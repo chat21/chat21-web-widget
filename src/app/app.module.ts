@@ -33,7 +33,7 @@ import { MomentModule } from 'angular2-moment';
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a
     NgbModule.forRoot(),
     LocalStorageModule.withConfig({
-      prefix: 'my-app',
+      prefix: 'chat21-web-widget',
       storageType: 'localStorage'
      }),
      MomentModule
