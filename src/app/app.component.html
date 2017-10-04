@@ -1,20 +1,65 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!-- https://bootsnipp.com/user/snippets/92nm6 -->
+<div class="container">
+    <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="margin-left:10px;float:right">
+        <div class="col-xs-12 col-md-12">
+        	<div class="panel panel-default">
+                <div class="panel-heading top-bar">
+                    <div class="col-md-8 col-xs-8">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat21</h3>
+                    </div>
+                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                        <!-- <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a> -->
+                    </div>
+                </div>
+                <div #scrollMe class="panel-body msg_container_base">
 
+                  <div *ngFor="let message of messages | async">
+                     
+                        <div class="row msg_container base_sent" *ngIf="message.sender != senderId;" >
+                          
+                            <div class="col-md-10 col-xs-10">
+                                <div class="messages msg_sent">
+                                    <p>{{message.text}}</p>
+                                    <time datetime="2009-11-13T20:00">{{message.timestamp | date: 'H:mm'}}</time>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                            </div>
+                            <!-- <div class="col-md-2 col-xs-2 avatar">
+                                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                            </div> -->
+                        </div>
+
+                        <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">
+                            <div class="col-md-2 col-xs-2">
+                              </div>
+                            <!-- <div class="col-md-2 col-xs-2 avatar">
+                                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                            </div> -->
+                            <div class="col-md-10 col-xs-10">
+                                <div class="messages msg_receive">
+                                     <p>{{message.text}}</p>
+                                        <time datetime="2009-11-13T20:00">{{message.timestamp | amTimeAgo}}</time>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+
+                </div>
+                <div class="panel-footer" style="padding: 0;">
+                    <form class="example-form" (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
+                      <div class="input-group">
+                          <input id="btn-input" type="text" [(ngModel)]="newMessageText" name="text"  autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi qui ..." />
+                          <span class="input-group-btn">
+                          <button class="btn btn-primary btn-sm" id="btn-chat">Invia</button>
+                          </span>
+                      </div>
+                    </form>
+                </div>
+    		</div>
+        </div>
+    </div>
+    
+   
+</div>
