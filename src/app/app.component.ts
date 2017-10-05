@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewChecked  {
   messages: FirebaseListObservable<any>;
   db: AngularFireDatabase;
   newMessageText: string;
-  senderId: any;
+  senderId: string;
   recipientId: string;
   conversationId: string;
   tenant: string;
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewChecked  {
     this.tenant = environment.tenant;
     console.log('this.tenant ',  this.tenant);
 
-    this.senderId = localStorageService.get('senderId');
+    this.senderId = localStorageService.get<string>('senderId');
     console.log('this.senderId', this.senderId);
 
 
@@ -45,7 +45,12 @@ export class AppComponent implements OnInit, AfterViewChecked  {
 
     this.recipientId = environment.agentId;
 
-    this.conversationId = this.senderId + '-' + this.recipientId;
+    if (this.senderId.localeCompare(this.recipientId) < 0) {
+        this.conversationId = this.senderId + '-' + this.recipientId;
+    }else {
+        this.conversationId = this.recipientId + '-' + this.senderId;
+    }
+    
     console.log('this.conversationId  :', this.conversationId );
 
     this.messages = db.list('/apps/' + this.tenant + '/messages/' + this.conversationId);
@@ -64,7 +69,7 @@ ngAfterViewChecked() {
 
 scrollToBottom(): void {
   // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-  console.log('scrollToBottom');
+  //console.log('scrollToBottom');
   //console.log('this.myScrollContainer.nativeElement.scrollHeight', this.myScrollContainer.nativeElement.scrollHeight);
     try {
         this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
