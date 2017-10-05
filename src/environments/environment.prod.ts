@@ -7,5 +7,8 @@ export const environment = {
     projectId: 'bppmobileintranet-chat',
     storageBucket: '<your-storage-bucket>',
     messagingSenderId: '478926705150'
-  }
+  },
+  tenant: 'frontiere21',
+  agentId: 'andrea_sponziello'
+
 };

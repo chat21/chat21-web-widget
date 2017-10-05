@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
-
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, AfterViewChecked  {
     
     this.db = db;
 
-    this.tenant = 'frontiere21';
+    this.tenant = environment.tenant;
     console.log('this.tenant ',  this.tenant);
 
     this.senderId = localStorageService.get('senderId');
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, AfterViewChecked  {
        console.log('generated new senderId :', uuid);
     }
 
-    this.recipientId = 'andrea_sponziello';
+    this.recipientId = environment.agentId;
 
     this.conversationId = this.senderId + '-' + this.recipientId;
     console.log('this.conversationId  :', this.conversationId );
