@@ -1,21 +1,27 @@
-body{
+/* body{
     height:400px;
     position: fixed;
     bottom: 0;
-}
+} */
+
+/* no conflict
+https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
+
+
 .col-md-2, .col-md-10{
     padding:0;
 }
 .panel{
     margin-bottom: 0px;
 }
-.chat-window{
+div.chat21-window{
     bottom:0;
     position:fixed;
     float:right;
     margin-left:10px;
+    z-index: 999;
 }
-.chat-window > div > .panel{
+.chat21-window > div > .panel{
     border-radius: 5px 5px 0 0;
 }
 .icon_minim{
