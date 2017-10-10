@@ -5,6 +5,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit, AfterViewChecked  {
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
   messages: FirebaseListObservable<any>;
   db: AngularFireDatabase;
   newMessageText: string;
@@ -20,9 +22,19 @@ export class AppComponent implements OnInit, AfterViewChecked  {
   recipientId: string;
   conversationId: string;
   tenant: string;
+  public chat21_tenant:string;
+  public panelBodyOpen: boolean;
+ 
 
-  constructor(db: AngularFireDatabase, private localStorageService: LocalStorageService) {
+  constructor(
+      db: AngularFireDatabase, 
+      private localStorageService: LocalStorageService
+    ) {
 
+    
+
+   // console.log('nameXXX ', name);
+    console.log('chat21_tenant ',  this.chat21_tenant);
     moment.locale('it');
     
     this.db = db;
@@ -50,63 +62,76 @@ export class AppComponent implements OnInit, AfterViewChecked  {
     }else {
         this.conversationId = this.recipientId + '-' + this.senderId;
     }
-    
     console.log('this.conversationId  :', this.conversationId );
 
-    this.messages = db.list('/apps/' + this.tenant + '/messages/' + this.conversationId);
-    console.log('this.messages', this.messages);
+    // se esiste la conversazione apro il popup!!!!
+    // Determine which child keys in DataSnapshot have data.
+    let url = '/apps/' + this.tenant + '/messages/';
+    var ref = firebase.database().ref(url);
+    let that = this;
+    ref.once("value")
+    .then(function(snapshot) {
+        if(snapshot.child(that.conversationId).exists()){
+            that.panelBodyOpen = true;
+            console.log('LA CONVERSAZIONE ESISTE');
+        }
+        else {
+            that.panelBodyOpen = false;
+            console.log('LA CONVERSAZIONE NON ESISTE');
+        }
+    });
 
+    this.messages = db.list(url+this.conversationId);
+    // this.messages.$ref
+    // .on("child_added", (child) => {
+    //   console.log("child_added", child.key, child.val());
+    //   that.scrollToBottom();
+    // });
+    console.log('this.messages', this.messages);
   }
 
 
 ngOnInit() {
-    this.scrollToBottom();
+    //this.scrollToBottom();
 }
 
 ngAfterViewChecked() {
-    this.scrollToBottom();
+    //this.scrollToBottom();
 }
 
 scrollToBottom(): void {
   // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-  //console.log('scrollToBottom');
-  //console.log('this.myScrollContainer.nativeElement.scrollHeight', this.myScrollContainer.nativeElement.scrollHeight);
-    try {
-        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } catch(err) { }
+  console.log('scrollToBottom');
+  try {
+    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+  } catch(err) { }
 }
 
 
 sendMessage() {
     console.log('text:', this.newMessageText);
-
-
     const now: Date = new Date();
     const timestamp = now.valueOf();
     // creo messaggio e lo aggiungo all'array
     // cambio lo stato da 0 a 1 e lo invio
     // quando lo ricevo cambio lo stato a 2
-    // if(this.messages) {
-        const message = {
-            conversationId: this.conversationId,
-            recipient: this.recipientId,
-            sender: this.senderId,
-            //sender_fullname: this.user.displayName,
-            status: 2,
-            text: this.newMessageText,
-            timestamp: timestamp,
-            type: 'text'
-        };
-        console.log('messaggio **************', message);
-        
-        this.newMessageText = '';
+    const message = {
+        conversationId: this.conversationId,
+        recipient: this.recipientId,
+        sender: this.senderId,
+        //sender_fullname: this.user.displayName,
+        status: 2,
+        text: this.newMessageText,
+        timestamp: timestamp,
+        type: 'text'
+    };
+    console.log('messaggio **************', message);
+    this.newMessageText = '';
+    this.messages.push(message);
 
-        this.messages.push(message);
-        this.scrollToBottom();
-
-        this.createSenderConversation(message);
-        this.createReceiverConversation(message);
-    // }
+    this.createSenderConversation(message);
+    this.createReceiverConversation(message);
+    this.panelBodyOpen = true;
 }
 
 
@@ -121,7 +146,6 @@ createSenderConversation(message:any) {
             last_message_text: message.text,
             recipient: message.recipient,
             sender: message.sender,
-            // sender_fullname: message.sender_fullname,
             status: 2,
             timestamp: message.timestamp,
         };
@@ -139,7 +163,6 @@ createReceiverConversation(message:any) {
             last_message_text: message.text,
             recipient: message.recipient,
             sender: message.sender,
-            // sender_fullname: message.sender_fullname,
             status: 2,
             timestamp: message.timestamp,
         };

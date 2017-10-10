@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // import { FlexLayoutModule } from '@angular/flex-layout';
 // import {MdInputModule} from '@angular/material';
 import { FormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+//import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 
@@ -31,7 +31,7 @@ import { MomentModule } from 'angular2-moment';
     // MdInputModule,
     FormsModule,
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a
-    NgbModule.forRoot(),
+    //NgbModule.forRoot(),
     LocalStorageModule.withConfig({
       prefix: 'chat21-web-widget',
       storageType: 'localStorage'
