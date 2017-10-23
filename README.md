@@ -9,7 +9,13 @@ Copy this code into your html pages:
 
 ```
 <app-root></app-root>
-<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="https://chat21-web.firebaseapp.com/polyfills.bundle.js"></script><script type="text/javascript" src="https://chat21-web.firebaseapp.com/scripts.bundle.js"></script><script type="text/javascript" src="https://chat21-web.firebaseapp.com/styles.bundle.js"></script><script type="text/javascript" src="https://chat21-web.firebaseapp.com/vendor.bundle.js"></script><script type="text/javascript" src="https://chat21-web.firebaseapp.com/main.bundle.js"></script>
+<script type="text/javascript" src="inline.bundle.js"></script>
+<script type="text/javascript" src="https://chat21-web.firebaseapp.com/polyfills.bundle.js"></script>
+<script type="text/javascript" src="https://chat21-web.firebaseapp.com/scripts.bundle.js"></script>
+<script type="text/javascript" src="https://chat21-web.firebaseapp.com/styles.bundle.js"></script>
+<script type="text/javascript" src="https://chat21-web.firebaseapp.com/vendor.bundle.js"></script>
+<script type="text/javascript" src="https://chat21-web.firebaseapp.com/main.bundle.js">
+</script>
 
 <script type="text/javascript">
 chat21_tenant="frontiere21";
