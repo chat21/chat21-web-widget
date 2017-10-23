@@ -15,8 +15,6 @@ Copy this code into your html pages:
 chat21_tenant="frontiere21";
 chat21_agentId="<UID>";
 </script>
-
-<app-root></app-root>
 ```
 
 
