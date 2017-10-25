@@ -2,6 +2,9 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.4.
 
+# Screenshot
+
+![Chat21 widget screenshot](https://raw.githubusercontent.com/chat21/chat21-web-widget/master/src/assets/screenshot.png)
 
 ## Installation
 
