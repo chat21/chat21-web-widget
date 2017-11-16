@@ -35,6 +35,7 @@ chat21_agentId="<UID>";
 </script>
 ```
 
+Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
 ## Development server
 
