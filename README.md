@@ -9,8 +9,10 @@ With Chat21-web-widget you can:
 * It's a HTML5 widget built with Google Firebase, Angular4 and Bootstrap
 
 # Features
-* Send a direct message to an agent
+* Send a direct message to an agent with push notifications
 * Receive realtime support from your agents
+* Configure the widget with company logo and colors
+* Chat21 Web Widget is free and open source. Download it on github
 
 # Screenshot
 
