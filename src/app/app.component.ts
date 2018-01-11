@@ -33,7 +33,8 @@ export class AppComponent implements OnInit, AfterViewChecked  {
 
     
 
-   // console.log('nameXXX ', name);
+    console.log('chat21_web_widget_version 2.0');
+        
     console.log('chat21_tenant ',  this.chat21_tenant);
     moment.locale('it');
     

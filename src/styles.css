@@ -7,10 +7,10 @@
 
 /* no conflict
 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
-.panelShown{
+.chat21-window .panelShown{
     display: block;
 }
-.panelHidden{
+.chat21-window .panelHidden{
     display: none;
 }
 
@@ -18,15 +18,15 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     min-width: 280px;
     max-width: 320px;
 }
-#chat21_window_1 .panel-footer form.ng-valid {
+.chat21-window  .panel-footer form.ng-valid {
     margin: 0px;
 }
-#chat21_window_1 .input-group {
+.chat21-window .input-group {
     padding:10px;
 }
 
 /* TOPBAR */
-.top-bar {
+.chat21-window .top-bar {
     background: #337ab7!important;
     color: white;
     padding: 10px;
@@ -34,12 +34,12 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     overflow: hidden;
 }
 
-.top-bar .logo{
+.chat21-window .top-bar .logo{
     height: 28px;
     width: auto;
 }
 
-.top-bar .panel-title {
+.chat21-window .top-bar .panel-title {
     color: #ffffff;
 }
 
@@ -50,7 +50,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 
 /* CONTAINER */
 
-.msg_container_base{
+.chat21-window .msg_container_base{
     margin: 0;
     padding: 0 10px 10px;
     max-height:300px;
@@ -58,18 +58,18 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-image: url(https://ionic3chat.firebaseapp.com/assets/chat21-ionic-pattern-2.svg);
   }
 
-.msg_container_base::-webkit-scrollbar {
+.chat21-window .msg_container_base::-webkit-scrollbar {
     width: 10px!important;
     background-color: transparent!important;
 }
  
-.msg_container_base::-webkit-scrollbar-track {
+.chat21-window .msg_container_base::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0)!important; 
     border-radius: 10px!important;
     background-color: transparent!important;
 }
  
-.msg_container_base::-webkit-scrollbar-thumb {
+.chat21-window .msg_container_base::-webkit-scrollbar-thumb {
     border-radius: 10px!important;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0)!important; 
     background-color: #ccc!important;    
@@ -99,39 +99,39 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     font-size: 11px;
     color: #ccc;
 } */
-.messages {
+.chat21-window .messages {
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     /* max-width:100%; */
 }
-.msg_sent{
+.chat21-window .msg_sent{
     background-color: #f7f7f7;
     color: #333333;
     margin-right:0;
     margin-left: 4px;
     padding-bottom: 20px !important;
 }
-.msg_receive{
+.chat21-window .msg_receive{
     background-color: #0b5c89;
     color: white;
     margin-right: 4px;
 }
-.messages > p {
+.chat21-window .messages > p {
     font-size: 13px;
     margin: 0 0 0.2rem 0;
 }
-.messages > time {
+.chat21-window .messages > time {
     font-size: 11px;
     color: #aaaaaa;
 }
 
 
 /***********************************/
-.col-md-2, .col-md-10{
+.chat21-window .col-md-2, .col-md-10{
     padding:0;
 }
-.panel{
+.chat21-window .panel{
     margin-bottom: 0px!important;
 }
 div.chat21-window{
@@ -146,7 +146,7 @@ div.chat21-window{
 .chat21-window > div > .panel{
     border-radius: 5px 5px 0 0;
 }
-.icon_minim{
+.chat21-window .icon_minim{
     padding:2px 10px;
 }
 /* .msg_container_base{
@@ -167,19 +167,19 @@ div.chat21-window{
 
  
 
-.msg_container {
+.chat21-window .msg_container {
     padding: 10px;
     overflow: hidden;
     display: flex;
 }
-img {
+.chat21-window img {
     display: block;
     /*width: 100%;*/
 }
-.avatar {
+.chat21-window .avatar {
     position: relative;
 }
-.base_receive > .avatar:after {
+.chat21-window .base_receive > .avatar:after {
     content: "";
     position: absolute;
     top: 0;
@@ -191,11 +191,11 @@ img {
     border-bottom-color: rgba(0, 0, 0, 0);
 }
 
-.base_sent {
+.chat21-window .base_sent {
   justify-content: flex-end;
   align-items: flex-end;
 }
-.base_sent > .avatar:after {
+.chat21-window .base_sent > .avatar:after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -208,31 +208,31 @@ img {
     box-shadow: 1px 1px 2px rgba(black, 0.2); 
 }
 
-.msg_sent > time{
+.chat21-window .msg_sent > time{
     float: right;
 }
 
 
 
-.msg_container_base::-webkit-scrollbar-track
+.chat21-window .msg_container_base::-webkit-scrollbar-track
 {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     background-color: #F5F5F5;
 }
 
-.msg_container_base::-webkit-scrollbar
+.chat21-window .msg_container_base::-webkit-scrollbar
 {
     width: 12px;
     background-color: #F5F5F5;
 }
 
-.msg_container_base::-webkit-scrollbar-thumb
+.chat21-window .msg_container_base::-webkit-scrollbar-thumb
 {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background-color: #555;
 }
 
-.btn-group.dropup{
+.chat21-window .btn-group.dropup{
     position:fixed;
     left:0px;
     bottom:0;
