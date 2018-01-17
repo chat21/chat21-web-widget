@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import * as firebase from 'firebase/app';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,7 +16,7 @@ import * as firebase from 'firebase/app';
 })
 export class AppComponent implements OnInit, AfterViewChecked  {
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-
+  isShowed: boolean;
   messages: FirebaseListObservable<any>;
   db: AngularFireDatabase;
   newMessageText: string;
@@ -22,12 +24,14 @@ export class AppComponent implements OnInit, AfterViewChecked  {
   recipientId: string;
   conversationId: string;
   tenant: string;
-  public chat21_tenant:string;
+  public chat21_tenant: string;
   public panelBodyOpen: boolean;
- 
+  MSG_STATUS_SENT = 1;
+  MSG_STATUS_RETURN_RECEIPT = 250;
+
 
   constructor(
-      db: AngularFireDatabase, 
+      db: AngularFireDatabase,
       private localStorageService: LocalStorageService
     ) {
 
@@ -39,7 +43,8 @@ export class AppComponent implements OnInit, AfterViewChecked  {
     moment.locale('it');
     
     this.db = db;
-
+    this.isShowed = false;
+    this.panelBodyOpen = true;
     this.tenant = environment.tenant;
     console.log('this.tenant ',  this.tenant);
 
@@ -73,11 +78,11 @@ export class AppComponent implements OnInit, AfterViewChecked  {
     ref.once("value")
     .then(function(snapshot) {
         if(snapshot.child(that.conversationId).exists()){
-            that.panelBodyOpen = true;
+            // that.panelBodyOpen = true;
             console.log('LA CONVERSAZIONE ESISTE');
         }
         else {
-            that.panelBodyOpen = false;
+            // that.panelBodyOpen = false;
             console.log('LA CONVERSAZIONE NON ESISTE');
         }
     });
@@ -93,11 +98,18 @@ export class AppComponent implements OnInit, AfterViewChecked  {
 
 
 ngOnInit() {
-    //this.scrollToBottom();
+    // this.scrollToBottom();
 }
 
 ngAfterViewChecked() {
-    //this.scrollToBottom();
+    // this.scrollToBottom();
+}
+
+f21_open() {
+    this.isShowed = !this.isShowed;
+    // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+    console.log('isShowed::', this.isShowed);
+
 }
 
 scrollToBottom(): void {
@@ -120,7 +132,7 @@ sendMessage() {
         conversationId: this.conversationId,
         recipient: this.recipientId,
         sender: this.senderId,
-        //sender_fullname: this.user.displayName,
+        // sender_fullname: this.user.displayName,
         status: 2,
         text: this.newMessageText,
         timestamp: timestamp,
@@ -132,7 +144,7 @@ sendMessage() {
 
     this.createSenderConversation(message);
     this.createReceiverConversation(message);
-    this.panelBodyOpen = true;
+    // this.panelBodyOpen = true;
 }
 
 

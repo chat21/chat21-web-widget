@@ -20,7 +20,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",        
-        "app.less"        
+        "app.less",
+        "../node_modules/material-design-icons/iconfont/material-icons.css"     
       ],
       "scripts": [
         "../src/assets/chat-windows.js"

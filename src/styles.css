@@ -1,10 +1,4 @@
 
-/* body{
-    height:400px;
-    position: fixed;
-    bottom: 0;
-} */
-
 /* no conflict
 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
 .chat21-window .panelShown{
@@ -44,7 +38,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 }
 
 #minim_chat_window{
-    color: #0b5c89;
+    color: #f7f7f7;
 }
 
 
@@ -53,7 +47,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 .chat21-window .msg_container_base{
     margin: 0;
     padding: 0 10px 10px;
-    max-height:300px;
+    /* max-height:300px; */
     overflow-x:hidden;
     background-image: url(https://ionic3chat.firebaseapp.com/assets/chat21-ionic-pattern-2.svg);
   }
@@ -101,30 +95,36 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 } */
 .chat21-window .messages {
     border-radius: 10px;
-    padding: 10px;
+    padding: 6px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     /* max-width:100%; */
 }
 .chat21-window .msg_sent{
-    background-color: #f7f7f7;
-    color: #333333;
-    margin-right:0;
+    background-color: #62a8ea;
+    color: #ffffff;
+    margin-right: 0;
     margin-left: 4px;
-    padding-bottom: 20px !important;
 }
 .chat21-window .msg_receive{
-    background-color: #0b5c89;
-    color: white;
+    background-color: #f7f7f7;
+    color: #000000;
     margin-right: 4px;
+    margin-left: 0;
 }
 .chat21-window .messages > p {
-    font-size: 13px;
-    margin: 0 0 0.2rem 0;
+    font-size: 0.8em;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
-.chat21-window .messages > time {
-    font-size: 11px;
+.chat21-window .msg_sent > time {
+    font-size: 0.7em;
+    color: #dddddd;
+}
+.chat21-window .msg_receive > time {
+    font-size: 0.7em;
     color: #aaaaaa;
 }
+
 
 
 /***********************************/
@@ -135,7 +135,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     margin-bottom: 0px!important;
 }
 div.chat21-window{
-    bottom:0;
+    bottom:80px;
     right:0;
     position:fixed;
     float:right;
@@ -189,6 +189,17 @@ div.chat21-window{
     border: 5px solid #FFF;
     border-left-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.status-message {
+    width: 20px;
+    height: 20px;
+    margin-right: 0px;
+    margin-left: 4px;
+}
+.status-message .material-icons{
+    color: #333333;
+    font-size: 1em;
 }
 
 .chat21-window .base_sent {

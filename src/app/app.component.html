@@ -1,19 +1,90 @@
 <!-- https://bootsnipp.com/user/snippets/92nm6 
 col-xs-5 col-md-3
 -->
-<div class="container">
-    <div class="row chat21-window" id="chat21_window_1">
+<div class="container" id="customerly-container">
+    <div id="f21-launcher-button" class="" (click)="f21_open()"></div>
+    <div *ngIf="isShowed" id="customerly-conversations" style="display: block;" class="row chat21-window customerly-position-right customerly-conversations customerly-sheet customerly-conversations-fetched customerly-new-message-enabledd customerly-sheet-active">
+
+        <!--HEADER-->
+        <div class="customerly-sheet-header" style="background-color: #62a8ea;"> 
+            <div id="customerly-sheet-header-title-container" class="customerly-sheet-header-title-container">
+                <b id="customerly-title" class="customerly-sheet-header-title" style="background-color: #62a8ea !important;color: white !important;">Customerly</b>
+            </div>
+            <a id="customerly-close-button" class="customerly-sheet-header-button customerly-sheet-header-close-button" onclick="customerly_close();">
+                <div class="customerly-sheet-header-button-icon customerly-sheet-header-button-icon-white"></div>
+            </a>
+        </div>
+
+        <!--CONTENT-->
+        <div id="customerly-sheet-content" class="customerly-sheet-content customerly-conversations-content" style="bottom: 114px;">
+            
+            <div class="customerly-spinner" id="customerly-loader">
+                <div class="customerly-bounce-1"></div>
+                <div class="customerly-bounce-2"></div>
+                <div class="customerly-bounce-3"></div>
+            </div>         
+            <!-- <div id="customerly-sheet-content-container" class="customerly-sheet-content-container customerly-background-theme-3"> -->
+                <div id="customerly-conversation-parts-container" class="msg_container_base customerly-conversation-parts-container customerly-animated customerly_bounceInRight">
+                    <div #scrollMe class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" #scrollToBottom [scrollTop]="scrollToBottom.scrollHeight">
+                        <div *ngFor="let message of messages | async">
+                            <div class="row msg_container base_sent" *ngIf="message.sender != senderId;" >
+                                <div class="messages msg_sent">
+                                    <p>{{message.text}}</p>
+                                    <time>{{message.timestamp | amTimeAgo}}</time>
+                                </div>
+                                <div class="status-message">
+                                    <span *ngIf="!message.status" class="material-icons">schedule</span>
+                                    <span *ngIf="message.status == MSG_STATUS_SENT" class="material-icons">done</span>
+                                    <span *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="material-icons">done_all</span>     
+                                </div>
+                            </div>
+                            <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">    
+                                <div class="content-avatar">
+                                    <img src="https://pictures.cdn.customerly.io/accounts/260" class="img_circle img-message" width="25" height="25">
+                                </div>
+                                <div class="messages msg_receive">
+                                    <p>{{message.text}}</p>
+                                    <time>{{message.timestamp | amTimeAgo}}</time>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                            
+                </div>
+            <!-- </div> -->
+
+        </div>
+
+       <div id="f21-footer" class="f21-footer">
+            <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
+                    <div class="input-group">
+                        <input id="btn-input" type="text" [(ngModel)]="newMessageText" name="text"  autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi qui ..." />
+                        <span class="input-group-btn">
+                        <button class="btn btn-primary btn-sm" id="btn-chat">Invia</button>
+                        </span>
+                    </div>
+            </form>
+            <div id="customerly-powered-by" class="customerly-powered-by"><a target="_blank" href="https://www.customerly.io/?utm_medium=organic&amp;utm_source=widget&amp;utm_campaign=00c4ed07">Offerto da <b>Customerly</b></a></div>
+       </div>
+
+
+       
+    </div>
+</div>
+
+
+    <!-- <div  *ngIf="isShowed" class="row chat21-window" id="chat21_window_1">
         <div>
         	<div class="panel panel-default">
                 <div class="panel-heading top-bar">
                     <div class="col-md-10 col-xs-10">
-                        <!-- <img class="logo" src="https://ionic3chat.firebaseapp.com/assets/chat21-logo.svg" alt="chat21"> -->
+                        <!-- <img class="logo" src="https://ionic3chat.firebaseapp.com/assets/chat21-logo.svg" alt="chat21"> --
                         <h3 class="panel-title">Chat21</h3>
-                        <!-- <span class="glyphicon glyphicon-comment"></span> --> 
+                        <!-- <span class="glyphicon glyphicon-comment"></span>  --
                     </div>
                     <div class="col-md-2 col-xs-2" style="text-align: right;">
-                        <!-- <a href="#"><span id="minim_chat_window" class="icon_minim"></span></a> -->
-                        <!-- <a href="#"><span id="minim_chat_window" class="glyphicon icon_close glyphicon-remove icon_minim"></span></a> -->
+                        <!-- <a href="#"><span id="minim_chat_window" class="icon_minim"></span></a> --
+                        <!-- <a href="#"><span id="minim_chat_window" class="glyphicon icon_close glyphicon-remove icon_minim"></span></a> --
                         <a href="#"><span id="minim_chat_window" [ngClass]="panelBodyOpen ? 'glyphicon-remove' : 'panel-collapsed glyphicon-chevron-down new-conversation'" class="glyphicon icon_minim"></span></a>
                     </div>
                 </div>
@@ -32,7 +103,7 @@ col-xs-5 col-md-3
                             </div>
                             <!-- <div class="col-md-2 col-xs-2 avatar">
                                 <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
-                            </div> -->
+                            </div> --
                         </div>
 
                         <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">
@@ -40,7 +111,7 @@ col-xs-5 col-md-3
                               </div>
                             <!-- <div class="col-md-2 col-xs-2 avatar">
                                 <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
-                            </div> -->
+                            </div> --
                             <div class="col-md-10 col-xs-10">
                                 <div class="messages msg_receive">
                                      <p>{{message.text}}</p>
@@ -67,4 +138,4 @@ col-xs-5 col-md-3
     </div>
     
    
-</div>
+</div> -->
