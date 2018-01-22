@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { LocalStorageService } from 'angular-2-local-storage';
@@ -6,7 +6,7 @@ import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import * as firebase from 'firebase/app';
-
+import {FormsModule} from '@angular/forms';
 
 
 @Component({
@@ -14,12 +14,17 @@ import * as firebase from 'firebase/app';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewChecked  {
-  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
+export class AppComponent implements OnInit, AfterViewChecked, AfterViewInit  {
+    @ViewChild('scrollMe') myScrollContainer: ElementRef;
+    // @ViewChild('content') content: ElementRef;
+    disableScrollDown = false;
+
   isShowed: boolean;
   messages: FirebaseListObservable<any>;
   db: AngularFireDatabase;
-  newMessageText: string;
+  // newMessageText: string;
+  testo: string;
   senderId: string;
   recipientId: string;
   conversationId: string;
@@ -28,20 +33,26 @@ export class AppComponent implements OnInit, AfterViewChecked  {
   public panelBodyOpen: boolean;
   MSG_STATUS_SENT = 1;
   MSG_STATUS_RETURN_RECEIPT = 250;
+  HEIGHT_DEFAULT = '35px';
 
+  myStyles = {
+    'overflow-x': 'hidden',
+    'word-wrap': 'break-word',
+    'resize': 'none',
+    'overflow-y': 'auto',
+    'height': this.HEIGHT_DEFAULT,
+    'max-height': '100px',
+    'border': 'none'
+};
 
   constructor(
       db: AngularFireDatabase,
       private localStorageService: LocalStorageService
     ) {
 
-    
-
     console.log('chat21_web_widget_version 2.0');
-        
     console.log('chat21_tenant ',  this.chat21_tenant);
     moment.locale('it');
-    
     this.db = db;
     this.isShowed = false;
     this.panelBodyOpen = true;
@@ -72,22 +83,21 @@ export class AppComponent implements OnInit, AfterViewChecked  {
 
     // se esiste la conversazione apro il popup!!!!
     // Determine which child keys in DataSnapshot have data.
-    let url = '/apps/' + this.tenant + '/messages/';
-    var ref = firebase.database().ref(url);
-    let that = this;
-    ref.once("value")
+    const url = '/apps/' + this.tenant + '/messages/';
+    const ref = firebase.database().ref(url);
+    const that = this;
+    ref.once('value')
     .then(function(snapshot) {
-        if(snapshot.child(that.conversationId).exists()){
+        if (snapshot.child(that.conversationId).exists()) {
             // that.panelBodyOpen = true;
             console.log('LA CONVERSAZIONE ESISTE');
-        }
-        else {
+        } else {
             // that.panelBodyOpen = false;
             console.log('LA CONVERSAZIONE NON ESISTE');
         }
     });
 
-    this.messages = db.list(url+this.conversationId);
+    this.messages = db.list(url + this.conversationId);
     // this.messages.$ref
     // .on("child_added", (child) => {
     //   console.log("child_added", child.key, child.val());
@@ -101,6 +111,10 @@ ngOnInit() {
     // this.scrollToBottom();
 }
 
+ngAfterViewInit() {
+    // console.log('ngAfterViewInit::');
+}
+
 ngAfterViewChecked() {
     // this.scrollToBottom();
 }
@@ -109,20 +123,110 @@ f21_open() {
     this.isShowed = !this.isShowed;
     // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
     console.log('isShowed::', this.isShowed);
-
-}
-
-scrollToBottom(): void {
-  // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-  console.log('scrollToBottom');
-  try {
-    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-  } catch(err) { }
+    if (this.isShowed) {
+        this.scrollToBottom();
+    }
 }
 
 
-sendMessage() {
-    console.log('text:', this.newMessageText);
+f21_update_view_height() {
+    const target = document.getElementById('f21-main-message-context');
+    console.log('f21_update_view_height::', target.style, target.offsetHeight);
+    const messageString = document.getElementsByTagName('textarea')[0].value;
+    console.log('f21_update_view_height::', messageString);
+
+    // console.log('************ $messageString2', messageString.trim());
+    if (messageString === '') {
+        document.getElementsByTagName('textarea')[0].value = '';
+      console.log('************ messageString ----->', document.getElementsByTagName('textarea')[0].value, '<-----');
+      return;
+    }
+    // if (event.inputType == "insertLineBreak" && messageString == null){
+    //   console.log('************ insertLineBreak');
+    //   return;
+    // }
+    // se messageString contiene \n non dimensiono!!!
+    // var match = /\r|\n/.exec(messageString);
+    // if (!match) {
+    //   this.adjust();
+    // }
+}
+
+/**
+ * 
+ */
+scrollToBottom() {
+    const that = this;
+    setTimeout(function() {
+        try {
+            const objDiv = document.getElementById('scrollMe');
+            if (objDiv.scrollTop !== objDiv.scrollHeight) {
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+            document.getElementById('scrollMe').scrollIntoView(false);
+            console.log('scrollTop ::', objDiv.scrollTop,  objDiv.scrollHeight);
+        } catch (err) {
+            console.log('RIPROVO ::');
+            that.scrollToBottom();
+        }
+    }, 300);
+}
+
+/**
+ *
+ */
+resizeInputField() {
+    const target = document.getElementById('f21-main-message-context');
+    console.log('H::', target.scrollHeight, target.offsetHeight, target.clientHeight);
+    target.style.height = '100%';
+    if (target.scrollHeight > target.offsetHeight) {
+        target.style.height = target.scrollHeight + 2 + 'px';
+        // target.style.background-color = 'red';
+    } else {
+        // target.offsetHeight = 'auto';
+        target.style.height = this.HEIGHT_DEFAULT; // target.offsetHeight - 15 + 'px';
+    }
+}
+
+/**
+ * quando premo un tasto richiamo questo metodo che:
+ * verifica se è stato premuto 'invio'
+ * se si azzera testo
+ * imposta altezza campo come min di default
+ * leva il focus e lo reimposta dopo pochi attimi
+ * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
+ * invio messaggio
+ * @param event
+ */
+onkeypress(event) {
+    const msg = document.getElementsByTagName('textarea')[0].value;
+    console.log('onkeypress **************', event);
+    const keyCode = event.which || event.keyCode;
+    if (keyCode === 13) {
+        document.getElementsByTagName('textarea')[0].value = '';
+        this.testo = '';
+        const target = document.getElementById('f21-main-message-context');
+        target.style.height = this.HEIGHT_DEFAULT;
+        target.blur();
+        setTimeout(function() {
+            target.focus();
+        }, 500);
+        if (msg && msg.trim() !== '') {
+            this.sendMessage(msg);
+            this.scrollToBottom();
+        }
+    }
+}
+
+/**
+ * invio messaggio
+ * purifico il testo del messaggio
+ * creo un oggetto messaggio e lo aggiungo all'array di messaggi
+ * @param msg
+ */
+sendMessage(msg) {
+    const messageString = this.controlOfMessage(msg);
+    console.log('text::::: ', messageString);
     const now: Date = new Date();
     const timestamp = now.valueOf();
     // creo messaggio e lo aggiungo all'array
@@ -134,21 +238,34 @@ sendMessage() {
         sender: this.senderId,
         // sender_fullname: this.user.displayName,
         status: 2,
-        text: this.newMessageText,
+        text: messageString,
         timestamp: timestamp,
         type: 'text'
     };
     console.log('messaggio **************', message);
-    this.newMessageText = '';
     this.messages.push(message);
-
     this.createSenderConversation(message);
     this.createReceiverConversation(message);
-    // this.panelBodyOpen = true;
+    this.panelBodyOpen = true;
+
+    this.scrollToBottom();
 }
 
+/**
+ * purifico il messaggio
+ * e lo passo al metodo di invio
+ */
+controlOfMessage(messageString): string {
+    // let messageString = document.getElementsByTagName('textarea')[0].value;
+    console.log('controlOfMessage **************', messageString);
+    messageString = messageString.replace(/(\r\n|\n|\r)/gm, '');
+    if (messageString.trim() !== '') {
+        return messageString;
+    }
+    return '';
+}
 
-createSenderConversation(message:any) {
+createSenderConversation(message: any) {
   const senderIdNormalized = message.sender.replace('.', '_');
   const conversationsPathDb = '/apps/' + this.tenant + '/users/' + senderIdNormalized + '/conversations/' + this.conversationId;
   console.log('createSenderConversation.conversationsPathDb: ', conversationsPathDb);
@@ -165,7 +282,7 @@ createSenderConversation(message:any) {
   converationsObj.set(conversation);
 }
 
-createReceiverConversation(message:any) {
+createReceiverConversation(message: any) {
   const receiverIdNormalized = message.recipient.replace('.', '_');
   const conversationsPathDb = '/apps/' + this.tenant + '/users/' + receiverIdNormalized + '/conversations/' + this.conversationId;
   console.log('createReceiverConversation.conversationsPathDb: ', conversationsPathDb);

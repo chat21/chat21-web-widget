@@ -1,31 +1,33 @@
 <!-- https://bootsnipp.com/user/snippets/92nm6 
 col-xs-5 col-md-3
 -->
-<div class="container" id="customerly-container">
+<div class="container" id="f21-container">
     <div id="f21-launcher-button" class="" (click)="f21_open()"></div>
-    <div *ngIf="isShowed" id="customerly-conversations" style="display: block;" class="row chat21-window customerly-position-right customerly-conversations customerly-sheet customerly-conversations-fetched customerly-new-message-enabledd customerly-sheet-active">
+    <div *ngIf="isShowed" id="f21-conversations" style="display: block;" class="row chat21-window f21-position-right f21-conversations f21-sheet f21-conversations-fetched f21-new-message-enabledd f21-sheet-active">
 
         <!--HEADER-->
-        <div class="customerly-sheet-header" style="background-color: #62a8ea;"> 
-            <div id="customerly-sheet-header-title-container" class="customerly-sheet-header-title-container">
-                <b id="customerly-title" class="customerly-sheet-header-title" style="background-color: #62a8ea !important;color: white !important;">Customerly</b>
+        <div class="f21-sheet-header" style="background-color: #62a8ea;"> 
+            <div id="f21-sheet-header-title-container" class="f21-sheet-header-title-container">
+                <b id="f21-title" class="f21-sheet-header-title" style="background-color: #62a8ea !important;color: white !important;">Chat21</b>
             </div>
-            <a id="customerly-close-button" class="customerly-sheet-header-button customerly-sheet-header-close-button" onclick="customerly_close();">
-                <div class="customerly-sheet-header-button-icon customerly-sheet-header-button-icon-white"></div>
+            <a id="f21-close-button" class="f21-sheet-header-button f21-sheet-header-close-button" onclick="f21_close();">
+                <div class="f21-sheet-header-button-icon f21-sheet-header-button-icon-white"></div>
             </a>
         </div>
 
         <!--CONTENT-->
-        <div id="customerly-sheet-content" class="customerly-sheet-content customerly-conversations-content" style="bottom: 114px;">
+        <div #contentArea id="f21-sheet-content" class="f21-sheet-content f21-conversations-content" style="bottom: 114px;">
             
-            <div class="customerly-spinner" id="customerly-loader">
-                <div class="customerly-bounce-1"></div>
-                <div class="customerly-bounce-2"></div>
-                <div class="customerly-bounce-3"></div>
+            <div class="f21-spinner" id="f21-loader">
+                <div class="f21-bounce-1"></div>
+                <div class="f21-bounce-2"></div>
+                <div class="f21-bounce-3"></div>
             </div>         
-            <!-- <div id="customerly-sheet-content-container" class="customerly-sheet-content-container customerly-background-theme-3"> -->
-                <div id="customerly-conversation-parts-container" class="msg_container_base customerly-conversation-parts-container customerly-animated customerly_bounceInRight">
-                    <div #scrollMe class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" #scrollToBottom [scrollTop]="scrollToBottom.scrollHeight">
+            <!-- <div id="f21-sheet-content-container" class="f21-sheet-content-container f21-background-theme-3"> -->
+                <div  id="f21-conversation-parts-container" class="msg_container_base f21-conversation-parts-container f21-animated f21_bounceInRight">
+                    <!-- <div #scrollMe class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" #scrollToBottom [scrollTop]="scrollToBottom.scrollHeight"> -->
+
+                    <div id="scrollMe" #scrollMe [scrollTop]="scrollMe.scrollHeight" class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
                         <div *ngFor="let message of messages | async">
                             <div class="row msg_container base_sent" *ngIf="message.sender != senderId;" >
                                 <div class="messages msg_sent">
@@ -40,7 +42,7 @@ col-xs-5 col-md-3
                             </div>
                             <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">    
                                 <div class="content-avatar">
-                                    <img src="https://pictures.cdn.customerly.io/accounts/260" class="img_circle img-message" width="25" height="25">
+                                    <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle img-message" width="25" height="25">
                                 </div>
                                 <div class="messages msg_receive">
                                     <p>{{message.text}}</p>
@@ -48,23 +50,28 @@ col-xs-5 col-md-3
                                 </div>
                             </div>    
                         </div>
+                        <!-- {{scrollToBottom()}} -->
                     </div>
-                            
+                        
                 </div>
             <!-- </div> -->
 
         </div>
 
        <div id="f21-footer" class="f21-footer">
-            <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
+        
+
+            <textarea #textarea rows="1" id="f21-main-message-context" [ngModel]="testo" [name]="testo" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
+            </textarea>
+            <!-- <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
                     <div class="input-group">
                         <input id="btn-input" type="text" [(ngModel)]="newMessageText" name="text"  autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi qui ..." />
                         <span class="input-group-btn">
                         <button class="btn btn-primary btn-sm" id="btn-chat">Invia</button>
                         </span>
                     </div>
-            </form>
-            <div id="customerly-powered-by" class="customerly-powered-by"><a target="_blank" href="https://www.customerly.io/?utm_medium=organic&amp;utm_source=widget&amp;utm_campaign=00c4ed07">Offerto da <b>Customerly</b></a></div>
+            </form> -->
+            <div id="f21-powered-by" class="f21-powered-by"><a target="_blank" href="http://www.chat21.org/chat21-ionic/">Offerto da <b>Frontiere21</b></a></div>
        </div>
 
 
