@@ -23,9 +23,6 @@
         "app.less",
         "../node_modules/material-design-icons/iconfont/material-icons.css"     
       ],
-      "scripts": [
-        "../src/assets/chat-windows.js"
-      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

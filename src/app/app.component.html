@@ -1,7 +1,7 @@
 <!-- https://bootsnipp.com/user/snippets/92nm6 
 col-xs-5 col-md-3
 -->
-<div class="container" id="f21-container">
+<div class="f21-container" id="f21-container">
     <div id="f21-launcher-button" class="" (click)="f21_open()"></div>
     <div *ngIf="isShowed" id="f21-conversations" style="display: block;" class="row chat21-window f21-position-right f21-conversations f21-sheet f21-conversations-fetched f21-new-message-enabledd f21-sheet-active">
 
@@ -10,7 +10,7 @@ col-xs-5 col-md-3
             <div id="f21-sheet-header-title-container" class="f21-sheet-header-title-container">
                 <b id="f21-title" class="f21-sheet-header-title" style="background-color: #62a8ea !important;color: white !important;">Chat21</b>
             </div>
-            <a id="f21-close-button" class="f21-sheet-header-button f21-sheet-header-close-button" onclick="f21_close();">
+            <a id="f21-close-button" class="f21-sheet-header-button f21-sheet-header-close-button" (click)="f21_close()">
                 <div class="f21-sheet-header-button-icon f21-sheet-header-button-icon-white"></div>
             </a>
         </div>
@@ -25,11 +25,9 @@ col-xs-5 col-md-3
             </div>         
             <!-- <div id="f21-sheet-content-container" class="f21-sheet-content-container f21-background-theme-3"> -->
                 <div  id="f21-conversation-parts-container" class="msg_container_base f21-conversation-parts-container f21-animated f21_bounceInRight">
-                    <!-- <div #scrollMe class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" #scrollToBottom [scrollTop]="scrollToBottom.scrollHeight"> -->
-
-                    <div id="scrollMe" #scrollMe [scrollTop]="scrollMe.scrollHeight" class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
+                     <div id="scrollMe" #scrollMe [scrollTop]="scrollMe.scrollHeight" class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
                         <div *ngFor="let message of messages | async">
-                            <div class="row msg_container base_sent" *ngIf="message.sender != senderId;" >
+                            <div class="row msg_container base_sent" *ngIf="message.sender == senderId;" >
                                 <div class="messages msg_sent">
                                     <p>{{message.text}}</p>
                                     <time>{{message.timestamp | amTimeAgo}}</time>
@@ -40,7 +38,7 @@ col-xs-5 col-md-3
                                     <span *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="material-icons">done_all</span>     
                                 </div>
                             </div>
-                            <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">    
+                            <div class="row msg_container base_receive" *ngIf="message.sender != senderId;">    
                                 <div class="content-avatar">
                                     <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle img-message" width="25" height="25">
                                 </div>
@@ -48,6 +46,7 @@ col-xs-5 col-md-3
                                     <p>{{message.text}}</p>
                                     <time>{{message.timestamp | amTimeAgo}}</time>
                                 </div>
+                                
                             </div>    
                         </div>
                         <!-- {{scrollToBottom()}} -->

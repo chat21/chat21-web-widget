@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, AfterViewChecked, AfterViewInit  {
   public chat21_tenant: string;
   public panelBodyOpen: boolean;
   MSG_STATUS_SENT = 1;
-  MSG_STATUS_RETURN_RECEIPT = 250;
+  MSG_STATUS_RETURN_RECEIPT = 2;
   HEIGHT_DEFAULT = '35px';
 
   myStyles = {
@@ -71,7 +71,6 @@ export class AppComponent implements OnInit, AfterViewChecked, AfterViewInit  {
       this.senderId = uuid;
        console.log('generated new senderId :', uuid);
     }
-
     this.recipientId = environment.agentId;
 
     if (this.senderId.localeCompare(this.recipientId) < 0) {
@@ -128,6 +127,11 @@ f21_open() {
     }
 }
 
+f21_close() {
+    console.log('isShowed::', this.isShowed);
+    this.isShowed = false;
+}
+
 
 f21_update_view_height() {
     const target = document.getElementById('f21-main-message-context');
@@ -153,7 +157,7 @@ f21_update_view_height() {
 }
 
 /**
- * 
+ *
  */
 scrollToBottom() {
     const that = this;
@@ -200,8 +204,8 @@ resizeInputField() {
  */
 onkeypress(event) {
     const msg = document.getElementsByTagName('textarea')[0].value;
-    console.log('onkeypress **************', event);
     const keyCode = event.which || event.keyCode;
+    console.log('onkeypress **************', keyCode);
     if (keyCode === 13) {
         document.getElementsByTagName('textarea')[0].value = '';
         this.testo = '';
@@ -237,7 +241,7 @@ sendMessage(msg) {
         recipient: this.recipientId,
         sender: this.senderId,
         // sender_fullname: this.user.displayName,
-        status: 2,
+        // status: 2,
         text: messageString,
         timestamp: timestamp,
         type: 'text'

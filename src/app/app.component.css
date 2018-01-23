@@ -1,4 +1,4 @@
-.container {
+.f21-container {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size-adjust: none;
     font-size: 100%;
@@ -142,11 +142,12 @@
 }
 /* BUTTON */
 #f21-launcher-button {
-    background-image : url("../assets/f21_widget_icon_white_1.svg");
+    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21_widget_icon_white_1.svg");
     background-size: 40px 40px;
     background-repeat: no-repeat;
     border-radius: 50%;
-    position: absolute;
+    position: fixed;
+    z-index: 9999;
     bottom: 20px;
     right: 20px;
     width: 50px;
@@ -177,7 +178,6 @@
     right: 20px;
     max-height: 400px;
 }
-
 
 
 /* CSS HEADER */
@@ -234,16 +234,16 @@
     height: 48px;
 }
 
-#f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon {
-    background-image: url(//widget.f21.io/assets/widgetclose_black.png);
+/* #f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon {
+    background-image: url(//widget.f21.io/assets/images/widgetclose_black.png);
     background-size: 13px 13px;
     background-repeat: no-repeat;
     width: 16px;
     opacity: .7;
-}
+} */
 
 #f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon-white {
-    background-image : url("../assets/widgetclose_white.svg")!important;
+    background-image : url("https://chat21-web.firebaseapp.com/assets/images/widgetclose_white.svg")!important;
 }
 #f21-container .f21-sheet-header-button-icon {
     height: 100%;
@@ -251,9 +251,6 @@
 }
 
 /** CONTENT **/
-element.style {
-    bottom: 114px;
-}
 #f21-container .f21-sheet-active .f21-sheet-content {
     overflow-y: auto;
     bottom: 189px;
@@ -266,6 +263,7 @@ element.style {
     bottom: 0;
     width: 100%;
     -webkit-transform: translateZ(0);
+    background-color: #fff;
 }
 #f21-container .f21-app-profile-container {
     background: transparent!important;
@@ -273,14 +271,6 @@ element.style {
     top: 0!important;
     z-index: 10!important;
     width: 100%;
-}
-
-
-#f21-container .f21-background-theme-3 {
-    background-image: url(//widget.f21.io/assets/images/background/3.jpg);
-    background-size: 500px;
-    background-repeat: repeat;
-    bottom: 74px;
 }
 
 #f21-container .f21-sheet-content-container {
@@ -292,7 +282,6 @@ element.style {
     top: 0;
     height: 100%;
 }
-
 
 #f21-container .f21-animated {
     -webkit-animation-duration: .6s;
@@ -309,7 +298,7 @@ element.style {
 
 /* CONVERSAZIONE */
 .f21-sheet-content{
-    bottom: 81px!important;
+    bottom: 69px!important;
 }
 /* 1 - f21-conversation-parts */
 #f21-container .f21-conversation-parts {
@@ -356,49 +345,49 @@ element.style {
     max-width: 272px;
     display: block;
 }
-    /* avatar */
-    .content-avatar {
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        left: 0;
-        top: 0;
-        margin-right: 6px;
-    }
-    .img_circle {
-        border-radius: 50%!important;
-    }
-    .f21-comment-avatar.f21-default-0-avatar {
-        right: 0!important;
-        left: inherit!important;
-    }
-    /* body container */
-    #f21-container .f21-comment-body-container.bubble-right {
-        color: #fff!important;
-        background-color: #62a8ea;
-    }
-    #f21-container .f21-comment-body-container {
-        font-size: 14px;
-        font-weight: 400;
-        /* color: #455a64; */
-        position: relative;
-        /* margin-left: 34px; */
-        padding: 2px 4px;
-        float: left;
-        border-radius: 8px;
-        max-width: 210px;
-    }
-    
-        /* embedded body */
-        #f21-container .f21-comment-body-container .f21-comment-body {
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 20px;
-            color: white;
-        }
-        #f21-container .f21-comment-body {
-            padding: 5px 8px 4px;
-        }
+/* avatar */
+.content-avatar {
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    left: 0;
+    top: 0;
+    margin-right: 6px;
+}
+.img_circle {
+    border-radius: 50%!important;
+}
+.f21-comment-avatar.f21-default-0-avatar {
+    right: 0!important;
+    left: inherit!important;
+}
+/* body container */
+#f21-container .f21-comment-body-container.bubble-right {
+    color: #fff!important;
+    background-color: #62a8ea;
+}
+#f21-container .f21-comment-body-container {
+    font-size: 14px;
+    font-weight: 400;
+    /* color: #455a64; */
+    position: relative;
+    /* margin-left: 34px; */
+    padding: 2px 4px;
+    float: left;
+    border-radius: 8px;
+    max-width: 210px;
+}
+
+/* embedded body */
+#f21-container .f21-comment-body-container .f21-comment-body {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: white;
+}
+#f21-container .f21-comment-body {
+    padding: 5px 8px 4px;
+}
 
 
 /* after  before */

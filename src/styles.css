@@ -47,9 +47,9 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 .chat21-window .msg_container_base{
     margin: 0;
     padding: 0 10px 10px;
-    /* max-height:300px; */
+    height: 100%;
     overflow-x:hidden;
-    background-image: url(https://ionic3chat.firebaseapp.com/assets/chat21-ionic-pattern-2.svg);
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21-pattern-2.svg");
   }
 
 .chat21-window .msg_container_base::-webkit-scrollbar {
@@ -104,12 +104,14 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     color: #ffffff;
     margin-right: 0;
     margin-left: 4px;
+    max-width: calc(100% - 30px);
 }
 .chat21-window .msg_receive{
     background-color: #f7f7f7;
     color: #000000;
     margin-right: 4px;
     margin-left: 0;
+    max-width: calc(100% - 60px);
 }
 .chat21-window .messages > p {
     font-size: 0.8em;
@@ -168,16 +170,19 @@ div.chat21-window{
  
 
 .chat21-window .msg_container {
-    padding: 10px;
     overflow: hidden;
     display: flex;
 }
+
 .chat21-window img {
     display: block;
     /*width: 100%;*/
 }
 .chat21-window .avatar {
     position: relative;
+}
+.chat21-window .base_receive{
+    padding: 4px 0px 4px 10px;
 }
 .chat21-window .base_receive > .avatar:after {
     content: "";
@@ -205,7 +210,9 @@ div.chat21-window{
 .chat21-window .base_sent {
   justify-content: flex-end;
   align-items: flex-end;
+  padding: 4px 0px 4px 10px;
 }
+
 .chat21-window .base_sent > .avatar:after {
     content: "";
     position: absolute;
