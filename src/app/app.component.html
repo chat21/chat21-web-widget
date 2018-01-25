@@ -4,7 +4,6 @@ col-xs-5 col-md-3
 <div class="f21-container" id="f21-container">
     <div id="f21-launcher-button" class="" (click)="f21_open()"></div>
     <div *ngIf="isShowed" id="f21-conversations" style="display: block;" class="row chat21-window f21-position-right f21-conversations f21-sheet f21-conversations-fetched f21-new-message-enabledd f21-sheet-active">
-
         <!--HEADER-->
         <div class="f21-sheet-header" style="background-color: #62a8ea;"> 
             <div id="f21-sheet-header-title-container" class="f21-sheet-header-title-container">
@@ -26,16 +25,16 @@ col-xs-5 col-md-3
             <!-- <div id="f21-sheet-content-container" class="f21-sheet-content-container f21-background-theme-3"> -->
                 <div  id="f21-conversation-parts-container" class="msg_container_base f21-conversation-parts-container f21-animated f21_bounceInRight">
                      <div id="scrollMe" #scrollMe [scrollTop]="scrollMe.scrollHeight" class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
-                        <div *ngFor="let message of messages | async">
+                        <div *ngFor="let message of messages">
                             <div class="row msg_container base_sent" *ngIf="message.sender == senderId;" >
                                 <div class="messages msg_sent">
                                     <p>{{message.text}}</p>
                                     <time>{{message.timestamp | amTimeAgo}}</time>
                                 </div>
                                 <div class="status-message">
-                                    <span *ngIf="!message.status" class="material-icons">schedule</span>
-                                    <span *ngIf="message.status == MSG_STATUS_SENT" class="material-icons">done</span>
-                                    <span *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="material-icons">done_all</span>     
+                                    <div *ngIf="!message.status" class="f21ico-schedule"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_SENT" class="f21ico-done"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="f21ico-done_all"></div>     
                                 </div>
                             </div>
                             <div class="row msg_container base_receive" *ngIf="message.sender != senderId;">    
@@ -60,7 +59,7 @@ col-xs-5 col-md-3
        <div id="f21-footer" class="f21-footer">
         
 
-            <textarea #textarea rows="1" id="f21-main-message-context" [ngModel]="testo" [name]="testo" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
+            <textarea #f21Textarea rows="1" id="f21-main-message-context" class='f21textarea' [ngModel]="testo" [name]="testo" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
             </textarea>
             <!-- <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
                     <div class="input-group">
@@ -70,7 +69,7 @@ col-xs-5 col-md-3
                         </span>
                     </div>
             </form> -->
-            <div id="f21-powered-by" class="f21-powered-by"><a target="_blank" href="http://www.chat21.org/chat21-ionic/">Offerto da <b>Frontiere21</b></a></div>
+            <div id="f21-powered-by" class="f21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
        </div>
 
 

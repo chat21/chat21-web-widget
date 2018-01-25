@@ -1,3 +1,4 @@
+/* DEFAULT CSS */
 .f21-container {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size-adjust: none;
@@ -140,9 +141,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 /* BUTTON */
 #f21-launcher-button {
-    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21_widget_icon_white_1.svg");
+    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-logo-widget-new.svg");
     background-size: 40px 40px;
     background-repeat: no-repeat;
     border-radius: 50%;
@@ -154,9 +156,9 @@
     height: 50px;
     cursor: pointer;
     background-position: center;
-    background-color: #42a5f5;
-    border-color: #42a5f5;
-    box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important;
+    background-color: #ffffff00;
+    border-color: #000000;
+    /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
 }
 
 /* CSS CONTAINER */
@@ -179,7 +181,6 @@
     max-height: 400px;
 }
 
-
 /* CSS HEADER */
 #f21-container .f21-sheet-header {
     background-color: #62a8ea;
@@ -192,7 +193,6 @@
     width: 100%;
     height: 48px;
 }
-
 #f21-container .f21-sheet-header-generic-title, #f21-container .f21-sheet-header-title-container {
     z-index: 2147483000;
     position: absolute;
@@ -205,7 +205,6 @@
     text-align-last: center;
     pointer-events: none;
 }
-
 #f21-container .f21-sheet-header-generic-title, #f21-container .f21-sheet-header-title {
     background-color: #62a8ea !important;
     color: white !important;
@@ -221,7 +220,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 #f21-container .f21-sheet-header-close-button {
     cursor: pointer;
     float: right;
@@ -231,19 +229,14 @@
     z-index: 2147483001;
     position: relative;
     margin: 0 20px;
-    height: 48px;
+    height: 100%;
+    width: 20px;
 }
-
-/* #f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon {
-    background-image: url(//widget.f21.io/assets/images/widgetclose_black.png);
-    background-size: 13px 13px;
-    background-repeat: no-repeat;
-    width: 16px;
-    opacity: .7;
-} */
-
 #f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon-white {
-    background-image : url("https://chat21-web.firebaseapp.com/assets/images/widgetclose_white.svg")!important;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-widgetclose_white.svg");
 }
 #f21-container .f21-sheet-header-button-icon {
     height: 100%;
@@ -376,6 +369,29 @@
     float: left;
     border-radius: 8px;
     max-width: 210px;
+}
+
+/* icon status */
+.f21ico-schedule {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-x: hidden;
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-schedule.svg");
+}
+.f21ico-done {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-x: hidden;
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done.svg");
+}
+.f21ico-done_all {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-x: hidden;
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done_all.svg");
 }
 
 /* embedded body */

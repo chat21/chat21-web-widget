@@ -45,9 +45,13 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 /* CONTAINER */
 
 .chat21-window .msg_container_base{
+    position: relative;
     margin: 0;
     padding: 0 10px 10px;
     height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     overflow-x:hidden;
     background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21-pattern-2.svg");
   }

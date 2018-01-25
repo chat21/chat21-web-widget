@@ -1,28 +1,38 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
-import { environment } from '../environments/environment';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { environment } from '../environments/environment';
+
+
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // import {MdButtonModule, MdListModule, MdToolbarModule} from '@angular/material';
 // import { FlexLayoutModule } from '@angular/flex-layout';
 // import {MdInputModule} from '@angular/material';
 import { FormsModule } from '@angular/forms';
-//import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
+import { UserLoginComponent } from './users/user-login/user-login.component';
+import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
+
+// import { AuthService } from './core/auth.service';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UserLoginComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     BrowserAnimationsModule,
     // MdButtonModule,
@@ -39,7 +49,9 @@ import { MomentModule } from 'angular2-moment';
      }),
      MomentModule
   ],
-  providers: [],
+  providers: [
+    // AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
