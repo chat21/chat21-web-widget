@@ -1,146 +1,64 @@
 <!-- https://bootsnipp.com/user/snippets/92nm6 
 col-xs-5 col-md-3
 -->
-<div class="f21-container" id="f21-container">
-    <div id="f21-launcher-button" class="" (click)="f21_open()"></div>
-    <div *ngIf="isShowed" id="f21-conversations" style="display: block;" class="row chat21-window f21-position-right f21-conversations f21-sheet f21-conversations-fetched f21-new-message-enabledd f21-sheet-active">
+<div id="chat21-container">
+    <div id="chat21-launcher-button" class="" (click)="f21_open()"></div>
+    <div *ngIf="isShowed" id="chat21-conversations" class="chat21-window chat21-sheet">
         <!--HEADER-->
-        <div class="f21-sheet-header" style="background-color: #62a8ea;"> 
-            <div id="f21-sheet-header-title-container" class="f21-sheet-header-title-container">
-                <b id="f21-title" class="f21-sheet-header-title" style="background-color: #62a8ea !important;color: white !important;">Chat21</b>
+        <div class="chat21-sheet-header"> 
+            <div class="chat21-sheet-header-title-container">
+                <b class="chat21-sheet-header-title">Chat21</b>
             </div>
-            <a id="f21-close-button" class="f21-sheet-header-button f21-sheet-header-close-button" (click)="f21_close()">
-                <div class="f21-sheet-header-button-icon f21-sheet-header-button-icon-white"></div>
+            <a class="chat21-sheet-header-close-button" (click)="f21_close()">
+                <div class="chat21-sheet-header-button-icon-white"></div>
             </a>
         </div>
 
         <!--CONTENT-->
-        <div #contentArea id="f21-sheet-content" class="f21-sheet-content f21-conversations-content" style="bottom: 114px;">
-            
-            <div class="f21-spinner" id="f21-loader">
-                <div class="f21-bounce-1"></div>
-                <div class="f21-bounce-2"></div>
-                <div class="f21-bounce-3"></div>
+        <div class="chat21-sheet-content">
+            <div class="chat21-spinner" id="chat21-loader">
+                <div class="chat21-bounce-1"></div>
+                <div class="chat21-bounce-2"></div>
+                <div class="chat21-bounce-3"></div>
             </div>         
-            <!-- <div id="f21-sheet-content-container" class="f21-sheet-content-container f21-background-theme-3"> -->
-                <div  id="f21-conversation-parts-container" class="msg_container_base f21-conversation-parts-container f21-animated f21_bounceInRight">
-                     <div id="scrollMe" #scrollMe [scrollTop]="scrollMe.scrollHeight" class="panel-body msg_container_base2" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
-                        <div *ngFor="let message of messages">
-                            <div class="row msg_container base_sent" *ngIf="message.sender == senderId;" >
-                                <div class="messages msg_sent">
-                                    <p>{{message.text}}</p>
-                                    <time>{{message.timestamp | amTimeAgo}}</time>
-                                </div>
-                                <div class="status-message">
-                                    <div *ngIf="!message.status" class="f21ico-schedule"></div>
-                                    <div *ngIf="message.status == MSG_STATUS_SENT" class="f21ico-done"></div>
-                                    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="f21ico-done_all"></div>     
-                                </div>
-                            </div>
-                            <div class="row msg_container base_receive" *ngIf="message.sender != senderId;">    
-                                <div class="content-avatar">
-                                    <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle img-message" width="25" height="25">
-                                </div>
-                                <div class="messages msg_receive">
-                                    <p>{{message.text}}</p>
-                                    <time>{{message.timestamp | amTimeAgo}}</time>
-                                </div>
-                                
-                            </div>    
-                        </div>
-                        <!-- {{scrollToBottom()}} -->
-                    </div>
+            <div class="chat21-conversation-parts-container">
+                    <div id="scrollMe" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
+                            <!-- [scrollTop]="scrollMe.scrollHeight" -->
+                    <div *ngFor="let message of messages">
                         
-                </div>
-            <!-- </div> -->
+                        <div class="msg_container base_sent" *ngIf="message.sender == senderId;" >
+                            <div class="messages msg_sent">
+                                <p>{{message.text}}</p>
+                            </div>
+                            <div class="status-message">
+                                <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
+                                <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
+                                <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>     
+                            </div>
+                        </div>
 
+                        <div class="msg_container base_receive" *ngIf="message.sender != senderId;">    
+                            <div class="content-avatar">
+                                <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25">
+                            </div>
+                            <div class="messages msg_receive">
+                                <p>{{message.text}}</p>
+                            </div>
+                        </div>
+
+                        <div class="time" [ngClass]="{'sender' : message.sender == senderId}" >
+                            <time>{{message.timestamp | amTimeAgo}}</time>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
-       <div id="f21-footer" class="f21-footer">
-        
-
-            <textarea #f21Textarea rows="1" id="f21-main-message-context" class='f21textarea' [ngModel]="testo" [name]="testo" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
+       <div id="chat21-footer">
+            <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
             </textarea>
-            <!-- <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
-                    <div class="input-group">
-                        <input id="btn-input" type="text" [(ngModel)]="newMessageText" name="text"  autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi qui ..." />
-                        <span class="input-group-btn">
-                        <button class="btn btn-primary btn-sm" id="btn-chat">Invia</button>
-                        </span>
-                    </div>
-            </form> -->
-            <div id="f21-powered-by" class="f21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
+            <div id="chat21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
        </div>
-
-
-       
     </div>
 </div>
-
-
-    <!-- <div  *ngIf="isShowed" class="row chat21-window" id="chat21_window_1">
-        <div>
-        	<div class="panel panel-default">
-                <div class="panel-heading top-bar">
-                    <div class="col-md-10 col-xs-10">
-                        <!-- <img class="logo" src="https://ionic3chat.firebaseapp.com/assets/chat21-logo.svg" alt="chat21"> --
-                        <h3 class="panel-title">Chat21</h3>
-                        <!-- <span class="glyphicon glyphicon-comment"></span>  --
-                    </div>
-                    <div class="col-md-2 col-xs-2" style="text-align: right;">
-                        <!-- <a href="#"><span id="minim_chat_window" class="icon_minim"></span></a> --
-                        <!-- <a href="#"><span id="minim_chat_window" class="glyphicon icon_close glyphicon-remove icon_minim"></span></a> --
-                        <a href="#"><span id="minim_chat_window" [ngClass]="panelBodyOpen ? 'glyphicon-remove' : 'panel-collapsed glyphicon-chevron-down new-conversation'" class="glyphicon icon_minim"></span></a>
-                    </div>
-                </div>
-     
-                <div #scrollMe class="panel-body msg_container_base" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" #scrollToBottom [scrollTop]="scrollToBottom.scrollHeight">
-                   
-                  <div *ngFor="let message of messages | async">
-                        <div class="row msg_container base_sent" *ngIf="message.sender != senderId;" >
-                            <div class="col-md-10 col-xs-10">
-                                <div class="messages msg_sent">
-                                    <p>{{message.text}}</p>
-                                    <time datetime="2009-11-13T20:00">{{message.timestamp | date: 'H:mm'}}</time>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-xs-2">
-                            </div>
-                            <!-- <div class="col-md-2 col-xs-2 avatar">
-                                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
-                            </div> --
-                        </div>
-
-                        <div class="row msg_container base_receive" *ngIf="message.sender == senderId;">
-                            <div class="col-md-2 col-xs-2">
-                              </div>
-                            <!-- <div class="col-md-2 col-xs-2 avatar">
-                                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
-                            </div> --
-                            <div class="col-md-10 col-xs-10">
-                                <div class="messages msg_receive">
-                                     <p>{{message.text}}</p>
-                                        <time datetime="2009-11-13T20:00">{{message.timestamp | amTimeAgo}}</time>
-                                </div>
-                            </div>
-                        </div>
-                  </div>
-                
-
-                </div>
-                <div class="panel-footer" style="padding: 0;">
-                    <form (ngSubmit)="sendMessage()" #newMessageForm="ngForm">
-                      <div class="input-group">
-                          <input id="btn-input" type="text" [(ngModel)]="newMessageText" name="text"  autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi qui ..." />
-                          <span class="input-group-btn">
-                          <button class="btn btn-primary btn-sm" id="btn-chat">Invia</button>
-                          </span>
-                      </div>
-                    </form>
-                </div>
-    		</div>
-        </div>
-    </div>
-    
-   
-</div> -->

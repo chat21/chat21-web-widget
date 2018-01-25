@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, AfterViewChecked, AfterViewInit  {
     loggedUser: any;
     urlNodeFirebase: string;
 
-    testo: string;
+    textInputTextArea: string;
     senderId: string;
     recipientId: string;
     conversationId: string;
@@ -109,19 +109,18 @@ authenticateFirebaseAnonymously() {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ...
+        this.messages = [];
         console.log('signInAnonymously KO:', errorCode, errorMessage);
     });
+
     // firebase.auth().onAuthStateChanged(function(user) {
     //     if (user) {
     //         // User is signed in.
     //         const isAnonymous = user.isAnonymous;
     //         const uid = user.uid;
     //         console.log('AUTENTICATE :', user);
-    //         // ...
     //     } else {
     //         // User is signed out.
-    //         // ...
     //         console.log('NON AUTENTICATE :');
     //     }
     // });
@@ -136,16 +135,18 @@ authenticateFirebaseAnonymously() {
  * 3 - imposto conversation id
  */
 getSenderId(user) {
-    this.senderId = this.localStorageService.get<string>('senderId');
-    console.log('this.senderId', this.senderId);
+    console.log('this.senderId', user.uid);
+    this.senderId = user.uid;
+    //this.senderId = this.localStorageService.get<string>('senderId');
+    //console.log('this.senderId', this.senderId);
 
-    if (!this.senderId) {
-        let uuid = user.uid; // UUID.UUID();
-        uuid = uuid.split('-').join('_');
-        this.localStorageService.set('senderId', uuid);
-        this.senderId = uuid;
-        console.log('generated new senderId :', uuid);
-    }
+    // if (!this.senderId) {
+    //     let uuid = user.uid; // UUID.UUID();
+    //     uuid = uuid.split('-').join('_');
+    //     this.localStorageService.set('senderId', uuid);
+    //     this.senderId = uuid;
+    //     console.log('generated new senderId :', uuid);
+    // }
     this.recipientId = environment.agentId;
     this.conversationId = this.recipientId;
     this.conversationWith = environment.agentId;
@@ -172,17 +173,14 @@ listMessages() {
     this.messagesRef.on('child_changed', function(childSnapshot) {
         console.log('child_changed *****', childSnapshot.key);
         const itemMsg = childSnapshot.val();
-
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
         const calcolaData = setHeaderDate(itemMsg['timestamp'], lastDate);
         if (calcolaData != null) {
             lastDate = calcolaData;
         }
-
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
         // tslint:disable-next-line:max-line-length
         const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg['text'], itemMsg['timestamp'], calcolaData, itemMsg['type']);
-
         const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
         console.log('child_changed222 *****', index, that.messages, childSnapshot.key);
         that.messages.splice(index, 1, msg);
@@ -216,6 +214,8 @@ listMessages() {
       const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
       console.log('child_added *****', calcolaData, that.messages, msg);
       that.messages.push(msg);
+      that.scrollToBottom();
+      //
       // aggiorno stato messaggio
       // questo stato indica che è stato consegnato al client e NON che è stato letto
       //that.setStatusMessage(childSnapshot, that.conversationWith);
@@ -286,7 +286,7 @@ f21_close() {
 
 
 f21_update_view_height() {
-    const target = document.getElementById('f21-main-message-context');
+    const target = document.getElementById('chat21-main-message-context');
     console.log('f21_update_view_height::', target.style, target.offsetHeight);
     //const messageString = document.getElementsByTagName('f21textarea')[0].value;
     const messageString = document.getElementsByClassName('f21textarea')[0].nodeValue;
@@ -322,8 +322,10 @@ scrollToBottom() {
             document.getElementById('scrollMe').scrollIntoView(false);
             console.log('scrollTop ::', objDiv.scrollTop,  objDiv.scrollHeight);
         } catch (err) {
-            console.log('RIPROVO ::');
-            that.scrollToBottom();
+            console.log('RIPROVO ::', that.isShowed);
+            if (that.isShowed === true) {
+                that.scrollToBottom();
+            }
         }
     }, 300);
 }
@@ -332,7 +334,7 @@ scrollToBottom() {
  *
  */
 resizeInputField() {
-    const target = document.getElementById('f21-main-message-context');
+    const target = document.getElementById('chat21-main-message-context');
     console.log('H::', target.scrollHeight, target.offsetHeight, target.clientHeight);
     target.style.height = '100%';
     if (target.scrollHeight > target.offsetHeight) {
@@ -355,15 +357,13 @@ resizeInputField() {
  * @param event
  */
 onkeypress(event) {
-    //const msg = document.getElementsByClassName('f21textarea')[0];
-    const msg = ((document.getElementById('f21-main-message-context') as HTMLInputElement).value);
+    // const msg = document.getElementsByClassName('f21textarea')[0];
+    const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
     const keyCode = event.which || event.keyCode;
     console.log('onkeypress **************', keyCode, msg);
     if (keyCode === 13) {
-        document.getElementsByClassName('f21textarea')[0].nodeValue = '';
-        //document.getElementById('f21textarea')[0].value = '';
-        this.testo = '';
-        const target = document.getElementById('f21-main-message-context');
+        this.textInputTextArea = '';
+        const target = document.getElementById('chat21-main-message-context');
         target.style.height = this.HEIGHT_DEFAULT;
         target.blur();
         setTimeout(function() {
@@ -424,40 +424,5 @@ controlOfMessage(messageString): string {
     }
     return '';
 }
-
-// createSenderConversation(message: any) {
-//   const senderIdNormalized = message.sender.replace('.', '_');
-//   const conversationsPathDb = '/apps/' + this.tenant + '/users/' + senderIdNormalized + '/conversations/' + this.conversationId;
-//   console.log('createSenderConversation.conversationsPathDb: ', conversationsPathDb);
-//   const converationsObj = this.db.object(conversationsPathDb);
-//   const conversation = {
-//             convers_with: message.recipient,
-//             is_new: true,
-//             last_message_text: message.text,
-//             recipient: message.recipient,
-//             sender: message.sender,
-//             status: 2,
-//             timestamp: message.timestamp,
-//         };
-//   converationsObj.set(conversation);
-// }
-
-// createReceiverConversation(message: any) {
-//   const receiverIdNormalized = message.recipient.replace('.', '_');
-//   const conversationsPathDb = '/apps/' + this.tenant + '/users/' + receiverIdNormalized + '/conversations/' + this.conversationId;
-//   console.log('createReceiverConversation.conversationsPathDb: ', conversationsPathDb);
-//   const  converationsObj = this.db.object(conversationsPathDb);
-//   const conversation = {
-//             convers_with: message.sender,
-//             is_new: true,
-//             last_message_text: message.text,
-//             recipient: message.recipient,
-//             sender: message.sender,
-//             status: 2,
-//             timestamp: message.timestamp,
-//         };
-//   converationsObj.set(conversation);
-// }
-
 
 }

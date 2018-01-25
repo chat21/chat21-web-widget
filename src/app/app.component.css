@@ -1,5 +1,5 @@
 /* DEFAULT CSS */
-.f21-container {
+#chat21-container {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size-adjust: none;
     font-size: 100%;
@@ -143,13 +143,13 @@
 }
 
 /* BUTTON */
-#f21-launcher-button {
+#chat21-launcher-button {
     background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-logo-widget-new.svg");
     background-size: 40px 40px;
     background-repeat: no-repeat;
     border-radius: 50%;
     position: fixed;
-    z-index: 9999;
+    z-index: 999999000;
     bottom: 20px;
     right: 20px;
     width: 50px;
@@ -161,15 +161,14 @@
     /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
 }
 
-/* CSS CONTAINER */
-#f21-container .f21-conversations {
+/* CSS BOX CONTAINER */
+#chat21-container #chat21-conversations {
     box-shadow: rgba(0,0,0,0.18) 0 0 38px;
-}
-#f21-container.f21-position-right .f21-sheet {
     right: 20px;
+    display: block;
 }
-#f21-container .f21-sheet {
-    z-index: 2147482999;
+#chat21-container .chat21-sheet {
+    z-index: 999999001;
     display: none;
     position: fixed;
     height: 80%;
@@ -179,22 +178,23 @@
     border-radius: 10px;
     right: 20px;
     max-height: 400px;
+    overflow-y: auto;
 }
 
 /* CSS HEADER */
-#f21-container .f21-sheet-header {
-    background-color: #62a8ea;
-    z-index: 2147483002;
-    background: #42a5f5;
+#chat21-container .chat21-sheet-header {
+    background-color: #2a6ac1;
+    z-index: 999999005;
     overflow: hidden;
     position: absolute;
     top: 0;
     right: 0;
     width: 100%;
     height: 48px;
+    box-shadow: 0px 5px 10px 1px rgba(191,191,191,0.7);
 }
-#f21-container .f21-sheet-header-generic-title, #f21-container .f21-sheet-header-title-container {
-    z-index: 2147483000;
+#chat21-container .chat21-sheet-header-title-container {
+    z-index: 999999003;
     position: absolute;
     left: 0;
     top: 0;
@@ -205,8 +205,7 @@
     text-align-last: center;
     pointer-events: none;
 }
-#f21-container .f21-sheet-header-generic-title, #f21-container .f21-sheet-header-title {
-    background-color: #62a8ea !important;
+#chat21-container .chat21-sheet-header-title {
     color: white !important;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 15px;
@@ -220,211 +219,161 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#f21-container .f21-sheet-header-close-button {
+#chat21-container .chat21-sheet-header-close-button {
+    z-index: 999999004;
+    position: relative;
+    margin: 0 16px;
+    height: 100%;
     cursor: pointer;
     float: right;
-    margin-left: 15px;
 }
-#f21-container .f21-sheet-header-button {
-    z-index: 2147483001;
-    position: relative;
-    margin: 0 20px;
+#chat21-container .chat21-sheet-header-button-icon-white {
     height: 100%;
-    width: 20px;
-}
-#f21-container .f21-sheet-header-close-button .f21-sheet-header-button-icon-white {
+    width: 16px;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 16px;
-    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-widgetclose_white.svg");
-}
-#f21-container .f21-sheet-header-button-icon {
-    height: 100%;
-    background-position: center center;
+    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21ico-widgetclose_white.svg");
 }
 
 /** CONTENT **/
-#f21-container .f21-sheet-active .f21-sheet-content {
-    overflow-y: auto;
-    bottom: 189px;
-}
-#f21-container .f21-sheet-content {
-    z-index: 2147483001;
+#chat21-container .chat21-sheet-content {
+    z-index: 999999004;
     position: absolute;
     top: 48px;
     right: 0;
-    bottom: 0;
+    bottom: 70px;
     width: 100%;
-    -webkit-transform: translateZ(0);
+    /* -webkit-transform: translateZ(0); */
     background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-x:hidden;
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21-pattern-2.svg");
 }
-#f21-container .f21-app-profile-container {
-    background: transparent!important;
-    position: absolute!important;
-    top: 0!important;
-    z-index: 10!important;
-    width: 100%;
-}
-
-#f21-container .f21-sheet-content-container {
-    box-sizing: border-box;
-    position: relative;
-    max-width: 620px;
-    margin: 0 auto;
-    overflow-x: hidden;
-    top: 0;
-    height: 100%;
-}
-
-#f21-container .f21-animated {
-    -webkit-animation-duration: .6s;
-    animation-duration: .6s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
+/* no conflict
+https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
+#chat21-conversations .panelShown{
     display: block;
 }
-#f21-container .f21-conversation-parts-container {
-    padding: 8px;
-    overflow-x: hidden;
+#chat21-conversations .panelHidden{
+    display: none;
 }
 
-
-/* CONVERSAZIONE */
-.f21-sheet-content{
-    bottom: 69px!important;
+/* SET SCROLLBAR */
+#chat21-conversations .chat21-conversation-parts-container::-webkit-scrollbar {
+    width: 8px;
+    background-color: #00000000!important;
+} 
+#chat21-conversations .chat21-conversation-parts-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    background-color: #00000000!important;
 }
-/* 1 - f21-conversation-parts */
-#f21-container .f21-conversation-parts {
+#chat21-conversations .chat21-conversation-parts-container::-webkit-scrollbar-thumb {
+    border-radius: 6px!important;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0); 
+    background-color: #00000040!important;   
+} 
+
+/* MESSAGE CONTAINER */
+#chat21-conversations .msg_container {
     overflow: hidden;
-    transition: opacity .2s;
+    display: flex;
+}
+#chat21-conversations .messages {
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+#chat21-conversations .messages > p {
+    font-size: 0.8em;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+/* MESSAGE CONTAINER SENT */
+#chat21-conversations .base_sent {
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 2px 10px 4px 40px;
+}
+#chat21-conversations .msg_sent {
+    background-color: #62a8ea;
+    color: #ffffff;
+    margin-right: 0;
+    margin-left: 4px;
+    max-width: calc(100% - 30px);
+    min-width: 14px;
+}
+/* icon status */
+#chat21-conversations .base_sent .status-message{
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+}
+#chat21-conversations .base_sent .icon {
+    width: 13px;
+    height: 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-x: hidden;
+}
+#chat21-conversations .base_sent .f21ico-schedule {
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-schedule.svg");
+}
+#chat21-conversations .base_sent .f21ico-done {
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done.svg");
+}
+#chat21-conversations .base_sent .f21ico-done_all {
+    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done_all.svg");
 }
 
-/* 1.1 f21-comment-date */
-#f21-container .f21-comment-date {
-    text-align: center;
-    font-size: 10px;
-    color: #bdbdbd;
-    font-weight: 600;
-    padding: 10px;
-}
-
-/* 1.2 mid */
-#f21-container .f21-conversation-part {
-    margin: 2px;
-    display: block;
-}
-#f21-container .f21-conversation-part:before, #f21-container .f21-conversation-part:after {
-    content: " ";
-    display: table;
-}
-/* after */
-#f21-container .f21-conversation-part:after {
-    clear: both;
-}
-#f21-container .f21-conversation-part:before, #f21-container .f21-conversation-part:after {
-    content: " ";
-    display: table;
-}
-
-/* f21-comment f21-comment-by-0 */
-
-#f21-container .f21-comment-by-0 {
-    float: right;
-}
-#f21-container .f21-comment {
-    line-height: 20px;
-    position: relative;
-    clear: both;
-    max-width: 272px;
-    display: block;
+/* MESSAGE CONTAINER RECEIVE */
+#chat21-conversations .base_receive{
+    padding: 4px 10px 4px 10px;
 }
 /* avatar */
-.content-avatar {
+#chat21-conversations .content-avatar {
+    position: relative;
     border-radius: 50%;
     width: 28px;
     height: 28px;
     left: 0;
     top: 0;
     margin-right: 6px;
-}
-.img_circle {
+} 
+.content-avatar .img_circle {
     border-radius: 50%!important;
 }
-.f21-comment-avatar.f21-default-0-avatar {
-    right: 0!important;
-    left: inherit!important;
+/* message */
+#chat21-conversations .msg_receive{
+    background-color: #f7f7f7;
+    color: #000000;
+    margin-right: 20px;
+    margin-left: 0;
+    max-width: calc(100% - 60px);
+    min-width: 14px;
 }
-/* body container */
-#f21-container .f21-comment-body-container.bubble-right {
-    color: #fff!important;
-    background-color: #62a8ea;
+/* TIME */
+#chat21-conversations .time {
+    font-size: 0.7em;
+    color: #aaaaaa;
+    margin-bottom: 10px;
+    margin-top: -2px;
+    text-align: left;
+    margin-left: 46px;
 }
-#f21-container .f21-comment-body-container {
-    font-size: 14px;
-    font-weight: 400;
-    /* color: #455a64; */
-    position: relative;
-    /* margin-left: 34px; */
-    padding: 2px 4px;
-    float: left;
-    border-radius: 8px;
-    max-width: 210px;
-}
-
-/* icon status */
-.f21ico-schedule {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    overflow-x: hidden;
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-schedule.svg");
-}
-.f21ico-done {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    overflow-x: hidden;
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done.svg");
-}
-.f21ico-done_all {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    overflow-x: hidden;
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done_all.svg");
-}
-
-/* embedded body */
-#f21-container .f21-comment-body-container .f21-comment-body {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    color: white;
-}
-#f21-container .f21-comment-body {
-    padding: 5px 8px 4px;
+#chat21-conversations .time.sender{
+    text-align: right;
+    margin-right: 24px;
 }
 
 
-/* after  before */
-#f21-container .f21-conversation-part:after {
-    clear: both;
-}
-#f21-container .f21-conversation-part:before, #f21-container .f21-conversation-part:after {
-    content: " ";
-    display: table;
-}
-*, :after, :before {
-    box-sizing: border-box;
-}
-*, :after, :before {
-    box-sizing: border-box;
-}
 
-
-/* footer */ 
-#f21-footer {
-    z-index: 2147483001;
+/* FOOTER CONTAINER */ 
+#chat21-footer {
+    z-index: 999999005;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -434,12 +383,8 @@
     box-shadow: 0 -1px 10px 1px rgba(191,191,191,0.28);
     background: white;
 }
-#f21-container .f21-composer-textarea-container {
-    border-radius: 8px;
-}
 
-
-#f21-main-message-context {
+#chat21-main-message-context {
     overflow-x: hidden;
     word-wrap: break-word;
     resize: horizontal;
@@ -457,11 +402,7 @@
     border-radius: 5px;
 }
 
-.f21-reset textarea:not(.default), .f21-reset input:not(.default) {
-    cursor: text;
-}
-
-#f21-footer .f21-powered-by {
+#chat21-powered-by {
     width: 100%;
     text-align: center;
     clear: both;
@@ -472,4 +413,8 @@
     padding: 0;
     height: 25px;
     color: #65a9e7;
+}
+#chat21-powered-by a {
+    text-decoration: none;
+    color:#2a6ac1;
 }
