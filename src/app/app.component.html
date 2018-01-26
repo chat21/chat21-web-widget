@@ -7,7 +7,9 @@ col-xs-5 col-md-3
         <!--HEADER-->
         <div class="chat21-sheet-header"> 
             <div class="chat21-sheet-header-title-container">
-                <b class="chat21-sheet-header-title">Chat21</b>
+                <b class="chat21-sheet-header-title">Chat21
+                        {{countChange}} {{test1}}
+                </b>
             </div>
             <a class="chat21-sheet-header-close-button" (click)="f21_close()">
                 <div class="chat21-sheet-header-button-icon-white"></div>
@@ -22,8 +24,8 @@ col-xs-5 col-md-3
                 <div class="chat21-bounce-3"></div>
             </div>         
             <div class="chat21-conversation-parts-container">
-                    <div id="scrollMe" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'">
-                            <!-- [scrollTop]="scrollMe.scrollHeight" -->
+                    <div id="scrollMe">
+                            <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
                     <div *ngFor="let message of messages">
                         
                         <div class="msg_container base_sent" *ngIf="message.sender == senderId;" >
@@ -51,6 +53,7 @@ col-xs-5 col-md-3
                         </div>
 
                     </div>
+                    <span>&nbsp;</span>
                 </div>
             </div>
         </div>

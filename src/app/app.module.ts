@@ -20,7 +20,8 @@ import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
 
-// import { AuthService } from './core/auth.service';
+import { AuthService } from './core/auth.service';
+import { MessagingService } from './providers/messaging.service';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { UserProfileComponent } from './users/user-profile/user-profile.componen
      MomentModule
   ],
   providers: [
-    // AuthService
+    AuthService,
+    MessagingService
   ],
   bootstrap: [AppComponent]
 })

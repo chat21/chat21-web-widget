@@ -179,6 +179,7 @@
     right: 20px;
     max-height: 400px;
     overflow-y: auto;
+    background-color: #fff;
 }
 
 /* CSS HEADER */
@@ -277,6 +278,9 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 } 
 
 /* MESSAGE CONTAINER */
+#chat21-loader{
+    min-height: 10px;
+}
 #chat21-conversations .msg_container {
     overflow: hidden;
     display: flex;
@@ -287,10 +291,17 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 #chat21-conversations .messages > p {
-    font-size: 0.8em;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+    font-size: 13px!important;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-variant: normal;
+    font-weight: normal;
 }
+
 /* MESSAGE CONTAINER SENT */
 #chat21-conversations .base_sent {
     justify-content: flex-end;
@@ -379,9 +390,20 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     left: 0;
     right: 0;
     margin: 0;
-    padding: 6px 16px 0 16px;
+    /* padding: 6px 16px 0 16px; */
+    padding: 0px 0px 0px 0px;
     box-shadow: 0 -1px 10px 1px rgba(191,191,191,0.28);
     background: white;
+}
+#chat21-footer textarea {
+    margin-bottom: 0px!important;
+    padding: 10px!important;
+    margin: 0px!important;
+    line-height: normal!important;
+    border: none!important;
+    box-shadow: none!important;
+    min-height: 40px!important;
+
 }
 
 #chat21-main-message-context {
@@ -401,6 +423,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     overflow: auto;
     border-radius: 5px;
 }
+
 
 #chat21-powered-by {
     width: 100%;
