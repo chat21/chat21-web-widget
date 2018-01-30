@@ -14,6 +14,10 @@ export const MSG_STATUS_RECEIVED = 200;
 export const MSG_STATUS_RETURN_RECEIPT = 250;
 export const MSG_STATUS_SEEN = 300;
 
+// TYPES MESSAGES
+export const TYPE_MSG_TEXT: string = 'text';
+export const TYPE_MSG_IMAGE: string = 'image';
+
 // constans messages detail
 export const MIN_HEIGHT_TEXTAREA: number = 24;
 export const MAX_HEIGHT_TEXTAREA: number = 180;

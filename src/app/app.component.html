@@ -30,7 +30,7 @@ col-xs-5 col-md-3
                         
                         <div class="msg_container base_sent" *ngIf="message.sender == senderId;" >
                             <div class="messages msg_sent">
-                                <p>{{message.text}}</p>
+                                <p [innerHTML]="message.text"></p>
                             </div>
                             <div class="status-message">
                                 <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
@@ -44,7 +44,7 @@ col-xs-5 col-md-3
                                 <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25">
                             </div>
                             <div class="messages msg_receive">
-                                <p>{{message.text}}</p>
+                                <p [innerHTML]="message.text"></p>
                             </div>
                         </div>
 
@@ -61,6 +61,16 @@ col-xs-5 col-md-3
        <div id="chat21-footer">
             <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
             </textarea>
+            <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label>
+            <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
+        
+            <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
+            <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
+            <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
+            <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
+            
+            <!-- <img src="" width="200" alt="Image preview..."> -->
+            <div class="name-image">{{nameImg}}</div>
             <div id="chat21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
        </div>
     </div>

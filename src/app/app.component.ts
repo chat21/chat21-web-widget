@@ -10,11 +10,15 @@ import { MessagingService } from './providers/messaging.service';
 import { MessageModel } from '../models/message';
 // utils
 // import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
-import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT } from './utils/constants';
+import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT } from './utils/constants';
 
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import { Subscription } from 'rxjs/Subscription';
+
+
+import { UploadModel } from '../models/upload';
+import { UploadService } from './providers/upload.service';
 
 
 @Component({
@@ -26,12 +30,19 @@ import { Subscription } from 'rxjs/Subscription';
 export class AppComponent implements OnDestroy, OnInit  {
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     loggedUser: any;
-    subscription: Subscription;
+    subscriptions: Subscription[] = [];
     messages: MessageModel[];
     conversationWith: string;
     senderId: string;
     recipientId: string;
     conversationId: string;
+    nameImg: string;
+
+    tenant: string;
+    agentId: string;
+
+    imageXLoad = new Image;
+    isSelected = false;
 
     MSG_STATUS_SENT = MSG_STATUS_SENT;
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
@@ -48,10 +59,19 @@ export class AppComponent implements OnDestroy, OnInit  {
         'border': 'none',
         'padding': '10px'
     };
+    private selectedFiles: FileList;
+    //private currentUpload: UploadModel;
+
+
     constructor(
         public authService: AuthService,
-        public messagingService: MessagingService
+        public messagingService: MessagingService,
+        public upSvc: UploadService
     ) {
+        this.tenant = location.search.split('tenant=')[1];
+        this.agentId = location.search.split('agentId=')[1];
+        // tenant: 'chat21',
+        // agentId: '9EBA3VLhNKMFIVa0IOco82TkIzk1'
     }
 
     /**
@@ -59,10 +79,13 @@ export class AppComponent implements OnDestroy, OnInit  {
      * inizializzo la pagina
      */
     ngOnInit() {
-        this.subscription = this.messagingService.observable
+        const that = this;
+        const subscriptionMessages: Subscription = this.messagingService.observable
         .subscribe(messages => {
-            this.messages = messages;
+            that.messages = messages;
+            // console.log('subscriptionMessages:', that.subscriptions, subscriptionMessages);
         });
+        this.subscriptions.push(subscriptionMessages);
         this.initialize();
     }
 
@@ -70,7 +93,9 @@ export class AppComponent implements OnDestroy, OnInit  {
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.subscriptions.forEach(function(subscription) {
+            subscription.unsubscribe();
+        });
     }
 
     /**
@@ -112,7 +137,9 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.recipientId = environment.agentId;
         this.conversationId = environment.agentId;
         this.conversationWith = environment.agentId;
-        this.messagingService.initialize(user);
+        this.upSvc.initialize(user.uid,  this.tenant, this.agentId);
+
+        this.messagingService.initialize(user,  this.tenant, this.agentId);
         this.messagingService.listMessages();
     }
 
@@ -229,12 +256,126 @@ export class AppComponent implements OnDestroy, OnInit  {
             if (msg && msg.trim() !== '') {
                 console.log('sendMessage -> ', this.textInputTextArea);
                 // this.resizeInputField();
-                this.messagingService.sendMessage(msg);
+                this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
                 this.scrollToBottom();
             }
             this.textInputTextArea = null;
         }
     }
 
+    detectFiles(event) {
+        console.log('event: ', event.target.files[0].name, event.target.files);
+        // let profileModal = this.modalCtrl.create(UpdateImageProfilePage, {event: event}, { enableBackdropDismiss: false });
+        // profileModal.present();
+        if (event) {
+            this.selectedFiles = event.target.files;
+            this.fileChange(event);
+          }
+      }
+
+      fileChange(event) {
+        const that = this;
+        if (event.target.files && event.target.files[0]) {
+            this.nameImg = event.target.files[0].name;
+            // const preview = document.querySelector('img');
+            // const file    = document.querySelector('input[type=file]').files[0];
+            const reader  = new FileReader();
+            reader.addEventListener('load', function () {
+                that.isSelected = true;
+                // aggiungo nome img in un div 'event.target.files[0].name'
+                // aggiungo div pulsante invio
+                // preview.src = reader.result;
+                that.imageXLoad = new Image;
+                that.imageXLoad.src = reader.result;
+                that.imageXLoad.title = that.nameImg;
+                that.imageXLoad.onload = function() {
+
+                console.log('that.imageXLoad: ', that.imageXLoad);
+                    // that.addImageToMessages(img);
+                    // that.uploadSingle(img);
+
+                };
+            }, false);
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+                console.log('reader-result: ', event.target.result);
+            }
+        }
+      }
+
+      loadImage() {
+        console.log('loadImage: ');
+        const now: Date = new Date();
+        const timestamp = now.valueOf();
+        const rapporto = (this.imageXLoad.width / this.imageXLoad.height);
+        const w = 240;
+        const h = w / rapporto;
+        const src = '<img src="' + this.imageXLoad.src + '" width="' + w + '" height="' + h + '">';
+
+        this.addImageToMessages(src);
+        this.uploadSingle();
+
+      }
+
+      resetLoadImage() {
+        console.log('resetLoadImage: ');
+        this.nameImg = '';
+        this.imageXLoad.src = '';
+        // document.getElementById('chat21-file').nodeValue = '';
+        this.imageXLoad = null;
+        this.isSelected = false;
+      }
+
+      addImageToMessages(src) {
+        console.log('addImageToMessages: ', src);
+        const message = new MessageModel(
+            null,
+            '',
+            this.recipientId,
+            'Valentina',
+            this.senderId,
+            'Ospite',
+            '',
+            src,
+            'timestamp',
+            '',
+            TYPE_MSG_IMAGE
+        );
+        this.messages.push(message);
+        this.isSelected = true;
+        this.scrollToBottom();
+      }
+
+      uploadSingle() {
+        const that = this;
+        const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-img');
+        send_order_btn.disabled = true;
+        const file = this.selectedFiles.item(0);
+        const currentUpload = new UploadModel(file);
+        this.upSvc.pushUpload(currentUpload)
+        .then(function(snapshot) {
+            console.log('Uploaded a blob or file! ', snapshot.downloadURL);
+            that.onSendImage(snapshot.downloadURL);
+        })
+        .catch(function(error) {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+        console.log('reader-result: ');
+      }
+
+      onSendImage(url) {
+        console.log('onSendImage::::: ', url, this.imageXLoad.width, this.imageXLoad.height);
+        const metadata = {
+            'width': 'this.imageXLoad.width',
+            'height': 'this.imageXLoad.height'
+        };
+        
+        console.log('onSendImage::::: ', metadata, url);
+        this.messagingService.sendMessage(url, TYPE_MSG_IMAGE, metadata);
+        this.scrollToBottom();
+        this.textInputTextArea = null;
+    }
 
 }

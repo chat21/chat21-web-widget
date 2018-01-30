@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 import { environment } from '../../environments/environment';
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
-import { MSG_STATUS_RECEIVED } from '../utils/constants';
+import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
 // models
 import { MessageModel } from '../../models/message';
 
@@ -40,14 +40,22 @@ export class MessagingService {
     this.observable.next(this.messages);
   }
   /** */
-  public initialize(user) {
+  public initialize(user, tenant, recipientId) {
     this.messages = [];
     this.loggedUser = user;
     this.senderId = user.uid;
-    this.tenant = environment.tenant;
-    this.recipientId = environment.agentId;
-    this.conversationId = environment.agentId;
-    this.conversationWith = environment.agentId;
+    if (!tenant) {
+      this.tenant = environment.tenant;
+    } else {
+      this.tenant = tenant;
+    }
+    if (!recipientId) {
+      this.recipientId = environment.agentId;
+    } else {
+      this.recipientId = recipientId;
+    }
+    this.conversationId = this.recipientId;
+    this.conversationWith = this.recipientId;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + this.conversationId;
     console.log('urlNodeFirebase *****', this.urlNodeFirebase);
   }
@@ -68,9 +76,18 @@ export class MessagingService {
         if (calcolaData != null) {
             lastDate = calcolaData;
         }
+        let messageText = '';
+        if (itemMsg.type === TYPE_MSG_IMAGE) {
+          const rapporto = (itemMsg.metadata.width / itemMsg.metadata.height);
+          const w = 240;
+          const h = w / rapporto;
+          messageText = '<img src="' + itemMsg['text'] + '" width="' + w + '" height="' + h + '">';
+        } else {
+          messageText = urlify(itemMsg['text']);
+        }
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
         // tslint:disable-next-line:max-line-length
-        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg['text'], itemMsg['timestamp'], calcolaData, itemMsg['type']);
+        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
         const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
         console.log('child_changed222 *****', index, that.messages, childSnapshot.key);
         that.messages.splice(index, 1, msg);
@@ -100,7 +117,16 @@ export class MessagingService {
         lastDate = calcolaData;
       }
       // creo oggetto messaggio e lo aggiungo all'array dei messaggi
-      const messageText = urlify(itemMsg['text']);
+      let messageText = '';
+      if (itemMsg.type === TYPE_MSG_IMAGE) {
+        console.log('itemMsg.type *****', itemMsg.type);
+        const rapporto = (itemMsg.metadata.width / itemMsg.metadata.height);
+        const w = 240;
+        const h = w / rapporto;
+        messageText = '<img src="' + itemMsg['text'] + '" width="' + w + '" height="' + h + '">';
+      } else {
+        messageText = urlify(itemMsg['text']);
+      }
       // const msg = itemMsg.map();
       // msg.uid = childSnapshot.key;
       // msg.text = urlify(itemMsg['text']);
@@ -138,9 +164,10 @@ export class MessagingService {
    * creo un oggetto messaggio e lo aggiungo all'array di messaggi
    * @param msg
    */
-  public sendMessage(msg) {
+  public sendMessage(msg, type, metadata?) {
+    (metadata) ? metadata = metadata : metadata = '';
     const messageString = this.controlOfMessage(msg);
-    console.log('text::::: ', messageString);
+    console.log('text::::: ', msg, messageString);
     const now: Date = new Date();
     const timestamp = now.valueOf();
     // creo messaggio e lo aggiungo all'array
@@ -154,9 +181,10 @@ export class MessagingService {
             sender: this.senderId,
             sender_fullname: 'Ospite',
             // status: MSG_STATUS_SENDING,
+            metadata: metadata,
             text: messageString,
             timestamp: timestamp,
-            type: 'text'
+            type: type
         };
         console.log('messaggio **************', message);
         const newMessageRef = firebaseMessages.push();

@@ -142,6 +142,26 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+
+.messages a:link {
+    color: #ffffff!important;
+}
+
+/* visited link */
+.messages a:visited {
+    color: #ffffff;
+}
+
+/* mouse over link */
+.messages a:hover {
+    color: #ffffff;
+}
+
+/* selected link */
+.messages a:active {
+    color: #ffffff;
+}
+
 /* BUTTON */
 #chat21-launcher-button {
     background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-logo-widget-new.svg");
@@ -403,7 +423,59 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     border: none!important;
     box-shadow: none!important;
     min-height: 40px!important;
+    padding-right: 30px!important;
+}
 
+.chat21-textarea-button {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 10px;
+    bottom: 25px;
+    display: none;
+}
+
+.chat21-textarea-button.active {
+    display: block;
+}
+
+#chat21-start-upload-img {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("../assets/images/f21ico-photo.svg");
+    /* background-color: #999999; */
+    right: 10px;
+}
+
+#chat21-start-upload-doc {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("../assets/images/f21ico-attached.svg");
+    /* background-color: #999999; */
+    right: 32px;
+}
+#chat21-button-reset {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("../assets/images/f21ico-close.svg");
+    left: 10px;
+}
+#chat21-button-send {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("../assets/images/f21ico-send.svg");
+    right: 10px;
+}
+
+#chat21-footer .name-image {
+    padding: 0px 10px 0px 30px;
+    font-size: 10px;
+    height: 20px;
+    line-height: 18px;
 }
 
 #chat21-main-message-context {
