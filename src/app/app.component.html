@@ -30,7 +30,8 @@ col-xs-5 col-md-3
                         
                         <div class="msg_container base_sent" *ngIf="message.sender == senderId;" >
                             <div class="messages msg_sent">
-                                <p [innerHTML]="message.text"></p>
+                                <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  />
                             </div>
                             <div class="status-message">
                                 <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
@@ -39,12 +40,18 @@ col-xs-5 col-md-3
                             </div>
                         </div>
 
-                        <div class="msg_container base_receive" *ngIf="message.sender != senderId;">    
+
+                        <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
+                        <div class="msg_container base_receive" *ngIf="message.sender != senderId;">  
                             <div class="content-avatar">
-                                <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25">
+                                <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
+                                <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError="this.src='assets/images/f21ico-support.png';"/> </div>
+                                <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
                             </div>
+                            
                             <div class="messages msg_receive">
-                                <p [innerHTML]="message.text"></p>
+                                <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" />
                             </div>
                         </div>
 
@@ -70,7 +77,7 @@ col-xs-5 col-md-3
             <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
             
             <!-- <img src="" width="200" alt="Image preview..."> -->
-            <div class="name-image">{{nameImg}}</div>
+            <div [class.active]="isSelected" class="name-image">{{nameImg}}</div>
             <div id="chat21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
        </div>
     </div>

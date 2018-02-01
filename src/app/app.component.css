@@ -322,6 +322,14 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     font-weight: normal;
 }
 
+#chat21-conversations .messages > img {
+    border-radius: 8px;
+    padding: 0px;
+    margin-bottom: -3px;
+    /* width: 100%;
+    height: 100%; */
+}
+
 /* MESSAGE CONTAINER SENT */
 #chat21-conversations .base_sent {
     justify-content: flex-end;
@@ -374,8 +382,23 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     top: 0;
     margin-right: 6px;
 } 
-.content-avatar .img_circle {
+/* .content-avatar .img_circle {
     border-radius: 50%!important;
+} */
+.profile_image{
+    position:relative;
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    overflow:hidden;
+    background-color: #cccccc;
+    border: 1px solid #cccccc;
+}
+.profile_image img{
+    max-width:100%;
+    min-width: 25px;
+    min-height: 25px;
+    object-fit: cover;
 }
 /* message */
 #chat21-conversations .msg_receive{
@@ -398,6 +421,13 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 #chat21-conversations .time.sender{
     text-align: right;
     margin-right: 24px;
+}
+
+.message_sender_fullname{
+    margin-top: 10px;
+    font-size: 0.8em;
+    color: #666;
+    margin-left: 10px;
 }
 
 
@@ -423,15 +453,15 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     border: none!important;
     box-shadow: none!important;
     min-height: 40px!important;
-    padding-right: 30px!important;
+    padding-right: 40px!important;
 }
 
 .chat21-textarea-button {
     width: 20px;
     height: 20px;
     position: absolute;
-    right: 10px;
-    bottom: 25px;
+    /* right: 10px; */
+    bottom: 40px;
     display: none;
 }
 
@@ -445,7 +475,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-size: 16px;
     background-image : url("../assets/images/f21ico-photo.svg");
     /* background-color: #999999; */
-    right: 10px;
+    right: 4px;
 }
 
 #chat21-start-upload-doc {
@@ -454,7 +484,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-size: 16px;
     background-image : url("../assets/images/f21ico-attached.svg");
     /* background-color: #999999; */
-    right: 32px;
+    right: 24px;
 }
 #chat21-button-reset {
     background-position: center center;
@@ -462,6 +492,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-size: 16px;
     background-image : url("../assets/images/f21ico-close.svg");
     left: 10px;
+    bottom: 25px;
 }
 #chat21-button-send {
     background-position: center center;
@@ -469,13 +500,21 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-size: 16px;
     background-image : url("../assets/images/f21ico-send.svg");
     right: 10px;
+    bottom: 25px;
 }
+
+
+
 
 #chat21-footer .name-image {
     padding: 0px 10px 0px 30px;
     font-size: 10px;
     height: 20px;
     line-height: 18px;
+    display: none;
+}
+#chat21-footer .name-image.active {
+    display: block;
 }
 
 #chat21-main-message-context {
@@ -513,3 +552,5 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     text-decoration: none;
     color:#2a6ac1;
 }
+
+

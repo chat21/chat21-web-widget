@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 import { environment } from '../../environments/environment';
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
-import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
+import { UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
 // models
 import { MessageModel } from '../../models/message';
 
@@ -20,13 +20,17 @@ export class MessagingService {
   loggedUser: any;
   tenant: string;
   senderId: string;
-  recipientId: string;
-  conversationId: string;
+  // recipientId: string;
+  // conversationId: string;
   conversationWith: string;
   urlNodeFirebase: string;
+  urlNodeFirebaseGroups: string;
+  urlNodeFirebaseContact: string;
   messagesRef: any;
   messages: Array<MessageModel>;
   observable: any;
+
+  firebaseMessagesKey: any;
 
   constructor(
     // private firebaseAuth: AngularFireAuth
@@ -40,33 +44,52 @@ export class MessagingService {
     this.observable.next(this.messages);
   }
   /** */
-  public initialize(user, tenant, recipientId) {
+  public initialize(user, tenant) {
+    const that = this;
+
     this.messages = [];
     this.loggedUser = user;
     this.senderId = user.uid;
-    if (!tenant) {
-      this.tenant = environment.tenant;
-    } else {
-      this.tenant = tenant;
-    }
-    if (!recipientId) {
-      this.recipientId = environment.agentId;
-    } else {
-      this.recipientId = recipientId;
-    }
-    this.conversationId = this.recipientId;
-    this.conversationWith = this.recipientId;
-    this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + this.conversationId;
-    console.log('urlNodeFirebase *****', this.urlNodeFirebase);
+    this.tenant = tenant;
+    this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
+
+
+    // const key = sessionStorage.getItem(UID_SUPPORT_GROUP_MESSAGES);
+    // console.log('generateUidConversation **************', key);
+    // //controllo se esiste il nodo!!! se nn esiste ne creo uno nuovo!!!
+    // if (key) {
+    //   this.conversationWith = key;
+    // } else {
+    //   const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
+    //   this.conversationWith = this.generateUidConversation(firebaseMessages);
+    // }
+
+
+
+    // if (!recipientId) {
+    //   this.recipientId = environment.agentId;
+    // } else {
+    //   this.recipientId = recipientId;
+    // }
+    // this.conversationId = this.recipientId;
+
+
+    // this.urlNodeFirebaseGroups = '/apps/' + this.tenant + '/groups/'; // + this.recipientId + '/members/' + this.senderId;
+    // const firebaseGroups = firebase.database().ref().child(this.urlNodeFirebaseGroups);
+    // const status = 1;
+    // firebaseGroups.push(status);
+
+    console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
   /** */
-  public listMessages() {
+  public listMessages(conversationWith) {
+    this.conversationWith = conversationWith;
     let lastDate = '';
     // verifico se esiste la conversazione !!!!
     // Determine which child keys in DataSnapshot have data.
     // const url = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations';
     const that = this;
-    const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
+    const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
     this.messagesRef.on('child_changed', function(childSnapshot) {
         console.log('child_changed *****', childSnapshot.key);
@@ -78,16 +101,13 @@ export class MessagingService {
         }
         let messageText = '';
         if (itemMsg.type === TYPE_MSG_IMAGE) {
-          const rapporto = (itemMsg.metadata.width / itemMsg.metadata.height);
-          const w = 240;
-          const h = w / rapporto;
-          messageText = '<img src="' + itemMsg['text'] + '" width="' + w + '" height="' + h + '">';
+          messageText = itemMsg['text'];
         } else {
           messageText = urlify(itemMsg['text']);
         }
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
         // tslint:disable-next-line:max-line-length
-        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
+        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
         const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
         console.log('child_changed222 *****', index, that.messages, childSnapshot.key);
         that.messages.splice(index, 1, msg);
@@ -119,25 +139,36 @@ export class MessagingService {
       // creo oggetto messaggio e lo aggiungo all'array dei messaggi
       let messageText = '';
       if (itemMsg.type === TYPE_MSG_IMAGE) {
-        console.log('itemMsg.type *****', itemMsg.type);
-        const rapporto = (itemMsg.metadata.width / itemMsg.metadata.height);
-        const w = 240;
-        const h = w / rapporto;
-        messageText = '<img src="' + itemMsg['text'] + '" width="' + w + '" height="' + h + '">';
+        console.log('itemMsg.type *****', itemMsg.metadata);
+        messageText = itemMsg['text'];
       } else {
         messageText = urlify(itemMsg['text']);
       }
+
+      try {
+        const index = searchIndexInArrayForUid(that.messages, itemMsg.metadata['uid']);
+        console.log('child_DELETE *****', index, that.messages, itemMsg.metadata['uid']);
+        if (index > -1) {
+          that.messages.splice(index, 1);
+        }
+      } catch (err) {
+        console.log('RIPROVO ::');
+    }
+
       // const msg = itemMsg.map();
       // msg.uid = childSnapshot.key;
       // msg.text = urlify(itemMsg['text']);
       // msg.timestamp = calcolaData;
       // tslint:disable-next-line:max-line-length
-      const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
+      const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
       console.log('child_added *****', calcolaData, that.messages, msg);
+      // controllo se c'è un oggetto == aggiunto in locale e lo sostituisco
       that.messages.push(msg);
       that.eventChange();
     });
    }
+
+
 
    /**
    * arriorno lo stato del messaggio
@@ -173,11 +204,16 @@ export class MessagingService {
     // creo messaggio e lo aggiungo all'array
     const language = document.documentElement.lang;
     const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
+
+    
+    // const key = this.generateUidConversation(firebaseMessages);
+
     if (firebaseMessages) {
         const message = {
+            channel_type: 'group',
             language: language,
-            recipient: this.recipientId,
-            recipient_fullname: 'Valentina',
+            recipient: this.conversationWith,
+            recipient_fullname: '',
             sender: this.senderId,
             sender_fullname: 'Ospite',
             // status: MSG_STATUS_SENDING,
@@ -186,12 +222,25 @@ export class MessagingService {
             timestamp: timestamp,
             type: type
         };
-        console.log('messaggio **************', message);
-        const newMessageRef = firebaseMessages.push();
-        newMessageRef.set(message);
+
+        const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
+        const newMessageRef = firebaseMessagesCustomUid.push(message);
+        //newMessageRef.set(message);
+        console.log('messaggio **************', message, this.conversationWith);
     }
   }
 
+
+  generateUidConversation(): string {
+    this.firebaseMessagesKey = firebase.database().ref(this.urlNodeFirebase);
+    // creo il nodo conversazione generando un custom uid
+    const newMessageRef = this.firebaseMessagesKey.push();
+    const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
+    //firebaseMessages.child(key).set('');
+    sessionStorage.setItem(UID_SUPPORT_GROUP_MESSAGES, key);
+    this.conversationWith = key;
+    return key;
+  }
   /**
    * purifico il messaggio
    * e lo passo al metodo di invio

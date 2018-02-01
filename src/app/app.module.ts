@@ -23,6 +23,7 @@ import { UserProfileComponent } from './users/user-profile/user-profile.componen
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { UploadService } from './providers/upload.service';
+import { ContactService } from './providers/contact.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { UploadService } from './providers/upload.service';
   providers: [
     AuthService,
     MessagingService,
-    UploadService
+    UploadService,
+    ContactService
   ],
   bootstrap: [AppComponent]
 })

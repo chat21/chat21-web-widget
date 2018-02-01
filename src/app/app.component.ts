@@ -10,7 +10,7 @@ import { MessagingService } from './providers/messaging.service';
 import { MessageModel } from '../models/message';
 // utils
 // import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
-import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT } from './utils/constants';
+import { UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT } from './utils/constants';
 
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
@@ -19,6 +19,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { UploadModel } from '../models/upload';
 import { UploadService } from './providers/upload.service';
+import { ContactService } from './providers/contact.service';
+
 
 
 @Component({
@@ -34,12 +36,12 @@ export class AppComponent implements OnDestroy, OnInit  {
     messages: MessageModel[];
     conversationWith: string;
     senderId: string;
-    recipientId: string;
-    conversationId: string;
+    //recipientId: string;
+    //conversationId: string;
     nameImg: string;
 
     tenant: string;
-    agentId: string;
+    //agentId: string;
 
     imageXLoad = new Image;
     isSelected = false;
@@ -60,16 +62,26 @@ export class AppComponent implements OnDestroy, OnInit  {
         'padding': '10px'
     };
     private selectedFiles: FileList;
-    //private currentUpload: UploadModel;
+    // private currentUpload: UploadModel;
 
-
+    imageStyles = {
+        'overflow-x': 'hidden',
+        'word-wrap': 'break-word',
+        'resize': 'none',
+        'overflow-y': 'auto',
+        'height': this.HEIGHT_DEFAULT,
+        'max-height': '100px',
+        'border': 'none',
+        'padding': '10px'
+    };
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
-        public upSvc: UploadService
+        public upSvc: UploadService,
+        public contactService: ContactService
     ) {
         this.tenant = location.search.split('tenant=')[1];
-        this.agentId = location.search.split('agentId=')[1];
+        //this.agentId = location.search.split('agentId=')[1];
         // tenant: 'chat21',
         // agentId: '9EBA3VLhNKMFIVa0IOco82TkIzk1'
     }
@@ -83,7 +95,8 @@ export class AppComponent implements OnDestroy, OnInit  {
         const subscriptionMessages: Subscription = this.messagingService.observable
         .subscribe(messages => {
             that.messages = messages;
-            // console.log('subscriptionMessages:', that.subscriptions, subscriptionMessages);
+            console.log('subscriptionMessages:', that.subscriptions, subscriptionMessages);
+            that.scrollToBottom();
         });
         this.subscriptions.push(subscriptionMessages);
         this.initialize();
@@ -132,15 +145,27 @@ export class AppComponent implements OnDestroy, OnInit  {
      * 4 - recupero messaggi conversazione
      */
     createConversation(user) {
-        console.log('createConversation: ', user.uid);
         this.senderId = user.uid;
-        this.recipientId = environment.agentId;
-        this.conversationId = environment.agentId;
-        this.conversationWith = environment.agentId;
-        this.upSvc.initialize(user.uid,  this.tenant, this.agentId);
+        //this.recipientId = environment.agentId;
+        //this.conversationId = environment.agentId;
+        //this.conversationWith = environment.agentId;
+        if (!this.tenant) {
+            this.tenant = environment.tenant;
+        }
+        this.messagingService.initialize(user,  this.tenant);
 
-        this.messagingService.initialize(user,  this.tenant, this.agentId);
-        this.messagingService.listMessages();
+        const key = sessionStorage.getItem(UID_SUPPORT_GROUP_MESSAGES);
+        console.log('generateUidConversation **************', key, user.uid);
+        if (key) {
+            this.conversationWith = key;
+        } else {
+            this.conversationWith = this.messagingService.generateUidConversation();
+        }
+
+        console.log('createConversation: ', this.tenant, this.conversationWith);
+        this.upSvc.initialize(user.uid,  this.tenant, this.conversationWith);
+        this.messagingService.listMessages(this.conversationWith);
+        this.contactService.initialize(user.uid, this.tenant, this.conversationWith);
     }
 
     //// ACTIONS ////
@@ -307,15 +332,17 @@ export class AppComponent implements OnDestroy, OnInit  {
         console.log('loadImage: ');
         const now: Date = new Date();
         const timestamp = now.valueOf();
-        const rapporto = (this.imageXLoad.width / this.imageXLoad.height);
-        const w = 240;
-        const h = w / rapporto;
-        const src = '<img src="' + this.imageXLoad.src + '" width="' + w + '" height="' + h + '">';
-
-        this.addImageToMessages(src);
-        this.uploadSingle();
-
+        // const rapporto = (this.imageXLoad.width / this.imageXLoad.height);
+        // const w = 240;
+        // const h = w / rapporto;
+        // console.log('loadImage: ', w, h, rapporto);
+        const src = this.imageXLoad.src;
+        this.addImageToMessages(src, timestamp);
+        this.uploadSingle(timestamp);
+        // this.imageXLoad = null;
+        this.isSelected = false;
       }
+
 
       resetLoadImage() {
         console.log('resetLoadImage: ');
@@ -326,18 +353,24 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.isSelected = false;
       }
 
-      addImageToMessages(src) {
+      addImageToMessages(src, timestamp) {
         console.log('addImageToMessages: ', src);
+        const  metadata = {
+            'uid': timestamp.toString(),
+            'width': this.imageXLoad.width,
+            'height': this.imageXLoad.height
+        };
         const message = new MessageModel(
-            null,
+            timestamp.toString(),
             '',
-            this.recipientId,
+            this.conversationWith,
             'Valentina',
             this.senderId,
             'Ospite',
             '',
+            metadata,
             src,
-            'timestamp',
+            '',
             '',
             TYPE_MSG_IMAGE
         );
@@ -346,7 +379,7 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.scrollToBottom();
       }
 
-      uploadSingle() {
+      uploadSingle(timestamp) {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-img');
         send_order_btn.disabled = true;
@@ -355,7 +388,7 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.upSvc.pushUpload(currentUpload)
         .then(function(snapshot) {
             console.log('Uploaded a blob or file! ', snapshot.downloadURL);
-            that.onSendImage(snapshot.downloadURL);
+            that.onSendImage(snapshot.downloadURL, timestamp);
         })
         .catch(function(error) {
             // Handle Errors here.
@@ -365,17 +398,33 @@ export class AppComponent implements OnDestroy, OnInit  {
         console.log('reader-result: ');
       }
 
-      onSendImage(url) {
+      onSendImage(url, timestamp) {
         console.log('onSendImage::::: ', url, this.imageXLoad.width, this.imageXLoad.height);
         const metadata = {
-            'width': 'this.imageXLoad.width',
-            'height': 'this.imageXLoad.height'
+            'uid': timestamp.toString(),
+            'width': this.imageXLoad.width,
+            'height': this.imageXLoad.height
         };
-        
         console.log('onSendImage::::: ', metadata, url);
         this.messagingService.sendMessage(url, TYPE_MSG_IMAGE, metadata);
         this.scrollToBottom();
         this.textInputTextArea = null;
     }
 
+    getHeightImg(metadata): string {
+        const rapporto = (metadata['width'] / metadata['height']);
+        const h = 230 / rapporto;
+        return h.toString();
+    }
+
+
+    getUrlImgProfile(uid): string {
+        // console.log('getUrlImgProfile::::: ', uid);
+        const profile = this.contactService.getContactProfile(uid);
+        if (profile && profile.imageurl) {
+            return profile.imageurl;
+        } else {
+            return '';
+        }
+    }
 }
