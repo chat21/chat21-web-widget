@@ -10,7 +10,8 @@ import { MessagingService } from './providers/messaging.service';
 import { MessageModel } from '../models/message';
 // utils
 // import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
-import { UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT } from './utils/constants';
+// tslint:disable-next-line:max-line-length
+import { UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER } from './utils/constants';
 
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
@@ -47,6 +48,7 @@ export class AppComponent implements OnDestroy, OnInit  {
     isSelected = false;
 
     MSG_STATUS_SENT = MSG_STATUS_SENT;
+    MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
 
     textInputTextArea: String;

@@ -34,8 +34,10 @@ col-xs-5 col-md-3
                                 <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  />
                             </div>
                             <div class="status-message">
+                                <!-- {{message.status}} -->
                                 <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
                                 <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
+                                <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
                                 <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>     
                             </div>
                         </div>
