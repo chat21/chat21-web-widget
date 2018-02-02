@@ -24,12 +24,14 @@ import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
+import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserLoginComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    StarRatingWidgetComponent
   ],
   imports: [
     BrowserModule,

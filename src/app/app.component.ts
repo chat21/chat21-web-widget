@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UploadModel } from '../models/upload';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
+//import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 
 
 
@@ -64,25 +65,18 @@ export class AppComponent implements OnDestroy, OnInit  {
         'padding': '10px'
     };
     private selectedFiles: FileList;
+    isWidgetActive: boolean;
     // private currentUpload: UploadModel;
 
-    imageStyles = {
-        'overflow-x': 'hidden',
-        'word-wrap': 'break-word',
-        'resize': 'none',
-        'overflow-y': 'auto',
-        'height': this.HEIGHT_DEFAULT,
-        'max-height': '100px',
-        'border': 'none',
-        'padding': '10px'
-    };
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
+        //public starRatingWidgetComponent: StarRatingWidgetComponent,
         public upSvc: UploadService,
         public contactService: ContactService
     ) {
         this.tenant = location.search.split('tenant=')[1];
+        this.isWidgetActive = false;
         //this.agentId = location.search.split('agentId=')[1];
         // tenant: 'chat21',
         // agentId: '9EBA3VLhNKMFIVa0IOco82TkIzk1'
@@ -101,6 +95,16 @@ export class AppComponent implements OnDestroy, OnInit  {
             that.scrollToBottom();
         });
         this.subscriptions.push(subscriptionMessages);
+
+
+        const subscriptionRatingWidget: Subscription = this.messagingService.observableWidgetActive
+        .subscribe(isWidgetActive => {
+            that.isWidgetActive = isWidgetActive;
+            console.log('subscriptionRatingWidget:', that.isWidgetActive, subscriptionRatingWidget);
+        });
+        this.subscriptions.push(subscriptionRatingWidget);
+       
+
         this.initialize();
     }
 
@@ -151,6 +155,7 @@ export class AppComponent implements OnDestroy, OnInit  {
         //this.recipientId = environment.agentId;
         //this.conversationId = environment.agentId;
         //this.conversationWith = environment.agentId;
+
         if (!this.tenant) {
             this.tenant = environment.tenant;
         }
@@ -428,5 +433,16 @@ export class AppComponent implements OnDestroy, OnInit  {
         } else {
             return '';
         }
+    }
+
+
+
+    openRate() {
+        console.log('this.isWidgetActive', this.isWidgetActive);
+        this.isWidgetActive = true;
+    }
+    closeRate() {
+        console.log('this.isWidgetActive', this.isWidgetActive);
+        this.isWidgetActive = false;
     }
 }

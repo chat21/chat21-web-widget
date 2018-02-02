@@ -554,3 +554,60 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 }
 
 
+
+
+
+.modal-page-filter{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.0);
+    z-index: 999999900;
+    opacity: 0;
+    bottom: -100%;
+    transition: all 0.2s;
+}
+.modal-page-filter.active {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    position: absolute;
+    transition: all 0.3s;
+    bottom: 0px;
+    vertical-align: bottom;
+}
+.modal-page-filter .modal-content {
+    position: absolute;
+    background-color: #fff;
+    border: 0px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    top: 60px;
+    bottom: 60px!important;
+    left: 40px;
+    right: 40px;
+    padding:10px;
+}
+.modal-page-filter.active .modal-content{
+    bottom: 120px;
+}
+.modal-page-filter h1.modal-title {
+    min-height: 30px;
+    /* padding: 7px; */
+    /* border-bottom: 1px solid #e9ecef; */
+    /* display: inline; */
+    text-align: center;
+    color: #2a6ac1;
+    font-size: 1.2em;
+}
+.modal-page-filter  h3.modal-title  {
+    text-align: center;
+    color: #333333;
+    font-size: 0.9em;
+    display: inline-block;
+}
+.modal-page-filter .modal-header button{
+    color: #239C96;
+    font-size: 16px;
+    font-weight: bold;
+}

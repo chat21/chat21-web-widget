@@ -79,8 +79,15 @@ col-xs-5 col-md-3
             <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
             
             <!-- <img src="" width="200" alt="Image preview..."> -->
-            <div [class.active]="isSelected" class="name-image">{{nameImg}}</div>
-            <div id="chat21-powered-by"><a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a></div>
+            <div [class.active]="isSelected" class="name-image" >{{nameImg}}</div>
+            <div id="chat21-powered-by" (click)="openRate()" > test
+                <!-- <a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a> -->
+            </div>
        </div>
+
+        <!-- Modale Filtri Markers -->
+        <div class="modal-page-filter" [class.active]="isWidgetActive">
+            <app-star-rating-widget></app-star-rating-widget>
+        </div>
     </div>
 </div>

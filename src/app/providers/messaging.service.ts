@@ -29,15 +29,18 @@ export class MessagingService {
   messagesRef: any;
   messages: Array<MessageModel>;
   observable: any;
+  observableWidgetActive: any;
 
   firebaseMessagesKey: any;
   firebaseGroupMenbersRef: any;
+  isWidgetActive: boolean;
 
   constructor(
     // private firebaseAuth: AngularFireAuth
   ) {
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
+    this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
   /** */
@@ -175,7 +178,7 @@ export class MessagingService {
       channel_type: 'group',
       language: language,
       recipient: this.conversationWith,
-      recipient_fullname: '',
+      recipient_fullname: 'Support Group',
       sender: this.senderId,
       sender_fullname: 'Ospite',
       metadata: metadata,
@@ -241,6 +244,13 @@ export class MessagingService {
         return messageString;
     }
     return '';
+  }
+
+
+  setRating(rate) {
+    console.log('setRating **************', rate);
+    this.observableWidgetActive.next(false);
+
   }
 
 
