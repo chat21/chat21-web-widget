@@ -11,7 +11,7 @@ import { MessageModel } from '../models/message';
 // utils
 // import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
 // tslint:disable-next-line:max-line-length
-import { UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER } from './utils/constants';
+import { MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER } from './utils/constants';
 
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UploadModel } from '../models/upload';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
-//import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
+// import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 
 
 
@@ -35,15 +35,17 @@ export class AppComponent implements OnDestroy, OnInit  {
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     loggedUser: any;
     subscriptions: Subscription[] = [];
+    arrayImages4Load: Array<any>;
+    arrayLocalImmages:  Array<any> = [];
     messages: MessageModel[];
     conversationWith: string;
     senderId: string;
-    //recipientId: string;
-    //conversationId: string;
+    // recipientId: string;
+    // conversationId: string;
     nameImg: string;
 
     tenant: string;
-    //agentId: string;
+    // agentId: string;
 
     imageXLoad = new Image;
     isSelected = false;
@@ -71,13 +73,13 @@ export class AppComponent implements OnDestroy, OnInit  {
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
-        //public starRatingWidgetComponent: StarRatingWidgetComponent,
+        // public starRatingWidgetComponent: StarRatingWidgetComponent,
         public upSvc: UploadService,
         public contactService: ContactService
     ) {
         this.tenant = location.search.split('tenant=')[1];
         this.isWidgetActive = false;
-        //this.agentId = location.search.split('agentId=')[1];
+        // this.agentId = location.search.split('agentId=')[1];
         // tenant: 'chat21',
         // agentId: '9EBA3VLhNKMFIVa0IOco82TkIzk1'
     }
@@ -103,8 +105,6 @@ export class AppComponent implements OnDestroy, OnInit  {
             console.log('subscriptionRatingWidget:', that.isWidgetActive, subscriptionRatingWidget);
         });
         this.subscriptions.push(subscriptionRatingWidget);
-       
-
         this.initialize();
     }
 
@@ -127,6 +127,7 @@ export class AppComponent implements OnDestroy, OnInit  {
         moment.locale('it');
         this.isShowed = false;
         this.messages = [];
+        this.arrayImages4Load = [];
 
         this.authService.authenticateFirebaseAnonymously()
         .then(function(user) {
@@ -152,9 +153,9 @@ export class AppComponent implements OnDestroy, OnInit  {
      */
     createConversation(user) {
         this.senderId = user.uid;
-        //this.recipientId = environment.agentId;
-        //this.conversationId = environment.agentId;
-        //this.conversationWith = environment.agentId;
+        // this.recipientId = environment.agentId;
+        // this.conversationId = environment.agentId;
+        // this.conversationWith = environment.agentId;
 
         if (!this.tenant) {
             this.tenant = environment.tenant;
@@ -287,8 +288,9 @@ export class AppComponent implements OnDestroy, OnInit  {
 
             if (msg && msg.trim() !== '') {
                 console.log('sendMessage -> ', this.textInputTextArea);
-                // this.resizeInputField();
-                this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+                this.resizeInputField();
+                // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+                this.sendMessage(msg, TYPE_MSG_TEXT);
                 this.scrollToBottom();
             }
             this.textInputTextArea = null;
@@ -306,6 +308,8 @@ export class AppComponent implements OnDestroy, OnInit  {
       }
 
       fileChange(event) {
+        // delete this.arrayImages4Load[0];
+        console.log('fileChange: ', event.target.files);
         const that = this;
         if (event.target.files && event.target.files[0]) {
             this.nameImg = event.target.files[0].name;
@@ -317,106 +321,181 @@ export class AppComponent implements OnDestroy, OnInit  {
                 // aggiungo nome img in un div 'event.target.files[0].name'
                 // aggiungo div pulsante invio
                 // preview.src = reader.result;
-                that.imageXLoad = new Image;
-                that.imageXLoad.src = reader.result;
-                that.imageXLoad.title = that.nameImg;
-                that.imageXLoad.onload = function() {
-
-                console.log('that.imageXLoad: ', that.imageXLoad);
-                    // that.addImageToMessages(img);
-                    // that.uploadSingle(img);
-
+                const imageXLoad = new Image;
+                imageXLoad.src = reader.result;
+                imageXLoad.title = that.nameImg;
+                imageXLoad.onload = function() {
+                    //that.arrayImages4Load.push(imageXLoad);
+                    that.arrayImages4Load[0] = imageXLoad;
                 };
             }, false);
             if (event.target.files[0]) {
                 reader.readAsDataURL(event.target.files[0]);
-                console.log('reader-result: ', event.target.result);
+                console.log('reader-result: ', event.target.files[0]);
             }
         }
       }
 
       loadImage() {
-        console.log('loadImage: ');
-        const now: Date = new Date();
-        const timestamp = now.valueOf();
-        // const rapporto = (this.imageXLoad.width / this.imageXLoad.height);
-        // const w = 240;
-        // const h = w / rapporto;
-        // console.log('loadImage: ', w, h, rapporto);
-        const src = this.imageXLoad.src;
-        this.addImageToMessages(src, timestamp);
-        this.uploadSingle(timestamp);
-        // this.imageXLoad = null;
-        this.isSelected = false;
+        // al momento gestisco solo il caricamento di un'immagine alla volta
+        const imageXLoad = this.arrayImages4Load[0];
+        console.log('that.imageXLoad: ', imageXLoad);
+        // const key = imageXLoad.src.substring(imageXLoad.src.length - 16);
+        const metadata = {
+            'src': imageXLoad.src,
+            'width': imageXLoad.width,
+            'height': imageXLoad.height,
+            'status': false
+          };
+          // 1 - invio messaggio
+          this.onSendImage(metadata);
+          // 2 - carico immagine
+          const file = this.selectedFiles.item(0);
+          this.uploadSingle(metadata, file);
+          this.isSelected = false;
       }
 
 
       resetLoadImage() {
         console.log('resetLoadImage: ');
         this.nameImg = '';
-        this.imageXLoad.src = '';
-        // document.getElementById('chat21-file').nodeValue = '';
-        this.imageXLoad = null;
+        delete this.arrayImages4Load[0];
+        document.getElementById('chat21-file').nodeValue = null;
+        // event.target.files[0].name, event.target.files
         this.isSelected = false;
       }
 
-      addImageToMessages(src, timestamp) {
-        console.log('addImageToMessages: ', src);
-        const  metadata = {
-            'uid': timestamp.toString(),
-            'width': this.imageXLoad.width,
-            'height': this.imageXLoad.height
+      getSizeImg(message): any {
+        const metadata = message.metadata;
+        // const MAX_WIDTH_IMAGES = 300;
+        const sizeImage = {
+          width: metadata.width,
+          height: metadata.height
         };
-        const message = new MessageModel(
-            timestamp.toString(),
-            '',
-            this.conversationWith,
-            'Valentina',
-            this.senderId,
-            'Ospite',
-            '',
-            metadata,
-            src,
-            '',
-            '',
-            TYPE_MSG_IMAGE
-        );
-        this.messages.push(message);
-        this.isSelected = true;
-        this.scrollToBottom();
+        // console.log('message::: ', metadata);
+        if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
+          const rapporto = (metadata['width'] / metadata['height']);
+          sizeImage.width = MAX_WIDTH_IMAGES;
+          sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
+        }
+        return sizeImage; // h.toString();
       }
+    //   addImageToMessages(src, timestamp) {
+    //     console.log('addImageToMessages: ', src);
+    //     const  metadata = {
+    //         'uid': timestamp.toString(),
+    //         'width': this.imageXLoad.width,
+    //         'height': this.imageXLoad.height
+    //     };
+    //     const message = new MessageModel(
+    //         timestamp.toString(),
+    //         '',
+    //         this.conversationWith,
+    //         'Valentina',
+    //         this.senderId,
+    //         'Ospite',
+    //         '',
+    //         metadata,
+    //         src,
+    //         '',
+    //         '',
+    //         TYPE_MSG_IMAGE
+    //     );
+    //     this.messages.push(message);
+    //     this.isSelected = true;
+    //     this.scrollToBottom();
+    //   }
 
-      uploadSingle(timestamp) {
+    //   uploadSingle_old(timestamp) {
+    //     const that = this;
+    //     const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-img');
+    //     send_order_btn.disabled = true;
+    //     const file = this.selectedFiles.item(0);
+    //     const currentUpload = new UploadModel(file);
+    //     this.upSvc.pushUpload(currentUpload)
+    //     .then(function(snapshot) {
+    //         console.log('Uploaded a blob or file! ', snapshot.downloadURL);
+    //         that.onSendImage(snapshot.downloadURL, timestamp);
+    //     })
+    //     .catch(function(error) {
+    //         // Handle Errors here.
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //     });
+    //     console.log('reader-result: ');
+    //   }
+
+      uploadSingle(metadata, file) {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-img');
         send_order_btn.disabled = true;
-        const file = this.selectedFiles.item(0);
+
+        console.log('uploadSingle: ', metadata, file);
+        // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
         this.upSvc.pushUpload(currentUpload)
         .then(function(snapshot) {
-            console.log('Uploaded a blob or file! ', snapshot.downloadURL);
-            that.onSendImage(snapshot.downloadURL, timestamp);
+          console.log('Uploaded a file! ', snapshot.downloadURL);
+          that.updateMetadataMessage(metadata);
         })
         .catch(function(error) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log('error: ', errorCode, errorMessage);
         });
-        console.log('reader-result: ');
+        console.log('reader-result: ', file);
       }
 
-      onSendImage(url, timestamp) {
-        console.log('onSendImage::::: ', url, this.imageXLoad.width, this.imageXLoad.height);
-        const metadata = {
-            'uid': timestamp.toString(),
-            'width': this.imageXLoad.width,
-            'height': this.imageXLoad.height
-        };
-        console.log('onSendImage::::: ', metadata, url);
-        this.messagingService.sendMessage(url, TYPE_MSG_IMAGE, metadata);
-        this.scrollToBottom();
+      updateMetadataMessage(metadata) {
+        // recupero id nodo messaggio
+        const key = metadata.src.substring(metadata.src.length - 16);
+        const uid =  this.arrayLocalImmages[key];
+        console.log('UPDATE MESSAGE: ', key, uid);
+        this.messagingService.updateMetadataMessage(uid, metadata);
+        delete this.arrayLocalImmages[key];
+      }
+
+      addLocalImage4Key(key, resultSendMsgKey) {
+        this.arrayLocalImmages[key] = resultSendMsgKey;
+      }
+
+      onSendImage(metadata) {
+        console.log('onSendImage::::: ', metadata);
+        this.sendMessage('', TYPE_MSG_IMAGE, metadata);
+        // this.scrollToBottom();
         this.textInputTextArea = null;
-    }
+      }
+
+      sendMessage(msg, type, metadata?) {
+        (metadata) ? metadata = metadata : metadata = '';
+        console.log('SEND MESSAGE: ', msg);
+        if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
+          // tslint:disable-next-line:max-line-length
+          const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
+          console.log('resultSendMsgKey: ', resultSendMsgKey);
+          if (resultSendMsgKey) {
+            if (metadata) {
+              const key = metadata.src.substring(metadata.src.length - 16);
+              this.addLocalImage4Key(key, resultSendMsgKey);
+            }
+            this.scrollToBottom();
+          }
+        }
+      }
+
+    //   onSendImage(url, timestamp) {
+    //     console.log('onSendImage::::: ', url, this.imageXLoad.width, this.imageXLoad.height);
+    //     const metadata = {
+    //         'uid': timestamp.toString(),
+    //         'width': this.imageXLoad.width,
+    //         'height': this.imageXLoad.height
+    //     };
+    //     console.log('onSendImage::::: ', metadata, url);
+    //     this.messagingService.sendMessage(url, TYPE_MSG_IMAGE, metadata);
+    //     this.scrollToBottom();
+    //     this.textInputTextArea = null;
+    // }
 
     getHeightImg(metadata): string {
         const rapporto = (metadata['width'] / metadata['height']);

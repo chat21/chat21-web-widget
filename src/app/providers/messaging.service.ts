@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 import { environment } from '../../environments/environment';
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
-import { UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
+import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
 // models
 import { MessageModel } from '../../models/message';
 
@@ -34,10 +34,12 @@ export class MessagingService {
   firebaseMessagesKey: any;
   firebaseGroupMenbersRef: any;
   isWidgetActive: boolean;
+  channel_type: string;
 
   constructor(
     // private firebaseAuth: AngularFireAuth
   ) {
+    this.channel_type = CHANNEL_TYPE_GROUP;
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
     this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
@@ -160,13 +162,49 @@ export class MessagingService {
     }
   }
 
+
+  sendMessage(msg, type, metadata, conversationWith): string {
+    console.log('SEND MESSAGE: ', msg);
+    // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
+    // const messageString = urlify(msg);
+    const now: Date = new Date();
+    const timestamp = now.valueOf();
+    const language = document.documentElement.lang;
+    // const sender_fullname = this.loggedUser.fullname;
+    // const recipient_fullname = conversationWithDetailFullname;
+
+    const message = {
+      language: language,
+      recipient: conversationWith,
+      recipient_fullname: 'Support Group',
+      sender: this.senderId,
+      sender_fullname: 'Ospite',
+      metadata: metadata,
+      text: msg,
+      timestamp: timestamp,
+      type: type,
+      channel_type: this.channel_type
+    };
+
+    const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
+    console.log('messaggio **************', message);
+    const newMessageRef = firebaseMessagesCustomUid.push();
+    newMessageRef.set(message);
+    // se non c'è rete viene aggiunto al nodo in locale e visualizzato
+    // appena torno on line viene inviato!!!
+
+    if (!this.firebaseGroupMenbersRef) {
+      this.checkRemoveMember();
+    }
+    return newMessageRef.key;
+  }
   /**
    * invio messaggio
    * purifico il testo del messaggio
    * creo un oggetto messaggio e lo aggiungo all'array di messaggi
    * @param msg
   */
-  public sendMessage(msg, type, metadata?) {
+  public sendMessage_old(msg, type, metadata?) {
     (metadata) ? metadata = metadata : metadata = '';
     const messageString = this.controlOfMessage(msg);
     console.log('text::::: ', msg, messageString);
@@ -253,5 +291,14 @@ export class MessagingService {
 
   }
 
+
+  updateMetadataMessage(uid, metadata) {
+    metadata.status = true;
+    const message = {
+      metadata: metadata
+    };
+    const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + uid);
+    firebaseMessages.set(message);
+  }
 
 }

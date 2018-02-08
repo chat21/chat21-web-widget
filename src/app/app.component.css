@@ -165,15 +165,15 @@
 /* BUTTON */
 #chat21-launcher-button {
     background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-logo-widget-new.svg");
-    background-size: 40px 40px;
+    background-size: 60px 60px;
     background-repeat: no-repeat;
     border-radius: 50%;
     position: fixed;
     z-index: 999999000;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     cursor: pointer;
     background-position: center;
     background-color: #ffffff00;
@@ -275,6 +275,9 @@
 }
 /* no conflict
 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
+#chat21-conversations {
+    overflow-y: hidden!important;
+}
 #chat21-conversations .panelShown{
     display: block;
 }

@@ -30,8 +30,10 @@ col-xs-5 col-md-3
                         
                         <div class="msg_container base_sent" *ngIf="message.sender == senderId;" >
                             <div class="messages msg_sent">
-                                <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
-                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  />
+                                <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+                                <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  /> -->
                             </div>
                             <div class="status-message">
                                 <!-- {{message.status}} -->
@@ -52,8 +54,10 @@ col-xs-5 col-md-3
                             </div>
                             
                             <div class="messages msg_receive">
-                                <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
-                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" />
+                                <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';"  class="message-contentX message-content-imageX" [src]="message.metadata.src"  [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+                                <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" /> -->
                             </div>
                         </div>
 

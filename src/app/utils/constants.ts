@@ -18,12 +18,18 @@ export const MSG_STATUS_SEEN = 300;
 export const TYPE_MSG_TEXT: string = 'text';
 export const TYPE_MSG_IMAGE: string = 'image';
 
+// CHANNEL TYPE
+export const CHANNEL_TYPE_GROUP: string = 'group';
+export const CHANNEL_TYPE_DIRECT: string = 'direct';
+
 // NODE MESSAGES
 export const UID_SUPPORT_GROUP_MESSAGES: string = 'support-group';
 
 // constans messages detail
 export const MIN_HEIGHT_TEXTAREA: number = 24;
 export const MAX_HEIGHT_TEXTAREA: number = 180;
+export const MAX_WIDTH_IMAGES: number = 230;
+
 
 // pagine
 export const PARENT_PAGE_USERS: string = 'users';

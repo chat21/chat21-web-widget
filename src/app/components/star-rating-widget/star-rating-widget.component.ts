@@ -16,7 +16,7 @@ export class StarRatingWidgetComponent implements OnInit {
   constructor(
     public messagingService: MessagingService
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -26,7 +26,7 @@ export class StarRatingWidgetComponent implements OnInit {
   openRate(e) {
     const that = this;
     this.rate = parseInt(e.srcElement.value, 0);
-    
+
     setTimeout(function() {
       that.step = 1;
       console.log('VOTA!!!::', that.step, that.rate);

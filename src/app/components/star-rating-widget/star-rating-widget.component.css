@@ -67,7 +67,23 @@ h3.modal-title  {
   line-height: 20px;
 }
 
-
+#chat21-main-message-context {
+  overflow-x: hidden;
+  word-wrap: break-word;
+  resize: horizontal;
+  overflow-y: visible;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 10px;
+  color: #1a1a1a;
+  min-width: 100%;
+  outline: 0;
+  resize: none!important;
+  max-height: 180px;
+  font-size: 13px;
+  overflow: auto;
+  border-radius: 5px;
+}
 
 /****** Style Star Rating Widget *****/
 
