@@ -539,6 +539,24 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 }
 
 
+.chat21b-box-new-conversation {
+    margin: 6px;
+    border-color: #2a6ac1;
+    border-spacing: 10px;
+    border-style: inset;
+    border-width: 2px;
+    height: 40px;
+    position: relative;
+    width: 304px;
+    background-color: #ffffff;
+    z-index: 100;
+    font-size: 13px;
+    color: #2a6ac1;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+}
+
 #chat21-powered-by {
     width: 100%;
     text-align: center;

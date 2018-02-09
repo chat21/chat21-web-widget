@@ -14,6 +14,8 @@ import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TY
 // models
 import { MessageModel } from '../../models/message';
 
+import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
+
 @Injectable()
 export class MessagingService {
 
@@ -28,7 +30,13 @@ export class MessagingService {
   urlNodeFirebaseContact: string;
   messagesRef: any;
   messages: Array<MessageModel>;
+
   observable: any;
+  // obsAdded: any;
+  obsAdded: BehaviorSubject<MessageModel>;
+  obsChanged: BehaviorSubject<MessageModel>;
+  obsRemoved: BehaviorSubject<MessageModel>;
+
   observableWidgetActive: any;
 
   firebaseMessagesKey: any;
@@ -38,22 +46,36 @@ export class MessagingService {
 
   constructor(
     // private firebaseAuth: AngularFireAuth
+    public starRatingWidgetService: StarRatingWidgetService
   ) {
     this.channel_type = CHANNEL_TYPE_GROUP;
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
+
+    this.obsAdded = new BehaviorSubject<MessageModel>(null);
+    this.obsChanged = new BehaviorSubject<MessageModel>(null);
+    this.obsRemoved = new BehaviorSubject<MessageModel>(null);
+    
     this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
   /** */
-  eventChange() {
+  eventChange(message, event) {
     this.observable.next(this.messages);
+    if (event === 'ADDED') {
+      this.obsAdded.next(message);
+    } else if (event === 'CHANGED') {
+      this.obsChanged.next(message);
+    } else if (event === 'REMOVED') {
+      this.obsRemoved.next(message);
+    }
   }
 
   /**
    *
   */
   public initialize(user, tenant) {
+
     const that = this;
     this.messages = [];
     this.loggedUser = user;
@@ -68,6 +90,7 @@ export class MessagingService {
   */
   public listMessages(conversationWith) {
     this.conversationWith = conversationWith;
+    this.checkRemoveMember();
     let lastDate = '';
     const that = this;
     const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
@@ -80,24 +103,20 @@ export class MessagingService {
         if (calcolaData != null) {
             lastDate = calcolaData;
         }
-        let messageText = '';
-        if (itemMsg.type === TYPE_MSG_IMAGE) {
-          messageText = itemMsg['text'];
-        } else {
-          messageText = urlify(itemMsg['text']);
-        }
+        const messageText = urlify(itemMsg['text']);
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
         // tslint:disable-next-line:max-line-length
         const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
         const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-        console.log('child_changed222 *****', index, that.messages, childSnapshot.key);
+        console.log('child_changed *****', index, that.messages, childSnapshot.key);
         that.messages.splice(index, 1, msg);
         // aggiorno stato messaggio
         // questo stato indica che è stato consegnato al client e NON che è stato letto
         that.setStatusMessage(childSnapshot, that.conversationWith);
         // pubblico messaggio - sottoscritto in dettaglio conversazione
-        that.eventChange();
+        that.eventChange(msg, 'CHANGED');
     });
+
     this.messagesRef.on('child_removed', function(childSnapshot) {
       // al momento non previsto!!!
       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
@@ -105,8 +124,9 @@ export class MessagingService {
         if (index > -1) {
           that.messages.splice(index, 1);
         }
-        that.eventChange();
+        that.eventChange(childSnapshot.key, 'REMOVED');
     });
+
     this.messagesRef.on('child_added', function(childSnapshot) {
       const itemMsg = childSnapshot.val();
       console.log('child_added *****', childSnapshot.key);
@@ -135,9 +155,9 @@ export class MessagingService {
       // tslint:disable-next-line:max-line-length
       const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
       console.log('child_added *****', calcolaData, that.messages, msg);
-      // controllo se c'è un oggetto == aggiunto in locale e lo sostituisco
       that.messages.push(msg);
-      that.eventChange();
+
+      that.eventChange(msg, 'ADDED');
     });
   }
 
@@ -193,9 +213,9 @@ export class MessagingService {
     // se non c'è rete viene aggiunto al nodo in locale e visualizzato
     // appena torno on line viene inviato!!!
 
-    if (!this.firebaseGroupMenbersRef) {
-      this.checkRemoveMember();
-    }
+    // if (!this.firebaseGroupMenbersRef) {
+      // this.checkRemoveMember();
+    // }
     return newMessageRef.key;
   }
   /**
@@ -204,40 +224,41 @@ export class MessagingService {
    * creo un oggetto messaggio e lo aggiungo all'array di messaggi
    * @param msg
   */
-  public sendMessage_old(msg, type, metadata?) {
-    (metadata) ? metadata = metadata : metadata = '';
-    const messageString = this.controlOfMessage(msg);
-    console.log('text::::: ', msg, messageString);
-    const now: Date = new Date();
-    const timestamp = now.valueOf();
-    // creo messaggio e lo aggiungo all'array
-    const language = document.documentElement.lang;
-    const message = {
-      channel_type: 'group',
-      language: language,
-      recipient: this.conversationWith,
-      recipient_fullname: 'Support Group',
-      sender: this.senderId,
-      sender_fullname: 'Ospite',
-      metadata: metadata,
-      text: messageString,
-      timestamp: timestamp,
-      type: type
-    };
-    const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-    const newMessageRef = firebaseMessagesCustomUid.push(message);
-    console.log('messaggio **************', this.firebaseGroupMenbersRef, message, this.conversationWith);
+  // public sendMessage_old(msg, type, metadata?) {
+  //   (metadata) ? metadata = metadata : metadata = '';
+  //   const messageString = this.controlOfMessage(msg);
+  //   console.log('text::::: ', msg, messageString);
+  //   const now: Date = new Date();
+  //   const timestamp = now.valueOf();
+  //   // creo messaggio e lo aggiungo all'array
+  //   const language = document.documentElement.lang;
+  //   const message = {
+  //     channel_type: 'group',
+  //     language: language,
+  //     recipient: this.conversationWith,
+  //     recipient_fullname: 'Support Group',
+  //     sender: this.senderId,
+  //     sender_fullname: 'Ospite',
+  //     metadata: metadata,
+  //     text: messageString,
+  //     timestamp: timestamp,
+  //     type: type
+  //   };
+  //   const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
+  //   const newMessageRef = firebaseMessagesCustomUid.push(message);
+  //   console.log('messaggio **************', this.firebaseGroupMenbersRef, message, this.conversationWith);
 
-    if (!this.firebaseGroupMenbersRef) {
-      this.checkRemoveMember();
-    }
+  //   if (!this.firebaseGroupMenbersRef) {
+  //     this.checkRemoveMember();
+  //   }
 
-  }
+  // }
 
   /**
    *
    */
   private checkRemoveMember() {
+    const that = this;
     // dopo aver aggiunto un messaggio al gruppo
     // mi sottoscrivo al nodo user/groups/ui-group/members
     // tslint:disable-next-line:max-line-length
@@ -246,15 +267,16 @@ export class MessagingService {
     this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
       console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
-      if ( childSnapshot.key === this.loggedUser.uid) {
+      if ( childSnapshot.key === that.loggedUser.uid) {
         // CHIUDO CONVERSAZIONE
-        this.closeConversation();
+        that.closeConversation();
       }
     });
   }
 
   private closeConversation() {
-    // apro popup stelle e add messaggio
+    // apro popup rating
+    this.starRatingWidgetService.setOsservable(true);
   }
 
   /**
@@ -288,7 +310,6 @@ export class MessagingService {
   setRating(rate) {
     console.log('setRating **************', rate);
     this.observableWidgetActive.next(false);
-
   }
 
 

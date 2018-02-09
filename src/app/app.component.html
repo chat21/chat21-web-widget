@@ -72,23 +72,29 @@ col-xs-5 col-md-3
         </div>
 
        <div id="chat21-footer">
-            <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." >
-            </textarea>
-            <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label>
-            <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
-        
-            <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
-            <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
-            <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
-            <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
+            <div *ngIf="isConversationOpen == false" class="chat21b-box-new-conversation" (click)="startNwConversation()">
+                INIZIA UNA NUOVA CONVERSAZIONE
+            </div>
+            <div *ngIf="isConversationOpen == true">
+                <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." ></textarea>
+                <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label>
+                <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
             
-            <!-- <img src="" width="200" alt="Image preview..."> -->
-            <div [class.active]="isSelected" class="name-image" >{{nameImg}}</div>
-            <div id="chat21-powered-by" (click)="openRate()" > test
-                <!-- <a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a> -->
+                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
+                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
+                <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
+                <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
+                
+                <!-- <img src="" width="200" alt="Image preview..."> -->
+                <div [class.active]="isSelected" class="name-image" >{{nameImg}}</div>
+            </div> 
+            <div id="chat21-powered-by" >
+                <!-- (click)="openRate()" -->
+                <a target="_blank" href="http://www.chat21.org/">Offerto da <b>Chat21</b></a>
             </div>
        </div>
 
+        
         <!-- Modale Filtri Markers -->
         <div class="modal-page-filter" [class.active]="isWidgetActive">
             <app-star-rating-widget></app-star-rating-widget>

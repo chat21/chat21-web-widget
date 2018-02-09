@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
 // import { AngularFirestore } from 'angularfire2/firestore';
@@ -25,6 +26,7 @@ import { MessagingService } from './providers/messaging.service';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
+import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 
 @NgModule({
   declarations: [
@@ -39,11 +41,7 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     BrowserAnimationsModule,
-    // MdButtonModule,
-    // MdListModule,
-    // MdToolbarModule,
-    // FlexLayoutModule,
-    // MdInputModule,
+    HttpModule,
     FormsModule,
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a
     // NgbModule.forRoot(),
@@ -57,7 +55,8 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
     AuthService,
     MessagingService,
     UploadService,
-    ContactService
+    ContactService,
+    StarRatingWidgetService
   ],
   bootstrap: [AppComponent]
 })
