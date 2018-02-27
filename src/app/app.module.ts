@@ -14,7 +14,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // import {MdButtonModule, MdListModule, MdToolbarModule} from '@angular/material';
 // import { FlexLayoutModule } from '@angular/flex-layout';
 // import {MdInputModule} from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { UserLoginComponent } from './users/user-login/user-login.component';
@@ -43,6 +43,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
     BrowserAnimationsModule,
     HttpModule,
     FormsModule,
+    ReactiveFormsModule,
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a
     // NgbModule.forRoot(),
     LocalStorageModule.withConfig({

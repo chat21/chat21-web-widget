@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
-
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 // services
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
-
 // models
 import { MessageModel } from '../models/message';
+import { DepartmentModel } from '../models/department';
 
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
 // tslint:disable-next-line:max-line-length
-import { MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
+import { CLIENT_BROWSER, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import { Subscription } from 'rxjs/Subscription';
@@ -34,16 +34,27 @@ export class AppComponent implements OnDestroy, OnInit  {
     loggedUser: any;
     subscriptions: Subscription[] = [];
     arrayImages4Load: Array<any>;
-    arrayLocalImmages:  Array<any> = [];
+    attributes: any;
+
     messages: MessageModel[];
     conversationWith: string;
     senderId: string;
     nameImg: string;
     tenant: string;
+    chat21_agentId: string;
+
+    myForm: FormGroup;
+    public events: any[] = [];
+    public submitted: boolean;
+
     isSelected = false;
     isConversationOpen = true;
 
-    // MSG_STATUS_SENDING = MSG_STATUS_SENDING;
+    preChatForm = false;
+    userEmail = '';
+    userName = '';
+
+
     MSG_STATUS_SENT = MSG_STATUS_SENT;
     MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
@@ -60,18 +71,37 @@ export class AppComponent implements OnDestroy, OnInit  {
         'border': 'none',
         'padding': '10px'
     };
-    private selectedFiles: FileList;
+    selectedFiles: FileList;
     isWidgetActive: boolean;
+
+    departments: DepartmentModel[];
+    attributes_message: any;
+    openSelectionDepartment: boolean;
+    departmentSelected: DepartmentModel;
 
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
         public starRatingWidgetService: StarRatingWidgetService,
         public upSvc: UploadService,
-        public contactService: ContactService
+        public contactService: ContactService,
+        public formBuilder: FormBuilder
     ) {
-        this.tenant = location.search.split('tenant=')[1];
+
+        this.setForm();
+
+        if (location.search) {
+            let TEMP = location.search.split('chat21_tenant=')[1];
+            if (TEMP) { this.tenant = TEMP.split('&')[0]; }
+            TEMP = (location.search.split('chat21_agentId=')[1]);
+            if (TEMP) { this.chat21_agentId = TEMP.split('&')[0]; }
+            TEMP = (location.search.split('chat21_preChatForm=')[1]);
+            if (TEMP) { this.preChatForm = (TEMP.split('&')[0] === 'true' || TEMP.split('&')[0] === '1'); }
+
+            // this.chat21_agentId = (location.search.split('chat21_agentId=')[1]).split('&')[0];
+        }
         this.isWidgetActive = false;
+        this.authService.authenticateFirebaseAnonymously();
     }
 
     /**
@@ -79,18 +109,41 @@ export class AppComponent implements OnDestroy, OnInit  {
      * inizializzo la pagina
      */
     ngOnInit() {
+        this.initialize();
+        this.openSelectionDepartment = true;
         this.isShowed = false;
-        const key = sessionStorage.getItem(UID_SUPPORT_GROUP_MESSAGES);
-        if (key) {
-            this.conversationWith = key;
-        }
-        if (!this.tenant) {
-            this.tenant = environment.tenant;
-        }
         moment.locale('it');
         this.setSubscriptions();
-        this.initialize();
     }
+
+    // START FORM
+    // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
+    /** */
+    setForm() {
+        // SET FORM
+        const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+        this.myForm = this.formBuilder.group({
+            email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+            name: ['', Validators.compose([Validators.minLength(5), Validators.required])]
+        });
+        this.subcribeToFormChanges();
+    }
+    /** */
+    subcribeToFormChanges() {
+        const that = this;
+        const myFormValueChanges$ = this.myForm.valueChanges;
+        myFormValueChanges$.subscribe(x => {
+            that.userName = x.name;
+            that.userEmail = x.email;
+        });
+    }
+    /** */
+    closeForm() {
+        this.attributes.userName = this.userName;
+        this.attributes.userEmail = this.userEmail;
+        this.preChatForm = false;
+    }
+    // END FORM
 
     /**
      * imposto le sottoscrizioni
@@ -100,6 +153,18 @@ export class AppComponent implements OnDestroy, OnInit  {
      */
     setSubscriptions() {
         const that = this;
+
+        // USER AUTENTICATE
+        const subLoggedUser: Subscription = this.authService.obsLoggedUser
+        .subscribe(user => {
+            if (user) {
+                console.log('USER AUTENTICATE: ', user);
+                that.loggedUser = user;
+                that.initConversation();
+                that.createConversation();
+            }
+        });
+
         // MSG ADDED
         const subMsgAdded: Subscription = this.messagingService.obsAdded
         .subscribe(message => {
@@ -143,7 +208,7 @@ export class AppComponent implements OnDestroy, OnInit  {
             that.isWidgetActive = isWidgetActive;
             if (isWidgetActive === false) {
                 this.conversationWith = null;
-                this.generateNewUidConversation(this.loggedUser);
+                this.generateNewUidConversation();
                 console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
             } else if (isWidgetActive === true) {
                 console.log('APROOOOOOOO!!!!:', );
@@ -169,28 +234,16 @@ export class AppComponent implements OnDestroy, OnInit  {
      * se il login è andato a buon fine recupero id utente
      */
     initialize() {
-        const that = this;
         this.messages = [];
         this.arrayImages4Load = [];
-        if (!this.loggedUser) {
-            this.authService.authenticateFirebaseAnonymously()
-            .then(function(user) {
-                that.loggedUser = user;
-                that.generateNewUidConversation(user);
-                that.createConversation(user);
-            })
-            .catch(function(error) {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                that.messages = [];
-                console.log('22222 signInAnonymously KO:', errorCode, errorMessage);
-                // devo scrivere un messaggio di errore e aggiungere un pulsante riprova
-            });
-        } else {
-            this.generateNewUidConversation(this.loggedUser);
-            this.createConversation(this.loggedUser);
-        }
+        this.attributes = {
+            client: CLIENT_BROWSER,
+            sourcePage: location.href,
+            departmentId: '',
+            departmentName: '',
+            userEmail: '',
+            userName: ''
+        };
     }
 
     /**
@@ -198,11 +251,33 @@ export class AppComponent implements OnDestroy, OnInit  {
      * al login o all'apertura di una nuova conversazione
      * @param user
      */
-    generateNewUidConversation(user) {
-        console.log('generateUidConversation **************', this.conversationWith, user.uid);
+    generateNewUidConversation() {
+        console.log('generateUidConversation **************', this.conversationWith, this.loggedUser.uid);
         if (!this.conversationWith) {
-            this.conversationWith = this.messagingService.generateUidConversation();
+            this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
         }
+    }
+
+    /** */
+    initConversation() {
+        // set this.conversationWith
+        if (this.chat21_agentId) {
+            this.conversationWith = this.chat21_agentId;
+        } else {
+            const key = sessionStorage.getItem(this.loggedUser.uid);
+            console.log('key:', key, this.loggedUser.uid, sessionStorage);
+            if (key) {
+                this.conversationWith = key;
+            } else {
+                this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
+            }
+            console.log('this.conversationWith:', this.conversationWith);
+        }
+        // set tenant
+        if (!this.tenant) {
+            this.tenant = environment.tenant;
+        }
+        console.log('INIT VAR:', this.tenant, this.chat21_agentId, this.conversationWith);
     }
 
     /**
@@ -212,16 +287,70 @@ export class AppComponent implements OnDestroy, OnInit  {
      * 3 - inizializzo messagingService
      * 4 - recupero messaggi conversazione
      */
-    createConversation(user) {
-        this.senderId = user.uid;
-        this.messagingService.initialize(user,  this.tenant);
+    createConversation() {
+        const that = this;
+        this.senderId = this.loggedUser.uid;
+        if (this.chat21_agentId) {
+            this.messagingService.initialize(this.loggedUser,  this.tenant, CHANNEL_TYPE_DIRECT);
+        } else {
+            this.messagingService.initialize(this.loggedUser,  this.tenant, CHANNEL_TYPE_GROUP);
+        }
+        const token = this.authService.token;
         console.log('createConversation: ', this.tenant, this.conversationWith);
-        this.upSvc.initialize(user.uid,  this.tenant, this.conversationWith);
+        this.upSvc.initialize(this.loggedUser.uid,  this.tenant, this.conversationWith);
+        this.contactService.initialize(this.loggedUser.uid, this.tenant, this.conversationWith);
+        this.messagingService.checkListMessages(this.conversationWith)
+        .then(function(snapshot) {
+            console.log('checkListMessages: ', snapshot);
+            if (snapshot.exists()) {
+                that.openSelectionDepartment = false;
+                that.messagingService.listMessages(that.conversationWith);
+            } else {
+                that.getMongDbDepartments();
+            }
+        });
+    }
+    /** */
+    getMongDbDepartments() {
+        const token = this.authService.token;
+        this.messagingService.getMongDbDepartments(token)
+        .subscribe(
+            response => {
+                console.log('OK DEPARTMENTS ::::', response);
+                this.departments = response;
+                if (this.departments.length > 1) {
+                    this.openSelectionDepartment = true;
+                } else {
+                    this.openSelectionDepartment = false;
+                    this.setDepartment(this.departments[0]);
+                }
+            },
+            errMsg => {
+                console.log('http ERROR MESSAGE', errMsg);
+                window.alert('MSG_GENERIC_SERVICE_ERROR');
+            },
+            () => {
+                console.log('API ERROR NESSUNO');
+            }
+        );
+    }
+    /** */
+    setDepartment(department) {
+        this.openSelectionDepartment = false;
+        this.attributes.departmentId = department._id;
+        this.attributes.departmentName = department.name;
         this.messagingService.listMessages(this.conversationWith);
-        this.contactService.initialize(user.uid, this.tenant, this.conversationWith);
+        //this.preChatForm = true;
     }
 
+
     //// ACTIONS ////
+    /** */
+    onSelectDepartment(department) {
+        console.log('onSelectDepartment: ', department);
+        this.departmentSelected = department;
+        this.setDepartment(department);
+    }
     /**
      * apro il popup conversazioni
      */
@@ -385,13 +514,13 @@ export class AppComponent implements OnDestroy, OnInit  {
             metadata.uid, // uid
             language, // language
             this.conversationWith, // recipient
-            'Valentina', // recipient_fullname
+            'Support Group', // recipient_fullname
             this.senderId, // sender
             'Ospite', // sender_fullname
             '', // status
             metadata, // metadata
             '', // text
-            timestamp.toString(), // timestamp
+            timestamp, // timestamp
             '', // headerDate
             TYPE_MSG_IMAGE // type
         );
@@ -441,7 +570,7 @@ export class AppComponent implements OnDestroy, OnInit  {
      */
     uploadSingle(metadata, file) {
         const that = this;
-        const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-img');
+        const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
 
         console.log('uploadSingle: ', metadata, file);
@@ -473,8 +602,9 @@ export class AppComponent implements OnDestroy, OnInit  {
         console.log('SEND MESSAGE: ', msg, type, metadata);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
           // tslint:disable-next-line:max-line-length
-          const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
-          console.log('resultSendMsgKey: ', resultSendMsgKey);
+          this.messagingService.sendMessage(msg, type, metadata, this.conversationWith, this.attributes);
+        //   const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
+        //   console.log('resultSendMsgKey: ', resultSendMsgKey);
         }
     }
 

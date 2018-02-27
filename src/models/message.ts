@@ -9,7 +9,7 @@ export class MessageModel {
         public status: string,
         public metadata: any,
         public text: string,
-        public timestamp: string,
+        public timestamp: number,
         public headerDate: string,
         public type: string,
     ) { }

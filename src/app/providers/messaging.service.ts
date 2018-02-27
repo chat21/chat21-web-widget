@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -10,9 +10,11 @@ import * as firebase from 'firebase/app';
 import { environment } from '../../environments/environment';
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
-import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE } from '../utils/constants';
+// tslint:disable-next-line:max-line-length
+import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, CHANNEL_TYPE_DIRECT } from '../utils/constants';
 // models
 import { MessageModel } from '../../models/message';
+import { DepartmentModel } from '../../models/department';
 
 import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
 
@@ -43,19 +45,22 @@ export class MessagingService {
   firebaseGroupMenbersRef: any;
   isWidgetActive: boolean;
   channel_type: string;
+  MONGODB_BASE_URL: string;
+  departments: DepartmentModel[];
+
 
   constructor(
     // private firebaseAuth: AngularFireAuth
-    public starRatingWidgetService: StarRatingWidgetService
+    public starRatingWidgetService: StarRatingWidgetService,
+    public http: Http
   ) {
-    this.channel_type = CHANNEL_TYPE_GROUP;
+    // this.channel_type = CHANNEL_TYPE_GROUP;
+    this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
-
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
     this.obsChanged = new BehaviorSubject<MessageModel>(null);
     this.obsRemoved = new BehaviorSubject<MessageModel>(null);
-    
     this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
@@ -74,8 +79,8 @@ export class MessagingService {
   /**
    *
   */
-  public initialize(user, tenant) {
-
+  public initialize(user, tenant, channel_type) {
+    this.channel_type = channel_type;
     const that = this;
     this.messages = [];
     this.loggedUser = user;
@@ -85,16 +90,42 @@ export class MessagingService {
     console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
 
+  public getMongDbDepartments(token): Observable<DepartmentModel[]> {
+    const url = this.MONGODB_BASE_URL + 'departments/';
+    // const url = `http://api.chat21.org/app1/departments`;
+    console.log('MONGO DB DEPARTMENTS URL', url);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', token);
+    return this.http
+      .get(url, { headers })
+      .map((response) => response.json());
+  }
+
   /**
    *
   */
-  public listMessages(conversationWith) {
+
+  public checkListMessages(conversationWith): any {
     this.conversationWith = conversationWith;
     this.checkRemoveMember();
-    let lastDate = '';
     const that = this;
     const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
+    return this.messagesRef.once('value');
+  }
+
+  public listMessages(conversationWith) {
+    const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
+    text_area.focus();
+    let lastDate = '';
+    const that = this;
+    // this.conversationWith = conversationWith;
+    // this.checkRemoveMember();
+    // const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
+    // this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
+
+    // CHANGED
     this.messagesRef.on('child_changed', function(childSnapshot) {
         console.log('child_changed *****', childSnapshot.key);
         const itemMsg = childSnapshot.val();
@@ -117,6 +148,8 @@ export class MessagingService {
         that.eventChange(msg, 'CHANGED');
     });
 
+
+    // REMOVED
     this.messagesRef.on('child_removed', function(childSnapshot) {
       // al momento non previsto!!!
       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
@@ -127,6 +160,8 @@ export class MessagingService {
         that.eventChange(childSnapshot.key, 'REMOVED');
     });
 
+
+    // ADDED
     this.messagesRef.on('child_added', function(childSnapshot) {
       const itemMsg = childSnapshot.val();
       console.log('child_added *****', childSnapshot.key);
@@ -159,6 +194,8 @@ export class MessagingService {
 
       that.eventChange(msg, 'ADDED');
     });
+
+
   }
 
 
@@ -183,7 +220,7 @@ export class MessagingService {
   }
 
 
-  sendMessage(msg, type, metadata, conversationWith): string {
+  sendMessage(msg, type, metadata, conversationWith, attributes) { // : string {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
@@ -203,20 +240,22 @@ export class MessagingService {
       text: msg,
       timestamp: timestamp,
       type: type,
-      channel_type: this.channel_type
+      channel_type: this.channel_type,
+      attributes: attributes
     };
 
-    const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-    console.log('messaggio **************', message);
-    const newMessageRef = firebaseMessagesCustomUid.push();
-    newMessageRef.set(message);
+    const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + conversationWith);
+    console.log('messaggio **************', this.urlNodeFirebase, conversationWith, message);
+    firebaseMessagesCustomUid.push(message);
+    // const newMessageRef = firebaseMessagesCustomUid.push();
+    // newMessageRef.set(message);
     // se non c'è rete viene aggiunto al nodo in locale e visualizzato
     // appena torno on line viene inviato!!!
 
     // if (!this.firebaseGroupMenbersRef) {
       // this.checkRemoveMember();
     // }
-    return newMessageRef.key;
+    // return newMessageRef.key;
   }
   /**
    * invio messaggio
@@ -282,13 +321,12 @@ export class MessagingService {
   /**
    *
    */
-  generateUidConversation(): string {
+  generateUidConversation(uid): string {
     this.firebaseMessagesKey = firebase.database().ref(this.urlNodeFirebase);
     // creo il nodo conversazione generando un custom uid
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
-    // firebaseMessages.child(key).set('');
-    sessionStorage.setItem(UID_SUPPORT_GROUP_MESSAGES, key);
+    sessionStorage.setItem(uid, key);
     this.conversationWith = key;
     return key;
   }

@@ -13,7 +13,7 @@ import { ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } 
 export function setHeaderDate(timestamp, lastDate): string {
     const date = new Date(timestamp);
     const now: Date = new Date();
-    let labelDays: string = '';
+    let labelDays = '';
     console.log('setHeaderDate **************', timestamp, lastDate, date);
     if (now.getFullYear() !== date.getFullYear()) {
       labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();

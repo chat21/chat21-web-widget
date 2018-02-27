@@ -18,6 +18,9 @@ col-xs-5 col-md-3
 
         <!--CONTENT-->
         <div class="chat21-sheet-content">
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && messages.length == 0" class="chat21-header-modal-select">
+                <div>Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato</div>
+            </div>
             <div class="chat21-spinner" id="chat21-loader">
                 <div class="chat21-bounce-1"></div>
                 <div class="chat21-bounce-2"></div>
@@ -77,12 +80,12 @@ col-xs-5 col-md-3
             </div>
             <div *ngIf="isConversationOpen == true">
                 <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." ></textarea>
-                <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label>
+                <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
             
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
-                <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
+                <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
                 <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
                 
                 <!-- <img src="" width="200" alt="Image preview..."> -->
@@ -95,6 +98,46 @@ col-xs-5 col-md-3
        </div>
 
         
+       <div *ngIf="openSelectionDepartment" id="chat21-modal-select" >
+           <div class="chat21-header-modal-select">Seleziona un argomento</div>
+           <ul class="chat21-content-modal-select">
+                <li *ngFor="let department of departments; let i = index"
+                (click)="onSelectDepartment(department)">
+                <span class="badge">{{i+1}}</span> {{department.name}}
+              </li>
+            </ul>
+       </div>
+
+       <div *ngIf="preChatForm" id="chat21-modal-form" >
+            <div class="chat21-content-modal-form">
+                    <div class="chat21-formMessageField">Completa il form per iniziare una conversazione con il prossimo agente disponibile.</div>
+                    <form id="formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                        <div class="form-group chat21-inputContainer">
+                            <label [hidden]="!userName" class="form-field-label small">* Nome</label>
+                            <input type="text" class="form-control" formControlName="name" placeholder="* Nome">
+                        </div>
+                        <div class="text-danger">   
+                            <small [hidden]="myForm.controls.name.valid || myForm.controls.name.pristine">
+                            Nome richiesto (minimo 5 caratteri).
+                            </small>
+                        </div>
+                        <div class="form-group chat21-inputContainer">
+                            <label [hidden]="!userEmail" class="form-field-label small">* Email</label>
+                            <input type="email" class="form-control" formControlName="email" placeholder="* Email">
+                        </div>
+                        <div class="text-danger">
+                            <small [hidden]="myForm.controls.email.valid || myForm.controls.email.pristine" >
+                                Inserisci un indirizzo email valido.
+                            </small>
+                        </div>
+                        <button [disabled]="!myForm.controls.name.valid || !myForm.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new" (click)="closeForm()">
+                            INIZIA UNA NUOVA CONVERSAZIONE
+                        </button>
+                            
+                    </form>
+            </div>
+        </div>
+
         <!-- Modale Filtri Markers -->
         <div class="modal-page-filter" [class.active]="isWidgetActive">
             <app-star-rating-widget></app-star-rating-widget>
