@@ -1,6 +1,3 @@
-<!-- https://bootsnipp.com/user/snippets/92nm6 
-col-xs-5 col-md-3
--->
 <div id="chat21-container">
     <div id="chat21-launcher-button" class="" (click)="f21_open()"></div>
     <div *ngIf="isShowed" id="chat21-conversations" class="chat21-window chat21-sheet">
@@ -10,6 +7,7 @@ col-xs-5 col-md-3
                 <b class="chat21-sheet-header-title">Chat21
                         {{countChange}} {{test1}}
                 </b>
+                <p class="chat21-header-writing">{{writingMessage}}</p>
             </div>
             <a class="chat21-sheet-header-close-button" (click)="f21_close()">
                 <div class="chat21-sheet-header-button-icon-white"></div>
@@ -52,7 +50,7 @@ col-xs-5 col-md-3
                         <div class="msg_container base_receive" *ngIf="message.sender != senderId;">  
                             <div class="content-avatar">
                                 <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
-                                <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError="this.src='assets/images/f21ico-support.png';"/> </div>
+                                <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError = "this.src=getUrlImgProfile()"/> </div>
                                 <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
                             </div>
                             
@@ -82,7 +80,6 @@ col-xs-5 col-md-3
                 <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="Scrivi la tua domanda..." ></textarea>
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
-            
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
                 <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
@@ -103,7 +100,7 @@ col-xs-5 col-md-3
            <ul class="chat21-content-modal-select">
                 <li *ngFor="let department of departments; let i = index"
                 (click)="onSelectDepartment(department)">
-                <span class="badge">{{i+1}}</span> {{department.name}}
+                <span class="chat21-badge">{{i+1}}</span><span class="chat21-title">{{department.name}}</span>
               </li>
             </ul>
        </div>
@@ -111,7 +108,7 @@ col-xs-5 col-md-3
        <div *ngIf="preChatForm" id="chat21-modal-form" >
             <div class="chat21-content-modal-form">
                     <div class="chat21-formMessageField">Completa il form per iniziare una conversazione con il prossimo agente disponibile.</div>
-                    <form id="formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                    <form id="chat21-formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                         <div class="form-group chat21-inputContainer">
                             <label [hidden]="!userName" class="form-field-label small">* Nome</label>
                             <input type="text" class="form-control" formControlName="name" placeholder="* Nome">

@@ -79,6 +79,10 @@ export class AppComponent implements OnDestroy, OnInit  {
     openSelectionDepartment: boolean;
     departmentSelected: DepartmentModel;
 
+    IMG_PROFILE_SUPPORT = 'https://widget.chat21.org/assets/images/f21ico-support.png';
+    filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
+
+    writingMessage = '';
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
@@ -97,7 +101,6 @@ export class AppComponent implements OnDestroy, OnInit  {
             if (TEMP) { this.chat21_agentId = TEMP.split('&')[0]; }
             TEMP = (location.search.split('chat21_preChatForm=')[1]);
             if (TEMP) { this.preChatForm = (TEMP.split('&')[0] === 'true' || TEMP.split('&')[0] === '1'); }
-
             // this.chat21_agentId = (location.search.split('chat21_agentId=')[1]).split('&')[0];
         }
         this.isWidgetActive = false;
@@ -109,6 +112,7 @@ export class AppComponent implements OnDestroy, OnInit  {
      * inizializzo la pagina
      */
     ngOnInit() {
+        console.log('ngOnInit: ');
         this.initialize();
         this.openSelectionDepartment = true;
         this.isShowed = false;
@@ -141,6 +145,7 @@ export class AppComponent implements OnDestroy, OnInit  {
     closeForm() {
         this.attributes.userName = this.userName;
         this.attributes.userEmail = this.userEmail;
+        if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
         this.preChatForm = false;
     }
     // END FORM
@@ -152,8 +157,8 @@ export class AppComponent implements OnDestroy, OnInit  {
      * 3 - utente eliminato dal gruppo (CHAT CHIUSA)
      */
     setSubscriptions() {
+        console.log('setSubscriptions: ');
         const that = this;
-
         // USER AUTENTICATE
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
         .subscribe(user => {
@@ -169,8 +174,13 @@ export class AppComponent implements OnDestroy, OnInit  {
         const subMsgAdded: Subscription = this.messagingService.obsAdded
         .subscribe(message => {
             console.log('ADD NW MSG:', message);
-            if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
-                // se è un'immagine che ho inviato io nn fare nulla
+            if (!message) {
+                return;
+            } else if (message.sender === 'system' && this.filterSystemMsg && message.attributes['subtype'] !== 'info/support') {
+                // se è un msg inviato da system NON fare nulla
+                return;
+            } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
+                // se è un'immagine che ho inviato io NON fare nulla
                 // aggiorno la stato del messaggio e la data
                 that.updateMessage(message);
             } else if (message) {
@@ -184,7 +194,12 @@ export class AppComponent implements OnDestroy, OnInit  {
         const subMsgChanged: Subscription = this.messagingService.obsChanged
         .subscribe(message => {
             console.log('CHANGED NW MSG:', message);
-            if (message) {
+            if (!message) {
+                return;
+            } else if (message.sender === 'system' && this.filterSystemMsg && message.attributes['subtype'] !== 'info/support') {
+                // se è un msg inviato da system NON fare nulla
+                return;
+            } else {
                 const index = searchIndexInArrayForUid(that.messages, message.uid);
                 that.messages.splice(index, 1, message);
             }
@@ -236,16 +251,26 @@ export class AppComponent implements OnDestroy, OnInit  {
     initialize() {
         this.messages = [];
         this.arrayImages4Load = [];
-        this.attributes = {
-            client: CLIENT_BROWSER,
-            sourcePage: location.href,
-            departmentId: '',
-            departmentName: '',
-            userEmail: '',
-            userName: ''
-        };
+        this.attributes = this.setAttributes();
     }
 
+    setAttributes(): any {
+        console.log('setAttributes: ', sessionStorage);
+        let attributes: any = sessionStorage.getItem('attributes');
+        // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
+        if (!attributes || attributes === 'undefined') {
+            attributes = {
+                client: CLIENT_BROWSER,
+                sourcePage: location.href,
+                departmentId: '',
+                departmentName: '',
+                userEmail: '',
+                userName: ''
+            };
+            sessionStorage.setItem('attributes', JSON.stringify(attributes));
+        }
+        return attributes;
+    }
     /**
      * genero un nuovo conversationWith
      * al login o all'apertura di una nuova conversazione
@@ -306,7 +331,28 @@ export class AppComponent implements OnDestroy, OnInit  {
                 that.openSelectionDepartment = false;
                 that.messagingService.listMessages(that.conversationWith);
             } else {
-                that.getMongDbDepartments();
+                that.preChatForm = false;
+                that.openSelectionDepartment = false;
+                that.messagingService.listMessages(that.conversationWith);
+                //that.getMongDbDepartments();
+            }
+        });
+        this.checkWritingMessages();
+
+    }
+
+    checkWritingMessages() {
+        const that = this;
+        const messagesRef = this.messagingService.checkWritingMessages(this.conversationWith);
+        messagesRef.on('value', function(writing) {
+        //.then(function(writing) {
+            console.log('checkWritingMessages >>>>>>>>>: ', writing);
+            if (writing.exists()) {
+                console.log('WritingMessages >>>>>>>>> OKKKK ');
+                that.writingMessage = 'sta scrivendo...';
+            } else {
+                console.log('WritingMessages >>>>>>>>> NOOOOO ');
+                that.writingMessage = '';
             }
         });
     }
@@ -339,8 +385,9 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.openSelectionDepartment = false;
         this.attributes.departmentId = department._id;
         this.attributes.departmentName = department.name;
+        if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
         this.messagingService.listMessages(this.conversationWith);
-        //this.preChatForm = true;
+        this.preChatForm = true;
     }
 
 
@@ -522,7 +569,8 @@ export class AppComponent implements OnDestroy, OnInit  {
             '', // text
             timestamp, // timestamp
             '', // headerDate
-            TYPE_MSG_IMAGE // type
+            TYPE_MSG_IMAGE, // type
+            ''
         );
         this.messages.push(message);
         // message.metadata.uid = message.uid;
@@ -599,7 +647,7 @@ export class AppComponent implements OnDestroy, OnInit  {
      */
     sendMessage(msg, type, metadata?) {
         (metadata) ? metadata = metadata : metadata = '';
-        console.log('SEND MESSAGE: ', msg, type, metadata);
+        console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
           // tslint:disable-next-line:max-line-length
           this.messagingService.sendMessage(msg, type, metadata, this.conversationWith, this.attributes);
@@ -632,11 +680,13 @@ export class AppComponent implements OnDestroy, OnInit  {
      * @param uid
      */
     getUrlImgProfile(uid): string {
+        // tslint:disable-next-line:curly
+        if (!uid) return this.IMG_PROFILE_SUPPORT;
         const profile = this.contactService.getContactProfile(uid);
         if (profile && profile.imageurl) {
             return profile.imageurl;
         } else {
-            return '';
+            return this.IMG_PROFILE_SUPPORT;
         }
     }
 

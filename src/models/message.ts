@@ -12,5 +12,6 @@ export class MessageModel {
         public timestamp: number,
         public headerDate: string,
         public type: string,
+        public attributes: any
     ) { }
  }

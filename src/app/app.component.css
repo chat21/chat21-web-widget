@@ -164,7 +164,7 @@
 
 /* BUTTON */
 #chat21-launcher-button {
-    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21-chat21-logo-widget.svg");
+    background-image : url("../assets/images/f21-chat21-logo-widget.svg");
     background-size: 60px 60px;
     background-repeat: no-repeat;
     border-radius: 50%;
@@ -230,7 +230,7 @@
     color: white !important;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 15px;
-    line-height: 48px;
+    /* line-height: 48px; */
     font-weight: 500;
     color: #465c66;
     letter-spacing: .2px;
@@ -239,7 +239,15 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top: 10px;
 }
+.chat21-header-writing{
+    margin:0px;
+    padding: 0px;
+    font-size: 12px;
+    color: #ffffff;
+}
+
 #chat21-container .chat21-sheet-header-close-button {
     z-index: 999999004;
     position: relative;
@@ -254,7 +262,7 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 16px;
-    background-image : url("https://chat21-web.firebaseapp.com/assets/images/f21ico-widgetclose_white.svg");
+    background-image : url("../assets/images/f21ico-widgetclose_white.svg");
 }
 
 /** CONTENT **/
@@ -265,13 +273,14 @@
     right: 0;
     bottom: 70px;
     width: 100%;
+    overflow-x: hidden;
     /* -webkit-transform: translateZ(0); */
     background-color: #fff;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center center;
     background-size: cover;
-    overflow-x:hidden;
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21-pattern-2.svg");
+    background-image : url("../assets/images/f21-backgroundXXX.jpg");
+    /*background-image : url("../assets/images/f21-background.jpg"); f21-pattern-2.svg");*/
 }
 /* no conflict
 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
@@ -362,13 +371,13 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     overflow-x: hidden;
 }
 #chat21-conversations .base_sent .f21ico-schedule {
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-schedule.svg");
+    background-image: url("../assets/images/f21ico-schedule.svg");
 }
 #chat21-conversations .base_sent .f21ico-done {
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done.svg");
+    background-image: url("../assets/images/f21ico-done.svg");
 }
 #chat21-conversations .base_sent .f21ico-done_all {
-    background-image: url("https://chat21-web.firebaseapp.com/assets/images/f21ico-done_all.svg");
+    background-image: url("../assets/images/f21ico-done_all.svg");
 }
 
 /* MESSAGE CONTAINER RECEIVE */
@@ -666,22 +675,24 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     margin: 0 0 2em 0;
     list-style-type: none;
     padding: 0;
+    height: 255px;
+    overflow-y: auto;
     /* width: 15em; */
   }
-  .chat21-content-modal-select li {
+  .chat21-content-modal-select > li {
     cursor: pointer;
     position: relative;
     margin: 10px 10px 10px 10px;
     padding: 4px 10px 4px 10px;
-    height: 24px;
-    font-weight: bolder;
+    /* height: 24px; */
+    /* font-weight: bolder; */
     font-size: 13px;
   }
   .chat21-content-modal-select li.selected:hover {
     /* background-color: #BBD8DC !important;
     color: white; */
   }
-  .chat21-content-modal-select li:hover {
+  .chat21-content-modal-select > li:hover {
     color: #2a69c1;
     /* background-color: #DDD;
     /* left: .1em; */
@@ -690,20 +701,23 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     position: relative;
     /* top: -3px; */
   }
-  .chat21-content-modal-select .badge {
+  .chat21-content-modal-select .chat21-badge {
     display: inline-block;
     font-size: 12px;
     color: white;
     padding: 4px;
     background-color: #2a69c1;
     line-height: 14px;
-    position: relative;
+    position: absolute;
     height: 14px;
     width: 14px;
     border-radius: 50%;
     margin: 0px 5px 0px 0px;
     text-align: center;
-    top: -2px;
+    top: 0px;
+  }
+  .chat21-content-modal-select .chat21-title{
+      margin-left: 30px;
   }
 
   /*** END SELECT DEPARTMENT ***/
@@ -725,14 +739,6 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     position: absolute;
     bottom: 0px;
   }
-  .text-danger {
-    color: #a94442;
-    font-size: 80%;
-    /* float: left; */
-    min-height: 20px;
-    background-color: #ffffff;
-    margin: 0px 10px 0px 10px;
-  }
 
   .chat21-formMessageField {
     padding: 10px 20px;
@@ -743,13 +749,21 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     word-wrap: break-word;
   }
 
-#formContainer .chat21-inputContainer {
+#chat21-formContainer .chat21-inputContainer {
     background-color: #fff;
     overflow: hidden;
     position: relative;
     height: 33px;
     margin: 10px 10px 0px 10px;
 }
+#chat21-formContainer .text-danger {
+    color: #a94442;
+    font-size: 80%;
+    /* float: left; */
+    min-height: 20px;
+    background-color: #ffffff;
+    margin: 0px 10px 0px 10px;
+  }
 .chat21-inputContainer {
     padding: 0 15px;
     border: 1px solid #ccc;
@@ -762,12 +776,10 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     margin: 0 0 7px 0;
     position: relative;
 }
-
-.chat21-inputContainer input {
+.chat21-inputContainer > input {
     padding: 11px 0;
 }
-
-.chat21-inputContainer input, .chat21-inputContainer select {
+.chat21-inputContainer > input, .chat21-inputContainer select {
     width: 100%;
     margin: 0;
     border: 0;
@@ -779,11 +791,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     font-size: 13px;
     font-weight: bold;
 }
-input, select {
+.chat21-inputContainer > input, select {
     vertical-align: middle;
 }
   
-.form-field-label.small {
+.chat21-inputContainer .form-field-label.small {
     color: #b3b3b3;
     padding: 1px 0 0 0;
     /* display: none; */
@@ -794,11 +806,13 @@ input, select {
     font-weight: bold;
 }
 
-.form-field-label {
+.chat21-inputContainer .form-field-label {
     color: #707070;
     font-family: Arial;
     font-size: 13px;
     font-weight: bold;
 }
-input:focus {outline:none;}
+.chat21-inputContainer > input:focus {
+    outline:none;
+}
 /********* END FORM *********/

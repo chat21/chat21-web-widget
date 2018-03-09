@@ -1,9 +1,9 @@
 
-<div class="modal-content">
+<div class="chat21-modal-content">
     <div *ngIf="step==0">
-        <div class="modal-header">
-                <h1 class="modal-title">Valutazione servizio</h1>
-                <fieldset class="rating">
+        <div class="chat21-modal-header">
+                <h1 class="chat21-modal-title">Valutazione servizio</h1>
+                <fieldset class="chat21-rating">
                     <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label class = "full" for="star5" title="eccellente - 5 stars"></label>
                     <!-- <input type="radio" id="star4half" name="rating" value="4 and a half" (click)="openRate($event)" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label> -->
                     <input type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" /><label class = "full" for="star4" title="ottimo - 4 stars"></label>
@@ -16,15 +16,15 @@
                     <!-- <input type="radio" id="starhalf" name="rating" value="half" (click)="openRate($event)" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label> -->
                 </fieldset>
         </div> 
-        <h3 class="modal-title">il tuo giudizio sul nostro servizio clienti</h3>
+        <h3 class="chat21-modal-title">il tuo giudizio sul nostro servizio clienti</h3>
     </div>
 
     <div *ngIf="step==1">
-        <div class="button_back" (click)="prevStep()">Indietro</div>
-        <div class="button_send" (click)="sendRate()">Invia</div>
-        <div class="yourRating">
+        <div class="chat21-button_back" (click)="prevStep()">Indietro</div>
+        <div class="chat21-button_send" (click)="sendRate()">Invia</div>
+        <div class="chat21-yourRating">
             <p>il tuo voto:</p>
-            <div class="stars">
+            <div class="chat21-stars">
                 <span *ngIf="rate>0" class="fa fa-star checked"></span>
                 <span *ngIf="rate>1" class="fa fa-star checked"></span>
                 <span *ngIf="rate>2" class="fa fa-star checked"></span>
@@ -36,7 +36,7 @@
     </div>
 
     <div *ngIf="step==2">
-        <h1 class="modal-title">Grazie per la tua valutazione</h1>
+        <h1 class="chat21-modal-title">Grazie per la tua valutazione</h1>
         <p class="chat21-modal-message">il tuo voto è stato ricevuto</p>
         <div class="chat21-modal-button-ok" (click)="closeRate()">OK</div>
     </div>

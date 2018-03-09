@@ -6,7 +6,7 @@ h1 { font-size: 2em; margin: 10px; }
 
 
 
-.modal-content {
+.chat21-modal-content {
   position: absolute;
   background-color: #fff;
   border: 0px solid rgba(0,0,0,.2);
@@ -17,10 +17,10 @@ h1 { font-size: 2em; margin: 10px; }
   right: 40px;
   padding:10px;
 }
-.modal-content{
+.chat21-modal-content{
   bottom: 120px;
 }
-h1.modal-title {
+h1.chat21-modal-title {
   min-height: 30px;
   /* padding: 7px; */
   /* border-bottom: 1px solid #e9ecef; */
@@ -29,32 +29,32 @@ h1.modal-title {
   color: #2a6ac1;
   font-size: 1.2em;
 }
-h3.modal-title  {
+h3.chat21-modal-title  {
   text-align: center;
   color: #333333;
   font-size: 0.9em;
   display: inline-block;
 }
-.modal-header button{
+.chat21-modal-header > button{
   color: #239C96;
   font-size: 16px;
   font-weight: bold;
 }
 
-.yourRating {
+.chat21-yourRating {
   position: relative;
   top: 20px;
   left: 0px;
 }
 
-.yourRating .stars{
+.chat21-yourRating .chat21-stars{
   position: relative;
   display: inline-block;
   float: right;
   top: -20px;
   right: 0px;
 }
-.yourRating .stars > span:before { 
+.chat21-yourRating .chat21-stars > span:before { 
   margin: 0px;
   font-size: 1em;
   font-family: FontAwesome;
@@ -64,7 +64,7 @@ h3.modal-title  {
   color: #FFD700;
 }
 
-.yourRating > p {
+.chat21-yourRating > p {
   position: relative;
   top: 0px;
   left: 0px;
@@ -74,7 +74,7 @@ h3.modal-title  {
   line-height: 20px;
 }
 
-.button_send {
+.chat21-button_send {
   font-size: 12px;
   color: #123456;
   font-weight: bold;
@@ -86,7 +86,7 @@ h3.modal-title  {
   cursor: pointer;
 }
 
-.button_back {
+.chat21-button_back {
   font-size: 12px;
   color: #123456;
   font-weight: bold;
@@ -122,7 +122,7 @@ h3.modal-title  {
 
 /****** Style Star Rating Widget *****/
 
-.rating { 
+.chat21-rating { 
   border: none;
   float: left;
   /* width: 143px; */
@@ -130,8 +130,8 @@ h3.modal-title  {
   margin-left: 10px;
 }
 
-.rating > input { display: none; } 
-.rating > label:before { 
+.chat21-rating > input { display: none; } 
+.chat21-rating > label:before { 
   margin: 5px;
   font-size: 2em;
   font-family: FontAwesome;
@@ -139,12 +139,12 @@ h3.modal-title  {
   content: "\f005";
 }
 
-.rating > .half:before { 
+.chat21-rating > .half:before { 
   content: "\f089";
   position: absolute;
 }
 
-.rating > label { 
+.chat21-rating > label { 
   color: #ddd; 
  float: right; 
 }
@@ -173,11 +173,11 @@ p.chat21-modal-message {
 
 /***** CSS Magic to Highlight Stars on Hover *****/
 
-.rating > input:checked ~ label, /* show gold star when clicked */
-.rating:not(:checked) > label:hover, /* hover current star */
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+.chat21-rating > input:checked ~ label, /* show gold star when clicked */
+.chat21-rating:not(:checked) > label:hover, /* hover current star */
+.chat21-rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
 
-.rating > input:checked + label:hover, /* hover current star when changing rating */
-.rating > input:checked ~ label:hover,
-.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+.chat21-rating > input:checked + label:hover, /* hover current star when changing rating */
+.chat21-rating > input:checked ~ label:hover,
+.chat21-rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.chat21-rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 

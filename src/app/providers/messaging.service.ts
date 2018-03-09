@@ -55,7 +55,7 @@ export class MessagingService {
     public http: Http
   ) {
     // this.channel_type = CHANNEL_TYPE_GROUP;
-    this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
+    this.MONGODB_BASE_URL = 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
@@ -93,10 +93,12 @@ export class MessagingService {
   public getMongDbDepartments(token): Observable<DepartmentModel[]> {
     const url = this.MONGODB_BASE_URL + 'departments/';
     // const url = `http://api.chat21.org/app1/departments`;
-    console.log('MONGO DB DEPARTMENTS URL', url);
+    // tslint:disable-next-line:max-line-length
+    const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwiX2lkIjoiNWE3MDQ0YzdjNzczNGQwZGU0ZGRlMmQ0Iiwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsicGFzc3dvcmQiOiJpbml0IiwidXNlcm5hbWUiOiJpbml0IiwiX192IjoiaW5pdCIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsInVzZXJuYW1lIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJfX3YiOjAsInBhc3N3b3JkIjoiJDJhJDEwJGw3RnN1aS9FcDdONkEwTW10b1BNa2VjQnY0SzMzaFZwSlF3ckpGcHFSMVZSQ2JaUnkybHk2IiwidXNlcm5hbWUiOiJhbmRyZWEiLCJfaWQiOiI1YTcwNDRjN2M3NzM0ZDBkZTRkZGUyZDQifSwiJGluaXQiOnRydWUsImlhdCI6MTUxNzMwNzExM30.6kpeWLl_o5EgBzmzH3EGtJ_f3yhE7M9VMpx59ze_gbY';
+    console.log('MONGO DB DEPARTMENTS URL', url, TOKEN);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', token);
+    headers.append('Authorization', TOKEN);
     return this.http
       .get(url, { headers })
       .map((response) => response.json());
@@ -115,9 +117,24 @@ export class MessagingService {
     return this.messagesRef.once('value');
   }
 
+  public checkWritingMessages(conversationWith): any {
+    this.conversationWith = conversationWith;
+    const that = this;
+    // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
+    const urlNodeFirebase = '/apps/' + this.tenant + '/typings/' + conversationWith;
+    console.log('checkWritingMessages *****', urlNodeFirebase);
+    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+    const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
+    return messagesRef;
+//     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+// starCountRef.on('value', function(snapshot) {
+
+  }
+
   public listMessages(conversationWith) {
     const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
-    text_area.focus();
+    // tslint:disable-next-line:curly
+    if (text_area) text_area.focus();
     let lastDate = '';
     const that = this;
     // this.conversationWith = conversationWith;
@@ -136,8 +153,13 @@ export class MessagingService {
         }
         const messageText = urlify(itemMsg['text']);
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
+        let attributes = '';
+        if (itemMsg['attributes']) {
+          attributes = itemMsg['attributes'];
+          console.log('attributes *****', itemMsg['attributes']);
+        }
         // tslint:disable-next-line:max-line-length
-        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
+        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type'], attributes);
         const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
         console.log('child_changed *****', index, that.messages, childSnapshot.key);
         that.messages.splice(index, 1, msg);
@@ -164,7 +186,7 @@ export class MessagingService {
     // ADDED
     this.messagesRef.on('child_added', function(childSnapshot) {
       const itemMsg = childSnapshot.val();
-      console.log('child_added *****', childSnapshot.key);
+      console.log('child_added *****', itemMsg);
       // imposto il giorno del messaggio per visualizzare o nascondere l'header data
       const calcolaData = setHeaderDate(itemMsg['timestamp'], lastDate);
       if (calcolaData != null) {
@@ -178,6 +200,7 @@ export class MessagingService {
       } else {
         messageText = urlify(itemMsg['text']);
       }
+
       try {
         const index = searchIndexInArrayForUid(that.messages, itemMsg.metadata['uid']);
         console.log('child_DELETE *****', index, that.messages, itemMsg.metadata['uid']);
@@ -187,8 +210,14 @@ export class MessagingService {
       } catch (err) {
         console.log('RIPROVO ::');
       }
+
+      let attributes = '';
+      if (itemMsg['attributes']) {
+        attributes = itemMsg['attributes'];
+        console.log('attributes *****', itemMsg['attributes']);
+      }
       // tslint:disable-next-line:max-line-length
-      const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type']);
+      const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type'], attributes);
       console.log('child_added *****', calcolaData, that.messages, msg);
       that.messages.push(msg);
 
