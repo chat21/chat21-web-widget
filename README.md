@@ -32,10 +32,6 @@ Copy this code into your html pages:
 <script type="text/javascript" src="https://chat21-web.firebaseapp.com/main.bundle.js">
 </script>
 
-<script type="text/javascript">
-chat21_tenant="frontiere21";
-chat21_agentId="<UID>";
-</script>
 ```
 info passing variables:  
 preChatForm if exist enable form email and fullname
