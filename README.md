@@ -16,6 +16,7 @@ With Chat21-web-widget you can:
 
 # Screenshot
 
+https://user-images.githubusercontent.com/32448495/37604224-c890227a-2b90-11e8-9ecb-8fed8bd07f8e.png
 ![Chat21 widget screenshot](https://raw.githubusercontent.com/chat21/chat21-web-widget/master/src/assets/screenshot.png)
 
 ## Installation
