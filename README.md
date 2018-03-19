@@ -15,8 +15,7 @@ With Chat21-web-widget you can:
 * Chat21 Web Widget is free and open source. Download it on github
 
 # Screenshot
-
-<img src="https://user-images.githubusercontent.com/32448495/37604224-c890227a-2b90-11e8-9ecb-8fed8bd07f8e.png" width="100%">
+<img width="488" alt="dialogo_widgetchat_2" src="https://user-images.githubusercontent.com/32448495/37611003-789f8da8-2ba1-11e8-9758-e23a47af90f7.png">
 
 ## Installation
 
