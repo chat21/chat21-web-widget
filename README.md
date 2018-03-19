@@ -22,7 +22,8 @@ With Chat21-web-widget you can:
 Copy this code into your html pages:
 
 ```
-<app-root></app-root>
+<app-root preChatForm tenant='' recipientId='' projectid='' userId='' userEmail='' userPassword='' userFullname=''></app-root>
+
 <script type="text/javascript" src="https://chat21-web.firebaseapp.com/inline.bundle.js"></script>
 <script type="text/javascript" src="https://chat21-web.firebaseapp.com/polyfills.bundle.js"></script>
 <script type="text/javascript" src="https://chat21-web.firebaseapp.com/scripts.bundle.js"></script>
@@ -36,7 +37,14 @@ chat21_tenant="frontiere21";
 chat21_agentId="<UID>";
 </script>
 ```
-
+info passing variables:  
+preChatForm if exist enable form email and fullname
+recipientId='' 
+projectid='' 
+userId='' 
+userEmail='' 
+userPassword='' 
+userFullname=''
 Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
 ## Development server
