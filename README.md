@@ -2,7 +2,7 @@
 
 Chat21-web-widget is a Free Live Chat Widget built on Firebase with Angular4 that lets you support and chat with visitors and customers on your website. 
 
-<img width="488" alt="dialogo_widgetchat_2" src="https://user-images.githubusercontent.com/32564846/37611161-e299ad10-2ba1-11e8-8c14-ef7376e7e1b4.png">
+<img width="488" alt="dialogo_widgetchat_2" src="https://user-images.githubusercontent.com/32448495/37662363-35110862-2c57-11e8-8720-263d1ff96f29.jpg">
 
 With Chat21-web-widget you can:
 * Invite your website visitors to share feedback and suggestions to better understand their needs.
