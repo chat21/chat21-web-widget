@@ -42,7 +42,7 @@ info passing variables:
 * userPassword 
 * userFullname
 * chatName ex: TileDesk
-* poweredBy ex:'<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>'
+* poweredBy ex: ```<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>```
 Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
 ## Development server
