@@ -34,13 +34,15 @@ Copy this code into your html pages:
 
 ```
 info passing variables:  
-preChatForm if exist enable form email and fullname
-recipientId='' 
-projectid='' 
-userId='' 
-userEmail='' 
-userPassword='' 
-userFullname=''
+* preChatForm -> if exist enable form email and fullname
+* recipientId 
+* projectid 
+* userId  
+* userEmail 
+* userPassword 
+* userFullname
+* chatName ex: TileDesk
+* poweredBy ex:'<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>'
 Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
 ## Development server
