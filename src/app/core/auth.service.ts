@@ -25,7 +25,7 @@ export class AuthService {
     firebase.auth().signInAnonymously()
     .then(function(user) {
       that.user = user;
-      that.obsLoggedUser.next(user);
+      //that.obsLoggedUser.next(user);
       that.getToken();
     })
     .catch(function(error) {
@@ -42,6 +42,7 @@ export class AuthService {
     .then(function(idToken) {
         that.token = idToken;
         console.log('idToken.', idToken);
+        that.obsLoggedUser.next(that.user);
     }).catch(function(error) {
         console.log('idToken ERROR: ', error);
     });

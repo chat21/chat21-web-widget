@@ -54,12 +54,70 @@ export function searchIndexInArrayForUid(items, key) {
  * trasforma url contenuti nel testo passato in tag <a>
  */
 export function urlify(text) {
-    // tslint:disable-next-line:max-line-length
-    const urlRegex = /((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,64}(?:\:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,25})?\@)?)?((?:(?:[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}\.)+(?:(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])|(?:biz|b[abdefghijmnorstvwyz])|(?:cat|com|coop|c[acdfghiklmnoruvxyz])|d[ejkmoz]|(?:edu|e[cegrstu])|f[ijkmor]|(?:gov|g[abdefghilmnpqrstuwy])|h[kmnrtu]|(?:info|int|i[delmnoqrst])|(?:jobs|j[emop])|k[eghimnrwyz]|l[abcikrstuvy]|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])|(?:name|net|n[acefgilopruz])|(?:org|om)|(?:pro|p[aefghklmnrstwy])|qa|r[eouw]|s[abcdeghijklmnortuvyz]|(?:tel|travel|t[cdfghjklmnoprtvwz])|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw]))|(?:(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])))(?:\:\d{1,5})?)(\/(?:(?:[a-zA-Z0-9\;\/\?\:\@\&\=\#\~\-\.\+\!\*\'\(\)\,\_])|(?:\%[a-fA-F0-9]{2}))*)?(?:\b|$)/gi;
-    return text.replace(urlRegex, function (url) {
-      if (!url.match(/^[a-zA-Z]+:\/\//)) {
-        url = 'http://' + url;
-      }
-      return '<a href="' + url + '" target="_blank">' + url + '</a>';
-    });
+  // tslint:disable-next-line:max-line-length
+  const urlRegex = /((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,64}(?:\:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,25})?\@)?)?((?:(?:[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}\.)+(?:(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])|(?:biz|b[abdefghijmnorstvwyz])|(?:cat|com|coop|c[acdfghiklmnoruvxyz])|d[ejkmoz]|(?:edu|e[cegrstu])|f[ijkmor]|(?:gov|g[abdefghilmnpqrstuwy])|h[kmnrtu]|(?:info|int|i[delmnoqrst])|(?:jobs|j[emop])|k[eghimnrwyz]|l[abcikrstuvy]|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])|(?:name|net|n[acefgilopruz])|(?:org|om)|(?:pro|p[aefghklmnrstwy])|qa|r[eouw]|s[abcdeghijklmnortuvyz]|(?:tel|travel|t[cdfghjklmnoprtvwz])|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw]))|(?:(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])))(?:\:\d{1,5})?)(\/(?:(?:[a-zA-Z0-9\;\/\?\:\@\&\=\#\~\-\.\+\!\*\'\(\)\,\_])|(?:\%[a-fA-F0-9]{2}))*)?(?:\b|$)/gi;
+  return text.replace(urlRegex, function (url) {
+    if (!url.match(/^[a-zA-Z]+:\/\//)) {
+      url = 'http://' + url;
+    }
+    //url = convertUrlToTag(url);
+    console.log('convertUrlToTag 2 **************', url);
+    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  });
+}
+
+function convertUrlToTag(url) {
+  let popup = false;
+  const TEMP = url.split('popup=')[1];
+  if (TEMP) { popup = TEMP.split('&')[0]; }
+  // tslint:disable-next-line:no-unused-expression
+  (TEMP === 'true') ? popup = true : popup = false;
+  console.log('convertUrlToTag 1 **************', TEMP);
+  // tslint:disable-next-line:curly
+  if (popup !== true) return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  // tslint:disable-next-line:curly
+  else return '<p (click)="openPopup2()">zzz</p>';
+
+  //// '<a href="#" onclick="window.open("www.google.it", "_system");" >' + url + '</a>';
+  //// <a href="#" onclick="openPopup(' + url + ')">' + url + '</a>';
+}
+
+export function openPopup2() {
+  // const myWindow = window.open(url, 'Video Chat', 'width=100%,height=300');
+  console.log('myWindow 1 **************');
+  // return myWindow;
+}
+
+export function isPopupUrl(url) {
+  const TEMP = url.split('popup=')[1];
+  // può essere seguito da & oppure "
+  if (TEMP) {
+    if (TEMP.startsWith('true')) {
+      // console.log('isPopupUrl::::: ', TEMP.startsWith('true'));
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
   }
+}
+
+export function popupUrl(html, title) {
+  const url = this.strip_tags(html);
+  const w = 600;
+  const h = 600; // screen.height - 40;
+  const left = (screen.width / 2) - ( w / 2);
+  const top = (screen.height / 2) - ( h / 2);
+
+  // tslint:disable-next-line:whitespace
+  // tslint:disable-next-line:max-line-length
+  const newWindow = window.open(url, '_blank', 'fullscreen=1, titlebar=0, toolbar=no, location=0, status=0, menubar=0, scrollbars=0, resizable=0, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+  if (window.focus) {
+    newWindow.focus();
+  }
+}
+
+export function strip_tags(html){
+  return (html.replace( /<.*?>/g, '' )).trim();
+}

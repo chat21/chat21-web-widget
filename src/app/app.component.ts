@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -10,7 +10,7 @@ import { MessageModel } from '../models/message';
 import { DepartmentModel } from '../models/department';
 
 // utils
-import { setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
+import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
 // tslint:disable-next-line:max-line-length
 import { CLIENT_BROWSER, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
@@ -28,6 +28,7 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 
 export class AppComponent implements OnDestroy, OnInit  {
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
@@ -50,14 +51,27 @@ export class AppComponent implements OnDestroy, OnInit  {
     isSelected = false;
     isConversationOpen = true;
 
-    preChatForm = false;
-    userEmail = '';
-    userName = '';
-
+    isPopupUrl = isPopupUrl;
+    popupUrl = popupUrl;
+    strip_tags = strip_tags;
 
     MSG_STATUS_SENT = MSG_STATUS_SENT;
     MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
+    LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
+    LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
+    // tslint:disable-next-line:max-line-length
+    LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent'; // 
+    LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
+    // tslint:disable-next-line:max-line-length
+    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.'; // 
+    LABEL_FIELD_NAME = '* Nome'; // '* Name';
+    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 5 caratteri).'; // 'Required field (minimum 5 characters).'; // 
+    LABEL_FIELD_EMAIL = '* Email';
+    // tslint:disable-next-line:max-line-length
+    LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.'; 
+    LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
+
 
     textInputTextArea: String;
     HEIGHT_DEFAULT = '40px';
@@ -79,32 +93,116 @@ export class AppComponent implements OnDestroy, OnInit  {
     openSelectionDepartment: boolean;
     departmentSelected: DepartmentModel;
 
-    IMG_PROFILE_SUPPORT = 'https://widget.chat21.org/assets/images/f21ico-support.png';
+    IMG_PROFILE_SUPPORT = '../assets/images/f21ico-support.png';
     filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
 
     writingMessage = '';
+
+    userId: string;
+    userFullname: string;
+    userEmail: string;
+    userPassword: string;
+    projectid: string;
+    preChatForm: boolean;
+    recipientId: string;
+    chatName: string;
+    poweredBy: string;
+
     constructor(
         public authService: AuthService,
         public messagingService: MessagingService,
         public starRatingWidgetService: StarRatingWidgetService,
         public upSvc: UploadService,
         public contactService: ContactService,
-        public formBuilder: FormBuilder
+        public formBuilder: FormBuilder,
+        public el: ElementRef
     ) {
-
         this.setForm();
 
-        if (location.search) {
-            let TEMP = location.search.split('chat21_tenant=')[1];
-            if (TEMP) { this.tenant = TEMP.split('&')[0]; }
-            TEMP = (location.search.split('chat21_agentId=')[1]);
-            if (TEMP) { this.chat21_agentId = TEMP.split('&')[0]; }
-            TEMP = (location.search.split('chat21_preChatForm=')[1]);
-            if (TEMP) { this.preChatForm = (TEMP.split('&')[0] === 'true' || TEMP.split('&')[0] === '1'); }
-            // this.chat21_agentId = (location.search.split('chat21_agentId=')[1]).split('&')[0];
+        console.log('costructor: ');
+        moment.locale('it');
+
+        // this.isShowed = false; /// prendo isWidgetActive dallo storage;
+        this.isShowed = (sessionStorage.getItem('isShowed')) ? true : false;
+        // this.isWidgetActive = false; // prendo isWidgetActive (votazione) dallo storage;
+        this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
+
+        this.getVariablesFromAttributeHtml();
+
+        // USER AUTENTICATE
+        const that = this;
+        const subLoggedUser: Subscription = this.authService.obsLoggedUser
+        .subscribe(user => {
+            if (user) {
+                console.log('USER AUTENTICATE: ', user.uid);
+                that.loggedUser = user;
+                that.initConversation();
+                that.createConversation();
+                that.initialize();
+            }
+        });
+    }
+
+    /** */
+    getVariablesFromAttributeHtml() {
+        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+        let TEMP;
+        // get variables from attribute html
+        // TEMP = this.el.nativeElement.getAttribute('tenant');
+        // this.tenant = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('recipientId');
+        this.chat21_agentId = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('projectid');
+        this.projectid =  '5ab0f32757066e0014bfd718'; // (TEMP) ? TEMP : null; // //'5ab0f32757066e0014bfd718'; //
+
+        TEMP = this.el.nativeElement.getAttribute('chatName');
+        this.chatName = 'TileDesk'; // (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('poweredBy');
+        this.poweredBy = '<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>'; // (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('userId');
+        this.userId = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('userEmail');
+        this.userEmail = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('userPassword');
+        this.userPassword = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('userFullname');
+        this.userFullname = (TEMP) ? TEMP : null;
+
+        TEMP = this.el.nativeElement.getAttribute('preChatForm');
+        this.preChatForm = (TEMP == null) ? false : true;
+
+        console.log('getVariablesFromAttributeHtml:: ');
+        console.log('tenant:: ', this.tenant);
+        console.log('chat21_agentId:: ', this.chat21_agentId);
+        console.log('projectid:: ', this.projectid);
+        console.log('userId:: ', this.userId);
+        console.log('userEmail:: ', this.userEmail);
+        console.log('userPassword:: ', this.userPassword);
+        console.log('userFullname:: ', this.userFullname);
+        console.log('preChatForm:: ', TEMP, this.preChatForm);
+        //  if (location.search) {
+        //     TEMP = location.search.split('chat21_tenant=')[1];
+        //     if (TEMP) { this.tenant = TEMP.split('&')[0]; }
+        //     TEMP = (location.search.split('chat21_agentId=')[1]);
+        //     if (TEMP) { this.chat21_agentId = TEMP.split('&')[0]; }
+        //     TEMP = (location.search.split('chat21_preChatForm=')[1]);
+        //     if (TEMP) { this.preChatForm = (TEMP.split('&')[0] === 'true' || TEMP.split('&')[0] === '1'); }
+        //     // this.chat21_agentId = (location.search.split('chat21_agentId=')[1]).split('&')[0];
+        // }
+        if (this.userEmail && this.userPassword) {
+            // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
+        } else if (this.userId) {
+
+        } else {
+            this.authService.authenticateFirebaseAnonymously();
         }
-        this.isWidgetActive = false;
-        this.authService.authenticateFirebaseAnonymously();
     }
 
     /**
@@ -112,13 +210,9 @@ export class AppComponent implements OnDestroy, OnInit  {
      * inizializzo la pagina
      */
     ngOnInit() {
-        console.log('ngOnInit: ');
-        this.initialize();
-        this.openSelectionDepartment = true;
-        this.isShowed = false;
-        moment.locale('it');
-        this.setSubscriptions();
+        // this.initialize();
     }
+
 
     // START FORM
     // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
@@ -132,20 +226,24 @@ export class AppComponent implements OnDestroy, OnInit  {
         });
         this.subcribeToFormChanges();
     }
+
     /** */
     subcribeToFormChanges() {
         const that = this;
         const myFormValueChanges$ = this.myForm.valueChanges;
         myFormValueChanges$.subscribe(x => {
-            that.userName = x.name;
+            that.userFullname = x.name;
             that.userEmail = x.email;
         });
     }
+
     /** */
     closeForm() {
-        this.attributes.userName = this.userName;
-        this.attributes.userEmail = this.userEmail;
-        if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
+        // recupero email inserita nel form e fullname
+        // salvo tutto nello storage e successivamente le invio con il messaggio!!!!
+        // this.attributes.userName = this.userFullname;
+        // this.attributes.userEmail = this.userEmail;
+        // if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
         this.preChatForm = false;
     }
     // END FORM
@@ -159,16 +257,6 @@ export class AppComponent implements OnDestroy, OnInit  {
     setSubscriptions() {
         console.log('setSubscriptions: ');
         const that = this;
-        // USER AUTENTICATE
-        const subLoggedUser: Subscription = this.authService.obsLoggedUser
-        .subscribe(user => {
-            if (user) {
-                console.log('USER AUTENTICATE: ', user);
-                that.loggedUser = user;
-                that.initConversation();
-                that.createConversation();
-            }
-        });
 
         // MSG ADDED
         const subMsgAdded: Subscription = this.messagingService.obsAdded
@@ -222,12 +310,14 @@ export class AppComponent implements OnDestroy, OnInit  {
         .subscribe(isWidgetActive => {
             that.isWidgetActive = isWidgetActive;
             if (isWidgetActive === false) {
+                sessionStorage.removeItem('isWidgetActive');
                 this.conversationWith = null;
-                this.generateNewUidConversation();
+                // this.generateNewUidConversation();
                 console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
             } else if (isWidgetActive === true) {
                 console.log('APROOOOOOOO!!!!:', );
-                this.isConversationOpen = false;
+                sessionStorage.setItem('isWidgetActive', 'true');
+                that.isConversationOpen = false;
             }
         });
         this.subscriptions.push(subscriptionIsWidgetActive);
@@ -238,9 +328,15 @@ export class AppComponent implements OnDestroy, OnInit  {
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
+        this.unsubscribe();
+    }
+
+    unsubscribe() {
         this.subscriptions.forEach(function(subscription) {
             subscription.unsubscribe();
         });
+        this.subscriptions.length = 0;
+        console.log('this.subscriptions', this.subscriptions);
     }
 
     /**
@@ -251,7 +347,10 @@ export class AppComponent implements OnDestroy, OnInit  {
     initialize() {
         this.messages = [];
         this.arrayImages4Load = [];
+        console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.attributes = this.setAttributes();
+        this.openSelectionDepartment = true;
+        this.setSubscriptions();
     }
 
     setAttributes(): any {
@@ -274,16 +373,18 @@ export class AppComponent implements OnDestroy, OnInit  {
     /**
      * genero un nuovo conversationWith
      * al login o all'apertura di una nuova conversazione
-     * @param user
      */
     generateNewUidConversation() {
         console.log('generateUidConversation **************', this.conversationWith, this.loggedUser.uid);
-        if (!this.conversationWith) {
-            this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
-        }
+        this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
     }
 
-    /** */
+    /**
+     * imposto id conversazione (conversationWith)
+     * controllo se è stato passato nei params
+     * altrimenti controllo se esiste un id conv nello storage per loggedUser
+     * altrimenti ne genero uno nuovo
+     */
     initConversation() {
         // set this.conversationWith
         if (this.chat21_agentId) {
@@ -296,7 +397,7 @@ export class AppComponent implements OnDestroy, OnInit  {
             } else {
                 this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
             }
-            console.log('this.conversationWith:', this.conversationWith);
+            console.log('this.conversationWith: ', this.conversationWith);
         }
         // set tenant
         if (!this.tenant) {
@@ -349,7 +450,7 @@ export class AppComponent implements OnDestroy, OnInit  {
             console.log('checkWritingMessages >>>>>>>>>: ', writing);
             if (writing.exists()) {
                 console.log('WritingMessages >>>>>>>>> OKKKK ');
-                that.writingMessage = 'sta scrivendo...';
+                that.writingMessage = that.LABEL_WRITING;
             } else {
                 console.log('WritingMessages >>>>>>>>> NOOOOO ');
                 that.writingMessage = '';
@@ -402,11 +503,14 @@ export class AppComponent implements OnDestroy, OnInit  {
      * apro il popup conversazioni
      */
     f21_open() {
-        this.isShowed = !this.isShowed;
-        // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-        console.log('isShowed::', this.isShowed);
-        if (this.isShowed) {
-            this.scrollToBottom();
+        if (this.loggedUser) {
+            this.isShowed = true; // !this.isShowed;
+            sessionStorage.setItem('isShowed', 'true');
+            // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+            console.log('isShowed::', this.isShowed);
+            // if (this.isShowed) {
+                this.scrollToBottom();
+            // }
         }
     }
 
@@ -416,6 +520,7 @@ export class AppComponent implements OnDestroy, OnInit  {
     f21_close() {
         console.log('isShowed::', this.isShowed);
         this.isShowed = false;
+        sessionStorage.removeItem('isShowed');
     }
 
     /**
@@ -449,6 +554,9 @@ export class AppComponent implements OnDestroy, OnInit  {
      */
     resizeInputField() {
         const target = document.getElementById('chat21-main-message-context');
+        if (!target) {
+            return;
+        }
         // tslint:disable-next-line:max-line-length
         // console.log('H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
         target.style.height = '100%';
@@ -646,11 +754,19 @@ export class AppComponent implements OnDestroy, OnInit  {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+        const that = this;
         (metadata) ? metadata = metadata : metadata = '';
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
-          // tslint:disable-next-line:max-line-length
-          this.messagingService.sendMessage(msg, type, metadata, this.conversationWith, this.attributes);
+            // tslint:disable-next-line:max-line-length
+            this.messagingService.sendMessage(msg, type, metadata, this.conversationWith, this.attributes, this.projectid);
+
+            // setTimeout(function() {
+            //     that.writingMessage = that.LABEL_WRITING;
+            //     console.log('writingMessage: ', that.writingMessage);
+            // }, 300);
+          
+
         //   const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
         //   console.log('resultSendMsgKey: ', resultSendMsgKey);
         }
@@ -695,9 +811,34 @@ export class AppComponent implements OnDestroy, OnInit  {
      * attivo una nuova conversazione
      */
     startNwConversation() {
-        console.log('this.startNwConversation');
-        this.isConversationOpen = true;
+        console.log('this.startNwConversation 2');
+
+        this.constructor();
+
+        this.ngOnDestroy();
+        console.log('unsubscribe OK', this.subscriptions);
+
+        this.generateNewUidConversation();
+        console.log('NEW conversationWith:', this.conversationWith);
+
+        this.createConversation();
+        console.log('NEW createConversation: ');
+
         this.initialize();
-        this.resizeInputField();
+        console.log('NEW initialize: ');
+
+        this.isConversationOpen = true;
+        console.log('NEW SUBSRIBE -->' + this.isConversationOpen + ' <--');
+
     }
+
+
+    convertMessage(msg) {
+        const messageText = urlify(msg);
+        return messageText;
+        // window.alert('ciao');
+        // window.open("http://www.google.it", 'Video Chat', 'width=100%,height=300');
+    }
+
+
 }

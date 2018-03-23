@@ -151,7 +151,8 @@ export class MessagingService {
         if (calcolaData != null) {
             lastDate = calcolaData;
         }
-        const messageText = urlify(itemMsg['text']);
+        // const messageText = urlify(itemMsg['text']);
+        const messageText = itemMsg['text'];
         // creo oggetto messaggio e lo aggiungo all'array dei messaggi
         let attributes = '';
         if (itemMsg['attributes']) {
@@ -198,7 +199,8 @@ export class MessagingService {
         console.log('itemMsg.type *****', itemMsg.metadata);
         messageText = itemMsg['text'];
       } else {
-        messageText = urlify(itemMsg['text']);
+        //messageText = urlify(itemMsg['text']);
+        messageText = itemMsg['text'];
       }
 
       try {
@@ -249,7 +251,7 @@ export class MessagingService {
   }
 
 
-  sendMessage(msg, type, metadata, conversationWith, attributes) { // : string {
+  sendMessage(msg, type, metadata, conversationWith, attributes, projectid) { // : string {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
@@ -270,7 +272,8 @@ export class MessagingService {
       timestamp: timestamp,
       type: type,
       channel_type: this.channel_type,
-      attributes: attributes
+      attributes: attributes,
+      projectid: projectid
     };
 
     const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + conversationWith);

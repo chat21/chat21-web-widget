@@ -1,6 +1,6 @@
 {
   "name": "chat21-web-widget",
-  "version": "0.0.0",
+  "version": "0.0.23",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
