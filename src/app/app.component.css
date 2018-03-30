@@ -180,7 +180,13 @@
     border-color: #000000;
     /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
 }
+#chat21-container{
+    display: none;
+}
 
+#chat21-container.active{
+    display: block;
+}
 /* CSS BOX CONTAINER */
 #chat21-container #chat21-conversations {
     box-shadow: rgba(0,0,0,0.18) 0 0 38px;

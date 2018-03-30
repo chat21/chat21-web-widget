@@ -9,44 +9,63 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
-  public user: Observable<firebase.User>;
+  // public user: Observable<firebase.User>;
+  public user: firebase.User;
   public token: string;
   obsLoggedUser: BehaviorSubject<any>;
 
   constructor(
     private firebaseAuth: AngularFireAuth
   ) {
-    this.user = firebaseAuth.authState;
+    // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
   }
+
+  getCurrentUser() {
+    const that = this;
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        console.log('PASSO OFFLINE AL CHAT MANAGER');
+        that.obsLoggedUser.next(null);
+      } else {
+        console.log('1 - user OK ***', that.obsLoggedUser);
+        that.user = firebase.auth().currentUser;
+        that.obsLoggedUser.next(that.user);
+        that.getToken();
+      }
+    });
+  }
+
+  getToken() {
+    console.log('Notification permission granted.');
+    const that = this;
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    .then(function(idToken) {
+        that.token = idToken;
+        console.log('idToken.', idToken);
+    }).catch(function(error) {
+        console.log('idToken ERROR: ', error);
+    });
+  }
+
 
   authenticateFirebaseAnonymously() {
     const that = this;
     firebase.auth().signInAnonymously()
     .then(function(user) {
       that.user = user;
-      //that.obsLoggedUser.next(user);
+      that.obsLoggedUser.next(user);
       that.getToken();
     })
     .catch(function(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
+        that.obsLoggedUser.next(null);
         console.log('signInAnonymously ERROR: ', errorCode, errorMessage);
     });
   }
 
-  getToken() {
-    const that = this;
-    console.log('Notification permission granted.');
-    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
-    .then(function(idToken) {
-        that.token = idToken;
-        console.log('idToken.', idToken);
-        that.obsLoggedUser.next(that.user);
-    }).catch(function(error) {
-        console.log('idToken ERROR: ', error);
-    });
-  }
+  
 
   logout() {
     return this.firebaseAuth

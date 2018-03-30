@@ -34,6 +34,7 @@ export class MessagingService {
   messages: Array<MessageModel>;
 
   observable: any;
+  obsCheckWritingMessages: BehaviorSubject<string>;
   // obsAdded: any;
   obsAdded: BehaviorSubject<MessageModel>;
   obsChanged: BehaviorSubject<MessageModel>;
@@ -47,6 +48,7 @@ export class MessagingService {
   channel_type: string;
   MONGODB_BASE_URL: string;
   departments: DepartmentModel[];
+  filterSystemMsg =  true;
 
 
   constructor(
@@ -55,9 +57,11 @@ export class MessagingService {
     public http: Http
   ) {
     // this.channel_type = CHANNEL_TYPE_GROUP;
-    this.MONGODB_BASE_URL = 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
+    this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
+    // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
+    this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
     this.obsChanged = new BehaviorSubject<MessageModel>(null);
     this.obsRemoved = new BehaviorSubject<MessageModel>(null);
@@ -65,23 +69,23 @@ export class MessagingService {
   }
 
   /** */
-  eventChange(message, event) {
-    this.observable.next(this.messages);
-    if (event === 'ADDED') {
-      this.obsAdded.next(message);
-    } else if (event === 'CHANGED') {
-      this.obsChanged.next(message);
-    } else if (event === 'REMOVED') {
-      this.obsRemoved.next(message);
-    }
-  }
+  // eventChange(message, event) {
+  //   this.observable.next(this.messages);
+  //   if (event === 'ADDED') {
+  //     this.obsAdded.next(message);
+  //   } else if (event === 'CHANGED') {
+  //     this.obsChanged.next(message);
+  //   } else if (event === 'REMOVED') {
+  //     this.obsRemoved.next(message);
+  //   }
+  // }
 
   /**
    *
   */
   public initialize(user, tenant, channel_type) {
-    this.channel_type = channel_type;
     const that = this;
+    this.channel_type = channel_type;
     this.messages = [];
     this.loggedUser = user;
     this.senderId = user.uid;
@@ -94,7 +98,7 @@ export class MessagingService {
     const url = this.MONGODB_BASE_URL + 'departments/';
     // const url = `http://api.chat21.org/app1/departments`;
     // tslint:disable-next-line:max-line-length
-    const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwiX2lkIjoiNWE3MDQ0YzdjNzczNGQwZGU0ZGRlMmQ0Iiwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsicGFzc3dvcmQiOiJpbml0IiwidXNlcm5hbWUiOiJpbml0IiwiX192IjoiaW5pdCIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsInVzZXJuYW1lIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJfX3YiOjAsInBhc3N3b3JkIjoiJDJhJDEwJGw3RnN1aS9FcDdONkEwTW10b1BNa2VjQnY0SzMzaFZwSlF3ckpGcHFSMVZSQ2JaUnkybHk2IiwidXNlcm5hbWUiOiJhbmRyZWEiLCJfaWQiOiI1YTcwNDRjN2M3NzM0ZDBkZTRkZGUyZDQifSwiJGluaXQiOnRydWUsImlhdCI6MTUxNzMwNzExM30.6kpeWLl_o5EgBzmzH3EGtJ_f3yhE7M9VMpx59ze_gbY';
+    const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnsiZW1haWwiOjEsImZpcnN0bmFtZSI6MSwibGFzdG5hbWUiOjEsInBhc3N3b3JkIjoxLCJpZCI6MX0sImdldHRlcnMiOnt9LCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJsYXN0bmFtZSI6ImluaXQiLCJmaXJzdG5hbWUiOiJpbml0IiwiX2lkIjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsibGFzdG5hbWUiOnRydWUsImZpcnN0bmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImVtYWlsIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJsYXN0bmFtZSI6IlNwb256aWVsbG8iLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJwYXNzd29yZCI6IiQyYSQxMCRkMHBTV3lTQkp5ejFQLmE0Y0QuamwubnpvbW9xMGlXZUlHRmZqRGNQZVhUeENpRUVJOTdNVyIsImVtYWlsIjoic3BvbnppZWxsb0BnbWFpbC5jb20iLCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUifSwiJGluaXQiOnRydWUsImlhdCI6MTUyMTY1MjE3Mn0.-iBbE2gCDrcUF1uh9HdK1kVsIRyRCBi_Pvm7LJEKhbs';
     console.log('MONGO DB DEPARTMENTS URL', url, TOKEN);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -104,6 +108,19 @@ export class MessagingService {
       .map((response) => response.json());
   }
 
+
+  // public getMongDbDepartments(): Observable<Department[]> {
+  //   const url = this.MONGODB_BASE_URL;
+  //   // const url = `http://localhost:3000/app1/departments/`;
+  //   // const url = `http://api.chat21.org/app1/departments/;
+  //   console.log('MONGO DB DEPARTMENTS URL', url);
+  //   const headers = new Headers();
+  //   headers.append('Content-Type', 'application/json');
+  //   headers.append('Authorization', this.TOKEN);
+  //   return this.http
+  //     .get(url, { headers })
+  //     .map((response) => response.json());
+  // }
   /**
    *
   */
@@ -117,25 +134,78 @@ export class MessagingService {
     return this.messagesRef.once('value');
   }
 
-  public checkWritingMessages(conversationWith): any {
-    this.conversationWith = conversationWith;
-    const that = this;
-    // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
-    const urlNodeFirebase = '/apps/' + this.tenant + '/typings/' + conversationWith;
-    console.log('checkWritingMessages *****', urlNodeFirebase);
-    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-    const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
-    return messagesRef;
-//     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-// starCountRef.on('value', function(snapshot) {
 
+  public checkWritingMessages() {
+    const that = this;
+    const urlNodeFirebaseMembers = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members';
+    console.log('urlNodeFirebaseMembers *****', urlNodeFirebaseMembers);
+    const firebaseGroup = firebase.database().ref(urlNodeFirebaseMembers)
+    .once('value').then(function(snapshot) {
+      // console.log('snapshot.val() *****', snapshot);
+      const resp = that.checkIsBot(snapshot);
+      that.obsCheckWritingMessages.next(resp);
+    });
   }
+
+  public deleteWritingMessages(sender) {
+    console.log('deleteWritingMessages *****', sender);
+    if (sender.startsWith('bot_')) {
+      this.obsCheckWritingMessages.next(null);
+    }
+  }
+
+  checkIsBot(snapshot) {
+    const that = this;
+    let RESP = null;
+    snapshot.forEach(
+      function(childSnapshot) {
+        const uid = childSnapshot.key;
+        console.log('childSnapshot *****', uid);
+        if (uid.startsWith('bot_')) {
+          RESP = uid;
+          return;
+        }
+      }
+    );
+    console.log('RESP:', RESP);
+    return RESP;
+  }
+
+//   public checkWritingMessages(conversationWith): any {
+//     this.conversationWith = conversationWith;
+//     const that = this;
+//     // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
+//     const urlNodeFirebase = '/apps/' + this.tenant + '/typings/' + conversationWith;
+//     console.log('checkWritingMessages *****', urlNodeFirebase);
+//     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+//     const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
+//     return messagesRef;
+// //     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+// // starCountRef.on('value', function(snapshot) {
+//   }
+
+  checkMessage(message): boolean {
+    if (message.text.trim() === '') {
+      // se è un messaggio vuoto non fare nulla
+      return false;
+    }
+    if (message.sender === 'system' && this.filterSystemMsg && message.attributes['subtype'] !== 'info/support') {
+      // se è un msg inviato da system NON fare nulla
+      return false;
+    } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
+        // se è un'immagine che ho inviato io NON fare nulla
+        // aggiorno la stato del messaggio e la data
+        // this.updateMessage(message);
+        return false;
+    }
+    return true;
+  }
+
 
   public listMessages(conversationWith) {
     const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
     // tslint:disable-next-line:curly
     if (text_area) text_area.focus();
-    let lastDate = '';
     const that = this;
     // this.conversationWith = conversationWith;
     // this.checkRemoveMember();
@@ -144,33 +214,36 @@ export class MessagingService {
 
     // CHANGED
     this.messagesRef.on('child_changed', function(childSnapshot) {
-        console.log('child_changed *****', childSnapshot.key);
-        const itemMsg = childSnapshot.val();
-        // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-        const calcolaData = setHeaderDate(itemMsg['timestamp'], lastDate);
-        if (calcolaData != null) {
-            lastDate = calcolaData;
-        }
-        // const messageText = urlify(itemMsg['text']);
-        const messageText = itemMsg['text'];
-        // creo oggetto messaggio e lo aggiungo all'array dei messaggi
-        let attributes = '';
-        if (itemMsg['attributes']) {
-          attributes = itemMsg['attributes'];
-          console.log('attributes *****', itemMsg['attributes']);
-        }
-        // tslint:disable-next-line:max-line-length
-        const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type'], attributes);
-        const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-        console.log('child_changed *****', index, that.messages, childSnapshot.key);
-        that.messages.splice(index, 1, msg);
-        // aggiorno stato messaggio
-        // questo stato indica che è stato consegnato al client e NON che è stato letto
-        that.setStatusMessage(childSnapshot, that.conversationWith);
-        // pubblico messaggio - sottoscritto in dettaglio conversazione
-        that.eventChange(msg, 'CHANGED');
-    });
+        const message = childSnapshot.val();
+        console.log('child_changed *****', childSnapshot.val());
+        if ( that.checkMessage(message) ) {
+          // imposto il giorno del messaggio
+          const dateSendingMessage = setHeaderDate(message['timestamp']);
 
+          const msg = new MessageModel(
+            childSnapshot.key,
+            message['language'],
+            message['recipient'],
+            message['recipient_fullname'],
+            message['sender'],
+            message['sender_fullname'],
+            message['status'],
+            message['metadata'],
+            message['text'],
+            message['timestamp'],
+            dateSendingMessage,
+            message['type'],
+            message['attributes']
+          );
+          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+          that.messages.splice(index, 1, msg);
+          console.log('child_changed *****', index, msg.uid);
+
+
+          // questo stato indica che è stato consegnato al client e NON che è stato letto
+          // that.setStatusMessage(childSnapshot, that.conversationWith);
+        }
+    });
 
     // REMOVED
     this.messagesRef.on('child_removed', function(childSnapshot) {
@@ -180,56 +253,37 @@ export class MessagingService {
         if (index > -1) {
           that.messages.splice(index, 1);
         }
-        that.eventChange(childSnapshot.key, 'REMOVED');
     });
-
 
     // ADDED
     this.messagesRef.on('child_added', function(childSnapshot) {
-      const itemMsg = childSnapshot.val();
-      console.log('child_added *****', itemMsg);
-      // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-      const calcolaData = setHeaderDate(itemMsg['timestamp'], lastDate);
-      if (calcolaData != null) {
-        lastDate = calcolaData;
+      const message = childSnapshot.val();
+      console.log('child_added *****', childSnapshot.val());
+      if ( that.checkMessage(message) ) {
+        // imposto il giorno del messaggio
+        const dateSendingMessage = setHeaderDate(message['timestamp']);
+        const msg = new MessageModel(
+          childSnapshot.key,
+          message['language'],
+          message['recipient'],
+          message['recipient_fullname'],
+          message['sender'],
+          message['sender_fullname'],
+          message['status'],
+          message['metadata'],
+          message['text'],
+          message['timestamp'],
+          dateSendingMessage,
+          message['type'],
+          message['attributes']
+        );
+        console.log('child_added *****', dateSendingMessage, msg);
+        // azzero sto scrivendo
+        that.deleteWritingMessages(message['sender']);
+        that.messages.push(msg);
       }
-      // creo oggetto messaggio e lo aggiungo all'array dei messaggi
-      let messageText = '';
-      if (itemMsg.type === TYPE_MSG_IMAGE) {
-        console.log('itemMsg.type *****', itemMsg.metadata);
-        messageText = itemMsg['text'];
-      } else {
-        //messageText = urlify(itemMsg['text']);
-        messageText = itemMsg['text'];
-      }
-
-      try {
-        const index = searchIndexInArrayForUid(that.messages, itemMsg.metadata['uid']);
-        console.log('child_DELETE *****', index, that.messages, itemMsg.metadata['uid']);
-        if (index > -1) {
-          that.messages.splice(index, 1);
-        }
-      } catch (err) {
-        console.log('RIPROVO ::');
-      }
-
-      let attributes = '';
-      if (itemMsg['attributes']) {
-        attributes = itemMsg['attributes'];
-        console.log('attributes *****', itemMsg['attributes']);
-      }
-      // tslint:disable-next-line:max-line-length
-      const msg = new MessageModel(childSnapshot.key, itemMsg['language'], itemMsg['recipient'], itemMsg['recipient_fullname'], itemMsg['sender'], itemMsg['sender_fullname'], itemMsg['status'], itemMsg.metadata, messageText, itemMsg['timestamp'], calcolaData, itemMsg['type'], attributes);
-      console.log('child_added *****', calcolaData, that.messages, msg);
-      that.messages.push(msg);
-
-      that.eventChange(msg, 'ADDED');
     });
-
-
   }
-
-
 
   /**
    * arriorno lo stato del messaggio

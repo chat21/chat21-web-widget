@@ -22,6 +22,8 @@ import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
+import 'rxjs/add/operator/takeWhile';
+
 
 @Component({
   selector: 'app-root',
@@ -30,7 +32,7 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 })
 
 
-export class AppComponent implements OnDestroy, OnInit  {
+export class AppComponent implements OnDestroy  {
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     loggedUser: any;
     subscriptions: Subscription[] = [];
@@ -42,7 +44,7 @@ export class AppComponent implements OnDestroy, OnInit  {
     senderId: string;
     nameImg: string;
     tenant: string;
-    chat21_agentId: string;
+    recipientId: string;
 
     myForm: FormGroup;
     public events: any[] = [];
@@ -61,10 +63,10 @@ export class AppComponent implements OnDestroy, OnInit  {
     LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
     LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
     // tslint:disable-next-line:max-line-length
-    LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent'; // 
+    LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
     LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
     // tslint:disable-next-line:max-line-length
-    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.'; // 
+    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
     LABEL_FIELD_NAME = '* Nome'; // '* Name';
     LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 5 caratteri).'; // 'Required field (minimum 5 characters).'; // 
     LABEL_FIELD_EMAIL = '* Email';
@@ -87,6 +89,7 @@ export class AppComponent implements OnDestroy, OnInit  {
     };
     selectedFiles: FileList;
     isWidgetActive: boolean;
+    isLogged = false;
 
     departments: DepartmentModel[];
     attributes_message: any;
@@ -104,9 +107,10 @@ export class AppComponent implements OnDestroy, OnInit  {
     userPassword: string;
     projectid: string;
     preChatForm: boolean;
-    recipientId: string;
     chatName: string;
     poweredBy: string;
+
+    private aliveSubLoggedUser = true;
 
     constructor(
         public authService: AuthService,
@@ -117,116 +121,114 @@ export class AppComponent implements OnDestroy, OnInit  {
         public formBuilder: FormBuilder,
         public el: ElementRef
     ) {
-        this.setForm();
-
-        console.log('costructor: ');
-        moment.locale('it');
-
-        // this.isShowed = false; /// prendo isWidgetActive dallo storage;
-        this.isShowed = (sessionStorage.getItem('isShowed')) ? true : false;
-        // this.isWidgetActive = false; // prendo isWidgetActive (votazione) dallo storage;
-        this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
-
+        console.log(' ---------------- COSTRUCTOR ---------------- ');
+        this.settingParams();
         this.getVariablesFromAttributeHtml();
 
+        // configuro il form di autenticazione
+        if (this.preChatForm) {
+            this.myForm = this.setForm(this.formBuilder);
+            if (this.myForm) {
+                this.subcribeToFormChanges();
+            }
+        }
+
+        // set auth
+        if (this.userEmail && this.userPassword) {
+            // se esistono email e psw faccio un'autenticazione firebase con email
+            // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
+        } else if (this.userId) {
+            // DA CAMBIARE IN SEGUITO !!!!
+            // PER IL MOMENTO SE PASSO userId SI PRESUME CHE SONO LOGGATO IN UN'ALTRA PG
+            this.authService.getCurrentUser();
+            console.log('USER userId: ', this.loggedUser);
+        } else {
+            // faccio un'autenticazione anonima
+            this.authService.authenticateFirebaseAnonymously();
+        }
+
+
         // USER AUTENTICATE
+        // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
         const that = this;
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
+        .takeWhile(() => that.aliveSubLoggedUser)
         .subscribe(user => {
             if (user) {
-                console.log('USER AUTENTICATE: ', user.uid);
+                console.log('USER AUTENTICATE: ', user);
                 that.loggedUser = user;
-                that.initConversation();
+                // that.initConversation();
                 that.createConversation();
                 that.initialize();
+                that.isLogged = true;
+                that.aliveSubLoggedUser = false;
+            } else {
+                that.isLogged = false;
             }
         });
     }
 
     /** */
-    getVariablesFromAttributeHtml() {
-        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-        let TEMP;
-        // get variables from attribute html
-        // TEMP = this.el.nativeElement.getAttribute('tenant');
-        // this.tenant = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('recipientId');
-        this.chat21_agentId = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('projectid');
-        this.projectid =  '5ab0f32757066e0014bfd718'; // (TEMP) ? TEMP : null; // //'5ab0f32757066e0014bfd718'; //
-
-        TEMP = this.el.nativeElement.getAttribute('chatName');
-        this.chatName = 'TileDesk'; // (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('poweredBy');
-        this.poweredBy = '<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>'; // (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('userId');
-        this.userId = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('userEmail');
-        this.userEmail = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('userPassword');
-        this.userPassword = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('userFullname');
-        this.userFullname = (TEMP) ? TEMP : null;
-
-        TEMP = this.el.nativeElement.getAttribute('preChatForm');
-        this.preChatForm = (TEMP == null) ? false : true;
-
-        console.log('getVariablesFromAttributeHtml:: ');
-        console.log('tenant:: ', this.tenant);
-        console.log('chat21_agentId:: ', this.chat21_agentId);
-        console.log('projectid:: ', this.projectid);
-        console.log('userId:: ', this.userId);
-        console.log('userEmail:: ', this.userEmail);
-        console.log('userPassword:: ', this.userPassword);
-        console.log('userFullname:: ', this.userFullname);
-        console.log('preChatForm:: ', TEMP, this.preChatForm);
-        //  if (location.search) {
-        //     TEMP = location.search.split('chat21_tenant=')[1];
-        //     if (TEMP) { this.tenant = TEMP.split('&')[0]; }
-        //     TEMP = (location.search.split('chat21_agentId=')[1]);
-        //     if (TEMP) { this.chat21_agentId = TEMP.split('&')[0]; }
-        //     TEMP = (location.search.split('chat21_preChatForm=')[1]);
-        //     if (TEMP) { this.preChatForm = (TEMP.split('&')[0] === 'true' || TEMP.split('&')[0] === '1'); }
-        //     // this.chat21_agentId = (location.search.split('chat21_agentId=')[1]).split('&')[0];
-        // }
-        if (this.userEmail && this.userPassword) {
-            // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
-        } else if (this.userId) {
-
-        } else {
-            this.authService.authenticateFirebaseAnonymously();
-        }
+    settingParams() {
+        // SETTINGS
+        //// setto widget language
+        moment.locale('it');
+        //// get isShowed from storage;
+        this.isShowed = (sessionStorage.getItem('isShowed')) ? true : false;
+        //// get isWidgetActive (poll) from storage;
+        this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
     }
 
     /**
-     * creo sottoscrizione ad array messaggi del provider
-     * inizializzo la pagina
-     */
-    ngOnInit() {
-        // this.initialize();
+     * tenant:
+     * recipientId:
+     * projectid:
+     * chatName:
+     * poweredBy:
+     * userId:
+     * userEmail:
+     * userPassword:
+     * userFullname:
+     * preChatForm:
+     *
+    */
+    getVariablesFromAttributeHtml() {
+        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+        let TEMP;
+        TEMP = this.el.nativeElement.getAttribute('tenant');
+        this.tenant = (TEMP) ? TEMP : environment.tenant;
+        TEMP = this.el.nativeElement.getAttribute('recipientId');
+        this.recipientId = (TEMP) ? TEMP : null;
+        TEMP = this.el.nativeElement.getAttribute('projectid');
+        this.projectid = (TEMP) ? TEMP : '5ab0f32757066e0014bfd718'; // di default id di frontiere21
+        TEMP = this.el.nativeElement.getAttribute('chatName');
+        this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
+        TEMP = this.el.nativeElement.getAttribute('poweredBy');
+        this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>';
+        TEMP = this.el.nativeElement.getAttribute('userId');
+        this.userId = (TEMP) ? TEMP : null;
+        TEMP = this.el.nativeElement.getAttribute('userEmail');
+        this.userEmail = (TEMP) ? TEMP : null;
+        TEMP = this.el.nativeElement.getAttribute('userPassword');
+        this.userPassword = (TEMP) ? TEMP : null;
+        TEMP = this.el.nativeElement.getAttribute('userFullname');
+        this.userFullname = (TEMP) ? TEMP : null;
+        TEMP = this.el.nativeElement.getAttribute('preChatForm');
+        this.preChatForm = (TEMP == null) ? false : true;
     }
-
 
     // START FORM
     // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
     /** */
-    setForm() {
+    setForm(formBuilder): FormGroup  {
         // SET FORM
         const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-        this.myForm = this.formBuilder.group({
+        const myForm = formBuilder.group({
             email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
             name: ['', Validators.compose([Validators.minLength(5), Validators.required])]
         });
-        this.subcribeToFormChanges();
+        return myForm;
     }
-
     /** */
     subcribeToFormChanges() {
         const that = this;
@@ -236,7 +238,6 @@ export class AppComponent implements OnDestroy, OnInit  {
             that.userEmail = x.email;
         });
     }
-
     /** */
     closeForm() {
         // recupero email inserita nel form e fullname
@@ -257,54 +258,6 @@ export class AppComponent implements OnDestroy, OnInit  {
     setSubscriptions() {
         console.log('setSubscriptions: ');
         const that = this;
-
-        // MSG ADDED
-        const subMsgAdded: Subscription = this.messagingService.obsAdded
-        .subscribe(message => {
-            console.log('ADD NW MSG:', message);
-            if (!message) {
-                return;
-            } else if (message.sender === 'system' && this.filterSystemMsg && message.attributes['subtype'] !== 'info/support') {
-                // se è un msg inviato da system NON fare nulla
-                return;
-            } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
-                // se è un'immagine che ho inviato io NON fare nulla
-                // aggiorno la stato del messaggio e la data
-                that.updateMessage(message);
-            } else if (message) {
-                that.messages.push(message);
-                that.scrollToBottom();
-            }
-        });
-        this.subscriptions.push(subMsgAdded);
-
-        // MSG CHANGED
-        const subMsgChanged: Subscription = this.messagingService.obsChanged
-        .subscribe(message => {
-            console.log('CHANGED NW MSG:', message);
-            if (!message) {
-                return;
-            } else if (message.sender === 'system' && this.filterSystemMsg && message.attributes['subtype'] !== 'info/support') {
-                // se è un msg inviato da system NON fare nulla
-                return;
-            } else {
-                const index = searchIndexInArrayForUid(that.messages, message.uid);
-                that.messages.splice(index, 1, message);
-            }
-        });
-        this.subscriptions.push(subMsgChanged);
-
-        // MSG REMOVED
-        const subMsgRemoved: Subscription = this.messagingService.obsRemoved
-        .subscribe(uid => {
-            console.log('REMOVED MSG:', uid);
-            if (uid) {
-                const index = searchIndexInArrayForUid(that.messages, uid);
-                that.messages.splice(index, 1);
-            }
-        });
-        this.subscriptions.push(subMsgRemoved);
-
         // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
         const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
         .subscribe(isWidgetActive => {
@@ -323,12 +276,12 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.subscriptions.push(subscriptionIsWidgetActive);
     }
 
-
     /**
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
         this.unsubscribe();
+        // this.messagingService.unsubscribe();
     }
 
     unsubscribe() {
@@ -339,17 +292,18 @@ export class AppComponent implements OnDestroy, OnInit  {
         console.log('this.subscriptions', this.subscriptions);
     }
 
+
     /**
      * inizializzo variabili
      * effettuo il login anonimo su firebase
      * se il login è andato a buon fine recupero id utente
      */
     initialize() {
-        this.messages = [];
+        this.messages = this.messagingService.messages;
         this.arrayImages4Load = [];
-        console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.attributes = this.setAttributes();
         this.openSelectionDepartment = true;
+        console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
     }
 
@@ -366,7 +320,7 @@ export class AppComponent implements OnDestroy, OnInit  {
                 userEmail: '',
                 userName: ''
             };
-            sessionStorage.setItem('attributes', JSON.stringify(attributes));
+            sessionStorage.setItem('attributes', attributes); // JSON.stringify(attributes)
         }
         return attributes;
     }
@@ -379,32 +333,6 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
     }
 
-    /**
-     * imposto id conversazione (conversationWith)
-     * controllo se è stato passato nei params
-     * altrimenti controllo se esiste un id conv nello storage per loggedUser
-     * altrimenti ne genero uno nuovo
-     */
-    initConversation() {
-        // set this.conversationWith
-        if (this.chat21_agentId) {
-            this.conversationWith = this.chat21_agentId;
-        } else {
-            const key = sessionStorage.getItem(this.loggedUser.uid);
-            console.log('key:', key, this.loggedUser.uid, sessionStorage);
-            if (key) {
-                this.conversationWith = key;
-            } else {
-                this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
-            }
-            console.log('this.conversationWith: ', this.conversationWith);
-        }
-        // set tenant
-        if (!this.tenant) {
-            this.tenant = environment.tenant;
-        }
-        console.log('INIT VAR:', this.tenant, this.chat21_agentId, this.conversationWith);
-    }
 
     /**
      * IMPOSTO: senderId, recipientId, conversationId, conversationWith
@@ -413,16 +341,47 @@ export class AppComponent implements OnDestroy, OnInit  {
      * 3 - inizializzo messagingService
      * 4 - recupero messaggi conversazione
      */
+
+    // initConversation() {
+    //     if (this.recipientId) {
+    //         this.conversationWith = this.recipientId;
+    //     } else {
+    //         const key = sessionStorage.getItem(this.loggedUser.uid);
+    //         console.log('key:', key, this.loggedUser.uid, sessionStorage);
+    //         if (key) {
+    //             this.conversationWith = key;
+    //         } else {
+    //             this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
+    //         }
+    //     }
+    //     // set tenant
+    //     if (!this.tenant) {
+    //         this.tenant = environment.tenant;
+    //     }
+    //     console.log('initConversation:  this.conversationWith -> ' + this.conversationWith + '  tenant -> ' + this.tenant);
+    // }
     createConversation() {
         const that = this;
-        this.senderId = this.loggedUser.uid;
-        if (this.chat21_agentId) {
-            this.messagingService.initialize(this.loggedUser,  this.tenant, CHANNEL_TYPE_DIRECT);
-        } else {
-            this.messagingService.initialize(this.loggedUser,  this.tenant, CHANNEL_TYPE_GROUP);
-        }
         const token = this.authService.token;
-        console.log('createConversation: ', this.tenant, this.conversationWith);
+        this.senderId = this.loggedUser.uid;
+        let channelType = CHANNEL_TYPE_GROUP;
+        // set this.conversationWith
+        if (this.recipientId) {
+            if (this.recipientId.indexOf('group') !== -1) {
+                channelType = CHANNEL_TYPE_GROUP;
+            }
+            // (this.recipientId) ? CHANNEL_TYPE_DIRECT : CHANNEL_TYPE_GROUP
+            this.conversationWith = this.recipientId;
+        } else {
+            channelType = CHANNEL_TYPE_GROUP;
+            this.conversationWith = sessionStorage.getItem(this.loggedUser.uid);
+            if (!this.conversationWith) {
+                this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
+            }
+        }
+        // tslint:disable-next-line:max-line-length
+
+        this.messagingService.initialize(this.loggedUser,  this.tenant, channelType);
         this.upSvc.initialize(this.loggedUser.uid,  this.tenant, this.conversationWith);
         this.contactService.initialize(this.loggedUser.uid, this.tenant, this.conversationWith);
         this.messagingService.checkListMessages(this.conversationWith)
@@ -435,28 +394,46 @@ export class AppComponent implements OnDestroy, OnInit  {
                 that.preChatForm = false;
                 that.openSelectionDepartment = false;
                 that.messagingService.listMessages(that.conversationWith);
-                //that.getMongDbDepartments();
+                // that.getMongDbDepartments();
             }
+            that.scrollToBottom();
         });
-        this.checkWritingMessages();
-
     }
 
     checkWritingMessages() {
+        this.messagingService.checkWritingMessages();
         const that = this;
-        const messagesRef = this.messagingService.checkWritingMessages(this.conversationWith);
-        messagesRef.on('value', function(writing) {
-        //.then(function(writing) {
-            console.log('checkWritingMessages >>>>>>>>>: ', writing);
-            if (writing.exists()) {
-                console.log('WritingMessages >>>>>>>>> OKKKK ');
-                that.writingMessage = that.LABEL_WRITING;
+        const subscription: Subscription = this.messagingService.obsCheckWritingMessages
+        // .takeWhile(() => that.subscriptionIsWriting)
+        .subscribe(resp => {
+            console.log('2 - subscribe IS: ', resp + ' ****************');
+            this.scrollToBottom();
+            if (resp) {
+                setTimeout(function() {
+                    that.writingMessage = that.LABEL_WRITING;
+                }, 500);
             } else {
-                console.log('WritingMessages >>>>>>>>> NOOOOO ');
                 that.writingMessage = '';
             }
         });
+
     }
+
+    // checkWritingMessages_old() {
+    //     const that = this;
+    //     const messagesRef = this.messagingService.checkWritingMessages(this.conversationWith);
+    //     messagesRef.on('value', function(writing) {
+    //     //.then(function(writing) {
+    //         console.log('checkWritingMessages >>>>>>>>>: ', writing);
+    //         if (writing.exists()) {
+    //             console.log('WritingMessages >>>>>>>>> OKKKK ');
+    //             that.writingMessage = that.LABEL_WRITING;
+    //         } else {
+    //             console.log('WritingMessages >>>>>>>>> NOOOOO ');
+    //             that.writingMessage = '';
+    //         }
+    //     });
+    // }
     /** */
     getMongDbDepartments() {
         const token = this.authService.token;
@@ -488,7 +465,7 @@ export class AppComponent implements OnDestroy, OnInit  {
         this.attributes.departmentName = department.name;
         if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
         this.messagingService.listMessages(this.conversationWith);
-        this.preChatForm = true;
+        this.preChatForm = false;
     }
 
 
@@ -765,7 +742,7 @@ export class AppComponent implements OnDestroy, OnInit  {
             //     that.writingMessage = that.LABEL_WRITING;
             //     console.log('writingMessage: ', that.writingMessage);
             // }, 300);
-          
+            this.checkWritingMessages();
 
         //   const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
         //   console.log('resultSendMsgKey: ', resultSendMsgKey);

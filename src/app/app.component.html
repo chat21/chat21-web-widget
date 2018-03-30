@@ -1,5 +1,5 @@
-<div id="chat21-container">
-    <div id="chat21-launcher-button" class="" (click)="f21_open()"></div>
+<div id="chat21-container" [class.active]="isLogged" >
+    <div id="chat21-launcher-button" (click)="f21_open()"></div>
     <div *ngIf="isShowed" id="chat21-conversations" class="chat21-window chat21-sheet">
         <!--HEADER-->
         <div class="chat21-sheet-header"> 
