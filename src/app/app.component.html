@@ -14,7 +14,7 @@
 
         <!--CONTENT-->
         <div class="chat21-sheet-content">
-            <div *ngIf="preChatForm == false && openSelectionDepartment == false && messages.length == 0" class="chat21-header-modal-select">
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
                 <div>{{LABEL_FIRST_MSG}}</div>
             </div>
             <div class="chat21-spinner" id="chat21-loader">
@@ -70,11 +70,9 @@
                                 <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" /> -->
                             </div>
                         </div>
-
                         <div class="time" [ngClass]="{'sender' : message.sender == senderId}" >
                             <time>{{message.timestamp | amTimeAgo}}</time>
                         </div>
-
                     </div>
                     <span>&nbsp;</span>
                 </div>
@@ -94,9 +92,13 @@
                 <!-- <img src="" width="200" alt="Image preview..."> -->
                 <div [class.active]="isSelected" class="name-image" >{{nameImg}}</div>
             </div> 
-            <div id="chat21-powered-by"  [innerHTML]="poweredBy">
-                <!-- (click)="openRate()" -->
-                <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
+            
+            <div id="chat21-end-footer">
+                <div id="chat21-powered-by"  [innerHTML]="poweredBy">
+                    <!-- (click)="openRate()" -->
+                    <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
+                </div>
+                <div class="build_version">{{BUILD_VERSION}}</div> 
             </div>
        </div>
 

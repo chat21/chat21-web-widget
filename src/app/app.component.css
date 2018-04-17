@@ -162,18 +162,19 @@
     color: #ffffff;
 }
 
+
 /* BUTTON */
 #chat21-launcher-button {
-    background-image : url("../assets/images/f21-chat21-logo-widget.svg");
-    background-size: 60px 60px;
+    background-image : url("../assets/images/f21-logo-widget.svg");
+    background-size: 90px 90px;
     background-repeat: no-repeat;
     border-radius: 50%;
     position: fixed;
     z-index: 999999000;
     bottom: 20px;
     right: 20px;
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
     cursor: pointer;
     background-position: center;
     background-color: #ffffff00;
@@ -199,7 +200,7 @@
     position: fixed;
     height: 80%;
     width: 320px;
-    bottom: 90px;
+    bottom: 100px;
     overflow: hidden;
     border-radius: 10px;
     right: 20px;
@@ -325,7 +326,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 }
 #chat21-conversations .messages {
     border-radius: 14px;
-    padding: 6px;
+    padding: 6px 6px 9px 6px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 #chat21-conversations .messages p {
@@ -585,12 +586,27 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     line-height: 22px;
     padding: 0;
     height: 25px;
-    color: #65a9e7;
+    width: 100%;
 }
 #chat21-powered-by a {
     text-decoration: none;
     color:#2a6ac1;
 }
+
+.build_version {
+    display: none;
+    font-size: 10px;
+    color:#777777;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+div#chat21-end-footer:hover div.build_version{
+    display: block;
+}
+
+
 
 
 

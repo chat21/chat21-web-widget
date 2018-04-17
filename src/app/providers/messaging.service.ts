@@ -21,7 +21,7 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 @Injectable()
 export class MessagingService {
 
-  loggedUser: any;
+  //loggedUser: any;
   tenant: string;
   senderId: string;
   // recipientId: string;
@@ -57,7 +57,8 @@ export class MessagingService {
     public http: Http
   ) {
     // this.channel_type = CHANNEL_TYPE_GROUP;
-    this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
+    this.MONGODB_BASE_URL = 'http://api.chat21.org/';
+    // this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
     // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
     this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
@@ -83,19 +84,19 @@ export class MessagingService {
   /**
    *
   */
-  public initialize(user, tenant, channel_type) {
+  public initialize(userUid, tenant, channel_type) {
     const that = this;
     this.channel_type = channel_type;
     this.messages = [];
-    this.loggedUser = user;
-    this.senderId = user.uid;
+    //this.loggedUser = user;
+    this.senderId = userUid;
     this.tenant = tenant;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
     console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
 
-  public getMongDbDepartments(token): Observable<DepartmentModel[]> {
-    const url = this.MONGODB_BASE_URL + 'departments/';
+  public getMongDbDepartments(token, projectId): Observable<DepartmentModel[]> {
+    const url = this.MONGODB_BASE_URL + projectId + '/departments/';
     // const url = `http://api.chat21.org/app1/departments`;
     // tslint:disable-next-line:max-line-length
     const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnsiZW1haWwiOjEsImZpcnN0bmFtZSI6MSwibGFzdG5hbWUiOjEsInBhc3N3b3JkIjoxLCJpZCI6MX0sImdldHRlcnMiOnt9LCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJsYXN0bmFtZSI6ImluaXQiLCJmaXJzdG5hbWUiOiJpbml0IiwiX2lkIjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsibGFzdG5hbWUiOnRydWUsImZpcnN0bmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImVtYWlsIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJsYXN0bmFtZSI6IlNwb256aWVsbG8iLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJwYXNzd29yZCI6IiQyYSQxMCRkMHBTV3lTQkp5ejFQLmE0Y0QuamwubnpvbW9xMGlXZUlHRmZqRGNQZVhUeENpRUVJOTdNVyIsImVtYWlsIjoic3BvbnppZWxsb0BnbWFpbC5jb20iLCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUifSwiJGluaXQiOnRydWUsImlhdCI6MTUyMTY1MjE3Mn0.-iBbE2gCDrcUF1uh9HdK1kVsIRyRCBi_Pvm7LJEKhbs';
@@ -121,10 +122,13 @@ export class MessagingService {
   //     .get(url, { headers })
   //     .map((response) => response.json());
   // }
+
+
   /**
+   * verifico se nel nodo della conversazione ci sono messaggi
+   * recupero gli ultimi 100 e li ordino dall'ultimo al primo
    *
   */
-
   public checkListMessages(conversationWith): any {
     this.conversationWith = conversationWith;
     this.checkRemoveMember();
@@ -185,7 +189,7 @@ export class MessagingService {
 //   }
 
   checkMessage(message): boolean {
-    if (message.text.trim() === '') {
+    if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
       // se è un messaggio vuoto non fare nulla
       return false;
     }
@@ -196,12 +200,15 @@ export class MessagingService {
         // se è un'immagine che ho inviato io NON fare nulla
         // aggiorno la stato del messaggio e la data
         // this.updateMessage(message);
-        return false;
+        return true;
     }
     return true;
   }
 
-
+/**
+ * mi sottoscrivo al cambio valori nei messaggi della chat
+ * @param conversationWith
+ */
   public listMessages(conversationWith) {
     const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
     // tslint:disable-next-line:curly
@@ -260,6 +267,7 @@ export class MessagingService {
       const message = childSnapshot.val();
       console.log('child_added *****', childSnapshot.val());
       if ( that.checkMessage(message) ) {
+
         // imposto il giorno del messaggio
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         const msg = new MessageModel(
@@ -280,7 +288,14 @@ export class MessagingService {
         console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
         that.deleteWritingMessages(message['sender']);
-        that.messages.push(msg);
+
+        if (message && message.sender === that.senderId && message.type !== TYPE_MSG_TEXT) {
+          // sto aggiungendo un'immagine inviata da me!!!
+          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+          that.messages.splice(index, 1, msg);
+        } else {
+          that.messages.push(msg);
+        }
       }
     });
   }
@@ -295,9 +310,9 @@ export class MessagingService {
   private setStatusMessage(item, conversationWith) {
     if (item.val()['status'] < MSG_STATUS_RECEIVED) {
       const msg = item.val();
-      if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
+      if (msg.sender !== this.senderId && msg.status < MSG_STATUS_RECEIVED) {
         // tslint:disable-next-line:max-line-length
-        const urlNodeMessagesUpdate  = '/apps/' + this.tenant + '/users/' + this.loggedUser.uid + '/messages/' + conversationWith + '/' + item.key;
+        const urlNodeMessagesUpdate  = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + conversationWith + '/' + item.key;
         console.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
         firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
       }
@@ -305,7 +320,7 @@ export class MessagingService {
   }
 
 
-  sendMessage(msg, type, metadata, conversationWith, attributes, projectid) { // : string {
+  sendMessage(nameSender, msg, type, metadata, conversationWith, attributes, projectid) { // : string {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
@@ -314,13 +329,12 @@ export class MessagingService {
     const language = document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;
     // const recipient_fullname = conversationWithDetailFullname;
-
     const message = {
       language: language,
       recipient: conversationWith,
       recipient_fullname: 'Support Group',
       sender: this.senderId,
-      sender_fullname: 'Ospite',
+      sender_fullname: nameSender,
       metadata: metadata,
       text: msg,
       timestamp: timestamp,
@@ -387,12 +401,12 @@ export class MessagingService {
     // dopo aver aggiunto un messaggio al gruppo
     // mi sottoscrivo al nodo user/groups/ui-group/members
     // tslint:disable-next-line:max-line-length
-    const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.loggedUser.uid + '/groups/' + this.conversationWith + '/members/';
+    const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
     console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
       console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
-      if ( childSnapshot.key === that.loggedUser.uid) {
+      if ( childSnapshot.key === that.senderId) {
         // CHIUDO CONVERSAZIONE
         that.closeConversation();
       }

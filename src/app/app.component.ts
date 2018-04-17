@@ -34,7 +34,8 @@ import 'rxjs/add/operator/takeWhile';
 
 export class AppComponent implements OnDestroy  {
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
-    loggedUser: any;
+    //loggedUser: any;
+    //loggedUserUid: string;
     subscriptions: Subscription[] = [];
     arrayImages4Load: Array<any>;
     attributes: any;
@@ -68,11 +69,13 @@ export class AppComponent implements OnDestroy  {
     // tslint:disable-next-line:max-line-length
     LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
     LABEL_FIELD_NAME = '* Nome'; // '* Name';
-    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 5 caratteri).'; // 'Required field (minimum 5 characters).'; // 
+    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 5 caratteri).'; // 'Required field (minimum 5 characters).';
     LABEL_FIELD_EMAIL = '* Email';
     // tslint:disable-next-line:max-line-length
-    LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.'; 
+    LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
     LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
+
+    BUILD_VERSION = environment.build; // 'b.0.5';
 
 
     textInputTextArea: String;
@@ -96,7 +99,7 @@ export class AppComponent implements OnDestroy  {
     openSelectionDepartment: boolean;
     departmentSelected: DepartmentModel;
 
-    IMG_PROFILE_SUPPORT = '../assets/images/f21ico-support.png';
+    IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/38661877-a44476dc-3e32-11e8-913d-747a8527b2b5.png';
     filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
 
     writingMessage = '';
@@ -111,6 +114,7 @@ export class AppComponent implements OnDestroy  {
     poweredBy: string;
 
     private aliveSubLoggedUser = true;
+    private isNewConversation = false;
 
     constructor(
         public authService: AuthService,
@@ -122,31 +126,31 @@ export class AppComponent implements OnDestroy  {
         public el: ElementRef
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
-        this.settingParams();
-        this.getVariablesFromAttributeHtml();
 
-        // configuro il form di autenticazione
-        if (this.preChatForm) {
-            this.myForm = this.setForm(this.formBuilder);
-            if (this.myForm) {
-                this.subcribeToFormChanges();
-            }
-        }
+        this.getVariablesFromAttributeHtml();
+        this.settingParams();
 
         // set auth
         if (this.userEmail && this.userPassword) {
             // se esistono email e psw faccio un'autenticazione firebase con email
             // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
         } else if (this.userId) {
-            // DA CAMBIARE IN SEGUITO !!!!
-            // PER IL MOMENTO SE PASSO userId SI PRESUME CHE SONO LOGGATO IN UN'ALTRA PG
-            this.authService.getCurrentUser();
-            console.log('USER userId: ', this.loggedUser);
+            // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
+            //this.authService.getCurrentUser();
+
+            this.senderId = this.userId;
+            this.createConversation();
+            this.initialize();
+            //this.isLogged = true;
+            this.aliveSubLoggedUser = false;
+            console.log('USER userId: this.isShowed:', this.senderId, this.isShowed);
         } else {
             // faccio un'autenticazione anonima
             this.authService.authenticateFirebaseAnonymously();
         }
 
+        // SET FORM
+        this.myForm = this.setForm(this.formBuilder);
 
         // USER AUTENTICATE
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -156,11 +160,12 @@ export class AppComponent implements OnDestroy  {
         .subscribe(user => {
             if (user) {
                 console.log('USER AUTENTICATE: ', user);
-                that.loggedUser = user;
+                //that.loggedUser = user;
+                that.senderId = user.uid;
                 // that.initConversation();
                 that.createConversation();
                 that.initialize();
-                that.isLogged = true;
+                //that.isLogged = true;
                 that.aliveSubLoggedUser = false;
             } else {
                 that.isLogged = false;
@@ -200,11 +205,11 @@ export class AppComponent implements OnDestroy  {
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         this.recipientId = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('projectid');
-        this.projectid = (TEMP) ? TEMP : '5ab0f32757066e0014bfd718'; // di default id di frontiere21
+        this.projectid = (TEMP) ? TEMP : '5ad5bd52c975820014ba900a'; // di default id di frontiere21
         TEMP = this.el.nativeElement.getAttribute('chatName');
         this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
         TEMP = this.el.nativeElement.getAttribute('poweredBy');
-        this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>';
+        this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         TEMP = this.el.nativeElement.getAttribute('userId');
         this.userId = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('userEmail');
@@ -215,6 +220,8 @@ export class AppComponent implements OnDestroy  {
         this.userFullname = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('preChatForm');
         this.preChatForm = (TEMP == null) ? false : true;
+        TEMP = this.el.nativeElement.getAttribute('isShowed');
+        this.isShowed = (TEMP == null) ? false : true;
     }
 
     // START FORM
@@ -242,9 +249,11 @@ export class AppComponent implements OnDestroy  {
     closeForm() {
         // recupero email inserita nel form e fullname
         // salvo tutto nello storage e successivamente le invio con il messaggio!!!!
-        // this.attributes.userName = this.userFullname;
-        // this.attributes.userEmail = this.userEmail;
-        // if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
+        this.attributes.userName = this.userFullname;
+        this.attributes.userEmail = this.userEmail;
+        if (this.attributes) {
+            sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
+        }
         this.preChatForm = false;
     }
     // END FORM
@@ -302,14 +311,24 @@ export class AppComponent implements OnDestroy  {
         this.messages = this.messagingService.messages;
         this.arrayImages4Load = [];
         this.attributes = this.setAttributes();
-        this.openSelectionDepartment = true;
+        this.openSelectionDepartment = false;
         console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
+
+        // configuro il form di autenticazione
+        if (!this.attributes.userEmail && !this.attributes.userName && this.preChatForm) {
+            //this.myForm = this.setForm(this.formBuilder);
+            if (this.myForm) {
+                this.subcribeToFormChanges();
+            }
+        } else {
+            this.preChatForm = false;
+        }
+
     }
 
     setAttributes(): any {
-        console.log('setAttributes: ', sessionStorage);
-        let attributes: any = sessionStorage.getItem('attributes');
+        let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
         // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
         if (!attributes || attributes === 'undefined') {
             attributes = {
@@ -317,10 +336,11 @@ export class AppComponent implements OnDestroy  {
                 sourcePage: location.href,
                 departmentId: '',
                 departmentName: '',
-                userEmail: '',
-                userName: ''
+                userEmail: this.userEmail,
+                userName: this.userFullname
             };
-            sessionStorage.setItem('attributes', attributes); // JSON.stringify(attributes)
+            console.log('setAttributes: ', JSON.stringify(attributes));
+            sessionStorage.setItem('attributes', JSON.stringify(attributes));
         }
         return attributes;
     }
@@ -329,8 +349,8 @@ export class AppComponent implements OnDestroy  {
      * al login o all'apertura di una nuova conversazione
      */
     generateNewUidConversation() {
-        console.log('generateUidConversation **************', this.conversationWith, this.loggedUser.uid);
-        this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
+        console.log('generateUidConversation **************', this.conversationWith, this.senderId);
+        this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
     }
 
 
@@ -360,12 +380,25 @@ export class AppComponent implements OnDestroy  {
     //     }
     //     console.log('initConversation:  this.conversationWith -> ' + this.conversationWith + '  tenant -> ' + this.tenant);
     // }
+    /**
+     * SET:
+     * token,
+     * senderId,
+     * channelType: CHANNEL_TYPE_DIRECT / CHANNEL_TYPE_GROUP
+     * conversationWith: recipientId / auto generato
+     * INIT:
+     * messagingService,
+     * upSvc,
+     * contactService,
+     * messagingService
+     */
     createConversation() {
         const that = this;
         const token = this.authService.token;
-        this.senderId = this.loggedUser.uid;
-        let channelType = CHANNEL_TYPE_GROUP;
-        // set this.conversationWith
+        //this.senderId = this.loggedUserUid;
+        let channelType = CHANNEL_TYPE_DIRECT;
+
+
         if (this.recipientId) {
             if (this.recipientId.indexOf('group') !== -1) {
                 channelType = CHANNEL_TYPE_GROUP;
@@ -374,29 +407,50 @@ export class AppComponent implements OnDestroy  {
             this.conversationWith = this.recipientId;
         } else {
             channelType = CHANNEL_TYPE_GROUP;
-            this.conversationWith = sessionStorage.getItem(this.loggedUser.uid);
+            this.conversationWith = sessionStorage.getItem(this.senderId);
             if (!this.conversationWith) {
-                this.conversationWith = this.messagingService.generateUidConversation(this.loggedUser.uid);
+                this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
             }
         }
         // tslint:disable-next-line:max-line-length
 
-        this.messagingService.initialize(this.loggedUser,  this.tenant, channelType);
-        this.upSvc.initialize(this.loggedUser.uid,  this.tenant, this.conversationWith);
-        this.contactService.initialize(this.loggedUser.uid, this.tenant, this.conversationWith);
+        this.messagingService.initialize(this.senderId,  this.tenant, channelType);
+        this.upSvc.initialize(this.senderId,  this.tenant, this.conversationWith);
+        this.contactService.initialize(this.senderId, this.tenant, this.conversationWith);
         this.messagingService.checkListMessages(this.conversationWith)
         .then(function(snapshot) {
             console.log('checkListMessages: ', snapshot);
+            // that.preChatForm = false;
+            // recupero nodo conversazione se è già presente
+            // 1 - se presente significa che:
+            //  1a - ho aggiornato la pg;
+            //      - recupero la lista dei messaggi
+            //  1b - ho concluso una prec conv?!?!?!
+            // 2 - se non è presente:
+            //  carico i dipartimenti!!!
+
             if (snapshot.exists()) {
-                that.openSelectionDepartment = false;
-                that.messagingService.listMessages(that.conversationWith);
+                that.isNewConversation = false;
+                that.isLogged = true;
+                //this.openSelectionDepartment = false;
+                //aggiungo loading...
+                //that.messagingService.listMessages(that.conversationWith);
             } else {
-                that.preChatForm = false;
-                that.openSelectionDepartment = false;
-                that.messagingService.listMessages(that.conversationWith);
-                // that.getMongDbDepartments();
+                that.isNewConversation = true;
+                //that.preChatForm = false;
+                //that.messagingService.listMessages(that.conversationWith);
+                if (that.projectid) {
+                    that.isLogged = false;
+                    that.getMongDbDepartments();
+                } else {
+                    that.isLogged = true;
+                }
             }
+            that.messagingService.listMessages(that.conversationWith);
             that.scrollToBottom();
+
+        }).catch(function(error) {
+            console.log('checkListMessages ERROR: ', error);
         });
     }
 
@@ -434,20 +488,38 @@ export class AppComponent implements OnDestroy  {
     //         }
     //     });
     // }
-    /** */
+
+    /**
+     * recupero elenco dipartimenti
+     * - recupero il token fisso
+     * - mi sottoscrivo al servizio
+     * - se c'è un solo dipartimento la setto di default
+     * - altrimenti visualizzo la schermata di selezione del dipartimento
+    */
     getMongDbDepartments() {
         const token = this.authService.token;
-        this.messagingService.getMongDbDepartments(token)
+        this.messagingService.getMongDbDepartments(token, this.projectid)
         .subscribe(
             response => {
                 console.log('OK DEPARTMENTS ::::', response);
                 this.departments = response;
-                if (this.departments.length > 1) {
+                if (this.departments.length === 1) {
+                    this.setDepartment(this.departments[0]);
+                } else if (this.departments.length > 0) {
+                    // escludo department con default == true
+                    let i = 0;
+                    this.departments.forEach(department => {
+                        if (department['default'] === true) {
+                            this.departments.splice(i, 1);
+                            return;
+                        }
+                        i++;
+                    });
                     this.openSelectionDepartment = true;
                 } else {
                     this.openSelectionDepartment = false;
-                    this.setDepartment(this.departments[0]);
                 }
+                this.isLogged = true;
             },
             errMsg => {
                 console.log('http ERROR MESSAGE', errMsg);
@@ -455,17 +527,21 @@ export class AppComponent implements OnDestroy  {
             },
             () => {
                 console.log('API ERROR NESSUNO');
+                //attivo pulsante aprichat!!!!!
             }
         );
     }
+
     /** */
     setDepartment(department) {
         this.openSelectionDepartment = false;
         this.attributes.departmentId = department._id;
         this.attributes.departmentName = department.name;
-        if (this.attributes) {sessionStorage.setItem('attributes', JSON.stringify(this.attributes)); }
-        this.messagingService.listMessages(this.conversationWith);
-        this.preChatForm = false;
+        console.log('setAttributes setDepartment: ', JSON.stringify(this.attributes));
+        if (this.attributes) {sessionStorage.setItem('attributes',  JSON.stringify(this.attributes)); } // JSON.stringify(this.attributes)
+        
+        //this.messagingService.listMessages(this.conversationWith);
+        //this.preChatForm = false;
     }
 
 
@@ -480,7 +556,7 @@ export class AppComponent implements OnDestroy  {
      * apro il popup conversazioni
      */
     f21_open() {
-        if (this.loggedUser) {
+        if (this.senderId) {
             this.isShowed = true; // !this.isShowed;
             sessionStorage.setItem('isShowed', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
@@ -539,7 +615,7 @@ export class AppComponent implements OnDestroy  {
         target.style.height = '100%';
         if ( (document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n' ) {
             console.log('PASSO 0');
-            (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = null;
+            (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
             target.style.height = this.HEIGHT_DEFAULT;
         } else if (target.scrollHeight > target.offsetHeight ) {
             console.log('PASSO 2');
@@ -575,7 +651,8 @@ export class AppComponent implements OnDestroy  {
                 this.sendMessage(msg, TYPE_MSG_TEXT);
                 this.scrollToBottom();
             }
-            this.textInputTextArea = null;
+            (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
+            // this.textInputTextArea = '';
         }
     }
 
@@ -642,13 +719,14 @@ export class AppComponent implements OnDestroy  {
         const now: Date = new Date();
         const timestamp = now.valueOf();
         const language = document.documentElement.lang;
+        const nameSender = (this.userFullname) ? this.userFullname : 'Ospite';
         const message = new MessageModel(
             metadata.uid, // uid
             language, // language
             this.conversationWith, // recipient
             'Support Group', // recipient_fullname
             this.senderId, // sender
-            'Ospite', // sender_fullname
+            nameSender, // sender_fullname
             '', // status
             metadata, // metadata
             '', // text
@@ -736,7 +814,8 @@ export class AppComponent implements OnDestroy  {
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
             // tslint:disable-next-line:max-line-length
-            this.messagingService.sendMessage(msg, type, metadata, this.conversationWith, this.attributes, this.projectid);
+            const nameSender = (this.userFullname) ? this.userFullname : 'Ospite';
+            this.messagingService.sendMessage(nameSender, msg, type, metadata, this.conversationWith, this.attributes, this.projectid);
 
             // setTimeout(function() {
             //     that.writingMessage = that.LABEL_WRITING;
