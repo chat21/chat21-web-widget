@@ -119,7 +119,7 @@
                     <form id="chat21-formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                         <div class="form-group chat21-inputContainer">
                             <label [hidden]="!userName" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
-                            <input type="text" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
+                            <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
                         </div>
                         <div class="text-danger">   
                             <small [hidden]="myForm.controls.name.valid || myForm.controls.name.pristine">
@@ -128,7 +128,7 @@
                         </div>
                         <div class="form-group chat21-inputContainer">
                             <label [hidden]="!userEmail" class="form-field-label small">{{LABEL_FIELD_EMAIL}}</label>
-                            <input type="email" class="form-control" formControlName="email" placeholder="{{LABEL_FIELD_EMAIL}}">
+                            <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{LABEL_FIELD_EMAIL}}">
                         </div>
                         <div class="text-danger">
                             <small [hidden]="myForm.controls.email.valid || myForm.controls.email.pristine" >

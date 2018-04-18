@@ -47,6 +47,7 @@ export class AppComponent implements OnDestroy  {
     tenant: string;
     recipientId: string;
 
+
     myForm: FormGroup;
     public events: any[] = [];
     public submitted: boolean;
@@ -109,6 +110,7 @@ export class AppComponent implements OnDestroy  {
     userEmail: string;
     userPassword: string;
     projectid: string;
+    projectname: string;
     preChatForm: boolean;
     chatName: string;
     poweredBy: string;
@@ -141,7 +143,6 @@ export class AppComponent implements OnDestroy  {
             this.senderId = this.userId;
             this.createConversation();
             this.initialize();
-            //this.isLogged = true;
             this.aliveSubLoggedUser = false;
             console.log('USER userId: this.isShowed:', this.senderId, this.isShowed);
         } else {
@@ -160,12 +161,10 @@ export class AppComponent implements OnDestroy  {
         .subscribe(user => {
             if (user) {
                 console.log('USER AUTENTICATE: ', user);
-                //that.loggedUser = user;
                 that.senderId = user.uid;
                 // that.initConversation();
                 that.createConversation();
                 that.initialize();
-                //that.isLogged = true;
                 that.aliveSubLoggedUser = false;
             } else {
                 that.isLogged = false;
@@ -205,7 +204,9 @@ export class AppComponent implements OnDestroy  {
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         this.recipientId = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('projectid');
-        this.projectid = (TEMP) ? TEMP : '5ad5bd52c975820014ba900a'; // di default id di frontiere21
+        this.projectid = (TEMP) ? TEMP : null; // '5ad5bd52c975820014ba900a'; // di default id di frontiere21
+        TEMP = this.el.nativeElement.getAttribute('projectname');
+        this.projectname = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('chatName');
         this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
         TEMP = this.el.nativeElement.getAttribute('poweredBy');
@@ -229,7 +230,9 @@ export class AppComponent implements OnDestroy  {
     /** */
     setForm(formBuilder): FormGroup  {
         // SET FORM
-        const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+        // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+        // tslint:disable-next-line:max-line-length
+        const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const myForm = formBuilder.group({
             email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
             name: ['', Validators.compose([Validators.minLength(5), Validators.required])]
@@ -255,6 +258,7 @@ export class AppComponent implements OnDestroy  {
             sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
         }
         this.preChatForm = false;
+        this.setFocusOnId();
     }
     // END FORM
 
@@ -317,11 +321,12 @@ export class AppComponent implements OnDestroy  {
 
         // configuro il form di autenticazione
         if (!this.attributes.userEmail && !this.attributes.userName && this.preChatForm) {
-            //this.myForm = this.setForm(this.formBuilder);
             if (this.myForm) {
                 this.subcribeToFormChanges();
             }
         } else {
+            this.userEmail = this.attributes.userEmail;
+            this.userFullname = this.attributes.userName;
             this.preChatForm = false;
         }
 
@@ -395,7 +400,7 @@ export class AppComponent implements OnDestroy  {
     createConversation() {
         const that = this;
         const token = this.authService.token;
-        //this.senderId = this.loggedUserUid;
+        // this.senderId = this.loggedUserUid;
         let channelType = CHANNEL_TYPE_DIRECT;
 
 
@@ -432,6 +437,7 @@ export class AppComponent implements OnDestroy  {
             if (snapshot.exists()) {
                 that.isNewConversation = false;
                 that.isLogged = true;
+                // console.log('FOCUSSSSSS 2: ', document.getElementById('chat21-main-message-context'));
                 //this.openSelectionDepartment = false;
                 //aggiungo loading...
                 //that.messagingService.listMessages(that.conversationWith);
@@ -446,9 +452,9 @@ export class AppComponent implements OnDestroy  {
                     that.isLogged = true;
                 }
             }
+            that.setFocusOnId();
             that.messagingService.listMessages(that.conversationWith);
             that.scrollToBottom();
-
         }).catch(function(error) {
             console.log('checkListMessages ERROR: ', error);
         });
@@ -509,8 +515,11 @@ export class AppComponent implements OnDestroy  {
                     // escludo department con default == true
                     let i = 0;
                     this.departments.forEach(department => {
+                        // console.log('DEPARTMENT ::::', department);
                         if (department['default'] === true) {
+                            // console.log('ELIMINO DEPARTMENT::::', department);
                             this.departments.splice(i, 1);
+                            // console.log('DEPARTMENTS::::', this.departments);
                             return;
                         }
                         i++;
@@ -520,6 +529,7 @@ export class AppComponent implements OnDestroy  {
                     this.openSelectionDepartment = false;
                 }
                 this.isLogged = true;
+                this.setFocusOnId();
             },
             errMsg => {
                 console.log('http ERROR MESSAGE', errMsg);
@@ -539,13 +549,30 @@ export class AppComponent implements OnDestroy  {
         this.attributes.departmentName = department.name;
         console.log('setAttributes setDepartment: ', JSON.stringify(this.attributes));
         if (this.attributes) {sessionStorage.setItem('attributes',  JSON.stringify(this.attributes)); } // JSON.stringify(this.attributes)
-        
+
         //this.messagingService.listMessages(this.conversationWith);
         //this.preChatForm = false;
     }
 
 
     //// ACTIONS ////
+
+    setFocusOnId() {
+        let id = 'chat21-main-message-context';
+        if (this.preChatForm) {
+            id = 'form-field-name';
+        }
+        console.log('-------------> setFocusOnId: ', id);
+        setTimeout(function() {
+            const textarea = document.getElementById(id);
+            // console.log('1--------> FOCUSSSSSS : ', textarea);
+            if (textarea) {
+                textarea.focus();
+                textarea.setAttribute('value', ' ');
+            }
+        }, 1000);
+    }
+
     /** */
     onSelectDepartment(department) {
         console.log('onSelectDepartment: ', department);
@@ -562,7 +589,9 @@ export class AppComponent implements OnDestroy  {
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
             console.log('isShowed::', this.isShowed);
             // if (this.isShowed) {
-                this.scrollToBottom();
+            this.scrollToBottom();
+            // console.log('FOCUSSSSSS 5: ', document.getElementById('chat21-main-message-context'));
+            this.setFocusOnId();
             // }
         }
     }
@@ -719,14 +748,27 @@ export class AppComponent implements OnDestroy  {
         const now: Date = new Date();
         const timestamp = now.valueOf();
         const language = document.documentElement.lang;
-        const nameSender = (this.userFullname) ? this.userFullname : 'Ospite';
+
+        // set recipientFullname
+        let recipientFullname = 'Guest';
+        if (this.userFullname) {
+            recipientFullname = this.userFullname;
+        } else if (this.userEmail) {
+            recipientFullname = this.userEmail;
+        }
+        const projectname = (this.projectname) ? this.projectname : this.projectid;
+        recipientFullname += ' - ' + projectname;
+
+        // set senderFullname
+        const senderFullname = recipientFullname;
+
         const message = new MessageModel(
             metadata.uid, // uid
             language, // language
             this.conversationWith, // recipient
-            'Support Group', // recipient_fullname
+            recipientFullname, // recipient_fullname
             this.senderId, // sender
-            nameSender, // sender_fullname
+            senderFullname, // sender_fullname
             '', // status
             metadata, // metadata
             '', // text
@@ -809,22 +851,27 @@ export class AppComponent implements OnDestroy  {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
-        const that = this;
         (metadata) ? metadata = metadata : metadata = '';
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
+
+            // set recipientFullname
+            let recipientFullname = 'Guest';
+            if (this.userFullname) {
+                recipientFullname = this.userFullname;
+            } else if (this.userEmail) {
+                recipientFullname = this.userEmail;
+            }
+            const projectname = (this.projectname) ? this.projectname : this.projectid;
+            recipientFullname += ' - ' + projectname;
+
+            // set senderFullname
+            const senderFullname = recipientFullname;
+
             // tslint:disable-next-line:max-line-length
-            const nameSender = (this.userFullname) ? this.userFullname : 'Ospite';
-            this.messagingService.sendMessage(nameSender, msg, type, metadata, this.conversationWith, this.attributes, this.projectid);
-
-            // setTimeout(function() {
-            //     that.writingMessage = that.LABEL_WRITING;
-            //     console.log('writingMessage: ', that.writingMessage);
-            // }, 300);
+            this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid);
+            this.isNewConversation = false;
             this.checkWritingMessages();
-
-        //   const resultSendMsgKey = this.messagingService.sendMessage(msg, type, metadata, this.conversationWith);
-        //   console.log('resultSendMsgKey: ', resultSendMsgKey);
         }
     }
 

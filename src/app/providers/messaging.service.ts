@@ -320,7 +320,7 @@ export class MessagingService {
   }
 
 
-  sendMessage(nameSender, msg, type, metadata, conversationWith, attributes, projectid) { // : string {
+  sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid) { // : string {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
@@ -328,13 +328,12 @@ export class MessagingService {
     const timestamp = now.valueOf();
     const language = document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;
-    // const recipient_fullname = conversationWithDetailFullname;
     const message = {
       language: language,
       recipient: conversationWith,
-      recipient_fullname: 'Support Group',
+      recipient_fullname: recipientFullname,
       sender: this.senderId,
-      sender_fullname: nameSender,
+      sender_fullname: senderFullname,
       metadata: metadata,
       text: msg,
       timestamp: timestamp,

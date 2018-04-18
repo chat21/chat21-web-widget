@@ -65,7 +65,6 @@ export class AuthService {
     });
   }
 
-  
 
   logout() {
     return this.firebaseAuth
