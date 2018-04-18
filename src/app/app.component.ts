@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -32,7 +32,11 @@ import 'rxjs/add/operator/takeWhile';
 })
 
 
-export class AppComponent implements OnDestroy  {
+
+export class AppComponent implements OnInit, OnDestroy  {
+    @ViewChild('scrollMe') private scrollMe: ElementRef;
+    @ViewChild('chat21Content') private chatContent: ElementRef;
+
     isShowed: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     //loggedUser: any;
     //loggedUserUid: string;
@@ -117,6 +121,10 @@ export class AppComponent implements OnDestroy  {
 
     private aliveSubLoggedUser = true;
     private isNewConversation = false;
+
+    showButtonToBottom = false;
+    contentScroll: any;
+    NUM_BADGES = 0;
 
     constructor(
         public authService: AuthService,
@@ -287,14 +295,40 @@ export class AppComponent implements OnDestroy  {
             }
         });
         this.subscriptions.push(subscriptionIsWidgetActive);
+
+        // NUOVO MESSAGGIO!!
+        const obsAddedMessage: Subscription = this.messagingService.obsAdded
+        .subscribe(newMessage => {
+            const divScrollMe = this.scrollMe.nativeElement;
+            const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+            if (checkContentScrollPosition ) {
+                // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+                console.log('------->sono alla fine dello scrooll: ');
+                setTimeout(function() {
+                    that.scrollToBottom();
+                }, 500);
+
+            } else {
+                // mostro badge
+                that.NUM_BADGES ++;
+            }
+
+        });
+        this.subscriptions.push(obsAddedMessage);
     }
+
+    ngOnInit() {
+    }
+
+    // ngAfterViewInit() {
+    //     this.scrollToBottom();
+    // }
 
     /**
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
         this.unsubscribe();
-        // this.messagingService.unsubscribe();
     }
 
     unsubscribe() {
@@ -304,7 +338,6 @@ export class AppComponent implements OnDestroy  {
         this.subscriptions.length = 0;
         console.log('this.subscriptions', this.subscriptions);
     }
-
 
     /**
      * inizializzo variabili
@@ -454,7 +487,7 @@ export class AppComponent implements OnDestroy  {
             }
             that.setFocusOnId();
             that.messagingService.listMessages(that.conversationWith);
-            that.scrollToBottom();
+            //that.scrollToBottom();
         }).catch(function(error) {
             console.log('checkListMessages ERROR: ', error);
         });
@@ -467,7 +500,7 @@ export class AppComponent implements OnDestroy  {
         // .takeWhile(() => that.subscriptionIsWriting)
         .subscribe(resp => {
             console.log('2 - subscribe IS: ', resp + ' ****************');
-            this.scrollToBottom();
+            //this.scrollToBottom();
             if (resp) {
                 setTimeout(function() {
                     that.writingMessage = that.LABEL_WRITING;
@@ -587,8 +620,7 @@ export class AppComponent implements OnDestroy  {
             this.isShowed = true; // !this.isShowed;
             sessionStorage.setItem('isShowed', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-            console.log('isShowed::', this.isShowed);
-            // if (this.isShowed) {
+            console.log('f21_open   ---- isShowed::', this.isShowed);
             this.scrollToBottom();
             // console.log('FOCUSSSSSS 5: ', document.getElementById('chat21-main-message-context'));
             this.setFocusOnId();
@@ -613,14 +645,11 @@ export class AppComponent implements OnDestroy  {
         const that = this;
         setTimeout(function() {
             try {
-                const objDiv = document.getElementById('scrollMe');
+                const objDiv = document.getElementById('contentScroll');
                 console.log('scrollTop1 ::', objDiv.scrollTop,  objDiv.scrollHeight);
-                // if (objDiv.scrollTop !== objDiv.scrollHeight) {
-                //     objDiv.scrollTop = objDiv.scrollHeight + 10;
-                //     console.log('scrollTop1 ::', objDiv.scrollTop);
-                // }
                 //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-                document.getElementById('scrollMe').scrollIntoView(false);
+                objDiv.scrollIntoView(false);
+                // that.badgeNewMessages = 0;
             } catch (err) {
                 console.log('RIPROVO ::', that.isShowed);
                 if (that.isShowed === true) {
@@ -628,6 +657,39 @@ export class AppComponent implements OnDestroy  {
                 }
             }
         }, 300);
+    }
+
+
+    /**
+     *
+     */
+    // LISTEN TO SCROLL POSITION
+    onScroll(event: any): void {
+        const divScrollMe = this.scrollMe.nativeElement;
+        const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+        if (checkContentScrollPosition) {
+            this.showButtonToBottom = false;
+            this.NUM_BADGES = 0;
+           // this.scrollToBottom();
+        } else {
+            this.showButtonToBottom = true;
+        }
+    }
+
+    /**
+     *
+     * @param divScrollMe
+     */
+    checkContentScrollPosition(divScrollMe): boolean {
+        // console.log('checkContentScrollPosition ::', divScrollMe);
+        // console.log('divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
+        // console.log('divScrollMe.clientHeight ::', divScrollMe.clientHeight);
+        if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 60)) {
+            //console.log('SONO ALLA FINE ::');
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

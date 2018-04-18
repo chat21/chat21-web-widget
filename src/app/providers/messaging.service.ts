@@ -33,12 +33,12 @@ export class MessagingService {
   messagesRef: any;
   messages: Array<MessageModel>;
 
-  observable: any;
+  //observable: any;
   obsCheckWritingMessages: BehaviorSubject<string>;
-  // obsAdded: any;
-  obsAdded: BehaviorSubject<MessageModel>;
-  obsChanged: BehaviorSubject<MessageModel>;
-  obsRemoved: BehaviorSubject<MessageModel>;
+  obsAdded: any;
+  // obsAdded: BehaviorSubject<MessageModel>;
+  // obsChanged: BehaviorSubject<MessageModel>;
+  // obsRemoved: BehaviorSubject<MessageModel>;
 
   observableWidgetActive: any;
 
@@ -61,11 +61,11 @@ export class MessagingService {
     // this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
     // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
-    this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
+    //this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
     this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
-    this.obsChanged = new BehaviorSubject<MessageModel>(null);
-    this.obsRemoved = new BehaviorSubject<MessageModel>(null);
+    // this.obsChanged = new BehaviorSubject<MessageModel>(null);
+    // this.obsRemoved = new BehaviorSubject<MessageModel>(null);
     this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
@@ -246,7 +246,6 @@ export class MessagingService {
           that.messages.splice(index, 1, msg);
           console.log('child_changed *****', index, msg.uid);
 
-
           // questo stato indica che è stato consegnato al client e NON che è stato letto
           // that.setStatusMessage(childSnapshot, that.conversationWith);
         }
@@ -288,6 +287,9 @@ export class MessagingService {
         console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
         that.deleteWritingMessages(message['sender']);
+        // notifico arrivo nuovo messaggio
+        console.log('NOTIFICO NW MSG *****', that.obsAdded);
+        that.obsAdded.next(msg);
 
         if (message && message.sender === that.senderId && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
@@ -296,6 +298,7 @@ export class MessagingService {
         } else {
           that.messages.push(msg);
         }
+
       }
     });
   }

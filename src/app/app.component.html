@@ -13,7 +13,8 @@
         </div>
 
         <!--CONTENT-->
-        <div class="chat21-sheet-content">
+          
+        <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
                 <div>{{LABEL_FIRST_MSG}}</div>
             </div>
@@ -21,68 +22,73 @@
                 <div class="chat21-bounce-1"></div>
                 <div class="chat21-bounce-2"></div>
                 <div class="chat21-bounce-3"></div>
-            </div>         
-            <div class="chat21-conversation-parts-container">
-                    <div id="scrollMe">
-                    <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
-                    <div *ngFor="let message of messages">
-                        <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
-                            <div class="messages msg_sent">
-                                <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
-                                <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
-                                <div *ngIf="message.type == 'text';" >
-                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                    <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
-                                    <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
+            </div>     
+             
+            <div class="chat21-conversation-parts-container" style="height:100%; overflow-y: hidden;">
+                <div #scrollMe id="scrollMe" style="height:280px; overflow-y:auto;" (scroll)="onScroll($event)">
+                    <div id="contentScroll">
+                        <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
+                        <div *ngFor="let message of messages">
+                            <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
+                                <div class="messages msg_sent">
+                                    <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
+                                    <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+                                    <div *ngIf="message.type == 'text';" >
+                                        <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                        <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
+                                        <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
+                                    </div>
+                                    <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                    <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  /> -->
                                 </div>
-                                <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
-                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  /> -->
+                                <div class="status-message">
+                                    <!-- {{message.status}} -->
+                                    <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>     
+                                </div>
                             </div>
-                            <div class="status-message">
-                                <!-- {{message.status}} -->
-                                <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
-                                <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
-                                <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
-                                <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>     
-                            </div>
-                        </div>
 
 
-                        <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
-                        <div *ngIf="message.sender != senderId;" class="msg_container base_receive">  
-                            <div class="content-avatar">
-                                <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
-                                <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError = "this.src=getUrlImgProfile()"/> </div>
-                                <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
+                            <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
+                            <div *ngIf="message.sender != senderId;" class="msg_container base_receive">  
+                                <div class="content-avatar">
+                                    <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
+                                    <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError = "this.src=getUrlImgProfile()"/> </div>
+                                    <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
+                                </div>
+                                
+                                <div class="messages msg_receive">
+                                    <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
+                                    <!-- {{convertMessage(message.text)}} -->
+                                    <!-- [innerHTML]="message.text" -->
+                                    <img *ngIf="message.type == 'image';"  class="message-contentX message-content-imageX" [src]="message.metadata.src"  [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+        
+                                    <div *ngIf="message.type == 'text';" >
+                                        <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                        <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
+                                        <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
+                                    </div><!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                    <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" /> -->
+                                </div>
                             </div>
-                            
-                            <div class="messages msg_receive">
-                                <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
-                                <!-- {{convertMessage(message.text)}} -->
-                                <!-- [innerHTML]="message.text" -->
-                                <img *ngIf="message.type == 'image';"  class="message-contentX message-content-imageX" [src]="message.metadata.src"  [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
-    
-                                <div *ngIf="message.type == 'text';" >
-                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                    <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
-                                    <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
-                                </div><!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
-                                <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" /> -->
+                            <div class="time" [ngClass]="{'sender' : message.sender == senderId}" >
+                                <time>{{message.timestamp | amTimeAgo}}</time>
                             </div>
-                        </div>
-                        <div class="time" [ngClass]="{'sender' : message.sender == senderId}" >
-                            <time>{{message.timestamp | amTimeAgo}}</time>
                         </div>
                     </div>
-                    <span>&nbsp;</span>
+                    <!-- <span>&nbsp;</span> -->
                 </div>
             </div>
         </div>
 
        <div id="chat21-footer">
+              
             <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation" (click)="startNwConversation()">{{LABEL_START_NW_CONV}}</div>
-            <div *ngIf="isConversationOpen === true">
-                <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="{{LABEL_PLACEHOLDER}}" ></textarea>
+            <div>
+                <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()"><div *ngIf="NUM_BADGES!=0"id="chat21-divBudge">{{NUM_BADGES}}</div></div>
+                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="{{LABEL_PLACEHOLDER}}" ></textarea>
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
