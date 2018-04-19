@@ -57,7 +57,8 @@ export class MessagingService {
     public http: Http
   ) {
     // this.channel_type = CHANNEL_TYPE_GROUP;
-    this.MONGODB_BASE_URL = 'http://api.chat21.org/';
+    this.MONGODB_BASE_URL = 'https://chat21-api-nodejs.herokuapp.com/';
+    // this.MONGODB_BASE_URL = 'http://api.chat21.org/';
     // this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
     // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();

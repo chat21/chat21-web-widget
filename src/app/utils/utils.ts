@@ -56,8 +56,8 @@ export function urlify(text) {
     if (!url.match(/^[a-zA-Z]+:\/\//)) {
       url = 'http://' + url;
     }
-    //url = convertUrlToTag(url);
-    console.log('convertUrlToTag 2 **************', url);
+    // url = convertUrlToTag(url);
+    // console.log('convertUrlToTag 2 **************', url);
     return '<a href="' + url + '" target="_blank">' + url + '</a>';
   });
 }
@@ -114,7 +114,32 @@ export function popupUrl(html, title) {
   }
 }
 
-export function strip_tags(html){
+
+export function encodeHTML(str) {
+  return convert(str);
+  // return str.replace(/[\u00A0-\u9999<>&](?!#)/gim, function(i) {
+  //   return '&#' + i.charCodeAt(0) + ';';
+  // });
+}
+
+export function decodeHTML(str) {
+  
+  // return str.replace(/&#([0-9]{1,3});/gi, function(match, num) {
+  //     // tslint:disable-next-line:radix
+  //     return String.fromCharCode( parseInt(num) );
+  // });
+}
+
+function convert(str) {
+  str = str.replace(/&/g, '&amp;');
+  str = str.replace(/>/g, '&gt;');
+  str = str.replace(/</g, '&lt;');
+  str = str.replace(/"/g, '&quot;');
+  str = str.replace(/'/g, '&#039;');
+  return str;
+}
+
+export function strip_tags(html) {
   return (html.replace( /<.*?>/g, '' )).trim();
 }
 

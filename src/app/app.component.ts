@@ -10,7 +10,7 @@ import { MessageModel } from '../models/message';
 import { DepartmentModel } from '../models/department';
 
 // utils
-import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify } from './utils/utils';
+import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify, encodeHTML } from './utils/utils';
 // tslint:disable-next-line:max-line-length
 import { CLIENT_BROWSER, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
@@ -104,7 +104,8 @@ export class AppComponent implements OnInit, OnDestroy  {
     openSelectionDepartment: boolean;
     departmentSelected: DepartmentModel;
 
-    IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/38661877-a44476dc-3e32-11e8-913d-747a8527b2b5.png';
+    IMG_PROFILE_SUPPORT = '../assets/images/c21-customer-service.svg';
+    // 'https://user-images.githubusercontent.com/32448495/38661877-a44476dc-3e32-11e8-913d-747a8527b2b5.png';
     filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
 
     writingMessage = '';
@@ -186,7 +187,11 @@ export class AppComponent implements OnInit, OnDestroy  {
         //// setto widget language
         moment.locale('it');
         //// get isShowed from storage;
-        this.isShowed = (sessionStorage.getItem('isShowed')) ? true : false;
+        if (sessionStorage.getItem('isShowed') === 'true') {
+            this.isShowed = true;
+        } else if (sessionStorage.getItem('isShowed') === 'false') {
+            this.isShowed = false;
+        }
         //// get isWidgetActive (poll) from storage;
         this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
     }
@@ -210,7 +215,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         TEMP = this.el.nativeElement.getAttribute('tenant');
         this.tenant = (TEMP) ? TEMP : environment.tenant;
         TEMP = this.el.nativeElement.getAttribute('recipientId');
-        this.recipientId = (TEMP) ? TEMP : null;
+        this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
         TEMP = this.el.nativeElement.getAttribute('projectid');
         this.projectid = (TEMP) ? TEMP : null; // '5ad5bd52c975820014ba900a'; // di default id di frontiere21
         TEMP = this.el.nativeElement.getAttribute('projectname');
@@ -229,7 +234,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.userFullname = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('preChatForm');
         this.preChatForm = (TEMP == null) ? false : true;
-        TEMP = this.el.nativeElement.getAttribute('isShowed');
+        TEMP = this.el.nativeElement.getAttribute('isOpen');
         this.isShowed = (TEMP == null) ? false : true;
     }
 
@@ -266,7 +271,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
         }
         this.preChatForm = false;
-        this.setFocusOnId();
+        this.setFocusOnId('chat21-main-message-context');
     }
     // END FORM
 
@@ -470,6 +475,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             if (snapshot.exists()) {
                 that.isNewConversation = false;
                 that.isLogged = true;
+                that.setFocusOnId('chat21-main-message-context');
                 // console.log('FOCUSSSSSS 2: ', document.getElementById('chat21-main-message-context'));
                 //this.openSelectionDepartment = false;
                 //aggiungo loading...
@@ -478,14 +484,14 @@ export class AppComponent implements OnInit, OnDestroy  {
                 that.isNewConversation = true;
                 //that.preChatForm = false;
                 //that.messagingService.listMessages(that.conversationWith);
-                if (that.projectid) {
+                if (that.projectid && !that.attributes.departmentId) {
                     that.isLogged = false;
                     that.getMongDbDepartments();
                 } else {
+                    that.setFocusOnId('chat21-main-message-context');
                     that.isLogged = true;
                 }
             }
-            that.setFocusOnId();
             that.messagingService.listMessages(that.conversationWith);
             //that.scrollToBottom();
         }).catch(function(error) {
@@ -544,7 +550,9 @@ export class AppComponent implements OnInit, OnDestroy  {
                 this.departments = response;
                 if (this.departments.length === 1) {
                     this.setDepartment(this.departments[0]);
+                    this.setFocusOnId('chat21-main-message-context');
                 } else if (this.departments.length > 0) {
+                    this.setFocusOnId('chat21-modal-select');
                     // escludo department con default == true
                     let i = 0;
                     this.departments.forEach(department => {
@@ -559,10 +567,10 @@ export class AppComponent implements OnInit, OnDestroy  {
                     });
                     this.openSelectionDepartment = true;
                 } else {
+                    this.setFocusOnId('chat21-main-message-context');
                     this.openSelectionDepartment = false;
                 }
                 this.isLogged = true;
-                this.setFocusOnId();
             },
             errMsg => {
                 console.log('http ERROR MESSAGE', errMsg);
@@ -578,6 +586,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     /** */
     setDepartment(department) {
         this.openSelectionDepartment = false;
+        this.departmentSelected = department;
         this.attributes.departmentId = department._id;
         this.attributes.departmentName = department.name;
         console.log('setAttributes setDepartment: ', JSON.stringify(this.attributes));
@@ -590,27 +599,28 @@ export class AppComponent implements OnInit, OnDestroy  {
 
     //// ACTIONS ////
 
-    setFocusOnId() {
-        let id = 'chat21-main-message-context';
+    setFocusOnId(id) {
+        // id = 'chat21-main-message-context';
         if (this.preChatForm) {
             id = 'form-field-name';
         }
         console.log('-------------> setFocusOnId: ', id);
         setTimeout(function() {
             const textarea = document.getElementById(id);
-            // console.log('1--------> FOCUSSSSSS : ', textarea);
             if (textarea) {
-                textarea.focus();
+                console.log('1--------> FOCUSSSSSS : ', textarea);
                 textarea.setAttribute('value', ' ');
+                textarea.focus();
             }
-        }, 1000);
+        }, 500);
     }
 
     /** */
     onSelectDepartment(department) {
         console.log('onSelectDepartment: ', department);
-        this.departmentSelected = department;
+        // this.departmentSelected = department;
         this.setDepartment(department);
+        this.setFocusOnId('chat21-main-message-context');
     }
     /**
      * apro il popup conversazioni
@@ -620,10 +630,12 @@ export class AppComponent implements OnInit, OnDestroy  {
             this.isShowed = true; // !this.isShowed;
             sessionStorage.setItem('isShowed', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-            console.log('f21_open   ---- isShowed::', this.isShowed);
+            console.log('f21_open   ---- isShowed::', this.isShowed, this.attributes.departmentId);
             this.scrollToBottom();
             // console.log('FOCUSSSSSS 5: ', document.getElementById('chat21-main-message-context'));
-            this.setFocusOnId();
+            if (this.attributes.departmentId) {
+                this.setFocusOnId('chat21-main-message-context');
+            }
             // }
         }
     }
@@ -634,7 +646,8 @@ export class AppComponent implements OnInit, OnDestroy  {
     f21_close() {
         console.log('isShowed::', this.isShowed);
         this.isShowed = false;
-        sessionStorage.removeItem('isShowed');
+        sessionStorage.setItem('isShowed', 'false');
+        // sessionStorage.removeItem('isShowed');
     }
 
     /**
@@ -685,7 +698,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         // console.log('divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
         // console.log('divScrollMe.clientHeight ::', divScrollMe.clientHeight);
         if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 60)) {
-            //console.log('SONO ALLA FINE ::');
+            // console.log('SONO ALLA FINE ::');
             return true;
         } else {
             return false;
@@ -997,13 +1010,11 @@ export class AppComponent implements OnInit, OnDestroy  {
 
     }
 
-
     convertMessage(msg) {
-        const messageText = urlify(msg);
+        let messageText = encodeHTML(msg);
+        messageText = urlify(messageText);
+        // console.log('messageText: ' + messageText);
         return messageText;
-        // window.alert('ciao');
-        // window.open("http://www.google.it", 'Video Chat', 'width=100%,height=300');
     }
-
 
 }

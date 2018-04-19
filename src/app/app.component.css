@@ -282,13 +282,12 @@
     width: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
-    /* -webkit-transform: translateZ(0); */
+
     background-color: #fff;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    background-image : url("/assets/images/f21-backgroundXXX.jpg");
-    /*background-image : url("../assets/images/f21-background.jpg"); f21-pattern-2.svg");*/
+    background-image : url("https://user-images.githubusercontent.com/32448495/38979663-16c07520-43bb-11e8-8b83-186ac1df0745.jpg");
 }
 /* no conflict
 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
@@ -327,7 +326,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 }
 #chat21-conversations .messages {
     border-radius: 14px;
-    padding: 6px 6px 9px 6px;
+    padding: 6px 6px 6px 6px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 #chat21-conversations .messages p {
@@ -410,8 +409,8 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     height:25px;
     border-radius:50%;
     overflow:hidden;
-    background-color: #cccccc;
-    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    border: 1px solid #e2e2e2;
 }
 .profile_image img{
     max-width:100%;
@@ -724,6 +723,8 @@ div#chat21-end-footer:hover div.build_version{
     /* top: -3px; */
   }
   .chat21-content-modal-select .chat21-badge {
+    -webkit-box-sizing: initial;
+    box-sizing: initial;
     display: inline-block;
     font-size: 12px;
     color: white;
@@ -739,8 +740,14 @@ div#chat21-end-footer:hover div.build_version{
     top: 0px;
   }
   .chat21-content-modal-select .chat21-title{
-      margin-left: 30px;
+        margin-left: 30px;
+        font-weight: initial;
+        line-height: normal;
   }
+  #chat21-modal-select ul {
+    line-height: normal;
+  }
+
 
   /*** END SELECT DEPARTMENT ***/
 
