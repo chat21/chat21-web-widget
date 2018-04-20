@@ -146,7 +146,7 @@ export class MessagingService {
     console.log('urlNodeFirebaseMembers *****', urlNodeFirebaseMembers);
     const firebaseGroup = firebase.database().ref(urlNodeFirebaseMembers)
     .once('value').then(function(snapshot) {
-      // console.log('snapshot.val() *****', snapshot);
+      console.log('snapshot.val() *****', snapshot);
       const resp = that.checkIsBot(snapshot);
       that.obsCheckWritingMessages.next(resp);
     });
@@ -213,7 +213,7 @@ export class MessagingService {
   public listMessages(conversationWith) {
     const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
     // tslint:disable-next-line:curly
-    if (text_area) text_area.focus();
+    // if (text_area) text_area.focus();
     const that = this;
     // this.conversationWith = conversationWith;
     // this.checkRemoveMember();
@@ -330,7 +330,7 @@ export class MessagingService {
     // const messageString = urlify(msg);
     const now: Date = new Date();
     const timestamp = now.valueOf();
-    const language = document.documentElement.lang;
+    const language = navigator.language; // document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;
     const message = {
       language: language,

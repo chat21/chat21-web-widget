@@ -1,6 +1,6 @@
 <div id="chat21-container" [class.active]="isLogged" >
     <div id="chat21-launcher-button" (click)="f21_open()"></div>
-    <div *ngIf="isShowed" id="chat21-conversations" class="chat21-window chat21-sheet">
+    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet">
         <!--HEADER-->
         <div class="chat21-sheet-header"> 
             <div class="chat21-sheet-header-title-container">
@@ -13,20 +13,23 @@
         </div>
 
         <!--CONTENT-->
-          
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
                 <div>{{LABEL_FIRST_MSG}}</div>
             </div>
-            <div class="chat21-spinner" id="chat21-loader">
-                <div class="chat21-bounce-1"></div>
-                <div class="chat21-bounce-2"></div>
-                <div class="chat21-bounce-3"></div>
+            <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
+                <div>{{departmentSelected?.name}}</div>
+            </div>
+            <div [class.active]="isNewConversation == false && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
+                <div class="chat21-bounce1"></div>
+                <div class="chat21-bounce2"></div>
+                <div class="chat21-bounce3"></div>
+                <span>loading</span>
             </div>     
              
             <div class="chat21-conversation-parts-container" style="height:100%; overflow-y: hidden;">
                 <div #scrollMe id="scrollMe" style="height:280px; overflow-y:auto;" (scroll)="onScroll($event)">
-                    <div id="contentScroll">
+                    <div id="chat21-contentScroll">
                         <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
                         <div *ngFor="let message of messages">
                             <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
@@ -114,7 +117,7 @@
            <ul class="chat21-content-modal-select">
                 <li *ngFor="let department of departments; let i = index"
                 (click)="onSelectDepartment(department)">
-                <span class="chat21-badge">{{i+1}}</span><span class="chat21-title">{{department.name}}</span>
+                <span class="chat21-badge">{{i+1}}</span><span class="chat21-title">{{department?.name}}</span>
               </li>
             </ul>
        </div>

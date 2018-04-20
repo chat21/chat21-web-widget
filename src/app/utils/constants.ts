@@ -47,4 +47,4 @@ export const BCK_COLOR_CONVERSATION_UNSELECTED = '#FFFFFF';
 // export const LABEL_ACTIVE_NOW = 'attivo/a ora';
 // export const LABEL_NO_MSG_HERE = 'Ancora nessun messaggio qui...';
 
-export const CLIENT_BROWSER = 'browser';
+// export const CLIENT_BROWSER = 'browser';
