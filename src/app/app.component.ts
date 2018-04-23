@@ -104,7 +104,8 @@ export class AppComponent implements OnInit, OnDestroy  {
     openSelectionDepartment: boolean;
     departmentSelected: DepartmentModel;
 
-    IMG_PROFILE_SUPPORT = '../assets/images/c21-customer-service.svg';
+    IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
+    // '../assets/images/c21-customer-service.svg';
     // 'https://user-images.githubusercontent.com/32448495/38661877-a44476dc-3e32-11e8-913d-747a8527b2b5.png';
     filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
 
@@ -179,6 +180,8 @@ export class AppComponent implements OnInit, OnDestroy  {
                 that.isLogged = false;
             }
         });
+
+        this.checkWritingMessages();
     }
 
     /** */
@@ -217,7 +220,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
         TEMP = this.el.nativeElement.getAttribute('projectid');
-        this.projectid = (TEMP) ? TEMP : '5ada1bfc4480840014ab1992'; // '5ad7620d3d1d1a00147500a9';
+        this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
         TEMP = this.el.nativeElement.getAttribute('projectname');
         this.projectname = (TEMP) ? TEMP : null;
         TEMP = this.el.nativeElement.getAttribute('chatName');
@@ -312,12 +315,10 @@ export class AppComponent implements OnInit, OnDestroy  {
                 setTimeout(function() {
                     that.scrollToBottom();
                 }, 500);
-
             } else {
                 // mostro badge
                 that.NUM_BADGES ++;
             }
-
         });
         this.subscriptions.push(obsAddedMessage);
     }
@@ -371,6 +372,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             this.userFullname = this.attributes.userName;
             this.preChatForm = false;
         }
+
     }
 
     setAttributes(): any {
@@ -380,12 +382,14 @@ export class AppComponent implements OnInit, OnDestroy  {
             attributes = {
                 client: this.CLIENT_BROWSER,
                 sourcePage: location.href,
-                departmentId: '',
-                departmentName: '',
+                // departmentId: '',
+                // departmentName: '',
+                // departmentId: this.departmentSelected._id,
+                // departmentName: this.departmentSelected.name,
                 userEmail: this.userEmail,
                 userName: this.userFullname
             };
-            console.log('setAttributes: ', JSON.stringify(attributes));
+            console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
             sessionStorage.setItem('attributes', JSON.stringify(attributes));
         }
         return attributes;
@@ -485,7 +489,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
 
     checkWritingMessages() {
-        this.messagingService.checkWritingMessages();
+        // this.messagingService.checkWritingMessages();
         const that = this;
         const subscription: Subscription = this.messagingService.obsCheckWritingMessages
         // .takeWhile(() => that.subscriptionIsWriting)
@@ -494,7 +498,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             if (resp) {
                 setTimeout(function() {
                     that.writingMessage = that.LABEL_WRITING;
-                }, 500);
+                }, 1000);
             } else {
                 that.writingMessage = '';
             }
@@ -537,6 +541,7 @@ export class AppComponent implements OnInit, OnDestroy  {
                     this.openSelectionDepartment = false;
                     this.departmentSelected = this.departments[0];
                     this.setFocusOnId('chat21-main-message-context');
+                    console.log('this.departmentSelected ::::', this.departmentSelected);
                 } else if (this.departments.length > 0) {
                     this.setFocusOnId('chat21-modal-select');
                     // escludo department con default == true
@@ -718,7 +723,9 @@ export class AppComponent implements OnInit, OnDestroy  {
             target.style.height = target.scrollHeight + 2 + 'px';
         } else {
             console.log('PASSO 3');
-            target.style.height = this.HEIGHT_DEFAULT; // target.offsetHeight - 15 + 'px';
+            target.style.height = this.HEIGHT_DEFAULT;
+            // segno sto scrivendo
+            // target.offsetHeight - 15 + 'px';
         }
         // tslint:disable-next-line:max-line-length
         console.log('H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
@@ -744,8 +751,8 @@ export class AppComponent implements OnInit, OnDestroy  {
                 // console.log('sendMessage -> ', this.textInputTextArea);
                 this.resizeInputField();
                 // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-                this.sendMessage(msg, TYPE_MSG_TEXT);
                 this.setDepartment();
+                this.sendMessage(msg, TYPE_MSG_TEXT);
                 this.scrollToBottom();
             }
             (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
@@ -938,7 +945,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             // tslint:disable-next-line:max-line-length
             this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid);
             this.isNewConversation = false;
-            this.checkWritingMessages();
+            // this.checkWritingMessages();
         }
     }
 

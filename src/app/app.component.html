@@ -58,7 +58,8 @@
                             <div *ngIf="message.sender != senderId;" class="msg_container base_receive">  
                                 <div class="content-avatar">
                                     <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
-                                    <div class = "profile_image"><img src = "{{getUrlImgProfile(message.sender)}}" onError = "this.src=getUrlImgProfile()"/> </div>
+                                    <div class = "profile_image"><img src="{{getUrlImgProfile(message.sender)}}"/> </div> 
+                                    <!-- onError = "this.src=IMG_PROFILE_SUPPORT" -->
                                     <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
                                 </div>
                                 

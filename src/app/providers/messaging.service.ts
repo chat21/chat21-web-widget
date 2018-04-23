@@ -21,7 +21,6 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 @Injectable()
 export class MessagingService {
 
-  //loggedUser: any;
   tenant: string;
   senderId: string;
   // recipientId: string;
@@ -33,7 +32,6 @@ export class MessagingService {
   messagesRef: any;
   messages: Array<MessageModel>;
 
-  //observable: any;
   obsCheckWritingMessages: BehaviorSubject<string>;
   obsAdded: any;
   // obsAdded: BehaviorSubject<MessageModel>;
@@ -62,7 +60,7 @@ export class MessagingService {
     // this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
     // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
-    //this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
+    // this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
     this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
     // this.obsChanged = new BehaviorSubject<MessageModel>(null);
@@ -89,7 +87,6 @@ export class MessagingService {
     const that = this;
     this.channel_type = channel_type;
     this.messages = [];
-    //this.loggedUser = user;
     this.senderId = userUid;
     this.tenant = tenant;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
@@ -160,8 +157,12 @@ export class MessagingService {
   }
 
   checkIsBot(snapshot) {
+    console.log('snapshot.numChildren() *****', snapshot.numChildren());
     const that = this;
     let RESP = null;
+    if (snapshot.numChildren() === 0) {
+      return '';
+    }
     snapshot.forEach(
       function(childSnapshot) {
         const uid = childSnapshot.key;
@@ -247,6 +248,9 @@ export class MessagingService {
           that.messages.splice(index, 1, msg);
           console.log('child_changed *****', index, msg.uid);
 
+          if (message && message.sender === that.senderId) {
+            that.checkWritingMessages();
+          }
           // questo stato indica che è stato consegnato al client e NON che è stato letto
           // that.setStatusMessage(childSnapshot, that.conversationWith);
         }
@@ -348,8 +352,10 @@ export class MessagingService {
     };
 
     const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + conversationWith);
-    console.log('messaggio **************', this.urlNodeFirebase, conversationWith, message);
+    console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
     firebaseMessagesCustomUid.push(message);
+
+    // this.checkWritingMessages();
     // const newMessageRef = firebaseMessagesCustomUid.push();
     // newMessageRef.set(message);
     // se non c'è rete viene aggiunto al nodo in locale e visualizzato
@@ -360,6 +366,7 @@ export class MessagingService {
     // }
     // return newMessageRef.key;
   }
+
   /**
    * invio messaggio
    * purifico il testo del messaggio
