@@ -18,6 +18,7 @@ export const MSG_STATUS_SEEN = 300;
 // TYPES MESSAGES
 export const TYPE_MSG_TEXT = 'text';
 export const TYPE_MSG_IMAGE = 'image';
+export const TYPE_MSG_FILE = 'file';
 
 // CHANNEL TYPE
 export const CHANNEL_TYPE_GROUP = 'group';

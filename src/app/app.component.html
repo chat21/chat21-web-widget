@@ -14,7 +14,7 @@
 
         <!--CONTENT-->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
-            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-header-modal-select">
                 <div>{{LABEL_FIRST_MSG}}</div>
             </div>
             <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
@@ -28,7 +28,7 @@
             </div>     
              
             <div class="chat21-conversation-parts-container" style="height:100%; overflow-y: hidden;">
-                <div #scrollMe id="scrollMe" style="height:280px; overflow-y:auto;" (scroll)="onScroll($event)">
+                <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
                     <div id="chat21-contentScroll">
                         <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
                         <div *ngFor="let message of messages">
@@ -96,11 +96,11 @@
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
-                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadImage()"></div>
+                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadFile()"></div>
                 <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
                 <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
                 <!-- <img src="" width="200" alt="Image preview..."> -->
-                <div [class.active]="isSelected" class="name-image" >{{nameImg}}</div>
+                <div [class.active]="isSelected" class="name-image" id="chat21-file-selected" >{{nameFile}}</div>
             </div> 
             
             <div id="chat21-end-footer">
@@ -128,7 +128,7 @@
                     <div class="chat21-formMessageField">{{LABLEL_COMPLETE_FORM}}</div>
                     <form id="chat21-formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                         <div class="form-group chat21-inputContainer">
-                            <label [hidden]="!userName" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
+                            <label [hidden]="!userFullname" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
                             <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
                         </div>
                         <div class="text-danger">   

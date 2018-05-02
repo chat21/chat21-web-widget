@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  build: '48',
   firebase: {
     apiKey: 'AIzaSyDWMsqHBKmWVT7mWiSqBfRpS5U8YwTl7H0',
     authDomain: 'chat-v2-dev.firebaseapp.com',

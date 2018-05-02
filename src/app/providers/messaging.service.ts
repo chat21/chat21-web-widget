@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 // utils
 import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
 // tslint:disable-next-line:max-line-length
-import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, CHANNEL_TYPE_DIRECT } from '../utils/constants';
+import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, CHANNEL_TYPE_DIRECT } from '../utils/constants';
 // models
 import { MessageModel } from '../../models/message';
 import { DepartmentModel } from '../../models/department';
@@ -222,39 +222,39 @@ export class MessagingService {
     // this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
 
     // CHANGED
-    this.messagesRef.on('child_changed', function(childSnapshot) {
-        const message = childSnapshot.val();
-        console.log('child_changed *****', childSnapshot.val());
-        if ( that.checkMessage(message) ) {
-          // imposto il giorno del messaggio
-          const dateSendingMessage = setHeaderDate(message['timestamp']);
+    // this.messagesRef.on('child_changed', function(childSnapshot) {
+    //     const message = childSnapshot.val();
+    //     console.log('child_changed *****', childSnapshot.val());
+    //     if ( that.checkMessage(message) ) {
+    //       // imposto il giorno del messaggio
+    //       const dateSendingMessage = setHeaderDate(message['timestamp']);
 
-          const msg = new MessageModel(
-            childSnapshot.key,
-            message['language'],
-            message['recipient'],
-            message['recipient_fullname'],
-            message['sender'],
-            message['sender_fullname'],
-            message['status'],
-            message['metadata'],
-            message['text'],
-            message['timestamp'],
-            dateSendingMessage,
-            message['type'],
-            message['attributes']
-          );
-          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          that.messages.splice(index, 1, msg);
-          console.log('child_changed *****', index, msg.uid);
+    //       const msg = new MessageModel(
+    //         childSnapshot.key,
+    //         message['language'],
+    //         message['recipient'],
+    //         message['recipient_fullname'],
+    //         message['sender'],
+    //         message['sender_fullname'],
+    //         message['status'],
+    //         message['metadata'],
+    //         message['text'],
+    //         message['timestamp'],
+    //         dateSendingMessage,
+    //         message['type'],
+    //         message['attributes']
+    //       );
+    //       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+    //       that.messages.splice(index, 1, msg);
+    //       console.log('child_changed *****', index, msg.uid);
 
-          if (message && message.sender === that.senderId) {
-            that.checkWritingMessages();
-          }
-          // questo stato indica che è stato consegnato al client e NON che è stato letto
-          // that.setStatusMessage(childSnapshot, that.conversationWith);
-        }
-    });
+    //       // if (message && message.sender === that.senderId) {
+    //       //   that.checkWritingMessages();
+    //       // }
+    //       // questo stato indica che è stato consegnato al client e NON che è stato letto
+    //       // that.setStatusMessage(childSnapshot, that.conversationWith);
+    //     }
+    // });
 
     // REMOVED
     this.messagesRef.on('child_removed', function(childSnapshot) {
@@ -296,11 +296,19 @@ export class MessagingService {
         console.log('NOTIFICO NW MSG *****', that.obsAdded);
         that.obsAdded.next(msg);
 
-        if (message && message.sender === that.senderId && message.type !== TYPE_MSG_TEXT) {
+        if (message && message.sender === that.senderId) {
+          // && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
+          // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+          // that.messages.splice(index, 1, msg);
           const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          that.messages.splice(index, 1, msg);
+          console.log('index *****', index, childSnapshot.key);
+          if (index < 0) {
+            console.log('--------> ADD MSG', index);
+            that.messages.push(msg);
+          }
         } else {
+          // se msg è inviato da me cambio status
           that.messages.push(msg);
         }
 
@@ -332,28 +340,80 @@ export class MessagingService {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
+    const that = this;
     const now: Date = new Date();
     const timestamp = now.valueOf();
-    const language = navigator.language; // document.documentElement.lang;
+    const language = navigator.language;
+    // document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;
-    const message = {
-      language: language,
-      recipient: conversationWith,
-      recipient_fullname: recipientFullname,
-      sender: this.senderId,
-      sender_fullname: senderFullname,
-      metadata: metadata,
-      text: msg,
-      timestamp: timestamp,
-      type: type,
-      channel_type: this.channel_type,
-      attributes: attributes,
-      projectid: projectid
-    };
+    const dateSendingMessage = setHeaderDate(timestamp);
+    const message = new MessageModel(
+      '',
+      language,
+      conversationWith,
+      recipientFullname,
+      this.senderId,
+      senderFullname,
+      '',
+      metadata,
+      msg,
+      timestamp,
+      dateSendingMessage,
+      type,
+      attributes
+    );
+
+    // const message = {
+    //   language: language,
+    //   recipient: conversationWith,
+    //   recipient_fullname: recipientFullname,
+    //   sender: this.senderId,
+    //   sender_fullname: senderFullname,
+    //   status: '',
+    //   metadata: metadata,
+    //   text: msg,
+    //   timestamp: timestamp,
+    //   type: type,
+    //   channel_type: this.channel_type,
+    //   attributes: attributes,
+    //   projectid: projectid
+    // };
+
+    this.messages.push(message);
 
     const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + conversationWith);
     console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
-    firebaseMessagesCustomUid.push(message);
+    // firebaseMessagesCustomUid.push(message, function(error) {
+    //   if (error) {
+    //     // cambio lo stato in rosso: invio nn riuscito!!!
+    //     message.status = '-100';
+    //     console.log('ERRORE', message);
+    //   } else {
+    //     // that.checkWritingMessages();
+    //     message.status = '150';
+    //     console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+    //   }
+
+
+      const messageRef = firebaseMessagesCustomUid.push();
+      const key = messageRef.key;
+      message.uid = key;
+      console.log('messageRef: ', messageRef, key);
+      messageRef.set(message, function( error ){
+        // Callback comes here
+        if (error) {
+          // cambio lo stato in rosso: invio nn riuscito!!!
+          message.status = '-100';
+          console.log('ERRORE', error);
+        } else {
+          // that.checkWritingMessages();
+          message.status = '150';
+          console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+        }
+        console.log('****** changed *****', that.messages);
+
+      });
+
 
     // this.checkWritingMessages();
     // const newMessageRef = firebaseMessagesCustomUid.push();

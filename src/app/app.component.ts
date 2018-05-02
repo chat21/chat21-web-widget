@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -12,7 +12,7 @@ import { DepartmentModel } from '../models/department';
 // utils
 import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify, encodeHTML } from './utils/utils';
 // tslint:disable-next-line:max-line-length
-import { CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
+import { CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import { Subscription } from 'rxjs/Subscription';
@@ -21,9 +21,9 @@ import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-
 import 'rxjs/add/operator/takeWhile';
 
+import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +33,7 @@ import 'rxjs/add/operator/takeWhile';
 
 
 
-export class AppComponent implements OnInit, OnDestroy  {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('scrollMe') private scrollMe: ElementRef;
     @ViewChild('chat21Content') private chatContent: ElementRef;
 
@@ -41,13 +41,13 @@ export class AppComponent implements OnInit, OnDestroy  {
     // loggedUser: any;
     // loggedUserUid: string;
     subscriptions: Subscription[] = [];
-    arrayImages4Load: Array<any>;
+    arrayFiles4Load: Array<any>;
     attributes: any;
 
     messages: MessageModel[];
     conversationWith: string;
     senderId: string;
-    nameImg: string;
+    nameFile: string;
     tenant: string;
     recipientId: string;
 
@@ -74,13 +74,13 @@ export class AppComponent implements OnInit, OnDestroy  {
     // tslint:disable-next-line:max-line-length
     LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
     LABEL_FIELD_NAME = '* Nome'; // '* Name';
-    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 5 caratteri).'; // 'Required field (minimum 5 characters).';
+    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
     LABEL_FIELD_EMAIL = '* Email';
     // tslint:disable-next-line:max-line-length
     LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
     LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
 
-    BUILD_VERSION = 'b.' + environment.build; // 'b.0.5';
+    BUILD_VERSION = + 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
     CLIENT_BROWSER = navigator.userAgent;
 
     textInputTextArea: String;
@@ -120,9 +120,10 @@ export class AppComponent implements OnInit, OnDestroy  {
     preChatForm: boolean;
     chatName: string;
     poweredBy: string;
+    channelType: string;
 
     private aliveSubLoggedUser = true;
-    private isNewConversation = false;
+    private isNewConversation = true;
 
     showButtonToBottom = false;
     contentScroll: any;
@@ -239,6 +240,9 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.preChatForm = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('isOpen');
         this.isOpen = (TEMP == null) ? false : true;
+        TEMP = this.el.nativeElement.getAttribute('channelType');
+        this.channelType = (TEMP) ? TEMP : null;
+
     }
 
     // START FORM
@@ -251,7 +255,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const myForm = formBuilder.group({
             email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-            name: ['', Validators.compose([Validators.minLength(5), Validators.required])]
+            name: ['', Validators.compose([Validators.minLength(2), Validators.required])]
         });
         return myForm;
     }
@@ -307,28 +311,34 @@ export class AppComponent implements OnInit, OnDestroy  {
         // NUOVO MESSAGGIO!!
         const obsAddedMessage: Subscription = this.messagingService.obsAdded
         .subscribe(newMessage => {
-            const divScrollMe = this.scrollMe.nativeElement;
-            const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-            if (checkContentScrollPosition ) {
-                // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-                console.log('------->sono alla fine dello scrooll: ');
-                setTimeout(function() {
-                    that.scrollToBottom();
-                }, 500);
-            } else {
-                // mostro badge
-                that.NUM_BADGES ++;
+            if (that.scrollMe) {
+                const divScrollMe = that.scrollMe.nativeElement;
+                const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+                if (checkContentScrollPosition ) {
+                    // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+                    console.log('------->sono alla fine dello scrooll: ');
+                    setTimeout(function() {
+                        that.scrollToBottom();
+                    }, 500);
+                } else {
+                    // mostro badge
+                    that.NUM_BADGES ++;
+                }
             }
         });
         this.subscriptions.push(obsAddedMessage);
     }
 
     ngOnInit() {
+        //this.setSubscriptions();
     }
 
-    // ngAfterViewInit() {
-    //     this.scrollToBottom();
-    // }
+    ngAfterViewInit() {
+        // const that = this;
+        // setTimeout(function() {
+        //     that.setSubscriptions();
+        // }, 2000);
+    }
 
     /**
      * elimino tutte le sottoscrizioni
@@ -352,7 +362,7 @@ export class AppComponent implements OnInit, OnDestroy  {
      */
     initialize() {
         this.messages = this.messagingService.messages;
-        this.arrayImages4Load = [];
+        this.arrayFiles4Load = [];
         this.attributes = this.setAttributes();
         console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
@@ -360,7 +370,7 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.openSelectionDepartment = false;
         if (!this.attributes.departmentId) {
             this.departmentSelected = null;
-            this.openSelectionDepartment = true;
+            //this.openSelectionDepartment = true;
         }
         // configuro il form di autenticazione
         if (!this.attributes.userEmail && !this.attributes.userName && this.preChatForm) {
@@ -445,20 +455,27 @@ export class AppComponent implements OnInit, OnDestroy  {
     createConversation() {
         const that = this;
         const token = this.authService.token;
-        let channelType = CHANNEL_TYPE_DIRECT;
+
+        let channelTypeTEMP = CHANNEL_TYPE_GROUP;
         if (this.recipientId) {
             if (this.recipientId.indexOf('group') !== -1) {
-                channelType = CHANNEL_TYPE_GROUP;
+                channelTypeTEMP = CHANNEL_TYPE_GROUP;
+            } else {
+                channelTypeTEMP = CHANNEL_TYPE_DIRECT;
             }
             this.conversationWith = this.recipientId;
         } else {
-            channelType = CHANNEL_TYPE_GROUP;
+            // channelType = CHANNEL_TYPE_GROUP;
             this.conversationWith = sessionStorage.getItem(this.senderId);
             if (!this.conversationWith) {
                 this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
             }
         }
-        this.messagingService.initialize(this.senderId,  this.tenant, channelType);
+
+        if (!this.channelType || (this.channelType !== CHANNEL_TYPE_GROUP && this.channelType !== CHANNEL_TYPE_DIRECT )) {
+            this.channelType = channelTypeTEMP;
+        }
+        this.messagingService.initialize(this.senderId,  this.tenant, this.channelType);
         this.upSvc.initialize(this.senderId,  this.tenant, this.conversationWith);
         this.contactService.initialize(this.senderId, this.tenant, this.conversationWith);
         this.messagingService.checkListMessages(this.conversationWith)
@@ -466,6 +483,11 @@ export class AppComponent implements OnInit, OnDestroy  {
             console.log('checkListMessages: ', snapshot);
             if (snapshot.exists()) {
                 that.isNewConversation = false;
+                setTimeout(function() {
+                    if (that.messages.length === 0) {
+                        that.isNewConversation = true;
+                    }
+                }, 2000);
                 that.isLogged = true;
                 that.setFocusOnId('chat21-main-message-context');
             } else {
@@ -481,7 +503,8 @@ export class AppComponent implements OnInit, OnDestroy  {
 
             setTimeout(function() {
                 that.messagingService.listMessages(that.conversationWith);
-            }, 1000);
+            }, 500);
+
 
         }).catch(function(error) {
             console.log('checkListMessages ERROR: ', error);
@@ -675,14 +698,16 @@ export class AppComponent implements OnInit, OnDestroy  {
      */
     // LISTEN TO SCROLL POSITION
     onScroll(event: any): void {
-        const divScrollMe = this.scrollMe.nativeElement;
-        const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-        if (checkContentScrollPosition) {
-            this.showButtonToBottom = false;
-            this.NUM_BADGES = 0;
-           // this.scrollToBottom();
-        } else {
-            this.showButtonToBottom = true;
+        if (this.scrollMe) {
+            const divScrollMe = this.scrollMe.nativeElement;
+            const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+            if (checkContentScrollPosition) {
+                this.showButtonToBottom = false;
+                this.NUM_BADGES = 0;
+            // this.scrollToBottom();
+            } else {
+                this.showButtonToBottom = true;
+            }
         }
     }
 
@@ -766,24 +791,42 @@ export class AppComponent implements OnInit, OnDestroy  {
      * @param event
      */
     detectFiles(event) {
+        console.log('detectFiles: ', event);
         if (event) {
             this.selectedFiles = event.target.files;
             console.log('fileChange: ', event.target.files);
             const that = this;
             if (event.target.files && event.target.files[0]) {
-                this.nameImg = event.target.files[0].name;
+                this.nameFile = event.target.files[0].name;
+                const typeFile = event.target.files[0].type;
                 const reader  = new FileReader();
+                console.log('OK preload: ', this.nameFile, typeFile, reader);
                 reader.addEventListener('load', function () {
+                    console.log('addEventListener load', reader.result);
                     that.isSelected = true;
-                    const imageXLoad = new Image;
-                    imageXLoad.src = reader.result;
-                    imageXLoad.title = that.nameImg;
-                    imageXLoad.onload = function() {
-                        // that.arrayImages4Load.push(imageXLoad);
-                        const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
-                        that.arrayImages4Load[0] = {uid: uid, image: imageXLoad};
-                        console.log('OK: ', that.arrayImages4Load[0]);
-                    };
+                    // se inizia con image
+                    if (typeFile.startsWith('image')) {
+                        const imageXLoad = new Image;
+                        imageXLoad.src = reader.result;
+                        imageXLoad.title = that.nameFile;
+                        imageXLoad.onload = function() {
+                            console.log('onload ');
+                            // that.arrayFiles4Load.push(imageXLoad);
+                            const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
+                            that.arrayFiles4Load[0] = {uid: uid, file: imageXLoad, type: typeFile};
+                            console.log('OK: ', that.arrayFiles4Load[0]);
+                        };
+                    } else {
+                        const fileXLoad  = {
+                            src: reader.result,
+                            title: that.nameFile
+                        };
+                        console.log('onload ');
+                        // that.arrayFiles4Load.push(imageXLoad);
+                        const uid = fileXLoad.src.substring(fileXLoad.src.length - 16);
+                        that.arrayFiles4Load[0] = {uid: uid, file: fileXLoad, type: typeFile};
+                        console.log('OK: ', that.arrayFiles4Load[0]);
+                    }
                 }, false);
                 if (event.target.files[0]) {
                     reader.readAsDataURL(event.target.files[0]);
@@ -796,23 +839,41 @@ export class AppComponent implements OnInit, OnDestroy  {
     /**
      *
      */
-    loadImage() {
+
+    loadFile() {
+        console.log('that.fileXLoad: ', this.arrayFiles4Load);
         // al momento gestisco solo il caricamento di un'immagine alla volta
-        const imageXLoad = this.arrayImages4Load[0].image;
-        const uid = this.arrayImages4Load[0].uid;
-        console.log('that.imageXLoad: ', imageXLoad);
-        const metadata = {
-            'src': imageXLoad.src,
-            'width': imageXLoad.width,
-            'height': imageXLoad.height,
-            'uid': uid
-        };
-        // 1 - aggiungo messaggio localmente
-        this.addLocalMessageImage(metadata);
-        // 2 - carico immagine
-        const file = this.selectedFiles.item(0);
-        this.uploadSingle(metadata, file);
-        this.isSelected = false;
+        if (this.arrayFiles4Load[0] && this.arrayFiles4Load[0].file) {
+            const fileXLoad = this.arrayFiles4Load[0].file;
+            const uid = this.arrayFiles4Load[0].uid;
+            const type = this.arrayFiles4Load[0].type;
+            console.log('that.fileXLoad: ', type);
+            let metadata;
+            if (type.startsWith('image')) {
+                metadata = {
+                    'name': fileXLoad.name,
+                    'src': fileXLoad.src,
+                    'width': fileXLoad.width,
+                    'height': fileXLoad.height,
+                    'type': type,
+                    'uid': uid
+                };
+            } else {
+                metadata = {
+                    'name': fileXLoad.name,
+                    'src': fileXLoad.src,
+                    'type': type,
+                    'uid': uid
+                };
+            }
+            this.scrollToBottom();
+            // 1 - aggiungo messaggio localmente
+            //this.addLocalMessageImage(metadata);
+            // 2 - carico immagine
+            const file = this.selectedFiles.item(0);
+            this.uploadSingle(metadata, file);
+            this.isSelected = false;
+        }
     }
 
     /**
@@ -852,7 +913,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             TYPE_MSG_IMAGE, // type
             ''
         );
-        this.messages.push(message);
+        // this.messages.push(message);
         // message.metadata.uid = message.uid;
         console.log('addLocalMessageImage: ', this.messages);
         this.isSelected = true;
@@ -863,9 +924,10 @@ export class AppComponent implements OnInit, OnDestroy  {
      *
      */
     resetLoadImage() {
-        console.log('resetLoadImage: ');
-        this.nameImg = '';
-        delete this.arrayImages4Load[0];
+        this.nameFile = '';
+        this.selectedFiles = null;
+        console.log('1 selectedFiles: ', this.selectedFiles);
+        delete this.arrayFiles4Load[0];
         document.getElementById('chat21-file').nodeValue = null;
         // event.target.files[0].name, event.target.files
         this.isSelected = false;
@@ -900,7 +962,6 @@ export class AppComponent implements OnInit, OnDestroy  {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-
         console.log('uploadSingle: ', metadata, file);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
@@ -908,7 +969,14 @@ export class AppComponent implements OnInit, OnDestroy  {
         .then(function(snapshot) {
             console.log('Uploaded a file! ', snapshot.downloadURL);
             metadata.src = snapshot.downloadURL;
-            that.sendMessage('', TYPE_MSG_IMAGE, metadata);
+            let type_message = TYPE_MSG_TEXT;
+            let message = 'File: ' + metadata.src;
+            if (metadata.type.startsWith('image')) {
+                type_message = TYPE_MSG_IMAGE;
+                message = 'Image: ' + metadata.src;
+            }
+            that.sendMessage(message, type_message, metadata);
+            that.scrollToBottom();
         })
         .catch(function(error) {
             // Handle Errors here.
@@ -916,6 +984,7 @@ export class AppComponent implements OnInit, OnDestroy  {
             const errorMessage = error.message;
             console.log('error: ', errorCode, errorMessage);
         });
+        //this.resetLoadImage();
         console.log('reader-result: ', file);
     }
 
@@ -937,7 +1006,9 @@ export class AppComponent implements OnInit, OnDestroy  {
                 recipientFullname = this.userEmail;
             }
             const projectname = (this.projectname) ? this.projectname : this.projectid;
-            recipientFullname += ' - ' + projectname;
+            if (projectname) {
+                recipientFullname += ' - ' + projectname;
+            }
 
             // set senderFullname
             const senderFullname = recipientFullname;

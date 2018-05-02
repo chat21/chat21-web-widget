@@ -11,7 +11,7 @@ import { StarRatingWidgetService } from './star-rating-widget.service';
 export class StarRatingWidgetComponent implements OnInit {
 
   private rate: number;
-  private step: number;
+  public step: number;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService

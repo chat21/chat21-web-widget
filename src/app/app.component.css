@@ -341,11 +341,12 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     font-stretch: normal;
     font-variant: normal;
     font-weight: normal;
+    overflow: hidden;
 }
 #chat21-conversations .messages img {
     border-radius: 8px;
     padding: 0px;
-    margin-bottom: -3px;
+    margin-bottom: 0px;
     /* width: 100%;
     height: 100%; */
 }
@@ -513,6 +514,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-image : url("../assets/images/f21ico-close.svg");
     left: 10px;
     bottom: 25px;
+    cursor: pointer;
 }
 #chat21-button-send {
     background-position: center center;
@@ -521,13 +523,14 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-image : url("../assets/images/f21ico-send.svg");
     right: 10px;
     bottom: 25px;
+    cursor: pointer;
 }
 
 
 
 
 #chat21-footer .name-image {
-    padding: 0px 10px 0px 30px;
+    padding: 0px 40px 0px 30px;
     font-size: 10px;
     height: 20px;
     line-height: 18px;
@@ -769,6 +772,7 @@ div#chat21-end-footer:hover div.build_version{
   .chat21-button-new {
     position: absolute;
     bottom: 0px;
+    cursor: pointer;
   }
 
   .chat21-formMessageField {
@@ -796,7 +800,8 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0px 10px 0px 10px;
   }
 .chat21-inputContainer {
-    padding: 0 15px;
+    padding: 4px 15px;
+    /* padding: 12px 10px!important; */
     border: 1px solid #ccc;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -808,29 +813,51 @@ div#chat21-end-footer:hover div.build_version{
     position: relative;
 }
 .chat21-inputContainer > input {
-    padding: 11px 0;
+    padding: 11px 0!important;
+    color: #707070!important;
+    font-family: Arial!important;
+    font-size: 13px!important;
+    font-weight: bold!important;
+    background-color: #ffffff!important;
+    display: block!important;
+    line-height: 1.2em!important;
+    border: 0px solid #e1e1e1!important;
+    outline: none!important;
+    margin: 0!important;
+    width: 100%!important;
+    margin-bottom: 0px!important;
+    background: #fff!important;
 }
+
+.chat21-inputContainer > input:focus{
+    box-shadow: none!important;
+    background-color: #ffffff;
+}
+
 .chat21-inputContainer > input, .chat21-inputContainer select {
     width: 100%;
     margin: 0;
-    border: 0;
-    display: block;
-    line-height: 1.2em;
+    border: 0!important;
     padding: 12px 0;
-    color: #707070;
-    font-family: Arial;
-    font-size: 13px;
-    font-weight: bold;
 }
+
+
+
 .chat21-inputContainer > input, select {
     vertical-align: middle;
 }
   
+
+/* #Forms
+================================================== */
+
+
+
 .chat21-inputContainer .form-field-label.small {
     color: #b3b3b3;
     padding: 1px 0 0 0;
     /* display: none; */
-    font-size: 10px;
+    font-size: 10px!important;
     position: absolute;
     top: 0;
     left: 4px;
@@ -840,7 +867,7 @@ div#chat21-end-footer:hover div.build_version{
 .chat21-inputContainer .form-field-label {
     color: #707070;
     font-family: Arial;
-    font-size: 13px;
+    font-size: 13px!important;
     font-weight: bold;
 }
 .chat21-inputContainer > input:focus {
