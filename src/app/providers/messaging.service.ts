@@ -287,7 +287,8 @@ export class MessagingService {
           message['timestamp'],
           dateSendingMessage,
           message['type'],
-          message['attributes']
+          message['attributes'],
+          message['channelType']
         );
         console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
@@ -360,7 +361,8 @@ export class MessagingService {
       timestamp,
       dateSendingMessage,
       type,
-      attributes
+      attributes,
+      this.channel_type
     );
 
     // const message = {

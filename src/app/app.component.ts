@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
     LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
 
-    BUILD_VERSION = + 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
+    BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
     CLIENT_BROWSER = navigator.userAgent;
 
     textInputTextArea: String;
@@ -241,7 +241,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('isOpen');
         this.isOpen = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('channelType');
-        this.channelType = (TEMP) ? TEMP : null;
+        this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
 
     }
 
@@ -330,7 +330,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        //this.setSubscriptions();
+        // this.setSubscriptions();
     }
 
     ngAfterViewInit() {
@@ -370,7 +370,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.openSelectionDepartment = false;
         if (!this.attributes.departmentId) {
             this.departmentSelected = null;
-            //this.openSelectionDepartment = true;
+            // this.openSelectionDepartment = true;
         }
         // configuro il form di autenticazione
         if (!this.attributes.userEmail && !this.attributes.userName && this.preChatForm) {
@@ -458,9 +458,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         let channelTypeTEMP = CHANNEL_TYPE_GROUP;
         if (this.recipientId) {
-            if (this.recipientId.indexOf('group') !== -1) {
+            if (this.recipientId.indexOf('group') !== -1 ) {
                 channelTypeTEMP = CHANNEL_TYPE_GROUP;
-            } else {
+            } else if (!this.projectid) {
                 channelTypeTEMP = CHANNEL_TYPE_DIRECT;
             }
             this.conversationWith = this.recipientId;
@@ -868,7 +868,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
-            //this.addLocalMessageImage(metadata);
+            // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
             this.uploadSingle(metadata, file);
@@ -911,7 +911,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             timestamp, // timestamp
             '', // headerDate
             TYPE_MSG_IMAGE, // type
-            ''
+            '',
+            this.channelType
         );
         // this.messages.push(message);
         // message.metadata.uid = message.uid;
@@ -984,7 +985,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const errorMessage = error.message;
             console.log('error: ', errorCode, errorMessage);
         });
-        //this.resetLoadImage();
+        // this.resetLoadImage();
         console.log('reader-result: ', file);
     }
 

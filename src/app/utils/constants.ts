@@ -1,8 +1,8 @@
 // TIMES
 export const LABEL_TODAY = 'Oggi'; // 'Today'; // 'Oggi';
-export const LABEL_TOMORROW = 'Ieri'; // 'Yesterday'; // 
-export const LABEL_LAST_ACCESS = 'ultimo accesso'; // 'last access'; // 
-export const LABEL_TO = 'alle'; // 'to the'; // 
+export const LABEL_TOMORROW = 'Ieri'; // 'Yesterday';
+export const LABEL_LAST_ACCESS = 'ultimo accesso'; // 'last access';
+export const LABEL_TO = 'alle'; // 'to the';
 // export const ARRAY_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const ARRAY_DAYS =  ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
 
