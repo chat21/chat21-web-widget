@@ -26,7 +26,8 @@ With Chat21-web-widget you can:
 
 # Installation
 
-* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget```
+* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
+* Move to the downloaded project path ```cd <YOUR_PATH>```
 * Compile the project with ```npm install```
 
 Copy this code into your html pages:
