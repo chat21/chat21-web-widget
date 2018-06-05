@@ -26,7 +26,8 @@ With Chat21-web-widget you can:
 
 # Installation
 
-* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget```
+* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
+* Move to the downloaded project path ```cd <YOUR_PATH>```
 * Compile the project with ```npm install```
 
 Copy this code into your html pages:
@@ -64,7 +65,6 @@ info passing variables:
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
-
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
 ## Widget in action 
