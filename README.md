@@ -17,7 +17,17 @@ With Chat21-web-widget you can:
 * Configure the widget with company logo and colors
 * Chat21 Web Widget is free and open source.
 
-## Installation
+# Prerequisites #
+* Install git: `https://git-scm.com/book/id/v2/Getting-Started-Installing-Git`
+* Install Angular CLI with  `npm install -g @angular/cli`. More info here https://github.com/angular/angular-cli#installation
+* A Firebase project. Create one free on `https://firebase.google.com`
+* "Chat21 Firebase cloud functions" installed. Instructions:`https://github.com/chat21/chat21-cloud-functions`
+
+
+# Installation
+
+* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget```
+* Compile the project with ```npm install```
 
 Copy this code into your html pages:
 
@@ -33,6 +43,9 @@ Copy this code into your html pages:
 </script>
 
 ```
+
+## Configuration ##
+
 info passing variables:  
 * preChatForm -> if exist enable form email and fullname
 * recipientId 
