@@ -4,7 +4,10 @@
         <!--HEADER-->
         <div class="chat21-sheet-header"> 
             <div class="chat21-sheet-header-title-container">
-                <b class="chat21-sheet-header-title">{{chatName}}</b>
+                <b class="chat21-sheet-header-title">
+                    <span>{{chatName}}</span>
+                    <span id="agent-available-status">{{ areAgentsAvailableText }}</span>
+                </b>
                 <p class="chat21-header-writing">{{writingMessage}}</p>
             </div>
             <a class="chat21-sheet-header-close-button" (click)="f21_close()">

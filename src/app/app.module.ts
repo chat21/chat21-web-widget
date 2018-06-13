@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
 // import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -28,6 +30,7 @@ import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +45,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     BrowserAnimationsModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a

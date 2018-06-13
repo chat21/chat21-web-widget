@@ -1,10 +1,12 @@
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone} from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+
 // services
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
+import { AgentAvailabilityService } from './providers/agent-availability.service';
 // models
 import { MessageModel } from '../models/message';
 import { DepartmentModel } from '../models/department';
@@ -28,7 +30,8 @@ import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [AgentAvailabilityService]
 })
 
 
@@ -129,19 +132,42 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     contentScroll: any;
     NUM_BADGES = 0;
 
+    private AGENT_NOT_AVAILABLE: string = " - Offline";
+    private AGENT_AVAILABLE: string = " - Online";
+    private areAgentsAvailableText : string;
+
     constructor(
+        private zone: NgZone,
         public authService: AuthService,
         public messagingService: MessagingService,
         public starRatingWidgetService: StarRatingWidgetService,
         public upSvc: UploadService,
         public contactService: ContactService,
         public formBuilder: FormBuilder,
-        public el: ElementRef
+        public el: ElementRef,
+        private agentAvailabilityService: AgentAvailabilityService,
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
         this.getVariablesFromAttributeHtml();
         this.settingParams();
+
+        this.getUrlParameters();
+
+        console.log("tenant", this.tenant);
+        console.log("recipientId", this.recipientId);
+        console.log("projectid", this.projectid);
+        console.log("projectname", this.projectname);
+        console.log("chatName", this.chatName);
+        console.log("poweredBy", this.poweredBy);
+        console.log("userId", this.userId);
+        console.log("userEmail", this.userEmail);
+        console.log("userPassword", this.userPassword);
+        console.log("userFullname", this.userFullname);
+        console.log("preChatForm", this.preChatForm);
+        console.log("isOpen", this.isOpen);
+        console.log("channelType", this.channelType); 
+        this.setAvailableAgentsStatus();
 
         // set auth
         if (this.userEmail && this.userPassword) {
@@ -170,16 +196,43 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
         .takeWhile(() => that.aliveSubLoggedUser)
         .subscribe(user => {
-            if (user) {
-                console.log('USER AUTENTICATE: ', user);
-                that.senderId = user.uid;
-                // that.initConversation();
-                that.createConversation();
-                that.initialize();
-                that.aliveSubLoggedUser = false;
-            } else {
-                that.isLogged = false;
-            }
+
+            // real time detection of the user authentication status
+            this.zone.run(() => { 
+                if (user) {
+                    console.log('USER AUTENTICATE: ', user);
+                    // console.log("constructor.subLoggedUser", user);
+                    // that.senderId = user.uid;
+                    that.senderId = user.user.uid;
+                    // console.log("constructor.subLoggedUser", that.senderId);
+                    // that.initConversation();
+
+                    that.createConversation();
+                    that.initialize();
+                    that.aliveSubLoggedUser = false;
+                    that.isLogged = true;
+                    console.log("isLogged", that.isLogged);
+                } else {
+                    that.isLogged = false;
+                }
+            });
+
+            // if (user) {
+            //     console.log('USER AUTENTICATE: ', user);
+            //     // console.log("constructor.subLoggedUser", user);
+            //     // that.senderId = user.uid;
+            //     that.senderId = user.user.uid;
+            //     // console.log("constructor.subLoggedUser", that.senderId);
+            //     // that.initConversation();
+
+            //     that.createConversation();
+            //     that.initialize();
+            //     that.aliveSubLoggedUser = false;
+            //     that.isLogged = true;
+            //     console.log("isLogged", that.isLogged);
+            // } else {
+            //     that.isLogged = false;
+            // }
         });
 
         this.checkWritingMessages();
@@ -198,6 +251,118 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         //// get isWidgetActive (poll) from storage;
         this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
+    }
+
+    private getUrlParameters() {
+        // console.log("getUrlParameters");
+
+        if (this.getParameterByName('tenant')) {
+            this.tenant = this.getParameterByName('tenant');
+            // console.log("getUrlParameters.tenant",  this.tenant); 
+        }
+
+        if (this.getParameterByName('recipientId')) {
+            this.recipientId = this.getParameterByName('recipientId');
+            // console.log("getUrlParameters.recipientId", this.recipientId); 
+        }
+
+        if (this.getParameterByName('projectid')) {
+            this.projectid = this.getParameterByName('projectid');
+            // console.log("getUrlParameters.projectid", this.projectid); 
+        }
+
+        if (this.getParameterByName('projectname')) {
+            this.projectname = this.getParameterByName('projectname');
+            // console.log("getUrlParameters.projectname", this.projectname); 
+        }
+
+        if (this.getParameterByName('chatName')) {
+            this.chatName = this.getParameterByName('chatName');
+            // console.log("getUrlParameters.chatName", this.chatName); 
+        }
+
+        if (this.getParameterByName('poweredBy')) {
+            this.poweredBy = this.getParameterByName('poweredBy');
+            // console.log("getUrlParameters.poweredBy", this.poweredBy); 
+        }
+
+        if (this.getParameterByName('userId')) {
+            this.userId = this.getParameterByName('userId');
+            // console.log("getUrlParameters.userId", this.userId); 
+        }
+
+        if (this.getParameterByName('userEmail')) {
+            this.userEmail = this.getParameterByName('userEmail');
+            // console.log("getUrlParameters.userEmail", this.userEmail); 
+        }
+
+        if (this.getParameterByName('userPassword')) {
+            this.userPassword = this.getParameterByName('userPassword');
+            // console.log("getUrlParameters.userPassword", this.userPassword); 
+        }
+
+        if (this.getParameterByName('userFullname')) {
+            this.userFullname = this.getParameterByName('userFullname');
+            // console.log("getUrlParameters.userFullname", this.userFullname); 
+        }
+
+        if (this.getParameterByName('preChatForm')) {
+            this.preChatForm = this.getParameterByName('preChatForm') == "true" ? true : false;
+            // console.log("getUrlParameters.preChatForm", this.preChatForm); 
+        }
+
+        if (this.getParameterByName('isOpen')) {
+            this.isOpen = this.getParameterByName('isOpen') == "true" ? true : false;
+            // console.log("getUrlParameters.isOpen", this.isOpen); 
+        }
+
+        if (this.getParameterByName('channelType')) {
+            this.channelType = this.getParameterByName('channelType');
+            // console.log("getUrlParameters.channelType", this.channelType); 
+        }
+    }
+
+    private setAvailableAgentsStatus() {
+        this.agentAvailabilityService
+        .getAvailableAgents(this.projectid)
+        .subscribe(
+            (availableAgents) => {
+                console.log("setOnlineStatus::setAvailableAgentsStatus::availableAgents", availableAgents); 
+
+                if (availableAgents.length <= 0) {
+                    this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
+                } else {
+                    this.areAgentsAvailableText = this.AGENT_AVAILABLE;
+                }
+            }, (error) => {
+                // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
+                console.error("setOnlineStatus::setAvailableAgentsStatus", error); 
+
+            },() => {
+
+            }
+        )
+        // , (error) => {
+        //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
+        // },() => {
+
+        // }
+    }
+
+    private getParameterByName(name) {
+        // if (!url) url = window.location.href;
+
+        var url = window.location.href;
+
+        name = name.replace(/[\[\]]/g, "\\$&");
+
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
+
+        if (!results) return null;
+
+        if (!results[2]) return '';
+        
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
     /**
@@ -242,7 +407,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpen = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('channelType');
         this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
-
     }
 
     // START FORM
@@ -471,6 +635,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
             }
         }
+
+        // console.log("createConversation.conversationWith", this.conversationWith);
 
         if (!this.channelType || (this.channelType !== CHANNEL_TYPE_GROUP && this.channelType !== CHANNEL_TYPE_DIRECT )) {
             this.channelType = channelTypeTEMP;
