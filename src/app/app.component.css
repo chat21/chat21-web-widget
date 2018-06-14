@@ -987,3 +987,16 @@ div#chat21-end-footer:hover div.build_version{
 }
 
 /* END LOADIN */
+
+
+.chat21-agents-available {
+    background-color: red;
+    color: white;
+    padding: 8px;
+    /* height: 32px; */
+    /* position: absolute; */
+    /* bottom: 0; */
+    /* left: 0; */
+    /* width: 100%; */
+     text-align: center;
+}
