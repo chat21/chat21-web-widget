@@ -1,6 +1,6 @@
 # chat21-web-widget
 
-Chat21-web-widget is a Free Live Chat Widget built on Firebase with Angular4 that lets you support and chat with visitors and customers on your website. 
+Chat21-web-widget is a Free Live Chat Widget built on Firebase with Angular5 that lets you support and chat with visitors and customers on your website. 
 
 <img width="488" alt="dialogo_widgetchat_2" src="https://user-images.githubusercontent.com/32448495/37662363-35110862-2c57-11e8-8720-263d1ff96f29.jpg">
 
@@ -8,7 +8,7 @@ With Chat21-web-widget you can:
 * Invite your website visitors to share feedback and suggestions to better understand their needs.
 * Answer questions from website visitors instantly to increase trust
 * Add a code snippet to your website easly 
-* It's a HTML5 widget built with Google Firebase, Angular4 and Bootstrap
+* It's a HTML5 widget built with Google Firebase, Angular5 and Bootstrap
 
 # Features
 * Send a direct message to a preset user
@@ -57,6 +57,7 @@ info passing variables:
 * userFullname
 * chatName ex: TileDesk
 * poweredBy ex: ```<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>```
+* lang (optional) with this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
 * Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
