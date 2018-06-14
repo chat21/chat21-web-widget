@@ -12,7 +12,7 @@ import { DepartmentModel } from '../models/department';
 // utils
 import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify, encodeHTML } from './utils/utils';
 // tslint:disable-next-line:max-line-length
-import { CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
+import { CALLOUT_TIMER_DEFAULT, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import { Subscription } from 'rxjs/Subscription';
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
     LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
     // tslint:disable-next-line:max-line-length
-    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
+    LABLEL_COMPLETE_FORM = 'Siamo qui per rispondere alle tue domande. Chiedici qualsiasi cosa.'; // 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
     LABEL_FIELD_NAME = '* Nome'; // '* Name';
     LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
     LABEL_FIELD_EMAIL = '* Email';
@@ -121,6 +121,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     chatName: string;
     poweredBy: string;
     channelType: string;
+    calloutTimer: number;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -181,7 +182,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 that.isLogged = false;
             }
         });
-
         this.checkWritingMessages();
     }
 
@@ -242,6 +242,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpen = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('channelType');
         this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
+        TEMP = this.el.nativeElement.getAttribute('calloutTimer');
+        this.calloutTimer = (TEMP) ? TEMP : CALLOUT_TIMER_DEFAULT;
 
     }
 
@@ -266,10 +268,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         myFormValueChanges$.subscribe(x => {
             that.userFullname = x.name;
             that.userEmail = x.email;
+            that.attributes.userEmail = x.email;
+            that.attributes.userName = x.name;
         });
     }
     /** */
     closeForm() {
+        // tslint:disable-next-line:no-debugger
+        // debugger;
         // recupero email inserita nel form e fullname
         // salvo tutto nello storage e successivamente le invio con il messaggio!!!!
         this.attributes.userName = this.userFullname;
@@ -334,10 +340,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        // const that = this;
-        // setTimeout(function() {
-        //     that.setSubscriptions();
-        // }, 2000);
+        const that = this;
+        const waitingTime = this.calloutTimer * 1000;
+        setTimeout(function() {
+            that.f21_open();
+        }, waitingTime);
     }
 
     /**
@@ -851,7 +858,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             let metadata;
             if (type.startsWith('image')) {
                 metadata = {
-                    'name': fileXLoad.name,
+                    'name': fileXLoad.title,
                     'src': fileXLoad.src,
                     'width': fileXLoad.width,
                     'height': fileXLoad.height,
@@ -860,12 +867,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 };
             } else {
                 metadata = {
-                    'name': fileXLoad.name,
+                    'name': fileXLoad.title,
                     'src': fileXLoad.src,
                     'type': type,
                     'uid': uid
                 };
             }
+            console.log('metadata -------> ', metadata);
             this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
@@ -912,7 +920,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             '', // headerDate
             TYPE_MSG_IMAGE, // type
             '',
-            this.channelType
+            this.channelType,
+            this.projectid
         );
         // this.messages.push(message);
         // message.metadata.uid = message.uid;
@@ -1015,7 +1024,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const senderFullname = recipientFullname;
 
             // tslint:disable-next-line:max-line-length
-            this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid);
+            this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
             this.isNewConversation = false;
             // this.checkWritingMessages();
         }

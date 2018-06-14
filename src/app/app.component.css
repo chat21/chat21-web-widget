@@ -800,7 +800,7 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0px 10px 0px 10px;
   }
 .chat21-inputContainer {
-    padding: 4px 15px;
+    /* padding: 0px 15px; */
     /* padding: 12px 10px!important; */
     border: 1px solid #ccc;
     -webkit-border-radius: 3px;
@@ -813,8 +813,8 @@ div#chat21-end-footer:hover div.build_version{
     position: relative;
 }
 .chat21-inputContainer > input {
-    padding: 11px 0!important;
-    color: #707070!important;
+    padding: 11px 10px 8px 10px!important;
+    color: #777777!important;
     font-family: Arial!important;
     font-size: 13px!important;
     font-weight: bold!important;
@@ -829,9 +829,26 @@ div#chat21-end-footer:hover div.build_version{
     background: #fff!important;
 }
 
+.chat21-inputContainer > input::placeholder {
+    color: #cccccc;
+    font-weight: initial;
+    opacity: 1; /* Firefox */
+}
+
+.chat21-inputContainer > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #cccccc;
+    font-weight: initial;
+}
+
+.chat21-inputContainer > input::-ms-input-placeholder { /* Microsoft Edge */
+   color: #cccccc;
+    font-weight: initial;
+}
+
+
 .chat21-inputContainer > input:focus{
     box-shadow: none!important;
-    background-color: #ffffff;
+    background-color: #ffffff!important;
 }
 
 .chat21-inputContainer > input, .chat21-inputContainer select {
@@ -839,6 +856,7 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0;
     border: 0!important;
     padding: 12px 0;
+    background-color: #ffffff!important;
 }
 
 
@@ -847,6 +865,7 @@ div#chat21-end-footer:hover div.build_version{
     vertical-align: middle;
 }
   
+
 
 /* #Forms
 ================================================== */
@@ -861,14 +880,14 @@ div#chat21-end-footer:hover div.build_version{
     position: absolute;
     top: 0;
     left: 4px;
-    font-weight: bold;
+    font-weight: initial;
 }
 
 .chat21-inputContainer .form-field-label {
     color: #707070;
     font-family: Arial;
     font-size: 13px!important;
-    font-weight: bold;
+    font-weight: initial;
 }
 .chat21-inputContainer > input:focus {
     outline:none;

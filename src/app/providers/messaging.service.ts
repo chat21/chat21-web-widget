@@ -288,7 +288,8 @@ export class MessagingService {
           dateSendingMessage,
           message['type'],
           message['attributes'],
-          message['channelType']
+          message['channel_type'],
+          message['progectId']
         );
         console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
@@ -337,7 +338,7 @@ export class MessagingService {
   }
 
 
-  sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid) { // : string {
+  sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
     console.log('SEND MESSAGE: ', msg);
     // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
     // const messageString = urlify(msg);
@@ -362,10 +363,12 @@ export class MessagingService {
       dateSendingMessage,
       type,
       attributes,
-      this.channel_type
+      channel_type,
+      projectid
     );
 
     // const message = {
+    //   uid: '',
     //   language: language,
     //   recipient: conversationWith,
     //   recipient_fullname: recipientFullname,
@@ -376,8 +379,8 @@ export class MessagingService {
     //   text: msg,
     //   timestamp: timestamp,
     //   type: type,
-    //   channel_type: this.channel_type,
     //   attributes: attributes,
+    //   channel_type: this.channel_type,
     //   projectid: projectid
     // };
 
@@ -408,7 +411,7 @@ export class MessagingService {
           message.status = '-100';
           console.log('ERRORE', error);
         } else {
-          // that.checkWritingMessages();
+          that.checkWritingMessages();
           message.status = '150';
           console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
         }

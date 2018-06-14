@@ -6,6 +6,11 @@ export const LABEL_TO = 'alle'; // 'to the';
 // export const ARRAY_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const ARRAY_DAYS =  ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
 
+
+// CONFIG WIDGET
+export const CALLOUT_TIMER_DEFAULT = 0;
+
+
 // MESSAGES STATUS
 export const MSG_STATUS_FAILED = -100;
 export const MSG_STATUS_SENDING = 0;

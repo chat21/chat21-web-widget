@@ -13,6 +13,7 @@ export class MessageModel {
         public headerDate: string,
         public type: string,
         public attributes: any,
-        public channel_type: string
+        public channel_type: string,
+        public projectid: string
     ) { }
  }
