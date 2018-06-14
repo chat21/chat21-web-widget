@@ -55,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     nameFile: string;
     tenant: string;
     recipientId: string;
+    lang : string;
 
 
     myForm: FormGroup;
@@ -139,22 +140,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         private translate: TranslateService,
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
-
-         var browserLang  = translate.getBrowserLang();
+        
+        // If the browser lanaguage is available use it, else use the default language store within environment.defaultLang
+        this.lang  = translate.getBrowserLang() ? translate.getBrowserLang() : environment.defaultLang;
         // console.log("browserLang", browserLang);
-
-        // this language will be used as a fallback when a translation isn't found in the current language
-        translate.setDefaultLang(browserLang);
-
-         // the lang to use, if the lang isn't available, it will use the current loader to get them
-        translate.use(browserLang);
-
-       
 
         this.getVariablesFromAttributeHtml();
         this.settingParams();
 
         this.getUrlParameters();
+
+        // the lang parameter is retrieved from the html data. 
+        // if any data is provided it will use the browser lang or the default lang previously initialized
+        // this language will be used as a fallback when a translation isn't found in the current language
+        translate.setDefaultLang(this.lang);
+         // the lang to use, if the lang isn't available, it will use the current loader to get them
+        translate.use(this.lang);
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -169,6 +170,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log("preChatForm", this.preChatForm);
         console.log("isOpen", this.isOpen);
         console.log("channelType", this.channelType); 
+        console.log("channelType", this.lang); 
         this.setAvailableAgentsStatus();
 
         // set auth
@@ -270,7 +272,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.getParameterByName('projectid')) {
             this.projectid = this.getParameterByName('projectid');
-            console.log("getUrlParameters.projectid", this.projectid); 
+            // console.log("getUrlParameters.projectid", this.projectid); 
         }
 
         if (this.getParameterByName('projectname')) {
@@ -321,6 +323,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.getParameterByName('channelType')) {
             this.channelType = this.getParameterByName('channelType');
             // console.log("getUrlParameters.channelType", this.channelType); 
+        }
+
+        if (this.getParameterByName('lang')) {
+            this.lang = this.getParameterByName('lang');
+            // console.log("getUrlParameters.lang", this.lang); 
         }
     }
 
@@ -427,6 +434,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpen = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('channelType');
         this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
+        TEMP = this.el.nativeElement.getAttribute('lang');
+        this.lang = (TEMP) ? TEMP : this.lang;
     }
 
     // START FORM
