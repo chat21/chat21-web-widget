@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
@@ -8,7 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 
 
 
@@ -29,6 +29,11 @@ import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
+
+// begin translations
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+// end translations
 
 
 @NgModule({
@@ -54,7 +59,15 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
       prefix: 'chat21-web-widget',
       storageType: 'localStorage'
      }),
-     MomentModule
+    MomentModule,
+   // source : https://ionicframework.com/docs/developer-resources/ng2-translate/
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     AuthService,
@@ -66,3 +79,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}

@@ -18,11 +18,11 @@
         <!--CONTENT-->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span>Tutti gli operatori sono offline al momento</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-header-modal-select">
-                <div>{{LABEL_FIRST_MSG}}</div>
+                <div>{{ 'LABEL_FIRST_MSG' | translate}}</div>
             </div>
             <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
                 <div>{{departmentSelected?.name}}</div>
@@ -31,7 +31,7 @@
                 <div class="chat21-bounce1"></div>
                 <div class="chat21-bounce2"></div>
                 <div class="chat21-bounce3"></div>
-                <span>loading</span>
+                <span>{{ 'LABEL_LOADING' | translate }}</span>
             </div>     
              
             <div class="chat21-conversation-parts-container" style="height:100%; overflow-y: hidden;">
@@ -99,7 +99,7 @@
             <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation" (click)="startNwConversation()">{{LABEL_START_NW_CONV}}</div>
             <div>
                 <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()"><div *ngIf="NUM_BADGES!=0"id="chat21-divBudge">{{NUM_BADGES}}</div></div>
-                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="{{LABEL_PLACEHOLDER}}" ></textarea>
+                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="{{ 'LABEL_PLACEHOLDER' | translate }}" ></textarea>
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
@@ -123,10 +123,10 @@
        <div *ngIf="openSelectionDepartment" id="chat21-modal-select" >
 
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span>Tutti gli operatori sono offline al momento</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
-           <div class="chat21-header-modal-select">{{LABEL_SELECT_TOPIC}}</div>
+           <div class="chat21-header-modal-select">{{ 'LABEL_SELECT_TOPIC' | translate }}</div>
            <ul class="chat21-content-modal-select">
                 <li *ngFor="let department of departments; let i = index"
                 (click)="onSelectDepartment(department)">
@@ -138,32 +138,32 @@
        <div *ngIf="preChatForm" id="chat21-modal-form" >
 
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span>Tutti gli operatori sono offline al momento</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
             <div class="chat21-content-modal-form">
-                <div class="chat21-formMessageField">{{LABLEL_COMPLETE_FORM}}</div>
+                <div class="chat21-formMessageField">{{ 'LABEL_COMPLETE_FORM' | translate }}</div>
                 <form id="chat21-formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userFullname" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
-                        <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
+                        <label [hidden]="!userFullname" class="form-field-label small">{{ 'LABEL_FIELD_NAME' | translate }}</label>
+                        <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{ 'LABEL_FIELD_NAME' | translate }}">
                     </div>
                     <div class="text-danger">   
                         <small [hidden]="myForm.controls.name.valid || myForm.controls.name.pristine">
-                        {{LABEL_ERROR_FIELD_NAME}}
+                        {{ 'LABEL_ERROR_FIELD_NAME' | translate}}
                         </small>
                     </div>
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userEmail" class="form-field-label small">{{LABEL_FIELD_EMAIL}}</label>
-                        <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{LABEL_FIELD_EMAIL}}">
+                        <label [hidden]="!userEmail" class="form-field-label small">{{ 'LABEL_FIELD_EMAIL' | translate}}</label>
+                        <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{ 'LABEL_FIELD_EMAIL'  | translate}}">
                     </div>
                     <div class="text-danger">
                         <small [hidden]="myForm.controls.email.valid || myForm.controls.email.pristine" >
-                            {{LABEL_ERROR_FIELD_EMAIL}}
+                            {{ 'LABEL_ERROR_FIELD_EMAIL' | translate}}
                         </small>
                     </div>
                     <button [disabled]="!myForm.controls.name.valid || !myForm.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new" (click)="closeForm()">
-                        {{LABEL_START_NW_CONV}}
+                        {{ 'LABEL_START_NW_CONV' | translate}}
                     </button>
                 </form>
             </div>

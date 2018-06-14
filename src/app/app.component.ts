@@ -27,6 +27,8 @@ import 'rxjs/add/operator/takeWhile';
 
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -69,19 +71,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     MSG_STATUS_SENT = MSG_STATUS_SENT;
     MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
-    LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
-    LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
-    // tslint:disable-next-line:max-line-length
-    LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
-    LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
-    // tslint:disable-next-line:max-line-length
-    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
-    LABEL_FIELD_NAME = '* Nome'; // '* Name';
-    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
-    LABEL_FIELD_EMAIL = '* Email';
-    // tslint:disable-next-line:max-line-length
-    LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
-    LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
 
     BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
     CLIENT_BROWSER = navigator.userAgent;
@@ -132,8 +121,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     contentScroll: any;
     NUM_BADGES = 0;
 
-    private AGENT_NOT_AVAILABLE: string = " - Offline";
-    private AGENT_AVAILABLE: string = " - Online";
+    // private AGENT_NOT_AVAILABLE: string = " - Offline";
+    // private AGENT_AVAILABLE: string = " - Online";
     private areAgentsAvailableText : string;
     private areAgentsAvailable : boolean = false;
 
@@ -147,8 +136,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public formBuilder: FormBuilder,
         public el: ElementRef,
         private agentAvailabilityService: AgentAvailabilityService,
+        private translate: TranslateService,
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
+
+         var browserLang  = translate.getBrowserLang();
+        // console.log("browserLang", browserLang);
+
+        // this language will be used as a fallback when a translation isn't found in the current language
+        translate.setDefaultLang(browserLang);
+
+         // the lang to use, if the lang isn't available, it will use the current loader to get them
+        translate.use(browserLang);
+
+       
 
         this.getVariablesFromAttributeHtml();
         this.settingParams();
@@ -324,6 +325,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private setAvailableAgentsStatus() {
+        var labelAgentNotAvailable;
+        this.translate.get('AGENT_NOT_AVAILABLE').subscribe(
+            value => {
+                // value is our translated string
+                labelAgentNotAvailable = value;
+            }
+        )
+
+         var labelAgentAvailable;
+        this.translate.get('AGENT_AVAILABLE').subscribe(
+            value => {
+                // value is our translated string
+                labelAgentAvailable = value;
+            }
+        )
+
         this.agentAvailabilityService
         .getAvailableAgents(this.projectid)
         .subscribe(
@@ -332,10 +349,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 if (availableAgents.length <= 0) {
                     this. areAgentsAvailable = false;
-                    this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
+                    this.areAgentsAvailableText = labelAgentNotAvailable;
                 } else {
                     this.areAgentsAvailable = true;
-                    this.areAgentsAvailableText = this.AGENT_AVAILABLE;
+                    this.areAgentsAvailableText = labelAgentAvailable;
                 }
             }, (error) => {
                 // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
@@ -681,6 +698,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     checkWritingMessages() {
+        var labelWriting;
+        this.translate.get('LABEL_WRITING').subscribe(
+            value => {
+                // value is our translated string
+                labelWriting = value;
+            }
+        )
+
         // this.messagingService.checkWritingMessages();
         const that = this;
         const subscription: Subscription = this.messagingService.obsCheckWritingMessages
@@ -689,7 +714,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('2 - subscribe IS: ', resp + ' ****************');
             if (resp) {
                 setTimeout(function() {
-                    that.writingMessage = that.LABEL_WRITING;
+                    that.writingMessage = labelWriting;
                 }, 1000);
             } else {
                 that.writingMessage = '';
@@ -1050,12 +1075,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param metadata
      */
     addLocalMessageImage(metadata) {
+        var labelGuest = this.translate.get('GUEST_LABEL')['value'];
+
         const now: Date = new Date();
         const timestamp = now.valueOf();
         const language = document.documentElement.lang;
 
         // set recipientFullname
-        let recipientFullname = 'Guest';
+        // let recipientFullname = 'Guest';
+         let recipientFullname = labelGuest;
         if (this.userFullname) {
             recipientFullname = this.userFullname;
         } else if (this.userEmail) {
@@ -1165,11 +1193,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+        var labelGuest = this.translate.get('GUEST_LABEL')['value'];
+
         (metadata) ? metadata = metadata : metadata = '';
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
             // set recipientFullname
-            let recipientFullname = 'Guest';
+            // let recipientFullname = 'Guest';
+            let recipientFullname = labelGuest;
             if (this.userFullname) {
                 recipientFullname = this.userFullname;
             } else if (this.userEmail) {
