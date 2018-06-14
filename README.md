@@ -48,16 +48,16 @@ Copy this code into your html pages:
 ## Configuration ##
 
 info passing variables:  
-* preChatForm -> if exist enable form email and fullname
+* preChatForm , if exist enable form email and fullname
 * recipientId 
 * projectid 
 * userId  
 * userEmail 
 * userPassword 
 * userFullname
-* chatName ex: TileDesk
-* poweredBy ex: ```<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>```
-* lang (optional) with this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
+* chatName , i.e.: TileDesk
+* poweredBy , i.e.: ```<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>```
+* lang , (optional) with this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
 * Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
