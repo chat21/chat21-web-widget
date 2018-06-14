@@ -7,10 +7,6 @@ NEW_BUILD=$(($build+1))
 #sed -i -e "s/$start$build/$start$NEW_BUILD/g" current_version.ts
 sed -i -e "s/$start$build/$start$NEW_BUILD/g" current_version.ts
 #ng build --prod --base-href #/$NEW_BUILD/
-<<<<<<< HEAD
-#ng build --prod --base-href
-=======
->>>>>>> 25372f1dcdd589c579ebbed6e13047a059b6064f
 ng build --prod --base-href --output-hashing none
 cd dist
 #aws s3 sync . s3://tiledesk-widget/dev/0/$NEW_BUILD/
