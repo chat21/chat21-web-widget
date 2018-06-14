@@ -135,6 +135,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private AGENT_NOT_AVAILABLE: string = " - Offline";
     private AGENT_AVAILABLE: string = " - Online";
     private areAgentsAvailableText : string;
+    private areAgentsAvailable : boolean = false;
 
     constructor(
         private zone: NgZone,
@@ -152,7 +153,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getVariablesFromAttributeHtml();
         this.settingParams();
 
-        // this.getUrlParameters();
+        this.getUrlParameters();
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -268,7 +269,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.getParameterByName('projectid')) {
             this.projectid = this.getParameterByName('projectid');
-            // console.log("getUrlParameters.projectid", this.projectid); 
+            console.log("getUrlParameters.projectid", this.projectid); 
         }
 
         if (this.getParameterByName('projectname')) {
@@ -306,8 +307,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.userFullname", this.userFullname); 
         }
 
-        if (this.getParameterByName('preChatForm')) {
-            this.preChatForm = this.getParameterByName('preChatForm') == "true" ? true : false;
+        if (this.getParameterByName('prechatform')) {
+            this.preChatForm = this.getParameterByName('prechatform') == "true" ? true : false;
             // console.log("getUrlParameters.preChatForm", this.preChatForm); 
         }
 
@@ -330,8 +331,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log("setOnlineStatus::setAvailableAgentsStatus::availableAgents", availableAgents); 
 
                 if (availableAgents.length <= 0) {
+                    this. areAgentsAvailable = false;
                     this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
                 } else {
+                    this.areAgentsAvailable = true;
                     this.areAgentsAvailableText = this.AGENT_AVAILABLE;
                 }
             }, (error) => {
