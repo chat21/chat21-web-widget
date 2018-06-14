@@ -148,7 +148,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getVariablesFromAttributeHtml();
         this.settingParams();
 
-        this.getUrlParameters();
+        // this.getUrlParameters();
 
         // the lang parameter is retrieved from the html data. 
         // if any data is provided it will use the browser lang or the default lang previously initialized
