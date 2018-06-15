@@ -8,7 +8,8 @@ sed -i -e "s/$start$build/$start$NEW_BUILD/g" current_version.ts
 #sed -i -e "s/$start$build/$start$NEW_BUILD/g" current_version.ts
 
 #ng build --prod --base-href #/$NEW_BUILD/
-ng build --base-href
+# ng build --base-href 
+ng build --base-href --output-hashing none
 cd dist
 aws s3 sync . s3://tiledesk-widget/dev/0/$NEW_BUILD/
 cd ..

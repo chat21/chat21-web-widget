@@ -31,8 +31,9 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 
 // begin translations
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+// import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+// import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+// import { WebpackTranslateLoader } from './providers/webpack-translate-loader';
 // end translations
 
 
@@ -61,23 +62,29 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
      }),
     MomentModule,
    // source : https://ionicframework.com/docs/developer-resources/ng2-translate/
-    TranslateModule.forRoot(
-      {
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }
+    // TranslateModule.forRoot(
+    //   {
+    //     loader: {
+    //       provide: TranslateLoader,
+    //       useFactory: (createTranslateLoader),
+    //       deps: [HttpClient]
+    //     }
+    //   }
+    //   //  {
+    //   //  loader: {
+    //   //     provide: TranslateLoader,
+    //   //     useFactory: HttpLoaderFactory,
+    //   //     deps: [HttpClient]
+    //   //   }
+    //   // }
+    // )
 
-      //  {
-      //  loader: {
-      //     provide: TranslateLoader,
-      //     useFactory: HttpLoaderFactory,
-      //     deps: [HttpClient]
-      //   }
-      // }
-    )
+    // TranslateModule.forRoot({
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useClass: WebpackTranslateLoader
+    //   }
+    // })
   ],
   providers: [
     AuthService,
@@ -98,6 +105,8 @@ export class AppModule { }
 // export function createTranslateLoader(http: HttpClient) {
 //   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 // }
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'https://widget.tiledesk.com/assets/i18n/', '.json');
-}
+
+
+// export function createTranslateLoader(http: HttpClient) {
+//   return new TranslateHttpLoader(http, 'https://widget.tiledesk.com/assets/i18n/', '.json');
+// }

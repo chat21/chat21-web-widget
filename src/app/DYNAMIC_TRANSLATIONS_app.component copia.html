@@ -1,8 +1,8 @@
-<div id="chat21-container" [class.active]="isLogged">
+<div id="chat21-container" [class.active]="isLogged" >
     <div id="chat21-launcher-button" (click)="f21_open()"></div>
     <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet">
         <!--HEADER-->
-        <div class="chat21-sheet-header">
+        <div class="chat21-sheet-header"> 
             <div class="chat21-sheet-header-title-container">
                 <b class="chat21-sheet-header-title">
                     <span>{{chatName}}</span>
@@ -18,23 +18,22 @@
         <!--CONTENT-->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-header-modal-select">
-                <div>{{LABEL_FIRST_MSG}}</div>
+                <div>{{ 'LABEL_FIRST_MSG' | translate}}</div>
             </div>
-            <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;"
-                class="chat21-header-modal-select">
+            <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;" class="chat21-header-modal-select">
                 <div>{{departmentSelected?.name}}</div>
             </div>
             <div [class.active]="isNewConversation == false && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
                 <div class="chat21-bounce1"></div>
                 <div class="chat21-bounce2"></div>
                 <div class="chat21-bounce3"></div>
-                <span>loading</span>
-            </div>
-
+                <span>{{ 'LABEL_LOADING' | translate }}</span>
+            </div>     
+             
             <div class="chat21-conversation-parts-container" style="height:100%; overflow-y: hidden;">
                 <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
                     <div id="chat21-contentScroll">
@@ -43,16 +42,11 @@
                             <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
                                 <div class="messages msg_sent">
                                     <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
-                                    <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                        [height]="getSizeImg(message).height" />
-                                    <div *ngIf="message.type == 'text';">
+                                    <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+                                    <div *ngIf="message.type == 'text';" >
                                         <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                        <ng-template #contentPopup>
-                                            <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                        </ng-template>
-                                        <ng-template #contentNewTab>
-                                            <p [innerHTML]="convertMessage(message.text)"></p>
-                                        </ng-template>
+                                        <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
+                                        <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
                                     </div>
                                     <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
                                     <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  /> -->
@@ -62,42 +56,35 @@
                                     <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
                                     <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
                                     <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
-                                    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>
+                                    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>     
                                 </div>
                             </div>
 
 
                             <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
-                            <div *ngIf="message.sender != senderId;" class="msg_container base_receive">
+                            <div *ngIf="message.sender != senderId;" class="msg_container base_receive">  
                                 <div class="content-avatar">
                                     <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
-                                    <div class="profile_image">
-                                        <img src="{{getUrlImgProfile(message.sender)}}" /> </div>
+                                    <div class = "profile_image"><img src="{{getUrlImgProfile(message.sender)}}"/> </div> 
                                     <!-- onError = "this.src=IMG_PROFILE_SUPPORT" -->
                                     <!-- <img src="{{getUrlImgProfile(message.sender)}}" class="img_circle" width="25" height="25"  > -->
                                 </div>
-
+                                
                                 <div class="messages msg_receive">
                                     <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
                                     <!-- {{convertMessage(message.text)}} -->
                                     <!-- [innerHTML]="message.text" -->
-                                    <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                        [height]="getSizeImg(message).height" />
-
-                                    <div *ngIf="message.type == 'text';">
+                                    <img *ngIf="message.type == 'image';"  class="message-contentX message-content-imageX" [src]="message.metadata.src"  [width]="getSizeImg(message).width" [height]="getSizeImg(message).height" />
+        
+                                    <div *ngIf="message.type == 'text';" >
                                         <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                        <ng-template #contentPopup>
-                                            <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                        </ng-template>
-                                        <ng-template #contentNewTab>
-                                            <p [innerHTML]="convertMessage(message.text)"></p>
-                                        </ng-template>
-                                    </div>
-                                    <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
+                                        <ng-template #contentPopup><p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p></ng-template>
+                                        <ng-template #contentNewTab><p [innerHTML]="convertMessage(message.text)"></p></ng-template>
+                                    </div><!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
                                     <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)" /> -->
                                 </div>
                             </div>
-                            <div class="time" [ngClass]="{'sender' : message.sender == senderId}">
+                            <div class="time" [ngClass]="{'sender' : message.sender == senderId}" >
                                 <time>{{message.timestamp | amTimeAgo}}</time>
                             </div>
                         </div>
@@ -107,81 +94,76 @@
             </div>
         </div>
 
-        <div id="chat21-footer">
-
+       <div id="chat21-footer">
+              
             <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation" (click)="startNwConversation()">{{LABEL_START_NW_CONV}}</div>
             <div>
-                <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
-                    <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
-                </div>
-                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea"
-                    [ngStyle]=m yStyles (ngModelChange)="resizeInputField()" (keypress)="onkeypress($event)" placeholder="{{LABEL_PLACEHOLDER}}"></textarea>
+                <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()"><div *ngIf="NUM_BADGES!=0"id="chat21-divBudge">{{NUM_BADGES}}</div></div>
+                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea" [ngStyle]= myStyles (ngModelChange)="resizeInputField()"  (keypress)="onkeypress($event)"  placeholder="{{ 'LABEL_PLACEHOLDER' | translate }}" ></textarea>
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
-                <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc"></label>
-                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div>
+                <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc" ></label>
+                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()" ></div>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadFile()"></div>
-                <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file"
-                    class="inputfile" (change)="detectFiles($event)" />
+                <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file" class="inputfile" (change)="detectFiles($event)"/>
                 <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
                 <!-- <img src="" width="200" alt="Image preview..."> -->
-                <div [class.active]="isSelected" class="name-image" id="chat21-file-selected">{{nameFile}}</div>
-            </div>
-
+                <div [class.active]="isSelected" class="name-image" id="chat21-file-selected" >{{nameFile}}</div>
+            </div> 
+            
             <div id="chat21-end-footer">
-                <div id="chat21-powered-by" [innerHTML]="poweredBy">
+                <div id="chat21-powered-by"  [innerHTML]="poweredBy">
                     <!-- (click)="openRate()" -->
                     <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
                 </div>
-                <div class="build_version">{{BUILD_VERSION}}</div>
+                <div class="build_version">{{BUILD_VERSION}}</div> 
             </div>
-        </div>
+       </div>
 
-
-        <div *ngIf="openSelectionDepartment" id="chat21-modal-select">
+        
+       <div *ngIf="openSelectionDepartment" id="chat21-modal-select" >
 
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
-            <div class="chat21-header-modal-select">{{LABEL_SELECT_TOPIC}}</div>
-            <ul class="chat21-content-modal-select">
-                <li *ngFor="let department of departments; let i = index" (click)="onSelectDepartment(department)">
-                    <span class="chat21-badge">{{i+1}}</span>
-                    <span class="chat21-title">{{department?.name}}</span>
-                </li>
+           <div class="chat21-header-modal-select">{{ 'LABEL_SELECT_TOPIC' | translate }}</div>
+           <ul class="chat21-content-modal-select">
+                <li *ngFor="let department of departments; let i = index"
+                (click)="onSelectDepartment(department)">
+                <span class="chat21-badge">{{i+1}}</span><span class="chat21-title">{{department?.name}}</span>
+              </li>
             </ul>
-        </div>
+       </div>
 
-        <div *ngIf="preChatForm" id="chat21-modal-form">
+       <div *ngIf="preChatForm" id="chat21-modal-form" >
 
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
+                <span> {{ 'ALL_AGENTS_OFFLINE_LABEL' | translate }}</span>
             </div>
 
             <div class="chat21-content-modal-form">
-                <div class="chat21-formMessageField">{{LABLEL_COMPLETE_FORM}}</div>
+                <div class="chat21-formMessageField">{{ 'LABEL_COMPLETE_FORM' | translate }}</div>
                 <form id="chat21-formContainer" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userFullname" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
-                        <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
+                        <label [hidden]="!userFullname" class="form-field-label small">{{ 'LABEL_FIELD_NAME' | translate }}</label>
+                        <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{ 'LABEL_FIELD_NAME' | translate }}">
                     </div>
-                    <div class="text-danger">
+                    <div class="text-danger">   
                         <small [hidden]="myForm.controls.name.valid || myForm.controls.name.pristine">
-                            {{LABEL_ERROR_FIELD_NAME}}
+                        {{ 'LABEL_ERROR_FIELD_NAME' | translate}}
                         </small>
                     </div>
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userEmail" class="form-field-label small">{{LABEL_FIELD_EMAIL}}</label>
-                        <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{LABEL_FIELD_EMAIL}}">
+                        <label [hidden]="!userEmail" class="form-field-label small">{{ 'LABEL_FIELD_EMAIL' | translate}}</label>
+                        <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{ 'LABEL_FIELD_EMAIL'  | translate}}">
                     </div>
                     <div class="text-danger">
-                        <small [hidden]="myForm.controls.email.valid || myForm.controls.email.pristine">
-                            {{LABEL_ERROR_FIELD_EMAIL}}
+                        <small [hidden]="myForm.controls.email.valid || myForm.controls.email.pristine" >
+                            {{ 'LABEL_ERROR_FIELD_EMAIL' | translate}}
                         </small>
                     </div>
-                    <button [disabled]="!myForm.controls.name.valid || !myForm.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new"
-                        (click)="closeForm()">
-                        {{LABEL_START_NW_CONV}}
+                    <button [disabled]="!myForm.controls.name.valid || !myForm.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new" (click)="closeForm()">
+                        {{ 'LABEL_START_NW_CONV' | translate}}
                     </button>
                 </form>
             </div>
