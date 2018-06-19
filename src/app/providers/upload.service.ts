@@ -49,6 +49,8 @@ export class UploadService {
     // Create a reference to 'mountains.jpg'
     const mountainsRef = storageRef.child(urlImagesNodeFirebase);
 
+    // console.log("UploadService::pushUpload::mountainsRef", mountainsRef);
+
     return mountainsRef.put(upload.file);
     // .then(function(snapshot) {
     //   console.log('Uploaded a blob or file! ', snapshot.downloadURL);

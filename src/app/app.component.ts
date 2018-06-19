@@ -1196,22 +1196,68 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         return sizeImage; // h.toString();
     }
 
+    // /**
+    //  *
+    //  * @param metadata
+    //  * @param file
+    //  */
+    // uploadSingle(metadata, file) {
+    //     const that = this;
+    //     const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
+    //     send_order_btn.disabled = true;
+    //     console.log('uploadSingle: ', metadata, file);
+    //     // const file = this.selectedFiles.item(0);
+    //     const currentUpload = new UploadModel(file);
+    //     this.upSvc.pushUpload(currentUpload)
+    //     .then(function(snapshot) {
+
+    //         var fullPath = snapshot.metadata.fullPath;
+    //         console.log("fullPath", fullPath);
+
+    //         console.log('Uploaded a file! ', snapshot.downloadURL);
+    //         metadata.src = snapshot.downloadURL;
+    //         let type_message = TYPE_MSG_TEXT;
+    //         let message = 'File: ' + metadata.src;
+    //         if (metadata.type.startsWith('image')) {
+    //             type_message = TYPE_MSG_IMAGE;
+    //             message = 'Image: ' + metadata.src;
+    //         }
+    //         that.sendMessage(message, type_message, metadata);
+    //         that.scrollToBottom();
+    //     })
+    //     .catch(function(error) {
+    //         // Handle Errors here.
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //         console.log('error: ', errorCode, errorMessage);
+    //     });
+    //     // this.resetLoadImage();
+    //     console.log('reader-result: ', file);
+    // }
+
     /**
-     *
-     * @param metadata
-     * @param file
-     */
+   *
+   * @param metadata
+   * @param file
+   */
     uploadSingle(metadata, file) {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-        console.log('uploadSingle: ', metadata, file);
+        console.log('AppComponent::uploadSingle::', metadata, file);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
-        this.upSvc.pushUpload(currentUpload)
-        .then(function(snapshot) {
-            console.log('Uploaded a file! ', snapshot.downloadURL);
-            metadata.src = snapshot.downloadURL;
+
+
+        var uploadTask = this.upSvc.pushUpload(currentUpload);
+        uploadTask.then(snapshot => {
+            return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+        })
+        .then(downloadURL => {
+            console.log("AppComponent::uploadSingle:: downloadURL", downloadURL);
+            console.log(`Successfully uploaded file and got download link - ${downloadURL}`);
+
+            metadata.src = downloadURL;
             let type_message = TYPE_MSG_TEXT;
             let message = 'File: ' + metadata.src;
             if (metadata.type.startsWith('image')) {
@@ -1220,13 +1266,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             that.sendMessage(message, type_message, metadata);
             that.scrollToBottom();
+
+            // return downloadURL;
         })
-        .catch(function(error) {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('error: ', errorCode, errorMessage);
+        .catch(error => {
+            // Use to signal error if something goes wrong.
+            console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
         });
+
         // this.resetLoadImage();
         console.log('reader-result: ', file);
     }
