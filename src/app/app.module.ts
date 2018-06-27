@@ -30,13 +30,6 @@ import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 
-// begin translations
-// import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-// import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-// import { WebpackTranslateLoader } from './providers/webpack-translate-loader';
-// end translations
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,52 +54,14 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
       storageType: 'localStorage'
      }),
     MomentModule,
-   // source : https://ionicframework.com/docs/developer-resources/ng2-translate/
-    // TranslateModule.forRoot(
-    //   {
-    //     loader: {
-    //       provide: TranslateLoader,
-    //       useFactory: (createTranslateLoader),
-    //       deps: [HttpClient]
-    //     }
-    //   }
-    //   //  {
-    //   //  loader: {
-    //   //     provide: TranslateLoader,
-    //   //     useFactory: HttpLoaderFactory,
-    //   //     deps: [HttpClient]
-    //   //   }
-    //   // }
-    // )
-
-    // TranslateModule.forRoot({
-    //   loader: {
-    //     provide: TranslateLoader,
-    //     useClass: WebpackTranslateLoader
-    //   }
-    // })
   ],
   providers: [
     AuthService,
     MessagingService,
     UploadService,
     ContactService,
-    StarRatingWidgetService
+    StarRatingWidgetService,
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-// // AoT requires an exported function for factories
-// export function HttpLoaderFactory(http: HttpClient) {
-//     return new TranslateHttpLoader(http);
-// }
-
-// export function createTranslateLoader(http: HttpClient) {
-//   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-// }
-
-
-// export function createTranslateLoader(http: HttpClient) {
-//   return new TranslateHttpLoader(http, 'https://widget.tiledesk.com/assets/i18n/', '.json');
-// }
