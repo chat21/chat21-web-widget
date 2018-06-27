@@ -26,17 +26,14 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import 'rxjs/add/operator/takeWhile';
 
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
-
-// import { TranslateService } from '@ngx-translate/core';
+import { TranslatorService } from './providers/translator.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AgentAvailabilityService]
+  providers: [AgentAvailabilityService, TranslatorService]
 })
-
-
 
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('scrollMe') private scrollMe: ElementRef;
@@ -128,26 +125,42 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private areAgentsAvailable : boolean = false;
     // ========= end::agent availability 
 
+    // text used within the html
+    private LABEL_PLACEHOLDER : string;
+    private LABEL_START_NW_CONV : string; 
+    private LABEL_FIRST_MSG : string; 
+    private LABEL_SELECT_TOPIC : string; 
+    private LABEL_COMPLETE_FORM : string; 
+    private LABEL_FIELD_NAME ; string; 
+    private LABEL_ERROR_FIELD_NAME : string; 
+    private LABEL_FIELD_EMAIL : string;
+    private LABEL_ERROR_FIELD_EMAIL : string;
+    private LABEL_WRITING : string;
+    private AGENT_NOT_AVAILABLE : string;
+    private AGENT_AVAILABLE : string;
+    private GUEST_LABEL : string;
+    private ALL_AGENTS_OFFLINE_LABEL : string;
 
-    // ========= begin::hardcoded translations
-    LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
-    LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
-    // tslint:disable-next-line:max-line-length
-    LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
-    LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
-    // tslint:disable-next-line:max-line-length
-    LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
-    LABEL_FIELD_NAME = '* Nome'; // '* Name';
-    LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
-    LABEL_FIELD_EMAIL = '* Email';
-    // tslint:disable-next-line:max-line-length
-    LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
-    LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
-    private AGENT_NOT_AVAILABLE: string = " - Offline";
-    private AGENT_AVAILABLE: string = " - Online";
-    // ========= end::hardcoded translations
-    private GUEST_LABEL = "Guest";
-    private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
+
+    // // ========= begin::hardcoded translations
+    // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
+    // LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
+    // // tslint:disable-next-line:max-line-length
+    // LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
+    // LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
+    // // tslint:disable-next-line:max-line-length
+    // LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
+    // LABEL_FIELD_NAME = '* Nome'; // '* Name';
+    // LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
+    // LABEL_FIELD_EMAIL = '* Email';
+    // // tslint:disable-next-line:max-line-length
+    // LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
+    // LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
+    // private AGENT_NOT_AVAILABLE: string = " - Offline";
+    // private AGENT_AVAILABLE: string = " - Online";
+    // // ========= end::hardcoded translations
+    // private GUEST_LABEL = "Guest";
+    // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
 
 
     constructor(
@@ -160,25 +173,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public formBuilder: FormBuilder,
         public el: ElementRef,
         private agentAvailabilityService: AgentAvailabilityService,
-        // private translate: TranslateService,
+        private translatorService : TranslatorService,
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
-        
-        // // If the browser lanaguage is available use it, else use the default language store within environment.defaultLang
-        // this.lang  = translate.getBrowserLang() ? translate.getBrowserLang() : environment.defaultLang;
-        // // console.log("browserLang", browserLang);
+
+        this.lang = this.translatorService.getBrowserLanguage() ? this.translatorService.getBrowserLanguage() : this.translatorService.getDefaultLanguage();
 
         this.getVariablesFromAttributeHtml();
         this.settingParams();
 
-        // this.getUrlParameters();
-
-        // // the lang parameter is retrieved from the html data. 
-        // // if any data is provided it will use the browser lang or the default lang previously initialized
-        // // this language will be used as a fallback when a translation isn't found in the current language
-        // translate.setDefaultLang(this.lang);
-        //  // the lang to use, if the lang isn't available, it will use the current loader to get them
-        // translate.use(this.lang);
+        this.getUrlParameters();
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -193,8 +197,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log("preChatForm", this.preChatForm);
         console.log("isOpen", this.isOpen);
         console.log("channelType", this.channelType); 
-        // console.log("lang", this.lang); 
+        console.log("lang", this.lang); 
         this.setAvailableAgentsStatus();
+
+        // if the lang is passed as parameter use it, oterwise use a default language ("en")
+        this.translatorService.setLanguage(!this.lang ? "en" : this.lang);
+        this.translate();
 
         // set auth
         if (this.userEmail && this.userPassword) {
@@ -262,6 +270,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // }
         });
         this.checkWritingMessages();
+    }
+
+    private translate() {
+        this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
+        this.LABEL_START_NW_CONV  = this.translatorService.translate('LABEL_START_NW_CONV');
+        this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
+        this.LABEL_SELECT_TOPIC =this.translatorService.translate('LABEL_SELECT_TOPIC');
+        this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
+        this.LABEL_FIELD_NAME =  this.translatorService.translate('LABEL_FIELD_NAME')
+        this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
+        this.LABEL_FIELD_EMAIL =  this.translatorService.translate('LABEL_FIELD_EMAIL');
+        this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
+        this.LABEL_WRITING = this.translatorService.translate('LABEL_WRITING');
+        this.AGENT_NOT_AVAILABLE = this.translatorService.translate('AGENT_NOT_AVAILABLE');
+        this.AGENT_AVAILABLE =this.translatorService.translate('AGENT_AVAILABLE');
+        this.GUEST_LABEL =  this.translatorService.translate('GUEST_LABEL');
+        this.ALL_AGENTS_OFFLINE_LABEL =this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
     }
 
     /** */
@@ -347,29 +372,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.channelType", this.channelType); 
         }
 
-        // if (this.getParameterByName('lang')) {
-        //     this.lang = this.getParameterByName('lang');
-        //     // console.log("getUrlParameters.lang", this.lang); 
-        // }
+        if (this.getParameterByName('lang')) {
+            this.lang = this.getParameterByName('lang') ? this.getParameterByName('lang') : this.lang ;
+            // console.log("getUrlParameters.lang", this.lang); 
+        }
     }
 
     private setAvailableAgentsStatus() {
-        // var labelAgentNotAvailable;
-        // this.translate.get('AGENT_NOT_AVAILABLE').subscribe(
-        //     value => {
-        //         // value is our translated string
-        //         labelAgentNotAvailable = value;
-        //     }
-        // )
-
-        //  var labelAgentAvailable;
-        // this.translate.get('AGENT_AVAILABLE').subscribe(
-        //     value => {
-        //         // value is our translated string
-        //         labelAgentAvailable = value;
-        //     }
-        // )
-
         this.agentAvailabilityService
         .getAvailableAgents(this.projectid)
         .subscribe(
@@ -456,8 +465,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpen = (TEMP == null) ? false : true;
         TEMP = this.el.nativeElement.getAttribute('channelType');
         this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
-        // TEMP = this.el.nativeElement.getAttribute('lang');
-        // this.lang = (TEMP) ? TEMP : this.lang;
+        TEMP = this.el.nativeElement.getAttribute('lang');
+        this.lang = (TEMP) ? TEMP : this.lang;
     }
 
     // START FORM
@@ -734,14 +743,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     checkWritingMessages() {
-        // var labelWriting;
-        // this.translate.get('LABEL_WRITING').subscribe(
-        //     value => {
-        //         // value is our translated string
-        //         labelWriting = value;
-        //     }
-        // )
-
         // this.messagingService.checkWritingMessages();
         const that = this;
         const subscription: Subscription = this.messagingService.obsCheckWritingMessages
@@ -1112,14 +1113,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param metadata
      */
     addLocalMessageImage(metadata) {
-        // var labelGuest = this.translate.get('GUEST_LABEL')['value'];
-        // var labelGuest;
-        // this.translate.get('GUEST_LABEL').subscribe(
-        //     value => {
-        //         // value is our translated string
-        //         labelGuest = value;
-        //     }
-        // )
 
         const now: Date = new Date();
         const timestamp = now.valueOf();
@@ -1285,14 +1278,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
-        // var labelGuest = this.translate.get('GUEST_LABEL')['value'];
-        // var labelGuest;
-        // this.translate.get('GUEST_LABEL').subscribe(
-        //     value => {
-        //         // value is our translated string
-        //         labelGuest = value;
-        //     }
-        // )
 
         (metadata) ? metadata = metadata : metadata = '';
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
