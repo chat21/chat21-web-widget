@@ -246,9 +246,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     that.initialize();
                     that.aliveSubLoggedUser = false;
                     that.isLogged = true;
+                    console.log("IS_LOGGED", "AppComponent:constructor:zone-if", that.isLogged);
                     console.log("isLogged", that.isLogged);
                 } else {
                     that.isLogged = false;
+                    console.log("IS_LOGGED", "AppComponent:constructor:zone-else", that.isLogged);
                 }
             });
 
@@ -720,15 +722,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                 }, 2000);
                 that.isLogged = true;
+                console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-if", that.isLogged);
                 that.setFocusOnId('chat21-main-message-context');
             } else {
                 that.isNewConversation = true;
                 if (that.projectid && !that.attributes.departmentId) {
-                    that.isLogged = false;
+                    // that.isLogged = false;
+                    // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
                     that.getMongDbDepartments();
                 } else {
                     that.setFocusOnId('chat21-main-message-context');
                     that.isLogged = true;
+                    console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-department", that.isLogged);
                 }
             }
 
@@ -816,12 +821,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.openSelectionDepartment = false;
                 }
                 this.isLogged = true;
+                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
             },
             errMsg => {
                 console.log('http ERROR MESSAGE', errMsg);
                 // window.alert('MSG_GENERIC_SERVICE_ERROR');
                 this.openSelectionDepartment = false;
                 this.setFocusOnId('chat21-main-message-context');
+
+                this.isLogged = false;
+                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
             },
             () => {
                 console.log('API ERROR NESSUNO');
