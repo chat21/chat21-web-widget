@@ -68,5 +68,15 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ## Build
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
+Build for production with :  `ng build --prod --base-href --output-hashing none`
+
 ## Widget in action 
 To see this widget in action you can go on 'http://chat21.org'
+
+# Deploy to AWS S3 (Optional)
+
+Run : `aws s3 sync . s3://tiledesk-widget`
+
+Or With a different AWS Profile: 
+
+Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
