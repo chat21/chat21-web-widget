@@ -114,17 +114,23 @@
                 <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
                     <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
                 </div>
+                <div  [ngClass]="{'visible-text-area': !isFilePendingToUpload, 'hidden-text-area': isFilePendingToUpload}">
                 <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea"
                     [ngStyle]=m yStyles (ngModelChange)="resizeInputField()" (keypress)="onkeypress($event)" placeholder="{{LABEL_PLACEHOLDER}}"></textarea>
+                </div>
+
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
                 <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-doc"></label>
                 <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div>
-                <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadFile()"></div>
+                <!-- <div [class.active]="isSelected" class="chat21-textarea-button" id="chat21-button-send" (click)="loadFile()"></div> -->
+                <div class="chat21-textarea-button active" id="chat21-button-send" (click)="onSendPressed($event)"></div>
                 <input style='display:none' type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file" id="chat21-file"
                     class="inputfile" (change)="detectFiles($event)" />
                 <!-- <input style='display:none' type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.ppt,.pptx,.txt,.pdf" name="file" id="file" class="inputfile" (change)="detectFiles($event)"/> -->
                 <!-- <img src="" width="200" alt="Image preview..."> -->
-                <div [class.active]="isSelected" class="name-image" id="chat21-file-selected">{{nameFile}}</div>
+                <div [class.active]="isSelected" class="name-image" id="chat21-file-selected">
+                    <span>{{nameFile}}</span>
+                </div>
             </div>
 
             <div id="chat21-end-footer">

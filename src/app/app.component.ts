@@ -141,27 +141,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private GUEST_LABEL : string;
     private ALL_AGENTS_OFFLINE_LABEL : string;
 
-
-    // // ========= begin::hardcoded translations
-    // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
-    // LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
-    // // tslint:disable-next-line:max-line-length
-    // LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
-    // LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
-    // // tslint:disable-next-line:max-line-length
-    // LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
-    // LABEL_FIELD_NAME = '* Nome'; // '* Name';
-    // LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
-    // LABEL_FIELD_EMAIL = '* Email';
-    // // tslint:disable-next-line:max-line-length
-    // LABEL_ERROR_FIELD_EMAIL = 'Inserisci un indirizzo email valido.'; // 'Enter a valid email address.';
-    // LABEL_WRITING = 'sta scrivendo...'; // 'is writing...';
-    // private AGENT_NOT_AVAILABLE: string = " - Offline";
-    // private AGENT_AVAILABLE: string = " - Online";
-    // // ========= end::hardcoded translations
-    // private GUEST_LABEL = "Guest";
-    // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
-
+    private isFilePendingToUpload : boolean = false;
 
     constructor(
         private zone: NgZone,
@@ -177,7 +157,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
-        this.lang = this.translatorService.getBrowserLanguage() ? this.translatorService.getBrowserLanguage() : this.translatorService.getDefaultLanguage();
+        this.lang = this.translatorService.getBrowserLanguage() ? 
+                    this.translatorService.getBrowserLanguage() :
+                    this.translatorService.getDefaultLanguage();
 
         this.getVariablesFromAttributeHtml();
         this.settingParams();
@@ -557,6 +539,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
         this.subscriptions.push(obsAddedMessage);
+
+
+        // var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+        // var in_dom = document.body.contains(textArea);
+        // var observer = new MutationObserver(function (mutations) {
+        //     if (document.body.contains(textArea)) {
+        //         if (!in_dom) {
+        //             console.log("element inserted");
+        //         }
+        //         in_dom = true;
+        //     } else if (in_dom) {
+        //         in_dom = false;
+        //         console.log("element removed");
+        //     }
+        // });
+        // observer.observe(document.body, { childList: true });
     }
 
     ngOnInit() {
@@ -1007,22 +1005,48 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param event
      */
     onkeypress(event) {
-        // const msg = document.getElementsByClassName('f21textarea')[0];
-        const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+       
         const keyCode = event.which || event.keyCode;
         // console.log('onkeypress **************', keyCode, msg);
         if (keyCode === 13) {
-            if (msg && msg.trim() !== '') {
-                // console.log('sendMessage -> ', this.textInputTextArea);
-                this.resizeInputField();
-                // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-                this.setDepartment();
-                this.sendMessage(msg, TYPE_MSG_TEXT);
-                this.scrollToBottom();
-            }
-            (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
-            // this.textInputTextArea = '';
+            this.performSendingMessage();
         }
+    }
+
+    private performSendingMessage() {
+        // const msg = document.getElementsByClassName('f21textarea')[0];
+        const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+
+        if (msg && msg.trim() !== '') {
+            // console.log('sendMessage -> ', this.textInputTextArea);
+            this.resizeInputField();
+            // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+            this.setDepartment();
+            this.sendMessage(msg, TYPE_MSG_TEXT);
+            this.scrollToBottom();
+        }
+        // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
+            // this.textInputTextArea = '';
+
+        this.restoreTextArea();
+    }
+
+    private restoreTextArea() {
+        console.log("AppComponent:restoreTextArea::restoreTextArea");
+
+        this.resizeInputField();
+
+        
+        var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+
+        if (textArea) {
+            textArea.value = '';  // clear the text area
+            textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
+            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "restored");
+        } else {
+            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "not restored");
+        }
+
     }
 
     // START LOAD IMAGE //
@@ -1034,6 +1058,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('detectFiles: ', event);
         if (event) {
             this.selectedFiles = event.target.files;
+            console.log("AppComponent:detectFiles::selectedFiles",this.selectedFiles);
+
+            if (this.selectedFiles == null) {
+                this.isFilePendingToUpload = false;
+            } else {
+                this.isFilePendingToUpload = true;
+            }
+            console.log("AppComponent:detectFiles::selectedFiles::isFilePendingToUpload", this.isFilePendingToUpload);
+
             console.log('fileChange: ', event.target.files);
             const that = this;
             if (event.target.files && event.target.files[0]) {
@@ -1172,10 +1205,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.nameFile = '';
         this.selectedFiles = null;
         console.log('1 selectedFiles: ', this.selectedFiles);
+
         delete this.arrayFiles4Load[0];
         document.getElementById('chat21-file').nodeValue = null;
         // event.target.files[0].name, event.target.files
         this.isSelected = false;
+
+        this.isFilePendingToUpload = false;
+        console.log("AppComponent::resetLoadImage::isFilePendingToUpload:", this.isFilePendingToUpload);
+
+        this.restoreTextArea();
     }
 
     /**
@@ -1379,6 +1418,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         messageText = urlify(messageText);
         // console.log('messageText: ' + messageText);
         return messageText;
+    }
+
+
+    private onSendPressed(event) {
+        console.log("onSendPressed:event", event );
+        console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+        if (this.isFilePendingToUpload) {
+            console.log("AppComponent::onSendPressed", "is a file");
+            // its a file 
+            this.loadFile();
+
+            this.isFilePendingToUpload = false;
+            console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+        } else {
+            console.log("AppComponent::onSendPressed", "is a message");
+            // its a message
+            this.performSendingMessage();
+
+            // restore the text area
+            this.restoreTextArea();
+        }
     }
 
 }
