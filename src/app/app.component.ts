@@ -164,7 +164,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getVariablesFromAttributeHtml();
         this.settingParams();
 
-        this.getUrlParameters();
+        // this.getUrlParameters();
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
