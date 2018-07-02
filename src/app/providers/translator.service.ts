@@ -4,8 +4,9 @@ import * as translations from '../utils/translations';
 @Injectable()
 export class TranslatorService {
 
-  private defaultLanguage : string = "en";
-  private language : string;
+  private defaultLanguage: string = "en"; // default language
+  private language : string; // user language
+  // contains the translation to the selected language
   private translations : Object;
 
   constructor() {
@@ -21,7 +22,7 @@ export class TranslatorService {
     var browserLanguage = window.navigator.language;
     console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
   
-    return !browserLanguage ? "" : browserLanguage;
+    return !browserLanguage ? undefined : browserLanguage;
   }
 
    /**
@@ -32,9 +33,27 @@ export class TranslatorService {
     * @param language the language
     */
   public setLanguage(language) {
-    // sets the user language if it is valid, the default language otherwise
-    this.language = !language ? this.defaultLanguage : language;
-    this.getLanguageObject(language);
+
+    // set the user languge if it is valid.
+    // if the user language is not valid, try to get the browser language.
+    // if the browser language is not valid, it use the default language (en)
+    if(!language) {
+      // user language not valid
+      if (this.getBrowserLanguage() !== undefined) {
+         // browser language valid
+        this.language = this.getBrowserLanguage();
+      } else {
+        // browser language not valid
+        this.defaultLanguage;
+      }
+    } else {
+      // user language valid
+      this.language = language; 
+    }
+
+    // retrieve the translation
+    this.getLanguageObject(this.language);
+
   }
 
   // retrieve the language object
@@ -44,6 +63,7 @@ export class TranslatorService {
     } else if (language === "it") {
       this.translations = translations.it;
     } else {
+      // use the default language in any other case
       this.translations = translations.en;
     }
   }
