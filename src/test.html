@@ -28,10 +28,10 @@
 
     <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
-       window.tiledesk.on('loadparams', function(e) {
-         console.log("loadparams called",e);
+       window.tiledesk.on('loadParams', function(e) {
+         console.log("loadParams called",e);
         // alert("ciao");
-         console.log("ciao alert end");
+         console.log("loadParams end");
        });
        window.tiledesk.on('beforeMessageSend', function(e) {
          console.log("beforeMessageSend called ",e);

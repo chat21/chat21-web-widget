@@ -52,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     nameFile: string;
     tenant: string;
     recipientId: string;
-    lang : string;
+    lang: string;
 
 
     myForm: FormGroup;
@@ -120,26 +120,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     contentScroll: any;
     NUM_BADGES = 0;
 
-    // ========= begin::agent availability 
-    private areAgentsAvailableText : string;
-    private areAgentsAvailable : boolean = false;
-    // ========= end::agent availability 
+    // ========= begin::agent availability
+    private areAgentsAvailableText: string;
+    private areAgentsAvailable: boolean = false;
+    // ========= end::agent availability
 
     // text used within the html
-    private LABEL_PLACEHOLDER : string;
-    private LABEL_START_NW_CONV : string; 
-    private LABEL_FIRST_MSG : string; 
-    private LABEL_SELECT_TOPIC : string; 
-    private LABEL_COMPLETE_FORM : string; 
-    private LABEL_FIELD_NAME ; string; 
-    private LABEL_ERROR_FIELD_NAME : string; 
-    private LABEL_FIELD_EMAIL : string;
-    private LABEL_ERROR_FIELD_EMAIL : string;
-    private LABEL_WRITING : string;
-    private AGENT_NOT_AVAILABLE : string;
-    private AGENT_AVAILABLE : string;
-    private GUEST_LABEL : string;
-    private ALL_AGENTS_OFFLINE_LABEL : string;
+    private LABEL_PLACEHOLDER: string;
+    private LABEL_START_NW_CONV: string;
+    private LABEL_FIRST_MSG: string;
+    private LABEL_SELECT_TOPIC: string;
+    private LABEL_COMPLETE_FORM: string;
+    private LABEL_FIELD_NAME: string;
+    private LABEL_ERROR_FIELD_NAME: string;
+    private LABEL_FIELD_EMAIL: string;
+    private LABEL_ERROR_FIELD_EMAIL: string;
+    private LABEL_WRITING: string;
+    private AGENT_NOT_AVAILABLE: string;
+    private AGENT_AVAILABLE: string;
+    private GUEST_LABEL: string;
+    private ALL_AGENTS_OFFLINE_LABEL: string;
 
 
     // // ========= begin::hardcoded translations
@@ -162,6 +162,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // private GUEST_LABEL = "Guest";
     // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
 
+    private window: Window;
 
     constructor(
         private zone: NgZone,
@@ -173,13 +174,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public formBuilder: FormBuilder,
         public el: ElementRef,
         private agentAvailabilityService: AgentAvailabilityService,
-        private translatorService : TranslatorService,
+        private translatorService: TranslatorService,
+        private ngZone: NgZone
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
         this.lang = this.translatorService.getBrowserLanguage() ? this.translatorService.getBrowserLanguage() : this.translatorService.getDefaultLanguage();
 
+        this.triggetLoadParamsEvent();
+    
         this.getVariablesFromAttributeHtml();
+        this.getVariablesFromSettings();
+        
         this.settingParams();
 
         this.getUrlParameters();
@@ -233,7 +239,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe(user => {
 
             // real time detection of the user authentication status
-            this.zone.run(() => { 
+            this.zone.run(() => {
                 if (user) {
                     console.log('USER AUTENTICATE: ', user);
                     // console.log("constructor.subLoggedUser", user);
@@ -246,7 +252,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     that.initialize();
                     that.aliveSubLoggedUser = false;
                     that.isLogged = true;
-                    console.log("isLogged", that.isLogged);
+                    console.log('isLogged', that.isLogged);
                 } else {
                     that.isLogged = false;
                 }
@@ -270,13 +276,49 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // }
         });
         this.checkWritingMessages();
+
+
+
+         this.addComponentToWindow(ngZone);
+    }
+
+    private addComponentToWindow(ngZone) {
+        if (window['tiledesk']) {
+            window['tiledesk']['angularcomponent'] = {component: this, ngZone: ngZone};
+
+            window['tiledesk'].close = function () {
+                // this.f21_close();
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.f21_close();
+                });
+            };
+            window['tiledesk'].open = function () {
+                // this.f21_close();
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.f21_open();
+                });
+            };
+            // window['tiledesk'].on = function (event_name, handler) {
+            //     console.log("addEventListener for "+ event_name);
+            //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
+            // };
+        }
+    }
+
+
+    private triggetLoadParamsEvent() {
+        const loadParams = new CustomEvent('loadParams', { detail: {} });
+
+        this.el.nativeElement.dispatchEvent(loadParams);
+        console.log('loadParams');
+
     }
 
     private translate() {
         this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
         this.LABEL_START_NW_CONV  = this.translatorService.translate('LABEL_START_NW_CONV');
         this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
-        this.LABEL_SELECT_TOPIC =this.translatorService.translate('LABEL_SELECT_TOPIC');
+        this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
         this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
         this.LABEL_FIELD_NAME =  this.translatorService.translate('LABEL_FIELD_NAME')
         this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
@@ -284,9 +326,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
         this.LABEL_WRITING = this.translatorService.translate('LABEL_WRITING');
         this.AGENT_NOT_AVAILABLE = this.translatorService.translate('AGENT_NOT_AVAILABLE');
-        this.AGENT_AVAILABLE =this.translatorService.translate('AGENT_AVAILABLE');
+        this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
         this.GUEST_LABEL =  this.translatorService.translate('GUEST_LABEL');
-        this.ALL_AGENTS_OFFLINE_LABEL =this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
+        this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
     }
 
     /** */
@@ -364,17 +406,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.getParameterByName('isOpen')) {
             this.isOpen = this.getParameterByName('isOpen') == "true" ? true : false;
-            // console.log("getUrlParameters.isOpen", this.isOpen); 
+            // console.log("getUrlParameters.isOpen", this.isOpen);
         }
 
         if (this.getParameterByName('channelType')) {
             this.channelType = this.getParameterByName('channelType');
-            // console.log("getUrlParameters.channelType", this.channelType); 
+            // console.log("getUrlParameters.channelType", this.channelType);
         }
 
         if (this.getParameterByName('lang')) {
             this.lang = this.getParameterByName('lang') ? this.getParameterByName('lang') : this.lang ;
-            // console.log("getUrlParameters.lang", this.lang); 
+            // console.log("getUrlParameters.lang", this.lang);
         }
     }
 
@@ -383,7 +425,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         .getAvailableAgents(this.projectid)
         .subscribe(
             (availableAgents) => {
-                console.log("setOnlineStatus::setAvailableAgentsStatus::availableAgents", availableAgents); 
+                console.log('setOnlineStatus::setAvailableAgentsStatus::availableAgents', availableAgents);
 
                 if (availableAgents.length <= 0) {
                     this. areAgentsAvailable = false;
@@ -394,7 +436,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }, (error) => {
                 // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
-                console.error("setOnlineStatus::setAvailableAgentsStatus", error); 
+                console.error('setOnlineStatus::setAvailableAgentsStatus', error); 
 
             },() => {
 
@@ -436,6 +478,71 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * preChatForm:
      *
     */
+   getVariablesFromSettings() {
+    // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+    if (!window['tiledesk']) {
+        console.log('tiledesk object is not defined');
+        return 0;
+    }
+
+    let TEMP;
+    TEMP = window['tiledeskSettings']['tenant'];
+    this.tenant = (TEMP) ? TEMP : environment.tenant;
+
+    TEMP = window['tiledeskSettings']['recipientId'];
+    this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
+
+    TEMP = window['tiledeskSettings']['projectid'];
+    console.log('TEMP', TEMP);
+    this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
+
+    TEMP = window['tiledeskSettings']['projectname'];
+    this.projectname = (TEMP) ? TEMP : null;
+
+    TEMP = window['tiledeskSettings']['chatName'];
+    this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
+
+    TEMP = window['tiledeskSettings']['poweredBy'];
+    this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+
+    TEMP = window['tiledeskSettings']['userId'];
+    this.userId = (TEMP) ? TEMP : null;
+
+    TEMP = window['tiledeskSettings']['userEmail'];
+    this.userEmail = (TEMP) ? TEMP : null;
+
+    TEMP = window['tiledeskSettings']['userPassword'];
+    this.userPassword = (TEMP) ? TEMP : null;
+
+    TEMP = window['tiledeskSettings']['userFullname'];
+    this.userFullname = (TEMP) ? TEMP : null;
+
+    TEMP = window['tiledeskSettings']['preChatForm'];
+    this.preChatForm = (TEMP == null) ? false : true;
+
+    TEMP = window['tiledeskSettings']['isOpen'];
+    this.isOpen = (TEMP == null) ? false : true;
+
+    TEMP = window['tiledeskSettings']['channelType'];
+    this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
+
+    TEMP = window['tiledeskSettings']['lang'];
+    this.lang = (TEMP) ? TEMP : this.lang;
+}
+
+    // /**
+    //  * tenant:
+    //  * recipientId:
+    //  * projectid:
+    //  * chatName:
+    //  * poweredBy:
+    //  * userId:
+    //  * userEmail:
+    //  * userPassword:
+    //  * userFullname:
+    //  * preChatForm:
+    //  *
+    // */
     getVariablesFromAttributeHtml() {
         // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
         let TEMP;
@@ -444,6 +551,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
         TEMP = this.el.nativeElement.getAttribute('projectid');
+        console.log('projectid', TEMP);
         this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
         TEMP = this.el.nativeElement.getAttribute('projectname');
         this.projectname = (TEMP) ? TEMP : null;
@@ -573,6 +681,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
+        window['tiledesk']['angularcomponent'] = null;
         this.unsubscribe();
     }
 
@@ -971,14 +1080,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // console.log('H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
         target.style.height = '100%';
         if ( (document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n' ) {
-            console.log('PASSO 0');
+            // console.log('PASSO 0');
             (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
             target.style.height = this.HEIGHT_DEFAULT;
         } else if (target.scrollHeight > target.offsetHeight ) {
-            console.log('PASSO 2');
+            // console.log('PASSO 2');
             target.style.height = target.scrollHeight + 2 + 'px';
         } else {
-            console.log('PASSO 3');
+            // console.log('PASSO 3');
             target.style.height = this.HEIGHT_DEFAULT;
             // segno sto scrivendo
             // target.offsetHeight - 15 + 'px';
@@ -1299,9 +1408,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const senderFullname = recipientFullname;
 
             // tslint:disable-next-line:max-line-length
-            this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
+            this.triggerBeforeSendMessageEvent(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
+            // tslint:disable-next-line:max-line-length
+            const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
+
+            this.triggerAfterSendMessageEvent(messageSent);
+
             this.isNewConversation = false;
             // this.checkWritingMessages();
+        }
+    }
+
+    // tslint:disable-next-line:max-line-length
+    private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
+
+        try {
+            // tslint:disable-next-line:max-line-length
+            const loadEvent = new CustomEvent('beforeMessageSend', { detail: {senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type} });
+
+            this.el.nativeElement.dispatchEvent(loadEvent);
+        } catch(e) {
+            console.error('Error triggering triggerBeforeSendMessageEvent', e);
+        }
+    }
+    // tslint:disable-next-line:max-line-length
+    private triggerAfterSendMessageEvent(message) {
+
+        try {
+            // tslint:disable-next-line:max-line-length
+            const loadEvent = new CustomEvent('afterMessageSend', { detail: {message: message} });
+
+            this.el.nativeElement.dispatchEvent(loadEvent);
+        } catch(e) {
+            console.error('Error triggering triggerAfterSendMessageEvent', e);
         }
     }
 
