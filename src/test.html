@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tilechat Widget</title>
+  <base href="./">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <script type="application/javascript">
+      window.tiledeskSettings = 
+          {
+              projectid: "5ad5bd52c975820014ba900a",
+             // poweredBy: "Andrea Leo"
+          };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id; //js.async=!0;
+        js.src = "./tiledesk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'tiledesk-jssdk'));
+    
+    </script>
+
+
+
+    <script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('loadparams', function(e) {
+         console.log("loadparams called",e);
+        // alert("ciao");
+         console.log("ciao alert end");
+       });
+       window.tiledesk.on('beforeMessageSend', function(e) {
+         console.log("beforeMessageSend called ",e);
+         e.detail.attributes.pagetitle = document.title;     
+       });
+       window.tiledesk.on('afterMessageSend', function(e) {
+         console.log("afterMessageSend called ",e);
+       });
+      }
+    </script>
+
+</body>
+</html>

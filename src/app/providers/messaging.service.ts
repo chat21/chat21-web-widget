@@ -404,7 +404,7 @@ export class MessagingService {
       const key = messageRef.key;
       message.uid = key;
       console.log('messageRef: ', messageRef, key);
-      messageRef.set(message, function( error ){
+      messageRef.set(message, function( error ) {
         // Callback comes here
         if (error) {
           // cambio lo stato in rosso: invio nn riuscito!!!
@@ -430,6 +430,7 @@ export class MessagingService {
       // this.checkRemoveMember();
     // }
     // return newMessageRef.key;
+    return message;
   }
 
   /**

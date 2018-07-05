@@ -10,7 +10,8 @@
       "assets": [
         "assets",
         "favicon.ico",
-        "tiledesk.js"
+        "tiledesk.js",
+        "test.html"
       ],
       "index": "index.html",
       "main": "main.ts",
