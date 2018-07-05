@@ -1,5 +1,10 @@
 var tiledeskroot = document.createElement('app-root');
 
+var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
+console.log("tiledeskScriptLocation", tiledeskScriptLocation);
+var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/tiledesk.js","");
+console.log("tiledeskScriptBaseLocation", tiledeskScriptBaseLocation);
+
 window.tiledesk = new function() {
     //this.type = "macintosh";
     this.on = function (event_name, handler) {
@@ -28,18 +33,27 @@ function appendJs(url) {
     document.body.appendChild(script1);
 }
 
+//  var origin = window.document.location.origin;
+//  console.log("origin", origin);
 
+//  var locationhref = window.document.location.href;
+//  locationhref = locationhref.replace("/tiledesk.js","");
+//  console.log("locationhref", locationhref);
 
+// var locationhref = "."
+// if (window.tiledeskSettings && window.tiledeskSettings.development) {
 
-appendJs('./inline.bundle.js');
-appendJs('./polyfills.bundle.js');
+// }
+
+appendJs(tiledeskScriptBaseLocation+'/inline.bundle.js');
+appendJs(tiledeskScriptBaseLocation+'/polyfills.bundle.js');
 
 if (window.tiledeskSettings && window.tiledeskSettings.development) {
-    appendJs('./styles.bundle.js');
-    appendJs('./vendor.bundle.js');
+    appendJs(tiledeskScriptBaseLocation+'/styles.bundle.js');
+    appendJs(tiledeskScriptBaseLocation+'/vendor.bundle.js');
 }
 
-appendJs('./main.bundle.js');
+appendJs(tiledeskScriptBaseLocation+'/main.bundle.js');
 
 
 
