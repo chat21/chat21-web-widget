@@ -33,8 +33,12 @@ function appendJs(url) {
 
 appendJs('./inline.bundle.js');
 appendJs('./polyfills.bundle.js');
-appendJs('./styles.bundle.js');
-appendJs('./vendor.bundle.js');
+
+if (window.tiledeskSettings && window.tiledeskSettings.development) {
+    appendJs('./styles.bundle.js');
+    appendJs('./vendor.bundle.js');
+}
+
 appendJs('./main.bundle.js');
 
 
