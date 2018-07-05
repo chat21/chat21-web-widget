@@ -315,7 +315,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const loadParams = new CustomEvent('loadParams', { detail: {} });
 
         this.el.nativeElement.dispatchEvent(loadParams);
-        console.log('loadParams');
 
     }
 
@@ -430,7 +429,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         .getAvailableAgents(this.projectid)
         .subscribe(
             (availableAgents) => {
-                console.log('setOnlineStatus::setAvailableAgentsStatus::availableAgents', availableAgents);
+                console.log('availableAgents', availableAgents);
 
                 if (availableAgents.length <= 0) {
                     this. areAgentsAvailable = false;
@@ -486,7 +485,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
    getVariablesFromSettings() {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
     if (!window['tiledesk']) {
-        console.log('tiledesk object is not defined');
+        console.log('tiledeskSettings is not defined');
         return 0;
     }
 
@@ -498,7 +497,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
 
     TEMP = window['tiledeskSettings']['projectid'];
-    console.log('TEMP', TEMP);
     this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
 
     TEMP = window['tiledeskSettings']['projectname'];
@@ -556,7 +554,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
         TEMP = this.el.nativeElement.getAttribute('projectid');
-        console.log('projectid', TEMP);
         this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
         TEMP = this.el.nativeElement.getAttribute('projectname');
         this.projectname = (TEMP) ? TEMP : null;
@@ -881,7 +878,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const subscription: Subscription = this.messagingService.obsCheckWritingMessages
         // .takeWhile(() => that.subscriptionIsWriting)
         .subscribe(resp => {
-            console.log('2 - subscribe IS: ', resp + ' ****************');
+            //console.log('2 - subscribe IS: ', resp + ' ****************');
             if (resp) {
                 setTimeout(function() {
                     that.writingMessage = this.LABEL_WRITING;

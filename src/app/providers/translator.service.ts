@@ -20,7 +20,7 @@ export class TranslatorService {
    */
   public getBrowserLanguage() {
     var browserLanguage = window.navigator.language;
-    console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
+    //console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
   
     return !browserLanguage ? undefined : browserLanguage;
   }

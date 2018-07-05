@@ -19,7 +19,7 @@ export class AgentAvailabilityService {
 
   public getAvailableAgents(projectId): Observable<User[]> {
 
-    console.log("getAvailableAgents::");
+    //console.log("getAvailableAgents::");
     // console.log("projectId", projectId);
 
     // return an exception if the projectid is undefined, null or not valid

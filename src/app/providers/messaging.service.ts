@@ -90,7 +90,7 @@ export class MessagingService {
     this.senderId = userUid;
     this.tenant = tenant;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
-    console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
+    //console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
 
   public getMongDbDepartments(token, projectId): Observable<DepartmentModel[]> {
@@ -478,10 +478,10 @@ export class MessagingService {
     // mi sottoscrivo al nodo user/groups/ui-group/members
     // tslint:disable-next-line:max-line-length
     const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
-    console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
+    //console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
-      console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
+      //console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
       if ( childSnapshot.key === that.senderId) {
         // CHIUDO CONVERSAZIONE
         that.closeConversation();
