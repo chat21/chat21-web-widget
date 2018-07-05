@@ -163,6 +163,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
 
     private window: Window;
+    private isFilePendingToUpload : boolean = false;
 
     constructor(
         private zone: NgZone,
@@ -179,7 +180,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
-        this.lang = this.translatorService.getBrowserLanguage() ? this.translatorService.getBrowserLanguage() : this.translatorService.getDefaultLanguage();
+        this.lang = this.translatorService.getBrowserLanguage() ? 
+                    this.translatorService.getBrowserLanguage() :
+                    this.translatorService.getDefaultLanguage();
 
         this.triggetLoadParamsEvent();
     
@@ -188,7 +191,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         
         this.settingParams();
 
-        this.getUrlParameters();
+        // this.getUrlParameters();
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -252,9 +255,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     that.initialize();
                     that.aliveSubLoggedUser = false;
                     that.isLogged = true;
+                    console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
                     console.log('isLogged', that.isLogged);
                 } else {
                     that.isLogged = false;
+                    console.log('IS_LOGGED', 'AppComponent:constructor:zone-else', that.isLogged);
                 }
             });
 
@@ -663,6 +668,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
         this.subscriptions.push(obsAddedMessage);
+
+
+        // var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+        // var in_dom = document.body.contains(textArea);
+        // var observer = new MutationObserver(function (mutations) {
+        //     if (document.body.contains(textArea)) {
+        //         if (!in_dom) {
+        //             console.log("element inserted");
+        //         }
+        //         in_dom = true;
+        //     } else if (in_dom) {
+        //         in_dom = false;
+        //         console.log("element removed");
+        //     }
+        // });
+        // observer.observe(document.body, { childList: true });
     }
 
     ngOnInit() {
@@ -829,15 +850,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                 }, 2000);
                 that.isLogged = true;
+                console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-if", that.isLogged);
                 that.setFocusOnId('chat21-main-message-context');
             } else {
                 that.isNewConversation = true;
                 if (that.projectid && !that.attributes.departmentId) {
-                    that.isLogged = false;
+                    // that.isLogged = false;
+                    // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
                     that.getMongDbDepartments();
                 } else {
                     that.setFocusOnId('chat21-main-message-context');
                     that.isLogged = true;
+                    console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-department", that.isLogged);
                 }
             }
 
@@ -925,12 +949,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.openSelectionDepartment = false;
                 }
                 this.isLogged = true;
+                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
             },
             errMsg => {
                 console.log('http ERROR MESSAGE', errMsg);
                 // window.alert('MSG_GENERIC_SERVICE_ERROR');
                 this.openSelectionDepartment = false;
                 this.setFocusOnId('chat21-main-message-context');
+
+                this.isLogged = false;
+                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
             },
             () => {
                 console.log('API ERROR NESSUNO');
@@ -1107,22 +1135,48 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param event
      */
     onkeypress(event) {
-        // const msg = document.getElementsByClassName('f21textarea')[0];
-        const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+       
         const keyCode = event.which || event.keyCode;
         // console.log('onkeypress **************', keyCode, msg);
         if (keyCode === 13) {
-            if (msg && msg.trim() !== '') {
-                // console.log('sendMessage -> ', this.textInputTextArea);
-                this.resizeInputField();
-                // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-                this.setDepartment();
-                this.sendMessage(msg, TYPE_MSG_TEXT);
-                this.scrollToBottom();
-            }
-            (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
-            // this.textInputTextArea = '';
+            this.performSendingMessage();
         }
+    }
+
+    private performSendingMessage() {
+        // const msg = document.getElementsByClassName('f21textarea')[0];
+        const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+
+        if (msg && msg.trim() !== '') {
+            // console.log('sendMessage -> ', this.textInputTextArea);
+            this.resizeInputField();
+            // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+            this.setDepartment();
+            this.sendMessage(msg, TYPE_MSG_TEXT);
+            this.scrollToBottom();
+        }
+        // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
+            // this.textInputTextArea = '';
+
+        this.restoreTextArea();
+    }
+
+    private restoreTextArea() {
+        console.log("AppComponent:restoreTextArea::restoreTextArea");
+
+        this.resizeInputField();
+
+        
+        var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+
+        if (textArea) {
+            textArea.value = '';  // clear the text area
+            textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
+            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "restored");
+        } else {
+            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "not restored");
+        }
+
     }
 
     // START LOAD IMAGE //
@@ -1134,6 +1188,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('detectFiles: ', event);
         if (event) {
             this.selectedFiles = event.target.files;
+            console.log("AppComponent:detectFiles::selectedFiles",this.selectedFiles);
+
+            if (this.selectedFiles == null) {
+                this.isFilePendingToUpload = false;
+            } else {
+                this.isFilePendingToUpload = true;
+            }
+            console.log("AppComponent:detectFiles::selectedFiles::isFilePendingToUpload", this.isFilePendingToUpload);
+
             console.log('fileChange: ', event.target.files);
             const that = this;
             if (event.target.files && event.target.files[0]) {
@@ -1272,10 +1335,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.nameFile = '';
         this.selectedFiles = null;
         console.log('1 selectedFiles: ', this.selectedFiles);
+
         delete this.arrayFiles4Load[0];
         document.getElementById('chat21-file').nodeValue = null;
         // event.target.files[0].name, event.target.files
         this.isSelected = false;
+
+        this.isFilePendingToUpload = false;
+        console.log("AppComponent::resetLoadImage::isFilePendingToUpload:", this.isFilePendingToUpload);
+
+        this.restoreTextArea();
     }
 
     /**
@@ -1509,6 +1578,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         messageText = urlify(messageText);
         // console.log('messageText: ' + messageText);
         return messageText;
+    }
+
+
+    private onSendPressed(event) {
+        console.log("onSendPressed:event", event );
+        console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+        if (this.isFilePendingToUpload) {
+            console.log("AppComponent::onSendPressed", "is a file");
+            // its a file 
+            this.loadFile();
+
+            this.isFilePendingToUpload = false;
+            console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+        } else {
+            console.log("AppComponent::onSendPressed", "is a message");
+            // its a message
+            this.performSendingMessage();
+
+            // restore the text area
+            this.restoreTextArea();
+        }
     }
 
 }

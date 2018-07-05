@@ -475,6 +475,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     box-shadow: none!important;
     min-height: 40px!important;
     padding-right: 40px!important;
+    padding-left: 40px!important;
 }
 
 .chat21-textarea-button {
@@ -505,41 +506,68 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-size: 16px;
     background-image : url("../assets/images/f21ico-attached.svg");
     /* background-color: #999999; */
-    right: 4px;
+    /* left: 4px; */
+    left: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 #chat21-button-reset {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 16px;
     background-image : url("../assets/images/f21ico-close.svg");
-    left: 10px;
+    /* left: 10px;
     bottom: 25px;
-    cursor: pointer;
+    cursor: pointer; */
+    left: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 #chat21-button-send {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 16px;
     background-image : url("../assets/images/f21ico-send.svg");
-    right: 10px;
-    bottom: 25px;
-    cursor: pointer;
+    right: 0px;
+    /* cursor: pointer; */
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
-
-
-
 #chat21-footer .name-image {
-    padding: 0px 40px 0px 30px;
+    /* padding: 0px 40px 0px 30px;
     font-size: 10px;
     height: 20px;
-    line-height: 18px;
+    line-height: 18px; */
     display: none;
 }
 #chat21-footer .name-image.active {
     display: block;
+
+    margin-bottom: 0px!important;
+    padding: 10px!important;
+    margin: 0px!important;
+    line-height: normal!important;
+    border: none!important;
+    box-shadow: none!important;
+    min-height: 26px!important;
+    padding-right: 40px!important;
+    padding-left: 40px!important;
 }
 
+#chat21-file-selected {
+   
+}
+
+#chat21-file-selected > span {
+    font-size: 13px;
+    position: relative;
+    -ms-transform: translateY(25%);
+    -webkit-transform: translateY(25%);
+    transform: translateY(25%);
+    bottom: 0px;
+}
+ 
 #chat21-main-message-context {
     overflow-x: hidden;
     word-wrap: break-word;
@@ -986,7 +1014,7 @@ div#chat21-end-footer:hover div.build_version{
     }
 }
 
-/* END LOADIN */
+/* END LOADING */
 
 
 .chat21-agents-available {
@@ -1000,4 +1028,16 @@ div#chat21-end-footer:hover div.build_version{
     /* width: 100%; */
      text-align: center;
      font-weight: 450;
+}
+
+/* resize and hide the text input area */
+.hidden-text-area {
+    visibility: hidden;
+    height: 0px;
+}
+
+/* show and restore the text area size */
+.visible-text-area {
+    visibility: block;
+    height: 100%;
 }
