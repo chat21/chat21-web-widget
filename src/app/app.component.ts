@@ -178,6 +178,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         private translatorService: TranslatorService,
         private ngZone: NgZone
     ) {
+
+        //RElated to https://github.com/firebase/angularfire/issues/970
+        localStorage.removeItem('firebase:previous_websocket_failure');
+
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
         this.lang = this.translatorService.getBrowserLanguage() ? 
