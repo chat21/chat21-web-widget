@@ -197,7 +197,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
-        this.getUrlParameters();
+        this.getVariableUrlParameters();
 
         this.settingParams();
 
@@ -304,6 +304,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.channelType = CHANNEL_TYPE_GROUP;
+        this.calloutTimer = -1;
     }
 
     private addComponentToWindow(ngZone) {
@@ -369,7 +370,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
     }
 
-    private getUrlParameters() {
+    private getVariableUrlParameters() {
         // console.log("getUrlParameters");
 
         if (this.getParameterByName('tiledesk_tenant')) {
@@ -439,8 +440,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.getParameterByName('tiledesk_lang')) {
-            this.lang = this.getParameterByName('tiledesk_lang') ? this.getParameterByName('tiledesk_lang') : this.lang ;
+            this.lang = this.getParameterByName('tiledesk_lang');
             // console.log("getUrlParameters.lang", this.lang);
+        }
+        const cotAsString = this.getParameterByName('tiledesk_callouttimer');
+        if (cotAsString && Number(cotAsString)) {
+            this.calloutTimer = Number(cotAsString);
+            // console.log("getUrlParameters.tiledesk_callouttimer", this.calloutTimer);
         }
     }
 
@@ -582,6 +588,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (TEMP) {
         this.lang = TEMP;
     }
+
+    TEMP = window['tiledeskSettings']['calloutTimer'];
+    if (TEMP) {
+        this.calloutTimer = TEMP;
+    }
+
 }
 
     // /**
@@ -668,6 +680,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('lang');
         if (TEMP) {
             this.lang = TEMP;
+        }
+
+
+        TEMP = this.el.nativeElement.getAttribute('calloutTimer');
+        if (TEMP) {
+            this.calloutTimer = TEMP;
         }
     }
 
@@ -781,10 +799,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         const that = this;
-        const waitingTime = this.calloutTimer * 1000;
-        setTimeout(function() {
-            that.f21_open();
-        }, waitingTime);
+        if (this.calloutTimer > 0) {
+            const waitingTime = this.calloutTimer * 1000;
+            setTimeout(function() {
+                that.f21_open();
+            }, waitingTime);
+        }
     }
 
     /**
