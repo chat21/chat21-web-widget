@@ -181,6 +181,7 @@
     border-color: #000000;
     /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
 }
+
 #chat21-container{
     display: none;
 }
@@ -215,11 +216,18 @@
         width: 100% !important;
         height: 100% !important;
         right: 0px !important;
+        left: 0px !important;
         bottom: 0px !important;
         border-radius: 0px !important;
         max-height: none !important;
     }
 }
+
+/* // nk: ALIGN LEFT chat21-launcher-button AND chat21-sheet*/
+.align_left {
+    left:20px;
+}
+
 
 /* CSS HEADER */
 #chat21-container .chat21-sheet-header {
