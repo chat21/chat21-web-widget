@@ -201,26 +201,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.settingParams();
 
-      
+        console.log('tenant', this.tenant);
+        console.log('recipientId', this.recipientId);
+        console.log('projectid', this.projectid);
+        console.log('projectname', this.projectname);
+        console.log('chatName', this.chatName);
+        console.log('poweredBy', this.poweredBy);
+        console.log('userId', this.userId);
+        console.log('userEmail', this.userEmail);
+        console.log('userPassword', this.userPassword);
+        console.log('userFullname', this.userFullname);
+        console.log('preChatForm', this.preChatForm);
+        console.log('isOpen', this.isOpen);
+        console.log('channelType', this.channelType);
+        console.log('lang', this.lang);
+        console.log('calloutTimer', this.calloutTimer);
 
-        console.log("tenant", this.tenant);
-        console.log("recipientId", this.recipientId);
-        console.log("projectid", this.projectid);
-        console.log("projectname", this.projectname);
-        console.log("chatName", this.chatName);
-        console.log("poweredBy", this.poweredBy);
-        console.log("userId", this.userId);
-        console.log("userEmail", this.userEmail);
-        console.log("userPassword", this.userPassword);
-        console.log("userFullname", this.userFullname);
-        console.log("preChatForm", this.preChatForm);
-        console.log("isOpen", this.isOpen);
-        console.log("channelType", this.channelType);
-        console.log("lang", this.lang);
+
         this.setAvailableAgentsStatus();
 
         // if the lang is passed as parameter use it, oterwise use a default language ("en")
-        this.translatorService.setLanguage(!this.lang ? "en" : this.lang);
+        this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
         this.translate();
 
         // set auth
@@ -267,6 +268,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         that.isLogged = true;
                         console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
                         console.log('isLogged', that.isLogged);
+
+                        this.openIfCallOutTimer();
+
                     } else {
                         that.isLogged = false;
                         console.log('IS_LOGGED', 'AppComponent:constructor:zone-else', that.isLogged);
@@ -295,8 +299,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         this.addComponentToWindow(this.ngZone);
+
+
     }
 
+    private openIfCallOutTimer() {
+        const that = this;
+        if (this.calloutTimer >= 0) {
+            const waitingTime = this.calloutTimer * 1000;
+            setTimeout(function() {
+                that.f21_open();
+            }, waitingTime);
+        }
+    }
     private initParameters() {
         this.tenant = environment.tenant;
         this.preChatForm = false;
@@ -444,7 +459,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.lang", this.lang);
         }
         const cotAsString = this.getParameterByName('tiledesk_callouttimer');
-        if (cotAsString && Number(cotAsString)) {
+        console.log('cotAsString', cotAsString);
+        // if (cotAsString && Number.isNaN(Number(cotAsString))) {
+        if (cotAsString) {
             this.calloutTimer = Number(cotAsString);
             // console.log("getUrlParameters.tiledesk_callouttimer", this.calloutTimer);
         }
@@ -798,13 +815,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        const that = this;
-        if (this.calloutTimer > 0) {
-            const waitingTime = this.calloutTimer * 1000;
-            setTimeout(function() {
-                that.f21_open();
-            }, waitingTime);
-        }
+    //     const that = this;
+    //     if (this.calloutTimer >= 0) {
+    //         const waitingTime = this.calloutTimer * 1000;
+    //         setTimeout(function() {
+    //             that.f21_open();
+    //         }, waitingTime);
+    //     }
     }
 
     /**
@@ -1125,6 +1142,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * apro il popup conversazioni
      */
     f21_open() {
+        console.log('f21_open senderId: ', this.senderId);
         if (this.senderId) {
             this.isOpen = true; // !this.isOpen;
             sessionStorage.setItem('isOpen', 'true');
