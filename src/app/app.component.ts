@@ -197,10 +197,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
+        this.getUrlParameters();
 
         this.settingParams();
 
-        this.getUrlParameters();
+      
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -371,73 +372,73 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private getUrlParameters() {
         // console.log("getUrlParameters");
 
-        if (this.getParameterByName('tenant')) {
-            this.tenant = this.getParameterByName('tenant');
+        if (this.getParameterByName('tiledesk_tenant')) {
+            this.tenant = this.getParameterByName('tiledesk_tenant');
             // console.log("getUrlParameters.tenant",  this.tenant); 
         }
 
-        if (this.getParameterByName('recipientId')) {
-            this.recipientId = this.getParameterByName('recipientId');
+        if (this.getParameterByName('tiledesk_recipientId')) {
+            this.recipientId = this.getParameterByName('tiledesk_recipientId');
             // console.log("getUrlParameters.recipientId", this.recipientId); 
         }
 
-        if (this.getParameterByName('projectid')) {
-            this.projectid = this.getParameterByName('projectid');
+        if (this.getParameterByName('tiledesk_projectid')) {
+            this.projectid = this.getParameterByName('tiledesk_projectid');
             // console.log("getUrlParameters.projectid", this.projectid); 
         }
 
-        if (this.getParameterByName('projectname')) {
-            this.projectname = this.getParameterByName('projectname');
+        if (this.getParameterByName('tiledesk_projectname')) {
+            this.projectname = this.getParameterByName('tiledesk_projectname');
             // console.log("getUrlParameters.projectname", this.projectname); 
         }
 
-        if (this.getParameterByName('chatName')) {
-            this.chatName = this.getParameterByName('chatName');
+        if (this.getParameterByName('tiledesk_chatName')) {
+            this.chatName = this.getParameterByName('tiledesk_chatName');
             // console.log("getUrlParameters.chatName", this.chatName); 
         }
 
-        if (this.getParameterByName('poweredBy')) {
-            this.poweredBy = this.getParameterByName('poweredBy');
+        if (this.getParameterByName('tiledesk_poweredBy')) {
+            this.poweredBy = this.getParameterByName('tiledesk_poweredBy');
             // console.log("getUrlParameters.poweredBy", this.poweredBy); 
         }
 
-        if (this.getParameterByName('userId')) {
-            this.userId = this.getParameterByName('userId');
+        if (this.getParameterByName('tiledesk_userId')) {
+            this.userId = this.getParameterByName('tiledesk_userId');
             // console.log("getUrlParameters.userId", this.userId); 
         }
 
-        if (this.getParameterByName('userEmail')) {
-            this.userEmail = this.getParameterByName('userEmail');
+        if (this.getParameterByName('tiledesk_userEmail')) {
+            this.userEmail = this.getParameterByName('tiledesk_userEmail');
             // console.log("getUrlParameters.userEmail", this.userEmail); 
         }
 
-        if (this.getParameterByName('userPassword')) {
-            this.userPassword = this.getParameterByName('userPassword');
+        if (this.getParameterByName('tiledesk_userPassword')) {
+            this.userPassword = this.getParameterByName('tiledesk_userPassword');
             // console.log("getUrlParameters.userPassword", this.userPassword); 
         }
 
-        if (this.getParameterByName('userFullname')) {
-            this.userFullname = this.getParameterByName('userFullname');
+        if (this.getParameterByName('tiledesk_userFullname')) {
+            this.userFullname = this.getParameterByName('tiledesk_userFullname');
             // console.log("getUrlParameters.userFullname", this.userFullname); 
         }
 
-        if (this.getParameterByName('prechatform')) {
-            this.preChatForm = this.getParameterByName('prechatform') == "true" ? true : false;
+        if (this.getParameterByName('tiledesk_prechatform')) {
+            this.preChatForm = this.getParameterByName('tiledesk_prechatform') == "true" ? true : false;
             // console.log("getUrlParameters.preChatForm", this.preChatForm); 
         }
 
-        if (this.getParameterByName('isOpen')) {
-            this.isOpen = this.getParameterByName('isOpen') == "true" ? true : false;
+        if (this.getParameterByName('tiledesk_isOpen')) {
+            this.isOpen = this.getParameterByName('tiledesk_isOpen') == "true" ? true : false;
             // console.log("getUrlParameters.isOpen", this.isOpen);
         }
 
-        if (this.getParameterByName('channelType')) {
-            this.channelType = this.getParameterByName('channelType');
+        if (this.getParameterByName('tiledesk_channelType')) {
+            this.channelType = this.getParameterByName('tiledesk_channelType');
             // console.log("getUrlParameters.channelType", this.channelType);
         }
 
-        if (this.getParameterByName('lang')) {
-            this.lang = this.getParameterByName('lang') ? this.getParameterByName('lang') : this.lang ;
+        if (this.getParameterByName('tiledesk_lang')) {
+            this.lang = this.getParameterByName('tiledesk_lang') ? this.getParameterByName('tiledesk_lang') : this.lang ;
             // console.log("getUrlParameters.lang", this.lang);
         }
     }
