@@ -209,6 +209,18 @@
     background-color: #fff;
 }
 
+/* // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX */
+@media (max-width: 451px) {
+    .chat21-sheet {
+        width: 100% !important;
+        height: 100% !important;
+        right: 0px !important;
+        bottom: 0px !important;
+        border-radius: 0px !important;
+        max-height: none !important;
+    }
+}
+
 /* CSS HEADER */
 #chat21-container .chat21-sheet-header {
     background-color: #2a6ac1;
