@@ -163,7 +163,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
 
     private window: Window;
-    private isFilePendingToUpload : boolean = false;
+    private isFilePendingToUpload: boolean = false;
 
     constructor(
         private zone: NgZone,
@@ -192,6 +192,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.translatorService.getBrowserLanguage() :
             this.translatorService.getDefaultLanguage();
 
+        this.initParameters();
         this.triggetLoadParamsEvent();
 
         this.getVariablesFromAttributeHtml();
@@ -293,6 +294,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         this.addComponentToWindow(this.ngZone);
+    }
+
+    private initParameters() {
+        this.tenant = environment.tenant;
+        this.preChatForm = false;
+        this.chatName = 'TileDesk';
+        this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+        this.isOpen = false;
+        this.channelType = CHANNEL_TYPE_GROUP;
     }
 
     private addComponentToWindow(ngZone) {
@@ -499,46 +509,77 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     let TEMP;
     TEMP = window['tiledeskSettings']['tenant'];
-    this.tenant = (TEMP) ? TEMP : environment.tenant;
+
+    if (TEMP) {
+        this.tenant =  TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['recipientId'];
-    this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
+    if (TEMP) {
+        this.recipientId = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['projectid'];
-    this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
+    if (TEMP) {
+        this.projectid = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['projectname'];
-    this.projectname = (TEMP) ? TEMP : null;
+    if (TEMP) {
+        this.projectname = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['chatName'];
-    this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
+    if (TEMP) {
+        this.chatName = TEMP; // di default TileDesk
+    }
 
     TEMP = window['tiledeskSettings']['poweredBy'];
-    this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+    if (TEMP) {
+        this.poweredBy = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['userId'];
-    this.userId = (TEMP) ? TEMP : null;
+    if (TEMP) {
+        this.userId = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['userEmail'];
-    this.userEmail = (TEMP) ? TEMP : null;
+    if (TEMP) {
+        this.userEmail = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['userPassword'];
-    this.userPassword = (TEMP) ? TEMP : null;
+    if (TEMP) {
+        this.userPassword = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['userFullname'];
-    this.userFullname = (TEMP) ? TEMP : null;
+    if (TEMP) {
+        this.userFullname = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['preChatForm'];
-    this.preChatForm = (TEMP == null) ? false : true;
+    if (TEMP) {
+        this.preChatForm = true;
+    }
+    //  = (TEMP == null) ? false : true;
 
     TEMP = window['tiledeskSettings']['isOpen'];
-    this.isOpen = (TEMP == null) ? false : true;
+    if (TEMP) {
+        this.isOpen = true;
+    }
+    // this.isOpen = (TEMP == null) ? false : true;
 
     TEMP = window['tiledeskSettings']['channelType'];
-    this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
+    if (TEMP) {
+        this.channelType = TEMP;
+    }
 
     TEMP = window['tiledeskSettings']['lang'];
-    this.lang = (TEMP) ? TEMP : this.lang;
+    if (TEMP) {
+        this.lang = TEMP;
+    }
 }
 
     // /**
