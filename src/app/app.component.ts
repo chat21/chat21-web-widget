@@ -32,7 +32,7 @@ import { TranslatorService } from './providers/translator.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AgentAvailabilityService, TranslatorService]
+//   providers: [AgentAvailabilityService, TranslatorService]
 })
 
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -178,24 +178,28 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         private translatorService: TranslatorService,
         private ngZone: NgZone
     ) {
+        this.initAll();
+    }
+
+    private initAll() {
 
         //RElated to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
 
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
-        this.lang = this.translatorService.getBrowserLanguage() ? 
-                    this.translatorService.getBrowserLanguage() :
-                    this.translatorService.getDefaultLanguage();
+        this.lang = this.translatorService.getBrowserLanguage() ?
+            this.translatorService.getBrowserLanguage() :
+            this.translatorService.getDefaultLanguage();
 
         this.triggetLoadParamsEvent();
-    
+
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
-        
+
         this.settingParams();
 
-        // this.getUrlParameters();
+        this.getUrlParameters();
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -209,8 +213,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log("userFullname", this.userFullname);
         console.log("preChatForm", this.preChatForm);
         console.log("isOpen", this.isOpen);
-        console.log("channelType", this.channelType); 
-        console.log("lang", this.lang); 
+        console.log("channelType", this.channelType);
+        console.log("lang", this.lang);
         this.setAvailableAgentsStatus();
 
         // if the lang is passed as parameter use it, oterwise use a default language ("en")
@@ -242,53 +246,53 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
         const that = this;
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
-        .takeWhile(() => that.aliveSubLoggedUser)
-        .subscribe(user => {
+            .takeWhile(() => that.aliveSubLoggedUser)
+            .subscribe(user => {
 
-            // real time detection of the user authentication status
-            this.zone.run(() => {
-                if (user) {
-                    console.log('USER AUTENTICATE: ', user);
-                    // console.log("constructor.subLoggedUser", user);
-                    // that.senderId = user.uid;
-                    that.senderId = user.user.uid;
-                    // console.log("constructor.subLoggedUser", that.senderId);
-                    // that.initConversation();
+                // real time detection of the user authentication status
+                this.zone.run(() => {
+                    if (user) {
+                        console.log('USER AUTENTICATE: ', user);
+                        // console.log("constructor.subLoggedUser", user);
+                        // that.senderId = user.uid;
+                        that.senderId = user.user.uid;
+                        // console.log("constructor.subLoggedUser", that.senderId);
+                        // that.initConversation();
 
-                    that.createConversation();
-                    that.initialize();
-                    that.aliveSubLoggedUser = false;
-                    that.isLogged = true;
-                    console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
-                    console.log('isLogged', that.isLogged);
-                } else {
-                    that.isLogged = false;
-                    console.log('IS_LOGGED', 'AppComponent:constructor:zone-else', that.isLogged);
-                }
+                        that.createConversation();
+                        that.initialize();
+                        that.aliveSubLoggedUser = false;
+                        that.isLogged = true;
+                        console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
+                        console.log('isLogged', that.isLogged);
+                    } else {
+                        that.isLogged = false;
+                        console.log('IS_LOGGED', 'AppComponent:constructor:zone-else', that.isLogged);
+                    }
+                });
+
+                // if (user) {
+                //     console.log('USER AUTENTICATE: ', user);
+                //     // console.log("constructor.subLoggedUser", user);
+                //     // that.senderId = user.uid;
+                //     that.senderId = user.user.uid;
+                //     // console.log("constructor.subLoggedUser", that.senderId);
+                //     // that.initConversation();
+
+                //     that.createConversation();
+                //     that.initialize();
+                //     that.aliveSubLoggedUser = false;
+                //     that.isLogged = true;
+                //     console.log("isLogged", that.isLogged);
+                // } else {
+                //     that.isLogged = false;
+                // }
             });
-
-            // if (user) {
-            //     console.log('USER AUTENTICATE: ', user);
-            //     // console.log("constructor.subLoggedUser", user);
-            //     // that.senderId = user.uid;
-            //     that.senderId = user.user.uid;
-            //     // console.log("constructor.subLoggedUser", that.senderId);
-            //     // that.initConversation();
-
-            //     that.createConversation();
-            //     that.initialize();
-            //     that.aliveSubLoggedUser = false;
-            //     that.isLogged = true;
-            //     console.log("isLogged", that.isLogged);
-            // } else {
-            //     that.isLogged = false;
-            // }
-        });
         this.checkWritingMessages();
 
 
 
-         this.addComponentToWindow(ngZone);
+        this.addComponentToWindow(this.ngZone);
     }
 
     private addComponentToWindow(ngZone) {
@@ -703,7 +707,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
-        window['tiledesk']['angularcomponent'] = null;
+        if (window['tiledesk']) {
+            window['tiledesk']['angularcomponent'] = null;
+        }
         this.unsubscribe();
     }
 
@@ -872,7 +878,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         }).catch(function(error) {
-            console.log('checkListMessages ERROR: ', error);
+            console.error('checkListMessages ERROR: ', error);
         });
     }
 
@@ -1555,7 +1561,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     startNwConversation() {
         console.log('this.startNwConversation 2');
 
-        this.constructor();
+        // this.constructor();
+
+        this.initAll();
 
         this.ngOnDestroy();
         console.log('unsubscribe OK', this.subscriptions);
@@ -1571,6 +1579,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isConversationOpen = true;
         console.log('NEW SUBSRIBE -->' + this.isConversationOpen + ' <--');
+        
+
+        // @TODO capire perchè quando si crea una nuova convesazione la textarea non c'è
+        this.restoreTextArea();
 
     }
 

@@ -29,6 +29,8 @@ import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
+import { AgentAvailabilityService } from './providers/agent-availability.service';
+import { TranslatorService } from './providers/translator.service';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
     UploadService,
     ContactService,
     StarRatingWidgetService,
+    AgentAvailabilityService, 
+    TranslatorService
   ],
   bootstrap: [AppComponent]
 })
