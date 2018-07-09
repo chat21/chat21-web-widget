@@ -599,33 +599,74 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
         let TEMP;
         TEMP = this.el.nativeElement.getAttribute('tenant');
-        this.tenant = (TEMP) ? TEMP : environment.tenant;
+        if (TEMP) {
+            this.tenant = TEMP;
+        }
+        
         TEMP = this.el.nativeElement.getAttribute('recipientId');
-        this.recipientId = (TEMP) ? TEMP : null; // 'Ruzuv8ZrPvcHiORP62rK1fuhmXv1';
+        if (TEMP) {
+            this.recipientId = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('projectid');
-        this.projectid = (TEMP) ? TEMP : null; // '5ada1bfc4480840014ab1990'; // '5ad7620d3d1d1a00147500a9';
+        if (TEMP) {
+            this.projectid = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('projectname');
-        this.projectname = (TEMP) ? TEMP : null;
+        if (TEMP) {
+            this.projectname = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('chatName');
-        this.chatName =  (TEMP) ? TEMP : 'TileDesk'; // di default TileDesk
+        if (TEMP) {
+            this.chatName = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('poweredBy');
-        this.poweredBy = (TEMP) ? TEMP : '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+        if (TEMP) {
+            this.poweredBy = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('userId');
-        this.userId = (TEMP) ? TEMP : null;
+        if (TEMP) {
+            this.userId = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('userEmail');
-        this.userEmail = (TEMP) ? TEMP : null;
+        if (TEMP) {
+            this.userEmail = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('userPassword');
-        this.userPassword = (TEMP) ? TEMP : null;
+        if (TEMP) {
+            this.userPassword = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('userFullname');
-        this.userFullname = (TEMP) ? TEMP : null;
+        if (TEMP) {
+            this.userFullname = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('preChatForm');
-        this.preChatForm = (TEMP == null) ? false : true;
+        if (TEMP) {
+            this.preChatForm = true;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('isOpen');
-        this.isOpen = (TEMP == null) ? false : true;
+        if (TEMP) {
+            this.isOpen = true;
+        }
+        
         TEMP = this.el.nativeElement.getAttribute('channelType');
-        this.channelType = (TEMP) ? TEMP : CHANNEL_TYPE_GROUP;
+        if (TEMP) {
+            this.channelType = TEMP;
+        }
+
         TEMP = this.el.nativeElement.getAttribute('lang');
-        this.lang = (TEMP) ? TEMP : this.lang;
+        if (TEMP) {
+            this.lang = TEMP;
+        }
     }
 
     // START FORM
