@@ -377,8 +377,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.tenant",  this.tenant); 
         }
 
-        if (this.getParameterByName('tiledesk_recipientId')) {
-            this.recipientId = this.getParameterByName('tiledesk_recipientId');
+        if (this.getParameterByName('tiledesk_recipientid')) {
+            this.recipientId = this.getParameterByName('tiledesk_recipientid');
             // console.log("getUrlParameters.recipientId", this.recipientId); 
         }
 
@@ -392,48 +392,49 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.projectname", this.projectname); 
         }
 
-        if (this.getParameterByName('tiledesk_chatName')) {
-            this.chatName = this.getParameterByName('tiledesk_chatName');
+        if (this.getParameterByName('tiledesk_chatname')) {
+            this.chatName = this.getParameterByName('tiledesk_chatname');
             // console.log("getUrlParameters.chatName", this.chatName); 
         }
 
-        if (this.getParameterByName('tiledesk_poweredBy')) {
-            this.poweredBy = this.getParameterByName('tiledesk_poweredBy');
+        if (this.getParameterByName('tiledesk_poweredby')) {
+            this.poweredBy = this.getParameterByName('tiledesk_poweredby');
             // console.log("getUrlParameters.poweredBy", this.poweredBy); 
         }
 
-        if (this.getParameterByName('tiledesk_userId')) {
-            this.userId = this.getParameterByName('tiledesk_userId');
+        if (this.getParameterByName('tiledesk_userid')) {
+            this.userId = this.getParameterByName('tiledesk_userid');
             // console.log("getUrlParameters.userId", this.userId); 
         }
 
-        if (this.getParameterByName('tiledesk_userEmail')) {
-            this.userEmail = this.getParameterByName('tiledesk_userEmail');
+        if (this.getParameterByName('tiledesk_useremail')) {
+            this.userEmail = this.getParameterByName('tiledesk_useremail');
             // console.log("getUrlParameters.userEmail", this.userEmail); 
         }
 
-        if (this.getParameterByName('tiledesk_userPassword')) {
-            this.userPassword = this.getParameterByName('tiledesk_userPassword');
+        if (this.getParameterByName('tiledesk_userpassword')) {
+            this.userPassword = this.getParameterByName('tiledesk_userpassword');
             // console.log("getUrlParameters.userPassword", this.userPassword); 
         }
 
-        if (this.getParameterByName('tiledesk_userFullname')) {
-            this.userFullname = this.getParameterByName('tiledesk_userFullname');
+        if (this.getParameterByName('tiledesk_userfullname')) {
+            this.userFullname = this.getParameterByName('tiledesk_userfullname');
             // console.log("getUrlParameters.userFullname", this.userFullname); 
         }
 
+        //console.log('this.getParameterByName(tiledesk_prechatform)', this.getParameterByName('tiledesk_prechatform'));
         if (this.getParameterByName('tiledesk_prechatform')) {
-            this.preChatForm = this.getParameterByName('tiledesk_prechatform') == "true" ? true : false;
+            this.preChatForm = true;
             // console.log("getUrlParameters.preChatForm", this.preChatForm); 
         }
 
-        if (this.getParameterByName('tiledesk_isOpen')) {
-            this.isOpen = this.getParameterByName('tiledesk_isOpen') == "true" ? true : false;
+        if (this.getParameterByName('tiledesk_isopen')) {
+            this.isOpen = true;
             // console.log("getUrlParameters.isOpen", this.isOpen);
         }
 
-        if (this.getParameterByName('tiledesk_channelType')) {
-            this.channelType = this.getParameterByName('tiledesk_channelType');
+        if (this.getParameterByName('tiledesk_channeltype')) {
+            this.channelType = this.getParameterByName('tiledesk_channeltype');
             // console.log("getUrlParameters.channelType", this.channelType);
         }
 
