@@ -28,7 +28,7 @@ export class ContactService {
     console.log('urlNodeFirebaseGroup *****', this.urlNodeFirebaseGroup);
     const firebaseGroup = firebase.database().ref(this.urlNodeFirebaseGroup)
     .once('value').then(function(snapshot) {
-      console.log('snapshot.val() *****', snapshot);
+      // console.log('snapshot.val() *****', snapshot);
       that.getProfileUser(snapshot);
     });
   }
@@ -49,7 +49,7 @@ export class ContactService {
         });
       }
     );
-    console.log('listContacts *****', this.listContacts);
+    // console.log('listContacts *****', this.listContacts);
   }
 
   getContactProfile(uid): ContactModel {
