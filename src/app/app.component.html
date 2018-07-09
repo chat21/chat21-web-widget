@@ -1,6 +1,7 @@
 <div id="chat21-container" [class.active]="isLogged">
-    <div id="chat21-launcher-button" (click)="f21_open()"></div>
-    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet">
+    <div id="chat21-launcher-button" [ngClass]="{'align_left' : align === 'left'}" (click)="f21_open_close_handler()"></div>
+    <!-- <div  *ngIf="isOpen" id="chat21-launcher-button" [ngClass]="{'align_left' : align === left}" (click)="f21_close()"></div> -->
+    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngClass]="{'align_left' : align === 'left'}">
         <!--HEADER-->
         <div class="chat21-sheet-header">
             <div class="chat21-sheet-header-title-container">

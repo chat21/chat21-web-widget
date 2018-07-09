@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone} from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -29,10 +29,10 @@ import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 import { TranslatorService } from './providers/translator.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-//   providers: [AgentAvailabilityService, TranslatorService]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    //   providers: [AgentAvailabilityService, TranslatorService]
 })
 
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -97,7 +97,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
     // '../assets/images/c21-customer-service.svg';
     // 'https://user-images.githubusercontent.com/32448495/38661877-a44476dc-3e32-11e8-913d-747a8527b2b5.png';
-    filterSystemMsg =  true; // se è true i messaggi inviati da system non vengono visualizzati
+    filterSystemMsg = true; // se è true i messaggi inviati da system non vengono visualizzati
 
     writingMessage = '';
 
@@ -112,6 +112,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     poweredBy: string;
     channelType: string;
     calloutTimer: number;
+    align: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -201,7 +202,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.settingParams();
 
-      
+
 
         console.log("tenant", this.tenant);
         console.log("recipientId", this.recipientId);
@@ -217,6 +218,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log("isOpen", this.isOpen);
         console.log("channelType", this.channelType);
         console.log("lang", this.lang);
+        console.log("align right", this.align);
         this.setAvailableAgentsStatus();
 
         // if the lang is passed as parameter use it, oterwise use a default language ("en")
@@ -304,11 +306,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.channelType = CHANNEL_TYPE_GROUP;
+        this.align = 'right';
     }
 
     private addComponentToWindow(ngZone) {
         if (window['tiledesk']) {
-            window['tiledesk']['angularcomponent'] = {component: this, ngZone: ngZone};
+            window['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
 
             window['tiledesk'].close = function () {
                 // this.f21_close();
@@ -339,18 +342,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private translate() {
         this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
-        this.LABEL_START_NW_CONV  = this.translatorService.translate('LABEL_START_NW_CONV');
+        this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
         this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
         this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
         this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
-        this.LABEL_FIELD_NAME =  this.translatorService.translate('LABEL_FIELD_NAME')
+        this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME')
         this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
-        this.LABEL_FIELD_EMAIL =  this.translatorService.translate('LABEL_FIELD_EMAIL');
+        this.LABEL_FIELD_EMAIL = this.translatorService.translate('LABEL_FIELD_EMAIL');
         this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
         this.LABEL_WRITING = this.translatorService.translate('LABEL_WRITING');
         this.AGENT_NOT_AVAILABLE = this.translatorService.translate('AGENT_NOT_AVAILABLE');
         this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
-        this.GUEST_LABEL =  this.translatorService.translate('GUEST_LABEL');
+        this.GUEST_LABEL = this.translatorService.translate('GUEST_LABEL');
         this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
     }
 
@@ -422,7 +425,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.userFullname", this.userFullname); 
         }
 
-        //console.log('this.getParameterByName(tiledesk_prechatform)', this.getParameterByName('tiledesk_prechatform'));
+        // console.log('this.getParameterByName(tiledesk_prechatform)', this.getParameterByName('tiledesk_prechatform'));
         if (this.getParameterByName('tiledesk_prechatform')) {
             this.preChatForm = true;
             // console.log("getUrlParameters.preChatForm", this.preChatForm); 
@@ -439,33 +442,40 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.getParameterByName('tiledesk_lang')) {
-            this.lang = this.getParameterByName('tiledesk_lang') ? this.getParameterByName('tiledesk_lang') : this.lang ;
+            this.lang = this.getParameterByName('tiledesk_lang') ? this.getParameterByName('tiledesk_lang') : this.lang;
             // console.log("getUrlParameters.lang", this.lang);
         }
+
+        // nk: chat21-launcher-button alignment
+        if (this.getParameterByName('tiledesk_align')) {
+            this.align = this.getParameterByName('tiledesk_align');
+            // console.log("getUrlParameters.preChatForm", this.preChatForm); 
+        }
+
     }
 
     private setAvailableAgentsStatus() {
         this.agentAvailabilityService
-        .getAvailableAgents(this.projectid)
-        .subscribe(
-            (availableAgents) => {
-                console.log('availableAgents', availableAgents);
+            .getAvailableAgents(this.projectid)
+            .subscribe(
+                (availableAgents) => {
+                    console.log('availableAgents', availableAgents);
 
-                if (availableAgents.length <= 0) {
-                    this. areAgentsAvailable = false;
-                    this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
-                } else {
-                    this.areAgentsAvailable = true;
-                    this.areAgentsAvailableText = this.AGENT_AVAILABLE;
+                    if (availableAgents.length <= 0) {
+                        this.areAgentsAvailable = false;
+                        this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
+                    } else {
+                        this.areAgentsAvailable = true;
+                        this.areAgentsAvailableText = this.AGENT_AVAILABLE;
+                    }
+                }, (error) => {
+                    // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
+                    console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+
+                }, () => {
+
                 }
-            }, (error) => {
-                // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
-                console.error('setOnlineStatus::setAvailableAgentsStatus', error); 
-
-            },() => {
-
-            }
-        )
+            )
         // , (error) => {
         //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
         // },() => {
@@ -485,7 +495,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!results) return null;
 
         if (!results[2]) return '';
-        
+
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
@@ -502,87 +512,94 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * preChatForm:
      *
     */
-   getVariablesFromSettings() {
-    // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-    if (!window['tiledesk']) {
-        console.log('tiledeskSettings is not defined');
-        return 0;
-    }
+    getVariablesFromSettings() {
+        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+        if (!window['tiledesk']) {
+            console.log('tiledeskSettings is not defined');
+            return 0;
+        }
 
-    let TEMP;
-    TEMP = window['tiledeskSettings']['tenant'];
+        let TEMP;
+        TEMP = window['tiledeskSettings']['tenant'];
 
-    if (TEMP) {
-        this.tenant =  TEMP;
-    }
+        if (TEMP) {
+            this.tenant = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['recipientId'];
-    if (TEMP) {
-        this.recipientId = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['recipientId'];
+        if (TEMP) {
+            this.recipientId = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['projectid'];
-    if (TEMP) {
-        this.projectid = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['projectid'];
+        if (TEMP) {
+            this.projectid = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['projectname'];
-    if (TEMP) {
-        this.projectname = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['projectname'];
+        if (TEMP) {
+            this.projectname = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['chatName'];
-    if (TEMP) {
-        this.chatName = TEMP; // di default TileDesk
-    }
+        TEMP = window['tiledeskSettings']['chatName'];
+        if (TEMP) {
+            this.chatName = TEMP; // di default TileDesk
+        }
 
-    TEMP = window['tiledeskSettings']['poweredBy'];
-    if (TEMP) {
-        this.poweredBy = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['poweredBy'];
+        if (TEMP) {
+            this.poweredBy = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['userId'];
-    if (TEMP) {
-        this.userId = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['userId'];
+        if (TEMP) {
+            this.userId = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['userEmail'];
-    if (TEMP) {
-        this.userEmail = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['userEmail'];
+        if (TEMP) {
+            this.userEmail = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['userPassword'];
-    if (TEMP) {
-        this.userPassword = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['userPassword'];
+        if (TEMP) {
+            this.userPassword = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['userFullname'];
-    if (TEMP) {
-        this.userFullname = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['userFullname'];
+        if (TEMP) {
+            this.userFullname = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['preChatForm'];
-    if (TEMP) {
-        this.preChatForm = true;
-    }
-    //  = (TEMP == null) ? false : true;
+        TEMP = window['tiledeskSettings']['preChatForm'];
+        if (TEMP) {
+            this.preChatForm = true;
+        }
+        //  = (TEMP == null) ? false : true;
 
-    TEMP = window['tiledeskSettings']['isOpen'];
-    if (TEMP) {
-        this.isOpen = true;
-    }
-    // this.isOpen = (TEMP == null) ? false : true;
+        TEMP = window['tiledeskSettings']['isOpen'];
+        if (TEMP) {
+            this.isOpen = true;
+        }
+        // this.isOpen = (TEMP == null) ? false : true;
 
-    TEMP = window['tiledeskSettings']['channelType'];
-    if (TEMP) {
-        this.channelType = TEMP;
-    }
+        TEMP = window['tiledeskSettings']['channelType'];
+        if (TEMP) {
+            this.channelType = TEMP;
+        }
 
-    TEMP = window['tiledeskSettings']['lang'];
-    if (TEMP) {
-        this.lang = TEMP;
+        TEMP = window['tiledeskSettings']['lang'];
+        if (TEMP) {
+            this.lang = TEMP;
+        }
+
+        // nk: chat21-launcher-button alignment
+        TEMP = window['tiledeskSettings']['align'];
+        if (TEMP) {
+            this.align = TEMP;
+        }
+
     }
-}
 
     // /**
     //  * tenant:
@@ -604,7 +621,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.tenant = TEMP;
         }
-        
+
         TEMP = this.el.nativeElement.getAttribute('recipientId');
         if (TEMP) {
             this.recipientId = TEMP;
@@ -659,7 +676,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.isOpen = true;
         }
-        
+
         TEMP = this.el.nativeElement.getAttribute('channelType');
         if (TEMP) {
             this.channelType = TEMP;
@@ -669,12 +686,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.lang = TEMP;
         }
+
+        // nk: chat21-launcher-button
+        TEMP = this.el.nativeElement.getAttribute('align');
+        if (TEMP) {
+            this.align = TEMP;
+        }
     }
 
     // START FORM
     // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
     /** */
-    setForm(formBuilder): FormGroup  {
+    setForm(formBuilder): FormGroup {
         // SET FORM
         // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
         // tslint:disable-next-line:max-line-length
@@ -723,39 +746,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const that = this;
         // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
         const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
-        .subscribe(isWidgetActive => {
-            that.isWidgetActive = isWidgetActive;
-            if (isWidgetActive === false) {
-                sessionStorage.removeItem('isWidgetActive');
-                this.conversationWith = null;
-                // this.generateNewUidConversation();
-                console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
-            } else if (isWidgetActive === true) {
-                console.log('APROOOOOOOO!!!!:', );
-                sessionStorage.setItem('isWidgetActive', 'true');
-                that.isConversationOpen = false;
-            }
-        });
+            .subscribe(isWidgetActive => {
+                that.isWidgetActive = isWidgetActive;
+                if (isWidgetActive === false) {
+                    sessionStorage.removeItem('isWidgetActive');
+                    this.conversationWith = null;
+                    // this.generateNewUidConversation();
+                    console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
+                } else if (isWidgetActive === true) {
+                    console.log('APROOOOOOOO!!!!:', );
+                    sessionStorage.setItem('isWidgetActive', 'true');
+                    that.isConversationOpen = false;
+                }
+            });
         this.subscriptions.push(subscriptionIsWidgetActive);
 
         // NUOVO MESSAGGIO!!
         const obsAddedMessage: Subscription = this.messagingService.obsAdded
-        .subscribe(newMessage => {
-            if (that.scrollMe) {
-                const divScrollMe = that.scrollMe.nativeElement;
-                const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
-                if (checkContentScrollPosition ) {
-                    // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-                    console.log('------->sono alla fine dello scrooll: ');
-                    setTimeout(function() {
-                        that.scrollToBottom();
-                    }, 500);
-                } else {
-                    // mostro badge
-                    that.NUM_BADGES ++;
+            .subscribe(newMessage => {
+                if (that.scrollMe) {
+                    const divScrollMe = that.scrollMe.nativeElement;
+                    const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+                    if (checkContentScrollPosition) {
+                        // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+                        console.log('------->sono alla fine dello scrooll: ');
+                        setTimeout(function () {
+                            that.scrollToBottom();
+                        }, 500);
+                    } else {
+                        // mostro badge
+                        that.NUM_BADGES++;
+                    }
                 }
-            }
-        });
+            });
         this.subscriptions.push(obsAddedMessage);
 
 
@@ -782,7 +805,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         const that = this;
         const waitingTime = this.calloutTimer * 1000;
-        setTimeout(function() {
+        setTimeout(function () {
             that.f21_open();
         }, waitingTime);
     }
@@ -798,7 +821,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     unsubscribe() {
-        this.subscriptions.forEach(function(subscription) {
+        this.subscriptions.forEach(function (subscription) {
             subscription.unsubscribe();
         });
         this.subscriptions.length = 0;
@@ -908,7 +931,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         let channelTypeTEMP = CHANNEL_TYPE_GROUP;
         if (this.recipientId) {
-            if (this.recipientId.indexOf('group') !== -1 ) {
+            if (this.recipientId.indexOf('group') !== -1) {
                 channelTypeTEMP = CHANNEL_TYPE_GROUP;
             } else if (!this.projectid) {
                 channelTypeTEMP = CHANNEL_TYPE_DIRECT;
@@ -924,63 +947,63 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // console.log("createConversation.conversationWith", this.conversationWith);
 
-        if (!this.channelType || (this.channelType !== CHANNEL_TYPE_GROUP && this.channelType !== CHANNEL_TYPE_DIRECT )) {
+        if (!this.channelType || (this.channelType !== CHANNEL_TYPE_GROUP && this.channelType !== CHANNEL_TYPE_DIRECT)) {
             this.channelType = channelTypeTEMP;
         }
-        this.messagingService.initialize(this.senderId,  this.tenant, this.channelType);
-        this.upSvc.initialize(this.senderId,  this.tenant, this.conversationWith);
+        this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
+        this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
         this.contactService.initialize(this.senderId, this.tenant, this.conversationWith);
         this.messagingService.checkListMessages(this.conversationWith)
-        .then(function(snapshot) {
-            console.log('checkListMessages: ', snapshot);
-            if (snapshot.exists()) {
-                that.isNewConversation = false;
-                setTimeout(function() {
-                    if (that.messages.length === 0) {
-                        that.isNewConversation = true;
-                    }
-                }, 2000);
-                that.isLogged = true;
-                console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-if", that.isLogged);
-                that.setFocusOnId('chat21-main-message-context');
-            } else {
-                that.isNewConversation = true;
-                if (that.projectid && !that.attributes.departmentId) {
-                    // that.isLogged = false;
-                    // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
-                    that.getMongDbDepartments();
-                } else {
-                    that.setFocusOnId('chat21-main-message-context');
+            .then(function (snapshot) {
+                console.log('checkListMessages: ', snapshot);
+                if (snapshot.exists()) {
+                    that.isNewConversation = false;
+                    setTimeout(function () {
+                        if (that.messages.length === 0) {
+                            that.isNewConversation = true;
+                        }
+                    }, 2000);
                     that.isLogged = true;
-                    console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-department", that.isLogged);
+                    console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-if", that.isLogged);
+                    that.setFocusOnId('chat21-main-message-context');
+                } else {
+                    that.isNewConversation = true;
+                    if (that.projectid && !that.attributes.departmentId) {
+                        // that.isLogged = false;
+                        // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
+                        that.getMongDbDepartments();
+                    } else {
+                        that.setFocusOnId('chat21-main-message-context');
+                        that.isLogged = true;
+                        console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-department", that.isLogged);
+                    }
                 }
-            }
 
-            setTimeout(function() {
-                that.messagingService.listMessages(that.conversationWith);
-            }, 500);
+                setTimeout(function () {
+                    that.messagingService.listMessages(that.conversationWith);
+                }, 500);
 
 
-        }).catch(function(error) {
-            console.error('checkListMessages ERROR: ', error);
-        });
+            }).catch(function (error) {
+                console.error('checkListMessages ERROR: ', error);
+            });
     }
 
     checkWritingMessages() {
         // this.messagingService.checkWritingMessages();
         const that = this;
         const subscription: Subscription = this.messagingService.obsCheckWritingMessages
-        // .takeWhile(() => that.subscriptionIsWriting)
-        .subscribe(resp => {
-            //console.log('2 - subscribe IS: ', resp + ' ****************');
-            if (resp) {
-                setTimeout(function() {
-                    that.writingMessage = this.LABEL_WRITING;
-                }, 1000);
-            } else {
-                that.writingMessage = '';
-            }
-        });
+            // .takeWhile(() => that.subscriptionIsWriting)
+            .subscribe(resp => {
+                //console.log('2 - subscribe IS: ', resp + ' ****************');
+                if (resp) {
+                    setTimeout(function () {
+                        that.writingMessage = this.LABEL_WRITING;
+                    }, 1000);
+                } else {
+                    that.writingMessage = '';
+                }
+            });
 
     }
 
@@ -1010,52 +1033,52 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     getMongDbDepartments() {
         const token = this.authService.token;
         this.messagingService.getMongDbDepartments(token, this.projectid)
-        .subscribe(
-            response => {
-                console.log('OK DEPARTMENTS ::::', response);
-                this.departments = response;
-                if (this.departments.length === 1) {
-                    // this.setDepartment(this.departments[0]);
+            .subscribe(
+                response => {
+                    console.log('OK DEPARTMENTS ::::', response);
+                    this.departments = response;
+                    if (this.departments.length === 1) {
+                        // this.setDepartment(this.departments[0]);
+                        this.openSelectionDepartment = false;
+                        this.departmentSelected = this.departments[0];
+                        this.setFocusOnId('chat21-main-message-context');
+                        console.log('this.departmentSelected ::::', this.departmentSelected);
+                    } else if (this.departments.length > 0) {
+                        this.setFocusOnId('chat21-modal-select');
+                        // escludo department con default == true
+                        let i = 0;
+                        this.departments.forEach(department => {
+                            // console.log('DEPARTMENT ::::', department);
+                            if (department['default'] === true) {
+                                // console.log('ELIMINO DEPARTMENT::::', department);
+                                this.departments.splice(i, 1);
+                                // console.log('DEPARTMENTS::::', this.departments);
+                                return;
+                            }
+                            i++;
+                        });
+                        this.openSelectionDepartment = true;
+                    } else {
+                        this.setFocusOnId('chat21-main-message-context');
+                        this.openSelectionDepartment = false;
+                    }
+                    this.isLogged = true;
+                    console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
+                },
+                errMsg => {
+                    console.log('http ERROR MESSAGE', errMsg);
+                    // window.alert('MSG_GENERIC_SERVICE_ERROR');
                     this.openSelectionDepartment = false;
-                    this.departmentSelected = this.departments[0];
                     this.setFocusOnId('chat21-main-message-context');
-                    console.log('this.departmentSelected ::::', this.departmentSelected);
-                } else if (this.departments.length > 0) {
-                    this.setFocusOnId('chat21-modal-select');
-                    // escludo department con default == true
-                    let i = 0;
-                    this.departments.forEach(department => {
-                        // console.log('DEPARTMENT ::::', department);
-                        if (department['default'] === true) {
-                            // console.log('ELIMINO DEPARTMENT::::', department);
-                            this.departments.splice(i, 1);
-                            // console.log('DEPARTMENTS::::', this.departments);
-                            return;
-                        }
-                        i++;
-                    });
-                    this.openSelectionDepartment = true;
-                } else {
-                    this.setFocusOnId('chat21-main-message-context');
-                    this.openSelectionDepartment = false;
-                }
-                this.isLogged = true;
-                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
-            },
-            errMsg => {
-                console.log('http ERROR MESSAGE', errMsg);
-                // window.alert('MSG_GENERIC_SERVICE_ERROR');
-                this.openSelectionDepartment = false;
-                this.setFocusOnId('chat21-main-message-context');
 
-                this.isLogged = false;
-                console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
-            },
-            () => {
-                console.log('API ERROR NESSUNO');
-                // attivo pulsante aprichat!!!!!
-            }
-        );
+                    this.isLogged = false;
+                    console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
+                },
+                () => {
+                    console.log('API ERROR NESSUNO');
+                    // attivo pulsante aprichat!!!!!
+                }
+            );
     }
 
     /** */
@@ -1067,7 +1090,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.attributes.departmentName = this.departmentSelected.name;
             console.log('setAttributes setDepartment: ', JSON.stringify(this.attributes));
             if (this.attributes) {
-                sessionStorage.setItem('attributes',  JSON.stringify(this.attributes));
+                sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
             }
             // JSON.stringify(this.attributes)
         }
@@ -1082,7 +1105,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             id = 'form-field-name';
         }
         console.log('-------------> setFocusOnId: ', id);
-        setTimeout(function() {
+        setTimeout(function () {
             const textarea = document.getElementById(id);
             if (textarea) {
                 console.log('1--------> FOCUSSSSSS : ', textarea);
@@ -1100,6 +1123,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.openSelectionDepartment = false;
         this.departmentSelected = department;
         this.setFocusOnId('chat21-main-message-context');
+    }
+
+
+    f21_open_close_handler() {
+
+        if (this.isOpen) {
+
+            this.f21_close();
+        } else {
+            this.f21_open();
+        }
     }
     /**
      * apro il popup conversazioni
@@ -1135,10 +1169,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     scrollToBottom() {
         const that = this;
-        setTimeout(function() {
+        setTimeout(function () {
             try {
                 const objDiv = document.getElementById('chat21-contentScroll');
-                console.log('scrollTop1 ::', objDiv.scrollTop,  objDiv.scrollHeight);
+                console.log('scrollTop1 ::', objDiv.scrollTop, objDiv.scrollHeight);
                 //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
                 objDiv.scrollIntoView(false);
                 // that.badgeNewMessages = 0;
@@ -1163,7 +1197,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (checkContentScrollPosition) {
                 this.showButtonToBottom = false;
                 this.NUM_BADGES = 0;
-            // this.scrollToBottom();
+                // this.scrollToBottom();
             } else {
                 this.showButtonToBottom = true;
             }
@@ -1198,11 +1232,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // tslint:disable-next-line:max-line-length
         // console.log('H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
         target.style.height = '100%';
-        if ( (document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n' ) {
+        if ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n') {
             // console.log('PASSO 0');
             (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
             target.style.height = this.HEIGHT_DEFAULT;
-        } else if (target.scrollHeight > target.offsetHeight ) {
+        } else if (target.scrollHeight > target.offsetHeight) {
             // console.log('PASSO 2');
             target.style.height = target.scrollHeight + 2 + 'px';
         } else {
@@ -1226,7 +1260,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param event
      */
     onkeypress(event) {
-       
+
         const keyCode = event.which || event.keyCode;
         // console.log('onkeypress **************', keyCode, msg);
         if (keyCode === 13) {
@@ -1247,7 +1281,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.scrollToBottom();
         }
         // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
-            // this.textInputTextArea = '';
+        // this.textInputTextArea = '';
 
         this.restoreTextArea();
     }
@@ -1257,7 +1291,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.resizeInputField();
 
-        
+
         var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
 
         if (textArea) {
@@ -1279,7 +1313,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('detectFiles: ', event);
         if (event) {
             this.selectedFiles = event.target.files;
-            console.log("AppComponent:detectFiles::selectedFiles",this.selectedFiles);
+            console.log("AppComponent:detectFiles::selectedFiles", this.selectedFiles);
 
             if (this.selectedFiles == null) {
                 this.isFilePendingToUpload = false;
@@ -1293,7 +1327,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (event.target.files && event.target.files[0]) {
                 this.nameFile = event.target.files[0].name;
                 const typeFile = event.target.files[0].type;
-                const reader  = new FileReader();
+                const reader = new FileReader();
                 console.log('OK preload: ', this.nameFile, typeFile, reader);
                 reader.addEventListener('load', function () {
                     console.log('addEventListener load', reader.result);
@@ -1303,22 +1337,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         const imageXLoad = new Image;
                         imageXLoad.src = reader.result;
                         imageXLoad.title = that.nameFile;
-                        imageXLoad.onload = function() {
+                        imageXLoad.onload = function () {
                             console.log('onload ');
                             // that.arrayFiles4Load.push(imageXLoad);
                             const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
-                            that.arrayFiles4Load[0] = {uid: uid, file: imageXLoad, type: typeFile};
+                            that.arrayFiles4Load[0] = { uid: uid, file: imageXLoad, type: typeFile };
                             console.log('OK: ', that.arrayFiles4Load[0]);
                         };
                     } else {
-                        const fileXLoad  = {
+                        const fileXLoad = {
                             src: reader.result,
                             title: that.nameFile
                         };
                         console.log('onload ');
                         // that.arrayFiles4Load.push(imageXLoad);
                         const uid = fileXLoad.src.substring(fileXLoad.src.length - 16);
-                        that.arrayFiles4Load[0] = {uid: uid, file: fileXLoad, type: typeFile};
+                        that.arrayFiles4Load[0] = { uid: uid, file: fileXLoad, type: typeFile };
                         console.log('OK: ', that.arrayFiles4Load[0]);
                     }
                 }, false);
@@ -1515,26 +1549,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         uploadTask.then(snapshot => {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
         })
-        .then(downloadURL => {
-            console.log("AppComponent::uploadSingle:: downloadURL", downloadURL);
-            console.log(`Successfully uploaded file and got download link - ${downloadURL}`);
+            .then(downloadURL => {
+                console.log("AppComponent::uploadSingle:: downloadURL", downloadURL);
+                console.log(`Successfully uploaded file and got download link - ${downloadURL}`);
 
-            metadata.src = downloadURL;
-            let type_message = TYPE_MSG_TEXT;
-            let message = 'File: ' + metadata.src;
-            if (metadata.type.startsWith('image')) {
-                type_message = TYPE_MSG_IMAGE;
-                message = 'Image: ' + metadata.src;
-            }
-            that.sendMessage(message, type_message, metadata);
-            that.scrollToBottom();
+                metadata.src = downloadURL;
+                let type_message = TYPE_MSG_TEXT;
+                let message = 'File: ' + metadata.src;
+                if (metadata.type.startsWith('image')) {
+                    type_message = TYPE_MSG_IMAGE;
+                    message = 'Image: ' + metadata.src;
+                }
+                that.sendMessage(message, type_message, metadata);
+                that.scrollToBottom();
 
-            // return downloadURL;
-        })
-        .catch(error => {
-            // Use to signal error if something goes wrong.
-            console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
-        });
+                // return downloadURL;
+            })
+            .catch(error => {
+                // Use to signal error if something goes wrong.
+                console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+            });
 
         // this.resetLoadImage();
         console.log('reader-result: ', file);
@@ -1550,7 +1584,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         (metadata) ? metadata = metadata : metadata = '';
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
-        if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
+        if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
             // set recipientFullname
             // let recipientFullname = 'Guest';
             let recipientFullname = this.GUEST_LABEL;
@@ -1584,10 +1618,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         try {
             // tslint:disable-next-line:max-line-length
-            const loadEvent = new CustomEvent('beforeMessageSend', { detail: {senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type} });
+            const loadEvent = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
 
             this.el.nativeElement.dispatchEvent(loadEvent);
-        } catch(e) {
+        } catch (e) {
             console.error('Error triggering triggerBeforeSendMessageEvent', e);
         }
     }
@@ -1596,10 +1630,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         try {
             // tslint:disable-next-line:max-line-length
-            const loadEvent = new CustomEvent('afterMessageSend', { detail: {message: message} });
+            const loadEvent = new CustomEvent('afterMessageSend', { detail: { message: message } });
 
             this.el.nativeElement.dispatchEvent(loadEvent);
-        } catch(e) {
+        } catch (e) {
             console.error('Error triggering triggerAfterSendMessageEvent', e);
         }
     }
@@ -1663,7 +1697,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isConversationOpen = true;
         console.log('NEW SUBSRIBE -->' + this.isConversationOpen + ' <--');
-        
+
 
         // @TODO capire perchè quando si crea una nuova convesazione la textarea non c'è
         this.restoreTextArea();
@@ -1679,7 +1713,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private onSendPressed(event) {
-        console.log("onSendPressed:event", event );
+        console.log("onSendPressed:event", event);
         console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
         if (this.isFilePendingToUpload) {
             console.log("AppComponent::onSendPressed", "is a file");
