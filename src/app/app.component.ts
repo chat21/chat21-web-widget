@@ -217,6 +217,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('channelType', this.channelType);
         console.log('lang', this.lang);
         console.log('calloutTimer', this.calloutTimer);
+        console.log('align right', this.align);
+
 
 
         this.setAvailableAgentsStatus();
@@ -713,7 +715,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('align');
         if (TEMP) {
             this.align = TEMP;
-
+        }
+        
         TEMP = this.el.nativeElement.getAttribute('calloutTimer');
         if (TEMP) {
             this.calloutTimer = TEMP;
