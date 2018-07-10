@@ -164,7 +164,6 @@
 
 
 /* BUTTON */
-
 #chat21-launcher-button {
     /* background-image : url("../assets/images/f21-logo-widget.svg"); */
     background-image : url("../assets/images/tiledesk-circle-shadow.svg");
@@ -281,21 +280,32 @@
     color: #ffffff;
 }
 
-#chat21-container .chat21-sheet-header-close-button {
-    z-index: 999999004;
-    position: relative;
-    margin: 0 16px;
-    height: 100%;
-    cursor: pointer;
-    float: right;
+/* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
+ * ONLY IF THE WINDOW WIDTH IS < OF 451PX
+ */
+@media (max-width: 451px) {
+    #chat21-container .chat21-sheet-header-close-button {
+        z-index: 999999004;
+        position: relative;
+        margin: 0 16px;
+        height: 100%;
+        cursor: pointer;
+        float: right;
+    }
 }
-#chat21-container .chat21-sheet-header-button-icon-white {
-    height: 100%;
-    width: 16px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-    background-image : url("../assets/images/f21ico-widgetclose_white.svg");
+
+/* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
+ * ONLY IF THE WINDOW WIDTH IS < OF 451PX
+ */
+@media (max-width: 451px) {
+    #chat21-container .chat21-sheet-header-button-icon-white {
+        height: 100%;
+        width: 16px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        background-image : url("../assets/images/f21ico-widgetclose_white.svg");
+    }
 }
 
 /** CONTENT **/
