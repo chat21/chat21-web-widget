@@ -355,6 +355,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.align = 'right';
         this.calloutTimer = -1;
         
+        //for retrocompatibility 0.9 (without tiledesk.js)
+        this.baseLocation = 'https://widget.tiledesk.com';
+
         if (window['tiledesk']) {
             this.baseLocation = window['tiledesk'].getBaseLocation();
         }
