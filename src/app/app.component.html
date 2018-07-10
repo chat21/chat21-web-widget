@@ -1,8 +1,8 @@
 <div id="chat21-container" [class.active]="isLogged">
     <div id="chat21-launcher-button" [ngClass]="{'align_left' : align === 'left'}" (click)="f21_open_close_handler()">
-        <img *ngIf="!isOpen"  [@enterBubbleAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="../assets/images/tiledesk-chat-ballon.svg"/>
+        <img *ngIf="!isOpen"  [@enterBubbleAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon.svg"/>
         <!-- CLOSE ICON -->
-        <img *ngIf="isOpen" [@enterCloseAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="../assets/images/tiledesk-chat-close.svg"/>
+        <img *ngIf="isOpen" [@enterCloseAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
     
     </div>
 

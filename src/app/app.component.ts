@@ -194,6 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private window: Window;
     private isFilePendingToUpload: boolean = false;
+    private baseLocation: string;
 
     constructor(
         private zone: NgZone,
@@ -353,6 +354,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
+        
+        if (window['tiledesk']) {
+            this.baseLocation = window['tiledesk'].getBaseLocation();
+        }
+        console.log('baseLocation', this.baseLocation);
     }
 
     private addComponentToWindow(ngZone) {

@@ -10,7 +10,10 @@ window.tiledesk = new function() {
     this.on = function (event_name, handler) {
             //console.log("addEventListener for "+ event_name, handler);
             tiledeskroot.addEventListener(event_name, handler);
-        };
+    };
+    this.getBaseLocation = function() {
+        return tiledeskScriptBaseLocation;
+    }
 }
 console.log("window.tiledesk created");
 
