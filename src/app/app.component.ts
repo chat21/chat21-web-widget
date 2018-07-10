@@ -935,9 +935,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 // departmentName: '',
                 // departmentId: this.departmentSelected._id,
                 // departmentName: this.departmentSelected.name,
-                userEmail: this.userEmail,
-                userName: this.userFullname
+                // userEmail: this.userEmail,
+                // userName: this.userFullname
             };
+
+            if (this.userEmail) {
+                attributes['userEmail'] = this.userEmail;
+            }
+            if (this.userFullname) {
+                attributes['userFullname'] = this.userFullname;
+            }
+
             console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
             sessionStorage.setItem('attributes', JSON.stringify(attributes));
         }
