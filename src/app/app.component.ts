@@ -141,7 +141,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     channelType: string;
     calloutTimer: number;
     align: string;
-
+    hideHeaderCloseButton: boolean;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -356,7 +356,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
-        
+        this.hideHeaderCloseButton = false;
         //for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
 
@@ -510,10 +510,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.tiledesk_callouttimer", this.calloutTimer);
         }
 
-           // nk: chat21-launcher-button alignment
+        // nk: chat21-launcher-button alignment
         if (this.getParameterByName('tiledesk_align')) {
             this.align = this.getParameterByName('tiledesk_align');
-            // console.log("getUrlParameters.preChatForm", this.preChatForm);
+        }
+
+       // nk
+       if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
+            this.hideHeaderCloseButton = true;
         }
 
     }
@@ -668,6 +672,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.calloutTimer = TEMP;
         }
 
+        // nk
+        TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
+        if (TEMP) {
+            this.hideHeaderCloseButton = true;
+        }
     }
 
     // /**
@@ -765,6 +774,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = this.el.nativeElement.getAttribute('calloutTimer');
         if (TEMP) {
             this.calloutTimer = TEMP;
+        }
+
+        // nk
+        TEMP = this.el.nativeElement.getAttribute('hideHeaderCloseButton');
+        if (TEMP) {
+            this.hideHeaderCloseButton = true;
         }
     }
 

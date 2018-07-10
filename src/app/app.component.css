@@ -283,6 +283,13 @@
     color: #ffffff;
 }
 
+/* // nk: HIDE THE 'CLOSE BUTTON' IN THE sheet-header 
+ * IF hideHeaderCloseButton === true
+ */
+.hide_header_close_btn {
+    display: none;
+}
+
 /* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
  * ONLY IF THE WINDOW WIDTH IS < OF 451PX
  */
