@@ -537,7 +537,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }, () => {
 
                 }
-            )
+            );
         // , (error) => {
         //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
         // },() => {
@@ -659,6 +659,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = window['tiledeskSettings']['align'];
         if (TEMP) {
             this.align = TEMP;
+        }
+
+        TEMP = window['tiledeskSettings']['calloutTimer'];
+        if (TEMP) {
+            this.calloutTimer = TEMP;
         }
 
     }
