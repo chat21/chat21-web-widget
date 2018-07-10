@@ -634,7 +634,8 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     border-width: 2px;
     height: 44px;
     position: relative;
-    width: 304px;
+    /* width: 304px; */
+    width: 364px; /* nk */
     background-color: #ffffff;
     z-index: 100;
     font-size: 13px;
