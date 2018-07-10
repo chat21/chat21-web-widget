@@ -164,8 +164,10 @@
 
 
 /* BUTTON */
+
 #chat21-launcher-button {
-    background-image : url("../assets/images/f21-logo-widget.svg");
+    /* background-image : url("../assets/images/f21-logo-widget.svg"); */
+    background-image : url("../assets/images/tiledesk-circle-shadow.svg");
     background-size: 90px 90px;
     background-repeat: no-repeat;
     border-radius: 50%;
@@ -181,6 +183,10 @@
     border-color: #000000;
     /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
 }
+
+/* .icon_launcer {
+    background-image : url("../assets/images/tiledesk-chat-ballon.svg");
+} */
 
 #chat21-container{
     display: none;

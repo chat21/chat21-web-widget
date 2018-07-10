@@ -28,10 +28,38 @@ import 'rxjs/add/operator/takeWhile';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 import { TranslatorService } from './providers/translator.service';
 
+import { trigger, style, animate, transition } from '@angular/animations';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
+    animations: [
+        trigger(
+          'enterCloseAnimation', [
+            transition(':enter', [
+              style({transform: 'rotate(0deg)', opacity: 0}),
+              animate('400ms ease-out', style({transform: 'rotate(90deg)', opacity: 1}))
+            ]),
+            transition(':leave', [
+              style({transform: 'rotate(90deg)', opacity: 1}),
+              animate('400ms ease-in', style({transform: 'rotate(0deg)', opacity: 0}))
+            ])
+          ]
+        ),
+        trigger(
+            'enterBubbleAnimation', [
+              transition(':enter', [
+                style({transform: 'scale(0.5)', opacity: 0}),
+                animate('200ms ease-out', style({transform: 'scale(1)', opacity: 1}))
+              ]),
+              transition(':leave', [
+                style({transform: 'scale(1)', opacity: 1}),
+                animate('200ms ease-in', style({transform: 'scale(0.5)', opacity: 0}))
+              ])
+            ]
+          )
+
+      ]
     //   providers: [AgentAvailabilityService, TranslatorService]
 })
 
@@ -113,6 +141,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     channelType: string;
     calloutTimer: number;
     align: string;
+
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
