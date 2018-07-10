@@ -204,13 +204,16 @@
     z-index: 999999001;
     display: none;
     position: fixed;
-    height: 80%;
-    width: 320px;
+    /* height: 80%; */
+    height: 80%; /* nk */
+    /* width: 320px; */
+    width: 376px; /* nk */
     bottom: 100px;
     overflow: hidden;
-    border-radius: 10px;
+    /* border-radius: 10px; */
+    border-radius: 8px; /* nk */
     right: 20px;
-    max-height: 400px;
+    /* max-height: 400px; */
     overflow-y: auto;
     background-color: #fff;
 }
