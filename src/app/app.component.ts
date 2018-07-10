@@ -327,7 +327,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 //     that.isLogged = false;
                 // }
             });
-        this.checkWritingMessages();
+
+
+        
 
 
 
@@ -432,58 +434,58 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.getParameterByName('tiledesk_tenant')) {
             this.tenant = this.getParameterByName('tiledesk_tenant');
-            // console.log("getUrlParameters.tenant",  this.tenant); 
+            // console.log("getUrlParameters.tenant",  this.tenant);
         }
 
         if (this.getParameterByName('tiledesk_recipientid')) {
             this.recipientId = this.getParameterByName('tiledesk_recipientid');
-            // console.log("getUrlParameters.recipientId", this.recipientId); 
+            // console.log("getUrlParameters.recipientId", this.recipientId);
         }
 
         if (this.getParameterByName('tiledesk_projectid')) {
             this.projectid = this.getParameterByName('tiledesk_projectid');
-            // console.log("getUrlParameters.projectid", this.projectid); 
+            // console.log("getUrlParameters.projectid", this.projectid);
         }
 
         if (this.getParameterByName('tiledesk_projectname')) {
             this.projectname = this.getParameterByName('tiledesk_projectname');
-            // console.log("getUrlParameters.projectname", this.projectname); 
+            // console.log("getUrlParameters.projectname", this.projectname);
         }
 
         if (this.getParameterByName('tiledesk_chatname')) {
             this.chatName = this.getParameterByName('tiledesk_chatname');
-            // console.log("getUrlParameters.chatName", this.chatName); 
+            // console.log("getUrlParameters.chatName", this.chatName);
         }
 
         if (this.getParameterByName('tiledesk_poweredby')) {
             this.poweredBy = this.getParameterByName('tiledesk_poweredby');
-            // console.log("getUrlParameters.poweredBy", this.poweredBy); 
+            // console.log("getUrlParameters.poweredBy", this.poweredBy);
         }
 
         if (this.getParameterByName('tiledesk_userid')) {
             this.userId = this.getParameterByName('tiledesk_userid');
-            // console.log("getUrlParameters.userId", this.userId); 
+            // console.log("getUrlParameters.userId", this.userId);
         }
 
         if (this.getParameterByName('tiledesk_useremail')) {
             this.userEmail = this.getParameterByName('tiledesk_useremail');
-            // console.log("getUrlParameters.userEmail", this.userEmail); 
+            // console.log("getUrlParameters.userEmail", this.userEmail);
         }
 
         if (this.getParameterByName('tiledesk_userpassword')) {
             this.userPassword = this.getParameterByName('tiledesk_userpassword');
-            // console.log("getUrlParameters.userPassword", this.userPassword); 
+            // console.log("getUrlParameters.userPassword", this.userPassword);
         }
 
         if (this.getParameterByName('tiledesk_userfullname')) {
             this.userFullname = this.getParameterByName('tiledesk_userfullname');
-            // console.log("getUrlParameters.userFullname", this.userFullname); 
+            // console.log("getUrlParameters.userFullname", this.userFullname);
         }
 
         // console.log('this.getParameterByName(tiledesk_prechatform)', this.getParameterByName('tiledesk_prechatform'));
         if (this.getParameterByName('tiledesk_prechatform')) {
             this.preChatForm = true;
-            // console.log("getUrlParameters.preChatForm", this.preChatForm); 
+            // console.log("getUrlParameters.preChatForm", this.preChatForm);
         }
 
         if (this.getParameterByName('tiledesk_isopen')) {
@@ -511,7 +513,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
            // nk: chat21-launcher-button alignment
         if (this.getParameterByName('tiledesk_align')) {
             this.align = this.getParameterByName('tiledesk_align');
-            // console.log("getUrlParameters.preChatForm", this.preChatForm); 
+            // console.log("getUrlParameters.preChatForm", this.preChatForm);
         }
 
     }
@@ -531,7 +533,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.areAgentsAvailableText = this.AGENT_AVAILABLE;
                     }
                 }, (error) => {
-                    // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
+                    // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
                     console.error('setOnlineStatus::setAvailableAgentsStatus', error);
 
                 }, () => {
@@ -759,7 +761,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.align = TEMP;
         }
-        
+
         TEMP = this.el.nativeElement.getAttribute('calloutTimer');
         if (TEMP) {
             this.calloutTimer = TEMP;
@@ -930,6 +932,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.preChatForm = false;
         }
 
+
+        this.checkWritingMessages();
+
     }
 
     setAttributes(): any {
@@ -1046,7 +1051,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     }, 2000);
                     that.isLogged = true;
-                    console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-if", that.isLogged);
+                    console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-if', that.isLogged);
                     that.setFocusOnId('chat21-main-message-context');
                 } else {
                     that.isNewConversation = true;
@@ -1057,7 +1062,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     } else {
                         that.setFocusOnId('chat21-main-message-context');
                         that.isLogged = true;
-                        console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-department", that.isLogged);
+                        console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-else-department', that.isLogged);
                     }
                 }
 
@@ -1071,39 +1076,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    checkWritingMessages() {
-        // this.messagingService.checkWritingMessages();
-        const that = this;
-        const subscription: Subscription = this.messagingService.obsCheckWritingMessages
-            // .takeWhile(() => that.subscriptionIsWriting)
-            .subscribe(resp => {
-                //console.log('2 - subscribe IS: ', resp + ' ****************');
-                if (resp) {
-                    setTimeout(function () {
-                        that.writingMessage = this.LABEL_WRITING;
-                    }, 1000);
-                } else {
-                    that.writingMessage = '';
-                }
-            });
-
-    }
-
-    // checkWritingMessages_old() {
+    // checkWritingMessages() {
+    //     // this.messagingService.checkWritingMessages();
     //     const that = this;
-    //     const messagesRef = this.messagingService.checkWritingMessages(this.conversationWith);
-    //     messagesRef.on('value', function(writing) {
-    //     //.then(function(writing) {
-    //         console.log('checkWritingMessages >>>>>>>>>: ', writing);
-    //         if (writing.exists()) {
-    //             console.log('WritingMessages >>>>>>>>> OKKKK ');
-    //             that.writingMessage = that.LABEL_WRITING;
-    //         } else {
-    //             console.log('WritingMessages >>>>>>>>> NOOOOO ');
-    //             that.writingMessage = '';
-    //         }
-    //     });
+    //     const subscription: Subscription = this.messagingService.obsCheckWritingMessages
+    //         // .takeWhile(() => that.subscriptionIsWriting)
+    //         .subscribe(resp => {
+    //             //console.log('2 - subscribe IS: ', resp + ' ****************');
+    //             if (resp) {
+    //                 setTimeout(function () {
+    //                     that.writingMessage = this.LABEL_WRITING;
+    //                 }, 1000);
+    //             } else {
+    //                 that.writingMessage = '';
+    //             }
+    //         });
+
     // }
+
+    checkWritingMessages() {
+        const that = this;
+        const messagesRef = this.messagingService.checkWritingMessages(this.tenant, this.conversationWith);
+        messagesRef.on('value', function(writing) {
+        // .then(function(writing) {
+            console.log('checkWritingMessages >>>>>>>>>: ', writing);
+            if (writing.exists()) {
+                console.log('WritingMessages >>>>>>>>> OKKKK ');
+                that.writingMessage = that.LABEL_WRITING;
+            } else {
+                console.log('WritingMessages >>>>>>>>> NOOOOO ');
+                that.writingMessage = '';
+            }
+        });
+    }
 
     /**
      * recupero elenco dipartimenti
@@ -1145,7 +1150,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.openSelectionDepartment = false;
                     }
                     this.isLogged = true;
-                    console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
+                    console.log('IS_LOGGED', 'AppComponent:getMongDbDepartments:', this.isLogged);
                 },
                 errMsg => {
                     console.log('http ERROR MESSAGE', errMsg);
@@ -1154,7 +1159,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.setFocusOnId('chat21-main-message-context');
 
                     this.isLogged = false;
-                    console.log("IS_LOGGED", "AppComponent:getMongDbDepartments:", this.isLogged);
+                    console.log('IS_LOGGED', 'AppComponent:getMongDbDepartments:', this.isLogged);
                 },
                 () => {
                     console.log('API ERROR NESSUNO');
@@ -1370,7 +1375,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private restoreTextArea() {
-        console.log("AppComponent:restoreTextArea::restoreTextArea");
+        console.log('AppComponent:restoreTextArea::restoreTextArea');
 
         this.resizeInputField();
 
@@ -1380,9 +1385,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (textArea) {
             textArea.value = '';  // clear the text area
             textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
-            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "restored");
+            console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
         } else {
-            console.log("AppComponent:restoreTextArea::restoreTextArea::textArea:", "not restored");
+            console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
         }
 
     }
@@ -1396,14 +1401,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('detectFiles: ', event);
         if (event) {
             this.selectedFiles = event.target.files;
-            console.log("AppComponent:detectFiles::selectedFiles", this.selectedFiles);
+            console.log('AppComponent:detectFiles::selectedFiles', this.selectedFiles);
 
             if (this.selectedFiles == null) {
                 this.isFilePendingToUpload = false;
             } else {
                 this.isFilePendingToUpload = true;
             }
-            console.log("AppComponent:detectFiles::selectedFiles::isFilePendingToUpload", this.isFilePendingToUpload);
+            console.log('AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload);
 
             console.log('fileChange: ', event.target.files);
             const that = this;
@@ -1550,7 +1555,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isSelected = false;
 
         this.isFilePendingToUpload = false;
-        console.log("AppComponent::resetLoadImage::isFilePendingToUpload:", this.isFilePendingToUpload);
+        console.log('AppComponent::resetLoadImage::isFilePendingToUpload:', this.isFilePendingToUpload);
 
         this.restoreTextArea();
     }
@@ -1628,12 +1633,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const currentUpload = new UploadModel(file);
 
 
-        var uploadTask = this.upSvc.pushUpload(currentUpload);
+        let uploadTask = this.upSvc.pushUpload(currentUpload);
         uploadTask.then(snapshot => {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
         })
             .then(downloadURL => {
-                console.log("AppComponent::uploadSingle:: downloadURL", downloadURL);
+                console.log('AppComponent::uploadSingle:: downloadURL', downloadURL);
                 console.log(`Successfully uploaded file and got download link - ${downloadURL}`);
 
                 metadata.src = downloadURL;
@@ -1796,17 +1801,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private onSendPressed(event) {
-        console.log("onSendPressed:event", event);
-        console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+        console.log('onSendPressed:event', event);
+        console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
         if (this.isFilePendingToUpload) {
-            console.log("AppComponent::onSendPressed", "is a file");
-            // its a file 
+            console.log('AppComponent::onSendPressed', 'is a file');
+            // its a file
             this.loadFile();
 
             this.isFilePendingToUpload = false;
-            console.log("AppComponent::onSendPressed::isFilePendingToUpload:", this.isFilePendingToUpload);
+            console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
         } else {
-            console.log("AppComponent::onSendPressed", "is a message");
+            console.log('AppComponent::onSendPressed', 'is a message');
             // its a message
             this.performSendingMessage();
 

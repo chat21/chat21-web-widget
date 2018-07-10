@@ -32,7 +32,7 @@ export class MessagingService {
   messagesRef: any;
   messages: Array<MessageModel>;
 
-  obsCheckWritingMessages: BehaviorSubject<string>;
+  // obsCheckWritingMessages: BehaviorSubject<string>;
   obsAdded: any;
   // obsAdded: BehaviorSubject<MessageModel>;
   // obsChanged: BehaviorSubject<MessageModel>;
@@ -61,7 +61,7 @@ export class MessagingService {
     // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
     this.messages = new Array<MessageModel>();
     // this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
-    this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
+    // this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
     // this.obsChanged = new BehaviorSubject<MessageModel>(null);
     // this.obsRemoved = new BehaviorSubject<MessageModel>(null);
@@ -90,7 +90,7 @@ export class MessagingService {
     this.senderId = userUid;
     this.tenant = tenant;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
-    //console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
+    // console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
 
   public getMongDbDepartments(token, projectId): Observable<DepartmentModel[]> {
@@ -137,24 +137,38 @@ export class MessagingService {
   }
 
 
-  public checkWritingMessages() {
+  // public checkWritingMessages() {
+  //   const that = this;
+  //   const urlNodeFirebaseMembers = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members';
+  //   console.log('urlNodeFirebaseMembers *****', urlNodeFirebaseMembers);
+  //   const firebaseGroup = firebase.database().ref(urlNodeFirebaseMembers)
+  //   .once('value').then(function(snapshot) {
+  //     console.log('snapshot.val() *****', snapshot);
+  //     const resp = that.checkIsBot(snapshot);
+  //     that.obsCheckWritingMessages.next(resp);
+  //   });
+  // }
+
+  public checkWritingMessages(tenant, conversationWith): any {
+    this.conversationWith = conversationWith;
     const that = this;
-    const urlNodeFirebaseMembers = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members';
-    console.log('urlNodeFirebaseMembers *****', urlNodeFirebaseMembers);
-    const firebaseGroup = firebase.database().ref(urlNodeFirebaseMembers)
-    .once('value').then(function(snapshot) {
-      console.log('snapshot.val() *****', snapshot);
-      const resp = that.checkIsBot(snapshot);
-      that.obsCheckWritingMessages.next(resp);
-    });
+    // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
+    const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
+    console.log('checkWritingMessages *****', urlNodeFirebase);
+    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+    const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
+    return messagesRef;
+//     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+// starCountRef.on('value', function(snapshot) {
   }
 
-  public deleteWritingMessages(sender) {
-    console.log('deleteWritingMessages *****', sender);
-    if (sender.startsWith('bot_')) {
-      this.obsCheckWritingMessages.next(null);
-    }
-  }
+
+  // public deleteWritingMessages(sender) {
+  //   console.log('deleteWritingMessages *****', sender);
+  //   if (sender.startsWith('bot_')) {
+  //     this.obsCheckWritingMessages.next(null);
+  //   }
+  // }
 
   checkIsBot(snapshot) {
     console.log('snapshot.numChildren() *****', snapshot.numChildren());
@@ -177,18 +191,7 @@ export class MessagingService {
     return RESP;
   }
 
-//   public checkWritingMessages(conversationWith): any {
-//     this.conversationWith = conversationWith;
-//     const that = this;
-//     // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
-//     const urlNodeFirebase = '/apps/' + this.tenant + '/typings/' + conversationWith;
-//     console.log('checkWritingMessages *****', urlNodeFirebase);
-//     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-//     const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
-//     return messagesRef;
-// //     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-// // starCountRef.on('value', function(snapshot) {
-//   }
+
 
   checkMessage(message): boolean {
     if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
@@ -293,7 +296,7 @@ export class MessagingService {
         );
         console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
-        that.deleteWritingMessages(message['sender']);
+        // that.deleteWritingMessages(message['sender']);
         // notifico arrivo nuovo messaggio
         console.log('NOTIFICO NW MSG *****', that.obsAdded);
         that.obsAdded.next(msg);
@@ -411,7 +414,7 @@ export class MessagingService {
           message.status = '-100';
           console.log('ERRORE', error);
         } else {
-          that.checkWritingMessages();
+          // that.checkWritingMessages();
           message.status = '150';
           console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
         }
@@ -478,10 +481,10 @@ export class MessagingService {
     // mi sottoscrivo al nodo user/groups/ui-group/members
     // tslint:disable-next-line:max-line-length
     const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
-    //console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
+    // console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
     this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
-      //console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
+      // console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
       if ( childSnapshot.key === that.senderId) {
         // CHIUDO CONVERSAZIONE
         that.closeConversation();
