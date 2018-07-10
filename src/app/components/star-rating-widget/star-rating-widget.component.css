@@ -16,6 +16,7 @@ h1 { font-size: 2em; margin: 10px; }
   left: 40px;
   right: 40px;
   padding:10px;
+  text-align: center; /* nk */
 }
 .chat21-modal-content{
   bottom: 120px;
@@ -127,7 +128,8 @@ h3.chat21-modal-title  {
   float: left;
   /* width: 143px; */
   min-height: 44px;
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  margin-left: 38px; /* nk */
 }
 
 .chat21-rating > input { display: none; } 
