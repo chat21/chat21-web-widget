@@ -142,6 +142,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutTimer: number;
     align: string;
     hideHeaderCloseButton: boolean;
+    wellcomeMsg: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -175,10 +176,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
     // LABEL_START_NW_CONV = 'INIZIA UNA NUOVA CONVERSAZIONE'; // 'START NEW CONVERSATION'; //
-    // // tslint:disable-next-line:max-line-length
+    // tslint:disable-next-line:max-line-length
     // LABEL_FIRST_MSG = 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato'; // 'Describe shortly your problem, you will be contacted by an agent';
     // LABEL_SELECT_TOPIC = 'Seleziona un argomento'; // 'Select a topic';
-    // // tslint:disable-next-line:max-line-length
+    // tslint:disable-next-line:max-line-length
     // LABLEL_COMPLETE_FORM = 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.'; // 'Complete the form to start a conversation with the next available agent.';
     // LABEL_FIELD_NAME = '* Nome'; // '* Name';
     // LABEL_ERROR_FIELD_NAME = 'Nome richiesto (minimo 2 caratteri).'; // 'Required field (minimum 5 characters).';
@@ -214,7 +215,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private initAll() {
 
-        //RElated to https://github.com/firebase/angularfire/issues/970
+        // RElated to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
 
         console.log(' ---------------- COSTRUCTOR ---------------- ');
@@ -247,7 +248,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('channelType', this.channelType);
         console.log('lang', this.lang);
         console.log('calloutTimer', this.calloutTimer);
-        console.log('align right', this.align);
+        console.log('align ', this.align);
+        console.log('hideHeaderCloseButton ', this.hideHeaderCloseButton);
+        console.log('wellcomeMsg ', this.wellcomeMsg);
 
 
 
@@ -328,13 +331,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 // }
             });
 
-
-        
-
-
-
         this.addComponentToWindow(this.ngZone);
-
 
     }
 
@@ -357,7 +354,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.align = 'right';
         this.calloutTimer = -1;
         this.hideHeaderCloseButton = false;
-        //for retrocompatibility 0.9 (without tiledesk.js)
+        this.wellcomeMsg = '';
+        // for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
 
         if (window['tiledesk']) {
@@ -403,7 +401,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
         this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
         this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
-        this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME')
+        this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME');
         this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
         this.LABEL_FIELD_EMAIL = this.translatorService.translate('LABEL_FIELD_EMAIL');
         this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
@@ -513,13 +511,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // nk: chat21-launcher-button alignment
         if (this.getParameterByName('tiledesk_align')) {
             this.align = this.getParameterByName('tiledesk_align');
+            console.log('»»» GET VARIABLE URL PARAMETERS - ALIGN ', this.align);
         }
 
        // nk
        if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
             this.hideHeaderCloseButton = true;
+            console.log('»»» GET VARIABLE URL PARAMETERS - HIDE HEADER CLOSE BUTTON ', this.hideHeaderCloseButton);
         }
 
+       // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
+        if (this.getParameterByName('tiledesk_wellcomemsg')) {
+            this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
+            console.log('»»» GET VARIABLE URL PARAMETERS - WELCOME MSG ', this.wellcomeMsg);
+        }
     }
 
     private setAvailableAgentsStatus() {
@@ -545,7 +550,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             );
         // , (error) => {
-        //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error); 
+        //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error);
         // },() => {
 
         // }
@@ -578,7 +583,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * userPassword:
      * userFullname:
      * preChatForm:
-     *
+     * align
+     * callouTimer
+     * hideHeaderCloseButton
     */
     getVariablesFromSettings() {
         // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
@@ -665,17 +672,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = window['tiledeskSettings']['align'];
         if (TEMP) {
             this.align = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - ALIGN ', this.align);
         }
 
         TEMP = window['tiledeskSettings']['calloutTimer'];
         if (TEMP) {
             this.calloutTimer = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - CALLOUT TIMER ', this.calloutTimer);
         }
 
         // nk
         TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
         if (TEMP) {
             this.hideHeaderCloseButton = true;
+            console.log('»»» GET VARIABLES FROM SETTINGS - HIDE HEADER CLOSE BTN ', this.hideHeaderCloseButton);
+        }
+
+        // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
+        TEMP = window['tiledeskSettings']['wellcomeMsg'];
+        if (TEMP) {
+            this.wellcomeMsg = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - WELCOME MSG ', this.wellcomeMsg);
         }
     }
 
@@ -690,7 +707,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     //  * userPassword:
     //  * userFullname:
     //  * preChatForm:
-    //  *
+    //  * align
+    //  * calloutTimer
+    //  * hideHeaderCloseButton
     // */
     getVariablesFromAttributeHtml() {
         // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
@@ -765,21 +784,31 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.lang = TEMP;
         }
 
-        // nk: chat21-launcher-button
+        // nk: aligns the chat21-launcher-button
         TEMP = this.el.nativeElement.getAttribute('align');
         if (TEMP) {
             this.align = TEMP;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - ALIGN ', this.align);
         }
 
         TEMP = this.el.nativeElement.getAttribute('calloutTimer');
         if (TEMP) {
             this.calloutTimer = TEMP;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - CALLOUT TIMER ', this.calloutTimer);
         }
 
         // nk
         TEMP = this.el.nativeElement.getAttribute('hideHeaderCloseButton');
         if (TEMP) {
             this.hideHeaderCloseButton = true;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - HIDE HEADER CLOSE BTN ', this.hideHeaderCloseButton);
+        }
+
+        // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
+        TEMP = this.el.nativeElement.getAttribute('wellcomeMsg');
+        if (TEMP) {
+            this.wellcomeMsg = TEMP;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - WELLCOME MSG ', this.wellcomeMsg);
         }
     }
 

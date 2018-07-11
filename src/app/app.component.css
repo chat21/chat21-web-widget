@@ -290,6 +290,17 @@
     display: none;
 }
 
+/* // nk HIDE THE LABEL_FIRST_MSG IF wellcomeMsg !== '' */
+.hide_LABEL_FIRST_MSG {
+    display: none;
+}
+
+/* // nk DISPLAY THE wellcomeMsg IF wellcomeMsg !== '' 
+ * (NOTE: initially the div of wellcomeMsg is hidden - see the template) */
+.display_wellcomeMsg {
+    display: block !important;
+}
+
 /* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
  * ONLY IF THE WINDOW WIDTH IS < OF 451PX
  */

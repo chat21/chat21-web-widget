@@ -28,8 +28,14 @@
                 <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
             </div>
 
+            <!-- // nk - to edit: display the msg of welcome msg if exist -->
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-header-modal-select">
-                <div>{{LABEL_FIRST_MSG}}</div>
+                <div [ngClass]="{'hide_LABEL_FIRST_MSG' : wellcomeMsg !== ''}">
+                    {{LABEL_FIRST_MSG}}
+                </div>
+                <div [ngClass]="{'display_wellcomeMsg' : wellcomeMsg !== ''}" style="display: none">
+                    {{ wellcomeMsg }}
+                </div>
             </div>
             <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;"
                 class="chat21-header-modal-select">
