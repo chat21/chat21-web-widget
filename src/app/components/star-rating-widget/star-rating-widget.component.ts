@@ -65,6 +65,11 @@ export class StarRatingWidgetComponent implements OnInit {
 
 closeRate() {
   this.starRatingWidgetService.setOsservable(false);
+  this.step = 0;
 }
+
+  ngOnDestroy() {
+    this.step = 0;
+  }
 
 }

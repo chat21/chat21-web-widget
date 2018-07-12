@@ -1831,8 +1831,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isConversationOpen = true;
         console.log('NEW SUBSRIBE -->' + this.isConversationOpen + ' <--');
 
-
-        // @TODO capire perchè quando si crea una nuova convesazione la textarea non c'è
         this.restoreTextArea();
 
     }
