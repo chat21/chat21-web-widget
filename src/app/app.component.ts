@@ -35,31 +35,31 @@ import { trigger, style, animate, transition } from '@angular/animations';
     styleUrls: ['./app.component.css'],
     animations: [
         trigger(
-          'enterCloseAnimation', [
-            transition(':enter', [
-              style({transform: 'rotate(0deg)', opacity: 0}),
-              animate('400ms ease-out', style({transform: 'rotate(90deg)', opacity: 1}))
-            ]),
-            transition(':leave', [
-              style({transform: 'rotate(90deg)', opacity: 1}),
-              animate('400ms ease-in', style({transform: 'rotate(0deg)', opacity: 0}))
-            ])
-          ]
+            'enterCloseAnimation', [
+                transition(':enter', [
+                    style({ transform: 'rotate(0deg)', opacity: 0 }),
+                    animate('400ms ease-out', style({ transform: 'rotate(90deg)', opacity: 1 }))
+                ]),
+                transition(':leave', [
+                    style({ transform: 'rotate(90deg)', opacity: 1 }),
+                    animate('400ms ease-in', style({ transform: 'rotate(0deg)', opacity: 0 }))
+                ])
+            ]
         ),
         trigger(
             'enterBubbleAnimation', [
-              transition(':enter', [
-                style({transform: 'scale(0.5)', opacity: 0}),
-                animate('200ms ease-out', style({transform: 'scale(1)', opacity: 1}))
-              ]),
-              transition(':leave', [
-                style({transform: 'scale(1)', opacity: 1}),
-                animate('200ms ease-in', style({transform: 'scale(0.5)', opacity: 0}))
-              ])
+                transition(':enter', [
+                    style({ transform: 'scale(0.5)', opacity: 0 }),
+                    animate('200ms ease-out', style({ transform: 'scale(1)', opacity: 1 }))
+                ]),
+                transition(':leave', [
+                    style({ transform: 'scale(1)', opacity: 1 }),
+                    animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
+                ])
             ]
-          )
+        )
 
-      ]
+    ]
     //   providers: [AgentAvailabilityService, TranslatorService]
 })
 
@@ -339,7 +339,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const that = this;
         if (this.calloutTimer >= 0) {
             const waitingTime = this.calloutTimer * 1000;
-            setTimeout(function() {
+            setTimeout(function () {
                 that.f21_open();
             }, waitingTime);
         }
@@ -514,13 +514,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - ALIGN ', this.align);
         }
 
-       // nk
-       if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
+        // nk
+        if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
             this.hideHeaderCloseButton = true;
             console.log('»»» GET VARIABLE URL PARAMETERS - HIDE HEADER CLOSE BUTTON ', this.hideHeaderCloseButton);
         }
 
-       // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
+        // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
         if (this.getParameterByName('tiledesk_wellcomemsg')) {
             this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
             console.log('»»» GET VARIABLE URL PARAMETERS - WELCOME MSG ', this.wellcomeMsg);
@@ -868,7 +868,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 that.isWidgetActive = isWidgetActive;
                 if (isWidgetActive === false) {
                     sessionStorage.removeItem('isWidgetActive');
-                    this.conversationWith = null;
+                    // this.conversationWith = null;
                     // this.generateNewUidConversation();
                     console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
                 } else if (isWidgetActive === true) {
@@ -921,13 +921,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-    //     const that = this;
-    //     if (this.calloutTimer >= 0) {
-    //         const waitingTime = this.calloutTimer * 1000;
-    //         setTimeout(function() {
-    //             that.f21_open();
-    //         }, waitingTime);
-    //     }
+        //     const that = this;
+        //     if (this.calloutTimer >= 0) {
+        //         const waitingTime = this.calloutTimer * 1000;
+        //         setTimeout(function() {
+        //             that.f21_open();
+        //         }, waitingTime);
+        //     }
     }
 
     /**
@@ -1141,8 +1141,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     checkWritingMessages() {
         const that = this;
         const messagesRef = this.messagingService.checkWritingMessages(this.tenant, this.conversationWith);
-        messagesRef.on('value', function(writing) {
-        // .then(function(writing) {
+        messagesRef.on('value', function (writing) {
+            // .then(function(writing) {
             console.log('checkWritingMessages >>>>>>>>>: ', writing);
             if (writing.exists()) {
                 console.log('WritingMessages >>>>>>>>> OKKKK ');
@@ -1260,7 +1260,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     f21_open_close_handler() {
 
         if (this.isOpen) {
-
             this.f21_close();
         } else {
             this.f21_open();
@@ -1290,6 +1289,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     */
     f21_close() {
         console.log('isOpen::', this.isOpen);
+        this.restoreTextArea();
         this.isOpen = false;
         sessionStorage.setItem('isOpen', 'false');
         // sessionStorage.removeItem('isOpen');
@@ -1423,15 +1423,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.resizeInputField();
 
-
         var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
 
+        this.textInputTextArea = ''; // clear the textarea
+
         if (textArea) {
-            textArea.value = '';  // clear the text area
+            // textArea.value = '';  // clear the textarea
             textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
             console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
         } else {
-            console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+            console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
         }
 
     }
@@ -1809,9 +1810,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * attivo una nuova conversazione
      */
     startNwConversation() {
-        console.log('this.startNwConversation 2');
-
-        // this.constructor();
+        console.log("AppComponent::startNwConversation");
 
         this.initAll();
 
@@ -1823,6 +1822,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.createConversation();
         console.log('NEW createConversation: ');
+
+        this.getMongDbDepartments();
 
         this.initialize();
         console.log('NEW initialize: ');
