@@ -541,6 +541,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.areAgentsAvailable = true;
                         this.areAgentsAvailableText = this.AGENT_AVAILABLE;
                     }
+
+                    console.log("AppComponent::setAvailableAgentsStatus::areAgentsAvailable:", this.areAgentsAvailable)
                 }, (error) => {
                     // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
                     console.error('setOnlineStatus::setAvailableAgentsStatus', error);
@@ -1456,6 +1458,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload);
 
             console.log('fileChange: ', event.target.files);
+
+            if (event.target.files.length <=0 ) {
+                this.isFilePendingToUpload = false;
+            } else {
+                this.isFilePendingToUpload = true;
+            }
+
             const that = this;
             if (event.target.files && event.target.files[0]) {
                 this.nameFile = event.target.files[0].name;
