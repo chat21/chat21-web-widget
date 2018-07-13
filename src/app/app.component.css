@@ -679,6 +679,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     height: 25px;
     width: 100%;
 }
+
+/* .powered_by {
+    color:#2a6ac1 !important;
+} */
+
 #chat21-powered-by a {
     text-decoration: none;
     color:#2a6ac1;
@@ -859,6 +864,12 @@ div#chat21-end-footer:hover div.build_version{
     position: absolute;
     bottom: 0px;
     cursor: pointer;
+  }
+
+  /* nk */
+  .chat21-button-new:hover {
+    background-color: #ffffff !important;
+    color: #2a6ac1 !important;
   }
 
   .chat21-formMessageField {
