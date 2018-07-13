@@ -41,7 +41,8 @@ export class MessagingService {
   observableWidgetActive: any;
 
   firebaseMessagesKey: any;
-  firebaseGroupMenbersRef: any;
+  // firebaseGroupMenbersRef: any;
+  conversationRef : any;
   isWidgetActive: boolean;
   channel_type: string;
   MONGODB_BASE_URL: string;
@@ -475,24 +476,34 @@ export class MessagingService {
   /**
    *
    */
+  // private checkRemoveMember() {
+  //   const that = this;
+  //   // dopo aver aggiunto un messaggio al gruppo
+  //   // mi sottoscrivo al nodo user/groups/ui-group/members
+  //   // tslint:disable-next-line:max-line-length
+  //   const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
+  //   // console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
+  //   this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
+  //   this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
+  //     // console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
+  //     if ( childSnapshot.key === that.senderId) {
+  //       // CHIUDO CONVERSAZIONE
+  //       that.closeConversation();
+  //     }
+  //   });
+  // }
+
   private checkRemoveMember() {
     const that = this;
-    // dopo aver aggiunto un messaggio al gruppo
-    // mi sottoscrivo al nodo user/groups/ui-group/members
-    // tslint:disable-next-line:max-line-length
-    const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
-    // console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
-    this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
-    this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
-      // console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
-      if ( childSnapshot.key === that.senderId) {
-        // CHIUDO CONVERSAZIONE
-        that.closeConversation();
-      }
+    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith;
+    this.conversationRef = firebase.database().ref(urlConversation);
+    this.conversationRef.on('child_removed', function (childSnapshot) {
+      that.closeConversation();
     });
   }
 
   private closeConversation() {
+    console.log("MessagingService::closeConversation::", "conversation closed");
     // apro popup rating
     this.starRatingWidgetService.setOsservable(true);
   }
