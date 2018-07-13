@@ -1430,7 +1430,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.textInputTextArea = ''; // clear the textarea
 
         if (textArea) {
-            // textArea.value = '';  // clear the textarea
+            textArea.value = '';  // clear the textarea
             textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
             console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
         } else {
