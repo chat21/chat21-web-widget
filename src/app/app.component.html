@@ -147,7 +147,7 @@
             </div>
 
             <div id="chat21-end-footer">
-                <div id="chat21-powered-by" [innerHTML]="poweredBy">
+                <div id="chat21-powered-by" [innerHTML]="poweredBy" style="color: #E18574" >
                     <!-- (click)="openRate()" -->
                     <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
                 </div>
@@ -200,7 +200,7 @@
                     </div>
                     <button [disabled]="!myForm.controls.name.valid || !myForm.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new"
                         (click)="closeForm()">
-                        {{LABEL_START_NW_CONV}}
+                        <span style="color:#2a6ac1">  {{LABEL_START_NW_CONV}} </span>
                     </button>
                 </form>
             </div>
