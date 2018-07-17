@@ -31,6 +31,7 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 import { TranslatorService } from './providers/translator.service';
+import { LinkyModule } from 'angular-linky';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { TranslatorService } from './providers/translator.service';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    LinkyModule,
     // https://medium.com/codingthesmartway-com-blog/using-bootstrap-with-angular-c83c3cee3f4a
     // NgbModule.forRoot(),
     LocalStorageModule.withConfig({

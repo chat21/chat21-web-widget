@@ -64,7 +64,7 @@
                                             <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                         </ng-template>
                                         <ng-template #contentNewTab>
-                                            <p [innerHTML]="convertMessage(message.text)"></p>
+                                            <p [innerHTML]="message.text | linky"></p>
                                         </ng-template>
                                     </div>
                                     <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
@@ -103,7 +103,7 @@
                                             <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                         </ng-template>
                                         <ng-template #contentNewTab>
-                                            <p [innerHTML]="convertMessage(message.text)"></p>
+                                            <p [innerHTML]="message.text | linky"></p>
                                         </ng-template>
                                     </div>
                                     <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>

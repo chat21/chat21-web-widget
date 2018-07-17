@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^5.0.2",
     "@angular/router": "^5.0.2",
     "angular-2-local-storage": "^1.0.1",
+    "angular-linky": "^1.2.2",
     "angular2-moment": "^1.8.0",
     "angular2-uuid": "^1.1.1",
     "angularfire2": "^5.0.0-rc.9",
