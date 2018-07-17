@@ -233,25 +233,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.settingParams();
 
-        console.log('tenant', this.tenant);
-        console.log('recipientId', this.recipientId);
-        console.log('projectid', this.projectid);
-        console.log('projectname', this.projectname);
-        console.log('chatName', this.chatName);
-        console.log('poweredBy', this.poweredBy);
-        console.log('userId', this.userId);
-        console.log('userEmail', this.userEmail);
-        console.log('userPassword', this.userPassword);
-        console.log('userFullname', this.userFullname);
-        console.log('preChatForm', this.preChatForm);
-        console.log('isOpen', this.isOpen);
-        console.log('channelType', this.channelType);
-        console.log('lang', this.lang);
-        console.log('calloutTimer', this.calloutTimer);
-        console.log('align ', this.align);
-        console.log('hideHeaderCloseButton ', this.hideHeaderCloseButton);
-        console.log('wellcomeMsg ', this.wellcomeMsg);
-
+        console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
+        'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
+        'userId', this.userId, 'userEmail', this.userEmail, 'userPassword', this.userPassword,
+        'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
+        'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
+        'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg);
 
 
         this.setAvailableAgentsStatus();
@@ -290,6 +277,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 // real time detection of the user authentication status
                 this.zone.run(() => {
+                    //console.log('subLoggedUser: ');
                     if (user) {
                         console.log('USER AUTENTICATE: ', user);
                         // console.log("constructor.subLoggedUser", user);
@@ -309,7 +297,28 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     } else {
                         that.isLogged = false;
-                        console.log('IS_LOGGED', 'AppComponent:constructor:zone-else', that.isLogged);
+                        console.log('IS_LOGGED', that.isLogged);
+
+                         // set auth
+                        // if (this.userEmail && this.userPassword) {
+                        //     console.log('Auth with email and password');
+                        //     // se esistono email e psw faccio un'autenticazione firebase con email
+                        //     // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
+                        // } else if (this.userId) {
+                        //     console.log('Auth with userId');
+                        //     // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
+                        //     // this.authService.getCurrentUser();
+
+                        //     this.senderId = this.userId;
+                        //     this.createConversation();
+                        //     this.initialize();
+                        //     this.aliveSubLoggedUser = false;
+                        //     console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
+                        // } else {
+                        //     console.log('Auth anonymously');
+                        //     // faccio un'autenticazione anonima
+                        //     this.authService.authenticateFirebaseAnonymously();
+                        // }
                     }
                 });
 
@@ -501,7 +510,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.lang", this.lang);
         }
         const cotAsString = this.getParameterByName('tiledesk_callouttimer');
-        console.log('cotAsString', cotAsString);
+        //console.log('cotAsString', cotAsString);
         // if (cotAsString && Number.isNaN(Number(cotAsString))) {
         if (cotAsString) {
             this.calloutTimer = Number(cotAsString);
@@ -542,7 +551,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.areAgentsAvailableText = this.AGENT_AVAILABLE;
                     }
 
-                    console.log("AppComponent::setAvailableAgentsStatus::areAgentsAvailable:", this.areAgentsAvailable)
+                    console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
                 }, (error) => {
                     // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
                     console.error('setOnlineStatus::setAvailableAgentsStatus', error);
@@ -862,7 +871,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * 3 - utente eliminato dal gruppo (CHAT CHIUSA)
      */
     setSubscriptions() {
-        console.log('setSubscriptions: ');
+        //console.log('setSubscriptions: ');
         const that = this;
         // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
         const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
@@ -959,7 +968,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messages = this.messagingService.messages;
         this.arrayFiles4Load = [];
         this.attributes = this.setAttributes();
-        console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
+        //console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
 
         this.openSelectionDepartment = false;
