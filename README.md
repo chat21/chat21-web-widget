@@ -80,3 +80,7 @@ Run : `aws s3 sync . s3://tiledesk-widget`
 Or With a different AWS Profile: 
 
 Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
+
+# Docker
+docker image build -t tiledesk-web-widget .
+ docker run -p 4200:80  tiledesk-web-widget
