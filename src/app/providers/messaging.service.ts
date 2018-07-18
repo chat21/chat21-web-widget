@@ -349,6 +349,7 @@ export class MessagingService {
     const that = this;
     const now: Date = new Date();
     const timestamp = now.valueOf();
+    // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
     const language = navigator.language;
     // document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;
@@ -371,6 +372,8 @@ export class MessagingService {
       projectid
     );
 
+    
+
     // const message = {
     //   uid: '',
     //   language: language,
@@ -390,7 +393,7 @@ export class MessagingService {
 
     this.messages.push(message);
 
-    const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + conversationWith);
+    const conversationRef = firebase.database().ref(this.urlNodeFirebase + conversationWith);
     console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
@@ -404,11 +407,12 @@ export class MessagingService {
     //   }
 
 
-      const messageRef = firebaseMessagesCustomUid.push();
+      const messageRef = conversationRef.push();
       const key = messageRef.key;
       message.uid = key;
       console.log('messageRef: ', messageRef, key);
-      messageRef.set(message, function( error ) {
+      const messageForFirebase = message.asFirebaseMessage();
+      messageRef.set(messageForFirebase, function( error ) {
         // Callback comes here
         if (error) {
           // cambio lo stato in rosso: invio nn riuscito!!!
