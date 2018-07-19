@@ -410,8 +410,9 @@ export class MessagingService {
       const messageRef = conversationRef.push();
       const key = messageRef.key;
       message.uid = key;
-      console.log('messageRef: ', messageRef, key);
+      // console.log('messageRef: ', messageRef, key);
       const messageForFirebase = message.asFirebaseMessage();
+      console.log('messageForFirebase: ', messageForFirebase);
       messageRef.set(messageForFirebase, function( error ) {
         // Callback comes here
         if (error) {
