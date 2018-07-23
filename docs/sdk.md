@@ -113,7 +113,7 @@ Example:
  
 
 ### Before sending messsage
-This event will be fired before the message sending. Use this event to send custom attribute at your chat message.
+This event will be fired before the message sending. Use this event to add custom attributes to your chat message.
 
 Example:
 
@@ -122,9 +122,11 @@ Example:
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          console.log("beforeMessageSend called ", event_data);
-          e.detail.attributes.pagetitle = document.title;
-         var username = getCookieByName("username");
-         e.detail.attributes.userName = username;
+         // add a page title attribute 
+          event_data.detail.attributes.pagetitle = document.title;
+          // add the current user fullname to the tiledesk userName attribute
+         var username = getCookieByName("username");  //read it from the cookies
+         event_data.detail.attributes.userName = username;
        });
       }
 </script>
