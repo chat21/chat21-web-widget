@@ -70,10 +70,10 @@ Register an event handler to an event type.
 
 The handler will have the signature function(event_data).
 
-| Parameter        | Type           | Required  | Description |
-| ------------- |:-------------:| -----:|
-| event_name      | String | YES | Event name to bind to |
-| handler      | Function | YES | Function with the signature function(event_data) |
+| Parameter    | Type      | Required  | Description                 |
+| ------------ | --------- | --------- | --------------------------  |
+| event_name   | String    | YES       | Event name to bind to       |
+| handler      | Function  | YES       | Function with the signature function(event_data) |
 
 
 Example:
