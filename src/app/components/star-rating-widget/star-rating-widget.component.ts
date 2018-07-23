@@ -57,7 +57,7 @@ export class StarRatingWidgetComponent implements OnInit {
         window.alert('MSG_GENERIC_SERVICE_ERROR');
       },
       () => {
-        console.log('API ERROR NESSUNO');
+        // console.log('API ERROR NESSUNO');
       }
     );
 

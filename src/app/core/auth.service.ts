@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class AuthService {
   // public user: Observable<firebase.User>;
+  // public user: firebase.User;
   public user: any;
   public token: string;
   obsLoggedUser: BehaviorSubject<any>;

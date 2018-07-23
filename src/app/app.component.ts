@@ -1217,7 +1217,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     console.log('IS_LOGGED', 'AppComponent:getMongDbDepartments:', this.isLogged);
                 },
                 () => {
-                    console.log('API ERROR NESSUNO');
+                    // console.log('API ERROR NESSUNO');
                     // attivo pulsante aprichat!!!!!
                 }
             );
