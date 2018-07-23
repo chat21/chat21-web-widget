@@ -99,7 +99,7 @@ Example:
 </script>
 ```
 
-[Full exmple here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
+[Full example here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
  
 
 ### Before sending messsage
