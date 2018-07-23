@@ -69,6 +69,10 @@ Register an event handler to an event type.
 
 The handler will have the signature function(event_data).
 
+event_data is a Javascript CustomEvent. More info about CustomEvent here https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+
+Arguments:
+
 | Parameter    | Type      | Required  | Description                 |
 | ------------ | --------- | --------- | --------------------------  |
 | event_name   | String    | YES       | Event name to bind to       |
@@ -100,6 +104,13 @@ Example:
 
 ### Before sending messsage
 This event will be fired before the message sending. Use this event to add custom attributes to your chat message.
+
+Important payload of event_data:
+
+| Parameter    | Type      | Description                         |
+| ------------ | --------- | ----------------------------------  |
+| detail       | Object    | the message that is being sent      |
+
 
 Example. Add a custom attribute (page title) to the message.
 
@@ -134,6 +145,13 @@ Example. Programmatic setting of the preChatForm data:
 ### After messsage sent
 
 This event is generated after the message has been sent.
+
+Important payload of event_data:
+
+| Parameter    | Type      | Description                         |
+| ------------ | --------- | ----------------------------------  |
+| detail       | Object    | the message that was sent           |
+
 
 Example:
 
