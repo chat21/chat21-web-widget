@@ -115,18 +115,28 @@ Example:
 ### Before sending messsage
 This event will be fired before the message sending. Use this event to add custom attributes to your chat message.
 
-Example:
+Example. Add a custom attribute (page title) to the message.
 
 ```
  <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
-         console.log("beforeMessageSend called ", event_data);
-         // add a page title attribute 
-          event_data.detail.attributes.pagetitle = document.title;
-          // add the current user fullname to the tiledesk userName attribute
-         var username = getCookieByName("username");  //read it from the cookies
-         event_data.detail.attributes.userName = username;
+         var message =  event_data.detail;
+         message.attributes.pagetitle = document.title;
+       });
+      }
+</script>
+```
+
+Example. Programmatic setting of the preChatForm data:
+
+```
+ <script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('beforeMessageSend', function(event_data) {
+         var message =  event_data.detail;
+         message.attributes.userName = "Andrew Lee";
+         message.attributes.userEmail = "andrewlee@f21.com";
        });
       }
 </script>
