@@ -7,7 +7,7 @@ This guide will show you how to get started as quickly as possible with the Web 
 To chat with your visitors embeds the widget on your site.
 Copy the following script and insert it in the HTML source between the head tags:
 
-
+```
     <script type="application/javascript">
         window.tiledeskSettings = 
             {
@@ -22,6 +22,7 @@ Copy the following script and insert it in the HTML source between the head tags
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'tiledesk-jssdk'));
     </script>
+```
 
 To get your TILEDESK_PROJECT_ID go in the TileDesk Dashboard and click on the Widget item of the menu:
 
@@ -42,6 +43,7 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 Example for a widget with the preChatForm enabled and a 10 seconds calloutTimer with left alignment:
 
+```
 <script type="application/javascript">
   window.tiledeskSettings = 
     {
@@ -59,6 +61,7 @@ Example for a widget with the preChatForm enabled and a 10 seconds calloutTimer 
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'tiledesk-jssdk'));
 </script>
+```
 
 # Events
 
@@ -75,6 +78,7 @@ The handler will have the signature function(event_data).
 
 Example:
 
+```
  <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('loadParams', function(event_data) {
@@ -88,11 +92,14 @@ Example:
        });
       }
 </script>
+```
 
 ## Load Parameters event
 This event will be fired when the tiledesk parameters is loaded
 
 Example:
+
+```
 <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('loadParams', function(event_data) {
@@ -100,6 +107,7 @@ Example:
        });
       }
 </script>
+```
  
 
 ## Before sending messsage
@@ -107,6 +115,7 @@ This event will be fired before the message sending
 
 Example:
 
+```
  <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
@@ -114,7 +123,7 @@ Example:
        });
       }
 </script>
-
+```
 
 
 ## After messsage sent
@@ -122,6 +131,7 @@ This event will be fired after the message sent
 
 Example:
 
+```
  <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
         window.tiledesk.on('afterMessageSend', function(event_data) {
@@ -129,4 +139,4 @@ Example:
        });
       }
 </script>
-
+```
