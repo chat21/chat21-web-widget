@@ -13,7 +13,9 @@ import { Http, Headers } from '@angular/http';
 
 @Injectable()
 export class AgentAvailabilityService {
-  private API_URL = "https://chat21-api-nodejs.herokuapp.com";
+  //private API_URL = "https://chat21-api-nodejs.herokuapp.com";
+  private API_URL = "https://api.tiledesk.com/v1";
+
 
   constructor(private http: Http) {}
 
