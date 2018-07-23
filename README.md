@@ -30,7 +30,7 @@ With Chat21-web-widget you can:
 * Move to the downloaded project path ```cd <YOUR_PATH>```
 * Compile the project with ```npm install```
 
-[For Installing the Widget read the SDK page](docs/sdk.md)
+[For Installing the Widget on your web site read the SDK page](docs/sdk.md)
 
 
 
