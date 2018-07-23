@@ -64,7 +64,7 @@ Example for a widget with the preChatForm enabled and a 10 seconds calloutTimer 
 
 # Events
 
-window.tiledesk.on(event_name, handler)
+## window.tiledesk.on(event_name, handler)
 Register an event handler to an event type.
 
 The handler will have the signature function(event_data).
@@ -94,7 +94,7 @@ Example:
 ```
 
 ## Load Parameters event
-This event will be fired when the tiledesk parameters is loaded
+This event will be fired before the tiledesk parameters is loaded. Use this event to change at runtime your TileDesk settings.
 
 Example:
 
@@ -110,7 +110,7 @@ Example:
  
 
 ## Before sending messsage
-This event will be fired before the message sending
+This event will be fired before the message sending. Use this event to send custom attribute at your chat message.
 
 Example:
 
@@ -119,6 +119,9 @@ Example:
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          console.log("beforeMessageSend called ", event_data);
+          e.detail.attributes.pagetitle = document.title;
+         var username = getCookieByName("username");
+         e.detail.attributes.userName = username;
        });
       }
 </script>
