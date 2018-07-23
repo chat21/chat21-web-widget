@@ -93,7 +93,10 @@ Example:
 </script>
 ```
 
-## Load Parameters event
+[See an exmple here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
+
+
+#### Load Parameters event
 This event will be fired before the tiledesk parameters is loaded. Use this event to change at runtime your TileDesk settings.
 
 Example:
@@ -109,7 +112,7 @@ Example:
 ```
  
 
-## Before sending messsage
+### Before sending messsage
 This event will be fired before the message sending. Use this event to send custom attribute at your chat message.
 
 Example:
@@ -128,7 +131,7 @@ Example:
 ```
 
 
-## After messsage sent
+### After messsage sent
 This event will be fired after the message sent
 
 Example:
