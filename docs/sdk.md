@@ -168,6 +168,7 @@ Example:
 
 
 #### Load Parameters event
+
 This event will be fired before the tiledesk parameters is loaded. Use this event to change at runtime your TileDesk settings.
 
 Example:
