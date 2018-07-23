@@ -10,7 +10,8 @@
     <script type="application/javascript">
       window.tiledeskSettings = 
           {
-              projectid: "5ad5bd52c975820014ba900a",
+              projectid: "5b55e806c93dde00143163dd",
+              projectname: "Demo",
               development: true,
               calloutTimer: 10
           };
@@ -28,15 +29,18 @@
 
     <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
-       window.tiledesk.on('loadParams', function(e) {
-         console.log("loadParams called",e);
+       window.tiledesk.on('loadParams', function(event_data) {
+         console.log("loadParams called", event_data);
        });
-       window.tiledesk.on('beforeMessageSend', function(e) {
-         console.log("beforeMessageSend called ",e);
-         e.detail.attributes.pagetitle = document.title;     
+       window.tiledesk.on('beforeMessageSend', function(event_data) {
+         console.log("beforeMessageSend called ",event_data);
+         var message =  event_data.detail;
+         message.attributes.pagetitle = document.title;
+         message.attributes.userName = "Andrew Lee";
+         message.attributes.userEmail = "andrewlee@f21.com";
        });
-       window.tiledesk.on('afterMessageSend', function(e) {
-         console.log("afterMessageSend called ",e);
+       window.tiledesk.on('afterMessageSend', function(event_data) {
+         console.log("afterMessageSend called ", event_data);
        });
       }
     </script>

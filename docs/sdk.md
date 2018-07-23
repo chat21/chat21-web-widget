@@ -93,7 +93,7 @@ Example:
 </script>
 ```
 
-[See an exmple here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
+[Full exmple here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
 
 
 #### Load Parameters event
