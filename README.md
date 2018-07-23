@@ -30,36 +30,9 @@ With Chat21-web-widget you can:
 * Move to the downloaded project path ```cd <YOUR_PATH>```
 * Compile the project with ```npm install```
 
-Copy this code into your html pages:
+[For Installing the Widget read the SDK page](docs/sdk.md)
 
-```
-<app-root preChatForm tenant='' recipientId='' projectid='' userId='' userEmail='' userPassword='' userFullname=''></app-root>
 
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/inline.bundle.js"></script>
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/polyfills.bundle.js"></script>
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/scripts.bundle.js"></script>
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/styles.bundle.js"></script>
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/vendor.bundle.js"></script>
-<script type="text/javascript" src="https://chat21-web.firebaseapp.com/main.bundle.js">
-</script>
-
-```
-
-## Configuration ##
-
-info passing variables:  
-* preChatForm , if exist enable form email and fullname
-* recipientId 
-* projectid 
-* userId  
-* userEmail 
-* userPassword 
-* userFullname
-* chatName , i.e.: TileDesk
-* poweredBy , i.e.: ```<a target="_blank" href="http://www.chat21.org/">Powered by <b>TileDesk</b></a>```
-* lang , (optional) with this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
-
-* Install and configure the  webapp chat for agent here : https://github.com/chat21/chat21-ionic
 
 ## Development server
 
