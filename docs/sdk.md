@@ -27,6 +27,19 @@ To get your TILEDESK_PROJECT_ID go in the TileDesk Dashboard and click on the Wi
 
 <img src="https://raw.githubusercontent.com/chat21/chat21-web-widget/master/docs/tiledesk-dashboard-widget-screenshots.png"/>
 
+
+
+## Configuration ##
+
+info passing variables:  
+* projectid. The TileDesk project id
+* projectname. The TileDesk project name
+* preChatForm: You can require customers to enter information, like name and email, by enabling the Pre-Chat form. Permitted values: true, false. The default value is false.
+* align: Make the Chat available on the Right or on the Left of the  screen. Permitted values: 'right', 'left'. Default value is right.
+* calloutTimer: Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds),  10 (After 10 seconds).
+* poweredBy: "Powered by" message visibile on the chat footer.
+* lang : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
+
 # Events
 
 ## Load event
