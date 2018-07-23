@@ -22,7 +22,6 @@
         js.src = "./tiledesk.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
-    
     </script>
 
 
@@ -31,8 +30,6 @@
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('loadParams', function(e) {
          console.log("loadParams called",e);
-        // alert("ciao");
-         console.log("loadParams end");
        });
        window.tiledesk.on('beforeMessageSend', function(e) {
          console.log("beforeMessageSend called ",e);
