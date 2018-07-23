@@ -31,7 +31,7 @@ To get your TILEDESK_PROJECT_ID go in the TileDesk Dashboard and click on the Wi
 
 ## Configuration ##
 
-info passing variables:  
+You can customize the widget passing these parameters to  window.tiledeskSettings:
 * projectid. The TileDesk project id
 * projectname. The TileDesk project name
 * preChatForm: You can require customers to enter information, like name and email, by enabling the Pre-Chat form. Permitted values: true, false. The default value is false.
@@ -40,10 +40,93 @@ info passing variables:
 * poweredBy: "Powered by" message visibile on the chat footer.
 * lang : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
+Example for a widget with the preChatForm enabled and a 10 seconds calloutTimer with left alignment:
+
+<script type="application/javascript">
+  window.tiledeskSettings = 
+    {
+      projectid: "5af02d8f705ac600147f0cbb",
+      projectname: "PROJ-7MAY",
+      preChatForm: true,
+      calloutTimer: 10,
+      align: 'left'
+    };
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id; //js.async=!0;
+      js.src = "https://widget.tiledesk.com/tiledesk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'tiledesk-jssdk'));
+</script>
+
 # Events
 
-## Load event
+window.tiledesk.on(event_name, handler)
+Register an event handler to an event type.
 
+The handler will have the signature function(event_data).
+
+| Parameter        | Type           | Required  | Description |
+| ------------- |:-------------:| -----:|
+| event_name      | String | YES | Event name to bind to |
+| handler      | Function | YES | Function with the signature function(event_data) |
+
+
+Example:
+
+ <script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('loadParams', function(event_data) {
+         console.log("loadParams called", event_data);
+       });
+       window.tiledesk.on('beforeMessageSend', function(event_data) {
+         console.log("beforeMessageSend called ", event_data);
+       });
+       window.tiledesk.on('afterMessageSend', function(event_data) {
+         console.log("afterMessageSend called ", event_data);
+       });
+      }
+</script>
+
+## Load Parameters event
+This event will be fired when the tiledesk parameters is loaded
+
+Example:
+<script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('loadParams', function(event_data) {
+         console.log("loadParams called", event_data);
+       });
+      }
+</script>
  
 
+## Before sending messsage
+This event will be fired before the message sending
+
+Example:
+
+ <script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('beforeMessageSend', function(event_data) {
+         console.log("beforeMessageSend called ", event_data);
+       });
+      }
+</script>
+
+
+
+## After messsage sent
+This event will be fired after the message sent
+
+Example:
+
+ <script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+        window.tiledesk.on('afterMessageSend', function(event_data) {
+         console.log("afterMessageSend called ", event_data);
+       });
+      }
+</script>
 
