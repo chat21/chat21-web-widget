@@ -84,32 +84,18 @@ Example:
          console.log("loadParams called", event_data);
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
-         console.log("beforeMessageSend called ", event_data);
+         var message =  event_data.detail;
+         console.log("beforeMessageSend called ", message);
        });
        window.tiledesk.on('afterMessageSend', function(event_data) {
-         console.log("afterMessageSend called ", event_data);
+         var message =  event_data.detail;
+         console.log("afterMessageSend called ", message);
        });
       }
 </script>
 ```
 
 [Full exmple here]( https://github.com/chat21/chat21-web-widget/blob/master/src/test.html)
-
-
-#### Load Parameters event
-This event will be fired before the tiledesk parameters is loaded. Use this event to change at runtime your TileDesk settings.
-
-Example:
-
-```
-<script type="application/javascript">    
-      window.tileDeskAsyncInit = function() {
-       window.tiledesk.on('loadParams', function(event_data) {
-         console.log("loadParams called", event_data);
-       });
-      }
-</script>
-```
  
 
 ### Before sending messsage
@@ -122,6 +108,7 @@ Example. Add a custom attribute (page title) to the message.
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;
+         console.log("beforeMessageSend called ", message);
          message.attributes.pagetitle = document.title;
        });
       }
@@ -135,6 +122,7 @@ Example. Programmatic setting of the preChatForm data:
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;
+         console.log("beforeMessageSend called ", message);
          message.attributes.userName = "Andrew Lee";
          message.attributes.userEmail = "andrewlee@f21.com";
        });
@@ -144,7 +132,8 @@ Example. Programmatic setting of the preChatForm data:
 
 
 ### After messsage sent
-This event will be fired after the message sent
+
+This event is generated after the message has been sent.
 
 Example:
 
@@ -152,7 +141,24 @@ Example:
  <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
         window.tiledesk.on('afterMessageSend', function(event_data) {
-         console.log("afterMessageSend called ", event_data);
+          var message =  event_data.detail;
+          console.log("afterMessageSend called ", message);
+       });
+      }
+</script>
+```
+
+
+#### Load Parameters event
+This event will be fired before the tiledesk parameters is loaded. Use this event to change at runtime your TileDesk settings.
+
+Example:
+
+```
+<script type="application/javascript">    
+      window.tileDeskAsyncInit = function() {
+       window.tiledesk.on('loadParams', function(event_data) {
+         console.log("loadParams called", event_data);
        });
       }
 </script>
