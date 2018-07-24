@@ -182,3 +182,7 @@ Example:
       }
 </script>
 ```
+
+
+
+Please see the [project license](b.md) for further details.
