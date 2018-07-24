@@ -107,9 +107,9 @@ This event will be fired before the message sending. Use this event to add custo
 
 Important payload of event_data:
 
-| Parameter    | Type      | Description                         |
-| ------------ | --------- | ----------------------------------  |
-| detail       | Object    | the message that is being sent      |
+| Parameter  | Type    | Description                        |
+|------------|---------|------------------------------------|
+| detail     | Object  | the message that is being sent |
 
 
 Example. Add a custom attribute (page title) to the message.
