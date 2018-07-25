@@ -1246,11 +1246,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.preChatForm) {
             id = 'form-field-name';
         }
-        console.log('-------------> setFocusOnId: ', id);
+        // console.log('-------------> setFocusOnId: ', id);
         setTimeout(function () {
             const textarea = document.getElementById(id);
             if (textarea) {
-                console.log('1--------> FOCUSSSSSS : ', textarea);
+                // console.log('1--------> FOCUSSSSSS : ', textarea);
                 textarea.setAttribute('value', ' ');
                 textarea.focus();
             }
@@ -1571,8 +1571,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             recipientFullname = this.userFullname;
         } else if (this.userEmail) {
             recipientFullname = this.userEmail;
-        } else if (this.attributes && this.attributes.userName) {
-            recipientFullname = this.attributes.userName;
         } else {
             recipientFullname = this.GUEST_LABEL;
         }
@@ -1580,7 +1578,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.projectname) {
             recipientFullname += ' - ' + this.projectname;
         }
-        
+
         // set senderFullname
         const senderFullname = recipientFullname;
 
@@ -1741,14 +1739,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
             // set recipientFullname
-            // let recipientFullname = 'Guest';
-            let recipientFullname;
+             let recipientFullname = this.GUEST_LABEL;
+
+            // tslint:disable-next-line:max-line-length
+            this.triggerBeforeSendMessageEvent(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
+            
+            // let recipientFullname;
             if (this.userFullname) {
                 recipientFullname = this.userFullname;
             } else if (this.userEmail) {
                 recipientFullname = this.userEmail;
             } else if (this.attributes && this.attributes.userName) {
-                recipientFullname = this.attributes.userName;
+                    recipientFullname = this.attributes.userName;
             } else {
                 recipientFullname = this.GUEST_LABEL;
             }
@@ -1756,12 +1758,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.projectname) {
                 recipientFullname += ' - ' + this.projectname;
             }
-
-            // set senderFullname
-            const senderFullname = recipientFullname;
-
-            // tslint:disable-next-line:max-line-length
-            this.triggerBeforeSendMessageEvent(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
+    
             // tslint:disable-next-line:max-line-length
             const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
 
