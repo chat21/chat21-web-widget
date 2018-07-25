@@ -29,8 +29,8 @@
 
     <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
-       window.tiledesk.on('loadParams', function(event_data) {
-         console.log("loadParams called", event_data);
+      window.tiledesk.on('loadParams', function(event_data) {
+         window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          console.log("beforeMessageSend called ",event_data);

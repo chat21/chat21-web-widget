@@ -226,12 +226,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.initParameters();
         this.triggetLoadParamsEvent();
-
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
         this.getVariableUrlParameters();
 
         this.settingParams();
+
+       
 
         console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
         'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
@@ -398,7 +399,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private triggetLoadParamsEvent() {
-        const loadParams = new CustomEvent('loadParams', { detail: {} });
+        const default_settings = {'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
+        'projectname': this.projectname, 'chatName': this.chatName, 'poweredBy': this.poweredBy,
+        'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
+        'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
+        'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
+        'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg };
+
+        const loadParams = new CustomEvent('loadParams', { detail: {default_settings: default_settings} });
 
         this.el.nativeElement.dispatchEvent(loadParams);
 
@@ -683,27 +691,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         TEMP = window['tiledeskSettings']['align'];
         if (TEMP) {
             this.align = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - ALIGN ', this.align);
+            // console.log('»»» GET VARIABLES FROM SETTINGS - ALIGN ', this.align);
         }
 
         TEMP = window['tiledeskSettings']['calloutTimer'];
         if (TEMP) {
             this.calloutTimer = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - CALLOUT TIMER ', this.calloutTimer);
+            // console.log('»»» GET VARIABLES FROM SETTINGS - CALLOUT TIMER ', this.calloutTimer);
         }
 
         // nk
         TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
         if (TEMP) {
             this.hideHeaderCloseButton = true;
-            console.log('»»» GET VARIABLES FROM SETTINGS - HIDE HEADER CLOSE BTN ', this.hideHeaderCloseButton);
+            // console.log('»»» GET VARIABLES FROM SETTINGS - HIDE HEADER CLOSE BTN ', this.hideHeaderCloseButton);
         }
 
         // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
         TEMP = window['tiledeskSettings']['wellcomeMsg'];
         if (TEMP) {
             this.wellcomeMsg = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - WELCOME MSG ', this.wellcomeMsg);
+            // console.log('»»» GET VARIABLES FROM SETTINGS - WELCOME MSG ', this.wellcomeMsg);
         }
     }
 
@@ -898,7 +906,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
                     if (checkContentScrollPosition) {
                         // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-                        console.log('------->sono alla fine dello scrooll: ');
+                        // console.log('------->sono alla fine dello scrooll: ');
                         setTimeout(function () {
                             that.scrollToBottom();
                         }, 500);
@@ -1154,12 +1162,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const messagesRef = this.messagingService.checkWritingMessages(this.tenant, this.conversationWith);
         messagesRef.on('value', function (writing) {
             // .then(function(writing) {
-            console.log('checkWritingMessages >>>>>>>>>: ', writing);
+            // console.log('checkWritingMessages >>>>>>>>>: ', writing);
             if (writing.exists()) {
-                console.log('WritingMessages >>>>>>>>> OKKKK ');
+                // console.log('WritingMessages >>>>>>>>> OKKKK ');
                 that.writingMessage = that.LABEL_WRITING;
             } else {
-                console.log('WritingMessages >>>>>>>>> NOOOOO ');
+                // console.log('WritingMessages >>>>>>>>> NOOOOO ');
                 that.writingMessage = '';
             }
         });
@@ -1280,12 +1288,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * apro il popup conversazioni
      */
     f21_open() {
-        console.log('f21_open senderId: ', this.senderId);
+        // console.log('f21_open senderId: ', this.senderId);
         if (this.senderId) {
             this.isOpen = true; // !this.isOpen;
             sessionStorage.setItem('isOpen', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-            console.log('f21_open   ---- isOpen::', this.isOpen, this.attributes.departmentId);
+           // console.log('f21_open   ---- isOpen::', this.isOpen, this.attributes.departmentId);
             this.scrollToBottom();
             // console.log('FOCUSSSSSS 5: ', document.getElementById('chat21-main-message-context'));
             if (this.attributes.departmentId) {
