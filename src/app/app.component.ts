@@ -1315,12 +1315,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(function () {
             try {
                 const objDiv = document.getElementById('chat21-contentScroll');
-                console.log('scrollTop1 ::', objDiv.scrollTop, objDiv.scrollHeight);
+                //console.log('scrollTop1 ::', objDiv.scrollTop, objDiv.scrollHeight);
                 //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
                 objDiv.scrollIntoView(false);
                 // that.badgeNewMessages = 0;
             } catch (err) {
-                console.log('RIPROVO ::', that.isOpen);
+                // console.log('RIPROVO ::', that.isOpen);
                 if (that.isOpen === true) {
                     that.scrollToBottom();
                 }
@@ -1389,7 +1389,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // target.offsetHeight - 15 + 'px';
         }
         // tslint:disable-next-line:max-line-length
-        console.log('H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+        // console.log('H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
     }
 
     /**
@@ -1566,17 +1566,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const timestamp = now.valueOf();
         const language = document.documentElement.lang;
 
-        // set recipientFullname
-        // let recipientFullname = 'Guest';
-        let recipientFullname = this.GUEST_LABEL;
+        let recipientFullname;
         if (this.userFullname) {
             recipientFullname = this.userFullname;
         } else if (this.userEmail) {
             recipientFullname = this.userEmail;
+        } else if (this.attributes && this.attributes.userName) {
+            recipientFullname = this.attributes.userName;
+        } else {
+            recipientFullname = this.GUEST_LABEL;
         }
-        const projectname = (this.projectname) ? this.projectname : this.projectid;
-        recipientFullname += ' - ' + projectname;
-
+        // const projectname = (this.projectname) ? this.projectname : this.projectid;
+        if (this.projectname) {
+            recipientFullname += ' - ' + this.projectname;
+        }
+        
         // set senderFullname
         const senderFullname = recipientFullname;
 
@@ -1738,15 +1742,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
             // set recipientFullname
             // let recipientFullname = 'Guest';
-            let recipientFullname = this.GUEST_LABEL;
+            let recipientFullname;
             if (this.userFullname) {
                 recipientFullname = this.userFullname;
             } else if (this.userEmail) {
                 recipientFullname = this.userEmail;
+            } else if (this.attributes && this.attributes.userName) {
+                recipientFullname = this.attributes.userName;
+            } else {
+                recipientFullname = this.GUEST_LABEL;
             }
-            const projectname = (this.projectname) ? this.projectname : this.projectid;
-            if (projectname) {
-                recipientFullname += ' - ' + projectname;
+            // const projectname = (this.projectname) ? this.projectname : this.projectid;
+            if (this.projectname) {
+                recipientFullname += ' - ' + this.projectname;
             }
 
             // set senderFullname

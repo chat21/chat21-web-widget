@@ -40,6 +40,14 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 * calloutTimer: Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds),  10 (After 10 seconds).
 * lang : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
+Other config parameters:
+* recipientId 
+* userId  
+* userEmail 
+* userPassword 
+* userFullname
+* chatName
+
 Example for a widget with the preChatForm enabled and a 10 seconds calloutTimer with left alignment:
 
 ```
