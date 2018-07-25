@@ -1438,7 +1438,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private restoreTextArea() {
-        console.log('AppComponent:restoreTextArea::restoreTextArea');
+        // console.log('AppComponent:restoreTextArea::restoreTextArea');
 
         this.resizeInputField();
 
@@ -1449,9 +1449,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (textArea) {
             textArea.value = '';  // clear the textarea
             textArea.placeholder = this.LABEL_PLACEHOLDER;  // restore the placholder
-            console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
+            // console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
         } else {
-            console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+            // console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
         }
 
     }

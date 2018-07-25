@@ -297,11 +297,11 @@ export class MessagingService {
           message['channel_type'],
           message['progectId']
         );
-        console.log('child_added *****', dateSendingMessage, msg);
+        // console.log('child_added *****', dateSendingMessage, msg);
         // azzero sto scrivendo
         // that.deleteWritingMessages(message['sender']);
         // notifico arrivo nuovo messaggio
-        console.log('NOTIFICO NW MSG *****', that.obsAdded);
+        // console.log('NOTIFICO NW MSG *****', that.obsAdded);
         that.obsAdded.next(msg);
 
         if (message && message.sender === that.senderId) {
@@ -310,9 +310,9 @@ export class MessagingService {
           // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
           // that.messages.splice(index, 1, msg);
           const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          console.log('index *****', index, childSnapshot.key);
+          // console.log('index *****', index, childSnapshot.key);
           if (index < 0) {
-            console.log('--------> ADD MSG', index);
+            // console.log('--------> ADD MSG', index);
             that.messages.push(msg);
           }
         } else {
@@ -396,7 +396,8 @@ export class MessagingService {
     this.messages.push(message);
 
     const conversationRef = firebase.database().ref(this.urlNodeFirebase + conversationWith);
-    console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
+    // console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
+    
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
     //     // cambio lo stato in rosso: invio nn riuscito!!!
@@ -414,7 +415,7 @@ export class MessagingService {
       message.uid = key;
       // console.log('messageRef: ', messageRef, key);
       const messageForFirebase = message.asFirebaseMessage();
-      console.log('messageForFirebase: ', messageForFirebase);
+      // console.log('messageForFirebase: ', messageForFirebase);
       messageRef.set(messageForFirebase, function( error ) {
         // Callback comes here
         if (error) {
@@ -426,7 +427,7 @@ export class MessagingService {
           message.status = '150';
           console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
         }
-        console.log('****** changed *****', that.messages);
+       //  console.log('****** changed *****', that.messages);
 
       });
 
