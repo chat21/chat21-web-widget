@@ -37,6 +37,7 @@
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;
          message.attributes.pagetitle = document.title;
+         message.attributes.userCompany = "Frontiere21";
        });
        window.tiledesk.on('afterMessageSend', function(event_data) {
          console.log("afterMessageSend called ", event_data);
