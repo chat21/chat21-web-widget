@@ -275,7 +275,7 @@ export class MessagingService {
     // ADDED
     this.messagesRef.on('child_added', function(childSnapshot) {
       const message = childSnapshot.val();
-      console.log('child_added *****', childSnapshot.val());
+      // console.log('child_added *****', childSnapshot.val());
       if ( that.checkMessage(message) ) {
 
         // imposto il giorno del messaggio
@@ -397,7 +397,7 @@ export class MessagingService {
 
     const conversationRef = firebase.database().ref(this.urlNodeFirebase + conversationWith);
     // console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
-    
+
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
     //     // cambio lo stato in rosso: invio nn riuscito!!!

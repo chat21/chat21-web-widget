@@ -37,11 +37,11 @@ export class ContactService {
     const that = this;
     snapshot.forEach(
       function(childSnapshot) {
-        console.log('arrayUser *****', childSnapshot.key);
+        // console.log('arrayUser *****', childSnapshot.key);
         that.urlNodeFirebaseContact = '/apps/' + that.tenant + '/contacts/' + childSnapshot.key;
         const firebaseContact = firebase.database().ref(that.urlNodeFirebaseContact)
         .once('value').then(function(snapshotContact) {
-          console.log('contact.val() *****', snapshotContact.val());
+          // console.log('contact.val() *****', snapshotContact.val());
           if (snapshotContact.val()) {
             const contact: ContactModel = snapshotContact.val();
             that.listContacts.push(contact);
