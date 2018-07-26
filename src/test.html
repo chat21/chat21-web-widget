@@ -13,7 +13,9 @@
               projectid: "5b55e806c93dde00143163dd",
               projectname: "Demo",
               development: true,
-              calloutTimer: 10
+              calloutTimer: 10,
+              userFullname: "Andrea Leo",
+              userEmail: "andrea.leo@f21.it"
           };
 
       (function(d, s, id) {
@@ -33,11 +35,8 @@
          window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
-         console.log("beforeMessageSend called ",event_data);
          var message =  event_data.detail;
          message.attributes.pagetitle = document.title;
-         message.attributes.userName = "Andrew Lee";
-         message.attributes.userEmail = "andrewlee@f21.com";
        });
        window.tiledesk.on('afterMessageSend', function(event_data) {
          console.log("afterMessageSend called ", event_data);

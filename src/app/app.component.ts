@@ -225,6 +225,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.translatorService.getDefaultLanguage();
 
         this.initParameters();
+
+
+
         this.triggetLoadParamsEvent();
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
@@ -341,7 +344,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 // }
             });
 
-        this.addComponentToWindow(this.ngZone);
+            this.addComponentToWindow(this.ngZone);        
 
     }
 
@@ -390,6 +393,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
+            window['tiledesk'].setUserInfo = function (userInfo) {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
+                });
+            };
             // window['tiledesk'].on = function (event_name, handler) {
             //     console.log("addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
@@ -397,6 +405,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    private setUserInfo(userInfo) {
+        console.log('this.attributes', this.attributes);
+        console.log('userInfo', userInfo);
+        if (userInfo) {
+            Object.assign( this.attributes, userInfo);
+            // if (userInfo.userName) {
+            //     this.attributes.userName = userInfo.userName;
+            // }
+            // if (userInfo.userEmail) {
+            //     this.attributes.userEmail = userInfo.userEmail;
+            // }
+        }
+    }
 
     private triggetLoadParamsEvent() {
         const default_settings = {'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
@@ -976,7 +997,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messages = this.messagingService.messages;
         this.arrayFiles4Load = [];
         this.attributes = this.setAttributes();
-        //console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
+        // console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
 
         this.openSelectionDepartment = false;
