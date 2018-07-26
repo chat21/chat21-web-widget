@@ -410,8 +410,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('userInfo', userInfo);
         if (userInfo) {
             Object.assign( this.attributes, userInfo);
-            // if (userInfo.userName) {
-            //     this.attributes.userName = userInfo.userName;
+            // if (userInfo.userFullname) {
+            //     this.attributes.userFullname = userInfo.userFullname;
             // }
             // if (userInfo.userEmail) {
             //     this.attributes.userEmail = userInfo.userEmail;
@@ -861,8 +861,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // tslint:disable-next-line:max-line-length
         const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const myForm = formBuilder.group({
-            email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-            name: ['', Validators.compose([Validators.minLength(2), Validators.required])]
+            email: [this.userFullname, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+            name: [this.userEmail, Validators.compose([Validators.minLength(2), Validators.required])]
         });
         return myForm;
     }
@@ -874,7 +874,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             that.userFullname = x.name;
             that.userEmail = x.email;
             that.attributes.userEmail = x.email;
-            that.attributes.userName = x.name;
+            that.attributes.userFullname = x.name;
         });
     }
     /** */
@@ -883,7 +883,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // debugger;
         // recupero email inserita nel form e fullname
         // salvo tutto nello storage e successivamente le invio con il messaggio!!!!
-        this.attributes.userName = this.userFullname;
+        this.attributes.userFullname = this.userFullname;
         this.attributes.userEmail = this.userEmail;
         if (this.attributes) {
             sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
@@ -1006,13 +1006,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // this.openSelectionDepartment = true;
         }
         // configuro il form di autenticazione
-        if (!this.attributes.userEmail && !this.attributes.userName && this.preChatForm) {
+        if (this.preChatForm) {
             if (this.myForm) {
                 this.subcribeToFormChanges();
             }
         } else {
             this.userEmail = this.attributes.userEmail;
-            this.userFullname = this.attributes.userName;
+            this.userFullname = this.attributes.userFullname;
             this.preChatForm = false;
         }
 
@@ -1778,8 +1778,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 recipientFullname = this.userFullname;
             } else if (this.userEmail) {
                 recipientFullname = this.userEmail;
-            } else if (this.attributes && this.attributes.userName) {
-                    recipientFullname = this.attributes.userName;
+            } else if (this.attributes && this.attributes.userFullname) {
+                    recipientFullname = this.attributes.userFullname;
             } else {
                 recipientFullname = this.GUEST_LABEL;
             }
