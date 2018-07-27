@@ -15,7 +15,8 @@
               development: true,
               calloutTimer: 10,
               userFullname: "Andrea Leo",
-              userEmail: "andrea.leo@f21.it"
+              userEmail: "andrea.leo@f21.it",
+             // preChatForm: true
           };
 
       (function(d, s, id) {
@@ -30,9 +31,12 @@
 
 
     <script type="application/javascript">    
+    localStorage.setItem("user", "Andrea from localStorage");
+
       window.tileDeskAsyncInit = function() {
       window.tiledesk.on('loadParams', function(event_data) {
          window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
+         window.tiledeskSettings.userFullname = localStorage.getItem("user");
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;
