@@ -201,7 +201,7 @@ export class MessagingService {
       // se è un messaggio vuoto non fare nulla
       return false;
     }
-    if (this.filterSystemMsg && message.attributes['subtype'] === 'info') {
+    if (this.filterSystemMsg && message.attributes && message.attributes['subtype'] === 'info') {
       // se è un msg inviato da system NON fare nulla
       return false;
     } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {

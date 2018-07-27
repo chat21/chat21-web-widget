@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     lang: string;
 
 
-    myForm: FormGroup;
+    preChatFormGroup: FormGroup;
     public events: any[] = [];
     public submitted: boolean;
 
@@ -153,7 +153,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // ========= begin::agent availability
     private areAgentsAvailableText: string;
-    private areAgentsAvailable: boolean = false;
+    private areAgentsAvailable: Boolean = false;
     // ========= end::agent availability
 
     // text used within the html
@@ -194,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // private ALL_AGENTS_OFFLINE_LABEL = "Tutti gli operatori sono offline al momento";
 
     private window: Window;
-    private isFilePendingToUpload: boolean = false;
+    private isFilePendingToUpload: Boolean = false;
     private baseLocation: string;
 
     constructor(
@@ -210,6 +210,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         private translatorService: TranslatorService,
         private ngZone: NgZone
     ) {
+        moment.locale('it');
         this.initAll();
     }
 
@@ -220,22 +221,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         console.log(' ---------------- COSTRUCTOR ---------------- ');
 
-        this.lang = this.translatorService.getBrowserLanguage() ?
-            this.translatorService.getBrowserLanguage() :
-            this.translatorService.getDefaultLanguage();
-
         this.initParameters();
 
 
-
         this.triggetLoadParamsEvent();
+
         this.getVariablesFromAttributeHtml();
         this.getVariablesFromSettings();
         this.getVariableUrlParameters();
 
-        this.settingParams();
-
-       
+        this.setIsWidgetOpenOrActive();
 
         console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
         'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
@@ -261,7 +256,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this.senderId = this.userId;
             this.createConversation();
-            this.initialize();
+            this.initializeChatManager();
             this.aliveSubLoggedUser = false;
             console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
         } else {
@@ -270,7 +265,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         // SET FORM
-        this.myForm = this.setForm(this.formBuilder);
+        this.preChatFormGroup = this.createForm(this.formBuilder);
 
         // USER AUTENTICATE
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -281,7 +276,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 // real time detection of the user authentication status
                 this.zone.run(() => {
-                    //console.log('subLoggedUser: ');
+                    // console.log('subLoggedUser: ');
                     if (user) {
                         console.log('USER AUTENTICATE: ', user);
                         // console.log("constructor.subLoggedUser", user);
@@ -291,7 +286,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         // that.initConversation();
 
                         that.createConversation();
-                        that.initialize();
+                        that.initializeChatManager();
                         that.aliveSubLoggedUser = false;
                         that.isLogged = true;
                         console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
@@ -344,7 +339,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 // }
             });
 
-            this.addComponentToWindow(this.ngZone);        
+            this.addComponentToWindow(this.ngZone);
 
     }
 
@@ -358,6 +353,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
     private initParameters() {
+
         this.tenant = environment.tenant;
         this.preChatForm = false;
         this.chatName = 'TileDesk';
@@ -374,7 +370,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (window['tiledesk']) {
             this.baseLocation = window['tiledesk'].getBaseLocation();
         }
-        console.log('baseLocation', this.baseLocation);
+        // console.log('baseLocation', this.baseLocation);
+
+
+        this.lang = this.translatorService.getBrowserLanguage() ?
+        this.translatorService.getBrowserLanguage() :
+        this.translatorService.getDefaultLanguage();
     }
 
     private addComponentToWindow(ngZone) {
@@ -451,10 +452,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /** */
-    settingParams() {
-        // SETTINGS
-        //// setto widget language
-        moment.locale('it');
+    setIsWidgetOpenOrActive() {
         //// get isOpen from storage;
         if (sessionStorage.getItem('isOpen') === 'true') {
             this.isOpen = true;
@@ -539,7 +537,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.lang", this.lang);
         }
         const cotAsString = this.getParameterByName('tiledesk_callouttimer');
-        //console.log('cotAsString', cotAsString);
+        // console.log('cotAsString', cotAsString);
         // if (cotAsString && Number.isNaN(Number(cotAsString))) {
         if (cotAsString) {
             this.calloutTimer = Number(cotAsString);
@@ -549,19 +547,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // nk: chat21-launcher-button alignment
         if (this.getParameterByName('tiledesk_align')) {
             this.align = this.getParameterByName('tiledesk_align');
-            console.log('»»» GET VARIABLE URL PARAMETERS - ALIGN ', this.align);
+            // console.log('»»» GET VARIABLE URL PARAMETERS - ALIGN ', this.align);
         }
 
         // nk
         if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
             this.hideHeaderCloseButton = true;
-            console.log('»»» GET VARIABLE URL PARAMETERS - HIDE HEADER CLOSE BUTTON ', this.hideHeaderCloseButton);
+            // console.log('»»» GET VARIABLE URL PARAMETERS - HIDE HEADER CLOSE BUTTON ', this.hideHeaderCloseButton);
         }
 
         // nk: USED FOR: if is not empty wellcomeMsg is displayed wellcomeMsg and not LABEL_FIRST_MSG
         if (this.getParameterByName('tiledesk_wellcomemsg')) {
             this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
-            console.log('»»» GET VARIABLE URL PARAMETERS - WELCOME MSG ', this.wellcomeMsg);
+            // console.log('»»» GET VARIABLE URL PARAMETERS - WELCOME MSG ', this.wellcomeMsg);
         }
     }
 
@@ -580,7 +578,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.areAgentsAvailableText = this.AGENT_AVAILABLE;
                     }
 
-                    console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
+                    // console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
                 }, (error) => {
                     // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
                     console.error('setOnlineStatus::setAvailableAgentsStatus', error);
@@ -599,17 +597,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private getParameterByName(name) {
         // if (!url) url = window.location.href;
 
-        var url = window.location.href;
+        const url = window.location.href;
 
-        name = name.replace(/[\[\]]/g, "\\$&");
+        name = name.replace(/[\[\]]/g, '\\$&');
 
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
+        const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
 
-        if (!results) return null;
+        if (!results) { return null; }
 
-        if (!results[2]) return '';
+        if (!results[2]) {return ''; }
 
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
     /**
@@ -855,22 +853,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // START FORM
     // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
     /** */
-    setForm(formBuilder): FormGroup {
+    createForm(formBuilder): FormGroup {
         // SET FORM
         // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
         // tslint:disable-next-line:max-line-length
         const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const myForm = formBuilder.group({
-            email: [this.userFullname, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-            name: [this.userEmail, Validators.compose([Validators.minLength(2), Validators.required])]
+        const preChatFormGroupTemp = formBuilder.group({
+            email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+            name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
         });
-        return myForm;
+        return preChatFormGroupTemp;
     }
     /** */
     subcribeToFormChanges() {
         const that = this;
-        const myFormValueChanges$ = this.myForm.valueChanges;
-        myFormValueChanges$.subscribe(x => {
+        const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
+        preChatFormValueChanges$.subscribe(x => {
             that.userFullname = x.name;
             that.userEmail = x.email;
             that.attributes.userEmail = x.email;
@@ -900,7 +898,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * 3 - utente eliminato dal gruppo (CHAT CHIUSA)
      */
     setSubscriptions() {
-        //console.log('setSubscriptions: ');
+        // console.log('setSubscriptions: ');
         const that = this;
         // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
         const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
@@ -993,7 +991,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * effettuo il login anonimo su firebase
      * se il login è andato a buon fine recupero id utente
      */
-    initialize() {
+    initializeChatManager() {
         this.messages = this.messagingService.messages;
         this.arrayFiles4Load = [];
         this.attributes = this.setAttributes();
@@ -1007,7 +1005,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         // configuro il form di autenticazione
         if (this.preChatForm) {
-            if (this.myForm) {
+            if (this.preChatFormGroup) {
                 this.subcribeToFormChanges();
             }
         } else {
@@ -1344,7 +1342,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(function () {
             try {
                 const objDiv = document.getElementById('chat21-contentScroll');
-                //console.log('scrollTop1 ::', objDiv.scrollTop, objDiv.scrollHeight);
+                // console.log('scrollTop1 ::', objDiv.scrollTop, objDiv.scrollHeight);
                 //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
                 objDiv.scrollIntoView(false);
                 // that.badgeNewMessages = 0;
@@ -1463,7 +1461,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.resizeInputField();
 
-        var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+        const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
 
         this.textInputTextArea = ''; // clear the textarea
 
@@ -1497,7 +1495,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             console.log('fileChange: ', event.target.files);
 
-            if (event.target.files.length <=0 ) {
+            if (event.target.files.length <= 0 ) {
                 this.isFilePendingToUpload = false;
             } else {
                 this.isFilePendingToUpload = true;
@@ -1727,7 +1725,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const currentUpload = new UploadModel(file);
 
 
-        let uploadTask = this.upSvc.pushUpload(currentUpload);
+        const uploadTask = this.upSvc.pushUpload(currentUpload);
         uploadTask.then(snapshot => {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
         })
@@ -1772,7 +1770,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             // tslint:disable-next-line:max-line-length
             this.triggerBeforeSendMessageEvent(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
-            
             // let recipientFullname;
             if (this.userFullname) {
                 recipientFullname = this.userFullname;
@@ -1787,7 +1784,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.projectname) {
                 recipientFullname += ' - ' + this.projectname;
             }
-    
             // tslint:disable-next-line:max-line-length
             const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
 
@@ -1862,7 +1858,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * attivo una nuova conversazione
      */
     startNwConversation() {
-        console.log("AppComponent::startNwConversation");
+        console.log('AppComponent::startNwConversation');
 
         this.initAll();
 
@@ -1877,7 +1873,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.getMongDbDepartments();
 
-        this.initialize();
+        this.initializeChatManager();
         console.log('NEW initialize: ');
 
         this.isConversationOpen = true;
