@@ -211,4 +211,80 @@
             <app-star-rating-widget></app-star-rating-widget>
         </div>
     </div>
+
+    <!-- 
+    *************************************************************    
+     **************  NK EYE-CATCHER (aka CALLOUT) **************
+    ************************************************************* -->
+ 
+
+
+    <!-- ******* EYE-CATCHER CARD  ******** -->
+    <div class="eye-catcher-card"  
+        [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+
+            <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
+            <div *ngIf="!isMobile">
+                <div class="eye-catcher-card-close-btn-wrapper" 
+                    [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+
+                    <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
+                        <img class="eye-catcher-card-close-btn-img" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
+                    </div>
+        
+                </div>
+            </div>
+
+              <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
+            <div *ngIf="isMobile">
+                <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
+                    [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
+                    <img class="eye-catcher-card-close-btn-img-is-mobile" src="../assets/images/tiledesk-chat-close-dark-gray.svg" />
+                </div>
+            </div>
+
+            <div class="row" (click)=openChatFromEyeCatcherCard()>
+                <div class="column left" >
+
+                    <div class="eye-catcher-card-img-wrapper">
+                        <img class="card-img" src="../assets/images/tiledesk-chat-ballon-big-badge.svg">
+                    </div>
+
+                </div>
+
+                <div class="column right" >
+
+
+                    <div class="eye-catcher-card-text-wrapper">
+                        <p class="eye-catcher-card-title"> 
+                            <!-- Need Help? -->
+                            {{ calloutTitle }}
+                        </p>
+                        <p class="eye-catcher-card-msg">
+                            <!-- Click here and start chatting with us!  -->
+                            {{ calloutMsg }}    
+                        </p>
+                    </div>
+
+                </div>
+              </div>
+                <!-- Need Help? --> <!-- Click here and start chatting with us!  -->
+        <!-- <div class="eye-catcher-card-img-wrapper">
+            <img class="card-img" src="../assets/images/tiledesk-chat-ballon-big-badge.svg">
+        </div>
+
+        <div class="eye-catcher-card-text-wrapper">
+            <p class="eye-catcher-card-title"> 
+
+                {{ calloutTitle }}
+            </p>
+            <p class="eye-catcher-card-msg">
+                
+                {{ calloutMsg }}    
+            </p>
+        </div> -->
+    </div>
+
+
+
 </div>

@@ -65,7 +65,7 @@ import { LinkyModule } from 'angular-linky';
     UploadService,
     ContactService,
     StarRatingWidgetService,
-    AgentAvailabilityService, 
+    AgentAvailabilityService,
     TranslatorService
   ],
   bootstrap: [AppComponent]
