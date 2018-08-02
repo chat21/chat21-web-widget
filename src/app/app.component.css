@@ -171,28 +171,29 @@
  * *********************************************  
  */ 
 
- .column {
+ .eye-catcher_column {
     float: left;
     /* padding: 10px; */
     /* height: 300px;  */
     /* Should be removed. Only for demonstration */
 }
 
-.left {
-    width: 25%;
+.ec_left {
+    width: 85px;
     padding-left: 20px;
     padding-top: 24px;
     padding-bottom: 24px;
     /* background-color: #5d6c80; */
 }
 
-.right {
-  width: 61%;
+.ec_right {
+  width: calc(100% - 105px);
+  padding-top: 24px;
   /* background-color: #aaaaaa */
 }
 
 /* Clear floats after the columns */
-.row:after {
+.eye-catcher_row:after {
     content: "";
     display: table;
     clear: both;
@@ -225,6 +226,7 @@
     position: relative;
     bottom: 5px;
     right: 5px;
+    max-width: none;
 }
 /* CLOSE BTN IS MOBILE - CLOSE IMG WRAPPER */
 .eye-catcher-card-close-btn-img-is-mobile-wrapper {
@@ -244,6 +246,7 @@
     bottom: 85px;
     right: -1px; */
     position:relative;
+    max-width: none;
 }
 
 /**
@@ -276,6 +279,8 @@
     font-weight:500;
     margin-bottom: 6px;
     word-wrap: break-word;
+    margin-top: 0px;
+    line-height: normal;
 }
 
 
@@ -289,6 +294,8 @@
     letter-spacing: 1px;
     font-weight: 500;
     word-wrap: break-word;
+    font-size:16px;
+    line-height: normal;
 }
 
 .eye-catcher-card-img-wrapper {
@@ -301,11 +308,12 @@
     /* right: 252px; */
 }
 
-.card-img {
+.eye-catcher-card .card-img {
     position: relative;
     bottom: 14px;
     right: 15px;
     width: 95px;
+    max-width: none;
 }
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
 
