@@ -217,8 +217,6 @@
      **************  NK EYE-CATCHER (aka CALLOUT) **************
     ************************************************************* -->
  
-
-
     <!-- ******* EYE-CATCHER CARD  ******** -->
     <div class="eye-catcher-card"  
         [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
@@ -239,7 +237,7 @@
             <div *ngIf="isMobile">
                 <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
                     [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
-                    <img class="eye-catcher-card-close-btn-img-is-mobile" src="../assets/images/tiledesk-chat-close-dark-gray.svg" />
+                    <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
                 </div>
             </div>
 
@@ -247,7 +245,7 @@
                 <div class="column left" >
 
                     <div class="eye-catcher-card-img-wrapper">
-                        <img class="card-img" src="../assets/images/tiledesk-chat-ballon-big-badge.svg">
+                        <img class="card-img" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>
                     </div>
 
                 </div>
@@ -258,12 +256,24 @@
                     <div class="eye-catcher-card-text-wrapper">
                         <p class="eye-catcher-card-title"> 
                             <!-- Need Help? -->
-                            {{ calloutTitle }}
+                            <span *ngIf="calloutTitle !== ''; else calloutTitle_placeholder">
+                                {{ calloutTitle }}
+                            </span>  
                         </p>
+                        <ng-template #calloutTitle_placeholder>
+                            <!-- Need Help? -->
+                            {{ CALLOUT_TITLE_PLACEHOLDER }}
+                        </ng-template>
                         <p class="eye-catcher-card-msg">
                             <!-- Click here and start chatting with us!  -->
-                            {{ calloutMsg }}    
+                            <span *ngIf="calloutTitle !== ''; else calloutMsg_placeholder">
+                                {{ calloutMsg }} 
+                            </span>   
                         </p>
+                        <ng-template #calloutMsg_placeholder>
+                            <!-- Click here and start chatting with us! -->
+                            {{ CALLOUT_MSG_PLACEHOLDER }}
+                        </ng-template>
                     </div>
 
                 </div>

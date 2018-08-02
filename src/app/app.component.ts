@@ -174,7 +174,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private AGENT_AVAILABLE: string;
     private GUEST_LABEL: string;
     private ALL_AGENTS_OFFLINE_LABEL: string;
-
+    CALLOUT_TITLE_PLACEHOLDER: string;
+    CALLOUT_MSG_PLACEHOLDER: string;
 
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
@@ -198,7 +199,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private window: Window;
     private isFilePendingToUpload: Boolean = false;
-    private baseLocation: string;
+    // private baseLocation: string;
+    baseLocation: string;
 
     // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
     displayEyeCatcherCard = 'none';
@@ -391,7 +393,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * *** EYE-CATCHER CARD ***
      * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
-    private openChatFromEyeCatcherCard() {
+    openChatFromEyeCatcherCard() {
         this.f21_open();
         this.displayEyeCatcherCard = 'none';
     }
@@ -534,6 +536,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
         this.GUEST_LABEL = this.translatorService.translate('GUEST_LABEL');
         this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
+        this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
+        this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
     }
 
     /** */

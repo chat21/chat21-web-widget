@@ -14,7 +14,9 @@ export const en = {
     "AGENT_AVAILABLE" : " - Online",
     "GUEST_LABEL": "Guest",
     "ALL_AGENTS_OFFLINE_LABEL" : "All operators are offline at the moment",
-    "LABEL_LOADING" : "Loading..."
+    "LABEL_LOADING" : "Loading...",
+    "CALLOUT_TITLE_PLACEHOLDER" : "Need Help?",
+    "CALLOUT_MSG_PLACEHOLDER" : "Click here and start chatting with us!"
 }
 
 export const it = {
@@ -32,5 +34,7 @@ export const it = {
     "AGENT_AVAILABLE": " - Online",
     "GUEST_LABEL": "Ospite",
     "ALL_AGENTS_OFFLINE_LABEL": "Tutti gli operatori sono offline al momento",
-    "LABEL_LOADING": "Caricamento..."
+    "LABEL_LOADING": "Caricamento...",
+    "CALLOUT_TITLE_PLACEHOLDER" : "Bisogno di aiuto?",
+    "CALLOUT_MSG_PLACEHOLDER" : "Clicca qui e inizia a chattare con noi!"
 }

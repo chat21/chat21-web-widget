@@ -165,9 +165,12 @@
 }
 
 /**
- * start EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN  */ 
+ * start 
+ * *********************************************
+ * EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
+ * *********************************************  
+ */ 
 
- /* CLOSE BTN - BTN WRAPPER */
  .column {
     float: left;
     /* padding: 10px; */
@@ -195,6 +198,7 @@
     clear: both;
 }
 
+ /* CLOSE BTN - BTN WRAPPER */
 .eye-catcher-card-close-btn-wrapper{
     z-index: 999999000;
     height: 30px;
@@ -212,6 +216,7 @@
     position:relative;
     left: 267px;
     cursor: pointer;
+    box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
 }
 
 /* CLOSE BTN - CLOSE IMG */
@@ -266,8 +271,8 @@
     font-family: 'Google Sans', sans-serif; 
     font-size: 24px; 
     color:#286abf; 
-    padding-left: 10px; 
-    padding-right: 20px; 
+    padding-left: 5px; 
+    padding-right: 10px; 
     font-weight:500;
     margin-bottom: 6px;
     word-wrap: break-word;
@@ -277,8 +282,8 @@
 .eye-catcher-card-msg {
     font-family: 'Google Sans', sans-serif; 
     color: #286abf;
-    padding-left: 10px; 
-    padding-right: 20px; 
+    padding-left: 5px; 
+    padding-right: 10px; 
     margin-top: 6px;
     margin-bottom: 24px;
     letter-spacing: 1px;
@@ -302,9 +307,6 @@
     right: 15px;
     width: 95px;
 }
-
-
-
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
 
 
