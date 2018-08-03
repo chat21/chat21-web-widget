@@ -179,15 +179,16 @@
 }
 
 .ec_left {
-    width: 85px;
+    width: 90px;
     padding-left: 20px;
     padding-top: 24px;
     padding-bottom: 24px;
     /* background-color: #5d6c80; */
+    box-sizing: border-box;
 }
 
 .ec_right {
-  width: calc(100% - 105px);
+  width: calc(100% - 90px);
   padding-top: 24px;
   /* background-color: #aaaaaa */
 }
