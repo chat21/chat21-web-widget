@@ -143,6 +143,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     align: string;
     hideHeaderCloseButton: boolean;
     wellcomeMsg: string;
+    // EYE-CATCHER (alias CALLOUT) CARD TITLE & MSG
+    calloutTitle: string;
+    calloutMsg: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -171,7 +174,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private AGENT_AVAILABLE: string;
     private GUEST_LABEL: string;
     private ALL_AGENTS_OFFLINE_LABEL: string;
-
+    CALLOUT_TITLE_PLACEHOLDER: string;
+    CALLOUT_MSG_PLACEHOLDER: string;
 
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
@@ -195,7 +199,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private window: Window;
     private isFilePendingToUpload: Boolean = false;
-    private baseLocation: string;
+    // private baseLocation: string;
+    baseLocation: string;
+
+    // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
+    displayEyeCatcherCard = 'none';
+    displayEyeCatcherCardCloseBtnWrapper = 'none';
+    displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
+    displayEyeCatcherCardCloseBtn = 'none';
+
+    /* EYE-CATCHER CLOSE BUTTON SWITCH */
+    // THERE ARE TWO 'CARD CLOSE BUTTONS' THAT ARE DISPLAYED ON THE BASIS OF PLATFORM
+    isMobile: boolean;
+
 
     constructor(
         private zone: NgZone,
@@ -215,6 +231,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private initAll() {
+        this.detectIfIsMobile();
 
         // RElated to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
@@ -233,11 +250,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setIsWidgetOpenOrActive();
 
         console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
-        'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
-        'userId', this.userId, 'userEmail', this.userEmail, 'userPassword', this.userPassword,
-        'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
-        'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
-        'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg);
+            'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
+            'userId', this.userId, 'userEmail', this.userEmail, 'userPassword', this.userPassword,
+            'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
+            'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
+            'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
+            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg);
 
 
         this.setAvailableAgentsStatus();
@@ -298,7 +316,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         that.isLogged = false;
                         console.log('IS_LOGGED', that.isLogged);
 
-                         // set auth
+                        // set auth
                         // if (this.userEmail && this.userPassword) {
                         //     console.log('Auth with email and password');
                         //     // se esistono email e psw faccio un'autenticazione firebase con email
@@ -339,8 +357,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 // }
             });
 
-            this.addComponentToWindow(this.ngZone);
+        this.addComponentToWindow(this.ngZone);
 
+    }
+
+    detectIfIsMobile() {
+        this.isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
+        console.log('»»» IS MOBILE ', this.isMobile);
     }
 
     private openIfCallOutTimer() {
@@ -348,10 +371,68 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.calloutTimer >= 0) {
             const waitingTime = this.calloutTimer * 1000;
             setTimeout(function () {
-                that.f21_open();
+                // that.f21_open();
+                that.openEyeCatcher();
             }, waitingTime);
         }
     }
+
+    /**
+     * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
+    openEyeCatcher() {
+        if (this.isOpen === false) {
+            console.log('»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ');
+            this.displayEyeCatcherCard = 'block';
+            this.displayEyeCatcherCardCloseBtnWrapper = 'block';
+            this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
+        } else {
+            console.log('»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ');
+        }
+    }
+
+    /**
+     * *** EYE-CATCHER CARD ***
+     * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
+    openChatFromEyeCatcherCard() {
+        this.f21_open();
+        this.displayEyeCatcherCard = 'none';
+    }
+
+    /**
+     * *** DISPLAY THE EYE-CATCHER CARD CLOSE BTN ***
+     * DISPLAY EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE IS OVER EYE-CATCHER CARD OR
+     * OVER THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
+    mouseEnter() {
+        // console.log('MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
+        this.displayEyeCatcherCardCloseBtn = 'block';
+    }
+
+    /**
+     * *** HIDE THE EYE-CATCHER CARD CLOSE BTN ***
+     * HIDE THE EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE LEAVE THE EYE-CATCHER CARD OR
+     * LEAVE THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
+    mouseLeave() {
+        // console.log('MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
+        this.displayEyeCatcherCardCloseBtn = 'none';
+    }
+
+    /**
+     * EYE-CATCHER CARD CLOSE BTN */
+    closeEyeCatcherCard() {
+        console.log('HAS CLICKED CLOSE EYE-CATCHER CARD');
+        this.displayEyeCatcherCard = 'none';
+        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+    }
+
+    /**
+     * EYE-CATCHER CARD CLOSE BTN ON MOBILE DEVICE */
+    closeEyeCatcherCardWhenMobile() {
+
+        console.log('HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
+        this.displayEyeCatcherCard = 'none';
+        this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
+    }
+
     private initParameters() {
 
         this.tenant = environment.tenant;
@@ -364,6 +445,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.calloutTimer = -1;
         this.hideHeaderCloseButton = false;
         this.wellcomeMsg = '';
+        this.calloutTitle = '';
+        this.calloutMsg = '';
+
         // for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
 
@@ -374,8 +458,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         this.lang = this.translatorService.getBrowserLanguage() ?
-        this.translatorService.getBrowserLanguage() :
-        this.translatorService.getDefaultLanguage();
+            this.translatorService.getBrowserLanguage() :
+            this.translatorService.getDefaultLanguage();
     }
 
     private addComponentToWindow(ngZone) {
@@ -410,7 +494,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('this.attributes', this.attributes);
         console.log('userInfo', userInfo);
         if (userInfo) {
-            Object.assign( this.attributes, userInfo);
+            Object.assign(this.attributes, userInfo);
             // if (userInfo.userFullname) {
             //     this.attributes.userFullname = userInfo.userFullname;
             // }
@@ -421,14 +505,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private triggetLoadParamsEvent() {
-        const default_settings = {'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
-        'projectname': this.projectname, 'chatName': this.chatName, 'poweredBy': this.poweredBy,
-        'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
-        'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
-        'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
-        'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg };
+        const default_settings = {
+            'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
+            'projectname': this.projectname, 'chatName': this.chatName, 'poweredBy': this.poweredBy,
+            'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
+            'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
+            'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
+            'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
+            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg
+        };
 
-        const loadParams = new CustomEvent('loadParams', { detail: {default_settings: default_settings} });
+        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
 
         this.el.nativeElement.dispatchEvent(loadParams);
 
@@ -449,6 +536,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
         this.GUEST_LABEL = this.translatorService.translate('GUEST_LABEL');
         this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
+        this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
+        this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
     }
 
     /** */
@@ -561,6 +650,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
             // console.log('»»» GET VARIABLE URL PARAMETERS - WELCOME MSG ', this.wellcomeMsg);
         }
+
+        // nk EYE-CATCHER CARD TITLE
+        if (this.getParameterByName('tiledesk_callouttitle')) {
+            this.calloutTitle = this.getParameterByName('tiledesk_callouttitle');
+            console.log('»»» GET VARIABLE URL PARAMETERS - EYE-CATCHER (CALLOUT) TITLE ', this.calloutTitle);
+        }
+
+        // nk EYE-CATCHER CARD MSG
+        if (this.getParameterByName('tiledesk_calloutmsg')) {
+            this.calloutMsg = this.getParameterByName('tiledesk_calloutmsg');
+            console.log('»»» GET VARIABLE URL PARAMETERS - EYE-CATCHER (CALLOUT) MSG ', this.calloutMsg);
+        }
     }
 
     private setAvailableAgentsStatus() {
@@ -605,7 +706,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (!results) { return null; }
 
-        if (!results[2]) {return ''; }
+        if (!results[2]) { return ''; }
 
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
@@ -732,6 +833,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.wellcomeMsg = TEMP;
             // console.log('»»» GET VARIABLES FROM SETTINGS - WELCOME MSG ', this.wellcomeMsg);
         }
+
+        // nk EYE CATCHER CARD TITLE
+        TEMP = window['tiledeskSettings']['calloutTitle'];
+        if (TEMP) {
+            this.calloutTitle = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - EYE-CATCHER (CALLOUT) TITLE ', this.calloutTitle);
+        }
+
+        // nk EYE CATCHER CARD MSG
+        TEMP = window['tiledeskSettings']['calloutMsg'];
+        if (TEMP) {
+            this.calloutMsg = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - EYE CATCHER (CALLOUT) MSG', this.calloutMsg);
+        }
     }
 
     // /**
@@ -847,6 +962,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.wellcomeMsg = TEMP;
             console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - WELLCOME MSG ', this.wellcomeMsg);
+        }
+
+        // nk EYE CATCHER CARD TITLE
+        TEMP = this.el.nativeElement.getAttribute('calloutTitle');
+        if (TEMP) {
+            this.calloutTitle = TEMP;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - EYE CATCHER (CALLOUT) TITLE', this.calloutTitle);
+        }
+
+        // nk EYE CATCHER CARD MSG
+        TEMP = this.el.nativeElement.getAttribute('calloutMsg');
+        if (TEMP) {
+            this.calloutMsg = TEMP;
+            console.log('»»» GET VARIABLES FROM ATTRIBUTE HTML - EYE CATCHER (CALLOUT) MSG', this.calloutMsg);
         }
     }
 
@@ -1296,6 +1425,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     f21_open_close_handler() {
+        this.displayEyeCatcherCard = 'none';
+        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+        this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
+        this.displayEyeCatcherCardCloseBtn = 'none';
 
         if (this.isOpen) {
             this.f21_close();
@@ -1312,7 +1445,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isOpen = true; // !this.isOpen;
             sessionStorage.setItem('isOpen', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-           // console.log('f21_open   ---- isOpen::', this.isOpen, this.attributes.departmentId);
+            // console.log('f21_open   ---- isOpen::', this.isOpen, this.attributes.departmentId);
             this.scrollToBottom();
             // console.log('FOCUSSSSSS 5: ', document.getElementById('chat21-main-message-context'));
             if (this.attributes.departmentId) {
@@ -1495,7 +1628,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             console.log('fileChange: ', event.target.files);
 
-            if (event.target.files.length <= 0 ) {
+            if (event.target.files.length <= 0) {
                 this.isFilePendingToUpload = false;
             } else {
                 this.isFilePendingToUpload = true;
@@ -1766,7 +1899,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('SEND MESSAGE: ', msg, type, metadata, this.attributes);
         if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
             // set recipientFullname
-             let recipientFullname = this.GUEST_LABEL;
+            let recipientFullname = this.GUEST_LABEL;
 
             // tslint:disable-next-line:max-line-length
             this.triggerBeforeSendMessageEvent(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
@@ -1776,7 +1909,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             } else if (this.userEmail) {
                 recipientFullname = this.userEmail;
             } else if (this.attributes && this.attributes.userFullname) {
-                    recipientFullname = this.attributes.userFullname;
+                recipientFullname = this.attributes.userFullname;
             } else {
                 recipientFullname = this.GUEST_LABEL;
             }
