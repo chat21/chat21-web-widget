@@ -29,6 +29,7 @@ import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 import { TranslatorService } from './providers/translator.service';
 
 import { trigger, style, animate, transition } from '@angular/animations';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -1133,7 +1134,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // this.openSelectionDepartment = true;
         }
         // configuro il form di autenticazione
-        if (this.preChatForm) {
+        if (!this.attributes.userEmail && !this.attributes.userFullname && this.preChatForm) {
             if (this.preChatFormGroup) {
                 this.subcribeToFormChanges();
             }
