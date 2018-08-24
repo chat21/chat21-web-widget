@@ -10,33 +10,48 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Http, Headers } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AgentAvailabilityService {
-  //private API_URL = "https://chat21-api-nodejs.herokuapp.com";
-  private API_URL = "https://api.tiledesk.com/v1";
+  // private API_URL = "https://chat21-api-nodejs.herokuapp.com";
+  // private API_URL = "https://api.tiledesk.com/v1";
+  private API_URL;
 
+  constructor(private http: Http) {
+   this.API_URL = environment.apiUrl;
 
-  constructor(private http: Http) {}
+   // console.log('AgentAvailabilityService:: this.API_URL',  this.API_URL );
+   if (!this.API_URL) {
+    throw new Error('apiUrl is not defined');
+   }
+
+  }
 
   public getAvailableAgents(projectId): Observable<User[]> {
 
-    //console.log("getAvailableAgents::");
+    // console.log("getAvailableAgents::");
     // console.log("projectId", projectId);
 
     // return an exception if the projectid is undefined, null or not valid
-    if (!projectId) return Observable.throw("projectId is not valid");
-    if(projectId == null) return Observable.throw("projectId is null");
-    if (projectId == undefined) return Observable.throw("projectId is undefined");
+    if (!projectId) {
+      return Observable.throw('projectId is not valid');
+    }
+    if (projectId == null)  {
+      return Observable.throw('projectId is null');
+    }
+    if (projectId === undefined) {
+      return Observable.throw('projectId is undefined');
+    }
 
-    const url = this.API_URL + "/projects/" + projectId+ "/users/availables";
+    const url = this.API_URL + '/projects/' + projectId + '/users/availables';
     // console.log('AgentAvailabilityService::getAvailableAgents::url', url);
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
       .get(url, { headers })
-      .map((response) => response.json())
+      .map((response) => response.json());
       // .catch(this.handleError);
   }
 
