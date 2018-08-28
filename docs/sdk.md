@@ -40,6 +40,7 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 * calloutTimer: Proactively open the chat window to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds),  10 (After 10 seconds).
 * lang : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 * isOpen: if it is true, the chat window is automatically opened when the widget is loaded. Permitted values: true, false, Default value : false
+* fullscreenMode: if it is true, the chat window is opened in fullscreen mode. Permitted values: true, false, Default value : false
 
 Other config parameters:
 * recipientId 
