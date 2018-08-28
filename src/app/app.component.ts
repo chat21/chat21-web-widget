@@ -147,6 +147,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // EYE-CATCHER (alias CALLOUT) CARD TITLE & MSG
     calloutTitle: string;
     calloutMsg: string;
+    fullscreenMode: boolean;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -256,7 +257,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
-            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg);
+            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode);
 
 
         this.setAvailableAgentsStatus();
@@ -441,6 +442,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chatName = 'TileDesk';
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
+        this.fullscreenMode = false;
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
@@ -513,7 +515,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
-            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg
+            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -663,6 +665,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.calloutMsg = this.getParameterByName('tiledesk_calloutmsg');
             console.log('»»» GET VARIABLE URL PARAMETERS - EYE-CATCHER (CALLOUT) MSG ', this.calloutMsg);
         }
+
+
+        if (this.getParameterByName('tiledesk_fullscreenMode')) {
+            this.fullscreenMode = true;
+            console.log('»»» GET VARIABLE URL PARAMETERS - fullscreenMode ', this.fullscreenMode);
+        }
+
     }
 
     private setAvailableAgentsStatus() {
@@ -847,6 +856,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             this.calloutMsg = TEMP;
             console.log('»»» GET VARIABLES FROM SETTINGS - EYE CATCHER (CALLOUT) MSG', this.calloutMsg);
+        }
+
+        TEMP = window['tiledeskSettings']['fullscreenMode'];
+        if (TEMP) {
+            this.fullscreenMode = true;
         }
     }
 
