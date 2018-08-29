@@ -497,6 +497,27 @@
     }
 }
 
+/* // nk start: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF show_header_close_btn is true  */
+#chat21-container .show_header_close_btn {
+    z-index: 999999004 !important;
+    position: relative !important;
+    margin: 0 16px !important;
+    height: 100% !important;
+    cursor: pointer !important;
+    float: right !important;
+}
+
+#chat21-container .show_header_close_btn .chat21-sheet-header-button-icon-white {
+    height: 100%;
+    width: 16px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image : url("../assets/images/f21ico-widgetclose_white.svg");
+}
+/* // nk end: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF show_header_close_btn is true  */
+
+
 /** CONTENT **/
 #chat21-container .chat21-sheet-content {
     z-index: 999999004;

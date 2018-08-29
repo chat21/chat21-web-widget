@@ -17,7 +17,7 @@
                 </b>
                 <p class="chat21-header-writing">{{writingMessage}}</p>
             </div>
-            <a class="chat21-sheet-header-close-button" [ngClass]="{'hide_header_close_btn' : hideHeaderCloseButton === true}" (click)="f21_close()">
+            <a class="chat21-sheet-header-close-button" [ngClass]="{'hide_header_close_btn' : hideHeaderCloseButton === true, 'show_header_close_btn' : fullscreenMode === true}" (click)="f21_close()">
                 <div class="chat21-sheet-header-button-icon-white"></div>
             </a>
         </div>

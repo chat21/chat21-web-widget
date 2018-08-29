@@ -669,6 +669,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.getParameterByName('tiledesk_fullscreenMode')) {
             this.fullscreenMode = true;
+            // this.fullscreenMode = this.getParameterByName('tiledesk_fullscreenMode');
             console.log('»»» GET VARIABLE URL PARAMETERS - fullscreenMode ', this.fullscreenMode);
         }
 
@@ -860,7 +861,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         TEMP = window['tiledeskSettings']['fullscreenMode'];
         if (TEMP) {
-            this.fullscreenMode = true;
+            // this.fullscreenMode = true;
+            this.fullscreenMode = TEMP;
         }
     }
 
