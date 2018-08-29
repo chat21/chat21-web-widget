@@ -2,6 +2,10 @@
 <div class="chat21-modal-content">
     <div *ngIf="step==0">
         <div class="chat21-modal-header">
+                <div class="chat21-button_close" (click)="closeRate()">
+                    <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
+                 </div>
+
                 <h1 class="chat21-modal-title">Valutazione servizio</h1>
                 <fieldset class="chat21-rating">
                     <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label class = "full" for="star5" title="eccellente - 5 stars"></label>
@@ -17,11 +21,15 @@
                 </fieldset>
         </div> 
         <h3 class="chat21-modal-title">il tuo giudizio sul nostro servizio clienti</h3>
+        <!-- <div class="chat21-button_close2" (click)="close()">Chiudi</div> -->
     </div>
 
     <div *ngIf="step==1">
         <div class="chat21-button_back" (click)="prevStep()">Indietro</div>
-        <div class="chat21-button_send" (click)="sendRate()">Invia</div>
+        <div class="chat21-button_close" (click)="closeRate()">
+                <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
+        </div>
+        <!-- <div class="chat21-button_send2" (click)="sendRate()">Invia</div> -->
         <div class="chat21-yourRating">
             <p>il tuo voto:</p>
             <div class="chat21-stars">
@@ -32,6 +40,7 @@
                 <span *ngIf="rate>4" class="fa fa-star checked"></span>
             </div>
             <textarea #textbox rows="1" id="chat21-message-rate-context" class='chat21-rating-textarea' placeholder="Scrivi la tua opinione...(opzionale)" ></textarea>
+            <div class="chat21-button_send" (click)="sendRate()">Invia</div>
         </div>
     </div>
 

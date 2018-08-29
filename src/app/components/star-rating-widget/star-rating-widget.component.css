@@ -80,6 +80,18 @@ h3.chat21-modal-title  {
   color: #123456;
   font-weight: bold;
   height: 20px;
+  /* position: absolute;
+  float: right;
+  right: 10px;
+  top: 10px; */
+  cursor: pointer;
+}
+
+.chat21-button_send2{
+  font-size: 12px;
+  color: #123456;
+  font-weight: bold;
+  height: 20px;
   position: absolute;
   float: right;
   right: 10px;
@@ -96,6 +108,26 @@ h3.chat21-modal-title  {
   float: left;
   left: 10px;
   top: 10px;
+  cursor: pointer;
+}
+
+.chat21-button_close {
+  position: absolute;
+  float: right;
+  right: -10px;
+  top: 0px;
+  cursor: pointer;
+}
+
+.chat21-button_close2 {
+  font-size: 12px;
+  color: #123456;
+  font-weight: bold;
+  height: 20px;
+  position: absolute;
+  float: left;
+  left: 10px;
+  bottom: 10px;
   cursor: pointer;
 }
 

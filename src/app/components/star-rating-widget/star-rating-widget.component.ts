@@ -27,7 +27,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.rate = parseInt(e.srcElement.value, 0);
     setTimeout(function() {
       that.step = 1;
-      console.log('VOTA!!!::', that.step, that.rate);
+      // console.log('VOTA!!!::', that.step, that.rate);
     }, 300);
   }
 
@@ -45,7 +45,7 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('sendRate!!!::', message);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate('userUid', this.rate, message)
+    this.starRatingWidgetService.httpSendRate( this.rate, message)
     .subscribe(
       response => {
         console.log('OK sender ::::', response);
@@ -54,7 +54,9 @@ export class StarRatingWidgetComponent implements OnInit {
       },
       errMsg => {
         console.log('httpSendRate ERROR MESSAGE', errMsg);
-        window.alert('MSG_GENERIC_SERVICE_ERROR');
+        // window.alert('MSG_GENERIC_SERVICE_ERROR');
+        that.nextStep();
+
       },
       () => {
         // console.log('API ERROR NESSUNO');
