@@ -48,7 +48,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
             'enterCloseAnimation', [
                 transition(':enter', [
                     style({ transform: 'rotate(-90deg)', opacity: 1 }),
-                    animate('200ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1  }))
+                    animate('450ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1  }))
                 ]),
                 // transition(':leave', [
                 //     style({ transform: 'scale(1)', opacity: 1 }),
@@ -62,10 +62,10 @@ import { trigger, style, animate, transition } from '@angular/animations';
                     style({ transform: 'scale(0.5)', opacity: 0 }),
                     animate('200ms ease-out', style({ transform: 'scale(1)', opacity: 1 }))
                 ]),
-                // transition(':leave', [
-                //     style({ transform: 'scale(1)', opacity: 1 }),
-                //     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
-                // ])
+                transition(':leave', [
+                    style({ transform: 'scale(1)', opacity: 1 }),
+                    animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
+                ])
             ]
         )
 
