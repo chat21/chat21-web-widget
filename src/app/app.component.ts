@@ -30,6 +30,15 @@ import { TranslatorService } from './providers/translator.service';
 
 import { trigger, style, animate, transition } from '@angular/animations';
 
+// transition(':enter', [
+//     style({ transform: 'rotate(0deg)', opacity: 0 }),
+//     animate('400ms ease-out', style({ transform: 'rotate(-90deg)', opacity: 1 }))
+// ]),
+// transition(':leave', [
+//     style({ transform: 'rotate(90deg)', opacity: 1 }),
+//     animate('400ms ease-in', style({ transform: 'rotate(0deg)', opacity: 0 }))
+// ])
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -38,13 +47,13 @@ import { trigger, style, animate, transition } from '@angular/animations';
         trigger(
             'enterCloseAnimation', [
                 transition(':enter', [
-                    style({ transform: 'rotate(0deg)', opacity: 0 }),
-                    animate('400ms ease-out', style({ transform: 'rotate(-90deg)', opacity: 1 }))
+                    style({ transform: 'rotate(-90deg)', opacity: 1 }),
+                    animate('200ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1  }))
                 ]),
-                transition(':leave', [
-                    style({ transform: 'rotate(90deg)', opacity: 1 }),
-                    animate('400ms ease-in', style({ transform: 'rotate(0deg)', opacity: 0 }))
-                ])
+                // transition(':leave', [
+                //     style({ transform: 'scale(1)', opacity: 1 }),
+                //     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
+                // ])
             ]
         ),
         trigger(
@@ -53,10 +62,10 @@ import { trigger, style, animate, transition } from '@angular/animations';
                     style({ transform: 'scale(0.5)', opacity: 0 }),
                     animate('200ms ease-out', style({ transform: 'scale(1)', opacity: 1 }))
                 ]),
-                transition(':leave', [
-                    style({ transform: 'scale(1)', opacity: 1 }),
-                    animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
-                ])
+                // transition(':leave', [
+                //     style({ transform: 'scale(1)', opacity: 1 }),
+                //     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
+                // ])
             ]
         )
 
