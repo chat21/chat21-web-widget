@@ -39,7 +39,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
             'enterCloseAnimation', [
                 transition(':enter', [
                     style({ transform: 'rotate(0deg)', opacity: 0 }),
-                    animate('400ms ease-out', style({ transform: 'rotate(90deg)', opacity: 1 }))
+                    animate('400ms ease-out', style({ transform: 'rotate(-90deg)', opacity: 1 }))
                 ]),
                 transition(':leave', [
                     style({ transform: 'rotate(90deg)', opacity: 1 }),
@@ -148,6 +148,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutTitle: string;
     calloutMsg: string;
     fullscreenMode: boolean;
+    headerColor: string;
+    headerTextColor: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -257,7 +259,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
-            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode);
+            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
+            'headerColor', this.headerColor, 'headerTextColor', this.headerTextColor);
 
 
         this.setAvailableAgentsStatus();
@@ -443,6 +446,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.fullscreenMode = false;
+        this.headerColor = '#2a6ac1';
+        this.headerTextColor = '#ffffff';
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
@@ -450,6 +455,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.wellcomeMsg = '';
         this.calloutTitle = '';
         this.calloutMsg = '';
+
 
         // for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
@@ -515,7 +521,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
-            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode
+            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
+            'headerColor': this.headerColor, 'headerTextColor': this.headerTextColor
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -673,6 +680,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - fullscreenMode ', this.fullscreenMode);
         }
 
+        if (this.getParameterByName('tiledesk_headercolor')) {
+            this.headerColor = this.getParameterByName('tiledesk_headercolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - HEADER COLOR ', this.headerColor);
+        }
+
+        if (this.getParameterByName('tiledesk_headertextcolor')) {
+            this.headerTextColor = this.getParameterByName('tiledesk_headertextcolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - HEADER TEXT COLOR ', this.headerTextColor);
+        }
+
     }
 
     private setAvailableAgentsStatus() {
@@ -712,13 +729,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const url = window.location.href;
 
         name = name.replace(/[\[\]]/g, '\\$&');
-
+        // console.log('»»» getParameterByName NAME ', name);
         const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
 
+        // console.log('»»» getParameterByName RESULT ', results);
         if (!results) { return null; }
 
         if (!results[2]) { return ''; }
 
+        // console.log('»»» getParameterByName RESULT[2] ', results[2]);
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
@@ -863,6 +882,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             // this.fullscreenMode = true;
             this.fullscreenMode = TEMP;
+        }
+
+        TEMP = window['tiledeskSettings']['headerColor'];
+        if (TEMP) {
+             this.headerColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - HEADER COLOR ', this.headerColor);
+        }
+
+        TEMP = window['tiledeskSettings']['headerTextColor'];
+        if (TEMP) {
+            this.headerTextColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - HEADER TEXT COLOR ', this.headerTextColor);
         }
     }
 
@@ -1056,7 +1087,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     // this.generateNewUidConversation();
                     console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
                 } else if (isWidgetActive === true) {
-                    console.log('APROOOOOOOO!!!!:', );
+                    console.log('APROOOOOOOO!!!!:');
                     sessionStorage.setItem('isWidgetActive', 'true');
                     that.isConversationOpen = false;
                 }
@@ -1105,6 +1136,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
+
         //     const that = this;
         //     if (this.calloutTimer >= 0) {
         //         const waitingTime = this.calloutTimer * 1000;

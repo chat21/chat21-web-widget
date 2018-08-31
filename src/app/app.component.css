@@ -319,10 +319,23 @@
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
 
 
-
-/* BUTTON */
+/* NK - NEW LAUNCHER BUTTON  */ 
 #chat21-launcher-button {
-    /* background-image : url("../assets/images/f21-logo-widget.svg"); */
+    border-radius: 50%;
+    position: fixed;
+    z-index: 999999000;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    -webkit-box-shadow: rgba(0,0,0,0.35) 0 0 38px;
+    box-shadow: rgba(0,0,0,0.35) 0 0 38px;
+}
+
+
+/* BUTTON - replaced with the rule of NEW LAUNCHER BUTTON since it is not possible to change the fill color for SVG as background-image */
+/* #chat21-launcher-button {
     background-image : url("../assets/images/tiledesk-circle-shadow.svg");
     background-size: 90px 90px;
     background-repeat: no-repeat;
@@ -337,8 +350,7 @@
     background-position: center;
     background-color: #ffffff00;
     border-color: #000000;
-    /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
-}
+} */
 
 /* .icon_launcer {
     background-image : url("../assets/images/tiledesk-chat-ballon.svg");
@@ -365,7 +377,8 @@
     height: 80%; /* nk */
     /* width: 320px; */
     width: 376px; /* nk */
-    bottom: 100px;
+    /* bottom: 100px; */
+    bottom: 90px; /* nk: replace the above bottom value for the new launcher chat icon (background- color instead of background image) */
     overflow: hidden;
     /* border-radius: 10px; */
     border-radius: 8px; /* nk */
@@ -407,7 +420,7 @@
 
 /* CSS HEADER */
 #chat21-container .chat21-sheet-header {
-    background-color: #2a6ac1;
+    /* background-color: #2a6ac1; */
     z-index: 999999005;
     overflow: hidden;
     position: absolute;
@@ -432,6 +445,7 @@
 #chat21-container .chat21-sheet-header-title {
     color: white !important;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    /* font-family: 'Google Sans', sans-serif !important;  */
     font-size: 15px;
     /* line-height: 48px; */
     font-weight: 500;
