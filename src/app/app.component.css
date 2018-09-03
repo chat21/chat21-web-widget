@@ -489,7 +489,8 @@
     #chat21-container .chat21-sheet-header-close-button {
         z-index: 999999004;
         position: relative;
-        margin: 0 16px;
+        /* margin: 0 16px; */
+        margin: 16px;
         height: 100%;
         cursor: pointer;
         float: right;
@@ -501,22 +502,22 @@
     #chat21-container .chat21-sheet-header-button-icon-white {
         height: 100%;
         width: 16px;
-        background-position: center center;
+        /* background-position: center center;
         background-repeat: no-repeat;
         background-size: 16px;
-        /* background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
+        background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
     }
 }
 /* // end nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header  ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
 
-/* hide THE SVG 'CLOSE BUTTON' IN THE sheet-header IF THE WINDOW WIDTH IS > OF 451PX */
+/* HIDE THE SVG 'CLOSE BUTTON' IN THE sheet-header IF THE WINDOW WIDTH IS > OF 451PX */
 @media (min-width: 451px) {
     .chat21-sheet-header-svg {
         display: none
     }
 }
 
-/* DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF FULLSCREEN IS SETTED ON TRUE */
+/* DISPLAY THE SVG 'CLOSE BUTTON' IN THE sheet-header IF FULLSCREEN IS SETTED ON TRUE */
 .chat21-sheet-header-svg-display-if-fullscreen {
     display: block
 
@@ -525,7 +526,8 @@
 #chat21-container .show_header_close_btn {
     z-index: 999999004 !important;
     position: relative !important;
-    margin: 0 16px !important;
+    /* margin: 0 16px !important; */
+    margin: 16px !important;
     height: 100% !important;
     cursor: pointer !important;
     float: right !important;
@@ -534,9 +536,9 @@
 #chat21-container .show_header_close_btn .chat21-sheet-header-button-icon-white {
     height: 100%;
     width: 16px;
-    background-position: center center;
+    /* background-position: center center;
     background-repeat: no-repeat;
-    background-size: 16px;
+    background-size: 16px; */
     /* background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
 }
 /* // nk end: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF show_header_close_btn is true  */

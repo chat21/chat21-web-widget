@@ -157,7 +157,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutTitle: string;
     calloutMsg: string;
     fullscreenMode: boolean;
-    headerColor: string;
+    themeColor: string;
+    // headerColor: string;
+
+    themeTextColor: string;
     headerTextColor: string;
 
     private aliveSubLoggedUser = true;
@@ -269,7 +272,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
             'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
-            'headerColor', this.headerColor, 'headerTextColor', this.headerTextColor);
+            'themeColor', this.themeColor, 'themeTextColor', this.themeTextColor);
 
 
         this.setAvailableAgentsStatus();
@@ -455,8 +458,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.fullscreenMode = false;
-        this.headerColor = '#2a6ac1';
-        this.headerTextColor = '#ffffff';
+        this.themeColor = '#2a6ac1';
+        this.themeTextColor = '#ffffff';
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
@@ -531,7 +534,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
             'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
-            'headerColor': this.headerColor, 'headerTextColor': this.headerTextColor
+            'themeColor': this.themeColor, 'themeTextColor': this.themeTextColor
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -689,14 +692,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - fullscreenMode ', this.fullscreenMode);
         }
 
-        if (this.getParameterByName('tiledesk_headercolor')) {
-            this.headerColor = this.getParameterByName('tiledesk_headercolor');
-            console.log('»»» GET VARIABLE URL PARAMETERS - HEADER COLOR ', this.headerColor);
+        if (this.getParameterByName('tiledesk_themecolor')) {
+            this.themeColor = this.getParameterByName('tiledesk_themecolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - THEME COLOR ', this.themeColor);
         }
 
-        if (this.getParameterByName('tiledesk_headertextcolor')) {
-            this.headerTextColor = this.getParameterByName('tiledesk_headertextcolor');
-            console.log('»»» GET VARIABLE URL PARAMETERS - HEADER TEXT COLOR ', this.headerTextColor);
+        if (this.getParameterByName('tiledesk_themetextcolor')) {
+            this.themeTextColor = this.getParameterByName('tiledesk_themetextcolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - THEME TEXT COLOR ', this.themeTextColor);
         }
 
     }
@@ -893,16 +896,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.fullscreenMode = TEMP;
         }
 
-        TEMP = window['tiledeskSettings']['headerColor'];
+        TEMP = window['tiledeskSettings']['themeColor'];
         if (TEMP) {
-             this.headerColor = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - HEADER COLOR ', this.headerColor);
+             this.themeColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - THEME COLOR ', this.themeColor);
         }
 
-        TEMP = window['tiledeskSettings']['headerTextColor'];
+        TEMP = window['tiledeskSettings']['themeTextColor'];
         if (TEMP) {
-            this.headerTextColor = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - HEADER TEXT COLOR ', this.headerTextColor);
+            this.themeTextColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - THEME TEXT COLOR ', this.themeTextColor);
         }
     }
 
