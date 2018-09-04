@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone, ViewEncapsulation } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -43,12 +43,13 @@ import { trigger, style, animate, transition } from '@angular/animations';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
+    encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
     animations: [
         trigger(
             'enterCloseAnimation', [
                 transition(':enter', [
                     style({ transform: 'rotate(-90deg)', opacity: 1 }),
-                    animate('450ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1  }))
+                    animate('450ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1 }))
                 ]),
                 // transition(':leave', [
                 //     style({ transform: 'scale(1)', opacity: 1 }),
@@ -244,6 +245,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         moment.locale('it');
         this.initAll();
+
+        this.convertHex('#FF00FF ', 50);
+    }
+
+
+    // function convertHex(hex, opacity) {
+    convertHex(hex, opacity) {
+
+        hex = hex.replace('#', '');
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+
+        const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+        console.log('CONVERT HEX TO RGBA ', result);
+        return result;
     }
 
     private initAll() {
@@ -455,6 +472,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tenant = environment.tenant;
         this.preChatForm = false;
         this.chatName = 'TileDesk';
+        // tslint:disable-next-line:max-line-length
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.fullscreenMode = false;
@@ -898,7 +916,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         TEMP = window['tiledeskSettings']['themeColor'];
         if (TEMP) {
-             this.themeColor = TEMP;
+            this.themeColor = TEMP;
+            // this.themeColor = rgb(255,182,193);
             console.log('»»» GET VARIABLES FROM SETTINGS - THEME COLOR ', this.themeColor);
         }
 

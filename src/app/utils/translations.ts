@@ -1,13 +1,13 @@
-
+// "LABEL_START_NW_CONV" : "START A NEW CONVERSATION",
 export const en = {
     "LABEL_PLACEHOLDER" : "type your message..",
-    "LABEL_START_NW_CONV" : "START A NEW CONVERSATION",
+    "LABEL_START_NW_CONV" : "New conversation",
     "LABEL_FIRST_MSG" : "Describe shortly your problem, you will be contacted by an agent",
     "LABEL_SELECT_TOPIC" : "Select a topic",
     "LABEL_COMPLETE_FORM" : "Complete the form to start a conversation with the next available agent.", 
-    "LABEL_FIELD_NAME" : "* Name", 
+    "LABEL_FIELD_NAME" : "Name", 
     "LABEL_ERROR_FIELD_NAME" : "Required field (minimum 5 characters).",
-    "LABEL_FIELD_EMAIL" : "* Email",
+    "LABEL_FIELD_EMAIL" : "Email",
     "LABEL_ERROR_FIELD_EMAIL" : "Enter a valid email address.",
     "LABEL_WRITING" : "is writing...",
     "AGENT_NOT_AVAILABLE" : " - Offline",
@@ -19,9 +19,10 @@ export const en = {
     "CALLOUT_MSG_PLACEHOLDER" : "Click here and start chatting with us!"
 }
 
+// "LABEL_START_NW_CONV": "INIZIA UNA NUOVA CONVERSAZIONE",
 export const it = {
     "LABEL_PLACEHOLDER": "Scrivi la tua domanda...",
-    "LABEL_START_NW_CONV": "INIZIA UNA NUOVA CONVERSAZIONE",
+    "LABEL_START_NW_CONV": "Nuova conversazione",
     "LABEL_FIRST_MSG": "Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato",
     "LABEL_SELECT_TOPIC": "Seleziona un argomento",
     "LABEL_COMPLETE_FORM": "Completa il form per iniziare una conversazione con il prossimo agente disponibile.",

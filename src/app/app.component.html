@@ -78,12 +78,21 @@
 
         <!--CONTENT-->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
+            <!-- // nk new: simulates a higher header content -- USED ONLY FIRST MSG-->
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-sheet-content-themable-section" [ngStyle]="{'background-color': themeColor}"></div>
+            <!-- // AVATAR -->
+            <!-- <div class="chat21-sheet-content-avatar">
+                <img src="https://static.intercomassets.com/avatars/1962870/square_128/21430626_1849878071693166_5885009477174544873_n-1523288996.jpg?1523288996" alt="Elaine avatar">
+            </div> -->
+
             <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
                 <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
             </div>
 
             <!-- // nk - to edit: display the msg of welcome msg if exist -->
-            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-header-modal-select">
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
+                class="chat21-header-modal-select chat21-first-msg" [ngStyle]="{'border-top-color': themeTextColor}">
+
                 <div [ngClass]="{'hide_LABEL_FIRST_MSG' : wellcomeMsg !== ''}">
                     {{LABEL_FIRST_MSG}}
                 </div>
@@ -201,7 +210,8 @@
             </div>
 
             <div id="chat21-end-footer">
-                <div id="chat21-powered-by" [innerHTML]="poweredBy" style="color: #E18574" >
+                <div id="chat21-powered-by" [innerHTML]="poweredBy">
+                    
                     <!-- (click)="openRate()" -->
                     <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
                 </div>
@@ -216,7 +226,9 @@
                 <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
             </div>
 
-            <div class="chat21-header-modal-select">{{LABEL_SELECT_TOPIC}}</div>
+            <div class="chat21-header-modal-select">
+                {{LABEL_SELECT_TOPIC}}
+            </div>
             <ul class="chat21-content-modal-select">
                 <li *ngFor="let department of departments; let i = index" (click)="onSelectDepartment(department)">
                     <span class="chat21-badge">{{i+1}}</span>
@@ -235,7 +247,7 @@
                 <div class="chat21-formMessageField">{{LABEL_COMPLETE_FORM}}</div>
                 <form id="chat21-formContainer" [formGroup]="preChatFormGroup" novalidate (ngSubmit)="save(preChatFormGroup.value, preChatFormGroup.valid)">
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userFullname" class="form-field-label small">{{LABEL_FIELD_NAME}}</label>
+                        <!-- <label [hidden]="!userFullname" class="form-field-label small">{{LABEL_FIELD_NAME}}</label> -->
                         <input type="text" id="form-field-name" class="form-control" formControlName="name" placeholder="{{LABEL_FIELD_NAME}}">
                     </div>
                     <div class="text-danger">
@@ -244,7 +256,7 @@
                         </small>
                     </div>
                     <div class="form-group chat21-inputContainer">
-                        <label [hidden]="!userEmail" class="form-field-label small">{{LABEL_FIELD_EMAIL}}</label>
+                        <!-- <label [hidden]="!userEmail" class="form-field-label small">{{LABEL_FIELD_EMAIL}}</label> -->
                         <input type="email" id="form-field-email" class="form-control" formControlName="email" placeholder="{{LABEL_FIELD_EMAIL}}">
                     </div>
                     <div class="text-danger">
@@ -253,8 +265,21 @@
                         </small>
                     </div>
                     <button [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="chat21b-box-new-conversation chat21-button-new"
-                        (click)="closeForm()">
-                        <span style="color:#2a6ac1">  {{LABEL_START_NW_CONV}} </span>
+                        (click)="closeForm()" [ngStyle]="{'background-color': themeColor, 'border-color': themeColor}">
+
+                        <span style="padding-right: 8px; padding-left:8px" [ngStyle]="{'color': themeTextColor}"> 
+                            <span style="position:relative; top:3px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': themeTextColor}"/>
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                </svg>
+                            </span>
+
+                            <span style="position:relative; top:-2px; margin-left: 8px; font-weight: 600">
+                                {{LABEL_START_NW_CONV}}
+                            </span>    
+                        </span>
+                        <!-- style="color:#2a6ac1" -->
                     </button>
                 </form>
             </div>
