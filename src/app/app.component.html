@@ -79,29 +79,37 @@
         <!--CONTENT-->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <!-- // nk new: simulates a higher header content -- USED ONLY FIRST MSG-->
-            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" class="chat21-sheet-content-themable-section" [ngStyle]="{'background-color': themeColor}"></div>
+            <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
+                class="chat21-sheet-content-themable-section" [ngClass]="{'themable-section-agent_not_available':  !areAgentsAvailable}" [ngStyle]="{'background-color': themeColor}">
+            </div>
             <!-- // AVATAR -->
             <!-- <div class="chat21-sheet-content-avatar">
                 <img src="https://static.intercomassets.com/avatars/1962870/square_128/21430626_1849878071693166_5885009477174544873_n-1523288996.jpg?1523288996" alt="Elaine avatar">
             </div> -->
 
-            <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
+            <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DEPARTMENTS AND THERE IS NOT PRECHAT-FORM 
+                 NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
+            <div *ngIf="!areAgentsAvailable && !openSelectionDepartment && isNewConversation == true" class="chat21-agents-available chat21-agents-available-is-new-conversation" 
+                [ngStyle]="{'border-top-color': themeForegroundColor}">
+                <span style="font-size:18px">🤔</span>  <span style="position: relative; top: -2px">{{ ALL_AGENTS_OFFLINE_LABEL }}</span>
             </div>
 
             <!-- // nk - to edit: display the msg of welcome msg if exist -->
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
-                class="chat21-header-modal-select chat21-first-msg" [ngStyle]="{'border-top-color': themeForegroundColor}">
+                class="chat21-header-modal-select chat21-header-modal-select-first-msg" [ngClass]="{'first-msg-agent_not_available':  !areAgentsAvailable}" 
+                [ngStyle]="{'border-top-color': themeForegroundColor}">
 
                 <div [ngClass]="{'hide_LABEL_FIRST_MSG' : wellcomeMsg !== ''}">
-                    {{LABEL_FIRST_MSG}}
+                    <span *ngIf="areAgentsAvailable"> {{LABEL_FIRST_MSG}} </span> 
+                    <span *ngIf="!areAgentsAvailable"> {{LABEL_FIRST_MSG_NO_AGENTS}}</span> 
                 </div>
                 <div [ngClass]="{'display_wellcomeMsg' : wellcomeMsg !== ''}" style="display: none">
                     {{ wellcomeMsg }}
                 </div>
             </div>
+
             <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;"
-                class="chat21-header-modal-select">
+                class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept" [ngClass]="{'more-of-one-dept-agent_not_available':  !areAgentsAvailable}">
                 <div>{{departmentSelected?.name}}</div>
             </div>
             <div [class.active]="isNewConversation == false && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
@@ -222,26 +230,27 @@
 
         <div *ngIf="openSelectionDepartment" id="chat21-modal-select">
 
-            <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
-            </div>
+            <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE DEPARTMENT SELECTION VIEW  -->
+            <!-- <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
+               <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
+            </div> -->
 
             <div class="chat21-header-modal-select">
                 {{LABEL_SELECT_TOPIC}}
             </div>
             <ul class="chat21-content-modal-select">
                 <li *ngFor="let department of departments; let i = index" (click)="onSelectDepartment(department)">
-                    <span class="chat21-badge">{{i+1}}</span>
+                    <span [ngStyle]="{'background-color': themeColor, 'color': themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
                     <span class="chat21-title">{{department?.name}}</span>
                 </li>
             </ul>
         </div>
 
         <div *ngIf="preChatForm" id="chat21-modal-form">
-
-            <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-                <span> {{ ALL_AGENTS_OFFLINE_LABEL }}</span>
-            </div>
+            <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE PRE-CHAT FORM VIEW  -->
+            <!-- <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
+                <span>{{ ALL_AGENTS_OFFLINE_LABEL }}</span>
+            </div> -->
 
             <div class="chat21-content-modal-form">
                 <div class="chat21-formMessageField">{{LABEL_COMPLETE_FORM}}</div>

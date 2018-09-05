@@ -1013,7 +1013,7 @@ div#chat21-end-footer:hover div.build_version{
 
 }
 
-.chat21-first-msg {
+.chat21-header-modal-select-first-msg {
     font-size: 13px; /* new: as card over the sheet-content-themable */
     border-radius: 3px; /* new: as card over the sheet-content-themable */
     background-color: #ffffff; /* new: as card over the sheet-content-themable */
@@ -1027,11 +1027,29 @@ div#chat21-end-footer:hover div.build_version{
     left: 0;
     right: 0;
 }
+.chat21-header-modal-select-more-of-one-dept {
+
+    margin-top: 35px
+}
+
+/* custom style to the 'box' Describe shortly your problem when agent are not available */
+.first-msg-agent_not_available {
+    top: 43px;
+}
+
+/* custom style to the 'box' with the name of the dept when are not available */
+.more-of-one-dept-agent_not_available {
+    margin-top: 65px
+}
 
 /* new: simulates a higher header content over the wich is overlay header-modal-select */
 .chat21-sheet-content-themable-section {
     position:relative;
     height:48px
+}
+
+.themable-section-agent_not_available {
+    height:80px
 }
 
 /* 
@@ -1087,9 +1105,9 @@ div#chat21-end-footer:hover div.build_version{
     box-sizing: initial;
     display: inline-block;
     font-size: 12px;
-    color: white;
+    /* color: white; */ /* nk commented for themable style */
     padding: 4px;
-    background-color: #2a69c1;
+    /* background-color: #2a69c1; */ /* nk commented for themable style */
     line-height: 14px;
     position: absolute;
     height: 14px;
@@ -1098,6 +1116,7 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0px 5px 0px 0px;
     text-align: center;
     top: 0px;
+    font-weight: 500; /* nk added for themable style */
   }
   .chat21-content-modal-select .chat21-title{
         margin-left: 30px;
@@ -1371,9 +1390,10 @@ input:-webkit-autofill {
 
 /* END LOADING */
 
-
+/* BOX ALL_AGENTS_OFFLINE_LABEL */
 .chat21-agents-available {
-    background-color: yellow;
+    font-family: 'Google Sans', sans-serif !important;
+    /* background-color: yellow; */ /* NK COMMENTED FOR THE NEW STYLE OF THE BOX */
     color: black;
     padding: 8px 4px 8px 4px;
     /* height: 32px; */
@@ -1382,8 +1402,27 @@ input:-webkit-autofill {
     /* left: 0; */
     /* width: 100%; */
      text-align: center;
-     font-weight: 450;
+     font-weight: 300;
 }
+
+/* NK - CUSTOMIZE THE BOX ALL_AGENTS_OFFLINE_LABEL THAT IS DISPLAYED WHEN THERE IS NOT PRECHAT-FORM AND THERE IS NOT DEPTS */
+.chat21-agents-available-is-new-conversation {
+    font-size: 13px; /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    background-color: #ffffff; /* new: as card over the sheet-content-themable */
+    position: absolute; /* new: as card over the sheet-content-themable */
+    z-index: 999999006; /* new: as card over the sheet-content-themable */
+    top: 1px; /* new: as card over the sheet-content-themable */
+    -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    border-top: 1.4px solid;  /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    left: 0;
+    right: 0;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
 
 /* resize and hide the text input area */
 .hidden-text-area {

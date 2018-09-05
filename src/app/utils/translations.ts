@@ -2,7 +2,8 @@
 export const en = {
     "LABEL_PLACEHOLDER" : "type your message..",
     "LABEL_START_NW_CONV" : "New conversation",
-    "LABEL_FIRST_MSG" : "Describe shortly your problem, you will be contacted by an agent",
+    "LABEL_FIRST_MSG" : "Describe shortly your problem, you will be contacted by an agent.",
+    "LABEL_FIRST_MSG_NO_AGENTS": "You can anyway describe your problem. It will be assigned to the support team who will answer you as soon as possible.",
     "LABEL_SELECT_TOPIC" : "Select a topic",
     "LABEL_COMPLETE_FORM" : "Complete the form to start a conversation with the next available agent.", 
     "LABEL_FIELD_NAME" : "Name", 
@@ -23,7 +24,8 @@ export const en = {
 export const it = {
     "LABEL_PLACEHOLDER": "Scrivi la tua domanda...",
     "LABEL_START_NW_CONV": "Nuova conversazione",
-    "LABEL_FIRST_MSG": "Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato",
+    "LABEL_FIRST_MSG": "Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato.",
+    "LABEL_FIRST_MSG_NO_AGENTS": "Puoi comunque descrivere il tuo problema. Sarà assegnato al team di supporto che ti risponderà appena possibile.",
     "LABEL_SELECT_TOPIC": "Seleziona un argomento",
     "LABEL_COMPLETE_FORM": "Completa il form per iniziare una conversazione con il prossimo agente disponibile.",
     "LABEL_FIELD_NAME": "Nome",

@@ -181,6 +181,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private LABEL_PLACEHOLDER: string;
     private LABEL_START_NW_CONV: string;
     private LABEL_FIRST_MSG: string;
+    private LABEL_FIRST_MSG_NO_AGENTS: string;
     private LABEL_SELECT_TOPIC: string;
     private LABEL_COMPLETE_FORM: string;
     private LABEL_FIELD_NAME: string;
@@ -566,6 +567,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
         this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
         this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
+        this.LABEL_FIRST_MSG_NO_AGENTS = this.translatorService.translate('LABEL_FIRST_MSG_NO_AGENTS');
         this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
         this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
         this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME');
@@ -1337,6 +1339,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log('checkListMessages: ', snapshot);
                 if (snapshot.exists()) {
                     that.isNewConversation = false;
+                    console.log('IS NEW CONVERSATION ?', that.isNewConversation);
                     setTimeout(function () {
                         if (that.messages.length === 0) {
                             that.isNewConversation = true;
@@ -1347,6 +1350,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     that.setFocusOnId('chat21-main-message-context');
                 } else {
                     that.isNewConversation = true;
+                    console.log('IS NEW CONVERSATION ?', that.isNewConversation);
                     if (that.projectid && !that.attributes.departmentId) {
                         // that.isLogged = false;
                         // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
