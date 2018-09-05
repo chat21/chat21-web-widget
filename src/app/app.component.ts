@@ -161,8 +161,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     themeColor: string;
     // headerColor: string;
 
-    themeTextColor: string;
-    headerTextColor: string;
+    // themeTextColor: string;
+    themeForegroundColor: string;
+    // headerTextColor: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -289,7 +290,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
             'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
-            'themeColor', this.themeColor, 'themeTextColor', this.themeTextColor);
+            'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor);
 
 
         this.setAvailableAgentsStatus();
@@ -477,7 +478,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpen = false;
         this.fullscreenMode = false;
         this.themeColor = '#2a6ac1';
-        this.themeTextColor = '#ffffff';
+        this.themeForegroundColor = '#ffffff';
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
@@ -552,7 +553,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
             'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
-            'themeColor': this.themeColor, 'themeTextColor': this.themeTextColor
+            'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -715,9 +716,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - THEME COLOR ', this.themeColor);
         }
 
-        if (this.getParameterByName('tiledesk_themetextcolor')) {
-            this.themeTextColor = this.getParameterByName('tiledesk_themetextcolor');
-            console.log('»»» GET VARIABLE URL PARAMETERS - THEME TEXT COLOR ', this.themeTextColor);
+        if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
+            this.themeForegroundColor = this.getParameterByName('tiledesk_themeforegroundcolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
         }
 
     }
@@ -921,10 +922,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLES FROM SETTINGS - THEME COLOR ', this.themeColor);
         }
 
-        TEMP = window['tiledeskSettings']['themeTextColor'];
+        TEMP = window['tiledeskSettings']['themeForegroundColor'];
         if (TEMP) {
-            this.themeTextColor = TEMP;
-            console.log('»»» GET VARIABLES FROM SETTINGS - THEME TEXT COLOR ', this.themeTextColor);
+            this.themeForegroundColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
         }
     }
 
