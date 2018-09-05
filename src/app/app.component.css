@@ -1049,7 +1049,7 @@ div#chat21-end-footer:hover div.build_version{
 }
 
 .themable-section-agent_not_available {
-    height:80px
+    height:100px
 }
 
 /* 
@@ -1136,6 +1136,7 @@ div#chat21-end-footer:hover div.build_version{
     background-color: rgba(255, 255, 255, 1.0);
     z-index: 999999900;
     top: 48px;
+    overflow-y: auto; /* nk added for new form style */
   }
   .chat21-button-new {
     position: absolute;
@@ -1143,6 +1144,7 @@ div#chat21-end-footer:hover div.build_version{
     cursor: pointer;
     margin-left: 10px; /* nk added for new form style */
     margin-right: 30px; /* nk added for new form style */
+    /* bottom: 0px;  */
   }
 
   /* nk */
@@ -1160,25 +1162,27 @@ div#chat21-end-footer:hover div.build_version{
     font-size: 15px;
     text-align: center;
     word-wrap: break-word;
-    margin-top: 25px; /* nk added for new form style */
+    margin-top: 15px; /* nk added for new form style */
   }
 
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+ /* Chrome, Firefox, Opera, Safari 10.1+ */
+/* ::placeholder { 
     color: rgb(179, 182, 184);
-
-}
+} */
 
   /* nk: added for new style for the form */
   #chat21-formContainer {
-    padding: 15px 30px;
+    padding: 0px 30px;
   }
 
- 
-  /* Change the white to any color ;) */
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px white inset;
-    box-shadow: 0 0 0 30px white inset;
-}
+  /* Remove input background colour for Chrome autocomplete */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+      transition: background-color 5000s ease-in-out 0s;
+  }
+
 
 #chat21-formContainer .chat21-inputContainer {
     background-color: #fff;
@@ -1212,6 +1216,8 @@ input:-webkit-autofill {
     margin: 0 0 7px 0;
     position: relative;
 }
+
+
 .chat21-inputContainer > input {
     padding: 11px 10px 8px 10px!important;
     /* color: #777777!important; */ /*nk commented for new form style */
@@ -1229,21 +1235,25 @@ input:-webkit-autofill {
     width: 100%!important;
     margin-bottom: 0px!important;
     background: #fff!important;
+    /* height: 33px; */
 }
 
 .chat21-inputContainer > input::placeholder {
-    color: #cccccc;
+    /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
     opacity: 1; /* Firefox */
 }
 
 .chat21-inputContainer > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #cccccc;
+    /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
 }
 
 .chat21-inputContainer > input::-ms-input-placeholder { /* Microsoft Edge */
-   color: #cccccc;
+   /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
 }
 

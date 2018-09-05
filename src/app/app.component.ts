@@ -230,7 +230,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     /* EYE-CATCHER CLOSE BUTTON SWITCH */
     // THERE ARE TWO 'CARD CLOSE BUTTONS' THAT ARE DISPLAYED ON THE BASIS OF PLATFORM
     isMobile: boolean;
-
+   
 
     constructor(
         private zone: NgZone,
@@ -251,6 +251,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.convertHex('#FF00FF ', 50);
     }
 
+ 
 
     // function convertHex(hex, opacity) {
     convertHex(hex, opacity) {
