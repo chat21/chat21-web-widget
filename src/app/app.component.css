@@ -258,7 +258,8 @@
     bottom: 120px;
     right: 36px;
     cursor: pointer;
-    background-color: #f5f5f5; 
+    /* background-color: #f5f5f5; */ /* commented for new style */
+    background-color: #ffffff;  /* added for new style */
     border: 1px solid #dedfde;
     box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
     width: 299px;
@@ -274,7 +275,8 @@
 .eye-catcher-card-title {
     font-family: 'Google Sans', sans-serif; 
     font-size: 24px; 
-    color:#286abf; 
+    /* color:#286abf;  */ /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
     padding-left: 5px; 
     padding-right: 10px; 
     font-weight:500;
@@ -287,7 +289,8 @@
 
 .eye-catcher-card-msg {
     font-family: 'Google Sans', sans-serif; 
-    color: #286abf;
+    /* color: #286abf; */  /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
     padding-left: 5px; 
     padding-right: 10px; 
     margin-top: 6px;
@@ -300,7 +303,8 @@
 }
 
 .eye-catcher-card-img-wrapper {
-    background-color: #286abf; 
+    /* background-color: #286abf;  */ /* commented for new style */
+    border: 1px solid #dedfde; /* added for new style */
     border-radius: 100px;
     height: 65px;
     width: 65px;
@@ -309,7 +313,7 @@
     /* right: 252px; */
 }
 
-.eye-catcher-card .card-img {
+.eye-catcher-card .chat21-card-img {
     position: relative;
     bottom: 14px;
     right: 15px;
