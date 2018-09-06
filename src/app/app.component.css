@@ -1144,14 +1144,15 @@ div#chat21-end-footer:hover div.build_version{
     cursor: pointer;
     margin-left: 10px; /* nk added for new form style */
     margin-right: 30px; /* nk added for new form style */
-    /* bottom: 0px;  */
+    outline: none !important;  /* Remove blue “selected” outline on buttons */
   }
+
 
   /* nk */
   .chat21-button-new:hover {
     /* background-color: #ffffff !important;
     color: #2a6ac1 !important; */
-    opacity: 0.6;
+    opacity: 0.8;
   }
 
   .chat21-formMessageField {
