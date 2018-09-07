@@ -256,15 +256,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.initAll();
 
         this.convertHex('#FF00FF ', 50);
-        this.rotate();
     }
 
-    rotate() {
-        // this.state = (this.state === 'default' ? 'rotated' : 'default');
-        if (this.state === 'default') {
-            setTimeout(() => this.state = 'rotated');
-          }
-      }
 
     // function convertHex(hex, opacity) {
     convertHex(hex, opacity) {
@@ -435,8 +428,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.displayEyeCatcherCard = 'block';
             this.displayEyeCatcherCardCloseBtnWrapper = 'block';
             this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
+            this.rotateCalloutEmoticon();
         } else {
             console.log('»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ');
+        }
+    }
+
+
+    rotateCalloutEmoticon() {
+        // this.state = (this.state === 'default' ? 'rotated' : 'default');
+        if (this.state === 'default') {
+            setTimeout(() => this.state = 'rotated');
         }
     }
 

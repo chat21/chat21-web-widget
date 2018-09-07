@@ -269,7 +269,8 @@
     background-color: #ffffff;  /* added for new style */
     border: 1px solid #dedfde;
     box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
-    width: 299px;
+    /* width: 299px; */ /* commented for new style */
+    width: 270px; /* added for new style */
     /* min-height: 125px; */ /* commented for new style */
 
 }

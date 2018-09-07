@@ -350,22 +350,22 @@
             <div class="eye-catcher_column ec_right" >
 
                 <div class="eye-catcher-card-text-wrapper">
-                    <p class="eye-catcher-card-title"> 
+                    <div class="eye-catcher-card-title"> 
                         <!-- Need Help? -->
                         <span *ngIf="calloutTitle !== ''; else calloutTitle_placeholder">
                             {{ calloutTitle }}
                         </span>  
-                    </p>
+                    </div>
                     <ng-template #calloutTitle_placeholder>
                         <!-- Need Help? -->
                         {{ CALLOUT_TITLE_PLACEHOLDER }}
                     </ng-template>
-                    <p class="eye-catcher-card-msg">
+                    <div class="eye-catcher-card-msg">
                         <!-- Click here and start chatting with us!  -->
                         <span *ngIf="calloutTitle !== ''; else calloutMsg_placeholder">
                             {{ calloutMsg }} 
                         </span>   
-                    </p>
+                    </div>
                     <ng-template #calloutMsg_placeholder>
                         <!-- Click here and start chatting with us! -->
                         {{ CALLOUT_MSG_PLACEHOLDER }}
