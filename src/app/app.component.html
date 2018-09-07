@@ -308,105 +308,70 @@
     ************************************************************* -->
  
     <!-- ******* EYE-CATCHER CARD  ******** -->
-    <div class="eye-catcher-card"  
-        [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+    <div class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
-            <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
-            <div *ngIf="!isMobile">
-                <div class="eye-catcher-card-close-btn-wrapper" 
-                    [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+        <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
+        <div *ngIf="!isMobile">
+            <div class="eye-catcher-card-close-btn-wrapper" 
+                [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
-                    <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
-                        <img class="eye-catcher-card-close-btn-img" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
-                    </div>
-        
+                <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
+                    <img class="eye-catcher-card-close-btn-img" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
                 </div>
+    
             </div>
-
-              <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
-            <div *ngIf="isMobile">
-                <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
-                    [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
-                    <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
-                </div>
-            </div>
-
-            <div class="eye-catcher_row" (click)=openChatFromEyeCatcherCard()>
-                <div class="eye-catcher_column ec_left" >
-
-                    <div class="eye-catcher-card-img-wrapper" [ngStyle]="{'background-color': themeColor }">
-                        <!-- <img class="card-img" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/> -->
-                        
-                        <svg class="chat21-card-img" version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                viewBox="0 0 90 90" style="enable-background:new 0 0 90 90;" xml:space="preserve">
-                            <style type="text/css">
-                                .st1{fill:none;}
-                                .st2{fill:#F44336;}
-                            </style>
-                            <title>tiledesk-chat-ballon</title>
-                            <g id="Livello_2_1_">
-                                <g id="gg">
-                                    <path [ngStyle]="{'fill': themeForegroundColor }" class="st0" d="M33.6,31C31,31,29,33,29,35.6v22.7c0,1.1,0.9,1.9,1.9,2c0.5,0,1-0.2,1.4-0.6l3-3c0.1-0.1,0.1-0.1,0.2-0.1
-                                        h20.9c2.5,0,4.6-2.1,4.6-4.6c0,0,0,0,0,0V35.6c0-2.5-2-4.6-4.6-4.6H33.6z"/>
-                                    <rect class="st1" width="90" height="90"/>
-                                </g>
-                            </g>
-                            <g>
-                                <circle class="st2" cx="59.5" cy="33.3" r="10"/>
-                                <g>
-                                    <path [ngStyle]="{'fill': themeForegroundColor }" class="st0" d="M62.5,36.4v1.4h-5.2v-1.4H59v-4.3l0.1-0.6l-0.9,0.7c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1,0-0.2,0-0.3,0
-                                        c-0.1,0-0.2,0-0.2-0.1c-0.1,0-0.1-0.1-0.1-0.1l-0.7-0.9l2.8-2.3h1.8v7.5H62.5z"/>
-                                </g>
-                            </g>
-                        </svg>
-                    </div>
-
-                </div>
-
-                <div class="eye-catcher_column ec_right" >
-
-                    <div class="eye-catcher-card-text-wrapper">
-                        <p class="eye-catcher-card-title"> 
-                            <!-- Need Help? -->
-                            <span *ngIf="calloutTitle !== ''; else calloutTitle_placeholder">
-                                {{ calloutTitle }}
-                            </span>  
-                        </p>
-                        <ng-template #calloutTitle_placeholder>
-                            <!-- Need Help? -->
-                            {{ CALLOUT_TITLE_PLACEHOLDER }}
-                        </ng-template>
-                        <p class="eye-catcher-card-msg">
-                            <!-- Click here and start chatting with us!  -->
-                            <span *ngIf="calloutTitle !== ''; else calloutMsg_placeholder">
-                                {{ calloutMsg }} 
-                            </span>   
-                        </p>
-                        <ng-template #calloutMsg_placeholder>
-                            <!-- Click here and start chatting with us! -->
-                            {{ CALLOUT_MSG_PLACEHOLDER }}
-                        </ng-template>
-                    </div>
-
-                </div>
-              </div>
-                <!-- Need Help? --> <!-- Click here and start chatting with us!  -->
-        <!-- <div class="eye-catcher-card-img-wrapper">
-            <img class="card-img" src="../assets/images/tiledesk-chat-ballon-big-badge.svg">
         </div>
 
-        <div class="eye-catcher-card-text-wrapper">
-            <p class="eye-catcher-card-title"> 
+            <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
+        <div *ngIf="isMobile">
+            <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
+                [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
+                <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
+            </div>
+        </div>
 
-                {{ calloutTitle }}
-            </p>
-            <p class="eye-catcher-card-msg">
+        <!-- <button (click)="rotate()">Press me to rotate</button> -->
+
+        <div class="eye-catcher_row" (click)=openChatFromEyeCatcherCard()>
+            
+            <div class="eye-catcher_column ec_left" >
+
+                <!-- <div class="eye-catcher-card-img-wrapper" [ngStyle]="{'background-color': themeColor }">
+                    <img class="chat21-card-img" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
+                </div> -->
+
+                <div [@rotatedState]='state' class="eye-catcher-card-emoticons-wrapper">
+                    <span  class="chat21-card-emoticons">✋ </span>
+                </div>
                 
-                {{ calloutMsg }}    
-            </p>
-        </div> -->
-    </div>
+            </div>
 
+            <div class="eye-catcher_column ec_right" >
 
+                <div class="eye-catcher-card-text-wrapper">
+                    <p class="eye-catcher-card-title"> 
+                        <!-- Need Help? -->
+                        <span *ngIf="calloutTitle !== ''; else calloutTitle_placeholder">
+                            {{ calloutTitle }}
+                        </span>  
+                    </p>
+                    <ng-template #calloutTitle_placeholder>
+                        <!-- Need Help? -->
+                        {{ CALLOUT_TITLE_PLACEHOLDER }}
+                    </ng-template>
+                    <p class="eye-catcher-card-msg">
+                        <!-- Click here and start chatting with us!  -->
+                        <span *ngIf="calloutTitle !== ''; else calloutMsg_placeholder">
+                            {{ calloutMsg }} 
+                        </span>   
+                    </p>
+                    <ng-template #calloutMsg_placeholder>
+                        <!-- Click here and start chatting with us! -->
+                        {{ CALLOUT_MSG_PLACEHOLDER }}
+                    </ng-template>
+                </div>
 
+            </div>
+        </div>
+    </div>  
 </div>

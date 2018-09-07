@@ -28,7 +28,7 @@ import 'rxjs/add/operator/takeWhile';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 import { TranslatorService } from './providers/translator.service';
 
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 // transition(':enter', [
 //     style({ transform: 'rotate(0deg)', opacity: 0 }),
@@ -68,8 +68,13 @@ import { trigger, style, animate, transition } from '@angular/animations';
                     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
                 ])
             ]
-        )
-
+        ),
+        trigger('rotatedState', [
+            state('default', style({ transform: 'scale(0)' })),
+            state('rotated', style({ transform: 'scale(1)' })),
+            transition('rotated => default', animate('1000ms ease-out')),
+            transition('default => rotated', animate('1000ms ease-in'))
+        ])
     ]
     //   providers: [AgentAvailabilityService, TranslatorService]
 })
@@ -77,6 +82,8 @@ import { trigger, style, animate, transition } from '@angular/animations';
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('scrollMe') private scrollMe: ElementRef;
     @ViewChild('chat21Content') private chatContent: ElementRef;
+
+    state = 'default';
 
     isOpen: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     // loggedUser: any;
@@ -230,7 +237,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     /* EYE-CATCHER CLOSE BUTTON SWITCH */
     // THERE ARE TWO 'CARD CLOSE BUTTONS' THAT ARE DISPLAYED ON THE BASIS OF PLATFORM
     isMobile: boolean;
-   
+
 
     constructor(
         private zone: NgZone,
@@ -249,9 +256,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.initAll();
 
         this.convertHex('#FF00FF ', 50);
+        this.rotate();
     }
 
- 
+    rotate() {
+        // this.state = (this.state === 'default' ? 'rotated' : 'default');
+        if (this.state === 'default') {
+            setTimeout(() => this.state = 'rotated');
+          }
+       
+    }
 
     // function convertHex(hex, opacity) {
     convertHex(hex, opacity) {
