@@ -306,12 +306,13 @@
     *************************************************************    
      **************  NK EYE-CATCHER (aka CALLOUT) **************
     ************************************************************* -->
- 
-    <!-- ******* EYE-CATCHER CARD  ******** -->
-    <div class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+                                     
+    <!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
+    <div *ngIf="!isMobile" class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
         <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
-        <div *ngIf="!isMobile">
+        <!-- <div *ngIf="!isMobile"> -->
+        <div>
             <div class="eye-catcher-card-close-btn-wrapper" 
                 [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
@@ -323,12 +324,12 @@
         </div>
 
             <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
-        <div *ngIf="isMobile">
+        <!-- <div *ngIf="isMobile">
             <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
                 [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
                 <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
             </div>
-        </div>
+        </div> -->
 
         <!-- <button (click)="rotate()">Press me to rotate</button> -->
 

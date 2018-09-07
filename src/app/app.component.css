@@ -568,7 +568,8 @@
 #chat21-container .chat21-sheet-content {
     z-index: 999999004;
     position: absolute;
-    top: 48px;
+    /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    top: 52px;
     right: 0;
     bottom: 70px;
     width: 100%;
@@ -1156,7 +1157,8 @@ div#chat21-end-footer:hover div.build_version{
     width: 100%;
     background-color: rgba(255, 255, 255, 1.0);
     z-index: 999999900;
-    top: 48px;
+    /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    top: 52px; 
     overflow-y: auto; /* nk added for new form style */
   }
   .chat21-button-new {

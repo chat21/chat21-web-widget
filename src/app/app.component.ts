@@ -264,8 +264,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.state === 'default') {
             setTimeout(() => this.state = 'rotated');
           }
-       
-    }
+      }
 
     // function convertHex(hex, opacity) {
     convertHex(hex, opacity) {
