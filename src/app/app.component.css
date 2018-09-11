@@ -179,17 +179,22 @@
 }
 
 .ec_left {
-    width: 90px;
+    /* width: 90px; /* commented for new style */
+    width: 70px; /* added for new style */
     padding-left: 20px;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    /* padding-top: 24px; */ /* commented for new style */
+    /* padding-bottom: 24px; */ /* commented for new style */
+    padding-top: 16px; /* added for new style */
+    padding-bottom: 16px; /* added for new style */
     /* background-color: #5d6c80; */
     box-sizing: border-box;
 }
 
 .ec_right {
-  width: calc(100% - 90px);
-  padding-top: 24px;
+  /* width: calc(100% - 90px); */ /* commented for new style */
+  width: calc(100% - 70px); /* added for new style */
+  /* padding-top: 24px; */ /* commented for new style */
+  padding-top: 16px; /* added for new style */
   /* background-color: #aaaaaa */
 }
 
@@ -255,14 +260,19 @@
 .eye-catcher-card{
     position: fixed;
     z-index: 999999000;
-    bottom: 120px;
-    right: 36px;
+    bottom: 95px;
+    right: 20px;
+    /* bottom: 120px; */ /* commented for new style */
+    /* right: 36px; */ /* commented for new style */
     cursor: pointer;
-    background-color: #f5f5f5; 
+    /* background-color: #f5f5f5; */ /* commented for new style */
+    background-color: #ffffff;  /* added for new style */
     border: 1px solid #dedfde;
     box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
-    width: 299px;
-    min-height: 125px;
+    /* width: 299px; */ /* commented for new style */
+    width: 270px; /* added for new style */
+    /* min-height: 125px; */ /* commented for new style */
+
 }
 
 .eye-catcher-card-text-wrapper {
@@ -273,8 +283,10 @@
 
 .eye-catcher-card-title {
     font-family: 'Google Sans', sans-serif; 
-    font-size: 24px; 
-    color:#286abf; 
+    /* font-size: 24px; */  /* commented for new style */
+    font-size: 19px;
+    /* color:#286abf;  */ /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
     padding-left: 5px; 
     padding-right: 10px; 
     font-weight:500;
@@ -287,11 +299,13 @@
 
 .eye-catcher-card-msg {
     font-family: 'Google Sans', sans-serif; 
-    color: #286abf;
+    /* color: #286abf; */  /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
     padding-left: 5px; 
     padding-right: 10px; 
     margin-top: 6px;
-    margin-bottom: 24px;
+    /* margin-bottom: 24px; */ /* commented for new style */
+    margin-bottom: 16px; 
     letter-spacing: 1px;
     font-weight: 500;
     word-wrap: break-word;
@@ -300,7 +314,8 @@
 }
 
 .eye-catcher-card-img-wrapper {
-    background-color: #286abf; 
+    /* background-color: #286abf;  */ /* commented for new style */
+    border: 1px solid #dedfde; /* added for new style */
     border-radius: 100px;
     height: 65px;
     width: 65px;
@@ -309,20 +324,38 @@
     /* right: 252px; */
 }
 
-.eye-catcher-card .card-img {
+.eye-catcher-card .chat21-card-img {
     position: relative;
     bottom: 14px;
     right: 15px;
     width: 95px;
     max-width: none;
 }
+
+.chat21-card-emoticons {
+    font-size: 30px;
+}
+
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
 
 
-
-/* BUTTON */
+/* NK - NEW LAUNCHER BUTTON  */ 
 #chat21-launcher-button {
-    /* background-image : url("../assets/images/f21-logo-widget.svg"); */
+    border-radius: 50%;
+    position: fixed;
+    z-index: 999999000;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    /* -webkit-box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
+    /* box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
+}
+
+
+/* BUTTON - replaced with the rule of NEW LAUNCHER BUTTON since it is not possible to change the fill color for SVG as background-image */
+/* #chat21-launcher-button {
     background-image : url("../assets/images/tiledesk-circle-shadow.svg");
     background-size: 90px 90px;
     background-repeat: no-repeat;
@@ -337,8 +370,7 @@
     background-position: center;
     background-color: #ffffff00;
     border-color: #000000;
-    /* box-shadow: 0 4px 32px 0 rgba(0,0,0,.175)!important; */
-}
+} */
 
 /* .icon_launcer {
     background-image : url("../assets/images/tiledesk-chat-ballon.svg");
@@ -365,10 +397,11 @@
     height: 80%; /* nk */
     /* width: 320px; */
     width: 376px; /* nk */
-    bottom: 100px;
+    /* bottom: 100px; */
+    bottom: 90px; /* nk: replace the above bottom value for the new launcher chat icon (background- color instead of background image) */
     overflow: hidden;
     /* border-radius: 10px; */
-    border-radius: 8px; /* nk */
+    /* border-radius: 8px;  */ /* nk: we have chosen for flat graphics  */
     right: 20px;
     /* max-height: 400px; */
     overflow-y: auto;
@@ -407,15 +440,16 @@
 
 /* CSS HEADER */
 #chat21-container .chat21-sheet-header {
-    background-color: #2a6ac1;
+    /* background-color: #2a6ac1; */
     z-index: 999999005;
     overflow: hidden;
     position: absolute;
     top: 0;
     right: 0;
     width: 100%;
-    height: 48px;
-    box-shadow: 0px 5px 10px 1px rgba(191,191,191,0.7);
+    /* height: 48px; */ /* commented for new style */
+    height: 52px; /* added for new style */
+    /* box-shadow: 0px 5px 10px 1px rgba(191,191,191,0.7); */ /* commented for the new as card over the sheet-content-themable */
 }
 #chat21-container .chat21-sheet-header-title-container {
     z-index: 999999003;
@@ -430,19 +464,20 @@
     pointer-events: none;
 }
 #chat21-container .chat21-sheet-header-title {
-    color: white !important;
+    /* color: white !important; */
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    /* font-family: 'Google Sans', sans-serif !important;  */
     font-size: 15px;
     /* line-height: 48px; */
     font-weight: 500;
-    color: #465c66;
+    /* color: #465c66; */
     letter-spacing: .2px;
     display: inline-block;
     max-width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 10px;
+    margin-top: 14px;
 }
 .chat21-header-writing{
     margin:0px;
@@ -469,39 +504,51 @@
     display: block !important;
 }
 
-/* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
- * ONLY IF THE WINDOW WIDTH IS < OF 451PX
- */
+/* // start nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
+ * ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
 @media (max-width: 451px) {
     #chat21-container .chat21-sheet-header-close-button {
         z-index: 999999004;
         position: relative;
-        margin: 0 16px;
+        /* margin: 0 16px; */
+        margin: 16px;
         height: 100%;
         cursor: pointer;
         float: right;
     }
 }
 
-/* // nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
- * ONLY IF THE WINDOW WIDTH IS < OF 451PX
- */
+
 @media (max-width: 451px) {
     #chat21-container .chat21-sheet-header-button-icon-white {
         height: 100%;
         width: 16px;
-        background-position: center center;
+        /* background-position: center center;
         background-repeat: no-repeat;
         background-size: 16px;
-        background-image : url("../assets/images/f21ico-widgetclose_white.svg");
+        background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
+    }
+}
+/* // end nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header  ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
+
+/* HIDE THE SVG 'CLOSE BUTTON' IN THE sheet-header IF THE WINDOW WIDTH IS > OF 451PX */
+@media (min-width: 451px) {
+    .chat21-sheet-header-svg {
+        display: none
     }
 }
 
+/* DISPLAY THE SVG 'CLOSE BUTTON' IN THE sheet-header IF FULLSCREEN IS SETTED ON TRUE */
+.chat21-sheet-header-svg-display-if-fullscreen {
+    display: block
+
+}
 /* // nk start: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF show_header_close_btn is true  */
 #chat21-container .show_header_close_btn {
     z-index: 999999004 !important;
     position: relative !important;
-    margin: 0 16px !important;
+    /* margin: 0 16px !important; */
+    margin: 16px !important;
     height: 100% !important;
     cursor: pointer !important;
     float: right !important;
@@ -510,10 +557,10 @@
 #chat21-container .show_header_close_btn .chat21-sheet-header-button-icon-white {
     height: 100%;
     width: 16px;
-    background-position: center center;
+    /* background-position: center center;
     background-repeat: no-repeat;
-    background-size: 16px;
-    background-image : url("../assets/images/f21ico-widgetclose_white.svg");
+    background-size: 16px; */
+    /* background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
 }
 /* // nk end: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header IF show_header_close_btn is true  */
 
@@ -522,7 +569,8 @@
 #chat21-container .chat21-sheet-content {
     z-index: 999999004;
     position: absolute;
-    top: 48px;
+    /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    top: 52px;
     right: 0;
     bottom: 70px;
     width: 100%;
@@ -697,8 +745,6 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     margin-left: 10px;
 }
 
-
-
 /* FOOTER CONTAINER */ 
 #chat21-footer {
     z-index: 999999005;
@@ -769,6 +815,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     padding-left: 8px;
     padding-right: 8px;
 }
+
 #chat21-button-send {
     background-position: center center;
     background-repeat: no-repeat;
@@ -835,33 +882,37 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 
 .chat21b-box-new-conversation {
     margin: 6px;
-    border-color: #2a6ac1;
-    border-spacing: 10px;
-    border-style: solid;
-    border-width: 2px;
+    /* border-color: #2a6ac1; */ /* nk commented for new form style */
+    /* border-spacing: 10px; */ /* nk commented for new form style */
+    /* border-style: solid; */ /* nk commented for new form style */
+    /* border-width: 2px; */ /* nk commented for new form style */
     height: 44px;
     position: relative;
     /* width: 304px; */
-    width: 364px; /* nk */
+    /*width: 364px; */ /* nk commented for new form style */
+    border-radius: 40px; /* nk added for new form style */
     background-color: #ffffff;
     z-index: 100;
     font-size: 13px;
     color: #2a6ac1;
-    line-height: 40px;
+    /* line-height: 40px; */ /* nk commented for new form style */
     text-align: center;
     cursor: pointer;
     opacity: 1;
+    margin-top: 25px;  /* nk added for new form style */
 }
 .chat21b-box-new-conversation:disabled {
-    opacity: 0.3;
+    /* opacity: 0.5; */
+    cursor: no-drop
 }
 
 #chat21-powered-by {
+    font-family: 'Google Sans', sans-serif !important;
     width: 100%;
     text-align: center;
     clear: both;
-    font-size: 10px;
-    font-style: italic;
+    font-size: 11px;
+    /* font-style: italic; */
     font-weight: 500;
     line-height: 22px;
     padding: 0;
@@ -874,9 +925,14 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 } */
 
 #chat21-powered-by a {
-    text-decoration: none;
-    color:#2a6ac1;
+    text-decoration: none  !important;
+    /* color:#2a6ac1; */
+    color: rgb(179, 182, 184);
 }
+/* #chat21-powered-by, a, span,  .special-link:visited {
+
+color:#2a6ac1 !important;;
+  } */
 
 .build_version {
     display: none;
@@ -961,11 +1017,13 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0;
     padding: 0px 0px 0px 0px;
     width: 100%;
-    height: calc(100% - 48px);
+    /* height: calc(100% - 48px); */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    height: calc(100% - 52px);
     background-color: rgba(255,255,255,.8);
 }
 
-.chat21-header-modal-select{
+.chat21-header-modal-select {
+    font-family: 'Google Sans', sans-serif !important;
     padding: 20px;
     background-color: #b9b9b921;
     margin: 8px;
@@ -975,6 +1033,64 @@ div#chat21-end-footer:hover div.build_version{
     text-align: center;
     word-wrap: break-word;
     border-radius: 8px;
+
+}
+
+.chat21-header-modal-select-first-msg {
+    font-size: 13px; /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    background-color: #ffffff; /* new: as card over the sheet-content-themable */
+    position: absolute; /* new: as card over the sheet-content-themable */
+    z-index: 999999006; /* new: as card over the sheet-content-themable */
+    top: -8px; /* new: as card over the sheet-content-themable */
+    -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    border-top: 1.4px solid;  /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    left: 0;
+    right: 0;
+}
+.chat21-header-modal-select-more-of-one-dept {
+
+    margin-top: 35px
+}
+
+/* custom style to the 'box' Describe shortly your problem when agent are not available */
+.first-msg-agent_not_available {
+    top: 43px;
+}
+
+/* custom style to the 'box' with the name of the dept when are not available */
+.more-of-one-dept-agent_not_available {
+    margin-top: 65px
+}
+
+/* new: simulates a higher header content over the wich is overlay header-modal-select */
+.chat21-sheet-content-themable-section {
+    position:relative;
+    height:48px
+}
+
+.themable-section-agent_not_available {
+    height:100px
+}
+
+/* 
+ * ****************************
+ * ========== AVATAR ==========
+ * *************************** */
+.chat21-sheet-content-avatar{
+    padding: 20px;
+    position: relative;
+    /* z-index: 999999006; */
+   
+    margin: 8px;
+}
+
+.chat21-sheet-content-avatar img{
+    width: 52px;
+    height: 52px;
+    border-radius: 50%
 }
 
 .chat21-content-modal-select {
@@ -1012,9 +1128,9 @@ div#chat21-end-footer:hover div.build_version{
     box-sizing: initial;
     display: inline-block;
     font-size: 12px;
-    color: white;
+    /* color: white; */ /* nk commented for themable style */
     padding: 4px;
-    background-color: #2a69c1;
+    /* background-color: #2a69c1; */ /* nk commented for themable style */
     line-height: 14px;
     position: absolute;
     height: 14px;
@@ -1023,6 +1139,7 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0px 5px 0px 0px;
     text-align: center;
     top: 0px;
+    font-weight: 500; /* nk added for themable style */
   }
   .chat21-content-modal-select .chat21-title{
         margin-left: 30px;
@@ -1032,13 +1149,7 @@ div#chat21-end-footer:hover div.build_version{
   #chat21-modal-select ul {
     line-height: normal;
   }
-
-
   /*** END SELECT DEPARTMENT ***/
-
-  
-
-
 
   /********* START FORM *********/
   #chat21-modal-form {
@@ -1047,34 +1158,63 @@ div#chat21-end-footer:hover div.build_version{
     width: 100%;
     background-color: rgba(255, 255, 255, 1.0);
     z-index: 999999900;
-    top: 48px;
+    /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    top: 52px; 
+    overflow-y: auto; /* nk added for new form style */
   }
   .chat21-button-new {
     position: absolute;
-    bottom: 0px;
+    /* bottom: 0px; */ /* nk commented for new form style */
     cursor: pointer;
+    margin-left: 10px; /* nk added for new form style */
+    margin-right: 30px; /* nk added for new form style */
+    outline: none !important;  /* Remove blue “selected” outline on buttons */
   }
+
 
   /* nk */
   .chat21-button-new:hover {
-    background-color: #ffffff !important;
-    color: #2a6ac1 !important;
+    /* background-color: #ffffff !important;
+    color: #2a6ac1 !important; */
+    opacity: 0.8;
   }
 
   .chat21-formMessageField {
+    font-family: 'Google Sans', sans-serif !important;
     padding: 10px 20px;
     line-height: 1.2em;
     color: #616161;
     font-size: 15px;
     text-align: center;
     word-wrap: break-word;
+    margin-top: 15px; /* nk added for new form style */
   }
+
+ /* Chrome, Firefox, Opera, Safari 10.1+ */
+/* ::placeholder { 
+    color: rgb(179, 182, 184);
+} */
+
+  /* nk: added for new style for the form */
+  #chat21-formContainer {
+    padding: 0px 30px;
+  }
+
+  /* Remove input background colour for Chrome autocomplete */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+      transition: background-color 5000s ease-in-out 0s;
+  }
+
 
 #chat21-formContainer .chat21-inputContainer {
     background-color: #fff;
     overflow: hidden;
     position: relative;
-    height: 33px;
+    /* height: 33px; */ /* nk commented for new form style */
+    height: 36px; /* nk added for new form style */
     margin: 10px 10px 0px 10px;
 }
 #chat21-formContainer .text-danger {
@@ -1085,10 +1225,13 @@ div#chat21-end-footer:hover div.build_version{
     background-color: #ffffff;
     margin: 0px 10px 0px 10px;
   }
+
+  /* // NK EDIT THE FORM */
 .chat21-inputContainer {
     /* padding: 0px 15px; */
     /* padding: 12px 10px!important; */
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */ /* nk commented for new form */
+    border-bottom: 1px solid rgba(211, 212, 213, .4); /* nk added for new form */
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -1098,12 +1241,16 @@ div#chat21-end-footer:hover div.build_version{
     margin: 0 0 7px 0;
     position: relative;
 }
+
+
 .chat21-inputContainer > input {
     padding: 11px 10px 8px 10px!important;
-    color: #777777!important;
+    /* color: #777777!important; */ /*nk commented for new form style */
+    color: #616161 !important; /*nk added for new form style */
     font-family: Arial!important;
     font-size: 13px!important;
-    font-weight: bold!important;
+    /* font-weight: bold!important; */ /*nk commented for new form style */
+    font-weight: 300;
     background-color: #ffffff!important;
     display: block!important;
     line-height: 1.2em!important;
@@ -1113,21 +1260,25 @@ div#chat21-end-footer:hover div.build_version{
     width: 100%!important;
     margin-bottom: 0px!important;
     background: #fff!important;
+    /* height: 33px; */
 }
 
 .chat21-inputContainer > input::placeholder {
-    color: #cccccc;
+    /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
     opacity: 1; /* Firefox */
 }
 
 .chat21-inputContainer > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #cccccc;
+    /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
 }
 
 .chat21-inputContainer > input::-ms-input-placeholder { /* Microsoft Edge */
-   color: #cccccc;
+   /* color: #cccccc; */
+    color: rgb(179, 182, 184);
     font-weight: initial;
 }
 
@@ -1274,9 +1425,10 @@ div#chat21-end-footer:hover div.build_version{
 
 /* END LOADING */
 
-
+/* BOX ALL_AGENTS_OFFLINE_LABEL */
 .chat21-agents-available {
-    background-color: yellow;
+    font-family: 'Google Sans', sans-serif !important;
+    /* background-color: yellow; */ /* NK COMMENTED FOR THE NEW STYLE OF THE BOX */
     color: black;
     padding: 8px 4px 8px 4px;
     /* height: 32px; */
@@ -1285,8 +1437,27 @@ div#chat21-end-footer:hover div.build_version{
     /* left: 0; */
     /* width: 100%; */
      text-align: center;
-     font-weight: 450;
+     font-weight: 300;
 }
+
+/* NK - CUSTOMIZE THE BOX ALL_AGENTS_OFFLINE_LABEL THAT IS DISPLAYED WHEN THERE IS NOT PRECHAT-FORM AND THERE IS NOT DEPTS */
+.chat21-agents-available-is-new-conversation {
+    font-size: 13px; /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    background-color: #ffffff; /* new: as card over the sheet-content-themable */
+    position: absolute; /* new: as card over the sheet-content-themable */
+    z-index: 999999006; /* new: as card over the sheet-content-themable */
+    top: 1px; /* new: as card over the sheet-content-themable */
+    -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1); /* new: as card over the sheet-content-themable */
+    border-top: 1.4px solid;  /* new: as card over the sheet-content-themable */
+    border-radius: 3px; /* new: as card over the sheet-content-themable */
+    left: 0;
+    right: 0;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
 
 /* resize and hide the text input area */
 .hidden-text-area {

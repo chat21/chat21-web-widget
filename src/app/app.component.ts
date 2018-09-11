@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, ViewChild, HostListener, NgZone, ViewEncapsulation } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -28,23 +28,33 @@ import 'rxjs/add/operator/takeWhile';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../current_version';
 import { TranslatorService } from './providers/translator.service';
 
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+
+// transition(':enter', [
+//     style({ transform: 'rotate(0deg)', opacity: 0 }),
+//     animate('400ms ease-out', style({ transform: 'rotate(-90deg)', opacity: 1 }))
+// ]),
+// transition(':leave', [
+//     style({ transform: 'rotate(90deg)', opacity: 1 }),
+//     animate('400ms ease-in', style({ transform: 'rotate(0deg)', opacity: 0 }))
+// ])
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
+    encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
     animations: [
         trigger(
             'enterCloseAnimation', [
                 transition(':enter', [
-                    style({ transform: 'rotate(0deg)', opacity: 0 }),
-                    animate('400ms ease-out', style({ transform: 'rotate(90deg)', opacity: 1 }))
+                    style({ transform: 'rotate(-90deg)', opacity: 1 }),
+                    animate('450ms ease-out', style({ transform: 'rotate(0deg)', opacity: 1 }))
                 ]),
-                transition(':leave', [
-                    style({ transform: 'rotate(90deg)', opacity: 1 }),
-                    animate('400ms ease-in', style({ transform: 'rotate(0deg)', opacity: 0 }))
-                ])
+                // transition(':leave', [
+                //     style({ transform: 'scale(1)', opacity: 1 }),
+                //     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
+                // ])
             ]
         ),
         trigger(
@@ -58,8 +68,13 @@ import { trigger, style, animate, transition } from '@angular/animations';
                     animate('200ms ease-in', style({ transform: 'scale(0.5)', opacity: 0 }))
                 ])
             ]
-        )
-
+        ),
+        trigger('rotatedState', [
+            state('default', style({ transform: 'scale(0)' })),
+            state('rotated', style({ transform: 'scale(1)' })),
+            transition('rotated => default', animate('1000ms ease-out')),
+            transition('default => rotated', animate('1000ms ease-in'))
+        ])
     ]
     //   providers: [AgentAvailabilityService, TranslatorService]
 })
@@ -67,6 +82,8 @@ import { trigger, style, animate, transition } from '@angular/animations';
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('scrollMe') private scrollMe: ElementRef;
     @ViewChild('chat21Content') private chatContent: ElementRef;
+
+    state = 'default';
 
     isOpen: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     // loggedUser: any;
@@ -148,6 +165,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutTitle: string;
     calloutMsg: string;
     fullscreenMode: boolean;
+    themeColor: string;
+    // headerColor: string;
+
+    // themeTextColor: string;
+    themeForegroundColor: string;
+    // headerTextColor: string;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -165,6 +188,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private LABEL_PLACEHOLDER: string;
     private LABEL_START_NW_CONV: string;
     private LABEL_FIRST_MSG: string;
+    private LABEL_FIRST_MSG_NO_AGENTS: string;
     private LABEL_SELECT_TOPIC: string;
     private LABEL_COMPLETE_FORM: string;
     private LABEL_FIELD_NAME: string;
@@ -230,6 +254,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         moment.locale('it');
         this.initAll();
+
+        this.convertHex('#FF00FF ', 50);
+    }
+
+
+    // function convertHex(hex, opacity) {
+    convertHex(hex, opacity) {
+
+        hex = hex.replace('#', '');
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+
+        const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+        console.log('CONVERT HEX TO RGBA ', result);
+        return result;
     }
 
     private initAll() {
@@ -257,7 +297,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
-            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode);
+            'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
+            'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor);
 
 
         this.setAvailableAgentsStatus();
@@ -387,8 +428,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.displayEyeCatcherCard = 'block';
             this.displayEyeCatcherCardCloseBtnWrapper = 'block';
             this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
+            this.rotateCalloutEmoticon();
         } else {
             console.log('»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ');
+        }
+    }
+
+
+    rotateCalloutEmoticon() {
+        // this.state = (this.state === 'default' ? 'rotated' : 'default');
+        if (this.state === 'default') {
+            setTimeout(() => this.state = 'rotated');
         }
     }
 
@@ -440,9 +490,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tenant = environment.tenant;
         this.preChatForm = false;
         this.chatName = 'TileDesk';
+        // tslint:disable-next-line:max-line-length
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.fullscreenMode = false;
+        this.themeColor = '#2a6ac1';
+        this.themeForegroundColor = '#ffffff';
         this.channelType = CHANNEL_TYPE_GROUP;
         this.align = 'right';
         this.calloutTimer = -1;
@@ -450,6 +503,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.wellcomeMsg = '';
         this.calloutTitle = '';
         this.calloutMsg = '';
+
 
         // for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
@@ -515,7 +569,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
-            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode
+            'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
+            'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -528,6 +583,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
         this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
         this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
+        this.LABEL_FIRST_MSG_NO_AGENTS = this.translatorService.translate('LABEL_FIRST_MSG_NO_AGENTS');
         this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
         this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
         this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME');
@@ -673,6 +729,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - fullscreenMode ', this.fullscreenMode);
         }
 
+        if (this.getParameterByName('tiledesk_themecolor')) {
+            this.themeColor = this.getParameterByName('tiledesk_themecolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - THEME COLOR ', this.themeColor);
+        }
+
+        if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
+            this.themeForegroundColor = this.getParameterByName('tiledesk_themeforegroundcolor');
+            console.log('»»» GET VARIABLE URL PARAMETERS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
+        }
+
     }
 
     private setAvailableAgentsStatus() {
@@ -712,13 +778,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const url = window.location.href;
 
         name = name.replace(/[\[\]]/g, '\\$&');
-
+        // console.log('»»» getParameterByName NAME ', name);
         const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
 
+        // console.log('»»» getParameterByName RESULT ', results);
         if (!results) { return null; }
 
         if (!results[2]) { return ''; }
 
+        // console.log('»»» getParameterByName RESULT[2] ', results[2]);
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
@@ -863,6 +931,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (TEMP) {
             // this.fullscreenMode = true;
             this.fullscreenMode = TEMP;
+        }
+
+        TEMP = window['tiledeskSettings']['themeColor'];
+        if (TEMP) {
+            this.themeColor = TEMP;
+            // this.themeColor = rgb(255,182,193);
+            console.log('»»» GET VARIABLES FROM SETTINGS - THEME COLOR ', this.themeColor);
+        }
+
+        TEMP = window['tiledeskSettings']['themeForegroundColor'];
+        if (TEMP) {
+            this.themeForegroundColor = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
         }
     }
 
@@ -1056,7 +1137,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     // this.generateNewUidConversation();
                     console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
                 } else if (isWidgetActive === true) {
-                    console.log('APROOOOOOOO!!!!:', );
+                    console.log('APROOOOOOOO!!!!:');
                     sessionStorage.setItem('isWidgetActive', 'true');
                     that.isConversationOpen = false;
                 }
@@ -1105,6 +1186,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
+
         //     const that = this;
         //     if (this.calloutTimer >= 0) {
         //         const waitingTime = this.calloutTimer * 1000;
@@ -1273,6 +1355,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log('checkListMessages: ', snapshot);
                 if (snapshot.exists()) {
                     that.isNewConversation = false;
+                    console.log('IS NEW CONVERSATION ?', that.isNewConversation);
                     setTimeout(function () {
                         if (that.messages.length === 0) {
                             that.isNewConversation = true;
@@ -1283,6 +1366,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     that.setFocusOnId('chat21-main-message-context');
                 } else {
                     that.isNewConversation = true;
+                    console.log('IS NEW CONVERSATION ?', that.isNewConversation);
                     if (that.projectid && !that.attributes.departmentId) {
                         // that.isLogged = false;
                         // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
