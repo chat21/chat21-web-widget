@@ -14,8 +14,8 @@ export class StarRatingWidgetService {
 
   private API_URL;
 
-  private requestid: String = 'LKfJrBCk6G5up3uNH1L';
-  private projectid: String = '5b55e806c93dde00143163dd';
+  // private requestid: String = 'LKfJrBCk6G5up3uNH1L';
+  // private projectid: String = '5b55e806c93dde00143163dd';
 
   constructor(
     public http: Http
@@ -32,12 +32,15 @@ export class StarRatingWidgetService {
     this.observable = new BehaviorSubject<boolean>(null);
   }
 
-  httpSendRate(rate, message): Observable<string> {
+  httpSendRate(requestid, rate, message): Observable<string> {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
-    const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
+   // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
+   const url = this.API_URL + 'chat/support/tilechat/requests/' +
+    requestid + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
+
     console.log('url: ', url);
     const body = {
       'rating': rate,
@@ -57,18 +60,18 @@ export class StarRatingWidgetService {
     console.log('------------------> options: ', options);
     console.log('------------------> body: ', JSON.stringify(body));
     return this.http
-    .patch(url, JSON.stringify(body), options)
+    .put(url, JSON.stringify(body), options)
     .map(res => (res.json()));
     // .timeout(10000) // in milli sec
    }
 
-   setProjectid(projectid: String) {
-     this.projectid = projectid;
-   }
+  //  setProjectid(projectid: String) {
+  //    this.projectid = projectid;
+  //  }
 
-   setRequestid(requestid: String) {
-    this.requestid = requestid;
-  }
+  //  setRequestid(requestid: String) {
+  //   this.requestid = requestid;
+  // }
 
    setOsservable(bool) {
     console.log('------------------> setOsservable: ', bool);

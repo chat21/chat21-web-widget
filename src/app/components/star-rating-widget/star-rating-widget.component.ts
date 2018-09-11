@@ -45,7 +45,7 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('sendRate!!!::', message);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate( this.rate, message)
+    this.starRatingWidgetService.httpSendRate( 'requestid', this.rate, message)
     .subscribe(
       response => {
         console.log('OK sender ::::', response);
