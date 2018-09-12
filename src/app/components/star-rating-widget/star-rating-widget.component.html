@@ -6,8 +6,9 @@
                 <div class="chat21-button_close" (click)="closeRate()">
                     <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
                  </div>
-
-                <h1 class="chat21-modal-title">Valutazione servizio</h1>
+                
+                <!-- Valutazione servizio -->
+                <h1 class="chat21-modal-title"> {{ CUSTOMER_SATISFACTION }}</h1>
                 <fieldset class="chat21-rating">
                     <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label class = "full" for="star5" title="eccellente - 5 stars"></label>
                     <!-- <input type="radio" id="star4half" name="rating" value="4 and a half" (click)="openRate($event)" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label> -->
@@ -21,23 +22,26 @@
                     <!-- <input type="radio" id="starhalf" name="rating" value="half" (click)="openRate($event)" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label> -->
                 </fieldset>
         </div> 
-        <h3 class="chat21-modal-title">il tuo giudizio sul nostro servizio clienti</h3>
+        <!-- il tuo giudizio sul nostro servizio clienti -->
+        <h3 class="chat21-modal-title">{{ YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE }}</h3>
         <!-- <div class="chat21-button_close2" (click)="close()">Chiudi</div> -->
         
         <button *ngIf="displayDownloadTranscriptBtn === true" class="chat21-download-transcript-btn" 
             [ngStyle]="{'background-color': parentThemeColor, 'border-color': parentThemeColor}" (click)="dowloadTranscript()">
-            <span [ngStyle]="{'color': parentThemeForegroundColor}">Download Transcript</span>
+            <span [ngStyle]="{'color': parentThemeForegroundColor}">{{ DOWNLOAD_TRANSCRIPT }}</span>
         </button>
     </div>
 
     <div *ngIf="step==1">
-        <div class="chat21-button_back" (click)="prevStep()">Indietro</div>
+        <!-- Indietro -->
+        <div class="chat21-button_back" (click)="prevStep()">{{ BACK }}</div>
         <div class="chat21-button_close" (click)="closeRate()">
             <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
         </div>
         <!-- <div class="chat21-button_send2" (click)="sendRate()">Invia</div> -->
         <div class="chat21-yourRating">
-            <p>il tuo voto:</p>
+            <!-- il tuo voto: -->
+            <p>{{ YOUR_RATING }}</p>
             <div class="chat21-stars">
                 <span *ngIf="rate>0" class="fa fa-star checked"></span>
                 <span *ngIf="rate>1" class="fa fa-star checked"></span>
@@ -45,14 +49,16 @@
                 <span *ngIf="rate>3" class="fa fa-star checked"></span>
                 <span *ngIf="rate>4" class="fa fa-star checked"></span>
             </div>
-            <textarea #textbox rows="1" id="chat21-message-rate-context" class='chat21-rating-textarea' placeholder="Scrivi la tua opinione...(opzionale)" ></textarea>
-            <div class="chat21-button_send" (click)="sendRate()">Invia</div>
+            <!-- Scrivi la tua opinione...(opzionale) -->
+            <textarea #textbox rows="1" id="chat21-message-rate-context" class='chat21-rating-textarea' placeholder="{{ WRITE_YOUR_OPINION }}" ></textarea>
+            <div class="chat21-button_send" (click)="sendRate()">{{ SUBMIT }}</div>
         </div>
     </div>
 
     <div *ngIf="step==2">
-        <h1 class="chat21-modal-title">Grazie per la tua valutazione</h1>
-        <p class="chat21-modal-message">il tuo voto è stato ricevuto</p>
+            <!-- Grazie per la tua valutazione -->  <!-- il tuo voto è stato ricevuto -->
+        <h1 class="chat21-modal-title">{{ THANK_YOU_FOR_YOUR_EVALUATION }}</h1>
+        <p class="chat21-modal-message">{{ YOUR_RATING_HAS_BEEN_RECEIVED }}</p>
         <div class="chat21-modal-button-ok" (click)="closeRate()">OK</div>
     </div>
     

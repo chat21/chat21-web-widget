@@ -301,7 +301,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.setAvailableAgentsStatus();
 
-        // if the lang is passed as parameter use it, oterwise use a default language ("en")
+        // if the lang is passed as parameter use it, otherwise use a default language ("en")
         this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
         this.translate();
 

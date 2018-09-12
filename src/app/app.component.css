@@ -1261,6 +1261,8 @@ div#chat21-end-footer:hover div.build_version{
     width: 100%!important;
     margin-bottom: 0px!important;
     background: #fff!important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
     /* height: 33px; */
 }
 

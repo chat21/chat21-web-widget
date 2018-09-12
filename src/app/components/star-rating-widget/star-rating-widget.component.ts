@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { StarRatingWidgetService } from './star-rating-widget.service';
+import { TranslatorService } from '../../providers/translator.service';
 
 
 @Component({
@@ -17,10 +18,21 @@ export class StarRatingWidgetComponent implements OnInit {
   public step: number;
   displayDownloadTranscriptBtn: boolean;
 
+  // STRING (FOR TRANSLATION) PASSED IN THE TEMPLATE
+  CUSTOMER_SATISFACTION: string;
+  YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
+  DOWNLOAD_TRANSCRIPT: string;
+  BACK: string;
+  YOUR_RATING: string;
+  WRITE_YOUR_OPINION: string;
+  SUBMIT: string;
+  THANK_YOU_FOR_YOUR_EVALUATION: string;
+  YOUR_RATING_HAS_BEEN_RECEIVED: string;
+
   constructor(
-    public starRatingWidgetService: StarRatingWidgetService
-  ) {
-  }
+    public starRatingWidgetService: StarRatingWidgetService,
+    public translatorService: TranslatorService
+  ) {  }
 
   ngOnInit() {
     console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.parentThemeColor);
@@ -28,7 +40,20 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('START-RATING-WIDGET - PARENT ALLOW-TRANSCRIPT-DOWNLOAD: ', this.parentAllowTranscriptDownload);
     this.displayDownloadTranscriptBtn = this.parentAllowTranscriptDownload;
 
+    this.translate();
     this.step = 0;
+  }
+
+  private translate() {
+    this.CUSTOMER_SATISFACTION = this.translatorService.translate('CUSTOMER_SATISFACTION');
+    this.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = this.translatorService.translate('YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE');
+    this.DOWNLOAD_TRANSCRIPT = this.translatorService.translate('DOWNLOAD_TRANSCRIPT');
+    this.BACK = this.translatorService.translate('BACK');
+    this.YOUR_RATING = this.translatorService.translate('YOUR_RATING');
+    this.WRITE_YOUR_OPINION = this.translatorService.translate('WRITE_YOUR_OPINION');
+    this.SUBMIT = this.translatorService.translate('SUBMIT');
+    this.THANK_YOU_FOR_YOUR_EVALUATION = this.translatorService.translate('THANK_YOU_FOR_YOUR_EVALUATION');
+    this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
   }
 
   dowloadTranscript() {

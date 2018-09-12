@@ -5,9 +5,9 @@ import * as translations from '../utils/translations';
 export class TranslatorService {
 
   private defaultLanguage: string = "en"; // default language
-  private language : string; // user language
+  private language: string; // user language
   // contains the translation to the selected language
-  private translations : Object;
+  private translations: Object;
 
   constructor() {
     this.language = this.defaultLanguage;
@@ -15,32 +15,32 @@ export class TranslatorService {
 
   /**
    * Return the browser language if it is detected, an epty string otherwise
-   * 
+   *
    * @returns the browser language
    */
   public getBrowserLanguage() {
     var browserLanguage = window.navigator.language;
-    //console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
-  
+    // console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
+
     return !browserLanguage ? undefined : browserLanguage;
   }
 
-   /**
-    * Set the language in which to translate.
-    * 
-    * If it is provided a not valid language it will use the default language (en)
-    * 
-    * @param language the language
-    */
+  /**
+   * Set the language in which to translate.
+   *
+   * If it is provided a not valid language it will use the default language (en)
+   *
+   * @param language the language
+   */
   public setLanguage(language) {
 
     // set the user languge if it is valid.
     // if the user language is not valid, try to get the browser language.
     // if the browser language is not valid, it use the default language (en)
-    if(!language) {
+    if (!language) {
       // user language not valid
       if (this.getBrowserLanguage() !== undefined) {
-         // browser language valid
+        // browser language valid
         this.language = this.getBrowserLanguage();
       } else {
         // browser language not valid
@@ -48,7 +48,7 @@ export class TranslatorService {
       }
     } else {
       // user language valid
-      this.language = language; 
+      this.language = language;
     }
 
     // retrieve the translation
@@ -74,7 +74,7 @@ export class TranslatorService {
    * @param keyword the keyword to translate
    * @returns the keyword translations
    */
-  public translate(keyword) : string {
+  public translate(keyword): string {
     return !this.translations[keyword] ? "" : this.translations[keyword];
   }
 
