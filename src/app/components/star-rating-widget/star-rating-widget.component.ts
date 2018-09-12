@@ -19,13 +19,15 @@ export class StarRatingWidgetComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.step = 0;
   }
+
 
   openRate(e) {
     const that = this;
     this.rate = parseInt(e.srcElement.value, 0);
-    setTimeout(function() {
+    setTimeout(function () {
       that.step = 1;
       // console.log('VOTA!!!::', that.step, that.rate);
     }, 300);
@@ -45,30 +47,30 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('sendRate!!!::', message);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate( 'requestid', this.rate, message)
-    .subscribe(
-      response => {
-        console.log('OK sender ::::', response);
-         // pubblico var isWidgetActive
-         that.nextStep();
-      },
-      errMsg => {
-        console.log('httpSendRate ERROR MESSAGE', errMsg);
-        // window.alert('MSG_GENERIC_SERVICE_ERROR');
-        that.nextStep();
+    this.starRatingWidgetService.httpSendRate(this.rate, message)
+      .subscribe(
+        response => {
+          console.log('OK sender ::::', response);
+          // pubblico var isWidgetActive
+          that.nextStep();
+        },
+        errMsg => {
+          console.log('httpSendRate ERROR MESSAGE', errMsg);
+          // window.alert('MSG_GENERIC_SERVICE_ERROR');
+          that.nextStep();
 
-      },
-      () => {
-        // console.log('API ERROR NESSUNO');
-      }
-    );
+        },
+        () => {
+          // console.log('API ERROR NESSUNO');
+        }
+      );
 
   }
 
-closeRate() {
-  this.starRatingWidgetService.setOsservable(false);
-  this.step = 0;
-}
+  closeRate() {
+    this.starRatingWidgetService.setOsservable(false);
+    this.step = 0;
+  }
 
   ngOnDestroy() {
     this.step = 0;

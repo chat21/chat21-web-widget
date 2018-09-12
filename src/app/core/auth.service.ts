@@ -39,12 +39,12 @@ export class AuthService {
   }
 
   getToken() {
-    //console.log('Notification permission granted.');
+    // console.log('Notification permission granted.');
     const that = this;
     firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
     .then(function(idToken) {
         that.token = idToken;
-        //console.log('idToken.', idToken);
+        // console.log('idToken.', idToken);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
     });
