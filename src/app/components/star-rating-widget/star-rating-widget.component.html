@@ -1,5 +1,6 @@
 
 <div class="chat21-modal-content">
+    <!-- <div style="background-color:#ffffff">FOR DEBUG OF PARENT PARAMETERS: {{ parentThemeColor }} {{ parentThemeForegroundColor }} {{ parentAllowTranscriptDownload }}</div> -->
     <div *ngIf="step==0">
         <div class="chat21-modal-header">
                 <div class="chat21-button_close" (click)="closeRate()">
@@ -22,12 +23,17 @@
         </div> 
         <h3 class="chat21-modal-title">il tuo giudizio sul nostro servizio clienti</h3>
         <!-- <div class="chat21-button_close2" (click)="close()">Chiudi</div> -->
+        
+        <button *ngIf="displayDownloadTranscriptBtn === true" class="chat21-download-transcript-btn" 
+            [ngStyle]="{'background-color': parentThemeColor, 'border-color': parentThemeColor}" (click)="dowloadTranscript()">
+            <span [ngStyle]="{'color': parentThemeForegroundColor}">Download Transcript</span>
+        </button>
     </div>
 
     <div *ngIf="step==1">
         <div class="chat21-button_back" (click)="prevStep()">Indietro</div>
         <div class="chat21-button_close" (click)="closeRate()">
-                <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
+            <img _ngcontent-c0="" class="eye-catcher-card-close-btn-img" src="https://widget.tiledesk.com/assets/images/tiledesk-chat-close-dark-gray.svg">
         </div>
         <!-- <div class="chat21-button_send2" (click)="sendRate()">Invia</div> -->
         <div class="chat21-yourRating">

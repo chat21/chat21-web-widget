@@ -215,3 +215,21 @@ p.chat21-modal-message {
 .chat21-rating > input:checked ~ label:hover,
 .chat21-rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .chat21-rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+
+.chat21-download-transcript-btn {
+  margin: 6px;
+  height: 34px;
+  position: relative;
+  border-radius: 40px; 
+  /* background-color: #ffffff; */
+  z-index: 100;
+  font-size: 13px;
+  /* color: #2a6ac1; */
+  text-align: center;
+  cursor: pointer;
+  opacity: 1;
+  margin-top: 25px;
+  font-weight: 500;
+  padding-right: 12px;
+  padding-left: 12px;
+}

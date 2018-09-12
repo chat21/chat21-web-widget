@@ -901,6 +901,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     opacity: 1;
     margin-top: 25px;  /* nk added for new form style */
 }
+
 .chat21b-box-new-conversation:disabled {
     /* opacity: 0.5; */
     cursor: no-drop

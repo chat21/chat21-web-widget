@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { StarRatingWidgetService } from './star-rating-widget.service';
 
@@ -9,9 +9,13 @@ import { StarRatingWidgetService } from './star-rating-widget.service';
   styleUrls: ['./star-rating-widget.component.css']
 })
 export class StarRatingWidgetComponent implements OnInit {
+  @Input() parentThemeColor: string;
+  @Input() parentThemeForegroundColor: string;
+  @Input() parentAllowTranscriptDownload: boolean;
 
   private rate: number;
   public step: number;
+  displayDownloadTranscriptBtn: boolean;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService
@@ -19,10 +23,17 @@ export class StarRatingWidgetComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.parentThemeColor);
+    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.parentThemeForegroundColor);
+    console.log('START-RATING-WIDGET - PARENT ALLOW-TRANSCRIPT-DOWNLOAD: ', this.parentAllowTranscriptDownload);
+    this.displayDownloadTranscriptBtn = this.parentAllowTranscriptDownload;
 
     this.step = 0;
   }
 
+  dowloadTranscript() {
+    this.starRatingWidgetService._dowloadTranscript();
+  }
 
   openRate(e) {
     const that = this;

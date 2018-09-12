@@ -745,7 +745,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
 
-
     }
 
     private setAvailableAgentsStatus() {

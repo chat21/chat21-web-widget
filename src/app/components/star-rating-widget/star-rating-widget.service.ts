@@ -98,6 +98,9 @@ export class StarRatingWidgetService {
     this.observable.next(bool);
   }
 
-
+  _dowloadTranscript() {
+    const url = 'https://api.tiledesk.com/v1/public/requests/' + this.requestid + '/messages.html';
+    window.open(url, '_blank');
+  }
 
 }
