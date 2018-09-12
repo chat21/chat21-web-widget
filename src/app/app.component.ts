@@ -166,11 +166,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutMsg: string;
     fullscreenMode: boolean;
     themeColor: string;
-    // headerColor: string;
-
-    // themeTextColor: string;
     themeForegroundColor: string;
-    // headerTextColor: string;
+    allowTranscriptDownload: boolean;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -298,7 +295,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
             'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
             'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
-            'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor);
+            'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor,
+            'allowTranscriptDownload', this.allowTranscriptDownload);
 
 
         this.setAvailableAgentsStatus();
@@ -503,6 +501,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.wellcomeMsg = '';
         this.calloutTitle = '';
         this.calloutMsg = '';
+        this.allowTranscriptDownload = false;
 
 
         // for retrocompatibility 0.9 (without tiledesk.js)
@@ -570,7 +569,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
             'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
-            'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor
+            'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
+            'allowTranscriptDownload': this.allowTranscriptDownload
         };
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
@@ -738,6 +738,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.themeForegroundColor = this.getParameterByName('tiledesk_themeforegroundcolor');
             console.log('»»» GET VARIABLE URL PARAMETERS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
         }
+
+        if (this.getParameterByName('tiledesk_allowtranscriptdownload')) {
+            this.allowTranscriptDownload = true;
+            console.log('»»» GET VARIABLE URL PARAMETERS - ALLOW TRANSCRIPT DOWNLOAD ', this.allowTranscriptDownload);
+        }
+
+
 
     }
 
@@ -945,6 +952,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.themeForegroundColor = TEMP;
             console.log('»»» GET VARIABLES FROM SETTINGS - THEME FOREGROUND COLOR ', this.themeForegroundColor);
         }
+
+        TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
+        if (TEMP) {
+            this.allowTranscriptDownload = TEMP;
+            console.log('»»» GET VARIABLES FROM SETTINGS - ALLOW TRANSCRIPT DOWNLOAD ', this.allowTranscriptDownload);
+        }
+
     }
 
     // /**
