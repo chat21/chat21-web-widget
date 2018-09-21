@@ -152,9 +152,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     userEmail: string;
     userPassword: string;
     projectid: string;
-    projectname: string;
+    // projectname: string;
+    widgetTitle: string;
     preChatForm: boolean;
-    chatName: string;
+    // chatName: string;
     poweredBy: string;
     channelType: string;
     calloutTimer: number;
@@ -168,6 +169,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     themeColor: string;
     themeForegroundColor: string;
     allowTranscriptDownload: boolean;
+    showWidgetNameInConversation: boolean;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -288,8 +290,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.setIsWidgetOpenOrActive();
 
+        // 'chatName', this.chatName,
         console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
-            'projectname', this.projectname, 'chatName', this.chatName, 'poweredBy', this.poweredBy,
+            'widgetTitle', this.widgetTitle, 'poweredBy', this.poweredBy,
             'userId', this.userId, 'userEmail', this.userEmail, 'userPassword', this.userPassword,
             'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
             'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
@@ -487,8 +490,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.tenant = environment.tenant;
         this.preChatForm = false;
-        this.chatName = 'TileDesk';
+        // this.chatName = 'TileDesk';
         // tslint:disable-next-line:max-line-length
+        this.widgetTitle = 'TileDesk';
         this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
         this.isOpen = false;
         this.fullscreenMode = false;
@@ -502,6 +506,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.calloutTitle = '';
         this.calloutMsg = '';
         this.allowTranscriptDownload = false;
+        this.showWidgetNameInConversation = false;
 
 
         // for retrocompatibility 0.9 (without tiledesk.js)
@@ -561,9 +566,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private triggetLoadParamsEvent() {
+        // 'chatName': this.chatName,
         const default_settings = {
             'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
-            'projectname': this.projectname, 'chatName': this.chatName, 'poweredBy': this.poweredBy,
+            'widgetTitle': this.widgetTitle, 'poweredBy': this.poweredBy,
             'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
             'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
             'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
@@ -629,15 +635,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // console.log("getUrlParameters.projectid", this.projectid);
         }
 
-        if (this.getParameterByName('tiledesk_projectname')) {
-            this.projectname = this.getParameterByName('tiledesk_projectname');
+        if (this.getParameterByName('tiledesk_widgetTitle')) {
+            this.widgetTitle = this.getParameterByName('tiledesk_widgetTitle');
             // console.log("getUrlParameters.projectname", this.projectname);
         }
 
-        if (this.getParameterByName('tiledesk_chatname')) {
-            this.chatName = this.getParameterByName('tiledesk_chatname');
-            // console.log("getUrlParameters.chatName", this.chatName);
-        }
+        // if (this.getParameterByName('tiledesk_chatname')) {
+        //     this.chatName = this.getParameterByName('tiledesk_chatname');
+        //     // console.log("getUrlParameters.chatName", this.chatName);
+        // }
 
         if (this.getParameterByName('tiledesk_poweredby')) {
             this.poweredBy = this.getParameterByName('tiledesk_poweredby');
@@ -744,6 +750,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - ALLOW TRANSCRIPT DOWNLOAD ', this.allowTranscriptDownload);
         }
 
+        if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
+            this.showWidgetNameInConversation = true;
+            console.log('»»» GET VARIABLE URL PARAMETERS - ALLOW TRANSCRIPT DOWNLOAD ', this.showWidgetNameInConversation);
+        }
 
     }
 
@@ -835,15 +845,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.projectid = TEMP;
         }
 
-        TEMP = window['tiledeskSettings']['projectname'];
+        TEMP = window['tiledeskSettings']['widgetTitle'];
         if (TEMP) {
-            this.projectname = TEMP;
+            this.widgetTitle = TEMP;
         }
 
-        TEMP = window['tiledeskSettings']['chatName'];
-        if (TEMP) {
-            this.chatName = TEMP; // di default TileDesk
-        }
+        // TEMP = window['tiledeskSettings']['chatName'];
+        // if (TEMP) {
+        //     this.chatName = TEMP; // di default TileDesk
+        // }
 
         TEMP = window['tiledeskSettings']['poweredBy'];
         if (TEMP) {
@@ -993,15 +1003,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.projectid = TEMP;
         }
 
-        TEMP = this.el.nativeElement.getAttribute('projectname');
+        TEMP = this.el.nativeElement.getAttribute('widgetTitle');
         if (TEMP) {
-            this.projectname = TEMP;
+            this.widgetTitle = TEMP;
         }
 
-        TEMP = this.el.nativeElement.getAttribute('chatName');
-        if (TEMP) {
-            this.chatName = TEMP;
-        }
+        // TEMP = this.el.nativeElement.getAttribute('chatName');
+        // if (TEMP) {
+        //     this.chatName = TEMP;
+        // }
 
         TEMP = this.el.nativeElement.getAttribute('poweredBy');
         if (TEMP) {
@@ -1849,8 +1859,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             recipientFullname = this.GUEST_LABEL;
         }
         // const projectname = (this.projectname) ? this.projectname : this.projectid;
-        if (this.projectname) {
-            recipientFullname += ' - ' + this.projectname;
+        if (this.showWidgetNameInConversation && this.showWidgetNameInConversation === true) {
+            recipientFullname += ' - ' + this.widgetTitle;
         }
 
         // set senderFullname
@@ -2028,8 +2038,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 recipientFullname = this.GUEST_LABEL;
             }
             // const projectname = (this.projectname) ? this.projectname : this.projectid;
-            if (this.projectname) {
-                recipientFullname += ' - ' + this.projectname;
+            if (this.showWidgetNameInConversation && this.showWidgetNameInConversation === true) {
+                recipientFullname += ' - ' + this.widgetTitle;
             }
             // tslint:disable-next-line:max-line-length
             const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.projectid, this.channelType);
