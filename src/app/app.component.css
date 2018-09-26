@@ -724,6 +724,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     max-width: calc(100% - 60px);
     min-width: 14px;
 }
+
+/* .messages.msg_receive a */
+#chat21-conversations .msg_receive a { 
+    color: #03a5e8 !important;
+}
 /* TIME */
 #chat21-conversations .time {
     font-size: 0.7em;
