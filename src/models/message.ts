@@ -25,16 +25,16 @@ export class MessageModel {
             recipient: this.recipient,
             recipient_fullname: this.recipient_fullname,
             sender: this.sender,
-           sender_fullname: this.sender_fullname,
-           status: this.status,
-           metadata: this.metadata,
-           text: this.text,
-           timestamp: firebase.database.ServerValue.TIMESTAMP,
-           headerDate: this.headerDate,
-           type: this.type,
-           attributes: this.attributes,
-           channel_type: this.channel_type,
-           projectid: this.projectid
+            sender_fullname: this.sender_fullname,
+            status: this.status,
+            // metadata: this.metadata,
+            text: this.text,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            // headerDate: this.headerDate,
+            type: this.type,
+            attributes: this.attributes,
+            channel_type: this.channel_type,
+            projectid: this.projectid
         };
 
         return message;
