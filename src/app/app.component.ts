@@ -1293,6 +1293,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             attributes = {
                 client: this.CLIENT_BROWSER,
                 sourcePage: location.href,
+                projectId: this.projectid,
                 // departmentId: '',
                 // departmentName: '',
                 // departmentId: this.departmentSelected._id,

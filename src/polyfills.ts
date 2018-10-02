@@ -73,6 +73,6 @@ import 'intl/locale-data/jsonp/en';
 
 /**
  * A polyfill for creating CustomEvents on IE9+ if the native implementation is missing.
- * https://www.npmjs.com/package/custom-event-polyfill
+ * see here the documentation: https://www.npmjs.com/package/custom-event-polyfill
  */
 import 'custom-event-polyfill';
