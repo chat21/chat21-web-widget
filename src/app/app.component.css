@@ -408,18 +408,7 @@
     background-color: #fff;
 }
 
-/* // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX */
-@media (max-width: 451px) {
-    .chat21-sheet {
-        width: 100% !important;
-        height: 100% !important;
-        right: 0px !important;
-        left: 0px !important;
-        bottom: 0px !important;
-        border-radius: 0px !important;
-        max-height: none !important;
-    }
-}
+
 
 
 .chat21-fullscreen {
@@ -504,39 +493,7 @@
     display: block !important;
 }
 
-/* // start nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
- * ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
-@media (max-width: 451px) {
-    #chat21-container .chat21-sheet-header-close-button {
-        z-index: 999999004;
-        position: relative;
-        /* margin: 0 16px; */
-        margin: 16px;
-        height: 100%;
-        cursor: pointer;
-        float: right;
-    }
-}
 
-
-@media (max-width: 451px) {
-    #chat21-container .chat21-sheet-header-button-icon-white {
-        height: 100%;
-        width: 16px;
-        /* background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 16px;
-        background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
-    }
-}
-/* // end nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header  ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
-
-/* HIDE THE SVG 'CLOSE BUTTON' IN THE sheet-header IF THE WINDOW WIDTH IS > OF 451PX */
-@media (min-width: 451px) {
-    .chat21-sheet-header-svg {
-        display: none
-    }
-}
 
 /* DISPLAY THE SVG 'CLOSE BUTTON' IN THE sheet-header IF FULLSCREEN IS SETTED ON TRUE */
 .chat21-sheet-header-svg-display-if-fullscreen {
@@ -1472,4 +1429,57 @@ div#chat21-end-footer:hover div.build_version{
 .visible-text-area {
     visibility: block;
     height: 100%;
+}
+
+
+
+
+
+/**************
+// nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX 
+***************/
+
+@media (max-width: 451px) {
+    #chat21-container .chat21-sheet {
+        width: 100% !important;
+        height: 100% !important;
+        right: 0px !important;
+        left: 0px !important;
+        bottom: 0px !important;
+        border-radius: 0px !important;
+        max-height: none !important;
+    }
+}
+
+/* // start nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header 
+ * ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
+ @media (max-width: 451px) {
+    #chat21-container .chat21-sheet-header-close-button {
+        z-index: 999999004;
+        position: relative;
+        /* margin: 0 16px; */
+        margin: 16px;
+        height: 100%;
+        cursor: pointer;
+        float: right;
+    }
+}
+
+@media (max-width: 451px) {
+    #chat21-container .chat21-sheet-header-button-icon-white {
+        height: 100%;
+        width: 16px;
+        /* background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        background-image : url("../assets/images/f21ico-widgetclose_white.svg"); */
+    }
+}
+/* // end nk: DISPLAY THE 'CLOSE BUTTON' IN THE sheet-header  ONLY IF THE WINDOW WIDTH IS < OF 451PX  */
+
+/* HIDE THE SVG 'CLOSE BUTTON' IN THE sheet-header IF THE WINDOW WIDTH IS > OF 451PX */
+@media (min-width: 451px) {
+    .chat21-sheet-header-svg {
+        display: none
+    }
 }
