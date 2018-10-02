@@ -133,6 +133,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     selectedFiles: FileList;
     isWidgetActive: boolean;
+    isModalAbbandonaChatActive = false;
     isLogged = false;
 
     departments: DepartmentModel[];
@@ -201,6 +202,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private ALL_AGENTS_OFFLINE_LABEL: string;
     CALLOUT_TITLE_PLACEHOLDER: string;
     CALLOUT_MSG_PLACEHOLDER: string;
+    ALT_BUTTON_CLOSE_CHAT: string;
 
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
@@ -603,6 +605,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
         this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
         this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
+        this.ALT_BUTTON_CLOSE_CHAT = this.translatorService.translate('ALT_BUTTON_CLOSE_CHAT');
     }
 
     /** */
@@ -2168,5 +2171,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.restoreTextArea();
         }
     }
+
+    openModal(id) {
+        if ( id === 'isModalAbbandonaChatActive' ) {
+            this.isModalAbbandonaChatActive = (this.isModalAbbandonaChatActive ? false : true);
+        }
+    }
+
 
 }

@@ -8,7 +8,7 @@
         <!-- <img *ngIf="isOpen" [@enterCloseAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
 
         <!-- .cls-1{fill:#fff;} -->
-        <div *ngIf="!isOpen"  [@enterBubbleAnimation] style="width:140%; margin-top: -12px;margin-left: -12px;">
+        <div *ngIf="!isOpen"  [@enterBubbleAnimation] style="width:140%; margin-top: -12px; margin-left: -12px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90"  [ngStyle]="{'fill': themeForegroundColor }">
                 <defs>
                     <style>.cls-2{fill:none;}</style>
@@ -49,6 +49,17 @@
         <!--HEADER-->
         <!-- [style.background-color]="themeColor" -->
         <div class="chat21-sheet-header"  [ngStyle]="{'background-color': themeColor}">
+
+            <!-- BUTTON EXIT CONVERSATION -->
+             <a *ngIf="messages && messages.length > 1" (click)="openModal('isModalAbbandonaChatActive')">
+                <div class="chat21-header-button-left">
+                    <svg role="img" aria-labelledby="altIconEsc" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%" height="24px" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0z"/><path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2z"/>
+                        <title id="altIconEsc">{{ALT_BUTTON_CLOSE_CHAT}}</title>
+                    </svg>
+                </div>
+            </a>
+            
             <div class="chat21-sheet-header-title-container">
                 <b [ngStyle]="{'color': themeForegroundColor}" class="chat21-sheet-header-title" >
                     <span>{{widgetTitle}}</span>
@@ -56,10 +67,11 @@
                 </b>
                 <p class="chat21-header-writing">{{writingMessage}}</p>
             </div>
+
             <a class="chat21-sheet-header-close-button" [ngClass]="{'hide_header_close_btn' : hideHeaderCloseButton === true, 'show_header_close_btn' : fullscreenMode === true}" (click)="f21_close()">
                 <div class="chat21-sheet-header-button-icon-white">
                         <!-- [ngClass]="{'chat21-sheet-header-svg' : fullscreenMode === true }" -->
-                    <svg [ngStyle]="{'fill': themeForegroundColor }"  class="chat21-sheet-header-svg" [ngClass]="{'chat21-sheet-header-svg-display-if-fullscreen' : fullscreenMode === true }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <svg [ngStyle]="{'fill': themeForegroundColor}"  width="100%" height="24px" class="chat21-sheet-header-svg" [ngClass]="{'chat21-sheet-header-svg-display-if-fullscreen' : fullscreenMode === true }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
                         <defs>
                             <style>.cls-2{fill:none;}</style>
                         </defs>
@@ -301,6 +313,28 @@
         <!-- <div class="modal-page-filter" [class.active]="true"> -->
             <app-star-rating-widget [parentThemeColor]="themeColor" [parentThemeForegroundColor]="themeForegroundColor" [parentAllowTranscriptDownload]="allowTranscriptDownload"></app-star-rating-widget>
         </div>
+
+        <!-- Modale ABBANDONA CHAT -->
+        <div class="modal-page-filter" id="modal-abbandona-chat" [class.active]="isModalAbbandonaChatActive">
+            <div class="chat21-modal-content chat21-header-modal-select chat21-header-modal-select-first-msg ng-tns-c0-0 ng-star-inserted">
+            
+                <div class="chat21-modal-header">
+                    <div class="chat21-button_close" (click)="closeRate()"></div>
+                    <div class="title">Vuoi abbandonare la conversazione?</div>
+                </div> 
+
+                <div class="chat21-modal-body">
+                    <button (click)="dowloadTranscript()">
+                        <span [ngStyle]="{'color': parentThemeForegroundColor}">{{ ANNULLA }}</span>
+                    </button>
+                    <button (click)="dowloadTranscript()">
+                        <span [ngStyle]="{'color': parentThemeForegroundColor}">{{ OK }}</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+
     </div>
 
     <!-- 

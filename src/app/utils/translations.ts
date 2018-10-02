@@ -26,7 +26,8 @@ export const en = {
     'WRITE_YOUR_OPINION': 'Write your opinion ... (optional)',
     'SUBMIT': 'Submit',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Thank you for your evaluation',
-    'YOUR_RATING_HAS_BEEN_RECEIVED' : 'your rating has been received'
+    'YOUR_RATING_HAS_BEEN_RECEIVED' : 'your rating has been received',
+    "ALT_BUTTON_CLOSE_CHAT": 'Exit the chat'
 }
 
 // "LABEL_START_NW_CONV": "INIZIA UNA NUOVA CONVERSAZIONE",
@@ -57,5 +58,6 @@ export const it = {
     'WRITE_YOUR_OPINION': 'Scrivi la tua opinione...(opzionale)',
     'SUBMIT': 'Invia',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Grazie per la tua valutazione',
-    'YOUR_RATING_HAS_BEEN_RECEIVED' : 'il tuo voto è stato ricevuto'
+    'YOUR_RATING_HAS_BEEN_RECEIVED' : 'il tuo voto è stato ricevuto',
+    "ALT_BUTTON_CLOSE_CHAT": 'Esci dalla chat'
 }

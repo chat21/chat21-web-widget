@@ -915,7 +915,6 @@ div#chat21-end-footer:hover div.build_version{
 
 
 /*** START SELECT DEPARTMENT ***/
-
 .modal-page-filter{
     position: absolute;
     height: 100%;
@@ -1434,6 +1433,33 @@ div#chat21-end-footer:hover div.build_version{
 .visible-text-area {
     visibility: block;
     height: 100%;
+}
+
+
+.chat21-header-button-left{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* MODAL **/
+.chat21-modal-content{
+    background-color: white;
+    width: 90%;
+    height: 40%;
+    margin: 60% 5% 0 5%;
+    padding: 0;
+    border-radius: 12px;
+}
+
+#modal-abbandona-chat{
+    display:none;
+}
+#modal-abbandona-chat.active{
+    display:block;
 }
 
 
