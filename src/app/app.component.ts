@@ -30,6 +30,7 @@ import { TranslatorService } from './providers/translator.service';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
+
 // transition(':enter', [
 //     style({ transform: 'rotate(0deg)', opacity: 0 }),
 //     animate('400ms ease-out', style({ transform: 'rotate(-90deg)', opacity: 1 }))
@@ -277,19 +278,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // RElated to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
 
-        console.log(' ---------------- COSTRUCTOR ---------------- ');
+        console.log(' ---------------- CONSTRUCTOR ---------------- ');
 
         this.initParameters();
-
+        console.log(' ---------------- 1 ---------------- ');
 
         this.triggetLoadParamsEvent();
-
+        console.log(' ---------------- 2 ---------------- ');
         this.getVariablesFromAttributeHtml();
+        console.log(' ---------------- 3 ---------------- ');
+
         this.getVariablesFromSettings();
+        console.log(' ---------------- 4 ---------------- ');
         this.getVariableUrlParameters();
+        console.log(' ---------------- 5 ---------------- ');
 
         this.setIsWidgetOpenOrActive();
-
+        console.log(' ---------------- 6 ---------------- ');
         // 'chatName', this.chatName,
         console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
             'widgetTitle', this.widgetTitle, 'poweredBy', this.poweredBy,
@@ -303,39 +308,46 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         this.setAvailableAgentsStatus();
-
+        console.log(' ---------------- 7 ---------------- ');
         // if the lang is passed as parameter use it, otherwise use a default language ("en")
         this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
-        this.translate();
+        console.log(' ---------------- 8 ---------------- ');
 
+        this.translate();
+        console.log(' ---------------- 9 ---------------- ');
         // set auth
         if (this.userEmail && this.userPassword) {
+            console.log(' ---------------- 10 ---------------- ');
             // se esistono email e psw faccio un'autenticazione firebase con email
             // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
         } else if (this.userId) {
+            console.log(' ---------------- 11 ---------------- ');
             // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
             // this.authService.getCurrentUser();
 
             this.senderId = this.userId;
             this.createConversation();
+            console.log(' ---------------- 12 ---------------- ');
             this.initializeChatManager();
+            console.log(' ---------------- 13 ---------------- ');
             this.aliveSubLoggedUser = false;
             console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
         } else {
             // faccio un'autenticazione anonima
             this.authService.authenticateFirebaseAnonymously();
+            console.log(' ---------------- 14 ---------------- ');
         }
 
         // SET FORM
         this.preChatFormGroup = this.createForm(this.formBuilder);
-
+        console.log(' ---------------- 15 ---------------- ');
         // USER AUTENTICATE
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
         const that = this;
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
             .takeWhile(() => that.aliveSubLoggedUser)
             .subscribe(user => {
-
+                console.log(' ---------------- 16 ---------------- ');
                 // real time detection of the user authentication status
                 this.zone.run(() => {
                     // console.log('subLoggedUser: ');
@@ -566,6 +578,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private triggetLoadParamsEvent() {
+        console.log(' ---------------- 2a ---------------- ');
         // 'chatName': this.chatName,
         const default_settings = {
             'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
@@ -581,7 +594,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
 
+        console.log(' ---------------- 2b ---------------- ');
         this.el.nativeElement.dispatchEvent(loadParams);
+
+        console.log(' ---------------- 2d ---------------- ');
 
     }
 
