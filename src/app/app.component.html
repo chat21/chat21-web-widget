@@ -8,7 +8,7 @@
         <!-- <img *ngIf="isOpen" [@enterCloseAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
 
         <!-- .cls-1{fill:#fff;} -->
-        <div *ngIf="!isOpen"  [@enterBubbleAnimation] style="width:140%; margin-top: -12px; margin-left: -12px;">
+        <div *ngIf="!isOpen"  [@enterBubbleAnimation] style="width:100%; height:100%; padding:0px; margin: 0px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90"  [ngStyle]="{'fill': themeForegroundColor }">
                 <defs>
                     <style>.cls-2{fill:none;}</style>
@@ -27,7 +27,7 @@
         <!-- <img *ngIf="isOpen" [@enterCloseAnimation] style="width:140%; margin-top: -15px;margin-left: -15px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
     
         <!-- CLOSE ICON -->   <!-- .cls-1{fill:#fff;} -->
-        <div *ngIf="isOpen" [@enterCloseAnimation] style="width:140%; margin-top: -12px;margin-left: -12px;">
+        <div *ngIf="isOpen" [@enterCloseAnimation] style="width:100%; height:100%; padding:0px; margin: 0px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" [ngStyle]="{'fill': themeForegroundColor }">
                 <defs>
                     <style>.cls-2{fill:none;}</style>
@@ -51,7 +51,7 @@
         <div class="chat21-sheet-header"  [ngStyle]="{'background-color': themeColor}">
 
             <!-- BUTTON EXIT CONVERSATION -->
-             <a *ngIf="messages && messages.length > 1" (click)="openModal('isModalAbbandonaChatActive')">
+             <a style="display:none" *ngIf="messages && messages.length > 1" (click)="openModal('isModalLeaveChatActive')">
                 <div class="chat21-header-button-left">
                     <svg role="img" aria-labelledby="altIconEsc" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%" height="24px" viewBox="0 0 24 24">
                         <path fill="none" d="M0 0h24v24H0V0z"/><path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2z"/>
@@ -204,8 +204,10 @@
         </div>
 
         <div id="chat21-footer">
-
-            <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation" (click)="startNwConversation()">{{LABEL_START_NW_CONV}}</div>
+    
+            <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation">
+                    <button (click)="startNwConversation()" class="btn-primary accept" (mouseover)="hoverY=true" (mouseleave)="hoverY=false" [ngStyle]="hoverY ? { 'background-color':themeColor, 'border-color':themeColor } : { 'border-color':themeColor, 'color':themeColor }">{{LABEL_START_NW_CONV}}</button>
+            </div>
             <div>
                 <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
                     <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
@@ -231,7 +233,6 @@
 
             <div id="chat21-end-footer">
                 <div id="chat21-powered-by" [innerHTML]="poweredBy">
-                    
                     <!-- (click)="openRate()" -->
                     <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
                 </div>
@@ -315,23 +316,18 @@
         </div>
 
         <!-- Modale ABBANDONA CHAT -->
-        <div class="modal-page-filter" id="modal-abbandona-chat" [class.active]="isModalAbbandonaChatActive">
-            <div class="chat21-modal-content chat21-header-modal-select chat21-header-modal-select-first-msg ng-tns-c0-0 ng-star-inserted">
+        <div class="chat21-modal-page" id="modal-abbandona-chat" [class.active]="isModalLeaveChatActive">
+            <div class="chat21-header-modal-select chat21-header-modal-select-first-msg2">
             
                 <div class="chat21-modal-header">
                     <div class="chat21-button_close" (click)="closeRate()"></div>
-                    <div class="title">Vuoi abbandonare la conversazione?</div>
+                    <div class="title">{{ALERT_LEAVE_CHAT}}</div>
                 </div> 
 
                 <div class="chat21-modal-body">
-                    <button (click)="dowloadTranscript()">
-                        <span [ngStyle]="{'color': parentThemeForegroundColor}">{{ ANNULLA }}</span>
-                    </button>
-                    <button (click)="dowloadTranscript()">
-                        <span [ngStyle]="{'color': parentThemeForegroundColor}">{{ OK }}</span>
-                    </button>
+                    <button (click)="leaveChat()" class="btn-primary accept" (mouseover)="hoverY=true" (mouseleave)="hoverY=false" [ngStyle]="hoverY ? { 'background-color':themeColor, 'border-color':themeColor } : { 'border-color':themeColor, 'color':themeColor }">{{YES}}</button>
+                    <button (click)="openModal('isModalLeaveChatActive')" class="btn-primary" (mouseover)="hoverN=true" (mouseleave)="hoverN=false" [ngStyle]="hoverN ? { 'background-color':'#9A9A9A', 'border-color':'#9A9A9A', 'color':'#ffffff'} : { 'border-color':'#9A9A9A', 'color':'#9A9A9A' }" >{{NO}}</button>
                 </div>
-                
             </div>
         </div>
 

@@ -540,7 +540,7 @@ export class MessagingService {
     });
   }
 
-  private closeConversation() {
+  closeConversation() {
     console.log('MessagingService::closeConversation', 'conversation closed');
     // apro popup rating
     this.starRatingWidgetService.setOsservable(true);

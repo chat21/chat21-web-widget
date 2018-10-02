@@ -27,7 +27,10 @@ export const en = {
     'SUBMIT': 'Submit',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Thank you for your evaluation',
     'YOUR_RATING_HAS_BEEN_RECEIVED' : 'your rating has been received',
-    "ALT_BUTTON_CLOSE_CHAT": 'Exit the chat'
+    'ALT_BUTTON_CLOSE_CHAT': 'Exit the chat',
+    'ALERT_LEAVE_CHAT': 'Do you want to leave the chat?',
+    'YES': 'Yes',
+    'NO': 'No'
 }
 
 // "LABEL_START_NW_CONV": "INIZIA UNA NUOVA CONVERSAZIONE",
@@ -59,5 +62,8 @@ export const it = {
     'SUBMIT': 'Invia',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Grazie per la tua valutazione',
     'YOUR_RATING_HAS_BEEN_RECEIVED' : 'il tuo voto è stato ricevuto',
-    "ALT_BUTTON_CLOSE_CHAT": 'Esci dalla chat'
+    'ALT_BUTTON_CLOSE_CHAT': 'Esci dalla chat',
+    'ALERT_LEAVE_CHAT': 'Vuoi abbandonare la conversazione?',
+    'YES': 'Yes',
+    'NO': 'No'
 }

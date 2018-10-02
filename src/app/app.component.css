@@ -730,6 +730,7 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     min-height: 40px!important;
     padding-right: 40px!important;
     padding-left: 40px!important;
+    overflow: hidden;
 }
 
 .chat21-textarea-button {
@@ -761,9 +762,10 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-image : url("../assets/images/f21ico-attached.svg");
     /* background-color: #999999; */
     /* left: 4px; */
-    left: 0px;
-    padding-left: 8px;
-    padding-right: 8px;
+    left: 8px;
+    padding: 0px;
+    /* padding-left: 8px;
+    padding-right: 8px; */
 }
 #chat21-button-reset {
     background-position: center center;
@@ -773,9 +775,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     /* left: 10px;
     bottom: 25px;
     cursor: pointer; */
-    left: 0px;
+    left: 8px;
+    padding: 0px;
+    /* left: 0px;
     padding-left: 8px;
-    padding-right: 8px;
+    padding-right: 8px; */
 }
 
 #chat21-button-send {
@@ -783,10 +787,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     background-repeat: no-repeat;
     background-size: 16px;
     background-image : url("../assets/images/f21ico-send.svg");
-    right: 0px;
-    /* cursor: pointer; */
+    right: 8px;
+    padding: 0px;
+    /* right: 0px;
     padding-left: 8px;
-    padding-right: 8px;
+    padding-right: 8px; */
 }
 
 #chat21-footer .name-image {
@@ -858,10 +863,11 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
     font-size: 13px;
     color: #2a6ac1;
     /* line-height: 40px; */ /* nk commented for new form style */
-    text-align: center;
     cursor: pointer;
     opacity: 1;
     margin-top: 25px;  /* nk added for new form style */
+    text-align: center;
+
 }
 
 .chat21b-box-new-conversation:disabled {
@@ -1435,7 +1441,6 @@ div#chat21-end-footer:hover div.build_version{
     height: 100%;
 }
 
-
 .chat21-header-button-left{
     width: 50px;
     height: 50px;
@@ -1446,24 +1451,93 @@ div#chat21-end-footer:hover div.build_version{
 
 
 /* MODAL **/
+.chat21-modal-page {
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    z-index: 999999900;
+    display: flex;
+    align-items: center;
+}
+
 .chat21-modal-content{
-    background-color: white;
-    width: 90%;
-    height: 40%;
-    margin: 60% 5% 0 5%;
+    background-color: #fff;
+    border: 0 solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    top: 60px;
+    left: 40px;
+    right: 40px;
     padding: 0;
-    border-radius: 12px;
+    margin: 0;
+    text-align: center;
+    width: calc(100% - 80px);
 }
 
 #modal-abbandona-chat{
     display:none;
 }
 #modal-abbandona-chat.active{
-    display:block;
+    display:flex;
+}
+/* #modal-abbandona-chat .chat21-header-modal-select-first-msg {
+    top: 30px;
+} */
+#modal-abbandona-chat .chat21-header-modal-select {
+    font-size: 13px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1);
+    border-radius: 3px;
+    width: calc(100% - 20px);
+    padding: 0;
+    margin: 10px;
 }
 
 
+#modal-abbandona-chat .chat21-modal-header,
+#modal-abbandona-chat .chat21-modal-body {
+    padding: 10px 4px;
+}
 
+
+#modal-abbandona-chat .btn-primary,
+#chat21-footer .btn-primary
+ {
+    /* min-width: 45%;
+    -ms-flex: auto;
+    flex: auto; */
+    width: auto;
+    min-width: 100px;
+    height: 37px;
+    font-size: 14px;
+    border: 1px solid;
+    border-color: #9a9a9a;
+    border-radius: 20px;
+    background: transparent;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+#modal-abbandona-chat .btn-primary,
+#chat21-footer .btn-primary 
+{
+    background-color: white; 
+    cursor: pointer;
+}
+
+#modal-abbandona-chat .btn-primary:hover,
+#modal-abbandona-chat .btn-primary:focus,
+#modal-abbandona-chat .btn-primary:active,
+#chat21-footer .btn-primary:hover,
+#chat21-footer .btn-primary:focus,
+#chat21-footer .btn-primary:active
+{
+    outline-width: 0px;
+    color:white;
+}
 
 
 /**************

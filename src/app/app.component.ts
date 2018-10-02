@@ -134,7 +134,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     selectedFiles: FileList;
     isWidgetActive: boolean;
-    isModalAbbandonaChatActive = false;
+    isModalLeaveChatActive = false;
     isLogged = false;
 
     departments: DepartmentModel[];
@@ -204,6 +204,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     CALLOUT_TITLE_PLACEHOLDER: string;
     CALLOUT_MSG_PLACEHOLDER: string;
     ALT_BUTTON_CLOSE_CHAT: string;
+    ALERT_LEAVE_CHAT: string;
+    YES: string;
+    NO: string;
 
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
@@ -622,6 +625,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
         this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
         this.ALT_BUTTON_CLOSE_CHAT = this.translatorService.translate('ALT_BUTTON_CLOSE_CHAT');
+        this.ALERT_LEAVE_CHAT = this.translatorService.translate('ALERT_LEAVE_CHAT');
+        this.YES = this.translatorService.translate('YES');
+        this.NO = this.translatorService.translate('NO');
     }
 
     /** */
@@ -2189,9 +2195,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     openModal(id) {
-        if ( id === 'isModalAbbandonaChatActive' ) {
-            this.isModalAbbandonaChatActive = (this.isModalAbbandonaChatActive ? false : true);
+        if ( id === 'isModalLeaveChatActive' ) {
+            this.isModalLeaveChatActive = (this.isModalLeaveChatActive ? false : true);
         }
+    }
+    leaveChat() {
+        this.openModal('isModalLeaveChatActive');
+        this.messagingService.closeConversation();
     }
 
 
