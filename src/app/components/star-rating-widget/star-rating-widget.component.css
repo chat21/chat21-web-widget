@@ -5,7 +5,7 @@ body{ margin: 20px; }
 h1 { font-size: 2em; margin: 10px; }
 
 
-
+/*
 .chat21-modal-content {
   position: absolute;
   background-color: #fff;
@@ -16,16 +16,13 @@ h1 { font-size: 2em; margin: 10px; }
   left: 40px;
   right: 40px;
   padding:10px;
-  text-align: center; /* nk */
+  text-align: center;
 }
 .chat21-modal-content{
   bottom: 120px;
 }
 h1.chat21-modal-title {
   min-height: 30px;
-  /* padding: 7px; */
-  /* border-bottom: 1px solid #e9ecef; */
-  /* display: inline; */
   text-align: center;
   color: #2a6ac1;
   font-size: 1.2em;
@@ -41,19 +38,18 @@ h3.chat21-modal-title  {
   font-size: 16px;
   font-weight: bold;
 }
+*/
 
 .chat21-yourRating {
   position: relative;
-  top: 20px;
+  /* top: 20px; */
   left: 0px;
 }
 
 .chat21-yourRating .chat21-stars{
   position: relative;
-  display: inline-block;
-  float: right;
-  top: -20px;
-  right: 0px;
+  display: block;
+  padding: 10px;
 }
 .chat21-yourRating .chat21-stars > span:before { 
   margin: 0px;
@@ -61,7 +57,6 @@ h3.chat21-modal-title  {
   font-family: FontAwesome;
   display: inline-block;
   content: "\f005";
-  /* float: right; */
   color: #FFD700;
 }
 
@@ -75,15 +70,12 @@ h3.chat21-modal-title  {
   line-height: 20px;
 }
 
+/*
 .chat21-button_send {
   font-size: 12px;
   color: #123456;
   font-weight: bold;
   height: 20px;
-  /* position: absolute;
-  float: right;
-  right: 10px;
-  top: 10px; */
   cursor: pointer;
 }
 
@@ -154,14 +146,14 @@ h3.chat21-modal-title  {
 }
 
 /****** Style Star Rating Widget *****/
-
+.content-rate{
+  margin: 30px auto;
+}
 .chat21-rating { 
   border: none;
-  float: left;
-  /* width: 143px; */
+  width: calc(100% - 175px);
   min-height: 44px;
-  /* margin-left: 10px; */
-  margin-left: 38px; /* nk */
+  margin: 20px auto;
 }
 
 .chat21-rating > input { display: none; } 
@@ -180,7 +172,7 @@ h3.chat21-modal-title  {
 
 .chat21-rating > label { 
   color: #ddd; 
- float: right; 
+  /* float: right;  */
 }
 
 
@@ -204,6 +196,12 @@ p.chat21-modal-message {
   padding: 16px 0px 6px 0px;
   cursor: pointer;
 }
+textarea{
+  margin: 20px 0;
+  width: 80%;
+    height: 120px;
+
+}
 
 /***** CSS Magic to Highlight Stars on Hover *****/
 
@@ -221,10 +219,8 @@ p.chat21-modal-message {
   height: 34px;
   position: relative;
   border-radius: 40px; 
-  /* background-color: #ffffff; */
   z-index: 100;
   font-size: 13px;
-  /* color: #2a6ac1; */
   text-align: center;
   cursor: pointer;
   opacity: 1;
@@ -232,4 +228,46 @@ p.chat21-modal-message {
   font-weight: 500;
   padding-right: 12px;
   padding-left: 12px;
+}
+
+
+input {
+  border: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  opacity: 0;
+}
+
+label {
+  position: relative;
+  float: right;
+  color: #C8C8C8;
+}
+
+label:before {
+  margin: 5px;
+  content: "\f005";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-size: 1.5em;
+  color: #ccc;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+input:checked ~ label:before {
+  color: #FFC107;
+}
+
+label:hover ~ label:before {
+  color: #ffdb70;
+}
+
+label:hover:before {
+  color: #FFC107;
 }

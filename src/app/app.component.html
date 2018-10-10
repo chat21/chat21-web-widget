@@ -1,103 +1,98 @@
+
 <div id="chat21-container" [class.active]="isLogged">
+
+    <!-- 
+    ****** LAUNCHER BUTTON ******
+    -->
+    <div id="chat21-launcher-button" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right'}" [ngStyle]=styleBckColor (click)="f21_open_close_handler()" > 
         
-    <div id="chat21-launcher-button" [ngClass]="{'align_left' : align === 'left'}" (click)="f21_open_close_handler()" [ngStyle]="{'background-color': themeColor}"> 
-    <!-- style="background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 112 112&quot;&gt;&lt;defs&gt;&lt;style&gt;.cls-1{opacity:0.35;}.cls-2{fill:#FF00FF;}.cls-3{fill:none;}&lt;/style&gt;&lt;/defs&gt;&lt;title&gt;tiledesk-circle-shadow&lt;/title&gt;&lt;g id=&quot;Livello_2&quot; data-name=&quot;Livello 2&quot;&gt;&lt;g id=&quot;gg&quot;&gt;&lt;g id=&quot;chat&quot;&gt;&lt;image class=&quot;cls-1&quot; width=&quot;112&quot; height=&quot;112&quot; xlink:href=&quot;data:image/png;base64,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&quot;/&gt;&lt;circle class=&quot;cls-2&quot; cx=&quot;56&quot; cy=&quot;53&quot; r=&quot;35&quot;/&gt;&lt;/g&gt;&lt;rect class=&quot;cls-3&quot; x=&quot;11&quot; y=&quot;8&quot; width=&quot;90&quot; height=&quot;90&quot;/&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;')" > -->
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 112 112"><defs><style>.cls-1{opacity:0.35;}.cls-2{fill:#3380cb;}.cls-3{fill:none;}</style></defs><title>tiledesk-circle-shadow</title><g id="Livello_2" data-name="Livello 2"><g id="gg"><g id="chat"><image class="cls-1" width="112" height="112" xlink:href="data:image/png;base64,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"/><circle class="cls-2" cx="56" cy="53" r="35"/></g><rect class="cls-3" x="11" y="8" width="90" height="90"/></g></g></svg> -->
-
-        <!-- <img *ngIf="!isOpen"  [@enterBubbleAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon.svg"/> -->
-        <!-- <img *ngIf="isOpen" [@enterCloseAnimation] style="width: 85%; margin-top: 4px;margin-left: 6px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
-
-        <!-- .cls-1{fill:#fff;} -->
-        <div *ngIf="!isOpen"  [@enterBubbleAnimation] style="width:100%; height:100%; padding:0px; margin: 0px;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90"  [ngStyle]="{'fill': themeForegroundColor }">
-                <defs>
-                    <style>.cls-2{fill:none;}</style>
-                </defs>
-                <!-- <title>tiledesk-chat-ballon</title> -->
-                <g id="Livello_2" data-name="Livello 2">
-                    <g id="gg">
-                        <path d="M33.57,31A4.58,4.58,0,0,0,29,35.57V58.3a1.94,1.94,0,0,0,3.32,1.38l3-3a.29.29,0,0,1,.21-.09H56.43A4.58,4.58,0,0,0,61,52V35.57A4.58,4.58,0,0,0,56.43,31Z"/>
-                        <rect class="cls-2" width="90" height="90"/>
-                    </g>
-                </g>
+        <!-- OPEN ICON -->
+        <div *ngIf="!isOpen" class="launcher-button" [@enterBubbleAnimation] >
+            <svg role="img" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 90 90">
+                <path fill="none" d="M0 0h24v24H0V0z"/><path d="M33.57,31A4.58,4.58,0,0,0,29,35.57V58.3a1.94,1.94,0,0,0,3.32,1.38l3-3a.29.29,0,0,1,.21-.09H56.43A4.58,4.58,0,0,0,61,52V35.57A4.58,4.58,0,0,0,56.43,31Z"/>
             </svg>
         </div>
 
-        <!-- CLOSE ICON  n -->
-        <!-- <img *ngIf="isOpen" [@enterCloseAnimation] style="width:140%; margin-top: -15px;margin-left: -15px;" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
-    
-        <!-- CLOSE ICON -->   <!-- .cls-1{fill:#fff;} -->
-        <div *ngIf="isOpen" [@enterCloseAnimation] style="width:100%; height:100%; padding:0px; margin: 0px;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" [ngStyle]="{'fill': themeForegroundColor }">
-                <defs>
-                    <style>.cls-2{fill:none;}</style>
-                </defs>
-                <!-- <title>tiledesk-chat-close</title> -->
-                <g id="Livello_2" data-name="Livello 2">
-                    <g id="gg">
-                        <path class="cls-1" d="M54.92,37.08l-2-2L45,43l-7.92-7.92-2,2L43,45l-7.92,7.92,2,2L45,47l7.92,7.92,2-2L47,45Z"/>
-                        <path class="cls-2" d="M28,28H62V62H28Z"/>
-                        <rect class="cls-2" width="90" height="90"/>
-                    </g>
-                </g>
+        <!-- CLOSE ICON -->
+        <div *ngIf="isOpen" class="launcher-button" [@enterCloseAnimation] >
+            <svg role="img" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 90 90">
+                <path fill="none" d="M0 0h24v24H0V0z"/>
+                <path class="cls-1" d="M54.92,37.08l-2-2L45,43l-7.92-7.92-2,2L43,45l-7.92,7.92,2,2L45,47l7.92,7.92,2-2L47,45Z"/>
             </svg>
         </div>
+
     </div>
 
-    <!-- <div  *ngIf="isOpen" id="chat21-launcher-button" [ngClass]="{'align_left' : align === left}" (click)="f21_close()"></div> -->
-    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngClass]="{'align_left' : align === 'left', 'chat21-fullscreen' : fullscreenMode === true}">
-        <!--HEADER-->
-        <!-- [style.background-color]="themeColor" -->
-        <div class="chat21-sheet-header"  [ngStyle]="{'background-color': themeColor}">
+    <!-- 
+    ****** WINDOW CHAT CONVERSATION ******
+    -->
+    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '8px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
+        
+        <div *ngIf="globals.isOpenHP && senderId" class="modal-page" [class.active]="true">
+            <app-home 
+            (eventClose)="returnClose()" 
+            (eventNewConv)="returnNewConversation()" 
+            (eventSelctedConv)="returnSelectedConversation($event)">
+            </app-home>
+        </div>
 
-            <!-- BUTTON EXIT CONVERSATION -->
-             <a style="display:none" *ngIf="messages && messages.length > 1" (click)="openModal('isModalLeaveChatActive')">
-                <div class="chat21-header-button-left">
-                    <svg role="img" aria-labelledby="altIconEsc" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%" height="24px" viewBox="0 0 24 24">
-                        <path fill="none" d="M0 0h24v24H0V0z"/><path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21v-2z"/>
-                        <title id="altIconEsc">{{ALT_BUTTON_CLOSE_CHAT}}</title>
-                    </svg>
-                </div>
-            </a>
-            
+        
+        
+        <!-- HEADER -->
+        <div class="chat21-sheet-header" [ngStyle]=styleBckColor > 
+            <!-- TITLE HEADER -->
             <div class="chat21-sheet-header-title-container">
-                <b [ngStyle]="{'color': themeForegroundColor}" class="chat21-sheet-header-title" >
+                <div class="chat21-sheet-header-title" [ngStyle]=styleSecondColor>
                     <span>{{widgetTitle}}</span>
                     <span id="agent-available-status">{{ areAgentsAvailableText }}</span>
-                </b>
+                </div>
                 <p class="chat21-header-writing">{{writingMessage}}</p>
             </div>
+            <!-- BUTTONS HEADER -->
+            <!-- ICON CLOSE CHAT -->
+            <a class="header-button right close" (click)="f21_close()">
+                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+                    <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title>
+                </svg>
+            </a>
+            <!-- ICON TRANSCRIPT -->
+            <a class="header-button right" *ngIf="messages && messages.length > 1" (click)="dowloadTranscript()">
+                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                    <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
+                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>
+                    <title id="altIconTitle">{{BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
+                </svg>
+            </a>
+            <!-- ICON EDIT PROFILE -->
+            <a class="header-button right" *ngIf="messages && messages.length > 1">
+                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+                    <title id="altIconTitle">{{BUTTON_EDIT_PROFILE}}</title>
+                </svg>
+            </a>
 
-            <a class="chat21-sheet-header-close-button" [ngClass]="{'hide_header_close_btn' : hideHeaderCloseButton === true, 'show_header_close_btn' : fullscreenMode === true}" (click)="f21_close()">
-                <div class="chat21-sheet-header-button-icon-white">
-                        <!-- [ngClass]="{'chat21-sheet-header-svg' : fullscreenMode === true }" -->
-                    <svg [ngStyle]="{'fill': themeForegroundColor}"  width="100%" height="24px" class="chat21-sheet-header-svg" [ngClass]="{'chat21-sheet-header-svg-display-if-fullscreen' : fullscreenMode === true }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-                        <defs>
-                            <style>.cls-2{fill:none;}</style>
-                        </defs>
-                        <!-- <title>chat21-close</title> -->
-                        <g id="Livello_2" data-name="Livello 2">
-                            <g id="Livello_1-2" data-name="Livello 1">
-                                <path d="M17.74,15,28.13,4.6A1.93,1.93,0,1,0,25.4,1.87L15,12.26,4.6,1.87a1.93,1.93,0,0,0-2.74,0h0a1.93,1.93,0,0,0,0,2.74L12.26,15,1.87,25.4a1.93,1.93,0,0,0,0,2.74h0a1.93,1.93,0,0,0,2.74,0L15,17.74l10.4,10.4a1.93,1.93,0,0,0,2.74-2.74Z"/>
-                                <rect class="cls-2" width="30" height="30"/>
-                            </g>
-                        </g>
-                    </svg>
-
-                </div>
+            <!-- ICON BACK -->
+            
+            <a class="header-button left" (click)="openHP()">
+                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                    <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
+                    <title id="altIconTitle">{{BUTTON_PREV}}</title>
+                </svg>
             </a>
         </div>
 
-        <!--CONTENT-->
+
+        <!-- CONTENT -->
         <div #chat21Content id="chat21-sheet-content" class="chat21-sheet-content">
             <!-- // nk new: simulates a higher header content -- USED ONLY FIRST MSG-->
             <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
                 class="chat21-sheet-content-themable-section" [ngClass]="{'themable-section-agent_not_available':  !areAgentsAvailable}" [ngStyle]="{'background-color': themeColor}">
             </div>
             <!-- // AVATAR -->
-            <!-- <div class="chat21-sheet-content-avatar">
-                <img src="https://static.intercomassets.com/avatars/1962870/square_128/21430626_1849878071693166_5885009477174544873_n-1523288996.jpg?1523288996" alt="Elaine avatar">
-            </div> -->
+           
 
             <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DEPARTMENTS AND THERE IS NOT PRECHAT-FORM 
                  NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
@@ -137,7 +132,7 @@
                         <!-- [scrollTop]="scrollMe.scrollHeight" [ngClass]="panelBodyOpen ? 'panelShown' : 'panelHidden'" -->
                         <div *ngFor="let message of messages">
                             <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
-                                <div class="messages msg_sent">
+                                <div class="messages msg_sent primary-color" [ngStyle]=styleSecondColor>
                                     <!-- <p *ngIf="message.type == 'text';" class="message-contentX message-content-textX" [innerHTML]="convertMessage(message.text)"></p> -->
                                     <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                         [height]="getSizeImg(message).height" />
@@ -153,6 +148,7 @@
                                     <!-- <p  *ngIf="message.type == 'text';" [innerHTML]="message.text"></p>
                                     <img *ngIf="message.type == 'image';" [src]="message.text" width="230" [height]="getHeightImg(message.metadata)"  /> -->
                                 </div>
+                                
                                 <div class="status-message">
                                     <!-- {{message.status}} -->
                                     <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
@@ -196,6 +192,11 @@
                             <div class="time" [ngClass]="{'sender' : message.sender == senderId}">
                                 <time>{{message.timestamp | amTimeAgo}}</time>
                             </div>
+
+                            <div *ngIf="checkChatClosed(message.attributes)" class="extra-msg-in-chat">
+                                <button (click)="leaveChat()" class="btn-primary" [ngStyle]=styleBtnPrimary (mouseover)="styleButtonOver($event)" (mouseleave)="styleButtonLeave($event)">{{RATE_CHAT}}</button>
+                            </div>
+
                         </div>
                     </div>
                     <!-- <span>&nbsp;</span> -->
@@ -203,18 +204,22 @@
             </div>
         </div>
 
+        <!-- FOOTER -->
         <div id="chat21-footer">
-    
+            <!-- 
             <div *ngIf="isConversationOpen === false" class="chat21b-box-new-conversation">
-                    <button (click)="startNwConversation()" class="btn-primary accept" (mouseover)="hoverY=true" (mouseleave)="hoverY=false" [ngStyle]="hoverY ? { 'background-color':themeColor, 'border-color':themeColor } : { 'border-color':themeColor, 'color':themeColor }">{{LABEL_START_NW_CONV}}</button>
-            </div>
+               <button (click)="startNwConversation()" class="btn-primary accept" [ngStyle]=styleBtnPrimary (mouseover)="styleButtonOver($event)" (mouseleave)="styleButtonLeave($event)" >{{LABEL_START_NW_CONV}}</button>
+            </div> 
+            -->
+
             <div>
                 <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
                     <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
                 </div>
                 <div  [ngClass]="{'visible-text-area': !isFilePendingToUpload, 'hidden-text-area': isFilePendingToUpload}">
-                <textarea *ngIf="isConversationOpen === true" #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea"
-                    [ngStyle]=m yStyles (ngModelChange)="resizeInputField()" (keypress)="onkeypress($event)" placeholder="{{LABEL_PLACEHOLDER}}"></textarea>
+                <!-- *ngIf="isConversationOpen === true" -->
+                <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' [(ngModel)]="textInputTextArea"
+                    [ngStyle]=myStyles (ngModelChange)="resizeInputField()" (keypress)="onkeypress($event)" placeholder="{{LABEL_PLACEHOLDER}}"></textarea>
                 </div>
 
                 <!-- <label for="chat21-file" [class.active]="!isSelected" class="chat21-textarea-button" id="chat21-start-upload-img" ></label> -->
@@ -231,22 +236,15 @@
                 </div>
             </div>
 
-            <div id="chat21-end-footer">
-                <div id="chat21-powered-by" [innerHTML]="poweredBy">
-                    <!-- (click)="openRate()" -->
-                    <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
-                </div>
+            <!-- <div id="chat21-end-footer">
+                <div id="chat21-powered-by" [innerHTML]="poweredBy">               </div>
                 <div class="build_version">{{BUILD_VERSION}}</div>
-            </div>
+            </div> -->
+
         </div>
 
 
-        <div *ngIf="openSelectionDepartment" id="chat21-modal-select">
-
-            <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE DEPARTMENT SELECTION VIEW  -->
-            <!-- <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
-               <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
-            </div> -->
+        <!-- <div *ngIf="openSelectionDepartment" id="chat21-modal-select">
 
             <div class="chat21-header-modal-select">
                 {{LABEL_SELECT_TOPIC}}
@@ -257,7 +255,7 @@
                     <span class="chat21-title">{{department?.name}}</span>
                 </li>
             </ul>
-        </div>
+        </div> -->
 
         <div *ngIf="preChatForm" id="chat21-modal-form">
             <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE PRE-CHAT FORM VIEW  -->
@@ -309,13 +307,29 @@
             </div>
         </div>
 
-        <!-- Modale Filtri Markers -->
-        <div class="modal-page-filter" [class.active]="isWidgetActive">
-        <!-- <div class="modal-page-filter" [class.active]="true"> -->
-            <app-star-rating-widget [parentThemeColor]="themeColor" [parentThemeForegroundColor]="themeForegroundColor" [parentAllowTranscriptDownload]="allowTranscriptDownload"></app-star-rating-widget>
+
+        <!-- 
+        ****************************************
+        *********** MODALE RATE CHAT ***********
+        ****************************************
+        -->
+        <div class="modal-page" [class.active]="isWidgetActive">
+            <app-star-rating-widget [themeColor]="themeColor" [themeForegroundColor]="themeForegroundColor" [parentAllowTranscriptDownload]="allowTranscriptDownload"></app-star-rating-widget>
         </div>
 
+        <!-- 
+        ****************************************
+        ******* MODALE SELECT DEPARTMENT *******
+        ****************************************
+        -->
+        <div class="modal-page" [class.active]="openSelectionDepartment">
+            <app-selection-department [themeColor]="themeColor" [themeForegroundColor]="themeForegroundColor" [departments]="departments"  (messageEvent)="returnDepartmentSelected($event)" ></app-selection-department>
+        </div>
+
+        
+
         <!-- Modale ABBANDONA CHAT -->
+        <!--
         <div class="chat21-modal-page" id="modal-abbandona-chat" [class.active]="isModalLeaveChatActive">
             <div class="chat21-header-modal-select chat21-header-modal-select-first-msg2">
             
@@ -325,18 +339,21 @@
                 </div> 
 
                 <div class="chat21-modal-body">
-                    <button (click)="leaveChat()" class="btn-primary accept" (mouseover)="hoverY=true" (mouseleave)="hoverY=false" [ngStyle]="hoverY ? { 'background-color':themeColor, 'border-color':themeColor } : { 'border-color':themeColor, 'color':themeColor }">{{YES}}</button>
-                    <button (click)="openModal('isModalLeaveChatActive')" class="btn-primary" (mouseover)="hoverN=true" (mouseleave)="hoverN=false" [ngStyle]="hoverN ? { 'background-color':'#9A9A9A', 'border-color':'#9A9A9A', 'color':'#ffffff'} : { 'border-color':'#9A9A9A', 'color':'#9A9A9A' }" >{{NO}}</button>
+                    <button (click)="leaveChat()" class="btn-primary accept" [ngStyle]=styleBtnPrimary (mouseover)="styleButtonOver($event)" (mouseleave)="styleButtonLeave($event)">{{YES}}</button>
+                    <button (click)="openModal('isModalLeaveChatActive')" class="btn-primary" [ngStyle]=styleBtnPrimary (mouseover)="styleButtonOver($event)" (mouseleave)="styleButtonLeave($event)" >{{NO}}</button>
                 </div>
+
             </div>
         </div>
+        -->
 
     </div>
 
     <!-- 
     *************************************************************    
-     **************  NK EYE-CATCHER (aka CALLOUT) **************
-    ************************************************************* -->
+    **************  NK EYE-CATCHER (aka CALLOUT) ****************
+    ************************************************************* 
+    -->
                                      
     <!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
     <div *ngIf="!isMobile" class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">

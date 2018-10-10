@@ -25,6 +25,7 @@ import { UserProfileComponent } from './users/user-profile/user-profile.componen
 
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
+import { ConversationsService } from './providers/conversations.service';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
@@ -32,13 +33,23 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 import { TranslatorService } from './providers/translator.service';
 import { LinkyModule } from 'angular-linky';
+import { SelectionDepartmentComponent } from './components/selection-department/selection-department.component';
+// import { NewConversationComponent } from './components/new-conversation/new-conversation.component';
+import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
+import { HomeComponent } from './components/home/home.component';
+
+import { Globals } from './utils/globals';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserLoginComponent,
     UserProfileComponent,
-    StarRatingWidgetComponent
+    StarRatingWidgetComponent,
+    SelectionDepartmentComponent,
+    // NewConversationComponent,
+    ListConversationsComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -62,11 +73,13 @@ import { LinkyModule } from 'angular-linky';
   providers: [
     AuthService,
     MessagingService,
+    ConversationsService,
     UploadService,
     ContactService,
     StarRatingWidgetService,
     AgentAvailabilityService,
-    TranslatorService
+    TranslatorService,
+    Globals
   ],
   bootstrap: [AppComponent]
 })

@@ -4,7 +4,7 @@ import * as translations from '../utils/translations';
 @Injectable()
 export class TranslatorService {
 
-  private defaultLanguage: string = "en"; // default language
+  private defaultLanguage = 'en'; // default language
   private language: string; // user language
   // contains the translation to the selected language
   private translations: Object;
@@ -19,9 +19,9 @@ export class TranslatorService {
    * @returns the browser language
    */
   public getBrowserLanguage() {
-    var browserLanguage = window.navigator.language;
+    // tslint:disable-next-line:prefer-const
+    let browserLanguage = window.navigator.language;
     // console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
-
     return !browserLanguage ? undefined : browserLanguage;
   }
 
@@ -33,7 +33,6 @@ export class TranslatorService {
    * @param language the language
    */
   public setLanguage(language) {
-
     // set the user languge if it is valid.
     // if the user language is not valid, try to get the browser language.
     // if the browser language is not valid, it use the default language (en)
@@ -44,23 +43,23 @@ export class TranslatorService {
         this.language = this.getBrowserLanguage();
       } else {
         // browser language not valid
-        this.defaultLanguage;
+        this.language = this.defaultLanguage;
       }
     } else {
       // user language valid
       this.language = language;
     }
-
+    this.language = this.language.substring(0, 2);
     // retrieve the translation
     this.getLanguageObject(this.language);
-
   }
 
   // retrieve the language object
   private getLanguageObject(language) {
-    if (language === "en") {
+    console.log('language ::: ', language);
+    if (language === 'en') {
       this.translations = translations.en;
-    } else if (language === "it") {
+    } else if (language === 'it') {
       this.translations = translations.it;
     } else {
       // use the default language in any other case
@@ -70,17 +69,15 @@ export class TranslatorService {
 
   /**
    * Translate a keyword to the language set with the method setLanguage(language)
-   * 
    * @param keyword the keyword to translate
    * @returns the keyword translations
    */
   public translate(keyword): string {
-    return !this.translations[keyword] ? "" : this.translations[keyword];
+    return !this.translations[keyword] ? '' : this.translations[keyword];
   }
 
   /**
    * Return the user language
-   * 
    * @returns the user language
    */
   public getLanguage() {
