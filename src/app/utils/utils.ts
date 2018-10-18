@@ -187,3 +187,19 @@ export function getFromNow(timestamp) {
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;
 }
+
+export function detectIfIsMobile() {
+  const isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
+  console.log('»»» IS MOBILE ', isMobile);
+  return isMobile;
+}
+
+export function convertHex(hex, opacity) {
+  hex = hex.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  console.log('CONVERT HEX TO RGBA ', result);
+  return result;
+}

@@ -9,7 +9,6 @@ import { avatarPlaceholder, getColorBck, getFromNow } from '../utils/utils';
 
 @Injectable()
 export class ConversationsService {
-  // conversations: Array<ConversationModel>;
   conversations: ConversationModel[];
   tenant: string;
   senderId: string;
@@ -37,6 +36,7 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(3);
+    // this.conversationRef.on('value', function(snapshot) {
     this.conversationRef.once('value').then(function(snapshot) {
       snapshot.forEach( function(childSnapshot) {
         that.addConversation(childSnapshot);

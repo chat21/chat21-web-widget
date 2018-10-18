@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // services
 import { ConversationsService } from '../../providers/conversations.service';
-import { TranslatorService } from '../../providers/translator.service';
 import { Globals } from '../../utils/globals';
 import { convertMessage } from '../../utils/utils';
+
 // models
 import { ConversationModel } from '../../../models/conversation';
 
@@ -16,55 +16,58 @@ import { ConversationModel } from '../../../models/conversation';
 })
 
 export class ListConversationsComponent implements OnInit {
+
+  // ========= begin:: Input/Output values ============//
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
+  @Output() eventClose = new EventEmitter();
+  @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  // ========= end:: Input/Output values ============//
 
-  // used within the html template
+
+  // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
+  // ========= end:: dichiarazione funzioni ========= //
+
+
+  // ========= begin:: variabili del componente ======= //
   conversations: ConversationModel[];
-  senderId = '';
   tenant = '';
   themeColor = '';
   themeForegroundColor = '';
-
-  lang: string;
   LABEL_START_NW_CONV: string;
+  // ========= end:: variabili del componente ======== //
+
 
   constructor(
-    public globals: Globals,
-    public conversationsService: ConversationsService,
-    private translatorService: TranslatorService
+    public g: Globals,
+    public conversationsService: ConversationsService
   ) {
-
-    // get global variables
-    this.tenant = this.globals.tenant;
-    this.senderId = this.globals.senderId;
-    this.themeColor = this.globals.themeColor;
-    this.themeForegroundColor = this.globals.themeForegroundColor;
-    this.lang = this.globals.lang;
-
-    /** set lang and translate */
-    this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
-    this.translate();
-
-    /** initialize */
-    this.initialize();
   }
 
   ngOnInit() {
+    this.initialize();
   }
 
   initialize() {
+    this.tenant = this.g.tenant;
+    this.themeColor = this.g.themeColor;
+    this.themeForegroundColor = this.g.themeForegroundColor;
+    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
+
+    console.log('senderId: ', this.senderId);
+    console.log('tenant: ', this.tenant);
+    console.log('themeColor: ', this.themeColor);
+    console.log('themeForegroundColor: ', this.themeForegroundColor);
+
     this.conversationsService.initialize(this.senderId, this.tenant);
     this.conversations = this.conversationsService.conversations;
     this.conversationsService.checkListConversations();
   }
 
-  private translate() {
-    this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
-  }
 
-  openNewConversation() {
+  // ========= begin:: ACTIONS ============//
+  private openNewConversation() {
     this.eventNewConv.emit();
   }
 
@@ -74,6 +77,6 @@ export class ListConversationsComponent implements OnInit {
       this.eventSelctedConv.emit(conversation);
     }
   }
-
+  // ========= end:: ACTIONS ============//
 
 }

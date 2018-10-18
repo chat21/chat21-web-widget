@@ -3,6 +3,57 @@
 /* @import url(variables.css); */
 @import '../sass/variables';
 /* DEFAULT CSS */
+body {
+    font-size: 10px;
+}
+
+/**
+* CSS GENERICI
+*/
+div.clear {
+    clear:both;
+}
+.truncate{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.v-align-center{
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    float: left;
+  }
+
+/**
+* CSS BUTTON
+*/
+.c21-button-primary{
+    width: auto;
+    height: 40px;
+    line-height: 40px;
+    margin: 16px 0;
+    padding: 0 24px;
+    opacity: 1;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 40px;
+    background-color: rgb(42, 106, 193);
+    color: #ffffff;
+    cursor: pointer;
+    .c21-label-button {
+        margin-left: 8px; 
+        font-weight: 600;
+    }
+  }
+  
+  .c21-button-primary:hover,
+  .c21-button-primary:focus,
+  .c21-button-primary:active {
+    outline-width: 0px;
+    opacity: 0.8;
+  }
+
 #chat21-container {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size-adjust: none;
@@ -146,6 +197,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     display: none;
+    background-color: #ffffff;
     
     &.active{
         display: block;
@@ -421,26 +473,26 @@
     /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
 
 
-    /* NK - NEW LAUNCHER BUTTON  */ 
-    #chat21-launcher-button {
-        border-radius: 50%;
-        position: fixed;
-        z-index: 999999000;
-        bottom: 20px;
-        // right: 20px;
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-        /* -webkit-box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
-        /* box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
+    // /* NK - NEW LAUNCHER BUTTON  */ 
+    // #chat21-launcher-button {
+    //     border-radius: 50%;
+    //     position: fixed;
+    //     z-index: 999999000;
+    //     bottom: 20px;
+    //     // right: 20px;
+    //     width: 60px;
+    //     height: 60px;
+    //     cursor: pointer;
+    //     /* -webkit-box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
+    //     /* box-shadow: rgba(0,0,0,0.35) 0 0 38px; */ /* we have chosen for flat graphics */
 
-        .launcher-button{
-            width:100%; 
-            height:100%; 
-            padding:0px; 
-            margin: 0px;
-        }
-    }
+    //     .launcher-button{
+    //         width:100%; 
+    //         height:100%; 
+    //         padding:0px; 
+    //         margin: 0px;
+    //     }
+    // }
 
 
     /* CSS BOX CONTAINER */
@@ -710,7 +762,7 @@
     }
     /* TIME */
     #chat21-conversations .time {
-        font-size: 0.7em;
+        font-size: 1em;
         color: #aaaaaa;
         margin-bottom: 10px;
         margin-top: -2px;
@@ -756,12 +808,12 @@
         overflow: hidden auto;
         overflow-wrap: break-word;
         resize: none;
-        height: 70px;
+        height: 20px;
         max-height: 100px;
         border: none;
-        padding: 10px 40px;
-        margin: 0px 0px 0px;
-        line-height: normal;
+        padding: 0px 40px;
+        margin: 10px 0px 10px;
+        line-height: 1.32em;
     }
     
 
@@ -793,26 +845,18 @@
         background-repeat: no-repeat;
         background-size: 16px;
         background-image : url("../assets/images/f21ico-attached.svg");
-        /* background-color: #999999; */
-        /* left: 4px; */
         left: 8px;
+        bottom: 10px;
         padding: 0px;
-        /* padding-left: 8px;
-        padding-right: 8px; */
     }
     #chat21-button-reset {
         background-position: center center;
         background-repeat: no-repeat;
         background-size: 16px;
         background-image : url("../assets/images/f21ico-close.svg");
-        /* left: 10px;
-        bottom: 25px;
-        cursor: pointer; */
         left: 8px;
+        bottom: 10px;
         padding: 0px;
-        /* left: 0px;
-        padding-left: 8px;
-        padding-right: 8px; */
     }
 
     #chat21-button-send {
@@ -821,7 +865,9 @@
         background-size: 16px;
         background-image : url("../assets/images/f21ico-send.svg");
         right: 8px;
+        bottom: 10px;
         padding: 0px;
+
         /* right: 0px;
         padding-left: 8px;
         padding-right: 8px; */
@@ -1163,214 +1209,169 @@
         border-radius: 50%
     }
 
-    .chat21-content-modal-select {
-        margin: 0 0 2em 0;
-        list-style-type: none;
-        padding: 0;
-        height: 255px;
-        overflow-y: auto;
-        /* width: 15em; */
-    }
-    .chat21-content-modal-select > li {
-        cursor: pointer;
-        position: relative;
-        margin: 0px;
-        padding: 4px 20px;
-        font-size: 13px;
-        text-align: left;
-    }
-    .chat21-content-modal-select > li:hover {
-        background-color: rgba(0, 0, 0, 0.03);
-    }
-    .chat21-content-modal-select li.selected:hover {
-        /* background-color: #BBD8DC !important;
-        color: white; */
-    }
-
-    .chat21-content-modal-select .text {
-        position: relative;
-    }
-    .chat21-content-modal-select .chat21-badge {
-        -webkit-box-sizing: initial;
-        box-sizing: initial;
-        display: inline-block;
-        font-size: 12px;
-        padding: 0px;
-        line-height: 24px;
-        height: 24px;
-        width: 24px;
-        border-radius: 50%;
-        margin: 0 10px 0 0;
-        text-align: center;
-        font-weight: 500;
-    }
-    .chat21-content-modal-select .chat21-title{
-            margin-left: 10px;
-            font-weight: initial;
-            line-height: normal;
-    }
+    
     #chat21-modal-select ul {
         line-height: normal;
     }
     /*** END SELECT DEPARTMENT ***/
 
-    /********* START FORM *********/
-    #chat21-modal-form {
-        position: absolute;
-        height: calc(100% - 70px);
-        width: 100%;
-        background-color: rgba(255, 255, 255, 1.0);
-        z-index: 999999900;
-        /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
-        top: 52px; 
-        overflow-y: auto; /* nk added for new form style */
-    }
-    .chat21-button-new {
-        position: absolute;
-        /* bottom: 0px; */ /* nk commented for new form style */
-        cursor: pointer;
-        margin-left: 10px; /* nk added for new form style */
-        margin-right: 30px; /* nk added for new form style */
-        outline: none !important;  /* Remove blue “selected” outline on buttons */
-    }
+    // /********* START FORM *********/
+    // #chat21-modal-form {
+    //     position: absolute;
+    //     height: calc(100% - 70px);
+    //     width: 100%;
+    //     background-color: rgba(255, 255, 255, 1.0);
+    //     z-index: 999999900;
+    //     /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
+    //     top: 52px; 
+    //     overflow-y: auto; /* nk added for new form style */
+    // }
+    // .chat21-button-new {
+    //     position: absolute;
+    //     /* bottom: 0px; */ /* nk commented for new form style */
+    //     cursor: pointer;
+    //     margin-left: 10px; /* nk added for new form style */
+    //     margin-right: 30px; /* nk added for new form style */
+    //     outline: none !important;  /* Remove blue “selected” outline on buttons */
+    // }
 
 
-    /* nk */
-    .chat21-button-new:hover {
-        /* background-color: #ffffff !important;
-        color: #2a6ac1 !important; */
-        opacity: 0.8;
-    }
+    // /* nk */
+    // .chat21-button-new:hover {
+    //     /* background-color: #ffffff !important;
+    //     color: #2a6ac1 !important; */
+    //     opacity: 0.8;
+    // }
 
-    .chat21-formMessageField {
-        font-family: 'Google Sans', sans-serif !important;
-        padding: 10px 20px;
-        line-height: 1.2em;
-        color: #616161;
-        font-size: 15px;
-        text-align: center;
-        word-wrap: break-word;
-        margin-top: 15px; /* nk added for new form style */
-    }
+    // .chat21-formMessageField {
+    //     font-family: 'Google Sans', sans-serif !important;
+    //     padding: 10px 20px;
+    //     line-height: 1.2em;
+    //     color: #616161;
+    //     font-size: 15px;
+    //     text-align: center;
+    //     word-wrap: break-word;
+    //     margin-top: 15px; /* nk added for new form style */
+    // }
 
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
-    /* ::placeholder { 
-        color: rgb(179, 182, 184);
-    } */
+    // /* Chrome, Firefox, Opera, Safari 10.1+ */
+    // /* ::placeholder { 
+    //     color: rgb(179, 182, 184);
+    // } */
 
-    /* nk: added for new style for the form */
-    #chat21-formContainer {
-        padding: 0px 30px;
-    }
+    // /* nk: added for new style for the form */
+    // #chat21-formContainer {
+    //     padding: 0px 30px;
+    // }
 
-    /* Remove input background colour for Chrome autocomplete */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:active {
-        transition: background-color 5000s ease-in-out 0s;
-    }
-
-
-    #chat21-formContainer .chat21-inputContainer {
-        background-color: #fff;
-        overflow: hidden;
-        position: relative;
-        /* height: 33px; */ /* nk commented for new form style */
-        height: 36px; /* nk added for new form style */
-        margin: 10px 10px 0px 10px;
-    }
-    #chat21-formContainer .text-danger {
-        color: #a94442;
-        font-size: 80%;
-        /* float: left; */
-        min-height: 20px;
-        background-color: #ffffff;
-        margin: 0px 10px 0px 10px;
-    }
-
-    /* // NK EDIT THE FORM */
-    .chat21-inputContainer {
-        /* padding: 0px 15px; */
-        /* padding: 12px 10px!important; */
-        /* border: 1px solid #ccc; */ /* nk commented for new form */
-        border-bottom: 1px solid rgba(211, 212, 213, .4); /* nk added for new form */
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        -ms-border-radius: 3px;
-        -o-border-radius: 3px;
-        border-radius: 3px;
-        background-color: #fff;
-        margin: 0 0 7px 0;
-        position: relative;
-    }
+    // /* Remove input background colour for Chrome autocomplete */
+    // input:-webkit-autofill,
+    // input:-webkit-autofill:hover,
+    // input:-webkit-autofill:focus,
+    // input:-webkit-autofill:active {
+    //     transition: background-color 5000s ease-in-out 0s;
+    // }
 
 
-    .chat21-inputContainer > input {
-        padding: 11px 10px 8px 10px!important;
-        /* color: #777777!important; */ /*nk commented for new form style */
-        color: #616161 !important; /*nk added for new form style */
-        font-family: Arial!important;
-        font-size: 13px!important;
-        /* font-weight: bold!important; */ /*nk commented for new form style */
-        font-weight: 300;
-        background-color: #ffffff!important;
-        display: block!important;
-        line-height: 1.2em!important;
-        border: 0px solid #e1e1e1!important;
-        outline: none!important;
-        margin: 0!important;
-        width: 100%!important;
-        margin-bottom: 0px!important;
-        background: #fff!important;
-        -webkit-box-shadow: none !important;
-        box-shadow: none !important;
-        /* height: 33px; */
-    }
+    // #chat21-formContainer .chat21-inputContainer {
+    //     background-color: #fff;
+    //     overflow: hidden;
+    //     position: relative;
+    //     /* height: 33px; */ /* nk commented for new form style */
+    //     height: 36px; /* nk added for new form style */
+    //     margin: 10px 10px 0px 10px;
+    // }
+    // #chat21-formContainer .text-danger {
+    //     color: #a94442;
+    //     font-size: 80%;
+    //     /* float: left; */
+    //     min-height: 20px;
+    //     background-color: #ffffff;
+    //     margin: 0px 10px 0px 10px;
+    // }
 
-    .chat21-inputContainer > input::placeholder {
-        /* color: #cccccc; */
-        color: rgb(179, 182, 184);
-        font-weight: initial;
-        opacity: 1; /* Firefox */
-    }
-
-    .chat21-inputContainer > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-        /* color: #cccccc; */
-        color: rgb(179, 182, 184);
-        font-weight: initial;
-    }
-
-    .chat21-inputContainer > input::-ms-input-placeholder { /* Microsoft Edge */
-    /* color: #cccccc; */
-        color: rgb(179, 182, 184);
-        font-weight: initial;
-    }
+    // /* // NK EDIT THE FORM */
+    // .chat21-inputContainer {
+    //     /* padding: 0px 15px; */
+    //     /* padding: 12px 10px!important; */
+    //     /* border: 1px solid #ccc; */ /* nk commented for new form */
+    //     border-bottom: 1px solid rgba(211, 212, 213, .4); /* nk added for new form */
+    //     -webkit-border-radius: 3px;
+    //     -moz-border-radius: 3px;
+    //     -ms-border-radius: 3px;
+    //     -o-border-radius: 3px;
+    //     border-radius: 3px;
+    //     background-color: #fff;
+    //     margin: 0 0 7px 0;
+    //     position: relative;
+    // }
 
 
-    .chat21-inputContainer > input:focus{
-        box-shadow: none!important;
-        background-color: #ffffff!important;
-    }
+    // .chat21-inputContainer > input {
+    //     padding: 11px 10px 8px 10px!important;
+    //     /* color: #777777!important; */ /*nk commented for new form style */
+    //     color: #616161 !important; /*nk added for new form style */
+    //     font-family: Arial!important;
+    //     font-size: 13px!important;
+    //     /* font-weight: bold!important; */ /*nk commented for new form style */
+    //     font-weight: 300;
+    //     background-color: #ffffff!important;
+    //     display: block!important;
+    //     line-height: 1.2em!important;
+    //     border: 0px solid #e1e1e1!important;
+    //     outline: none!important;
+    //     margin: 0!important;
+    //     width: 100%!important;
+    //     margin-bottom: 0px!important;
+    //     background: #fff!important;
+    //     -webkit-box-shadow: none !important;
+    //     box-shadow: none !important;
+    //     /* height: 33px; */
+    // }
 
-    .chat21-inputContainer > input, .chat21-inputContainer select {
-        width: 100%;
-        margin: 0;
-        border: 0!important;
-        padding: 12px 0;
-        background-color: #ffffff!important;
-    }
+    // .chat21-inputContainer > input::placeholder {
+    //     /* color: #cccccc; */
+    //     color: rgb(179, 182, 184);
+    //     font-weight: initial;
+    //     opacity: 1; /* Firefox */
+    // }
+
+    // .chat21-inputContainer > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    //     /* color: #cccccc; */
+    //     color: rgb(179, 182, 184);
+    //     font-weight: initial;
+    // }
+
+    // .chat21-inputContainer > input::-ms-input-placeholder { /* Microsoft Edge */
+    // /* color: #cccccc; */
+    //     color: rgb(179, 182, 184);
+    //     font-weight: initial;
+    // }
+
+
+    // .chat21-inputContainer > input:focus{
+    //     box-shadow: none!important;
+    //     background-color: #ffffff!important;
+    // }
+
+    // .chat21-inputContainer > input, .chat21-inputContainer select {
+    //     width: 100%;
+    //     margin: 0;
+    //     border: 0!important;
+    //     padding: 12px 0;
+    //     background-color: #ffffff!important;
+    // }
 
 
 
-    .chat21-inputContainer > input, select {
-        vertical-align: middle;
-    }
+    // .chat21-inputContainer > input, select {
+    //     vertical-align: middle;
+    // }
     
 
 
-    /* #Forms
-    ================================================== */
+    // /* #Forms
+    // ================================================== */
 
 
 
@@ -1536,25 +1537,7 @@
         height: 100%;
     }
 
-    .header-button{
-        width: 30px;
-        height: 50px;
-        float: left;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        cursor: pointer;
-    }
-    .header-button.close{
-        display: none;
-    }
-    .header-button.left{
-        float: left;
-    }
-    .header-button.right{
-        float: right;
-    }
-
+   
 
     
 

@@ -1,0 +1,69 @@
+
+<!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
+<div *ngIf="isMobile" class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+
+    <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
+    <!-- <div *ngIf="!isMobile"> -->
+    <div>
+        <div class="eye-catcher-card-close-btn-wrapper" 
+            [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+
+            <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
+                <img class="eye-catcher-card-close-btn-img" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
+            </div>
+
+        </div>
+    </div>
+
+        <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
+    <!-- <div *ngIf="isMobile">
+        <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
+            [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
+            <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
+        </div>
+    </div> -->
+
+    <!-- <button (click)="rotate()">Press me to rotate</button> -->
+
+    <div class="eye-catcher_row" (click)=openChatFromEyeCatcherCard()>
+        
+        <div class="eye-catcher_column ec_left" >
+
+            <!-- <div class="eye-catcher-card-img-wrapper" [ngStyle]="{'background-color': themeColor }">
+                <img class="chat21-card-img" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
+            </div> -->
+
+            <div [@rotatedState]='state' class="eye-catcher-card-emoticons-wrapper">
+                <span  class="chat21-card-emoticons">✋ </span>
+            </div>
+            
+        </div>
+
+        <div class="eye-catcher_column ec_right" >
+
+            <div class="eye-catcher-card-text-wrapper">
+                <div class="eye-catcher-card-title"> 
+                    <!-- Need Help? -->
+                    <span *ngIf="calloutTitle !== ''; else calloutTitle_placeholder">
+                        {{ calloutTitle }}
+                    </span>  
+                </div>
+                <ng-template #calloutTitle_placeholder>
+                    <!-- Need Help? -->
+                    {{ CALLOUT_TITLE_PLACEHOLDER }}
+                </ng-template>
+                <div class="eye-catcher-card-msg">
+                    <!-- Click here and start chatting with us!  -->
+                    <span *ngIf="calloutTitle !== ''; else calloutMsg_placeholder">
+                        {{ calloutMsg }} 
+                    </span>   
+                </div>
+                <ng-template #calloutMsg_placeholder>
+                    <!-- Click here and start chatting with us! -->
+                    {{ CALLOUT_MSG_PLACEHOLDER }}
+                </ng-template>
+            </div>
+
+        </div>
+    </div>
+</div> 

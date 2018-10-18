@@ -94,9 +94,8 @@ export class MessagingService {
    *
   */
   public initialize(userUid, tenant, channel_type) {
-    const that = this;
-    this.channel_type = channel_type;
     this.messages = [];
+    this.channel_type = channel_type;
     this.senderId = userUid;
     this.tenant = tenant;
     this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
@@ -132,9 +131,76 @@ export class MessagingService {
   // }
 
 
+  connect( conversationWith ) {
+    console.log('***** connect *****');
+    const that = this;
+    const urlNodeFirebase = this.urlNodeFirebase + conversationWith;
+    console.log('urlNodeFirebase *****', urlNodeFirebase);
+    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+
+    //// SUBSCRIBE REMOVED ////
+    this.messagesRef.on('child_removed', function(childSnapshot) {
+      const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+      if (index > -1) {
+        that.messages.splice(index, 1);
+      }
+    });
+
+    //// SUBSCRIBE ADDED ////
+    this.messagesRef.on('child_added', function(childSnapshot) {
+      const message = childSnapshot.val();
+      console.log('child_added *****', childSnapshot.val());
+      if ( that.checkMessage(message) ) {
+        // imposto il giorno del messaggio
+        const dateSendingMessage = setHeaderDate(message['timestamp']);
+        const msg = new MessageModel(
+          childSnapshot.key,
+          message['language'],
+          message['recipient'],
+          message['recipient_fullname'],
+          message['sender'],
+          message['sender_fullname'],
+          message['status'],
+          message['metadata'],
+          message['text'],
+          message['timestamp'],
+          dateSendingMessage,
+          message['type'],
+          message['attributes'],
+          message['channel_type'],
+          message['progectId']
+        );
+        // azzero sto scrivendo
+        // that.deleteWritingMessages(message['sender']);
+        // notifico arrivo nuovo messaggio
+        // console.log('NOTIFICO NW MSG *****', that.obsAdded);
+        that.obsAdded.next(msg);
+
+        if (message && message.sender === that.senderId) {
+          // && message.type !== TYPE_MSG_TEXT) {
+          // sto aggiungendo un'immagine inviata da me!!!
+          // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+          // that.messages.splice(index, 1, msg);
+          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+          // console.log('index *****', index, childSnapshot.key);
+          if (index < 0) {
+            console.log('--------> ADD MSG', index, msg);
+            that.messages.push(msg);
+          }
+        } else {
+          console.log('--------> ADD MSG', msg);
+          // se msg è inviato da me cambio status
+          that.messages.push(msg);
+        }
+        that.messages.sort(that.compareValues('timestamp', 'asc'));
+      }
+    });
+  }
+
   /**
    * verifico se nel nodo della conversazione ci sono messaggi
-   * recupero gli ultimi 100 e li ordino dall'ultimo al primo
+   * recupero gli ultimi 1000 e li ordino dall'ultimo al primo
    *
   */
   public checkListMessages(conversationWith): any {
@@ -142,7 +208,7 @@ export class MessagingService {
     this.checkRemoveConversation();
     const that = this;
     const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
+    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
     return this.messagesRef.once('value');
   }
 
@@ -333,6 +399,8 @@ export class MessagingService {
         that.messages.sort(that.compareValues('timestamp', 'asc'));
       }
     });
+
+
   }
 
   // function for dynamic sorting
@@ -379,7 +447,7 @@ export class MessagingService {
 
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
     console.log('SEND MESSAGE: ', msg);
-    // console.log("messageTextArea:: ",this.messageTextArea['_elementRef'].nativeElement.getElementsByTagName('textarea')[0].style);
+    console.log('metadata:: ', metadata);
     // const messageString = urlify(msg);
     const that = this;
     const now: Date = new Date();
@@ -424,9 +492,8 @@ export class MessagingService {
     // };
 
     this.messages.push(message);
-
     const conversationRef = firebase.database().ref(this.urlNodeFirebase + conversationWith);
-    // console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
+    console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
@@ -443,9 +510,9 @@ export class MessagingService {
       const messageRef = conversationRef.push();
       const key = messageRef.key;
       message.uid = key;
-      // console.log('messageRef: ', messageRef, key);
+       console.log('messageRef: ', messageRef, key);
       const messageForFirebase = message.asFirebaseMessage();
-      // console.log('messageForFirebase: ', messageForFirebase);
+       console.log('messageForFirebase: ', messageForFirebase);
       messageRef.set(messageForFirebase, function( error ) {
         // Callback comes here
         if (error) {

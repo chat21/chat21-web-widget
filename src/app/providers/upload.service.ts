@@ -8,6 +8,11 @@ import * as firebase from 'firebase';
 import { UploadModel } from '../../models/upload';
 import { environment } from '../../environments/environment';
 
+class ImageSnippet {
+  pending = false;
+  status = 'init';
+  constructor(public src: string, public file: File) {}
+}
 
 @Injectable()
 /**
@@ -17,6 +22,9 @@ export class UploadService {
   private tenant: string;
   private recipientId: string;
   private senderId: string;
+
+
+  arrayFilesLoad: Array<any>;
   observable: any;
 
   constructor(
@@ -37,6 +45,47 @@ export class UploadService {
       this.recipientId = recipientId;
     }
   }
+
+
+  processFile(imageInput: any) {
+    const that = this;
+    const file: File = imageInput.files[0];
+    const nameFile = file.name;
+    const typeFile = file.type;
+    const reader = new FileReader();
+    console.log('OK preload: ', nameFile, typeFile, reader);
+    reader.addEventListener('load', function () {
+    // reader.addEventListener('load', (event: any) => {
+      console.log('addEventListener load', reader.result);
+      // se inizia con image
+      if (typeFile.startsWith('image')) {
+        // const selectedFile = new ImageSnippet(event.target.result, file);
+        // selectedFile.pending = true;
+        const imageXLoad = new Image;
+        console.log('onload ', imageXLoad);
+        imageXLoad.src = reader.result.toString();
+        imageXLoad.title = nameFile;
+        imageXLoad.onload = function () {
+          console.log('onload immagine');
+          // that.arrayFilesLoad.push(imageXLoad);
+          const uid = that.createGuid();
+          that.arrayFilesLoad.push('{ uid: ' + uid + ', file: ' + imageXLoad + ', type: ' + typeFile + ' }');
+          console.log('OK: ', that.arrayFilesLoad[0]);
+        };
+      }
+      // this.imageService.uploadImage(this.selectedFile.file).subscribe(
+      //   (res) => {
+      //     this.onSuccess();
+      //   },
+      //   (err) => {
+      //     this.onError();
+      //   })
+    });
+    reader.readAsDataURL(file);
+    console.log('reader-result: ', file);
+  }
+
+
 
   pushUpload(upload: UploadModel): any {
     const uid = this.createGuid();

@@ -1,0 +1,263 @@
+
+<style>
+
+</style>
+
+
+<div id="chat21-conversation-component">
+        <!-- HEADER -->
+        <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}" >
+            
+            <div class="c21-header-container">
+
+                <!-- CONTENT HEADER -->
+                <div class="c21-header-content">
+
+                    <!-- ICON CLOSE CHAT -->
+                    <div class="c21-header-button c21-right c21-close" (click)="f21_close()">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+                            <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title>
+                        </svg>
+                    </div>
+
+                    <!-- ICON TRANSCRIPT -->
+                    <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1" (click)="dowloadTranscript()">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
+                            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>
+                            <title id="altIconTitle">{{BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
+                        </svg>
+                    </div>
+
+                    <!-- ICON EDIT PROFILE -->
+                    <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+                            <title id="altIconTitle">{{BUTTON_EDIT_PROFILE}}</title>
+                        </svg>
+                    </div>
+
+                     <!-- ICON BACK -->
+                    <div class="c21-header-button c21-left" (click)="returnHome()">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+                            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
+                            <title id="altIconTitle">{{BUTTON_PREV}}</title>
+                        </svg>
+                    </div>
+
+                    <!-- TITLE HEADER -->
+                    <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
+                        <span>{{g.widgetTitle}}</span>
+                        <span id="agent-available-status">{{ areAgentsAvailableText }}</span>
+                    </div>
+                    <p class="c21-header-writing">{{writingMessage}}</p>
+                
+                </div>
+            
+            </div>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="c21-body">
+
+            <div class="c21-body-container">
+    
+                <div class="c21-body-header">
+                    
+                </div>
+
+                <div class="c21-body-content">
+
+                </div>
+            
+            </div>
+
+        </div>
+
+</div>
+
+        
+
+
+
+        
+    <!-- CONTENT -->
+    <div  id="chat21-sheet-content" class="chat21-sheet-content">
+        <!-- // nk new: simulates a higher header content -- USED ONLY FIRST MSG-->
+        <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
+            class="chat21-sheet-content-themable-section" [ngClass]="{'themable-section-agent_not_available':  !areAgentsAvailable}" [ngStyle]="{'background-color': themeColor}">
+        </div>
+        <!-- // AVATAR -->
+       
+
+        <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DEPARTMENTS AND THERE IS NOT PRECHAT-FORM 
+             NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
+        <div *ngIf="!areAgentsAvailable && !openSelectionDepartment && isNewConversation == true" class="chat21-agents-available chat21-agents-available-is-new-conversation" 
+            [ngStyle]="{'border-top-color': themeForegroundColor}">
+            <span style="font-size:18px">🤔</span>  <span style="position: relative; top: -2px">{{ ALL_AGENTS_OFFLINE_LABEL }}</span>
+        </div>
+
+        <!-- // nk - to edit: display the msg of welcome msg if exist -->
+        <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
+            class="chat21-header-modal-select chat21-header-modal-select-first-msg" [ngClass]="{'first-msg-agent_not_available':  !areAgentsAvailable}" 
+            [ngStyle]="{'border-top-color': themeForegroundColor}">
+
+            <div [ngClass]="{'hide_LABEL_FIRST_MSG' : wellcomeMsg !== ''}">
+                <span *ngIf="areAgentsAvailable"> {{LABEL_FIRST_MSG}} </span> 
+                <span *ngIf="!areAgentsAvailable"> {{LABEL_FIRST_MSG_NO_AGENTS}}</span> 
+            </div>
+            <div [ngClass]="{'display_wellcomeMsg' : wellcomeMsg !== ''}" style="display: none">
+                {{ wellcomeMsg }}
+            </div>
+        </div>
+
+        <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;"
+            class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept" [ngClass]="{'more-of-one-dept-agent_not_available':  !areAgentsAvailable}">
+            <div>{{departmentSelected?.name}}</div>
+        </div>
+        <div [class.active]="isNewConversation == false && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
+            <div class="chat21-bounce1"></div>
+            <div class="chat21-bounce2"></div>
+            <div class="chat21-bounce3"></div>
+            <span>loading</span>
+        </div>
+
+        <div class="chat21-conversation-parts-container" style="height:calc(100% - 0px); overflow-y: hidden;">
+            
+            <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
+                
+                <div id="{{idDivScroll}}">
+
+                    <div *ngFor="let message of messages">
+
+                        <!-- message sender:: -->
+                        <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
+                            
+                            <div class="messages msg_sent primary-color" [ngStyle]=styleSecondColor>
+                                
+                                <!-- message type:: image -->
+                                <img *ngIf="message.type == 'image'" class="message-contentX message-content-imageX" 
+                                    [src]="message.metadata.src" 
+                                    [width]="getSizeImg(message).width"
+                                    [height]="getSizeImg(message).height" 
+                                />
+                                
+                                <!-- message type:: text -->
+                                <div *ngIf="message.type == 'text'">
+                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                    <ng-template #contentPopup>
+                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                    </ng-template>
+                                    <ng-template #contentNewTab>
+                                        <p [innerHTML]="message.text | linky"></p>
+                                    </ng-template>
+                                </div>
+
+                            </div>
+                            
+                            <!-- icon status message -->
+                            <div class="status-message">
+                                <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
+                                <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
+                                <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
+                                <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- message recipient:: -->
+                        <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
+                        <div *ngIf="message.sender != senderId;" class="msg_container base_receive">
+                            
+                            <div class="content-avatar">
+                                <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
+                                <div class="profile_image">
+                                    <img src="{{getUrlImgProfile(message.sender)}}" />
+                                </div>
+                            </div>
+
+                            <div class="messages msg_receive">
+
+                                <!-- message type:: image -->
+                                <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" 
+                                    [src]="message.metadata.src" 
+                                    [width]="getSizeImg(message).width"
+                                    [height]="getSizeImg(message).height" 
+                                />
+
+                                <!-- message type:: text -->
+                                <div *ngIf="message.type == 'text';">
+                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                    <ng-template #contentPopup>
+                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                    </ng-template>
+                                    <ng-template #contentNewTab>
+                                        <p [innerHTML]="message.text | linky"></p>
+                                    </ng-template>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="time" [ngClass]="{'sender' : message.sender == senderId}">
+                            <time>{{message.timestamp | amTimeAgo}}</time>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <span>&nbsp;</span> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="chat21-footer">
+
+            <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
+                <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
+            </div>
+
+            <div  [ngClass]="{'visible-text-area': !isFilePendingToUpload, 'hidden-text-area': isFilePendingToUpload}">
+                <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' 
+                    [(ngModel)]="textInputTextArea"
+                    [ngStyle]=textAreaStyles 
+                    (ngModelChange)="resizeInputField()" 
+                    (keypress)="onkeypress($event)" 
+                    placeholder="{{g.LABEL_PLACEHOLDER}}">
+                </textarea>
+            </div>
+
+
+            <label for="chat21-file" class="chat21-textarea-button active" id="chat21-start-upload-doc"></label>
+            <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
+            <div class="chat21-textarea-button active" id="chat21-button-send" (click)="onSendPressed($event)"></div>
+            <input style='display:none' 
+                type="file" 
+                accept="image/x-png,image/gif,image/jpeg,application/pdf" 
+                name="chat21-file" 
+                id="chat21-file"
+                class="inputfile" 
+                (change)="detectFiles($event)"
+            />
+            <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
+                <span>{{nameFile}}</span>
+            </div> -->
+
+    </div>
+
+    <!-- <div *ngIf="isFileSelected" class="modal-page" [class.active]="true">
+        <app-preview-loading-files
+            [arrayFilesLoad]="arrayFilesLoad"
+            (eventClose)="returnClose()" 
+            (eventSend)="returnSend()">
+        </app-preview-loading-files>
+    </div> -->
+

@@ -1,0 +1,157 @@
+#c21-app-list-conversations{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+
+    .c21-header{
+        color: #777777;
+        height: auto;
+        height: 50px;
+        min-height: 50px;
+        .c21-title{
+            font-size: 1.4em;
+            font-weight: 400;
+            line-height: normal;
+            padding: 16px 24px;
+            float:left;
+        }
+        .c21-button{
+            font-size: 1.2em;
+            margin: 0px;
+            line-height: normal;
+            padding: 17px 24px;
+            float: right;
+        }
+    }
+    .c21-body {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-size: 10px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+
+
+        .c21-item-conversation {
+            width: 100%;
+            height: auto;
+            position: relative;
+            margin: auto;
+            padding: 0px 0px;
+            cursor: pointer;
+
+            .c21-body-conv{
+                border-top: 1px solid #eee;
+                // width: calc(100% - 48px);
+                width: auto;
+                margin: 0 24px;
+                position: relative;
+                display: flex;
+                align-items: center;
+  
+                .c21-left-conv {
+                    width: auto;
+                    height: 100%;
+                    float: left;
+                    display: flex;
+                    align-items: center;
+
+                    .c21-icon-avatar {
+                        position: relative;
+                        padding: 0;
+                        margin: 0;
+                        height: 34px;
+                        width: 34px;
+                        line-height: 34px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        background-color: #aaaaaa70;
+                        .c21-avatar-placeholder {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            text-align: center;
+                            font-size: 14px;
+                            color: #ffffff;
+                            font-weight: 500;
+                        }
+                        .c21-avatar-image {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            margin: 2px 0 0 0;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: cover;
+                        }
+                    }
+                }
+
+                .c21-right-conv {
+                    width: calc( 100% - 50px);
+                    margin-left: 15px;
+                    height: auto;
+                    float: left;
+                    padding: 17px 0;
+                    .c21-last-time {
+                        font-size: 0.8em;
+                        color: #aaaaaa;
+                        float: right;
+                        display: block;
+                        padding: 0;
+                        margin: 0;
+                        width: auto;
+                        height: auto;
+                    }
+                    .c21-name {
+                        font-weight: 700;
+                        color: #3a3c4c;
+                        font-size: 12px;
+                        line-height: 1.7;
+                    }
+                    .c21-msg {
+                        font-weight: 200;
+                        color: #3a3c4c;
+                        font-size: 12px;
+                        line-height: 1.7;
+                    }
+                    .not-read.c21-msg {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    
+        .c21-item-conversation:hover,
+        .c21-item-conversation:focus,
+        .c21-item-conversation:active {
+            outline-width: 0px;
+            background-color: #fafafa;
+        }
+        
+    }
+    .c21-footer {
+        // width: calc(100% - 48px);
+        width: auto;
+        margin: 0 24px;
+        height: auto;
+        position: relative;
+        // margin: auto;
+        padding: 0px;
+        border-top: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+      
+}
+  

@@ -1,0 +1,179 @@
+// $f21ico-schedule: image-url('f21ico-schedule.svg', false, false);
+// $f21ico-done: image-url('../assets/images/f21ico-done.svg', false, false);
+// $f21ico-done_all: image-url('../assets/images/f21ico-done_all.svg', false, false);
+
+
+#chat21-conversation-component {
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+
+    .c21-header {
+        overflow: hidden;
+        width: 100%;
+        height: 52px;
+
+        .c21-header-container{
+            position: relative;
+            height: 52px;
+            width: 100%;
+            margin: 0 auto;
+
+            .c21-header-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                .c21-header-button{
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    margin-right: 4px;
+                    cursor: pointer;
+
+                    &.c21-right{
+                        float: right;
+                    }
+                    &.c21-left{
+                        float: left;
+                    }
+                    &.c21-close{
+                        display: none;
+                    }
+                }
+
+                .c21-title {
+                    position: absolute;
+                    left: 0;
+                    display: inline-block;
+                    width: calc(100% - 150px);
+                    height: 1.6em;
+                    line-height: 1.6em;
+                    padding: 0px;
+                    margin: 10px 75px;
+                    text-align: center;
+                    font-size: 1.6em;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;             
+                }
+
+                .c21-header-writing{
+                    position: absolute;
+                    bottom: 4px;
+                    width: 100%;
+                    text-align: center;
+                    margin: 0px;
+                    padding: 0px;
+                    font-size: 1.2em;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+       
+
+    .c21-body {
+        padding: 0px;
+        margin: 20px auto;
+
+        .c21-body-header {
+            padding: 10px 30px;
+            .c21-message-field {
+                padding: 0;
+                margin: 0;
+                line-height: 1.2em;
+                color: #616161;
+                font-size: 1.5em;
+                text-align: center;
+                word-wrap: break-word;
+            }
+        }
+        .c21-body-content  {
+            padding: 10px 30px;
+        }
+
+         /* icon status */
+        .base_sent .status-message{
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+        }
+        .base_sent .icon {
+            width: 13px;
+            height: 13px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            overflow-x: hidden;
+        }
+        .base_sent .f21ico-schedule {
+            background: url('../../../assets/images/f21ico-schedule.svg');
+        }
+        .base_sent .f21ico-done {
+            background: url('../../../assets/images/f21ico-done.svg');
+        }
+        .base_sent .f21ico-done_all {
+            background: url('../../../assets/images/f21ico-done_all.svg');
+        }
+    }
+
+    /* TIME */
+    .time {
+        font-size: 1em;
+        color: #aaaaaa;
+        margin-bottom: 10px;
+        margin-top: -2px;
+        text-align: left;
+        margin-left: 46px;
+    }
+    .time.sender{
+        text-align: right;
+        margin-right: 24px;
+    }
+
+    .profile_image{
+        position:relative;
+        width:25px;
+        height:25px;
+        border-radius:50%;
+        overflow:hidden;
+        background-color: #ffffff;
+        border: 1px solid #e2e2e2;
+    }
+    .profile_image img{
+        max-width:100%;
+        min-width: 25px;
+        min-height: 25px;
+        object-fit: cover;
+    }
+
+    .message_sender_fullname {
+        margin-top: 10px;
+        font-size: 1.1em;
+        color: #666;
+        margin-left: 10px;
+    }
+
+}
+
+
+@media (max-width: 451px) {
+    #chat21-conversation-component {
+    }
+        .c21-header {
+            .c21-header-container {    
+                .c21-header-content {
+                    .c21-header-button {
+                        &.c21-close {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+        }
+    
+}
