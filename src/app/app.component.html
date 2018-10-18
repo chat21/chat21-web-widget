@@ -4,12 +4,12 @@
     <!-- 
     ****** LAUNCHER BUTTON ******
     -->
-    <app-launcher-button (eventOpenCloseHandler)="open_close_handler()"></app-launcher-button>
+    <app-launcher-button *ngIf="" (eventOpenCloseHandler)="open_close_handler()"></app-launcher-button>
 
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
-    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '8px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
+    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '8px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
         
         <div *ngIf="isOpenHome && senderId" class="modal-page" [class.active]="true">
             <app-home 
@@ -24,6 +24,7 @@
             <app-conversation 
             [recipientId]="recipientId"
             [senderId]="senderId"
+            [departmentSelected]="departmentSelected"
             (eventClose)="returnCloseConversation()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
@@ -36,25 +37,26 @@
         ******* MODALE SELECT DEPARTMENT *******
         ****************************************
         -->
-        <!-- <div class="modal-page" [class.active]="isOpenSelectionDepartment">
+        <div class="modal-page" [class.active]="isOpenSelectionDepartment">
             <app-selection-department 
+            [token] = "token"
             (eventClosePage)="returnCloseModalDepartment()"
             (eventDepartmentSelected)="returnDepartmentSelected($event)" 
             ></app-selection-department>
-        </div> -->
+        </div>
     
 
         <!-- 
-        ****************************************
-        *********** MODALE RATE CHAT ***********
-        ****************************************
+        *******************************************
+        *********** MODALE PRECHAT FORM ***********
+        *******************************************
         -->
-        <!-- <div class="modal-page" [class.active]="g.isOpenPrechatForm">
+        <div class="modal-page" [class.active]="isOpenPrechatForm">
             <app-prechat-form
-            (eventClosePage)="returnToHome()" 
-            (eventCloseForm)="returnCloseForm()" 
+            (eventClosePage)="returnCloseModalPrechatForm()" 
+            (eventCloseForm)="returnPrechatFormComplete()"
             ></app-prechat-form>
-        </div> -->
+        </div>
 
             
         <!-- 

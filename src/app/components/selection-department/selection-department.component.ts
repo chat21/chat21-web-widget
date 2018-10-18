@@ -13,12 +13,13 @@ export class SelectionDepartmentComponent implements OnInit {
     // ========= begin:: Input/Output values ===========//
     @Output() eventDepartmentSelected = new EventEmitter<any>();
     @Output() eventClosePage = new EventEmitter();
+    @Input() token: string;
     // ========= end:: Input/Output values ===========//
 
     // ========= begin:: component variables ======= //
     departments: DepartmentModel[];
     isLogged: boolean;
-    token: string;
+    projectid: string;
     // ========= end:: component variables ======= //
 
     constructor(
@@ -39,75 +40,56 @@ export class SelectionDepartmentComponent implements OnInit {
      * - altrimenti visualizzo la schermata di selezione del dipartimento
     */
     getMongDbDepartments() {
-        if (this.g.token) {
-            this.token = this.g.token;
-            this.messagingService.getMongDbDepartments(this.token, this.g.projectid)
+        const that = this;
+        console.log('getMongDbDepartments ::::', this.token, this.g.projectid);
+        if (this.token) {
+            this.projectid = this.g.projectid;
+            this.messagingService.getMongDbDepartments(this.token, this.projectid)
             .subscribe(
                 response => {
-                    this.departments = response;
-                    console.log('OK DEPARTMENTS ::::', this.departments[0]);
-                    // DEPARTMENT DEFAULT SEMPRE PRESENTE
-                    if (this.departments.length === 1) {
-                        this.onSelectDepartment(this.departments[0]);
-                        //this.openSelectionDepartment = false;
-                        //this.departmentSelected = this.departments[0];
-                        //this.setFocusOnId('chat21-main-message-context');
-                        //console.log('this.departmentSelected ::::', this.departmentSelected);
-                    } else if (this.departments.length === 2) {
+                    that.departments = response;
+                    if (that.departments.length === 1) {
+                        // DEPARTMENT DEFAULT SEMPRE PRESENTE
+                        that.onSelectDepartment(that.departments[0]);
+                    } else if (that.departments.length === 2) {
                         // UN SOLO DEPARTMENT
-                        //this.openSelectionDepartment = false;
-                        this.onSelectDepartment(this.departments[1]);
-                        //this.departmentSelected = this.departments[1];
-                        //this.setFocusOnId('chat21-main-message-context');
-                        //console.log('this.departmentSelected ::::', this.departmentSelected);
-                    } else if (this.departments.length > 2) {
-                        //this.setFocusOnId('chat21-modal-select');
+                        that.onSelectDepartment(that.departments[1]);
+                    } else if (that.departments.length > 2) {
                         let i = 0;
-                        this.departments.forEach(department => {
-                            // console.log('DEPARTMENT ::::', department);
+                        that.departments.forEach(department => {
                             if (department['default'] === true) {
-                                // console.log('ELIMINO DEPARTMENT::::', department);
-                                this.departments.splice(i, 1);
-                                // console.log('DEPARTMENTS::::', this.departments);
+                                that.departments.splice(i, 1);
                                 return;
                             }
                             i++;
                         });
-                        //this.openSelectionDepartment = true;
                     } else {
-                        //this.setFocusOnId('chat21-main-message-context');
-                        //this.openSelectionDepartment = false;
+                        // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI
                     }
-                    this.isLogged = true;
-                    //console.log('IS_LOGGED', 'AppComponent:getMongDbDepartments:', this.isLogged);
+                    that.isLogged = true;
                 },
                 errMsg => {
                     console.log('http ERROR MESSAGE', errMsg);
-                    // window.alert('MSG_GENERIC_SERVICE_ERROR');
-                    //this.openSelectionDepartment = false;
-                    //this.setFocusOnId('chat21-main-message-context');
-
-                    this.isLogged = false;
-                    console.log('IS_LOGGED', 'AppComponent:getMongDbDepartments:', this.isLogged);
+                    that.isLogged = false;
                 },
                 () => {
                     // console.log('API ERROR NESSUNO');
                     // attivo pulsante aprichat!!!!!
                 }
             );
-            }
-        
+        }
     }
 
+    private onSelectDepartment(department) {
+        console.log(' onSelectDepartment: ', department);
+        this.eventDepartmentSelected.emit(department);
+    }
 
-  private onSelectDepartment(department) {
-    console.log(' onSelectDepartment: ', department);
-    this.eventDepartmentSelected.emit(department);
-  }
-
-  private closePage() {
-    console.log(' closePage: ');
-    this.eventClosePage.emit();
-  }
+    // ========= begin:: ACTIONS ============//
+    private closePage() {
+        console.log(' closePage: ');
+        this.eventClosePage.emit();
+    }
+    // ========= end:: ACTIONS ============//
 
 }

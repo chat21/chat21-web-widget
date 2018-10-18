@@ -6,7 +6,7 @@
                 <!-- ICON CLOSE CHAT -->
                 <div class="c21-header-button">
                     <div class="c21-close-button c21-small" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
-                        <div class="c21-close-button-body" (click)="closePage()">
+                        <div class="c21-close-button-body" (click)="returnClosePage()">
                             <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z"/>
                                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
@@ -58,7 +58,7 @@
                         </div>
                     </form>
                     
-                    <button [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="closeForm()" [ngStyle]="{'background-color': themeColor, 'border-color': themeColor, 'color': themeForegroundColor }">
+                    <button [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': themeColor, 'border-color': themeColor, 'color': themeForegroundColor }">
                         <span class="v-align-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': g.themeForegroundColor}"/>
