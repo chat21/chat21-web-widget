@@ -52,6 +52,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // ========= begin:: parametri di stato widget ======= //
+    token: string;
     state = 'default'; /** gestore animazione default/rotated -> displayEyeCatcherCard */
     // isOpen: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     isWidgetActive: boolean; /** */
@@ -117,6 +118,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     userEmail: string;
     userPassword: string;
     preChatForm: boolean;
+    startFromHome: boolean; // !!!!! da aggiungere come parametro !!!!
     channelType: string;
     lang: string;
     align: string;
@@ -130,7 +132,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     fullscreenMode: boolean;
     allowTranscriptDownload: boolean;
     // ========= end:: parametri configurabili widget ========= //
-
 
     constructor(
         private el: ElementRef,
@@ -147,12 +148,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
 
-
-
     private initAll() {
-        this.isOpenHome = true;
+        const that = this;
+
+        this.isOpen = false;
+        this.isOpenHome = false;
         this.isOpenPrechatForm = false;
-        this.isOpenConversation = true;
+        this.isOpenConversation = false;
         this.preChatForm = true;
         this.isOpenSelectionDepartment = true;
         this.BUILD_VERSION = this.BUILD_VERSION;
@@ -196,9 +198,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.aliveSubLoggedUser = false;
             console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
         } else {
-            // faccio un'autenticazione anonima
+            console.log(' ---------------- 14  ---------------- ');
+            /** faccio un'autenticazione anonima e
+             * visualizzo il widgwt una volta autenticato
+             */
             this.authService.authenticateFirebaseAnonymously();
-            console.log(' ---------------- 14 ---------------- ');
+            this.authService.obsToken.subscribe((token) => {
+                this.ngZone.run(() => {
+                    if (token) {
+                        console.log(' ---------------- TOKEN OK  ---------------- ');
+                        that.token = token;
+                        that.isOpen = true;
+                    }
+                });
+            });
         }
 
         // SET FORM
@@ -206,7 +219,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(' ---------------- 15 ---------------- ');
         // USER AUTENTICATE
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-        const that = this;
+
         const subLoggedUser: Subscription = this.authService.obsLoggedUser
             .takeWhile(() => that.aliveSubLoggedUser)
             .subscribe(user => {
@@ -240,9 +253,34 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             });
         this.addComponentToWindow(this.ngZone);
-        this.g.token = this.authService.token;
+
+        this.setOrderComponents();
     }
 
+    setOrderComponents() {
+        this.startFromHome = true;
+        this.preChatForm = true;
+
+        this.isOpenHome = true;
+        this.isOpenConversation = false;
+        this.isOpenPrechatForm = false;
+        this.isOpenSelectionDepartment = false;
+
+        if (this.startFromHome) {
+            this.isOpenHome = true;
+            this.isOpenConversation = false;
+            this.isOpenPrechatForm = false;
+            this.isOpenSelectionDepartment = false;
+        } else if (this.preChatForm) {
+            this.isOpenConversation = false;
+            this.isOpenPrechatForm = true;
+            this.isOpenSelectionDepartment = false;
+        } else {
+            this.isOpenConversation = false;
+            this.isOpenPrechatForm = false;
+            this.isOpenSelectionDepartment = true;
+        }
+    }
 
     private setLanguage() {
         if ( this.translatorService.getBrowserLanguage() ) {
@@ -449,7 +487,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     generateNewUidConversation() {
         console.log('generateUidConversation **************', this.conversationWith, this.senderId);
-        // this.conversationWith = 
         return this.messagingService.generateUidConversation(this.senderId);
     }
 
@@ -681,18 +718,60 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.g.isOpenHome = true;
     }
 
+    /**
+     * MODAL SELECTION DEPARTMENT:
+     * selected department
+     */
     private returnDepartmentSelected($event) {
         if ( $event ) {
             console.log('onSelectDepartment: ', $event);
-            this.g.isOpenSelectionDepartment = false;
             this.departmentSelected = $event;
+            this.isOpenConversation = true;
+            this.isOpenSelectionDepartment = false;
         }
     }
+
+    /**
+     * MODAL SELECTION DEPARTMENT:
+     * close modal
+     */
     private returnCloseModalDepartment() {
-        console.log('returnCloseModalDepartment in APP COMPONENT');
-        this.g.isOpenSelectionDepartment = false;
-        // chiudo conversation!!!!
+        console.log('returnCloseModalDepartment');
+        this.isOpenHome = true;
+        this.isOpenSelectionDepartment = false;
+        this.isOpenConversation = false;
     }
+
+
+    /**
+     * MODAL PRECHATFORM:
+     * completed prechatform
+     */
+    private returnPrechatFormComplete() {
+        console.log('returnPrechatFormComplete');
+        this.isOpenHome = true;
+        this.isOpenSelectionDepartment = true;
+        this.isOpenConversation = false;
+        setTimeout(() => {
+            // console.log('hide');
+            this.isOpenPrechatForm = false;
+        }, 300);
+
+    }
+
+
+    /**
+     * MODAL PRECHATFORM:
+     * close modal
+     */
+    private returnCloseModalPrechatForm() {
+        console.log('returnCloseModalPrechatForm');
+        this.isOpenHome = true;
+        this.isOpenSelectionDepartment = false;
+        this.isOpenConversation = false;
+        this.isOpenPrechatForm = false;
+    }
+
 
     private returnSelectedConversation($event) {
         if ( $event ) {
@@ -713,13 +792,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private returnNewConversation() {
         console.log('returnNewConversation in APP COMPONENT');
-        // this.isOpenPrechatForm = true;
-        // this.isOpenSelectionDepartment = false;
+        if (this.preChatForm) {
+            this.isOpenPrechatForm = true;
+            this.isOpenSelectionDepartment = false;
+        } else {
+            this.isOpenPrechatForm = false;
+            this.isOpenSelectionDepartment = true;
+        }
         this.startNwConversation();
-        this.isOpenConversation = true;
-        this.isOpenSelectionDepartment = true;
-        // this.globals.isOpenHome = false;
-        // this.recipientId = null;
+        // setTimeout(function () {
+        //     this.isOpenConversation = true;
+        // }, 200);
     }
 
     private returnClose() {
@@ -739,8 +822,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private returnToHome() {
-        this.g.isOpenSelectionDepartment = false;
-        this.g.isOpenPrechatForm = false;
+        this.isOpenSelectionDepartment = false;
+        this.isOpenPrechatForm = false;
         // this.g.isOpenConversation = false;
     }
 
@@ -750,7 +833,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.attributes) {
             localStorage.setItem('attributes', JSON.stringify(this.attributes));
         }
-        this.g.isOpenPrechatForm = false;
+        this.isOpenPrechatForm = false;
     }
     // ========= end:: CALLBACK FUNCTIONS ============//
 

@@ -12,16 +12,17 @@ export class AuthService {
   // public user: Observable<firebase.User>;
   // public user: firebase.User;
   public user: any;
-  public token: string;
+  private token: string;
   obsLoggedUser: BehaviorSubject<any>;
+  obsToken: BehaviorSubject<string>;
 
   constructor(
     private firebaseAuth: AngularFireAuth
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
+    this.obsToken = new BehaviorSubject<string>(null);
   }
-
 
   getCurrentUser() {
     const that = this;
@@ -33,21 +34,27 @@ export class AuthService {
         console.log('1 - user OK ***', that.obsLoggedUser);
         that.user = firebase.auth().currentUser;
         that.obsLoggedUser.next(that.user);
-        that.getToken();
+        that.setToken();
       }
     });
   }
 
-  getToken() {
+  setToken() {
     // console.log('Notification permission granted.');
     const that = this;
-    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    firebase.auth().currentUser.getIdToken(true)/* forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
-        // console.log('idToken.', idToken);
+        that.obsToken.next(idToken);
+        console.log('******************** ---------------> idToken.', idToken);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
+        that.obsToken.next(null);
     });
+  }
+
+  getToken() {
+    return this.token;
   }
 
 
@@ -57,7 +64,7 @@ export class AuthService {
     .then(function(user) {
       that.user = user;
       that.obsLoggedUser.next(user);
-      that.getToken();
+      that.setToken();
     })
     .catch(function(error) {
         const errorCode = error.code;

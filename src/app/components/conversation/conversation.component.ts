@@ -32,8 +32,8 @@ export class ConversationComponent implements OnInit {
   @Output() eventClose = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() departmentSelected: string;
   // ========= end:: Input/Output values
-
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
@@ -115,6 +115,7 @@ export class ConversationComponent implements OnInit {
     console.log(' senderId: ', this.senderId);
     console.log(' projectid: ', this.g.projectid);
     console.log(' channelType: ', this.g.channelType);
+    console.log(' onSelectDepartment: ', this.departmentSelected);
     this.initAll();
     this.scrollToBottom();
   }

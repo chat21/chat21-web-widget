@@ -8,23 +8,33 @@ import { Globals } from '../../utils/globals';
   styleUrls: ['./prechat-form.component.scss']
 })
 export class PrechatFormComponent implements OnInit {
-  @Output() eventClosePage = new EventEmitter();
-  @Output() eventCloseForm = new EventEmitter<any>();
 
+  // ========= begin:: Input/Output values ===========//
+  @Output() eventClosePage = new EventEmitter();
+  @Output() eventCloseForm = new EventEmitter();
+  // ========= end:: Input/Output values ===========//
+
+
+  // ========= begin:: component variables ======= //
   preChatFormGroup: FormGroup;
+  attributes: any;
+  userFullname: string;
+  userEmail: string;
+  // ========= end:: component variables ======= //
 
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder
   ) {
-    this.initialize();
+
   }
 
   ngOnInit() {
+    this.initialize();
   }
 
   initialize() {
-    // SET FORM
+    this.attributes = this.g.attributes;
     this.preChatFormGroup = this.createForm(this.formBuilder);
     if (this.preChatFormGroup) {
       this.subcribeToFormChanges();
@@ -41,8 +51,8 @@ export class PrechatFormComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const preChatFormGroupTemp = formBuilder.group({
-        email: [this.g.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-        name: [this.g.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
+        email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+        name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
     });
     return preChatFormGroupTemp;
   }
@@ -52,22 +62,31 @@ export class PrechatFormComponent implements OnInit {
     const that = this;
     const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
     preChatFormValueChanges$.subscribe(x => {
-        that.g.userFullname = x.name;
-        that.g.userEmail = x.email;
+      that.userFullname = x.name;
+      that.userEmail = x.email;
+      console.log(' openNewConversation: ', that.userFullname, that.userEmail);
     });
   }
 
-  /** */
-  closeForm() {
-    console.log(' closeForm: ');
-    this.eventCloseForm.emit();
+  // ========= begin:: ACTIONS ============//
+  openNewConversation() {
+    console.log(' openNewConversation: ');
+    this.attributes['userFullname'] = this.userFullname;
+    this.attributes['userEmail'] = this.userEmail;
+    if (this.g.attributes) {
+        localStorage.setItem('attributes', JSON.stringify(this.attributes));
+        // this.g.attributes = this.attributes;
+        this.eventCloseForm.emit();
+    } else {
+      // mostro messaggio di errore
+    }
   }
 
-  /** */
-  closePage() {
+  returnClosePage() {
     console.log(' closePage: ');
     this.eventClosePage.emit();
   }
+  // ========= end:: ACTIONS ============//
 
 
 }

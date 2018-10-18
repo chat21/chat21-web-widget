@@ -7,6 +7,9 @@ import { CALLOUT_TIMER_DEFAULT, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STA
 @Injectable()
 export class Globals {
 
+  CLIENT_BROWSER = navigator.userAgent;
+  attributes: any;
+
   senderId: string;
   isOpenHome: boolean;
   BUILD_VERSION: string;
@@ -120,6 +123,8 @@ export class Globals {
       // this.translate();
       this.translate();
       console.log(' ---------------- 6 ---------------- ');
+
+      this.attributes = this.setAttributes();
 
   }
 
@@ -488,5 +493,31 @@ export class Globals {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
+
+  private setAttributes(): any {
+    let attributes: any = JSON.parse(localStorage.getItem('attributes'));
+    if (!attributes || attributes === 'undefined') {
+        attributes = {
+            client: this.CLIENT_BROWSER,
+            sourcePage: location.href,
+            projectId: this.projectid
+            // departmentId: '',
+            // departmentName: '',
+            // departmentId: this.departmentSelected._id,
+            // departmentName: this.departmentSelected.name,
+            // userEmail: this.userEmail,
+            // userName: this.userFullname
+        };
+
+        if (this.userEmail) {
+            attributes['userEmail'] = this.userEmail;
+        }
+        if (this.userFullname) {
+            attributes['userFullname'] = this.userFullname;
+        }
+        localStorage.setItem('attributes', JSON.stringify(attributes));
+    }
+    return attributes;
+  }
 
 }
