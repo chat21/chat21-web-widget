@@ -41,7 +41,7 @@ export class Globals {
   themeForegroundColor: string;
   allowTranscriptDownload: boolean;
   showWidgetNameInConversation: boolean;
-
+  userToken: string;
 
 
 
@@ -144,6 +144,8 @@ export class Globals {
     this.calloutMsg = '';
     this.allowTranscriptDownload = false;
     this.showWidgetNameInConversation = false;
+    
+
     // for retrocompatibility 0.9 (without tiledesk.js)
     this.baseLocation = 'https://widget.tiledesk.com';
     if (window['tiledesk']) {
@@ -264,6 +266,11 @@ export class Globals {
     TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
     if (TEMP) {
       this.allowTranscriptDownload = TEMP;
+    }
+
+    TEMP = window['tiledeskSettings']['userToken'];
+    if (TEMP) {
+      this.userToken = TEMP;
     }
   }
 
