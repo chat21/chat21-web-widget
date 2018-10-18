@@ -4,8 +4,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-
+import { environment } from '../../environments/environment';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
 export class AuthService {
@@ -14,12 +14,17 @@ export class AuthService {
   public user: any;
   public token: string;
   obsLoggedUser: BehaviorSubject<any>;
+  API_URL: string;
 
   constructor(
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    public http: Http
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
+
+    this.API_URL = environment.apiUrl;
+
   }
 
 
@@ -67,6 +72,20 @@ export class AuthService {
     });
   }
 
+  authenticateFirebaseCustoToken(token) {
+    const that = this;
+    firebase.auth().signInWithCustomToken(token) .then(function(user) {
+      that.user = user;
+      that.obsLoggedUser.next(user);
+      that.getToken();
+    })
+    .catch(function(error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        that.obsLoggedUser.next(null);
+        console.log('authenticateFirebaseCustoToken ERROR: ', errorCode, errorMessage);
+    });
+  }
 
   logout() {
     return this.firebaseAuth
@@ -103,5 +122,30 @@ export class AuthService {
       .auth
       .signOut();
   }
+
+  // /jwt/decode?project_id=123
+  public decode(token, projectId) {
+    const url = this.API_URL + 'jwt/decode?project_id=' + projectId;
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'JWT ' + token);
+    return this.http
+      .post(url, null, { headers })
+      .map((response) => response.json());
+  }
+
+  public createToken(token, projectId) {
+    const url = this.API_URL + 'firebase/createtokenext?project_id=' + projectId;
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'JWT ' + token);
+    return this.http
+      .post(url, null, { headers })
+      .map((response) => response.json());
+  }
+
+
 
 }
