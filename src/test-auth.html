@@ -57,7 +57,7 @@
 
       window.tileDeskAsyncInit = function() {
       window.tiledesk.on('loadParams', function(event_data) {
-        console.log("customtoken");
+        console.log("loadParams", event_data);
         console.log("window.tiledesk", window.tiledesk);
         
         var httpRequest = createCORSRequest('GET', 'http://localhost:5000/',false); //set async to false because loadParams must return when the get is complete
