@@ -129,6 +129,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     calloutMsg: string;
     fullscreenMode: boolean;
     allowTranscriptDownload: boolean;
+    firebaseCustomToken: string;
     // ========= end:: parametri configurabili widget ========= //
 
 
@@ -173,6 +174,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.g.initialize(this.el);
         console.log(' ---------------- A1 ---------------- ');
 
+        //ATTENZIONE TESTAREREEEE QUESTO SPOSTAMENTO.. 
+        this.addComponentToWindow(this.ngZone);
+
         this.triggetLoadParamsEvent();
         console.log(' ---------------- A2 ---------------- ');
 
@@ -195,9 +199,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log(' ---------------- 13 ---------------- ');
             this.aliveSubLoggedUser = false;
             console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
+        } else if (this.g.userToken) {
+            console.log(' authenticateFirebaseCustoToken this.firebaseCustomToken', this.firebaseCustomToken);
+            // this.authService.authenticateFirebaseCustoToken(this.firebaseCustomToken);
         } else {
-            // faccio un'autenticazione anonima
-            this.authService.authenticateFirebaseAnonymously();
+            // // faccio un'autenticazione anonima
+            // console.log(' authenticateFirebaseAnonymously');
+            // this.authService.authenticateFirebaseAnonymously();
             console.log(' ---------------- 14 ---------------- ');
         }
 
@@ -236,10 +244,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     } else {
                         that.isLogged = false;
                         console.log('IS_NOT_LOGGED', that.isLogged);
+                        
+
+                          // faccio un'autenticazione anonima
+                        console.log(' authenticateFirebaseAnonymously');
+                        this.authService.authenticateFirebaseAnonymously();
+                        console.log(' ---------------- 14 ---------------- ');
+
+
+
                     }
                 });
             });
-        this.addComponentToWindow(this.ngZone);
+        
         this.g.token = this.authService.token;
     }
 
@@ -347,11 +364,35 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
                 });
             };
+
+            window['tiledesk'].signInWithCustomToken = function (token) {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
+                });
+            };
+
             // window['tiledesk'].on = function (event_name, handler) {
             //     console.log("addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
         }
+    }
+
+    private signInWithCustomToken(token) {
+        console.log('token', token);
+        this.g.userToken = token;
+
+        this.authService.createToken(token, '123').subscribe(
+            response => {
+                const firebaseToken = response.firebaseToken;
+                console.log('firebaseToken', firebaseToken);
+                this.firebaseCustomToken = firebaseToken;
+                this.authService.authenticateFirebaseCustoToken(this.firebaseCustomToken);
+            });
+
+
+
+
     }
 
     private setUserInfo(userInfo) {
@@ -379,9 +420,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
             'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
             'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
-            'allowTranscriptDownload': this.allowTranscriptDownload
+            'allowTranscriptDownload': this.allowTranscriptDownload,
+            'userToken': this.g.userToken
         };
-        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
+        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: this.g } });
         console.log(' ---------------- 2b ---------------- ');
         this.el.nativeElement.dispatchEvent(loadParams);
         console.log(' ---------------- 2d ---------------- ');
