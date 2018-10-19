@@ -14,8 +14,10 @@ export class AuthService {
   public user: any;
   private token: string;
   obsLoggedUser: BehaviorSubject<any>;
+  obsCurrentUser: BehaviorSubject<any>;
+
+  unsubscribe: any;
   API_URL: string;
-  obsToken: BehaviorSubject<string>;
 
   constructor(
     private firebaseAuth: AngularFireAuth,
@@ -23,38 +25,45 @@ export class AuthService {
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
+    this.obsCurrentUser = new BehaviorSubject<any>(null);
 
     this.API_URL = environment.apiUrl;
-
-    this.obsToken = new BehaviorSubject<string>(null);
   }
 
-  getCurrentUser() {
+
+  
+
+
+
+  onAuthStateChanged() {
     const that = this;
-    firebase.auth().onAuthStateChanged(user => {
+    // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
+    this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        console.log('PASSO OFFLINE AL CHAT MANAGER');
-        that.obsLoggedUser.next(null);
+        console.log('NO CURRENT USER PASSO NULL');
+        that.obsCurrentUser.next(0);
       } else {
-        console.log('1 - user OK ***', that.obsLoggedUser);
+        console.log('PASSO CURRENT USER');
         that.user = firebase.auth().currentUser;
-        that.obsLoggedUser.next(that.user);
-        that.setToken();
+        that.obsCurrentUser.next(that.user);
       }
     });
   }
 
-  setToken() {
+  getCurrentUser() {
+    return firebase.auth().currentUser;
+  }
+
+
+  getIdToken() {
     // console.log('Notification permission granted.');
     const that = this;
-    firebase.auth().currentUser.getIdToken(true)/* forceRefresh */
+    firebase.auth().currentUser.getIdToken()/* true: forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
-        that.obsToken.next(idToken);
         console.log('******************** ---------------> idToken.', idToken);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
-        that.obsToken.next(null);
     });
   }
 
@@ -68,37 +77,85 @@ export class AuthService {
     firebase.auth().signInAnonymously()
     .then(function(user) {
       that.user = user;
+      that.unsubscribe();
       that.obsLoggedUser.next(user);
-      that.setToken();
+      that.getIdToken();
     })
     .catch(function(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
+        that.unsubscribe();
         that.obsLoggedUser.next(null);
         console.log('signInAnonymously ERROR: ', errorCode, errorMessage);
     });
   }
 
-  authenticateFirebaseCustoToken(token) {
+  authenticateFirebaseCustomToken(token) {
     const that = this;
-    firebase.auth().signInWithCustomToken(token) .then(function(user) {
+    // firebase.auth().currentUser.getIdToken()
+    // .then(function(idToken) {
+    //   // Send token to your backend via HTTPS
+    //   console.log('idToken: ', idToken);
+    //   // ...
+    // }).catch(function(error) {
+    //   // Handle error
+    // });
+   
+      console.log('token: ', token);
+      // Sign-out successful.
+      firebase.auth().signInWithCustomToken(token)
+      .then(function(user) {
+        that.user = user;
+        that.unsubscribe();
+        that.obsLoggedUser.next(user);
+        that.getToken();
+      })
+      .catch(function(error) {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          that.unsubscribe();
+          that.obsLoggedUser.next(null);
+          console.log('authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage);
+      });
+  
+  }
+
+
+
+  authenticateFirebaseWithEmailAndPassword(email, password) {
+    const that = this;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(function(user) {
       that.user = user;
+      that.unsubscribe();
       that.obsLoggedUser.next(user);
-      that.getToken();
+      that.getIdToken();
     })
     .catch(function(error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        that.obsLoggedUser.next(null);
-        console.log('authenticateFirebaseCustoToken ERROR: ', errorCode, errorMessage);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      that.unsubscribe();
+      that.obsLoggedUser.next(null);
+      console.log('authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage);
     });
   }
 
+
   logout() {
-    return this.firebaseAuth
-      .auth
-      .signOut();
+    return this.firebaseAuth.auth.signOut();
   }
+
+
+  signOut() {
+    return firebase.auth().signOut();
+    // .then(function() {
+    //   // Sign-out successful.
+    // }).catch(function(error) {
+    //   // An error happened.
+    // });
+  }
+
+
 
   signup(email: string, password: string) {
     this.firebaseAuth

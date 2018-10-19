@@ -102,7 +102,7 @@ export class MessagingService {
     // console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
   }
 
-  public getMongDbDepartments(token, projectId): Observable<DepartmentModel[]> {
+  public getMongDbDepartments(projectId): Observable<DepartmentModel[]> {
     const url = this.API_URL + projectId + '/departments/';
     // const url = `http://api.chat21.org/app1/departments`;
     // tslint:disable-next-line:max-line-length

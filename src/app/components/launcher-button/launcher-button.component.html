@@ -1,4 +1,4 @@
-<div id="c21-launcher-button" [ngClass]="{'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}" [ngStyle]="{'background-color': g.themeColor}" (click)="open_close_handler()" >  
+<div id="c21-launcher-button" [ngClass]="{'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}" [ngStyle]="{'background-color': g.themeColor}" (click)="openCloseWidget()" >  
     
   <!-- OPEN ICON -->
     <div *ngIf="!isOpen" class="launcher-button" [@enterBubbleAnimation] >

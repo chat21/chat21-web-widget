@@ -35,22 +35,23 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ]
 })
 export class LauncherButtonComponent implements OnInit {
-  @Output() eventOpenCloseHandler = new EventEmitter<boolean>();
+  @Output() eventOpenCloseWidget = new EventEmitter<boolean>();
 
   isOpen: boolean;
   constructor(
     public g: Globals
   ) {
+  }
+
+  ngOnInit() {
     this.isOpen = this.g.isOpen;
     console.log('open_close_handler BUTTON 1: ', this.g.isOpen);
   }
 
-  ngOnInit() {
-  }
-
-  open_close_handler() {
-    console.log('open_close_handler BUTTON: ', this.g.isOpen);
+  openCloseWidget() {
+    console.log('1 open_close_handler BUTTON: ', this.isOpen);
     this.isOpen = !this.isOpen;
-    this.eventOpenCloseHandler.emit( this.g.isOpen );
+    console.log('2 open_close_handler BUTTON: ', this.isOpen);
+    this.eventOpenCloseWidget.emit( this.isOpen );
   }
 }

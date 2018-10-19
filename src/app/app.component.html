@@ -1,10 +1,11 @@
 
-<div id="chat21-container" [class.active]="isLogged">
+<div id="chat21-container" class="active"> 
+    <!-- [class.active]="isLogged" -->
 
     <!-- 
     ****** LAUNCHER BUTTON ******
     -->
-    <app-launcher-button *ngIf="" (eventOpenCloseHandler)="open_close_handler()"></app-launcher-button>
+    <app-launcher-button *ngIf="isInitialized" (eventOpenCloseWidget)="openCloseWidget($event)"></app-launcher-button>
 
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
@@ -39,7 +40,6 @@
         -->
         <div class="modal-page" [class.active]="isOpenSelectionDepartment">
             <app-selection-department 
-            [token] = "token"
             (eventClosePage)="returnCloseModalDepartment()"
             (eventDepartmentSelected)="returnDepartmentSelected($event)" 
             ></app-selection-department>
@@ -76,6 +76,6 @@
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
     -->
-   <app-eyeeye-catcher-card></app-eyeeye-catcher-card>                                 
+   <!-- <app-eyeeye-catcher-card></app-eyeeye-catcher-card>                                  -->
     
 </div>

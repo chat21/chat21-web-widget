@@ -529,7 +529,7 @@ export class ConversationComponent implements OnInit {
    * 
    */
 
-  private onSendPressed(event) {
+  onSendPressed(event) {
     console.log('onSendPressed:event', event);
     console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
     if (this.isFilePendingToUpload) {

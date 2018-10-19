@@ -67,7 +67,7 @@ export class ListConversationsComponent implements OnInit {
 
 
   // ========= begin:: ACTIONS ============//
-  private openNewConversation() {
+  openNewConversation() {
     this.eventNewConv.emit();
   }
 

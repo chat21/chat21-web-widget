@@ -13,7 +13,7 @@ export class SelectionDepartmentComponent implements OnInit {
     // ========= begin:: Input/Output values ===========//
     @Output() eventDepartmentSelected = new EventEmitter<any>();
     @Output() eventClosePage = new EventEmitter();
-    @Input() token: string;
+    // @Input() token: string;
     // ========= end:: Input/Output values ===========//
 
     // ========= begin:: component variables ======= //
@@ -29,6 +29,7 @@ export class SelectionDepartmentComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('ngOnInit :::: SelectionDepartmentComponent');
         this.getMongDbDepartments();
     }
 
@@ -41,10 +42,10 @@ export class SelectionDepartmentComponent implements OnInit {
     */
     getMongDbDepartments() {
         const that = this;
-        console.log('getMongDbDepartments ::::', this.token, this.g.projectid);
-        if (this.token) {
+        console.log('getMongDbDepartments ::::', this.g.projectid);
+        //if (this.token) {
             this.projectid = this.g.projectid;
-            this.messagingService.getMongDbDepartments(this.token, this.projectid)
+            this.messagingService.getMongDbDepartments( this.projectid )
             .subscribe(
                 response => {
                     that.departments = response;
@@ -77,7 +78,7 @@ export class SelectionDepartmentComponent implements OnInit {
                     // attivo pulsante aprichat!!!!!
                 }
             );
-        }
+        // }
     }
 
     private onSelectDepartment(department) {
@@ -86,7 +87,7 @@ export class SelectionDepartmentComponent implements OnInit {
     }
 
     // ========= begin:: ACTIONS ============//
-    private closePage() {
+    closePage() {
         console.log(' closePage: ');
         this.eventClosePage.emit();
     }

@@ -52,12 +52,18 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // ========= begin:: parametri di stato widget ======= //
+    isLogged = false; /** if it's logged */
+    isOpen = false; /** if widget it's open */
+    isInitialized = false; /** if true show bullon */
+    autoStart = false;  /** if  */
+
+
+
     token: string;
     state = 'default'; /** gestore animazione default/rotated -> displayEyeCatcherCard */
     // isOpen: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     isWidgetActive: boolean; /** */
     isModalLeaveChatActive = false; /** */
-    isLogged = false; /** */
     isOpenSelectionDepartment = true;
     filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
     isOpenHome = true; /** gestore visualizzazione comp home ( sempre visibile xchè il primo dello stack ) */
@@ -107,7 +113,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     // ========= begin:: parametri configurabili widget ======= //
-    isOpen: boolean; /** indica se il pannello conversazioni è aperto o chiuso */
     tenant: string;
     recipientId: string;
     projectid: string;
@@ -145,14 +150,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public upSvc: UploadService,
         public contactService: ContactService
     ) {
+        const autoStart = true;
         this.initAll();
+
+        const that = this;
+        if (autoStart === true) {
+            /**
+             * GET CURRENT USER
+             * recupero il current user se esiste
+             * https://forum.ionicframework.com/t/firebase-auth-currentuser-shows-me-null-but-it-logged-in/68411/4
+            */
+            this.authService.onAuthStateChanged();
+            this.authService.obsCurrentUser.subscribe((user) => {
+                this.ngZone.run(() => {
+                    if (user && user !== 0) {
+                        console.log('GET CURRENT USER AUTENTICATE: ', user.uid);
+                        that.senderId = user.uid;
+                        that.isLogged = true;
+                        that.start();
+                    } else if (user === 0 ) {
+                        console.log('NO CURRENT USER AUTENTICATE: ', user);
+                        that.start();
+                    }
+                });
+            });
+        }
     }
 
 
     private initAll() {
-        const that = this;
 
+        this.isLogged = false;
         this.isOpen = false;
+
         this.isOpenHome = false;
         this.isOpenPrechatForm = false;
         this.isOpenConversation = false;
@@ -176,7 +206,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.g.initialize(this.el);
         console.log(' ---------------- A1 ---------------- ');
 
-        //ATTENZIONE TESTAREREEEE QUESTO SPOSTAMENTO.. 
+        // ATTENZIONE TESTAREREEEE QUESTO SPOSTAMENTO..
         this.addComponentToWindow(this.ngZone);
 
         this.triggetLoadParamsEvent();
@@ -185,102 +215,87 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setIsWidgetOpenOrActive();
         console.log(' ---------------- A3 ---------------- ');
 
-        // set auth
+        this.isInitialized = true;
+    }
+
+
+    private start() {
+        this.setAuthentication();
+        this.startUI();
+    }
+
+    private setAuthentication() {
+        const that = this;
+        
+
+        /**
+         * 0 - controllo se è stato passato email e psw
+         *  SI - mi autentico con email e psw
+         * 1 - controllo se è stato passato userId
+         *  SI - vado avanti senza autenticazione
+         * 2 - controllo se esiste un token
+         *  SI - sono già autenticato
+         * 3 - controllo se esiste currentUser
+         *  SI - sono già autenticato
+         *  NO - mi autentico
+         */
+
+        // this.userEmail = 'czone555@gmail.com';
+        // this.userPassword = '123456';
+        // this.userId = 'LmBT2IKjMzeZ3wqyU8up8KIRB6J3';
+        // tslint:disable-next-line:max-line-length
+        // this.g.userToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdhMWViNTE2YWU0MTY4NTdiM2YwNzRlZDQxODkyZTY0M2MwMGYyZTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTM5OTQ4MDczLCJ1c2VyX2lkIjoid0RScm54SG0xQ01MMVhJd29MbzJqdm9lc040MiIsInN1YiI6IndEUnJueEhtMUNNTDFYSXdvTG8yanZvZXNONDIiLCJpYXQiOjE1Mzk5NDgwNzMsImV4cCI6MTUzOTk1MTY3MywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.gNtsfv1b5LFxxqwnmJI4jnGFq7760Eu_rR2Neargs6Q3tcNge1oTf7CPjd9pJxrOAeErEX6Un_E7tjIGqKidASZH7RJwKzfWT3-GZdr7j-LR6FgBVl8FgufDGo0DcVhw9Zajik0vuFM9b2PULmSAeDeNMLAhsvPOWPJMFMGIrewTk7Im-6ncm75QH241O4KyGKPWsC5slN9lckQP4j432xVUj1ss0TYVqBpkDP9zzgekuLIvL-qFpuqGI0yLjb-SzPev2eTO-xO48wlYK_s_GYOZRwWi4SZvSA8Sw54X7HUyDvw5iXLboEJEFMU6gJJWR6YPQMa69cjQlFS8mjPG6w";
+
+        const currentUser =  null;//this.authService.getCurrentUser();
+
         if (this.userEmail && this.userPassword) {
             console.log(' ---------------- 10 ---------------- ');
             // se esistono email e psw faccio un'autenticazione firebase con email
-            // this.authService.authenticateFirebaseEmail(this.userEmail, this.userPassword);
+            this.authService.authenticateFirebaseWithEmailAndPassword(this.userEmail, this.userPassword);
+
         } else if (this.userId) {
-            console.log(' ---------------- 11 ---------------- ');
             // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
-            // this.authService.getCurrentUser();
+            console.log(' ---------------- 11 ---------------- ');
+            console.log('this.userId:: ', this.userId);
             this.senderId = this.userId;
-            // this.conversation.createConversation();
-            console.log(' ---------------- 12 ---------------- ');
-            // this.initializeChatManager();
-            console.log(' ---------------- 13 ---------------- ');
-            this.aliveSubLoggedUser = false;
-            console.log('USER userId: this.isOpen:', this.senderId, this.isOpen);
+            this.isLogged = true;
+
         } else if (this.g.userToken) {
-            console.log(' authenticateFirebaseCustoToken this.firebaseCustomToken', this.firebaseCustomToken);
-            // this.authService.authenticateFirebaseCustoToken(this.firebaseCustomToken);
+            // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
+            // !!! DA TESTARE NON FUNZIONA !!! //
+            console.log(' ---------------- 12 ---------------- ');
+            console.log('this.g.userToken:: ', this.g.userToken);
+            this.authService.authenticateFirebaseCustomToken(this.g.userToken);
+
+        } else if (currentUser) {
+            //  SONO GIA' AUTENTICATO
+            console.log(' ---------------- 13 ---------------- ');
+            console.log(' currentUser', currentUser);
+            this.senderId = currentUser.uid;
+            this.isLogged = true;
+
         } else {
-            // // faccio un'autenticazione anonima
-            // console.log(' authenticateFirebaseAnonymously');
-            // this.authService.authenticateFirebaseAnonymously();
+            //  AUTENTICAZIONE ANONIMA
             console.log(' ---------------- 14 ---------------- ');
-            /** faccio un'autenticazione anonima e
-             * visualizzo il widgwt una volta autenticato
-             */
-            // this.authService.authenticateFirebaseAnonymously();
-            // this.authService.obsToken.subscribe((token) => {
-            //     this.ngZone.run(() => {
-            //         if (token) {
-            //             console.log(' ---------------- TOKEN OK  ---------------- ');
-            //             that.token = token;
-            //             that.isOpen = true;
-            //         }
-            //     });
-            // });
-
-
+            console.log(' authenticateFirebaseAnonymously');
+            this.authService.authenticateFirebaseAnonymously();
         }
 
-        // SET FORM
-        // this.preChatFormGroup = this.createForm(this.formBuilder);
-        console.log(' ---------------- 15 ---------------- ');
-        // USER AUTENTICATE
-        // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-
-        const subLoggedUser: Subscription = this.authService.obsLoggedUser
-            .takeWhile(() => that.aliveSubLoggedUser)
-            .subscribe(user => {
-                console.log(' ---------------- 16 ---------------- ');
-                // real time detection of the user authentication status
-                this.ngZone.run(() => {
-                    // console.log('subLoggedUser: ');
-                    if (user) {
-                        console.log('USER AUTENTICATE: ', user);
-                        // console.log("constructor.subLoggedUser", user);
-                        // that.senderId = user.uid;
-                        that.senderId = user.user.uid;
-                        console.log('USER senderId: ', that.senderId);
-                        // that.g.senderId = user.user.uid;
-                        // console.log("that.globals.senderId", that.globals.senderId);
-                        // that.initConversation();
-
-                        // that.createConversation();
-                        // that.initializeChatManager();
-                        that.aliveSubLoggedUser = false;
-                        that.isLogged = true;
-                        console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
-                        console.log('isLogged', that.isLogged);
-                        
-                        //attenzione dario
-                        that.isOpen = true;
-
-                        this.openIfCallOutTimer();
-
-                    } else {
-                        that.isLogged = false;
-                        console.log('IS_NOT_LOGGED', that.isLogged);
-                        
-                        //attenzione dario
-                          // faccio un'autenticazione anonima
-                        console.log(' authenticateFirebaseAnonymously');
-                        this.authService.authenticateFirebaseAnonymously();
-                        console.log(' ---------------- 14 ---------------- ');
-
-
-
-                    }
-                });
+        this.authService.obsLoggedUser.subscribe((user) => {
+            this.ngZone.run(() => {
+                that.authService.obsCurrentUser.unsubscribe();
+                if (user) {
+                    console.log('USER AUTENTICATE: ', user);
+                    that.senderId = user.uid;
+                    that.isLogged = true;
+                }
             });
-            
-        this.setOrderComponents();
+        });
     }
 
-    setOrderComponents() {
+
+    private startUI() {
+        /** TEST  */
         this.startFromHome = true;
         this.preChatForm = true;
 
@@ -297,13 +312,61 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (this.preChatForm) {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = true;
-            this.isOpenSelectionDepartment = false;
+            this.isOpenSelectionDepartment = true;
         } else {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = true;
         }
     }
+
+        // USER AUTENTICATE
+        // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+
+        // const subLoggedUser: Subscription = this.authService.obsLoggedUser
+        //     .takeWhile(() => that.aliveSubLoggedUser)
+        //     .subscribe(user => {
+        //         console.log(' ---------------- 16 ---------------- ');
+        //         // real time detection of the user authentication status
+        //         this.ngZone.run(() => {
+        //             // console.log('subLoggedUser: ');
+        //             if (user) {
+        //                 console.log('USER AUTENTICATE: ', user);
+        //                 // console.log("constructor.subLoggedUser", user);
+        //                 // that.senderId = user.uid;
+        //                 that.senderId = user.user.uid;
+        //                 console.log('USER senderId: ', that.senderId);
+        //                 // that.g.senderId = user.user.uid;
+        //                 // console.log("that.globals.senderId", that.globals.senderId);
+        //                 // that.initConversation();
+
+        //                 // that.createConversation();
+        //                 // that.initializeChatManager();
+        //                 that.aliveSubLoggedUser = false;
+        //                 that.isLogged = true;
+        //                 console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
+        //                 console.log('isLogged', that.isLogged);
+                        
+        //                 //attenzione dario
+        //                 that.isOpen = true;
+
+        //                 this.openIfCallOutTimer();
+
+        //             } else {
+        //                 that.isLogged = false;
+        //                 console.log('IS_NOT_LOGGED', that.isLogged);
+                        
+        //                 //attenzione dario
+        //                   // faccio un'autenticazione anonima
+        //                 console.log(' authenticateFirebaseAnonymously');
+        //                 this.authService.authenticateFirebaseAnonymously();
+        //                 console.log(' ---------------- 14 ---------------- ');
+        //             }
+        //         });
+        //     });
+        
+
+
 
     private setLanguage() {
         if ( this.translatorService.getBrowserLanguage() ) {
@@ -431,7 +494,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 const firebaseToken = response.firebaseToken;
                 console.log('firebaseToken', firebaseToken);
                 this.firebaseCustomToken = firebaseToken;
-                this.authService.authenticateFirebaseCustoToken(this.firebaseCustomToken);
+                this.authService.authenticateFirebaseCustomToken(this.firebaseCustomToken);
             });
 
 
@@ -584,20 +647,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setFocusOnId('chat21-main-message-context');
     }
 
-
-    open_close_handler() {
-        // this.isOpen = isOpen;
-        console.log('open_close_handlerHP: ', this.g.isOpen);
-        this.displayEyeCatcherCard = 'none';
-        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
-        this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
-        this.displayEyeCatcherCardCloseBtn = 'none';
-        if (this.g.isOpen) {
-            this.f21_close();
-        } else {
-            this.f21_open();
-        }
-    }
+    
     /**
      * apro il popup conversazioni
      */
@@ -767,6 +817,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
+     * LAUNCHER BUTTON:
+     * onClick button open/close widget
+     */
+    openCloseWidget($event) {
+        this.isOpen = $event;
+        console.log('openCloseWidget: ', this.isOpen);
+        this.displayEyeCatcherCard = 'none';
+        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+        this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
+        this.displayEyeCatcherCardCloseBtn = 'none';
+        this.setAuthentication();
+        this.startUI();
+    }
+
+
+    /**
      * MODAL SELECTION DEPARTMENT:
      * selected department
      */
@@ -800,10 +866,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = true;
         this.isOpenConversation = false;
-        setTimeout(() => {
-            // console.log('hide');
-            this.isOpenPrechatForm = false;
-        }, 300);
+        this.isOpenPrechatForm = false;
 
     }
 
@@ -815,7 +878,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private returnCloseModalPrechatForm() {
         console.log('returnCloseModalPrechatForm');
         this.isOpenHome = true;
-        this.isOpenSelectionDepartment = false;
+        this.isOpenSelectionDepartment = true;
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
     }
@@ -842,7 +905,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('returnNewConversation in APP COMPONENT');
         if (this.preChatForm) {
             this.isOpenPrechatForm = true;
-            this.isOpenSelectionDepartment = false;
+            this.isOpenSelectionDepartment = true;
         } else {
             this.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = true;
