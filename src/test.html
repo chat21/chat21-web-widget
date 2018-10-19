@@ -39,6 +39,8 @@
          window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
          window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
          window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
+         //window.tiledesk.show();
+         //window.tiledesk.hide();
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;

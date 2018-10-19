@@ -14,7 +14,7 @@ import { DepartmentModel } from '../models/department';
 
 // utils
 import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify, encodeHTML } from './utils/utils';
-import { detectIfIsMobile} from './utils/utils';
+import { detectIfIsMobile, setLanguage} from './utils/utils';
 // tslint:disable-next-line:max-line-length
 import { CALLOUT_TIMER_DEFAULT, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from './utils/constants';
 
@@ -54,9 +54,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // ========= begin:: parametri di stato widget ======= //
     isLogged = false; /** if it's logged */
     isOpen = false; /** if widget it's open */
-    isInitialized = false; /** if true show bullon */
-    autoStart = false;  /** if  */
+    isInitialized = false; /** if true show button */
 
+    autoStart = true;  /** if  */
+    isShown = true;
 
 
     token: string;
@@ -150,14 +151,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public upSvc: UploadService,
         public contactService: ContactService
     ) {
-        const autoStart = true;
+
+    }
+
+
+    ngOnInit() {
+        // this.setSubscriptions();
         this.initAll();
+        const autoStart = true;
 
         const that = this;
         if (autoStart === true) {
             /**
              * GET CURRENT USER
              * recupero il current user se esiste
+             * ripeto l'autenticazione
              * https://forum.ionicframework.com/t/firebase-auth-currentuser-shows-me-null-but-it-logged-in/68411/4
             */
             this.authService.onAuthStateChanged();
@@ -165,21 +173,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.ngZone.run(() => {
                     if (user && user !== 0) {
                         console.log('GET CURRENT USER AUTENTICATE: ', user.uid);
-                        that.senderId = user.uid;
-                        that.isLogged = true;
-                        that.start();
+                        that.setAuthentication();
                     } else if (user === 0 ) {
                         console.log('NO CURRENT USER AUTENTICATE: ', user);
-                        that.start();
+                        that.setAuthentication();
                     }
                 });
             });
         }
     }
 
+    ngAfterViewInit() {
+    }
+
 
     private initAll() {
-
         this.isLogged = false;
         this.isOpen = false;
 
@@ -191,9 +199,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.BUILD_VERSION = this.BUILD_VERSION;
 
         // set lang and in global variables
-        this.lang = this.setLanguage();
+        console.log(' ---------------- SET LANG ---------------- ');
+        this.lang = setLanguage(this.translatorService);
         this.g.lang = this.lang;
         moment.locale(this.lang);
+        console.log(' lang: ', this.g.lang);
 
         // detect is mobile
         this.isMobile = detectIfIsMobile();
@@ -202,7 +212,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         localStorage.removeItem('firebase:previous_websocket_failure');
         console.log(' ---------------- CONSTRUCTOR ---------------- ');
 
-        // this.initParameters();
         this.g.initialize(this.el);
         console.log(' ---------------- A1 ---------------- ');
 
@@ -218,16 +227,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isInitialized = true;
     }
 
-
-    private start() {
-        this.setAuthentication();
-        this.startUI();
-    }
-
     private setAuthentication() {
         const that = this;
-        
-
         /**
          * 0 - controllo se è stato passato email e psw
          *  SI - mi autentico con email e psw
@@ -239,14 +240,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
          *  SI - sono già autenticato
          *  NO - mi autentico
          */
-
         // this.userEmail = 'czone555@gmail.com';
         // this.userPassword = '123456';
         // this.userId = 'LmBT2IKjMzeZ3wqyU8up8KIRB6J3';
         // tslint:disable-next-line:max-line-length
         // this.g.userToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdhMWViNTE2YWU0MTY4NTdiM2YwNzRlZDQxODkyZTY0M2MwMGYyZTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTM5OTQ4MDczLCJ1c2VyX2lkIjoid0RScm54SG0xQ01MMVhJd29MbzJqdm9lc040MiIsInN1YiI6IndEUnJueEhtMUNNTDFYSXdvTG8yanZvZXNONDIiLCJpYXQiOjE1Mzk5NDgwNzMsImV4cCI6MTUzOTk1MTY3MywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.gNtsfv1b5LFxxqwnmJI4jnGFq7760Eu_rR2Neargs6Q3tcNge1oTf7CPjd9pJxrOAeErEX6Un_E7tjIGqKidASZH7RJwKzfWT3-GZdr7j-LR6FgBVl8FgufDGo0DcVhw9Zajik0vuFM9b2PULmSAeDeNMLAhsvPOWPJMFMGIrewTk7Im-6ncm75QH241O4KyGKPWsC5slN9lckQP4j432xVUj1ss0TYVqBpkDP9zzgekuLIvL-qFpuqGI0yLjb-SzPev2eTO-xO48wlYK_s_GYOZRwWi4SZvSA8Sw54X7HUyDvw5iXLboEJEFMU6gJJWR6YPQMa69cjQlFS8mjPG6w";
-
-        const currentUser =  null;//this.authService.getCurrentUser();
+        const currentUser =  this.authService.getCurrentUser();
 
         if (this.userEmail && this.userPassword) {
             console.log(' ---------------- 10 ---------------- ');
@@ -259,6 +258,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('this.userId:: ', this.userId);
             this.senderId = this.userId;
             this.isLogged = true;
+            that.startUI();
 
         } else if (this.g.userToken) {
             // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
@@ -273,6 +273,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log(' currentUser', currentUser);
             this.senderId = currentUser.uid;
             this.isLogged = true;
+            that.startUI();
 
         } else {
             //  AUTENTICAZIONE ANONIMA
@@ -281,13 +282,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.authService.authenticateFirebaseAnonymously();
         }
 
+        /**
+         * SUBSCRIBE TO ASINC LOGIN FUNCTION
+         */
         this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
                 that.authService.obsCurrentUser.unsubscribe();
                 if (user) {
                     console.log('USER AUTENTICATE: ', user);
-                    that.senderId = user.uid;
+                    that.senderId = user.user.uid;
                     that.isLogged = true;
+                    that.openIfCallOutTimer();
+                    that.startUI();
                 }
             });
         });
@@ -305,7 +311,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenSelectionDepartment = false;
 
         if (this.startFromHome) {
-            this.isOpenHome = true;
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = false;
@@ -320,6 +325,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+
+    NN_CANCELLARE_INTERESSANTE() {
+
+    
         // USER AUTENTICATE
         // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -357,30 +366,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         //                 console.log('IS_NOT_LOGGED', that.isLogged);
                         
         //                 //attenzione dario
-        //                   // faccio un'autenticazione anonima
+        //                 // faccio un'autenticazione anonima
         //                 console.log(' authenticateFirebaseAnonymously');
         //                 this.authService.authenticateFirebaseAnonymously();
         //                 console.log(' ---------------- 14 ---------------- ');
         //             }
         //         });
-        //     });
-        
-
-
-
-    private setLanguage() {
-        if ( this.translatorService.getBrowserLanguage() ) {
-            return this.translatorService.getBrowserLanguage();
-        }
-        return this.translatorService.getDefaultLanguage();
+        //});
     }
 
+    /**
+     *
+     */
     private openIfCallOutTimer() {
+        this.g.calloutTimer = 5; // TEST !!!!! DA ELIMINARE !!!
         const that = this;
-        if (this.calloutTimer >= 0) {
-            const waitingTime = this.calloutTimer * 1000;
+        if (this.g.calloutTimer >= 0) {
+            const waitingTime = this.g.calloutTimer * 1000;
             setTimeout(function () {
-                // that.f21_open();
                 that.openEyeCatcher();
             }, waitingTime);
         }
@@ -444,7 +447,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * EYE-CATCHER CARD CLOSE BTN ON MOBILE DEVICE */
     closeEyeCatcherCardWhenMobile() {
-
         console.log('HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
         this.displayEyeCatcherCard = 'none';
         this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
@@ -453,7 +455,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private addComponentToWindow(ngZone) {
         if (window['tiledesk']) {
             window['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
-
             window['tiledesk'].close = function () {
                 // this.f21_close();
                 ngZone.run(() => {
@@ -482,24 +483,36 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             //     console.log("addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
+
+            /**
+             * show all widget
+             */
+            window['tiledesk'].show = function () {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.showAllWidget();
+                });
+            };
+            /**
+             * hidden all widget
+             */
+            window['tiledesk'].hide = function () {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.hideAllWidget();
+                });
+            };
         }
     }
 
     private signInWithCustomToken(token) {
         console.log('token', token);
         this.g.userToken = token;
-
-        this.authService.createToken(token, '123').subscribe(
-            response => {
-                const firebaseToken = response.firebaseToken;
-                console.log('firebaseToken', firebaseToken);
-                this.firebaseCustomToken = firebaseToken;
-                this.authService.authenticateFirebaseCustomToken(this.firebaseCustomToken);
-            });
-
-
-
-
+        this.authService.createToken(token, '123')
+        .subscribe(response => {
+            const firebaseToken = response.firebaseToken;
+            console.log('firebaseToken', firebaseToken);
+            this.firebaseCustomToken = firebaseToken;
+            this.authService.authenticateFirebaseCustomToken(this.firebaseCustomToken);
+        });
     }
 
     private setUserInfo(userInfo) {
@@ -559,21 +572,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // console.log('»»» getParameterByName RESULT ', results);
         if (!results) { return null; }
-
         if (!results[2]) { return ''; }
-
         // console.log('»»» getParameterByName RESULT[2] ', results[2]);
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
 
-    ngOnInit() {
-        // this.setSubscriptions();
-    }
-
-    ngAfterViewInit() {
-    }
-
+    // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /**
      * elimino tutte le sottoscrizioni
      */
@@ -584,6 +589,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.unsubscribe();
     }
 
+    /**
+     *
+     */
     unsubscribe() {
         this.subscriptions.forEach(function (subscription) {
             subscription.unsubscribe();
@@ -591,6 +599,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptions.length = 0;
         console.log('this.subscriptions', this.subscriptions);
     }
+    // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
     /**
      * genero un nuovo conversationWith
@@ -647,7 +656,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setFocusOnId('chat21-main-message-context');
     }
 
-    
+
     /**
      * apro il popup conversazioni
      */
@@ -815,6 +824,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private openHP() {
         this.g.isOpenHome = true;
     }
+    /**
+     * 
+     */
+    private showAllWidget() {
+        this.isShown = true;
+    }
+
+    private hideAllWidget() {
+        this.isShown = false;
+    }
 
     /**
      * LAUNCHER BUTTON:
@@ -822,15 +841,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     openCloseWidget($event) {
         this.isOpen = $event;
-        console.log('openCloseWidget: ', this.isOpen);
+        console.log('openCloseWidget: ', this.isOpen, this.isOpenHome, this.senderId);
         this.displayEyeCatcherCard = 'none';
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
         this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
         this.displayEyeCatcherCardCloseBtn = 'none';
-        this.setAuthentication();
-        this.startUI();
     }
-
 
     /**
      * MODAL SELECTION DEPARTMENT:
@@ -856,7 +872,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenConversation = false;
     }
 
-
     /**
      * MODAL PRECHATFORM:
      * completed prechatform
@@ -870,7 +885,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-
     /**
      * MODAL PRECHATFORM:
      * close modal
@@ -882,7 +896,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
     }
-
 
     private returnSelectedConversation($event) {
         if ( $event ) {
@@ -947,5 +960,4 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenPrechatForm = false;
     }
     // ========= end:: CALLBACK FUNCTIONS ============//
-
 }

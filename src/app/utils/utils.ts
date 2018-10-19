@@ -203,3 +203,11 @@ export function convertHex(hex, opacity) {
   console.log('CONVERT HEX TO RGBA ', result);
   return result;
 }
+
+
+export function setLanguage(translatorService) {
+  if ( translatorService.getBrowserLanguage() ) {
+      return translatorService.getBrowserLanguage();
+  }
+  return translatorService.getDefaultLanguage();
+}

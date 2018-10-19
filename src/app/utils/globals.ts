@@ -33,7 +33,7 @@ export class Globals {
   isOpen: boolean;
   channelType: string;
   lang: string;
-  calloutTimer: Number;
+  calloutTimer: number;
   align: string;
   hideHeaderCloseButton: boolean;
   wellcomeMsg: string;
