@@ -244,7 +244,8 @@ export class ConversationComponent implements OnInit {
   initializeChatManager() {
     this.arrayFilesLoad = [];
     this.attributes = this.setAttributes();
-    this.setSubscriptions();
+    
+    //this.setSubscriptions();
 
     // this.isOpenSelectionDepartment = false;
     // if (!this.attributes.departmentId) {
@@ -333,6 +334,7 @@ export class ConversationComponent implements OnInit {
         }
       }
     });
+    
     this.subscriptions.push(obsAddedMessage);
 
   }
@@ -357,49 +359,49 @@ export class ConversationComponent implements OnInit {
    *
    */
   checkListMessages() {
-    const that = this;
-    this.messagingService.checkListMessages(this.conversationWith)
-    .then(function (snapshot) {
-        console.log('checkListMessages: ', snapshot);
-        if (snapshot.exists()) {
-            that.isNewConversation = false;
-            console.log('IS NOT NEW CONVERSATION ?', that.isNewConversation);
-            setTimeout(function () {
-                if (that.messages.length === 0) {
-                    that.isNewConversation = true;
-                }
-            }, 2000);
-            // that.isLogged = true;
-            // console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-if', that.isLogged);
-            // that.setFocusOnId('chat21-main-message-context');
-        } else {
-            /**
-             * se è una nuova conversazione:
-             * verifico se departmentId e projectid sono settati
-             * focus sul input messaggio
-             */
-            that.isNewConversation = true;
-            console.log('IS NEW CONVERSATION ?', that.isNewConversation);
-            //if (that.g.projectid && !that.g.attributes.departmentId) {
-                // that.isLogged = false;
-                // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
-                //that.getMongDbDepartments();
-            //} else {
-                that.setFocusOnId('chat21-main-message-context');
-                //that.isLogged = true;
-                //console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-else-department', that.isLogged);
-            //}
-        }
+    // const that = this;
+    // this.messagingService.checkListMessages(this.conversationWith)
+    // .then(function (snapshot) {
+    //     console.log('checkListMessages: ', snapshot);
+    //     if (snapshot.exists()) {
+    //         that.isNewConversation = false;
+    //         console.log('IS NOT NEW CONVERSATION ?', that.isNewConversation);
+    //         setTimeout(function () {
+    //             if (that.messages.length === 0) {
+    //                 that.isNewConversation = true;
+    //             }
+    //         }, 2000);
+    //         // that.isLogged = true;
+    //         // console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-if', that.isLogged);
+    //         // that.setFocusOnId('chat21-main-message-context');
+    //     } else {
+    //         /**
+    //          * se è una nuova conversazione:
+    //          * verifico se departmentId e projectid sono settati
+    //          * focus sul input messaggio
+    //          */
+    //         that.isNewConversation = true;
+    //         console.log('IS NEW CONVERSATION ?', that.isNewConversation);
+    //         //if (that.g.projectid && !that.g.attributes.departmentId) {
+    //             // that.isLogged = false;
+    //             // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
+    //             //that.getMongDbDepartments();
+    //         //} else {
+    //             that.setFocusOnId('chat21-main-message-context');
+    //             //that.isLogged = true;
+    //             //console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-else-department', that.isLogged);
+    //         //}
+    //     }
 
-        setTimeout(function () {
-            console.log('GET listMessages: ', that.conversationWith);
-            that.messagingService.listMessages(that.conversationWith);
-        }, 500);
+    //     setTimeout(function () {
+    //         console.log('GET listMessages: ', that.conversationWith);
+    //         that.messagingService.listMessages(that.conversationWith);
+    //     }, 500);
 
 
-    }).catch(function (error) {
-        console.error('checkListMessages ERROR: ', error);
-    });
+    // }).catch(function (error) {
+    //     console.error('checkListMessages ERROR: ', error);
+    // });
   }
 
 
@@ -937,6 +939,9 @@ export class ConversationComponent implements OnInit {
     this.eventClose.emit();
   }
 
+  dowloadTranscript() {
+    const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
+    window.open(url, '_blank');
+  }
 
-  
 }

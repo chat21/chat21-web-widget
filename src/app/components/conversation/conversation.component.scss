@@ -109,6 +109,7 @@
             left: 30px;
             right: 30px;
             height: auto;
+            z-index: 2;
             
 
             .c21-message-field {
@@ -130,6 +131,8 @@
             left: 0;
             right: 0;
             height: auto;
+            z-index: 1;
+            
             /* LOADING */
             /*http://tobiasahlin.com/spinkit/*/
             #chat21-spinner {

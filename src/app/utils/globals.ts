@@ -159,7 +159,7 @@ export class Globals {
     this.isShown = true; /** show/hide all widget */
     this.isOpen = false; /** show/hide window widget */
 
-    this.startFromHome = true; /** start from Home or Conversation */
+    this.startFromHome = false; /** start from Home or Conversation */
     this.default_settings = {}; /** settings for  */
 
     this.projectid = '';

@@ -135,6 +135,8 @@ export class MessagingService {
     console.log('***** connect *****');
     const that = this;
     const urlNodeFirebase = this.urlNodeFirebase + conversationWith;
+    this.checkRemoveConversation();
+
     console.log('urlNodeFirebase *****', urlNodeFirebase);
     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
@@ -203,14 +205,13 @@ export class MessagingService {
    * recupero gli ultimi 1000 e li ordino dall'ultimo al primo
    *
   */
-  public checkListMessages(conversationWith): any {
-    this.conversationWith = conversationWith;
-    this.checkRemoveConversation();
-    const that = this;
-    const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
-    return this.messagesRef.once('value');
-  }
+  // public checkListMessages(conversationWith): any {
+  //   this.conversationWith = conversationWith;
+  //   this.checkRemoveConversation();
+  //   const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
+  //   this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+  //   return this.messagesRef.once('value');
+  // }
 
 
   // public checkWritingMessages() {

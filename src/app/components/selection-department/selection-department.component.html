@@ -21,7 +21,7 @@
                 <div class="c21-header-content">
                     <!-- TITLE HEADER -->
                     <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
-                        <span>{{g.LABEL_SELECT_TOPIC}}</span>
+                        <!-- <span>{{g.LABEL_SELECT_TOPIC}}</span> -->
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@
                     <ul class="chat21-content-modal-select">
                         <li *ngFor="let department of departments; let i = index" (click)="onSelectDepartment(department)">
                             <span [ngStyle]="{'background-color': g.themeColor, 'color': g.themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
-                            <span class="default-text" >{{department?.name}}</span>
+                            <span class="" >{{department?.name}}</span>
                         </li>
                     </ul>
                 </div>

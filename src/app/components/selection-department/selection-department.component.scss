@@ -54,7 +54,7 @@
             }
         }
         .c21-body-content  {
-            padding: 10px 30px;
+            padding: 10px 0px;
             
         }
     }
@@ -65,17 +65,19 @@
     margin: 0 0 2em 0;
     list-style-type: none;
     padding: 0;
-    height: 255px;
+    height: auto;
     overflow-y: auto;
     /* width: 15em; */
 }
 .chat21-content-modal-select > li {
     cursor: pointer;
     position: relative;
-    margin: 0px;
+    margin: 15px 0;
     padding: 4px 20px;
-    font-size: 13px;
+    font-size: 1.6em;
     text-align: left;
+    color: #616161;
+    line-height: normal;
 }
 .chat21-content-modal-select > li:hover {
     background-color: rgba(0, 0, 0, 0.03);

@@ -80,7 +80,7 @@
                     <!-- // AVATAR -->
 
                     <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
-                    <div *ngIf="!areAgentsAvailable && isNewConversation == true && availableAgentsStatus == true" 
+                    <div *ngIf="!areAgentsAvailable && isNewConversation && availableAgentsStatus && messages.length == 0" 
                         class="chat21-agents-available chat21-agents-available-is-new-conversation" 
                         [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
                         >
@@ -89,7 +89,7 @@
                     </div>
 
                     <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                    <div *ngIf="isNewConversation == true && availableAgentsStatus == true" 
+                    <div *ngIf="isNewConversation && availableAgentsStatus && messages.length == 0" 
                         class="chat21-header-modal-select chat21-header-modal-select-first-msg" 
                         [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
                         >
@@ -103,7 +103,7 @@
                     </div>
 
                     <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                    <div *ngIf="isNewConversation == true && areAgentsAvailable == true"
+                    <div *ngIf="isNewConversation && areAgentsAvailable && messages.length == 0"
                         class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept" 
                         >
                         {{g.departmentSelected.name}}
