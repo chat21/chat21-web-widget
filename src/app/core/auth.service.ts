@@ -91,6 +91,7 @@ export class AuthService {
   }
 
   authenticateFirebaseCustomToken(token) {
+    console.log("authService.authenticateFirebaseCustomToken", token);
     const that = this;
     // firebase.auth().currentUser.getIdToken()
     // .then(function(idToken) {
@@ -101,7 +102,7 @@ export class AuthService {
     //   // Handle error
     // });
    
-      console.log('token: ', token);
+      // console.log('token: ', token);
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
       .then(function(user) {
@@ -117,7 +118,6 @@ export class AuthService {
           that.obsLoggedUser.next(null);
           console.log('authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage);
       });
-  
   }
 
 
@@ -189,7 +189,7 @@ export class AuthService {
 
   // /jwt/decode?project_id=123
   public decode(token, projectId) {
-    const url = this.API_URL + 'jwt/decode?project_id=' + projectId;
+    const url = this.API_URL + projectId + '/jwt/decode';
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -200,7 +200,7 @@ export class AuthService {
   }
 
   public createToken(token, projectId) {
-    const url = this.API_URL + 'firebase/createtokenext?project_id=' + projectId;
+    const url = this.API_URL + projectId + '/firebase/createtoken';
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
