@@ -51,7 +51,7 @@
                     <!-- TITLE HEADER -->
                     <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
                         <span>{{g.widgetTitle}}</span>
-                        <span id="agent-available-status">areAgentsAvailableText</span>
+                        <span id="agent-available-status">{{areAgentsAvailableText}}</span>
                     </div>
                     <p class="c21-header-writing">{{writingMessage}}</p>
                 
@@ -67,11 +67,159 @@
             <div class="c21-body-container">
     
                 <div class="c21-body-header">
-                    
+
+                    <!-- 
+                    // nk new: simulates a higher header content -- USED ONLY FIRST MSG
+                    ??? a cosa serve ??? 
+                    -->
+                    <!-- <div *ngIf="isNewConversation == true && g.projectid != null" 
+                        class="chat21-sheet-content-themable-section" 
+                        [ngClass]="{'themable-section-agent_not_available':!areAgentsAvailable}" 
+                        [ngStyle]="{'background-color': g.themeColor}">
+                    </div> -->
+                    <!-- // AVATAR -->
+
+                    <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
+                    <div *ngIf="!areAgentsAvailable && isNewConversation == true && availableAgentsStatus == true" 
+                        class="chat21-agents-available chat21-agents-available-is-new-conversation" 
+                        [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
+                        >
+                        <span style="font-size:18px">🤔</span>  
+                        <span>{{ g.ALL_AGENTS_OFFLINE_LABEL }}</span>
+                    </div>
+
+                    <!-- // nk - to edit: display the msg of welcome msg if exist -->
+                    <div *ngIf="isNewConversation == true && availableAgentsStatus == true" 
+                        class="chat21-header-modal-select chat21-header-modal-select-first-msg" 
+                        [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
+                        >
+                        <div *ngIf="areAgentsAvailable">
+                            <span> {{g.LABEL_FIRST_MSG}} </span> 
+                        </div>
+                        <div *ngIf="!areAgentsAvailable">
+                            <span>{{g.LABEL_FIRST_MSG_NO_AGENTS}}</span> 
+                        </div>
+
+                    </div>
+
+                    <!-- // nk - to edit: display the msg of welcome msg if exist -->
+                    <div *ngIf="isNewConversation == true && areAgentsAvailable == true"
+                        class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept" 
+                        >
+                        {{g.departmentSelected.name}}
+                    </div>
+
                 </div>
+
 
                 <div class="c21-body-content">
 
+                    <!-- CONTENT -->
+                    <div [class.active]="!isNewConversation && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
+                        <div class="chat21-bounce1"></div>
+                        <div class="chat21-bounce2"></div>
+                        <div class="chat21-bounce3"></div>
+                        <span>loading</span>
+                    </div>
+
+                    <div  id="chat21-sheet-content" class="chat21-sheet-content">
+                        <div class="chat21-conversation-parts-container" style="height:calc(100% - 0px); overflow-y: hidden;">
+                            <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
+                                
+                                <div id="{{idDivScroll}}">
+
+                                    <div *ngFor="let message of messages">
+
+                                        <!-- message sender:: -->
+                                        <div *ngIf="message.sender == g.senderId;" class="msg_container base_sent">
+                                            
+                                            <div class="messages msg_sent primary-color" [ngStyle]=styleSecondColor>
+                                                
+                                                <!-- message type:: image -->
+                                                <img *ngIf="message.type == 'image'" class="message-contentX message-content-imageX" 
+                                                    [src]="message.metadata.src" 
+                                                    [width]="getSizeImg(message).width"
+                                                    [height]="getSizeImg(message).height" 
+                                                />
+                                                
+                                                <!-- message type:: text -->
+                                                <div *ngIf="message.type == 'text'">
+                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                                    <ng-template #contentPopup>
+                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                    </ng-template>
+                                                    <ng-template #contentNewTab>
+                                                        <p [innerHTML]="message.text | linky"></p>
+                                                    </ng-template>
+                                                </div>
+
+                                            </div>
+                                            
+                                            <!-- icon status message -->
+                                            <div class="status-message">
+                                                <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
+                                                <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
+                                                <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
+                                                <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <!-- message recipient:: -->
+                                        <div *ngIf="message.sender != g.senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
+                                        <div *ngIf="message.sender != g.senderId;" class="msg_container base_receive">
+                                            
+                                            <div class="content-avatar">
+                                                <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> 
+                                                -->
+                                                <div class="profile_image">
+                                                    <img src="{{getUrlImgProfile(message.sender)}}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="messages msg_receive">
+
+                                                <!-- message type:: image -->
+                                                <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" 
+                                                    [src]="message.metadata.src" 
+                                                    [width]="getSizeImg(message).width"
+                                                    [height]="getSizeImg(message).height" 
+                                                />
+
+                                                <!-- message type:: text -->
+                                                <div *ngIf="message.type == 'text';">
+                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
+                                                    <ng-template #contentPopup>
+                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                    </ng-template>
+                                                    <ng-template #contentNewTab>
+                                                        <p [innerHTML]="message.text | linky"></p>
+                                                    </ng-template>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
+                                            <time>{{message.timestamp | amTimeAgo}}</time>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- <span>&nbsp;</span> -->
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <!---------------------------------------------------->
                 </div>
             
             </div>
@@ -85,143 +233,12 @@
 
 
         
-    <!-- CONTENT -->
-    <div  id="chat21-sheet-content" class="chat21-sheet-content">
-        <!-- // nk new: simulates a higher header content -- USED ONLY FIRST MSG-->
-        <!-- <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
-            class="chat21-sheet-content-themable-section" [ngClass]="{'themable-section-agent_not_available':  !areAgentsAvailable}" [ngStyle]="{'background-color': themeColor}">
-        </div> -->
-        <!-- // AVATAR -->
-       
-
-        <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DEPARTMENTS AND THERE IS NOT PRECHAT-FORM 
-             NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
-        <!-- <div *ngIf="!areAgentsAvailable && !openSelectionDepartment && isNewConversation == true" class="chat21-agents-available chat21-agents-available-is-new-conversation" 
-            [ngStyle]="{'border-top-color': themeForegroundColor}">
-            <span style="font-size:18px">🤔</span>  <span style="position: relative; top: -2px">{{ ALL_AGENTS_OFFLINE_LABEL }}</span>
-        </div> -->
-
-        <!-- // nk - to edit: display the msg of welcome msg if exist -->
-        <!-- <div *ngIf="preChatForm == false && openSelectionDepartment == false && isNewConversation == true && projectid != null" 
-            class="chat21-header-modal-select chat21-header-modal-select-first-msg" [ngClass]="{'first-msg-agent_not_available':  !areAgentsAvailable}" 
-            [ngStyle]="{'border-top-color': themeForegroundColor}">
-
-            <div [ngClass]="{'hide_LABEL_FIRST_MSG' : wellcomeMsg !== ''}">
-                <span *ngIf="areAgentsAvailable"> {{LABEL_FIRST_MSG}} </span> 
-                <span *ngIf="!areAgentsAvailable"> {{LABEL_FIRST_MSG_NO_AGENTS}}</span> 
-            </div>
-            <div [ngClass]="{'display_wellcomeMsg' : wellcomeMsg !== ''}" style="display: none">
-                {{ wellcomeMsg }}
-            </div>
-        </div> -->
-
-        <!-- <div *ngIf="departments && departments.length > 1 && preChatForm == false && openSelectionDepartment == false && isNewConversation == true;"
-            class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept" [ngClass]="{'more-of-one-dept-agent_not_available':  !areAgentsAvailable}">
-            <div>{{departmentSelected?.name}}</div>
-        </div> -->
-        <div [class.active]="isNewConversation == false && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
-            <div class="chat21-bounce1"></div>
-            <div class="chat21-bounce2"></div>
-            <div class="chat21-bounce3"></div>
-            <span>loading</span>
-        </div>
-
-        <div class="chat21-conversation-parts-container" style="height:calc(100% - 0px); overflow-y: hidden;">
-            
-            <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
-                
-                <div id="{{idDivScroll}}">
-
-                    <div *ngFor="let message of messages">
-
-                        <!-- message sender:: -->
-                        <div *ngIf="message.sender == senderId;" class="msg_container base_sent">
-                            
-                            <div class="messages msg_sent primary-color" [ngStyle]=styleSecondColor>
-                                
-                                <!-- message type:: image -->
-                                <img *ngIf="message.type == 'image'" class="message-contentX message-content-imageX" 
-                                    [src]="message.metadata.src" 
-                                    [width]="getSizeImg(message).width"
-                                    [height]="getSizeImg(message).height" 
-                                />
-                                
-                                <!-- message type:: text -->
-                                <div *ngIf="message.type == 'text'">
-                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                    <ng-template #contentPopup>
-                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                    </ng-template>
-                                    <ng-template #contentNewTab>
-                                        <p [innerHTML]="message.text | linky"></p>
-                                    </ng-template>
-                                </div>
-
-                            </div>
-                            
-                            <!-- icon status message -->
-                            <div class="status-message">
-                                <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
-                                <div *ngIf="message.status == MSG_STATUS_SENT" class="icon f21ico-done"></div>
-                                <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon f21ico-done"></div>
-                                <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon f21ico-done_all"></div>
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- message recipient:: -->
-                        <div *ngIf="message.sender != senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
-                        <div *ngIf="message.sender != senderId;" class="msg_container base_receive">
-                            
-                            <div class="content-avatar">
-                                <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> -->
-                                <div class="profile_image">
-                                    <img src="{{getUrlImgProfile(message.sender)}}" />
-                                </div>
-                            </div>
-
-                            <div class="messages msg_receive">
-
-                                <!-- message type:: image -->
-                                <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX" 
-                                    [src]="message.metadata.src" 
-                                    [width]="getSizeImg(message).width"
-                                    [height]="getSizeImg(message).height" 
-                                />
-
-                                <!-- message type:: text -->
-                                <div *ngIf="message.type == 'text';">
-                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-                                    <ng-template #contentPopup>
-                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                    </ng-template>
-                                    <ng-template #contentNewTab>
-                                        <p [innerHTML]="message.text | linky"></p>
-                                    </ng-template>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="time" [ngClass]="{'sender' : message.sender == senderId}">
-                            <time>{{message.timestamp | amTimeAgo}}</time>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- <span>&nbsp;</span> -->
-            </div>
-        </div>
-    </div>
+    
 
     <!-- FOOTER -->
     <div id="chat21-footer">
-
-            <div *ngIf="showButtonToBottom == true" id="chat21-buttonToBottom" (click)="scrollToBottom()">
+            <!--  -->
+            <div *ngIf="showButtonToBottom" id="chat21-buttonToBottom" (click)="scrollToBottom()">
                 <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge">{{NUM_BADGES}}</div>
             </div>
 

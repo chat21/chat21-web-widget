@@ -31,8 +31,8 @@ export class ConversationComponent implements OnInit {
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
-  @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
-  @Input() departmentSelected: string;
+  // @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
@@ -63,6 +63,7 @@ export class ConversationComponent implements OnInit {
   userEmail: string;
   userFullname: string;
   preChatForm = false;
+  themeColor50: string;
 
 
   textInputTextArea: String;
@@ -75,6 +76,7 @@ export class ConversationComponent implements OnInit {
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
 
   isNewConversation = true;
+  availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: MessageModel[];
 
   attributes: any;
@@ -86,8 +88,8 @@ export class ConversationComponent implements OnInit {
   subscriptions: Subscription[] = [];
 
   // ========= begin::agent availability
-  private areAgentsAvailableText: string;
-  private areAgentsAvailable: Boolean = false;
+  public areAgentsAvailableText: string;
+  public areAgentsAvailable: Boolean = false;
   // ========= end::agent availability
 
 
@@ -110,20 +112,24 @@ export class ConversationComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(' ngOnInit: app-conversation ');
+    this.initAll();
+    console.log(' ngOnInit: app-conversation ', this.g);
     console.log(' recipientId: ', this.recipientId);
-    console.log(' senderId: ', this.senderId);
+    console.log(' senderId: ', this.g.senderId);
     console.log(' projectid: ', this.g.projectid);
     console.log(' channelType: ', this.g.channelType);
-    console.log(' onSelectDepartment: ', this.departmentSelected);
-    this.initAll();
-    this.scrollToBottom();
+    console.log(' onSelectDepartment: ', this.g.departmentSelected);
+
+    // this.scrollToBottom();
+    this.setFocusOnId('chat21-main-message-context');
   }
 
   /**
    * do per scontato che this.userId esiste!!!
    */
   initAll() {
+    this.themeColor50 = this.g.themeColor + '7F';
+
     console.log(' ---------------- 1: setAvailableAgentsStatus ---------------- ');
     this.setAvailableAgentsStatus();
 
@@ -135,6 +141,8 @@ export class ConversationComponent implements OnInit {
 
     console.log(' ---------------- 4: initializeChatManager ------------------- ');
     this.initializeChatManager();
+
+    //this.checkListMessages();
   }
 
 
@@ -144,18 +152,20 @@ export class ConversationComponent implements OnInit {
    * per verificare se c'è un agent disponibile
    */
   private setAvailableAgentsStatus() {
+    const that = this;
     this.agentAvailabilityService
     .getAvailableAgents(this.g.projectid)
     .subscribe( (availableAgents) => {
       console.log('availableAgents', availableAgents);
       if (availableAgents.length <= 0) {
-        this.areAgentsAvailable = false;
-        this.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
+        that.areAgentsAvailable = false;
+        that.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
       } else {
-        this.areAgentsAvailable = true;
-        this.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+        that.areAgentsAvailable = true;
+        that.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
       }
-      console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
+      that.availableAgentsStatus = true;
+      console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.areAgentsAvailableText);
     }, (error) => {
       console.error('setOnlineStatus::setAvailableAgentsStatus', error);
     }, () => {
@@ -177,26 +187,24 @@ export class ConversationComponent implements OnInit {
     *    generateUidConversation
   */
   private setConversation() {
-    console.log('setConversation recipientId: ', this.recipientId);
-    if ( !this.recipientId ) { this.recipientId = this.setRecipientId(this.recipientId); }
-    if ( !this.g.channelType ) { this.g.channelType = this.setChannelType(this.recipientId); }
-    this.conversationWith = this.recipientId;
-    console.log('createConversation.recipientId', this.recipientId);
+    console.log('setConversation recipientId: ', this.g.recipientId, this.g.channelType);
+    if ( !this.g.recipientId ) { this.g.recipientId = this.setRecipientId(); }
+    if ( !this.g.channelType ) { this.g.channelType = this.setChannelType(); }
+    this.conversationWith = this.g.recipientId;
+    console.log('createConversation.recipientId', this.g.recipientId);
     console.log('createConversation.channelType', this.g.channelType);
-    console.log('createConversation.senderId', this.senderId);
+    console.log('createConversation.senderId', this.g.senderId);
   }
 
   /**
    *
    */
-  private setRecipientId(recipientId) {
+  private setRecipientId() {
     let recipientIdTEMP;
-    if (!recipientId) {
-      recipientIdTEMP = localStorage.getItem(this.senderId);
-      if (!recipientIdTEMP) {
-        // questa deve essere sincrona!!!!
-        recipientIdTEMP = this.messagingService.generateUidConversation(this.senderId);
-      }
+    recipientIdTEMP = localStorage.getItem(this.g.senderId);
+    if (!recipientIdTEMP) {
+      // questa deve essere sincrona!!!!
+      recipientIdTEMP = this.messagingService.generateUidConversation(this.g.senderId);
     }
     return recipientIdTEMP;
   }
@@ -204,14 +212,12 @@ export class ConversationComponent implements OnInit {
   /**
    *
    */
-  private setChannelType(recipientId) {
+  private setChannelType() {
     let channelTypeTEMP = CHANNEL_TYPE_GROUP;
-    if (recipientId) {
-      if (recipientId.indexOf('group') !== -1) {
-        channelTypeTEMP = CHANNEL_TYPE_GROUP;
-      } else if (!this.g.projectid) {
-        channelTypeTEMP = CHANNEL_TYPE_DIRECT;
-      }
+    if (this.recipientId.indexOf('group') !== -1) {
+      channelTypeTEMP = CHANNEL_TYPE_GROUP;
+    } else if (!this.g.projectid) {
+      channelTypeTEMP = CHANNEL_TYPE_DIRECT;
     }
     return channelTypeTEMP;
   }
@@ -222,9 +228,9 @@ export class ConversationComponent implements OnInit {
    *  2 - connect: recupero ultimi X messaggi
    */
   private connectConversation() {
-      this.messagingService.initialize( this.senderId, this.g.tenant, this.g.channelType );
-      this.upSvc.initialize(this.senderId, this.g.tenant, this.conversationWith);
-      this.contactService.initialize(this.senderId, this.g.tenant, this.conversationWith);
+      this.messagingService.initialize( this.g.senderId, this.g.tenant, this.g.channelType );
+      this.upSvc.initialize(this.g.senderId, this.g.tenant, this.conversationWith);
+      this.contactService.initialize(this.g.senderId, this.g.tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
   }
@@ -312,7 +318,7 @@ export class ConversationComponent implements OnInit {
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
       console.log('Subscription NEW MSG');
-      if ( that.startScroll || newMessage.sender === that.senderId) {
+      if ( that.startScroll || newMessage.sender === that.g.senderId) {
         that.scrollToBottom();
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
@@ -658,7 +664,7 @@ export class ConversationComponent implements OnInit {
         // // that.badgeNewMessages = 0;
       } catch (err) {
         console.log('RIPROVO ::');
-        that.scrollToBottom();
+        //that.scrollToBottom();
       }
     }, 0);
   }
@@ -931,4 +937,6 @@ export class ConversationComponent implements OnInit {
     this.eventClose.emit();
   }
 
+
+  
 }

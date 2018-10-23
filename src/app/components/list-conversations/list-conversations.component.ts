@@ -50,6 +50,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   initialize() {
+    this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
     this.themeForegroundColor = this.g.themeForegroundColor;

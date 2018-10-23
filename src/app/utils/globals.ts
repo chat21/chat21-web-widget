@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
+import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
+import { DepartmentModel } from '../../models/department';
 // tslint:disable-next-line:max-line-length
 import { CALLOUT_TIMER_DEFAULT, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from '../utils/constants';
 
@@ -9,17 +11,24 @@ export class Globals {
 
   CLIENT_BROWSER = navigator.userAgent;
   attributes: any;
+  isMobile: boolean;
+  default_settings: any; /** setting for triggetLoadParamsEvent */
+  filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
 
+  wellcomeTitle: string;
+
+  isLogged: boolean;
   senderId: string;
-  isOpenHome: boolean;
   BUILD_VERSION: string;
   baseLocation: string;
-  isOpenPrechatForm: boolean;
-  isOpenSelectionDepartment: boolean;
-  isOpenConversation: boolean;
   token: string;
+  departmentSelected: DepartmentModel;
 
   // params url
+  autoStart: boolean;
+  isShown: boolean;
+  startFromHome: boolean;
+
   tenant: string;
   recipientId: string;
   projectid: string;
@@ -45,6 +54,8 @@ export class Globals {
   allowTranscriptDownload: boolean;
   showWidgetNameInConversation: boolean;
   userToken: string;
+
+  startHidden: boolean;
 
 
 
@@ -74,6 +85,8 @@ export class Globals {
   BUTTON_DOWNLOAD_TRANSCRIPT: string;
   RATE_CHAT: string;
   WELLCOME_TITLE: string;
+  WELLCOME_MSG: string;
+  logoChat: string;
 
 
 
@@ -90,8 +103,25 @@ export class Globals {
 
   initialize(el) {
 
+    // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
+    // for retrocompatibility 0.9 (without tiledesk.js)
+    this.baseLocation = 'https://widget.tiledesk.com';
+    if (window['tiledesk']) {
+        this.baseLocation = window['tiledesk'].getBaseLocation();
+    }
+    this.lang = 'en';
+
+    // if the lang is passed as parameter use it, otherwise use a default language ("en")
+    this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
+    console.log(' ---------------- 5 ---------------- ');
+    this.translate();
+    console.log(' ---------------- 6 ---------------- ');
+
+
     this.initParameters();
     console.log(' ---------------- B1 ---------------- ');
+
+
 
     this.getVariablesFromAttributeHtml(el);
     console.log(' ---------------- B2 ---------------- ');
@@ -104,6 +134,9 @@ export class Globals {
     this.getVariableUrlParameters();
     console.log(' ---------------- B4 ---------------- ');
 
+
+    this.setDefaultSettings();
+
      // 'chatName', this.chatName,
      console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
      'widgetTitle', this.widgetTitle, 'poweredBy', this.poweredBy,
@@ -115,47 +148,60 @@ export class Globals {
      'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor,
      'allowTranscriptDownload', this.allowTranscriptDownload);
 
-
-      // if the lang is passed as parameter use it, otherwise use a default language ("en")
-      this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
-      console.log(' ---------------- 5 ---------------- ');
-
-      // this.translate();
-      this.translate();
-      console.log(' ---------------- 6 ---------------- ');
-
       this.attributes = this.setAttributes();
 
   }
 
 
-
-
   initParameters() {
-    this.tenant = environment.tenant;
+    // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
+    this.autoStart = true; /** setAuthentication and startUI */
+    this.isShown = true; /** show/hide all widget */
+    this.isOpen = false; /** show/hide window widget */
+
+    this.startFromHome = true; /** start from Home or Conversation */
+    this.default_settings = {}; /** settings for  */
+
+    this.projectid = '';
     this.preChatForm = false;
-    this.widgetTitle = 'TileDesk';
-    this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
-    this.isOpen = false;
-    this.fullscreenMode = false;
-    this.themeColor = '#2a6ac1';
-    this.themeForegroundColor = '#ffffff';
-    this.channelType = CHANNEL_TYPE_GROUP;
     this.align = 'right';
+
     this.calloutTimer = -1;
-    this.hideHeaderCloseButton = false;
-    this.wellcomeMsg = '';
     this.calloutTitle = '';
     this.calloutMsg = '';
-    this.allowTranscriptDownload = false;
-    this.showWidgetNameInConversation = false;
-    
 
-    // for retrocompatibility 0.9 (without tiledesk.js)
-    this.baseLocation = 'https://widget.tiledesk.com';
-    if (window['tiledesk']) {
-        this.baseLocation = window['tiledesk'].getBaseLocation();
-    }
+    this.userFullname = '';
+    this.userEmail = '';
+
+    this.widgetTitle = 'TileDesk';
+
+    this.hideHeaderCloseButton = false;
+
+    this.fullscreenMode = false;
+
+    this.themeColor = '#2a6ac1';
+    this.themeForegroundColor = '#ffffff';
+
+    this.showWidgetNameInConversation = false;
+    this.allowTranscriptDownload = false;
+
+    this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+    this.startHidden = false;
+    // ============ END: SET EXTERNAL PARAMETERS ==============//
+
+    this.tenant = environment.tenant;
+    this.channelType = CHANNEL_TYPE_GROUP;
+
+    this.isMobile = false;
+    this.isLogged = false; /** if it's logged */
+    this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
+
+    this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
+    this.logoChat = './assets/images/tiledesk_logo_white_small.png';
+    this.wellcomeTitle = this.WELLCOME_TITLE;
+    this.wellcomeMsg = this.WELLCOME_MSG;
+
+    // ============ END: SET INTERNAL PARAMETERS ==============//
   }
 
 
@@ -277,8 +323,29 @@ export class Globals {
     if (TEMP) {
       this.userToken = TEMP;
     }
-  }
+    TEMP = window['tiledeskSettings']['startHidden'];
+    if (TEMP) {
+      this.startHidden = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['startFromHome'];
+    if (TEMP) {
+      this.startFromHome = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['logoChat'];
+    if (TEMP) {
+      this.logoChat = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['wellcomeTitle'];
+    if (TEMP) {
+      this.wellcomeTitle = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['wellcomeMsg'];
+    if (TEMP) {
+      this.wellcomeMsg = TEMP;
+    }
 
+  }
+  
 
   /**
    * tenant:
@@ -374,6 +441,26 @@ export class Globals {
     if (TEMP) {
       this.calloutMsg = TEMP;
     }
+
+    TEMP = el.nativeElement.getAttribute('startHidden');
+    if (TEMP) {
+      this.startHidden = TEMP;
+    }
+
+    TEMP = el.nativeElement.getAttribute('startFromHome');
+    if (TEMP) {
+      this.startFromHome = TEMP;
+    }
+
+    TEMP = el.nativeElement.getAttribute('logoChat');
+    if (TEMP) {
+      this.logoChat = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('wellcomeTitle');
+    if (TEMP) {
+      this.wellcomeTitle = TEMP;
+    }
+
   }
 
 
@@ -451,6 +538,20 @@ export class Globals {
     if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
       this.showWidgetNameInConversation = true;
     }
+    if (this.getParameterByName('tiledesk_startHidden')) {
+      this.startHidden = true;
+    }
+    if (this.getParameterByName('tiledesk_startFromHome')) {
+      this.startFromHome = true;
+    }
+
+    if (this.getParameterByName('tiledesk_logoChat')) {
+      this.logoChat = this.getParameterByName('tiledesk_logoChat');
+    }
+    if (this.getParameterByName('tiledesk_wellcomeTitle')) {
+      this.wellcomeTitle = this.getParameterByName('tiledesk_wellcomeTitle');
+    }
+
   }
 
   translate() {
@@ -479,6 +580,7 @@ export class Globals {
     this.BUTTON_DOWNLOAD_TRANSCRIPT = this.translatorService.translate('BUTTON_DOWNLOAD_TRANSCRIPT');
     this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
     this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
+    this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
   }
 
 
@@ -526,5 +628,21 @@ export class Globals {
     }
     return attributes;
   }
+
+  setDefaultSettings() {
+    this.default_settings =  {
+      'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
+      'widgetTitle': this.widgetTitle, 'poweredBy': this.poweredBy,
+      'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
+      'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
+      'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
+      'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
+      'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
+      'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
+      'allowTranscriptDownload': this.allowTranscriptDownload,
+      'userToken': this.userToken
+    };
+  }
+
 
 }

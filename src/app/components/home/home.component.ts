@@ -22,7 +22,8 @@ export class HomeComponent implements OnInit {
   tenant;
   widgetTitle;
   wellcomeMsg;
-  WELLCOME_TITLE;
+  wellcomeTitle;
+  themeColor50: string;
   // ========= end:: component variables ======= //
 
   constructor(
@@ -39,7 +40,9 @@ export class HomeComponent implements OnInit {
     this.themeForegroundColor = this.g.themeForegroundColor;
     this.widgetTitle = this.g.widgetTitle;
     this.wellcomeMsg = this.g.wellcomeMsg;
-    this.WELLCOME_TITLE = this.g.WELLCOME_TITLE;
+    this.wellcomeTitle = this.g.wellcomeTitle;
+    // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
+    this.themeColor50 = this.g.themeColor + '7F';
   }
 
 

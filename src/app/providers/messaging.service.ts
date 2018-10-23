@@ -185,7 +185,7 @@ export class MessagingService {
           const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
           // console.log('index *****', index, childSnapshot.key);
           if (index < 0) {
-            console.log('--------> ADD MSG', index, msg);
+            console.log('--------> ADD MSG IMG', index, msg);
             that.messages.push(msg);
           }
         } else {
@@ -625,7 +625,7 @@ export class MessagingService {
     // creo il nodo conversazione generando un custom uid
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
-    sessionStorage.setItem(uid, key);
+    //sessionStorage.setItem(uid, key);
     localStorage.setItem(uid, key);
     this.conversationWith = key;
     return key;

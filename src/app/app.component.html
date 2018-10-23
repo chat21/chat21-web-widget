@@ -1,5 +1,5 @@
 
-<div id="chat21-container" [class.active]="isShown"> 
+<div id="chat21-container" [class.active]="g.isShown"> 
     <!-- [class.active]="isLogged" -->
 
     <!-- 
@@ -10,9 +10,9 @@
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
-    <div *ngIf="isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '8px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
+    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '8px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
         
-        <div *ngIf="isOpenHome && senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
             <app-home 
             [senderId]="senderId"
             (eventClose)="returnClose()" 
@@ -21,11 +21,9 @@
             ></app-home>
         </div>
 
-        <div *ngIf="isOpenConversation && senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
             <app-conversation 
             [recipientId]="recipientId"
-            [senderId]="senderId"
-            [departmentSelected]="departmentSelected"
             (eventClose)="returnCloseConversation()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
@@ -76,6 +74,8 @@
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
     -->
-   <app-eyeeye-catcher-card></app-eyeeye-catcher-card>                                 
+    <app-eyeeye-catcher-card *ngIf="g.senderId"
+    (eventOpenChat)="returnOpenChat()" 
+    ></app-eyeeye-catcher-card>                            
     
 </div>

@@ -5,17 +5,35 @@
   <title>Tilechat Widget</title>
   <base href="./">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
+    <div id="idShow">
+      SHOW
+    </div>
+    <div id="idHide">
+      HIDE
+    </div>
+    <div id="idOpen">
+      OPEN
+    </div>
+    <div id="idClose">
+      CLOSE
+    </div>
+    ?tiledesk_wellcomeTitle=ciao%20a%20tutti&tiledesk_wellcomemsg=bene%20e%20benvenuti&tiledesk_logoChat=http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png&tiledesk_wellcomemsg=bene%20e%20...
     <script type="application/javascript">
       window.tiledeskSettings = 
           {
               projectid: "5b55e806c93dde00143163dd",
               development: true,
               calloutTimer: 10,
-              userFullname: "Andrea Leo",
-              userEmail: "andrea.leo@f21.it",
-             // preChatForm: true
+              userFullname: "Dario",
+              userEmail: "czone555@gmail.com",
+              wellcomeTitle: "Benvenuti su questa chat",
+              wellcomeMsg: "Come possiamo aiutarti?",
+              logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
+              startFromHome: true,
+              preChatForm: true
           };
 
       (function(d, s, id) {
@@ -36,11 +54,13 @@
 
       window.tileDeskAsyncInit = function() {
       window.tiledesk.on('loadParams', function(event_data) {
-         window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
-         window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
-         window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
-         //window.tiledesk.show();
-         //window.tiledesk.hide();
+        window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
+        window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
+        window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
+        //window.tiledesk.show();
+        window.tiledesk.hide();
+        window.tiledesk.open();
+        //window.tiledesk.close();
        });
        window.tiledesk.on('beforeMessageSend', function(event_data) {
          var message =  event_data.detail;
@@ -52,6 +72,25 @@
        });
       }
     </script>
+
+    <script>
+    $( "#idShow" ).click(function() {
+      alert( "Handler for .click() idShow." );
+      window.tiledesk.show();
+    });
+    $( "#idHide" ).click(function() {
+      alert( "Handler for .click() idHide." );
+      window.tiledesk.hide();
+    });
+    $( "#idOpen" ).click(function() {
+      alert( "Handler for .click() idOpen." );
+      window.tiledesk.open();
+    });
+    $( "#idClose" ).click(function() {
+      alert( "Handler for .click() idClose." );
+      window.tiledesk.close();
+    });
+  </script>
 
 </body>
 </html>

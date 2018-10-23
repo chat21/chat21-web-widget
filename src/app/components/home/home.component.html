@@ -24,13 +24,13 @@
 
                 <!-- LOGO HEADER -->
                 <div class="c21-logo">
-                    <img src="./assets/images/tiledesk_logo_white_small.png" alt="logo">
+                    <img src="{{g.logoChat}}" alt="logo">
                 </div>
 
                 <!-- MESSAGE HEADER -->
                 <div class="c21-text">
-                    <div class="c21-text-wellcome">{{g.WELLCOME_TITLE}} {{widgetTitle}} 👋</div>          
-                    <div *ngIf="!wellcomeMsg" class="c21-text-intro">{{wellcomeMsg}} ciao benvenuto test testo messaggio di benvenuto lunghetto</div>
+                    <div class="c21-text-wellcome">{{g.wellcomeTitle}} 👋</div>          
+                    <div *ngIf="g.wellcomeMsg" class="c21-text-intro">{{g.wellcomeMsg}}</div>
                 </div>
 
             </div>
@@ -50,7 +50,7 @@
 
                 <div class="c21-cards">
 
-                    <div class="c21-card">
+                    <div class="c21-card" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
 
                         <app-list-conversations 
                         [senderId]="senderId"

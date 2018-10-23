@@ -44,14 +44,13 @@ export class LauncherButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isOpen = this.g.isOpen;
     console.log('open_close_handler BUTTON 1: ', this.g.isOpen);
   }
 
   openCloseWidget() {
-    console.log('1 open_close_handler BUTTON: ', this.isOpen);
-    this.isOpen = !this.isOpen;
-    console.log('2 open_close_handler BUTTON: ', this.isOpen);
-    this.eventOpenCloseWidget.emit( this.isOpen );
+    console.log('1 open_close_handler BUTTON: ', this.g.isOpen);
+    this.g.isOpen = !this.g.isOpen;
+    console.log('2 open_close_handler BUTTON: ', this.g.isOpen);
+    this.eventOpenCloseWidget.emit( this.g.isOpen );
   }
 }
