@@ -91,7 +91,7 @@ export class AuthService {
   }
 
   authenticateFirebaseCustomToken(token) {
-    console.log("authService.authenticateFirebaseCustomToken", token);
+    console.log('authService.authenticateFirebaseCustomToken', token);
     const that = this;
     // firebase.auth().currentUser.getIdToken()
     // .then(function(idToken) {
@@ -199,7 +199,7 @@ export class AuthService {
       .map((response) => response.json());
   }
 
-  public createToken(token, projectId) {
+  public createFirebaseToken(token, projectId) {
     const url = this.API_URL + projectId + '/firebase/createtoken';
 
     const headers = new Headers();
