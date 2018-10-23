@@ -356,12 +356,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('signInWithCustomToken token ', token);
         // console.log('this.g', this.g);
         this.g.userToken = token;
-        this.authService.createToken(token, this.g.projectid)
+        this.authService.createFirebaseToken(token, this.g.projectid)
         .subscribe(response => {
-            const firebaseToken = response.firebaseToken;
-            console.log('firebaseToken', firebaseToken);
-            this.g.userToken = firebaseToken;
-            this.authService.authenticateFirebaseCustomToken(firebaseToken);
+
+            this.authService.decode(token, this.g.projectid).subscribe(resDec => {
+                console.log('resDec', resDec);
+                const firebaseToken = response.firebaseToken;
+                console.log('firebaseToken', firebaseToken);
+                this.g.userToken = firebaseToken;
+                this.authService.authenticateFirebaseCustomToken(firebaseToken);
+            });
+
         });
     }
 
