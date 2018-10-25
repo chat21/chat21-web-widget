@@ -3,63 +3,34 @@ import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
 import { DepartmentModel } from '../../models/department';
-// tslint:disable-next-line:max-line-length
-import { CALLOUT_TIMER_DEFAULT, CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, MSG_STATUS_SENDING, MAX_WIDTH_IMAGES, UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, BCK_COLOR_CONVERSATION_SELECTED } from '../utils/constants';
+import { getParameterByName } from '../utils/utils';
+
+import { CHANNEL_TYPE_GROUP } from '../utils/constants';
+import { TemplateBindingParseResult } from '@angular/compiler';
 
 @Injectable()
 export class Globals {
 
-  CLIENT_BROWSER = navigator.userAgent;
-  attributes: any;
-  isMobile: boolean;
-  default_settings: any; /** setting for triggetLoadParamsEvent */
+  // ============ BEGIN: SET FUNCTION BY UTILS ==============//
+  getParameterByName = getParameterByName;
+
+  // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
+  senderId;
+  tenant;
+  channelType;
+  default_settings;
+  isMobile;
+  isLogged;
+  BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
-
-  wellcomeTitle: string;
-
-  isLogged: boolean;
-  senderId: string;
-  BUILD_VERSION: string;
   baseLocation: string;
-  token: string;
   departmentSelected: DepartmentModel;
-
-  // params url
-  autoStart: boolean;
-  isShown: boolean;
-  startFromHome: boolean;
-
-  tenant: string;
-  recipientId: string;
-  projectid: string;
-  widgetTitle: string;
-  poweredBy: string;
-  userId: string;
-  userEmail: string;
-  userPassword: string;
-  userFullname: string;
-  preChatForm: boolean;
-  isOpen: boolean;
-  channelType: string;
+  attributes: any;
+  token: string;
   lang: string;
-  calloutTimer: number;
-  align: string;
-  hideHeaderCloseButton: boolean;
-  wellcomeMsg: string;
-  calloutTitle: string;
-  calloutMsg: string;
-  fullscreenMode: boolean;
-  themeColor: string;
-  themeForegroundColor: string;
-  allowTranscriptDownload: boolean;
-  showWidgetNameInConversation: boolean;
-  userToken: string;
-
-  startHidden: boolean;
 
 
-
-  // text used within the html
+  // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
   LABEL_START_NW_CONV: string;
   LABEL_FIRST_MSG: string;
@@ -86,139 +57,289 @@ export class Globals {
   RATE_CHAT: string;
   WELLCOME_TITLE: string;
   WELLCOME_MSG: string;
-  logoChat: string;
 
+
+  // ============ BEGIN: EXTERNAL PARAMETERS ==============//
+  autoStart;
+  isShown;
+  isOpen;
+  startFromHome;
+  projectid;
+  preChatForm;
+  align;
+  calloutTimer;
+  calloutTitle;
+  calloutMsg;
+  userFullname;
+  userEmail;
+  widgetTitle;
+  fullscreenMode;
+  themeColor;
+  themeForegroundColor;
+  showWidgetNameInConversation;
+  allowTranscriptDownload;
+  poweredBy;
+  logoChat;
+  wellcomeTitle;
+  wellcomeMsg;
+  recipientId;
+  userId;
+  userPassword;
+  userToken;
 
 
   constructor(
     private translatorService: TranslatorService
   ) {
-    this.tenant = '';
-    this.senderId = '';
-    this.themeColor = '';
-    this.themeForegroundColor = '';
-    this.poweredBy = '';
   }
 
 
   initialize(el) {
-
+    console.log(' ---------------- START INIZIALIZE  ---------------- ');
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
     // for retrocompatibility 0.9 (without tiledesk.js)
+    console.log(' ---------------- 1: baseLocation ---------------- ');
     this.baseLocation = 'https://widget.tiledesk.com';
     if (window['tiledesk']) {
-        this.baseLocation = window['tiledesk'].getBaseLocation();
+      this.baseLocation = window['tiledesk'].getBaseLocation();
     }
-    this.lang = 'en';
 
+    console.log(' ---------------- 2: set lang ---------------- ');
+    this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
     this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
-    console.log(' ---------------- 5 ---------------- ');
+
+    console.log(' ---------------- 3: translate ---------------- ');
     this.translate();
-    console.log(' ---------------- 6 ---------------- ');
 
-
+    console.log(' ---------------- 4: initParameters ---------------- ');
     this.initParameters();
-    console.log(' ---------------- B1 ---------------- ');
 
-
-
+    console.log(' ---------------- 5: getVariablesFromAttributeHtml ---------------- ');
     this.getVariablesFromAttributeHtml(el);
-    console.log(' ---------------- B2 ---------------- ');
 
-    // this.getVariablesFromSettings();
+    console.log(' ---------------- 6: getVariablesFromSettings ---------------- ');
     this.getVariablesFromSettings();
-    console.log(' ---------------- B3 ---------------- ');
 
-    // this.getVariableUrlParameters();
+    console.log(' ---------------- 7: getVariableUrlParameters ---------------- ');
     this.getVariableUrlParameters();
-    console.log(' ---------------- B4 ---------------- ');
 
-
+    console.log(' ---------------- 8: setDefaultSettings ---------------- ');
     this.setDefaultSettings();
 
-     // 'chatName', this.chatName,
-     console.log('tenant', this.tenant, 'recipientId', this.recipientId, 'projectid', this.projectid,
-     'widgetTitle', this.widgetTitle, 'poweredBy', this.poweredBy,
-     'userId', this.userId, 'userEmail', this.userEmail, 'userPassword', this.userPassword,
-     'userFullname', this.userFullname, 'preChatForm', this.preChatForm, 'isOpen', this.isOpen,
-     'channelType', this.channelType, 'lang', this.lang, 'calloutTimer', this.calloutTimer,
-     'align ', this.align, 'hideHeaderCloseButton ', this.hideHeaderCloseButton, 'wellcomeMsg ', this.wellcomeMsg,
-     'calloutTitle ', this.calloutTitle, 'calloutMsg ', this.calloutMsg, 'fullscreenMode', this.fullscreenMode,
-     'themeColor', this.themeColor, 'themeForegroundColor', this.themeForegroundColor,
-     'allowTranscriptDownload', this.allowTranscriptDownload);
-
-      this.attributes = this.setAttributes();
+    console.log(' ---------------- 9: setAttributes ---------------- ');
+    this.attributes = this.setAttributes();
 
   }
 
+  /**
+   * 3: translate
+   */
+  translate() {
+    this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
+    this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
+    this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
+    this.LABEL_FIRST_MSG_NO_AGENTS = this.translatorService.translate('LABEL_FIRST_MSG_NO_AGENTS');
+    this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
+    this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
+    this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME');
+    this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
+    this.LABEL_FIELD_EMAIL = this.translatorService.translate('LABEL_FIELD_EMAIL');
+    this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
+    this.LABEL_WRITING = this.translatorService.translate('LABEL_WRITING');
+    this.AGENT_NOT_AVAILABLE = this.translatorService.translate('AGENT_NOT_AVAILABLE');
+    this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
+    this.GUEST_LABEL = this.translatorService.translate('GUEST_LABEL');
+    this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
+    this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
+    this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
+    this.ALERT_LEAVE_CHAT = this.translatorService.translate('ALERT_LEAVE_CHAT');
+    this.YES = this.translatorService.translate('YES');
+    this.NO = this.translatorService.translate('NO');
+    this.BUTTON_CLOSE_TO_ICON = this.translatorService.translate('BUTTON_CLOSE_TO_ICON');
+    this.BUTTON_EDIT_PROFILE = this.translatorService.translate('BUTTON_EDIT_PROFILE');
+    this.BUTTON_DOWNLOAD_TRANSCRIPT = this.translatorService.translate('BUTTON_DOWNLOAD_TRANSCRIPT');
+    this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
+    this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
+    this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
+  }
 
+  /**
+   * 4: initParameters
+   */
   initParameters() {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
-    this.autoStart = true; /** setAuthentication and startUI */
-    this.isShown = true; /** show/hide all widget */
-    this.isOpen = false; /** show/hide window widget */
+    this.autoStart = true; // da aggiungere!!!!        /** start Authentication and startUI */
+    this.isShown = true; // da aggiungere!!!!          /** show/hide all widget -> js call: showAllWidget */
+    this.isOpen = false;                        /** show/hide window widget -> js call: hideAllWidget */
+    this.startFromHome = false; // da aggiungere!!!!   /** start from Home or Conversation */
 
-    this.startFromHome = false; /** start from Home or Conversation */
-    this.default_settings = {}; /** settings for  */
+    // tslint:disable-next-line:max-line-length
+    this.projectid = '';                        /** The TileDesk project id. Find your TileDesk ProjectID in the TileDesk Dashboard under the Widget menu. */
 
-    this.projectid = '';
-    this.preChatForm = false;
-    this.align = 'right';
+    // tslint:disable-next-line:max-line-length
+    this.preChatForm = false;                   /** You can require customers to enter information like name and email before sending a chat message by enabling the Pre-Chat form. Permitted values: true, false. The default value is false. */
 
-    this.calloutTimer = -1;
-    this.calloutTitle = '';
-    this.calloutMsg = '';
+    // tslint:disable-next-line:max-line-length
+    this.align = 'right';                       /** if it is true, the chat window is automatically open when the widget is loaded. Permitted values: true, false. Default value : false */
 
-    this.userFullname = '';
-    this.userEmail = '';
+    // tslint:disable-next-line:max-line-length
+    this.calloutTimer = -1;                     /** Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds), 10 (After 10 seconds). */
 
-    this.widgetTitle = 'TileDesk';
+    this.calloutTitle = ''; // da aggiungere!!!!       /** title box callout */
+    this.calloutMsg = ''; // da aggiungere!!!!         /** message box callout */
 
-    this.hideHeaderCloseButton = false;
+    // tslint:disable-next-line:max-line-length
+    this.userFullname = '';                     /** userFullname: Current user fullname. Set this parameter to specify the visitor fullname. */
+    this.userEmail = '';                        /** Current user email address. Set this parameter to specify the visitor email address.  */
 
-    this.fullscreenMode = false;
+    // tslint:disable-next-line:max-line-length
+    this.widgetTitle = 'TileDesk';              /** Set the widget title label shown in the widget header. Value type : string. The default value is Tiledesk. */
 
-    this.themeColor = '#2a6ac1';
-    this.themeForegroundColor = '#ffffff';
+    // tslint:disable-next-line:max-line-length
+    // ELIMINATA!!! this.hideHeaderCloseButton = false; /** Hide the close button in the widget header. Permitted values: true, false. The default value is false. */
 
-    this.showWidgetNameInConversation = false;
-    this.allowTranscriptDownload = false;
+    // tslint:disable-next-line:max-line-length
+    this.fullscreenMode = false;                /** if it is true, the chat window is open in fullscreen mode. Permitted values: true, false. Default value : false */
 
-    this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
-    this.startHidden = false;
+    // tslint:disable-next-line:max-line-length
+    this.themeColor = '#2a6ac1';                /** allows you to change the main widget's color (color of the header, color of the launcher button, other minor elements). Permitted values: Hex color codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101) */
+
+    // tslint:disable-next-line:max-line-length
+    this.themeForegroundColor = '#ffffff';      /** allows you to change text and icons' color. Permitted values: Hex color codes, e.g. #425635 and RGB color codes, e.g. rgb(66,86,53) */
+
+    // tslint:disable-next-line:max-line-length
+    this.showWidgetNameInConversation = false;  /** If you want to display the widget title in the conversations, set the showWidgetNameInConversation field to true. It is advisable if you need to manage multiple projects. Value type : boolean. The default value is false. */
+    // tslint:disable-next-line:max-line-length
+    this.allowTranscriptDownload = false;       /** allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permitter values: true, false. Default value: false */
+
+    // tslint:disable-next-line:max-line-length
+    this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>'; // da aggiungere!!!! /** link nel footer widget */
+
+    this.logoChat = './assets/images/tiledesk_logo_white_small.png'; /** url img logo */
+    this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
+    this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
-    this.tenant = environment.tenant;
-    this.channelType = CHANNEL_TYPE_GROUP;
 
-    this.isMobile = false;
-    this.isLogged = false; /** if it's logged */
+    // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
+    this.tenant = environment.tenant;           /** name tenant ex: tilechat */
+    this.channelType = CHANNEL_TYPE_GROUP;      /** channelType: group/direct  */
+    this.default_settings = {};                 /** settings for pass variables to js */
+    this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
+    this.isLogged = false;                      /** detect is logged */
     this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
 
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
-    this.logoChat = './assets/images/tiledesk_logo_white_small.png';
-    this.wellcomeTitle = this.WELLCOME_TITLE;
-    this.wellcomeMsg = this.WELLCOME_MSG;
-
     // ============ END: SET INTERNAL PARAMETERS ==============//
+
   }
 
 
   /**
-   * tenant:
-   * recipientId:
-   * projectid:
-   * chatName:
-   * poweredBy:
-   * userId:
-   * userEmail:
-   * userPassword:
-   * userFullname:
-   * preChatForm:
-   * align
-   * callouTimer
-   * hideHeaderCloseButton
+   * 5: getVariablesFromAttributeHtml
+   *
+   */
+  getVariablesFromAttributeHtml(el) {
+    // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+    let TEMP;
+    TEMP = el.nativeElement.getAttribute('tenant');
+    console.log(' TEMP: tenant ', TEMP);
+    if (TEMP !== null) {
+      this.tenant = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('recipientId');
+    if (TEMP !== null) {
+      this.recipientId = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('projectid');
+    if (TEMP !== null) {
+      this.projectid = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('widgetTitle');
+    if (TEMP !== null) {
+      this.widgetTitle = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('poweredBy');
+    if (TEMP !== null) {
+      this.poweredBy = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('userId');
+    if (TEMP !== null) {
+      this.userId = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('userEmail');
+    if (TEMP !== null) {
+      this.userEmail = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('userPassword');
+    if (TEMP !== null) {
+      this.userPassword = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('userFullname');
+    if (TEMP !== null) {
+      this.userFullname = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('preChatForm');
+    if (TEMP !== null) {
+      this.preChatForm = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('isOpen');
+    if (TEMP !== null) {
+      this.isOpen = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('channelType');
+    if (TEMP !== null) {
+      this.channelType = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('lang');
+    if (TEMP !== null) {
+      this.lang = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('align');
+    if (TEMP !== null) {
+      this.align = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('calloutTimer');
+    if (TEMP !== null) {
+      this.calloutTimer = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('wellcomeMsg');
+    if (TEMP !== null) {
+      this.wellcomeMsg = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('calloutTitle');
+    if (TEMP !== null) {
+      this.calloutTitle = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('calloutMsg');
+    if (TEMP !== null) {
+      this.calloutMsg = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('startFromHome');
+    if (TEMP !== null) {
+      this.startFromHome = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('logoChat');
+    if (TEMP !== null) {
+      this.logoChat = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('wellcomeTitle');
+    if (TEMP !== null) {
+      this.wellcomeTitle = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('autoStart');
+    if (TEMP !== null) {
+      this.autoStart = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('isShown');
+    if (TEMP !== null) {
+      this.isShown = (TEMP === true) ? true : false;
+    }
+  }
+
+  /**
+   * 6: getVariablesFromSettings
   */
   getVariablesFromSettings() {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
@@ -227,243 +348,131 @@ export class Globals {
     }
     let TEMP;
     TEMP = window['tiledeskSettings']['tenant'];
-    if (TEMP) {
+
+    if (TEMP !== undefined) {
       this.tenant = TEMP;
     }
     TEMP = window['tiledeskSettings']['recipientId'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.recipientId = TEMP;
     }
     TEMP = window['tiledeskSettings']['projectid'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.projectid = TEMP;
     }
     TEMP = window['tiledeskSettings']['widgetTitle'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.widgetTitle = TEMP;
     }
     TEMP = window['tiledeskSettings']['poweredBy'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.poweredBy = TEMP;
     }
     TEMP = window['tiledeskSettings']['userId'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.userId = TEMP;
     }
     TEMP = window['tiledeskSettings']['userEmail'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.userEmail = TEMP;
     }
     TEMP = window['tiledeskSettings']['userPassword'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.userPassword = TEMP;
     }
     TEMP = window['tiledeskSettings']['userFullname'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.userFullname = TEMP;
     }
     TEMP = window['tiledeskSettings']['preChatForm'];
-    if (TEMP) {
-      this.preChatForm = true;
+    if (TEMP !== undefined) {
+      this.preChatForm = (TEMP === false) ? false : true;
     }
     TEMP = window['tiledeskSettings']['isOpen'];
-    if (TEMP) {
-      this.isOpen = true;
+    if (TEMP !== undefined) {
+      this.isOpen = (TEMP === false) ? false : true;
     }
     TEMP = window['tiledeskSettings']['channelType'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.channelType = TEMP;
     }
     TEMP = window['tiledeskSettings']['lang'];
-    if (TEMP) {
+    if (TemplateBindingParseResult) {
       this.lang = TEMP;
     }
     TEMP = window['tiledeskSettings']['align'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.align = TEMP;
     }
     TEMP = window['tiledeskSettings']['calloutTimer'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.calloutTimer = TEMP;
     }
-    TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
-    if (TEMP) {
-      this.hideHeaderCloseButton = true;
-    }
     TEMP = window['tiledeskSettings']['wellcomeMsg'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
     }
     TEMP = window['tiledeskSettings']['calloutTitle'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.calloutTitle = TEMP;
     }
     TEMP = window['tiledeskSettings']['calloutMsg'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.calloutMsg = TEMP;
     }
     TEMP = window['tiledeskSettings']['fullscreenMode'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.fullscreenMode = TEMP;
     }
     TEMP = window['tiledeskSettings']['themeColor'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.themeColor = TEMP;
     }
     TEMP = window['tiledeskSettings']['themeForegroundColor'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.themeForegroundColor = TEMP;
     }
     TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.allowTranscriptDownload = TEMP;
     }
-
     TEMP = window['tiledeskSettings']['userToken'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.userToken = TEMP;
     }
-    TEMP = window['tiledeskSettings']['startHidden'];
-    if (TEMP) {
-      this.startHidden = TEMP;
-    }
     TEMP = window['tiledeskSettings']['startFromHome'];
-    if (TEMP) {
-      this.startFromHome = TEMP;
+    if (TEMP !== undefined) {
+      this.startFromHome = (TEMP === false) ? false : true;
     }
     TEMP = window['tiledeskSettings']['logoChat'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.logoChat = TEMP;
     }
     TEMP = window['tiledeskSettings']['wellcomeTitle'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.wellcomeTitle = TEMP;
     }
     TEMP = window['tiledeskSettings']['wellcomeMsg'];
-    if (TEMP) {
+    if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['autoStart'];
+    console.log(' autoStart::: ', TEMP);
+    if (TEMP !== undefined) {
+      this.autoStart = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['isShown'];
+    if (TEMP !== undefined) {
+      this.isShown = (TEMP === false) ? false : true;
     }
 
   }
-  
+
+
 
   /**
-   * tenant:
-   * recipientId:
-   * projectid:
-   * chatName:
-   * poweredBy:
-   * userId:
-   * userEmail:
-   * userPassword:
-   * userFullname:
-   * preChatForm:
-   * align
-   * calloutTimer
-   * hideHeaderCloseButton
-  */
-  getVariablesFromAttributeHtml(el) {
-    // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-    let TEMP;
-    TEMP = el.nativeElement.getAttribute('tenant');
-    if (TEMP) {
-      this.tenant = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('recipientId');
-    if (TEMP) {
-      this.recipientId = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('projectid');
-    if (TEMP) {
-      this.projectid = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('widgetTitle');
-    if (TEMP) {
-      this.widgetTitle = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('poweredBy');
-    if (TEMP) {
-      this.poweredBy = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('userId');
-    if (TEMP) {
-      this.userId = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('userEmail');
-    if (TEMP) {
-      this.userEmail = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('userPassword');
-    if (TEMP) {
-      this.userPassword = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('userFullname');
-    if (TEMP) {
-      this.userFullname = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('preChatForm');
-    if (TEMP) {
-      this.preChatForm = true;
-    }
-    TEMP = el.nativeElement.getAttribute('isOpen');
-    if (TEMP) {
-      this.isOpen = true;
-    }
-    TEMP = el.nativeElement.getAttribute('channelType');
-    if (TEMP) {
-      this.channelType = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('lang');
-    if (TEMP) {
-      this.lang = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('align');
-    if (TEMP) {
-      this.align = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('calloutTimer');
-    if (TEMP) {
-      this.calloutTimer = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('hideHeaderCloseButton');
-    if (TEMP) {
-      this.hideHeaderCloseButton = true;
-    }
-    TEMP = el.nativeElement.getAttribute('wellcomeMsg');
-    if (TEMP) {
-      this.wellcomeMsg = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('calloutTitle');
-    if (TEMP) {
-      this.calloutTitle = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('calloutMsg');
-    if (TEMP) {
-      this.calloutMsg = TEMP;
-    }
-
-    TEMP = el.nativeElement.getAttribute('startHidden');
-    if (TEMP) {
-      this.startHidden = TEMP;
-    }
-
-    TEMP = el.nativeElement.getAttribute('startFromHome');
-    if (TEMP) {
-      this.startFromHome = TEMP;
-    }
-
-    TEMP = el.nativeElement.getAttribute('logoChat');
-    if (TEMP) {
-      this.logoChat = TEMP;
-    }
-    TEMP = el.nativeElement.getAttribute('wellcomeTitle');
-    if (TEMP) {
-      this.wellcomeTitle = TEMP;
-    }
-
-  }
-
-
+   * 7: getVariableUrlParameters
+   */
   getVariableUrlParameters() {
     if (this.getParameterByName('tiledesk_tenant')) {
       this.tenant = this.getParameterByName('tiledesk_tenant');
@@ -511,9 +520,6 @@ export class Globals {
     if (this.getParameterByName('tiledesk_align')) {
       this.align = this.getParameterByName('tiledesk_align');
     }
-    if (this.getParameterByName('tiledesk_hideheaderclosebutton')) {
-      this.hideHeaderCloseButton = true;
-    }
     if (this.getParameterByName('tiledesk_wellcomemsg')) {
       this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
     }
@@ -538,111 +544,76 @@ export class Globals {
     if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
       this.showWidgetNameInConversation = true;
     }
-    if (this.getParameterByName('tiledesk_startHidden')) {
-      this.startHidden = true;
-    }
+
     if (this.getParameterByName('tiledesk_startFromHome')) {
       this.startFromHome = true;
     }
-
     if (this.getParameterByName('tiledesk_logoChat')) {
       this.logoChat = this.getParameterByName('tiledesk_logoChat');
     }
     if (this.getParameterByName('tiledesk_wellcomeTitle')) {
       this.wellcomeTitle = this.getParameterByName('tiledesk_wellcomeTitle');
     }
-
-  }
-
-  translate() {
-    this.LABEL_PLACEHOLDER = this.translatorService.translate('LABEL_PLACEHOLDER');
-    this.LABEL_START_NW_CONV = this.translatorService.translate('LABEL_START_NW_CONV');
-    this.LABEL_FIRST_MSG = this.translatorService.translate('LABEL_FIRST_MSG');
-    this.LABEL_FIRST_MSG_NO_AGENTS = this.translatorService.translate('LABEL_FIRST_MSG_NO_AGENTS');
-    this.LABEL_SELECT_TOPIC = this.translatorService.translate('LABEL_SELECT_TOPIC');
-    this.LABEL_COMPLETE_FORM = this.translatorService.translate('LABEL_COMPLETE_FORM');
-    this.LABEL_FIELD_NAME = this.translatorService.translate('LABEL_FIELD_NAME');
-    this.LABEL_ERROR_FIELD_NAME = this.translatorService.translate('LABEL_ERROR_FIELD_NAME');
-    this.LABEL_FIELD_EMAIL = this.translatorService.translate('LABEL_FIELD_EMAIL');
-    this.LABEL_ERROR_FIELD_EMAIL = this.translatorService.translate('LABEL_ERROR_FIELD_EMAIL');
-    this.LABEL_WRITING = this.translatorService.translate('LABEL_WRITING');
-    this.AGENT_NOT_AVAILABLE = this.translatorService.translate('AGENT_NOT_AVAILABLE');
-    this.AGENT_AVAILABLE = this.translatorService.translate('AGENT_AVAILABLE');
-    this.GUEST_LABEL = this.translatorService.translate('GUEST_LABEL');
-    this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
-    this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
-    this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
-    this.ALERT_LEAVE_CHAT = this.translatorService.translate('ALERT_LEAVE_CHAT');
-    this.YES = this.translatorService.translate('YES');
-    this.NO = this.translatorService.translate('NO');
-    this.BUTTON_CLOSE_TO_ICON = this.translatorService.translate('BUTTON_CLOSE_TO_ICON');
-    this.BUTTON_EDIT_PROFILE = this.translatorService.translate('BUTTON_EDIT_PROFILE');
-    this.BUTTON_DOWNLOAD_TRANSCRIPT = this.translatorService.translate('BUTTON_DOWNLOAD_TRANSCRIPT');
-    this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
-    this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
-    this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
-  }
-
-
-  private getParameterByName(name) {
-    // if (!url) url = window.location.href;
-
-    const url = window.location.href;
-
-    name = name.replace(/[\[\]]/g, '\\$&');
-    // console.log('»»» getParameterByName NAME ', name);
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
-
-    // console.log('»»» getParameterByName RESULT ', results);
-    if (!results) { return null; }
-
-    if (!results[2]) { return ''; }
-
-    // console.log('»»» getParameterByName RESULT[2] ', results[2]);
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
-
-  private setAttributes(): any {
-    let attributes: any = JSON.parse(localStorage.getItem('attributes'));
-    if (!attributes || attributes === 'undefined') {
-        attributes = {
-            client: this.CLIENT_BROWSER,
-            sourcePage: location.href,
-            projectId: this.projectid
-            // departmentId: '',
-            // departmentName: '',
-            // departmentId: this.departmentSelected._id,
-            // departmentName: this.departmentSelected.name,
-            // userEmail: this.userEmail,
-            // userName: this.userFullname
-        };
-
-        if (this.userEmail) {
-            attributes['userEmail'] = this.userEmail;
-        }
-        if (this.userFullname) {
-            attributes['userFullname'] = this.userFullname;
-        }
-        localStorage.setItem('attributes', JSON.stringify(attributes));
+    if (this.getParameterByName('tiledesk_autoStart')) {
+      this.wellcomeTitle = this.getParameterByName('tiledesk_autoStart');
     }
-    return attributes;
+    if (this.getParameterByName('tiledesk_isShown')) {
+      this.isShown = true;
+    }
   }
 
+
+  /**
+   * 8: setDefaultSettings
+   */
   setDefaultSettings() {
-    this.default_settings =  {
-      'tenant': this.tenant, 'recipientId': this.recipientId, 'projectid': this.projectid,
-      'widgetTitle': this.widgetTitle, 'poweredBy': this.poweredBy,
-      'userId': this.userId, 'userEmail': this.userEmail, 'userPassword': this.userPassword,
-      'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'isOpen': this.isOpen,
-      'channelType': this.channelType, 'lang': this.lang, 'calloutTimer': this.calloutTimer,
-      'align': this.align, 'hideHeaderCloseButton': this.hideHeaderCloseButton, 'wellcomeMsg': this.wellcomeMsg,
-      'calloutTitle': this.calloutTitle, 'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
+    this.default_settings = {
+      'tenant': this.tenant, 'recipientId': this.recipientId,
+      'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
+      'poweredBy': this.poweredBy, 'userId': this.userId,
+      'userEmail': this.userEmail, 'userPassword': this.userPassword,
+      'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
+      'isOpen': this.isOpen, 'channelType': this.channelType,
+      'lang': this.lang, 'calloutTimer': this.calloutTimer,
+      'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
+      'wellcomeMsg': this.wellcomeMsg, 'calloutTitle': this.calloutTitle,
+      'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
-      'allowTranscriptDownload': this.allowTranscriptDownload,
-      'userToken': this.userToken
+      'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
+      'autoStart': this.autoStart, 'isShown': this.isShown,
+      'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
+      'wellcomeTitle': this.wellcomeTitle
     };
   }
 
+
+  /**
+   * 9: setAttributes
+   */
+  private setAttributes(): any {
+    const CLIENT_BROWSER = navigator.userAgent;
+    let attributes: any = JSON.parse(localStorage.getItem('attributes'));
+    if (!attributes || attributes === 'undefined') {
+      attributes = {
+        client: CLIENT_BROWSER,
+        sourcePage: location.href,
+        projectId: this.projectid
+        // departmentId: '',
+        // departmentName: '',
+        // departmentId: this.departmentSelected._id,
+        // departmentName: this.departmentSelected.name,
+        // userEmail: this.userEmail,
+        // userName: this.userFullname
+      };
+      if (this.userEmail) {
+        attributes['userEmail'] = this.userEmail;
+      }
+      if (this.userFullname) {
+        attributes['userFullname'] = this.userFullname;
+      }
+      localStorage.setItem('attributes', JSON.stringify(attributes));
+    }
+    return attributes;
+  }
 
 }

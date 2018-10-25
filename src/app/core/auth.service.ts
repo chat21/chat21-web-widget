@@ -14,7 +14,7 @@ export class AuthService {
   public user: any;
   private token: string;
   obsLoggedUser: BehaviorSubject<any>;
-  obsCurrentUser: BehaviorSubject<any>;
+  // obsCurrentUser: BehaviorSubject<any>;
 
   unsubscribe: any;
   API_URL: string;
@@ -25,7 +25,7 @@ export class AuthService {
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
-    this.obsCurrentUser = new BehaviorSubject<any>(null);
+    // this.obsCurrentUser = new BehaviorSubject<any>(null);
 
     this.API_URL = environment.apiUrl;
   }
@@ -41,11 +41,12 @@ export class AuthService {
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         console.log('NO CURRENT USER PASSO NULL');
-        that.obsCurrentUser.next(0);
+        that.obsLoggedUser.next(0);
       } else {
         console.log('PASSO CURRENT USER');
         that.user = firebase.auth().currentUser;
-        that.obsCurrentUser.next(that.user);
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+        // that.obsCurrentUser.next(that.user);
       }
     });
   }
@@ -78,14 +79,14 @@ export class AuthService {
     .then(function(user) {
       that.user = user;
       that.unsubscribe();
-      that.obsLoggedUser.next(user);
+      that.obsLoggedUser.next(firebase.auth().currentUser);
       that.getIdToken();
     })
     .catch(function(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
         that.unsubscribe();
-        that.obsLoggedUser.next(null);
+        that.obsLoggedUser.next(0);
         console.log('signInAnonymously ERROR: ', errorCode, errorMessage);
     });
   }
@@ -106,16 +107,17 @@ export class AuthService {
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
       .then(function(user) {
+        console.log('USER by signInWithCustomToken: ', user);
         that.user = user;
         that.unsubscribe();
-        that.obsLoggedUser.next(user);
+        that.obsLoggedUser.next(firebase.auth().currentUser);
         that.getToken();
       })
       .catch(function(error) {
           const errorCode = error.code;
           const errorMessage = error.message;
           that.unsubscribe();
-          that.obsLoggedUser.next(null);
+          that.obsLoggedUser.next(0);
           console.log('authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage);
       });
   }
@@ -128,14 +130,14 @@ export class AuthService {
     .then(function(user) {
       that.user = user;
       that.unsubscribe();
-      that.obsLoggedUser.next(user);
+      that.obsLoggedUser.next(firebase.auth().currentUser);
       that.getIdToken();
     })
     .catch(function(error) {
       const errorCode = error.code;
       const errorMessage = error.message;
       that.unsubscribe();
-      that.obsLoggedUser.next(null);
+      that.obsLoggedUser.next(0);
       console.log('authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage);
     });
   }

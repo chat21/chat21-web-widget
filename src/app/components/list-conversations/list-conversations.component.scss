@@ -34,6 +34,7 @@
         font-size: 1em;
         -webkit-box-shadow: none;
         box-shadow: none;
+        overflow: hidden;
 
 
         .c21-item-conversation {
@@ -52,6 +53,7 @@
                 position: relative;
                 display: flex;
                 align-items: center;
+                max-height: 80px;
   
                 .c21-left-conv {
                     width: auto;

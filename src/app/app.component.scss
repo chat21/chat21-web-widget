@@ -272,7 +272,7 @@ div.clear {
         .base_sent {
             align-items: flex-end;
             justify-content: flex-end;
-            padding: 2px 10px 4px 40px;
+            padding: 2px 0px 4px 40px;
         }
         .msg_sent {
             background-color: #62a8ea;
@@ -583,35 +583,36 @@ div.clear {
     #chat21-conversations .msg_receive{
         background-color: #f7f7f7;
         color: #000000;
-        margin-right: 20px;
-        margin-left: 0;
         max-width: calc(100% - 60px);
         min-width: 14px;
+        margin: 0 20px 4px 10px;
     }
 
     /* .messages.msg_receive a */
     #chat21-conversations .msg_receive a { 
         color: #03a5e8 !important;
     }
+    
     /* TIME */
     #chat21-conversations .time {
         font-size: 1em;
         color: #aaaaaa;
-        margin-bottom: 10px;
-        margin-top: -2px;
         text-align: left;
-        margin-left: 46px;
+        margin: 0px;
+        padding: 0px 40px;
+        margin-top: -2px;
+        background-color: transparent;
     }
     #chat21-conversations .time.sender{
         text-align: right;
         margin-right: 24px;
+        padding: 0;
     }
 
     .message_sender_fullname{
-        margin-top: 10px;
-        font-size: 0.8em;
+        font-size: 1em;
         color: #666;
-        margin-left: 10px;
+        margin: 0 auto 4px auto;
     }
 
     /* FOOTER CONTAINER */ 
@@ -654,53 +655,55 @@ div.clear {
         width: 20px;
         height: 20px;
         position: absolute;
-        /* right: 10px; */
-        // bottom: 40px;
         bottom: 22px;
-        display: none;
+        display: block;
+        opacity: 0.3;
+        cursor: initial;
+        
     }
 
     .chat21-textarea-button.active {
         display: block;
+        opacity: 1;
+        cursor: pointer;
     }
 
     #chat21-start-upload-img {
         background-position: center center;
         background-repeat: no-repeat;
-        background-size: 16px;
+        background-size: 1.8em;
         background-image : url("../assets/images/f21ico-photo.svg");
         /* background-color: #999999; */
         right: 4px;
     }
 
     #chat21-start-upload-doc {
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 16px;
-        background-image : url("../assets/images/f21ico-attached.svg");
+        // background-position: center center;
+        // background-repeat: no-repeat;
+        // background-size: 1.8em;
+        // background-image : url("../assets/images/f21ico-attached.svg");
         left: 8px;
         bottom: 10px;
         padding: 0px;
     }
     #chat21-button-reset {
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 16px;
-        background-image : url("../assets/images/f21ico-close.svg");
+        // background-position: center center;
+        // background-repeat: no-repeat;
+        // background-size: 1.8em;
+        // background-image : url("../assets/images/f21ico-close.svg");
         left: 8px;
         bottom: 10px;
         padding: 0px;
     }
 
     #chat21-button-send {
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 16px;
-        background-image : url("../assets/images/f21ico-send.svg");
+        // background-position: center center;
+        // background-repeat: no-repeat;
+        // background-size: 1.8em;
+        // background-image : url("../assets/images/f21ico-send.svg");
         right: 8px;
         bottom: 10px;
         padding: 0px;
-
         /* right: 0px;
         padding-left: 8px;
         padding-right: 8px; */
@@ -1236,6 +1239,7 @@ div.clear {
 
     #chat21-buttonToBottom {
         position: relative;
+        display: block;
         margin-right: 10px;
         margin-top: -40px;
         float: right;    
@@ -1243,7 +1247,8 @@ div.clear {
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        z-index: 999999999;
+        // z-index: 999999999;
+        z-index: 1;
         cursor: pointer;
         background-image: url("../assets/images/c21-down-gray.svg");
         border: 1px solid #eee;
@@ -1255,18 +1260,23 @@ div.clear {
     }
 
     #chat21-divBudge{
+        position: absolute;
+        top: 0;
         width: auto;
         height: 12px;
-        border-radius: 10px;
+        min-width: 12px;
+        font-size: 1em;
+        line-height: 1.2em;
+        border-radius: 20%;
         background-color: red;
-        font-size: 11px;
         color: white;
         padding: 0px 3px 2px 3px;
         text-align: center;
-        float: left;
+        // float: left;
         margin-top: -10px;
-        min-width: 12px;
-        line-height: 12px;
+        display: inline-block;
+
+    
     }
 
 

@@ -4,7 +4,9 @@ import * as firebase from 'firebase/app';
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { avatarPlaceholder, getColorBck, getFromNow } from '../utils/utils';
+import { avatarPlaceholder, getColorBck, getFromNow, searchIndexInArrayForUid } from '../utils/utils';
+
+
 
 
 @Injectable()
@@ -37,12 +39,35 @@ export class ConversationsService {
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(3);
     // this.conversationRef.on('value', function(snapshot) {
-    this.conversationRef.once('value').then(function(snapshot) {
-      snapshot.forEach( function(childSnapshot) {
-        that.addConversation(childSnapshot);
-      });
+
+    //// SUBSCRIBE ADDED ////
+    this.conversationRef.on('child_added', function(childSnapshot) {
+      that.addConversation(childSnapshot);
     });
+
+    // this.conversationRef.on('child_changed', function(childSnapshot) {
+    //   const index = searchIndexInArrayForUid(that.conversations, childSnapshot.key);
+    //   const newConv = that.addConversation(childSnapshot);
+    //   that.conversations.splice(index, 1, newConv);
+    //   console.log('child_changed *****', index, newConv.uid);
+    // });
+
+    //// SUBSCRIBE REMOVED ////
+    this.conversationRef.on('child_removed', function(childSnapshot) {
+      const index = searchIndexInArrayForUid(that.conversations, childSnapshot.key);
+      if (index > -1) {
+        that.conversations.splice(index, 1);
+      }
+    });
+
+
+    // this.conversationRef.once('value').then(function(snapshot) {
+    //   snapshot.forEach( function(childSnapshot) {
+    //     that.addConversation(childSnapshot);
+    //   });
+    // });
   }
+
 
   private addConversation(childSnapshot) {
     const that = this;
@@ -63,5 +88,9 @@ export class ConversationsService {
     }
   }
 
+  //const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+    //       that.messages.splice(index, 1, msg);
+
+    
 
 }

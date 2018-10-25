@@ -132,7 +132,7 @@
             right: 0;
             height: auto;
             z-index: 1;
-            
+
             /* LOADING */
             /*http://tobiasahlin.com/spinkit/*/
             #chat21-spinner {
@@ -203,11 +203,11 @@
                 overflow-x: hidden;
                 overflow-y: hidden;
 
-                background-color: #fff;
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-size: cover;
-                background-image : url("https://user-images.githubusercontent.com/32448495/38979663-16c07520-43bb-11e8-8b83-186ac1df0745.jpg");
+                // background-color: #fff;
+                // background-repeat: no-repeat;
+                // background-position: center center;
+                // background-size: cover;
+                // background-image : url("https://user-images.githubusercontent.com/32448495/38979663-16c07520-43bb-11e8-8b83-186ac1df0745.jpg");
             }
             /* no conflict
             https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
@@ -239,6 +239,12 @@
                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0); 
                 background-color: #00000040!important;   
             } 
+
+
+            #c21-contentScroll{
+                padding: 10px;
+            }
+            
 
 
             /* icon status */
@@ -338,14 +344,15 @@
         object-fit: cover;
     }
 
-    .message_sender_fullname {
-        margin-top: 10px;
-        font-size: 1.1em;
+    .message_sender_fullname{
+        font-size: 1em;
         color: #666;
-        margin-left: 10px;
+        margin: 0 auto 4px auto;
     }
 
-
+    .c21-msg-container{
+        margin: 0 0 15px 0;
+    }
 
 
 

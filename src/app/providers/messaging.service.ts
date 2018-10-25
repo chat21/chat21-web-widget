@@ -136,11 +136,14 @@ export class MessagingService {
     const that = this;
     const urlNodeFirebase = this.urlNodeFirebase + conversationWith;
     this.checkRemoveConversation();
-
     console.log('urlNodeFirebase *****', urlNodeFirebase);
     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+    this.subscriptions();
+  }
 
+  subscriptions() {
+    const that = this;
     //// SUBSCRIBE REMOVED ////
     this.messagesRef.on('child_removed', function(childSnapshot) {
       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
@@ -198,7 +201,9 @@ export class MessagingService {
         that.messages.sort(that.compareValues('timestamp', 'asc'));
       }
     });
+
   }
+  
 
   /**
    * verifico se nel nodo della conversazione ci sono messaggi

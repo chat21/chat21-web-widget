@@ -52,14 +52,12 @@ export class ListConversationsComponent implements OnInit {
   initialize() {
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
-    this.themeColor = this.g.themeColor;
-    this.themeForegroundColor = this.g.themeForegroundColor;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
 
     console.log('senderId: ', this.senderId);
     console.log('tenant: ', this.tenant);
-    console.log('themeColor: ', this.themeColor);
-    console.log('themeForegroundColor: ', this.themeForegroundColor);
+    console.log('themeColor: ', this.g.themeColor);
+    console.log('themeForegroundColor: ', this.g.themeForegroundColor);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     this.conversations = this.conversationsService.conversations;

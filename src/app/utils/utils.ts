@@ -211,3 +211,16 @@ export function setLanguage(translatorService) {
   }
   return translatorService.getDefaultLanguage();
 }
+
+export function getParameterByName(name) {
+  // if (!url) url = window.location.href;
+  const url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  // console.log('»»» getParameterByName NAME ', name);
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
+  // console.log('»»» getParameterByName RESULT ', results);
+  if (!results) { return null; }
+  if (!results[2]) { return ''; }
+  // console.log('»»» getParameterByName RESULT[2] ', results[2]);
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}

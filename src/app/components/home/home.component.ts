@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   wellcomeMsg;
   wellcomeTitle;
   themeColor50: string;
+  colorGradient: string;
+  colorBck: string;
   // ========= end:: component variables ======= //
 
   constructor(
@@ -43,6 +45,9 @@ export class HomeComponent implements OnInit {
     this.wellcomeTitle = this.g.wellcomeTitle;
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
     this.themeColor50 = this.g.themeColor + '7F';
+
+    this.colorGradient = 'linear-gradient(' + this.g.themeColor + ', ' + this.themeColor50 + ')';
+    this.colorBck = '#000000';
   }
 
 

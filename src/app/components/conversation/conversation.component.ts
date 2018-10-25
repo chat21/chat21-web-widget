@@ -120,7 +120,6 @@ export class ConversationComponent implements OnInit {
     console.log(' channelType: ', this.g.channelType);
     console.log(' onSelectDepartment: ', this.g.departmentSelected);
 
-    // this.scrollToBottom();
     this.setFocusOnId('chat21-main-message-context');
   }
 
@@ -141,6 +140,7 @@ export class ConversationComponent implements OnInit {
 
     console.log(' ---------------- 4: initializeChatManager ------------------- ');
     this.initializeChatManager();
+    
 
     //this.checkListMessages();
   }
@@ -244,24 +244,7 @@ export class ConversationComponent implements OnInit {
   initializeChatManager() {
     this.arrayFilesLoad = [];
     this.attributes = this.setAttributes();
-    
-    //this.setSubscriptions();
-
-    // this.isOpenSelectionDepartment = false;
-    // if (!this.attributes.departmentId) {
-    //     this.departmentSelected = null;
-    // }
-
-    // configuro il form di autenticazione
-    // if (!this.attributes.userEmail && !this.attributes.userFullname && this.preChatForm) {
-    //     if (this.preChatFormGroup) {
-    //         this.subcribeToFormChanges();
-    //     }
-    // } else {
-    //     this.userEmail = this.attributes.userEmail;
-    //     this.userFullname = this.attributes.userFullname;
-    //     this.preChatForm = false;
-    // }
+    this.setSubscriptions();
     this.checkWritingMessages();
   }
 
@@ -300,6 +283,7 @@ export class ConversationComponent implements OnInit {
    */
   setSubscriptions() {
     const that = this;
+
     // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
     // const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
     // .subscribe(isWidgetActive => {
@@ -316,6 +300,12 @@ export class ConversationComponent implements OnInit {
     // this.subscriptions.push(subscriptionIsWidgetActive);
 
     // NUOVO MESSAGGIO!!
+    /**
+     * se:          non sto già scrollando e il messaggio l'ho inviato io -> scrollToBottom
+     * altrimenti:  se esiste scrollMe (div da scrollare) verifico la posizione
+     *  se:         sono alla fine della pagina scrollo alla fine
+     *  altrimenti: aumento il badge
+     */
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
       console.log('Subscription NEW MSG');
@@ -328,13 +318,13 @@ export class ConversationComponent implements OnInit {
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 500);
+          }, 0);
         } else {
           that.NUM_BADGES++;
         }
       }
     });
-    
+
     this.subscriptions.push(obsAddedMessage);
 
   }
@@ -433,7 +423,8 @@ export class ConversationComponent implements OnInit {
      */
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
-      console.log('onkeypress **************', keyCode);
+      this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+      console.log('onkeypress **************', this.textInputTextArea);
       if (keyCode === 13) {
           this.performSendingMessage();
       }
@@ -444,15 +435,17 @@ export class ConversationComponent implements OnInit {
       const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
       if (msg && msg.trim() !== '') {
           // console.log('sendMessage -> ', this.textInputTextArea);
-          this.resizeInputField();
+          //this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           //this.setDepartment();
           this.sendMessage(msg, TYPE_MSG_TEXT);
           //this.scrollToBottom();
+          this.restoreTextArea();
+          this.scrollToBottom();
       }
       // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
       // this.textInputTextArea = '';
-      this.restoreTextArea();
+      //this.restoreTextArea();
   }
 
   private restoreTextArea() {
@@ -467,6 +460,7 @@ export class ConversationComponent implements OnInit {
     } else {
           console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
+    this.setFocusOnId('chat21-main-message-context');
   }
 
 
@@ -504,6 +498,8 @@ export class ConversationComponent implements OnInit {
           if (this.g.showWidgetNameInConversation && this.g.showWidgetNameInConversation === true) {
             recipientFullname += ' - ' + this.g.widgetTitle;
           }
+          console.error('this.g.userFullname:', this.g.userFullname);
+          console.error('recipientFullname:', recipientFullname);
           // tslint:disable-next-line:max-line-length
           const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.g.projectid, this.g.channelType);
           this.triggerAfterSendMessageEvent(messageSent);
@@ -534,7 +530,7 @@ export class ConversationComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
 
   onSendPressed(event) {
@@ -547,15 +543,16 @@ export class ConversationComponent implements OnInit {
       this.isFilePendingToUpload = false;
       console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
     } else {
-      console.log('AppComponent::onSendPressed', 'is a message');
-      // its a message
-      this.performSendingMessage();
-      // restore the text area
-      this.restoreTextArea();
+      if ( this.textInputTextArea.length > 0 ) {
+        console.log('AppComponent::onSendPressed', 'is a message');
+        // its a message
+        this.performSendingMessage();
+        // restore the text area
+        // this.restoreTextArea();
+      }
     }
   }
 
-  
 /**
      * recupero url immagine profilo
      * @param uid
@@ -735,7 +732,7 @@ export class ConversationComponent implements OnInit {
                 // INVIO MESSAGGIO
                 that.loadFile();
               }
-              
+
             }, false);
 
             if (event.target.files[0]) {
