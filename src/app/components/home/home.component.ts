@@ -28,6 +28,9 @@ export class HomeComponent implements OnInit {
   colorBck: string;
   // ========= end:: component variables ======= //
 
+
+  isOpenMenuOptions = false;
+
   constructor(
     public g: Globals
   ) {
@@ -48,6 +51,7 @@ export class HomeComponent implements OnInit {
 
     this.colorGradient = 'linear-gradient(' + this.g.themeColor + ', ' + this.themeColor50 + ')';
     this.colorBck = '#000000';
+    
   }
 
 
@@ -64,6 +68,10 @@ export class HomeComponent implements OnInit {
 
   f21_close() {
     this.eventClose.emit();
+  }
+
+  f21_toggle_options() {
+    this.isOpenMenuOptions = !this.isOpenMenuOptions;
   }
   // ========= end:: ACTIONS ============//
 

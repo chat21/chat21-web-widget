@@ -71,9 +71,18 @@
 
     <!-- FOOTER -->
     <div class="c21-footer">
+        <div class="c21-button-menu-options" (click)="f21_toggle_options()" >{{g.OPTIONS}}</div>
+        <div class="c21-powered-by">
+            <div id="c21-powered-by" [innerHTML]="g.poweredBy"></div>
+            <div class="build_version">{{g.BUILD_VERSION}}</div>
+        </div>
+    </div>
 
-        <div id="c21-powered-by" [innerHTML]="g.poweredBy"></div>
-        <div class="build_version">{{g.BUILD_VERSION}}</div>
+    <div *ngIf="isOpenMenuOptions" id="c21-menu-options" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
+        <div class="" style="padding: 10px">
+            <div class="c21-button">Sound on</div>
+            <div class="c21-button">Logout</div>
+        </div>
 
     </div>
 

@@ -37,7 +37,8 @@ export const en = {
     'BUTTON_DOWNLOAD_TRANSCRIPT': 'Download transcript',
     'RATE_CHAT': 'Rate chat',
     'WELLCOME_TITLE': 'Hi, wellcome to Tiledesk',
-    'WELLCOME_MSG': 'How can we help?'
+    'WELLCOME_MSG': 'How can we help?',
+    'OPTIONS': 'options'
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -79,5 +80,6 @@ export const it = {
     'BUTTON_DOWNLOAD_TRANSCRIPT': 'Scarica transcript',
     'RATE_CHAT': 'Valuta chat',
     'WELLCOME_TITLE': 'Ciao, benvenuto su Tiledesk',
-    'WELLCOME_MSG': 'Come possiamo aiutarti?'
+    'WELLCOME_MSG': 'Come possiamo aiutarti?',
+    'OPTIONS': 'opzioni'
 };

@@ -83,12 +83,15 @@
         box-shadow: 0 -10px 10px 1px rgba(0,0,0,.03);
 
         #c21-powered-by {
-            width: 100%;
+            width: calc(100% - 100px);
             height: 25px;
             text-align: center;
             padding: 0;
             margin: 5px 0;
-            color:#777777;
+            position: absolute;
+            color: #777777;
+            top: 0;
+            left: 50px;
             a {
                 text-decoration: none;
                 color:#777777;
@@ -105,12 +108,60 @@
             bottom: 5px;
             right: 10px;
         }
+
+        .c21-button-menu-options {
+            position: absolute;
+            width: auto;
+            line-height: 12px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #777777;
+            display: inline-block;
+            align-items: center;
+            margin: 4px 4px;
+            padding: 5px 5px;
+            background-color: whitesmoke;
+            cursor: pointer;
+        }
     } 
 
-    .c21-footer:hover {
+    .c21-powered-by:hover {
         div.build_version {
             display: block;
         }
+    }
+
+
+
+
+
+
+    
+    #c21-menu-options {
+        width: auto;
+        height: auto;
+        min-height: 40px;
+        min-width: 80px;
+        max-width: 80%;
+        position: absolute;
+        bottom: 40px;
+        left: 5px;
+        background-color: #f3f3f3;
+        border-radius: 3px;
+        font-size: 1.2em;
+        line-height: normal;
+        overflow: hidden;
+        border: 1px solid #d7d7d7;   
+    }
+    .c21-button{
+        cursor: pointer;
+        margin: 10px 0;
+        padding: 0;
+        color:#777777;
+        // font-weight: bold;
+    }
+    .c21-button:hover{
+        color:#000000;
     }
 
 }

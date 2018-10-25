@@ -57,6 +57,7 @@ export class Globals {
   RATE_CHAT: string;
   WELLCOME_TITLE: string;
   WELLCOME_MSG: string;
+  OPTIONS: string;
 
 
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
@@ -162,6 +163,7 @@ export class Globals {
     this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
     this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
     this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
+    this.OPTIONS = this.translatorService.translate('OPTIONS');
   }
 
   /**
