@@ -12,6 +12,7 @@ import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { TranslatorService } from './providers/translator.service';
 
+
 // utils
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
 
@@ -30,11 +31,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     isOpenHome = true;                  /**  check open/close component home ( sempre visibile xchè il primo dello stack ) */
     isOpenConversation = false;         /** check open/close component conversation if is true  */
-    isOpenSelectionDepartment = true;   /** check open/close modal select department */
+    isOpenSelectionDepartment = false;   /** check open/close modal select department */
     isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
+    isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
 
     isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
     isModalLeaveChatActive = false;     /** ???? */
+    departments = [];
     // ========= end:: parametri di stato widget ======= //
 
 
@@ -85,10 +88,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         /**
          * SUBSCRIBE TO ASINC LOGIN FUNCTION
          */
-        this.authService.obsLoggedUser.subscribe((user) => {
+
+        const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
                 console.log(' currentUser:::: ', user);
-                if (user === 0) {
+                if (user === -1) {
+                    /** ho effettuato il logout: nascondo il widget */
+                    that.g.isLogged = false;
+                    that.g.isShown = false;
+                    console.log('LOGOUT : ', user, that.g.autoStart);
+                    that.triggeisLoggedInEvent();
+                } else if (user === 0) {
+                    /** non sono loggato */
                     that.g.isLogged = false;
                     console.log('NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart);
                     if (that.g.autoStart === true) {
@@ -96,8 +107,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                     that.triggeisLoggedInEvent();
                 } else if (user) {
+                    /** sono loggato */
                     console.log('USER AUTENTICATE: ', user.uid);
-                    //  SONO GIA' AUTENTICATO
                     that.g.senderId = user.uid;
                     that.g.isLogged = true;
                     console.log(' this.g.senderId', that.g.senderId);
@@ -108,6 +119,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
         });
+        this.subscriptions.push(obsLoggedUser);
     }
 
     ngAfterViewInit() {
@@ -141,10 +153,82 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(' ---------------- A3 ---------------- ');
 
         this.isInitialized = true;
-        //this.g.isShown = false;
+        // this.g.isShown = false;
+
+        console.log(' ---------------- A4 ---------------- ');
+        this.getMongDbDepartments();
 
     }
 
+
+
+    /**
+     * recupero elenco dipartimenti
+     * - recupero il token fisso
+     * - mi sottoscrivo al servizio
+     * - se c'è un solo dipartimento la setto di default
+     * - altrimenti visualizzo la schermata di selezione del dipartimento
+    */
+    getMongDbDepartments() {
+        const that = this;
+        console.log('getMongDbDepartments ::::', this.g.projectid);
+        this.messagingService.getMongDbDepartments(this.g.projectid)
+        .subscribe(response => {
+            that.g.departments = response;
+            that.initDepartments();
+        },
+        errMsg => {
+            console.log('http ERROR MESSAGE', errMsg);
+        },
+        () => {
+            console.log('API ERROR NESSUNO');
+        });
+    }
+
+    /** */
+    initDepartments() {
+        this.g.departmentSelected = null;
+        console.log('initDepartments ::::', this.g.departments);
+
+        console.log('SET DEPARTMENT DEFAULT ::::', this.g.departments[0]);
+        this.setDepartment(this.g.departments[0]);
+
+        let i = 0;
+        this.g.departments.forEach(department => {
+            if (department['default'] === true) {
+                this.g.departments.splice(i, 1);
+                return;
+            }
+            i++;
+        });
+
+        if (this.g.departments.length === 1) {
+            // UN SOLO DEPARTMENT
+            console.log('DEPARTMENT FIRST ::::', this.g.departments[0]);
+            this.setDepartment(this.g.departments[0]);
+            return false;
+        } else if (this.g.departments.length > 1) {
+            // CI SONO + DI 2 DIPARTIMENTI
+        } else {
+            // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
+        }
+    }
+    /**
+     *
+     */
+    setDepartment(department) {
+        this.g.departmentSelected = department;
+        if (this.g.attributes) {
+            this.g.attributes.departmentId = department._id;
+            this.g.attributes.departmentName = department.name;
+            console.log('setAttributes setDepartment: ', JSON.stringify(this.g.attributes));
+            localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
+        }
+    }
+
+    /**
+     *
+     */
     private setAuthentication() {
 
         /**
@@ -163,7 +247,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // this.userId = 'LmBT2IKjMzeZ3wqyU8up8KIRB6J3';
         // tslint:disable-next-line:max-line-length
         // this.g.userToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdhMWViNTE2YWU0MTY4NTdiM2YwNzRlZDQxODkyZTY0M2MwMGYyZTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTM5OTQ4MDczLCJ1c2VyX2lkIjoid0RScm54SG0xQ01MMVhJd29MbzJqdm9lc040MiIsInN1YiI6IndEUnJueEhtMUNNTDFYSXdvTG8yanZvZXNONDIiLCJpYXQiOjE1Mzk5NDgwNzMsImV4cCI6MTUzOTk1MTY3MywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.gNtsfv1b5LFxxqwnmJI4jnGFq7760Eu_rR2Neargs6Q3tcNge1oTf7CPjd9pJxrOAeErEX6Un_E7tjIGqKidASZH7RJwKzfWT3-GZdr7j-LR6FgBVl8FgufDGo0DcVhw9Zajik0vuFM9b2PULmSAeDeNMLAhsvPOWPJMFMGIrewTk7Im-6ncm75QH241O4KyGKPWsC5slN9lckQP4j432xVUj1ss0TYVqBpkDP9zzgekuLIvL-qFpuqGI0yLjb-SzPev2eTO-xO48wlYK_s_GYOZRwWi4SZvSA8Sw54X7HUyDvw5iXLboEJEFMU6gJJWR6YPQMa69cjQlFS8mjPG6w";
-        const currentUser =  this.authService.getCurrentUser();
+        const currentUser = this.authService.getCurrentUser();
 
         if (this.g.userEmail && this.g.userPassword) {
             console.log(' ---------------- 10 ---------------- ');
@@ -205,9 +289,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private startUI() {
+        console.log(' ============ startUI ===============');
         /** TEST  */
-        //this.startFromHome = true;
-        //this.preChatForm = true;
         this.isOpenHome = true;
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
@@ -218,13 +301,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = false;
         } else if (this.g.preChatForm) {
-            this.isOpenConversation = false;
             this.isOpenPrechatForm = true;
-            this.isOpenSelectionDepartment = true;
-        } else {
             this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            if (this.g.departments.length > 1) {
+                this.isOpenSelectionDepartment = true;
+            }
+        } else {
+            console.log(' ============ apro dipartimenti ===============');
             this.isOpenPrechatForm = false;
-            this.isOpenSelectionDepartment = true;
+            this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            if (this.g.departments.length > 1) {
+                this.isOpenSelectionDepartment = true;
+            } else {
+                this.isOpenConversation = true;
+            }
         }
     }
 
@@ -318,25 +410,25 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // console.log('this.g', this.g);
         const that = this;
         this.authService.createFirebaseToken(token, this.g.projectid)
-        .subscribe(response => {
-            that.authService.decode(token, that.g.projectid)
-            .subscribe(resDec => {
-                console.log('resDec', resDec.decoded);
-                console.log('email', resDec.decoded.email);
-                console.log('name', resDec.decoded.name);
-                console.log('external_id', resDec.decoded.external_id);
-                console.log('iat', resDec.decoded.iat);
+            .subscribe(response => {
+                that.authService.decode(token, that.g.projectid)
+                    .subscribe(resDec => {
+                        console.log('resDec', resDec.decoded);
+                        console.log('email', resDec.decoded.email);
+                        console.log('name', resDec.decoded.name);
+                        console.log('external_id', resDec.decoded.external_id);
+                        console.log('iat', resDec.decoded.iat);
 
-                that.g.userEmail = resDec.decoded.email;
-                that.g.userFullname = resDec.decoded.name;
-                console.log('g', that.g);
+                        that.g.userEmail = resDec.decoded.email;
+                        that.g.userFullname = resDec.decoded.name;
+                        console.log('g', that.g);
 
-                const firebaseToken = response.firebaseToken;
-                console.log('firebaseToken', firebaseToken);
-                that.g.userToken = firebaseToken;
-                that.authService.authenticateFirebaseCustomToken(firebaseToken);
+                        const firebaseToken = response.firebaseToken;
+                        console.log('firebaseToken', firebaseToken);
+                        that.g.userToken = firebaseToken;
+                        that.authService.authenticateFirebaseCustomToken(firebaseToken);
+                    });
             });
-        });
     }
 
     /**
@@ -348,11 +440,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private setStatePreChatForm(state) {
-        if ( state != null ) {
+        if (state != null) {
             this.g.preChatForm = state;
             this.isOpenPrechatForm = state;
         }
         console.log('this.isOpenPrechatForm ', this.isOpenPrechatForm);
+    }
+
+    signOut() {
+        this.authService.signOut();
     }
 
     // private setUserInfo(userInfo) {
@@ -382,6 +478,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
     }
+
 
     /**
      * genero un nuovo conversationWith
@@ -457,6 +554,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * elimino tutte le sottoscrizioni
      */
     ngOnDestroy() {
+        console.log('this.subscriptions', this.subscriptions);
         if (window['tiledesk']) {
             window['tiledesk']['angularcomponent'] = null;
         }
@@ -511,7 +609,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     /** */
     private triggeisLoggedInEvent() {
         console.log(' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged);
-        const isLoggedIn = new CustomEvent('isLoggedIn', { detail:  this.g.isLogged } );
+        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
         this.el.nativeElement.dispatchEvent(isLoggedIn);
     }
 
@@ -549,9 +647,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * selected department
      */
     private returnDepartmentSelected($event) {
-        if ( $event ) {
+        if ($event) {
             console.log('onSelectDepartment: ', $event);
             // this.g.departmentSelected = $event;
+            this.startNwConversation();
+            this.isOpenHome = true;
             this.isOpenConversation = true;
             this.isOpenSelectionDepartment = false;
         }
@@ -562,11 +662,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * close modal
      */
     private returnCloseModalDepartment() {
-        console.log('returnCloseModalDepartment');
+        console.log('returnCloseModalDepartment', this.g.senderId);
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
     }
+
 
     /**
      * MODAL PRECHATFORM:
@@ -575,8 +676,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private returnPrechatFormComplete() {
         console.log('returnPrechatFormComplete');
         this.isOpenHome = true;
-        this.isOpenSelectionDepartment = true;
-        this.isOpenConversation = false;
+        this.isOpenConversation = true;
         this.isOpenPrechatForm = false;
     }
 
@@ -598,7 +698,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * return conversation selected
      */
     private returnSelectedConversation($event) {
-        if ( $event ) {
+        if ($event) {
             this.g.recipientId = $event.recipient;
             this.isOpenConversation = true;
             console.log('onSelectConversation in APP COMPONENT: ', $event);
@@ -616,12 +716,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private returnNewConversation() {
         console.log('returnNewConversation in APP COMPONENT');
+        // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
+        // altrimenti mostro modale dipartimenti
         if (this.g.preChatForm) {
+            this.isOpenConversation = false;
             this.isOpenPrechatForm = true;
-            this.isOpenSelectionDepartment = true;
+            this.isOpenSelectionDepartment = false;
+            if (this.g.departments.length > 1) {
+                this.isOpenSelectionDepartment = true;
+            }
         } else {
             this.isOpenPrechatForm = false;
-            this.isOpenSelectionDepartment = true;
+            this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            if (this.g.departments.length > 1) {
+                this.isOpenSelectionDepartment = true;
+            } else {
+                this.isOpenConversation = true;
+            }
         }
         this.startNwConversation();
     }
@@ -650,6 +762,38 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // }, 1);
         this.isOpenConversation = false;
     }
+
+
+    /**
+     * MODAL MENU SETTINGS:
+     * logout
+     */
+    returnSignOut() {
+        this.signOut();
+    }
+
+
+    /**
+     * MODAL RATING WIDGET:
+     * close modal page
+     */
+    returnCloseModalRateChat() {
+        this.isOpenHome = true;
+        this.isOpenPrechatForm = false;
+        this.isOpenConversation = false;
+        this.isOpenSelectionDepartment = false;
+        this.g.isOpenStartRating = !this.g.isOpenStartRating;
+    }
+
+    /**
+     * MODAL RATING WIDGET:
+     * complete rate chat
+     */
+    returnRateChatComplete() {
+
+    }
+
+
 
     // private returnToHome() {
     //     this.isOpenSelectionDepartment = false;

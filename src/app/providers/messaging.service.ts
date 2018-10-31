@@ -1,107 +1,65 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { Headers, Http } from '@angular/http';
 // import { AngularFireDatabase } from 'angularfire2/database';
 // import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-// utils
-import { setHeaderDate, searchIndexInArrayForUid, urlify } from '../utils/utils';
-// tslint:disable-next-line:max-line-length
-import { CHANNEL_TYPE_GROUP, UID_SUPPORT_GROUP_MESSAGES, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, TYPE_MSG_IMAGE, CHANNEL_TYPE_DIRECT } from '../utils/constants';
+import { DepartmentModel } from '../../models/department';
 // models
 import { MessageModel } from '../../models/message';
-import { DepartmentModel } from '../../models/department';
-
 import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
+// tslint:disable-next-line:max-line-length
+import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '../utils/constants';
+// utils
+import { searchIndexInArrayForUid, setHeaderDate } from '../utils/utils';
+
 
 @Injectable()
 export class MessagingService {
 
   tenant: string;
   senderId: string;
-  // recipientId: string;
-  // conversationId: string;
   conversationWith: string;
-  urlNodeFirebase: string;
+  urlMessages: string;
+  urlConversation: string;
   urlNodeFirebaseGroups: string;
   urlNodeFirebaseContact: string;
   messagesRef: any;
   messages: Array<MessageModel>;
 
-  // obsCheckWritingMessages: BehaviorSubject<string>;
   obsAdded: any;
-  // obsAdded: BehaviorSubject<MessageModel>;
-  // obsChanged: BehaviorSubject<MessageModel>;
-  // obsRemoved: BehaviorSubject<MessageModel>;
-
   observableWidgetActive: any;
 
   firebaseMessagesKey: any;
-  // firebaseGroupMenbersRef: any;
   conversationRef: any;
+  conversationsRef: any;                    /** ref nodo conversazioni: check if conversation is closed */
   isWidgetActive: boolean;
   channel_type: string;
   API_URL: string;
   departments: DepartmentModel[];
-  filterSystemMsg =  true;
+  filterSystemMsg = true;
 
 
   constructor(
-    // private firebaseAuth: AngularFireAuth
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http
   ) {
-
     this.API_URL = environment.apiUrl;
-
     // console.log('MessagingService::this.API_URL',  this.API_URL );
     if (!this.API_URL) {
-     throw new Error('apiUrl is not defined');
+      throw new Error('apiUrl is not defined');
     }
-
-    // this.channel_type = CHANNEL_TYPE_GROUP;
-    // this.MONGODB_BASE_URL = 'https://api.tiledesk.com/v1/';
-    // this.MONGODB_BASE_URL = 'https://chat21-api-nodejs.herokuapp.com/';
-    // this.MONGODB_BASE_URL = 'http://api.chat21.org/';
-    // this.MONGODB_BASE_URL = 'http://api.chat21.org/app1/';
-    // 'https://chat21-api-nodejs.herokuapp.com/app1/'; // 'http://api.chat21.org/app1/';
-    this.messages = new Array<MessageModel>();
-    // this.observable = new BehaviorSubject<MessageModel[]>(this.messages);
-    // this.obsCheckWritingMessages = new BehaviorSubject<string>(null);
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
-    // this.obsChanged = new BehaviorSubject<MessageModel>(null);
-    // this.obsRemoved = new BehaviorSubject<MessageModel>(null);
     this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
-  /** */
-  // eventChange(message, event) {
-  //   this.observable.next(this.messages);
-  //   if (event === 'ADDED') {
-  //     this.obsAdded.next(message);
-  //   } else if (event === 'CHANGED') {
-  //     this.obsChanged.next(message);
-  //   } else if (event === 'REMOVED') {
-  //     this.obsRemoved.next(message);
-  //   }
-  // }
 
   /**
-   *
-  */
-  public initialize(userUid, tenant, channel_type) {
-    this.messages = [];
-    this.channel_type = channel_type;
-    this.senderId = userUid;
-    this.tenant = tenant;
-    this.urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
-    // console.log('urlNodeFirebase *****', this.urlNodeFirebaseGroups);
-  }
-
+   * da modificare e da spostare da qui!!!
+   * chiamata da app component sull'init!!!
+   */
   public getMongDbDepartments(projectId): Observable<DepartmentModel[]> {
     const url = this.API_URL + projectId + '/departments/';
     // const url = `http://api.chat21.org/app1/departments`;
@@ -117,46 +75,59 @@ export class MessagingService {
   }
 
 
-  // public getMongDbDepartments(): Observable<Department[]> {
-  //   const url = this.MONGODB_BASE_URL;
-  //   // const url = `http://localhost:3000/app1/departments/`;
-  //   // const url = `http://api.chat21.org/app1/departments/;
-  //   console.log('MONGO DB DEPARTMENTS URL', url);
-  //   const headers = new Headers();
-  //   headers.append('Content-Type', 'application/json');
-  //   headers.append('Authorization', this.TOKEN);
-  //   return this.http
-  //     .get(url, { headers })
-  //     .map((response) => response.json());
-  // }
-
-
-  connect( conversationWith ) {
-    console.log('***** connect *****');
-    const that = this;
-    const urlNodeFirebase = this.urlNodeFirebase + conversationWith;
-    this.checkRemoveConversation();
-    console.log('urlNodeFirebase *****', urlNodeFirebase);
-    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
-    this.subscriptions();
+  /**
+   *
+   */
+  public initialize(userUid, tenant, channel_type) {
+    console.log('***** initialize MessagingService *****');
+    this.messages = [];
+    this.channel_type = channel_type;
+    this.senderId = userUid;
+    this.tenant = tenant;
+    this.urlMessages = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
+    this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
   }
 
-  subscriptions() {
+  /**
+   *
+   */
+  connect(conversationWith) {
+    console.log('***** connect MessagingService *****');
+    this.checkRemoveConversation(conversationWith);
+    this.checkMessages(conversationWith);
+  }
+
+  /**
+   * subcribe to mesages node (on added and removed message)
+   * and update array messages
+   */
+  checkMessages(conversationWith) {
+    const urlMessages = this.urlMessages + conversationWith;
+    const firebaseMessages = firebase.database().ref(urlMessages);
+    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+    this.subscriptionsToMessages();
+  }
+
+
+  /**
+   * subscribe to:
+   * child_removed, child_added, child_changed
+   * valutare utilizzo di .map!!!!
+   */
+  subscriptionsToMessages() {
     const that = this;
     //// SUBSCRIBE REMOVED ////
-    this.messagesRef.on('child_removed', function(childSnapshot) {
+    this.messagesRef.on('child_removed', function (childSnapshot) {
       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
       if (index > -1) {
         that.messages.splice(index, 1);
       }
     });
-
     //// SUBSCRIBE ADDED ////
-    this.messagesRef.on('child_added', function(childSnapshot) {
+    this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
       console.log('child_added *****', childSnapshot.val());
-      if ( that.checkMessage(message) ) {
+      if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         const msg = new MessageModel(
@@ -181,7 +152,6 @@ export class MessagingService {
         // notifico arrivo nuovo messaggio
         // console.log('NOTIFICO NW MSG *****', that.obsAdded);
         that.obsAdded.next(msg);
-
         if (message && message.sender === that.senderId) {
           // && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
@@ -201,58 +171,93 @@ export class MessagingService {
         that.messages.sort(that.compareValues('timestamp', 'asc'));
       }
     });
-
   }
-  
 
   /**
-   * verifico se nel nodo della conversazione ci sono messaggi
-   * recupero gli ultimi 1000 e li ordino dall'ultimo al primo
    *
+   */
+  checkMessage(message): boolean {
+    if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
+      // se è un messaggio vuoto non fare nulla
+      return false;
+    }
+    if (this.filterSystemMsg && message.attributes && message.attributes['subtype'] === 'info') {
+      // se è un msg inviato da system NON fare nulla
+      return false;
+    } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
+      // se è un'immagine che ho inviato io NON fare nulla
+      // aggiorno la stato del messaggio e la data
+      // this.updateMessage(message);
+      return true;
+    }
+    return true;
+  }
+
+  /**
+   * function for dynamic sorting
+   */
+  private compareValues(key, order = 'asc') {
+    return function (a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0;
+      }
+      const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
+      const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return (
+        (order === 'desc') ? (comparison * -1) : comparison
+      );
+    };
+  }
+
+
+  /**
+   * ?????????????????????????????????
+   * ?????????????????????????????????
+   * 
+   * aggiorno lo stato del messaggio
+   * questo stato indica che è stato consegnato al client e NON che è stato letto
+   * se il messaggio NON è stato inviato da loggedUser AGGIORNO stato a 200
+   * @param item
+   * @param conversationWith
   */
-  // public checkListMessages(conversationWith): any {
-  //   this.conversationWith = conversationWith;
-  //   this.checkRemoveConversation();
-  //   const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-  //   this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
-  //   return this.messagesRef.once('value');
-  // }
+ private setStatusMessage(item, conversationWith) {
+  if (item.val()['status'] < MSG_STATUS_RECEIVED) {
+    const msg = item.val();
+    if (msg.sender !== this.senderId && msg.status < MSG_STATUS_RECEIVED) {
+      // tslint:disable-next-line:max-line-length
+      const urlNodeMessagesUpdate = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + conversationWith + '/' + item.key;
+      console.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
+      firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
+    }
+  }
+}
 
-
-  // public checkWritingMessages() {
-  //   const that = this;
-  //   const urlNodeFirebaseMembers = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members';
-  //   console.log('urlNodeFirebaseMembers *****', urlNodeFirebaseMembers);
-  //   const firebaseGroup = firebase.database().ref(urlNodeFirebaseMembers)
-  //   .once('value').then(function(snapshot) {
-  //     console.log('snapshot.val() *****', snapshot);
-  //     const resp = that.checkIsBot(snapshot);
-  //     that.obsCheckWritingMessages.next(resp);
-  //   });
-  // }
-
+  /**
+   * check if agent writing
+   */
   public checkWritingMessages(tenant, conversationWith): any {
     this.conversationWith = conversationWith;
-    const that = this;
-    // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
-
     const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
     console.log('checkWritingMessages *****', urlNodeFirebase);
     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
     const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
     return messagesRef;
-//     var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-// starCountRef.on('value', function(snapshot) {
   }
 
-
-  // public deleteWritingMessages(sender) {
-  //   console.log('deleteWritingMessages *****', sender);
-  //   if (sender.startsWith('bot_')) {
-  //     this.obsCheckWritingMessages.next(null);
-  //   }
-  // }
-
+  /**
+   * NON USATA
+   * ?????????????????????????????????
+   * ?????????????????????????????????
+   * verifico se sta rispondendo un bot, func chiamata da checkWritingMessages
+   */
   checkIsBot(snapshot) {
     console.log('snapshot.numChildren() *****', snapshot.numChildren());
     const that = this;
@@ -261,7 +266,7 @@ export class MessagingService {
       return '';
     }
     snapshot.forEach(
-      function(childSnapshot) {
+      function (childSnapshot) {
         const uid = childSnapshot.key;
         console.log('childSnapshot *****', uid);
         if (uid.startsWith('bot_')) {
@@ -276,181 +281,18 @@ export class MessagingService {
 
 
 
-  checkMessage(message): boolean {
-    if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
-      // se è un messaggio vuoto non fare nulla
-      return false;
-    }
-    if (this.filterSystemMsg && message.attributes && message.attributes['subtype'] === 'info') {
-      // se è un msg inviato da system NON fare nulla
-      return false;
-    } else if (message && message.sender === this.senderId && message.type !== TYPE_MSG_TEXT) {
-        // se è un'immagine che ho inviato io NON fare nulla
-        // aggiorno la stato del messaggio e la data
-        // this.updateMessage(message);
-        return true;
-    }
-    return true;
-  }
-
-/**
- * mi sottoscrivo al cambio valori nei messaggi della chat
- * @param conversationWith
- */
-  public listMessages(conversationWith) {
-    const text_area = <HTMLInputElement>document.getElementById('chat21-main-message-context');
-    // tslint:disable-next-line:curly
-    // if (text_area) text_area.focus();
-    const that = this;
-    // this.conversationWith = conversationWith;
-    // this.checkRemoveMember();
-    // const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-    // this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(100);
-
-    // CHANGED
-    // this.messagesRef.on('child_changed', function(childSnapshot) {
-    //     const message = childSnapshot.val();
-    //     console.log('child_changed *****', childSnapshot.val());
-    //     if ( that.checkMessage(message) ) {
-    //       // imposto il giorno del messaggio
-    //       const dateSendingMessage = setHeaderDate(message['timestamp']);
-
-    //       const msg = new MessageModel(
-    //         childSnapshot.key,
-    //         message['language'],
-    //         message['recipient'],
-    //         message['recipient_fullname'],
-    //         message['sender'],
-    //         message['sender_fullname'],
-    //         message['status'],
-    //         message['metadata'],
-    //         message['text'],
-    //         message['timestamp'],
-    //         dateSendingMessage,
-    //         message['type'],
-    //         message['attributes']
-    //       );
-    //       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-    //       that.messages.splice(index, 1, msg);
-    //       console.log('child_changed *****', index, msg.uid);
-
-    //       // if (message && message.sender === that.senderId) {
-    //       //   that.checkWritingMessages();
-    //       // }
-    //       // questo stato indica che è stato consegnato al client e NON che è stato letto
-    //       // that.setStatusMessage(childSnapshot, that.conversationWith);
-    //     }
-    // });
-
-    // REMOVED
-    this.messagesRef.on('child_removed', function(childSnapshot) {
-      // al momento non previsto!!!
-      const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-        // controllo superfluo sarà sempre maggiore
-        if (index > -1) {
-          that.messages.splice(index, 1);
-        }
-    });
-
-    // ADDED
-    this.messagesRef.on('child_added', function(childSnapshot) {
-      const message = childSnapshot.val();
-      console.log('child_added *****', childSnapshot.val());
-      if ( that.checkMessage(message) ) {
-        console.log('gesù cristo *****');
-        // imposto il giorno del messaggio
-        const dateSendingMessage = setHeaderDate(message['timestamp']);
-        const msg = new MessageModel(
-          childSnapshot.key,
-          message['language'],
-          message['recipient'],
-          message['recipient_fullname'],
-          message['sender'],
-          message['sender_fullname'],
-          message['status'],
-          message['metadata'],
-          message['text'],
-          message['timestamp'],
-          dateSendingMessage,
-          message['type'],
-          message['attributes'],
-          message['channel_type'],
-          message['progectId']
-        );
-        // console.log('child_added *****', dateSendingMessage, msg);
-        // azzero sto scrivendo
-        // that.deleteWritingMessages(message['sender']);
-        // notifico arrivo nuovo messaggio
-        // console.log('NOTIFICO NW MSG *****', that.obsAdded);
-        that.obsAdded.next(msg);
-
-        if (message && message.sender === that.senderId) {
-          console.log('la madonna *****', that.messages);
-          // && message.type !== TYPE_MSG_TEXT) {
-          // sto aggiungendo un'immagine inviata da me!!!
-          // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          // that.messages.splice(index, 1, msg);
-          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          // console.log('index *****', index, childSnapshot.key);
-          if (index < 0) {
-            console.log('--------> ADD MSG', index, msg);
-            that.messages.push(msg);
-          }
-        } else {
-          console.log('--------> ADD MSG', msg);
-          // se msg è inviato da me cambio status
-          that.messages.push(msg);
-        }
-
-        that.messages.sort(that.compareValues('timestamp', 'asc'));
-      }
-    });
-
-
-  }
-
-  // function for dynamic sorting
- private compareValues(key, order = 'asc') {
-  return function(a, b) {
-    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-      // property doesn't exist on either object
-      return 0;
-    }
-    const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
-    const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
-
-    let comparison = 0;
-    if (varA > varB) {
-      comparison = 1;
-    } else if (varA < varB) {
-      comparison = -1;
-    }
-    return (
-      (order === 'desc') ? (comparison * -1) : comparison
-    );
-  };
-}
-
   /**
-   * arriorno lo stato del messaggio
-   * questo stato indica che è stato consegnato al client e NON che è stato letto
-   * se il messaggio NON è stato inviato da loggedUser AGGIORNO stato a 200
-   * @param item
-   * @param conversationWith
-  */
-  private setStatusMessage(item, conversationWith) {
-    if (item.val()['status'] < MSG_STATUS_RECEIVED) {
-      const msg = item.val();
-      if (msg.sender !== this.senderId && msg.status < MSG_STATUS_RECEIVED) {
-        // tslint:disable-next-line:max-line-length
-        const urlNodeMessagesUpdate  = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + conversationWith + '/' + item.key;
-        console.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
-        firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
-      }
-    }
-  }
-
-
+   * 
+   * @param senderFullname 
+   * @param msg 
+   * @param type 
+   * @param metadata 
+   * @param conversationWith 
+   * @param recipientFullname 
+   * @param attributes 
+   * @param projectid 
+   * @param channel_type 
+   */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
     console.log('SEND MESSAGE: ', msg);
     console.log('metadata:: ', metadata);
@@ -498,8 +340,8 @@ export class MessagingService {
     // };
 
     this.messages.push(message);
-    const conversationRef = firebase.database().ref(this.urlNodeFirebase + conversationWith);
-    console.log('messaggio **************', this.urlNodeFirebase + conversationWith, attributes);
+    const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
+    console.log('messaggio **************', this.urlMessages + conversationWith, attributes);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
@@ -513,26 +355,26 @@ export class MessagingService {
     //   }
 
 
-      const messageRef = conversationRef.push();
-      const key = messageRef.key;
-      message.uid = key;
-       console.log('messageRef: ', messageRef, key);
-      const messageForFirebase = message.asFirebaseMessage();
-       console.log('messageForFirebase: ', messageForFirebase);
-      messageRef.set(messageForFirebase, function( error ) {
-        // Callback comes here
-        if (error) {
-          // cambio lo stato in rosso: invio nn riuscito!!!
-          message.status = '-100';
-          console.log('ERRORE', error);
-        } else {
-          // that.checkWritingMessages();
-          message.status = '150';
-          console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
-        }
-       //  console.log('****** changed *****', that.messages);
+    const messageRef = conversationRef.push();
+    const key = messageRef.key;
+    message.uid = key;
+    console.log('messageRef: ', messageRef, key);
+    const messageForFirebase = message.asFirebaseMessage();
+    console.log('messageForFirebase: ', messageForFirebase);
+    messageRef.set(messageForFirebase, function (error) {
+      // Callback comes here
+      if (error) {
+        // cambio lo stato in rosso: invio nn riuscito!!!
+        message.status = '-100';
+        console.log('ERRORE', error);
+      } else {
+        // that.checkWritingMessages();
+        message.status = '150';
+        console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+      }
+      //  console.log('****** changed *****', that.messages);
 
-      });
+    });
 
 
     // this.checkWritingMessages();
@@ -542,84 +384,36 @@ export class MessagingService {
     // appena torno on line viene inviato!!!
 
     // if (!this.firebaseGroupMenbersRef) {
-      // this.checkRemoveMember();
+    // this.checkRemoveMember();
     // }
     // return newMessageRef.key;
     return message;
   }
 
-  /**
-   * invio messaggio
-   * purifico il testo del messaggio
-   * creo un oggetto messaggio e lo aggiungo all'array di messaggi
-   * @param msg
-  */
-  // public sendMessage_old(msg, type, metadata?) {
-  //   (metadata) ? metadata = metadata : metadata = '';
-  //   const messageString = this.controlOfMessage(msg);
-  //   console.log('text::::: ', msg, messageString);
-  //   const now: Date = new Date();
-  //   const timestamp = now.valueOf();
-  //   // creo messaggio e lo aggiungo all'array
-  //   const language = document.documentElement.lang;
-  //   const message = {
-  //     channel_type: 'group',
-  //     language: language,
-  //     recipient: this.conversationWith,
-  //     recipient_fullname: 'Support Group',
-  //     sender: this.senderId,
-  //     sender_fullname: 'Ospite',
-  //     metadata: metadata,
-  //     text: messageString,
-  //     timestamp: timestamp,
-  //     type: type
-  //   };
-  //   const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase + this.conversationWith);
-  //   const newMessageRef = firebaseMessagesCustomUid.push(message);
-  //   console.log('messaggio **************', this.firebaseGroupMenbersRef, message, this.conversationWith);
 
-  //   if (!this.firebaseGroupMenbersRef) {
-  //     this.checkRemoveMember();
-  //   }
-
-  // }
 
   /**
-   *
+   * check if conversation exists, subscibing conversations node
+   * if conversation is removed (closed by agent)
+   * call closeConversation and start modal Rating conversation
    */
-  // private checkRemoveMember() {
-  //   const that = this;
-  //   // dopo aver aggiunto un messaggio al gruppo
-  //   // mi sottoscrivo al nodo user/groups/ui-group/members
-  //   // tslint:disable-next-line:max-line-length
-  // tslint:disable-next-line:max-line-length
-  // const urlNodeFirebaseGroupMenbers  = '/apps/' + this.tenant + '/users/' + this.senderId + '/groups/' + this.conversationWith + '/members/';
-  //   // console.log('MI SOTTOSCRIVO A !!!!!', urlNodeFirebaseGroupMenbers);
-  //   this.firebaseGroupMenbersRef = firebase.database().ref(urlNodeFirebaseGroupMenbers);
-  //   this.firebaseGroupMenbersRef.on('child_removed', function(childSnapshot) {
-  //     // console.log('HO RIMOSSO!!!!!', childSnapshot.key, urlNodeFirebaseGroupMenbers);
-  //     if ( childSnapshot.key === that.senderId) {
-  //       // CHIUDO CONVERSAZIONE
-  //       that.closeConversation();
-  //     }
-  //   });
-  // }
-
-  private checkRemoveConversation() {
+  private checkRemoveConversation(conversationWith) {
     const that = this;
-    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith ;
-    this.conversationRef = firebase.database().ref(urlConversation);
-    this.conversationRef.on('child_removed', function (snap) {
-      // console.log('child_removed', snap );
-      if ( snap.key === 'sender') {
+    this.conversationsRef = firebase.database().ref(this.urlConversation);
+    this.conversationsRef.on('child_removed', function (snap) {
+      console.log('child_removed ***********************', snap.key, snap.val());
+      if (snap.key === conversationWith) {
         that.closeConversation();
       }
     });
   }
 
+  /**
+   * pass osservable var starRatingWidgetService in conversation
+   * for open rating chat modal
+   */
   closeConversation() {
     console.log('MessagingService::closeConversation', 'conversation closed');
-    // apro popup rating
     this.starRatingWidgetService.setOsservable(true);
   }
 
@@ -627,7 +421,7 @@ export class MessagingService {
    *
    */
   generateUidConversation(uid): string {
-    this.firebaseMessagesKey = firebase.database().ref(this.urlNodeFirebase);
+    this.firebaseMessagesKey = firebase.database().ref(this.urlMessages);
     // creo il nodo conversazione generando un custom uid
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
@@ -636,6 +430,7 @@ export class MessagingService {
     this.conversationWith = key;
     return key;
   }
+
   /**
    * purifico il messaggio
    * e lo passo al metodo di invio
@@ -645,25 +440,39 @@ export class MessagingService {
     console.log('controlOfMessage **************', messageString);
     messageString = messageString.replace(/(\r\n|\n|\r)/gm, '');
     if (messageString.trim() !== '') {
-        return messageString;
+      return messageString;
     }
     return '';
   }
 
 
+  /** */
   setRating(rate) {
     console.log('setRating **************', rate);
     this.observableWidgetActive.next(false);
   }
 
-
+  /** */
   updateMetadataMessage(uid, metadata) {
     metadata.status = true;
     const message = {
       metadata: metadata
     };
-    const firebaseMessages = firebase.database().ref(this.urlNodeFirebase + uid);
+    const firebaseMessages = firebase.database().ref(this.urlMessages + uid);
     firebaseMessages.set(message);
+  }
+
+
+
+
+  /**
+   * called on ondestroy from component 'conversation'
+   * detach all callbacks firebase on messagesRef
+   */
+  unsubscribeAllReferences() {
+    console.log('--------> messagesRef.off');
+    this.messagesRef.off();
+    //this.conversationsRef.off();
   }
 
 }

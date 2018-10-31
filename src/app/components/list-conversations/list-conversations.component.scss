@@ -46,6 +46,7 @@
             cursor: pointer;
 
             .c21-body-conv{
+                position: relative;
                 border-top: 1px solid #eee;
                 // width: calc(100% - 48px);
                 width: auto;
@@ -154,6 +155,25 @@
         align-items: center;
         -webkit-box-shadow: none;
         box-shadow: none;
+    }
+
+    .c21-divBudge {
+        position: absolute;
+        top: 30px;
+        right: 0px;
+        width: 16px;
+        height: 16px;
+        min-width: 12px;
+        font-size: 1.2em;
+        line-height: 16px;
+        border-radius: 50%;
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        padding: 2px 2px;
+        text-align: center;
+        margin-right: -10px;
+        display: inline-block;
     }
       
 }

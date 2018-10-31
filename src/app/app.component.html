@@ -18,8 +18,10 @@
             (eventClose)="returnClose()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
+            (eventSignOut)="returnSignOut()"
             ></app-home>
         </div>
+
 
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
             <app-conversation 
@@ -60,9 +62,12 @@
         *********** MODALE RATE CHAT ***********
         ****************************************
         -->
-        <!-- <div class="modal-page" [class.active]="isWidgetActive">
-            <app-star-rating-widget [themeColor]="themeColor" [themeForegroundColor]="themeForegroundColor" [parentAllowTranscriptDownload]="allowTranscriptDownload"></app-star-rating-widget>
-        </div> -->
+        <div class="modal-page" [class.active]="g.isOpenStartRating">
+            <app-star-rating-widget 
+            (eventClosePage)="returnCloseModalRateChat()" 
+            (eventCloseRate)="returnRateChatComplete()"
+            ></app-star-rating-widget>
+        </div>
 
 
     </div>

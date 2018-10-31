@@ -43,6 +43,7 @@ export class ListConversationsComponent implements OnInit {
     public g: Globals,
     public conversationsService: ConversationsService
   ) {
+    //this.initialize();
   }
 
   ngOnInit() {
@@ -50,6 +51,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   initialize() {
+    console.log('initialize: ListConversationsComponent');
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
@@ -73,6 +75,8 @@ export class ListConversationsComponent implements OnInit {
   private openConversationByID(conversation) {
     console.log('openConversationByID: ', conversation);
     if ( conversation ) {
+      this.conversationsService.updateBadge(conversation, 0);
+      this.conversationsService.updateConversationBadge();
       this.eventSelctedConv.emit(conversation);
     }
   }

@@ -11,6 +11,7 @@ import {
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
 import { AgentAvailabilityService } from '../../providers/agent-availability.service';
+import { StarRatingWidgetService } from '../../components/star-rating-widget/star-rating-widget.service';
 
 // models
 import { MessageModel } from '../../../models/message';
@@ -26,7 +27,7 @@ import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForU
   styleUrls: ['./conversation.component.scss']
 })
 export class ConversationComponent implements OnInit {
-  @ViewChild('scrollMe') private scrollMe: ElementRef;
+  @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
 
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
@@ -40,7 +41,7 @@ export class ConversationComponent implements OnInit {
   writingMessage = '';    // messaggio sta scrivendo...
 
   // ========= begin:: gestione scroll view messaggi ======= //
-  startScroll = true;
+  startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
   idDivScroll = 'c21-contentScroll'; // id div da scrollare
   showButtonToBottom = false;
   NUM_BADGES = 0;
@@ -64,8 +65,6 @@ export class ConversationComponent implements OnInit {
   userFullname: string;
   preChatForm = false;
   themeColor50: string;
-
-
   textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
 
@@ -106,20 +105,20 @@ export class ConversationComponent implements OnInit {
     public messagingService: MessagingService,
     public upSvc: UploadService,
     public contactService: ContactService,
-    private agentAvailabilityService: AgentAvailabilityService
+    private agentAvailabilityService: AgentAvailabilityService,
+    public starRatingWidgetService: StarRatingWidgetService
   ) {
-
+    this.initAll();
   }
 
   ngOnInit() {
-    this.initAll();
+    // this.initAll();
     console.log(' ngOnInit: app-conversation ', this.g);
     console.log(' recipientId: ', this.recipientId);
     console.log(' senderId: ', this.g.senderId);
     console.log(' projectid: ', this.g.projectid);
     console.log(' channelType: ', this.g.channelType);
     console.log(' onSelectDepartment: ', this.g.departmentSelected);
-
     this.setFocusOnId('chat21-main-message-context');
   }
 
@@ -140,9 +139,9 @@ export class ConversationComponent implements OnInit {
 
     console.log(' ---------------- 4: initializeChatManager ------------------- ');
     this.initializeChatManager();
-    
 
-    //this.checkListMessages();
+    this.g.activeConversation = this.conversationWith;
+    // this.checkListMessages();
   }
 
 
@@ -233,6 +232,7 @@ export class ConversationComponent implements OnInit {
       this.contactService.initialize(this.g.senderId, this.g.tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
+      // this.messagingService.resetBadge(this.conversationWith);
   }
 
 
@@ -279,29 +279,27 @@ export class ConversationComponent implements OnInit {
 
   /**
    * imposto le sottoscrizioni
-   * 1 - utente eliminato dal gruppo (CHAT CHIUSA)
+   * 1 - conversazione chiusa (CHAT CHIUSA)
+   * 2 - nuovo messaggio
    */
   setSubscriptions() {
     const that = this;
-
     // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    // const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
-    // .subscribe(isWidgetActive => {
-    //   that.isWidgetActive = isWidgetActive;
-    //   if (isWidgetActive === false) {
-    //     localStorage.removeItem('isWidgetActive');
-    //     console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
-    //   } else if (isWidgetActive === true) {
-    //     console.log('APROOOOOOOO!!!!:');
-    //     localStorage.setItem('isWidgetActive', 'true');
-    //     that.isConversationOpen = false;
-    //   }
-    // });
-    // this.subscriptions.push(subscriptionIsWidgetActive);
+    console.log('CHIUDOOOOO!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService);
+    const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
+    .subscribe(isOpenStartRating => {
+      that.g.isOpenStartRating = isOpenStartRating;
+      if (isOpenStartRating === false) {
+        console.log('CHIUDOOOOO!!!! StartRating');
+      } else if (isOpenStartRating === true) {
+        console.log('APROOOOOOOO!!!! StartRating');
+      }
+    });
+    this.subscriptions.push(subscriptionisOpenStartRating);
 
     // NUOVO MESSAGGIO!!
     /**
-     * se:          non sto già scrollando e il messaggio l'ho inviato io -> scrollToBottom
+     * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
      * altrimenti:  se esiste scrollMe (div da scrollare) verifico la posizione
      *  se:         sono alla fine della pagina scrollo alla fine
      *  altrimenti: aumento il badge
@@ -324,9 +322,7 @@ export class ConversationComponent implements OnInit {
         }
       }
     });
-
     this.subscriptions.push(obsAddedMessage);
-
   }
 
   /**
@@ -860,6 +856,8 @@ export class ConversationComponent implements OnInit {
       }
   }
 
+  
+
 
   /**
      *
@@ -933,6 +931,7 @@ export class ConversationComponent implements OnInit {
   // ========= end:: functions send image ======= //
 
   returnHome() {
+    this.g.activeConversation = null;
     this.eventClose.emit();
   }
 
@@ -940,5 +939,42 @@ export class ConversationComponent implements OnInit {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
     window.open(url, '_blank');
   }
+
+  toggleSound() {
+    this.g.isSoundActive = !this.g.isSoundActive;
+    if ( this.g.isSoundActive === true ) {
+      localStorage.setItem('isSoundActive', 'true');
+    } else {
+      localStorage.removeItem('isSoundActive');
+    }
+  }
+
+
+
+
+  // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
+  /**
+   * elimino tutte le sottoscrizioni
+   */
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnDestroy() {
+    console.log('ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
+    if (window['tiledesk']) {
+        window['tiledesk']['angularcomponent'] = null;
+    }
+    this.unsubscribe();
+  }
+
+  /** */
+  unsubscribe() {
+    this.subscriptions.forEach(function (subscription) {
+        subscription.unsubscribe();
+    });
+    this.subscriptions.length = 0;
+    this.messagingService.unsubscribeAllReferences();
+    console.log('this.subscriptions', this.subscriptions);
+  }
+  // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
+
 
 }

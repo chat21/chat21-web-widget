@@ -10,7 +10,7 @@ import { AuthService } from '../../core/auth.service';
 @Injectable()
 export class StarRatingWidgetService {
   // private BASE_URL_SEND_RATE: string;
-  observable: any;
+  public obsCloseConversation: any;
   private API_URL;
   public senderId: any;
   public requestid: any;
@@ -27,6 +27,7 @@ export class StarRatingWidgetService {
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
     }
+    this.obsCloseConversation = new BehaviorSubject<boolean>(null);
 
     // this.observable = new BehaviorSubject<boolean>(null);
     // this.auth.obsLoggedUser.subscribe((current_user) => {
@@ -41,6 +42,7 @@ export class StarRatingWidgetService {
     //     }, 100);
     //   }
     // });
+
   }
 
   httpSendRate(rate, message): Observable<string> {
@@ -75,7 +77,7 @@ export class StarRatingWidgetService {
 
   setOsservable(bool) {
     console.log('------------------> setOsservable: ', bool);
-    this.observable.next(bool);
+    this.obsCloseConversation.next(bool);
   }
 
   _dowloadTranscript() {

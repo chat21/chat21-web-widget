@@ -1,0 +1,50 @@
+#c21-menu-options{
+    .modal-menu-options {
+        width: auto;
+        height: auto;
+        min-height: 40px;
+        min-width: 100px;
+        max-width: 80%;
+        position: absolute;
+        bottom: 40px;
+        left: 5px;
+        border-radius: 3px;
+        font-size: 1.2em;
+        line-height: normal;
+        overflow: hidden;
+        border: 1px solid #d7d7d7;  
+        background-color: whitesmoke; 
+    }
+    
+    .button-menu-options {
+        position: absolute;
+        width: auto;
+        line-height: 12px;
+        font-size: 1em;
+        font-weight: bold;
+        color: #777777;
+        display: inline-block;
+        align-items: center;
+        margin: 4px 4px;
+        padding: 5px 5px;
+        cursor: pointer;
+    }
+    .button-menu-options:hover{
+        background-color: whitesmoke;
+    }
+}
+
+
+
+
+
+.c21-button{
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 0;
+    color:#777777;
+    // font-weight: bold;
+}
+.c21-button:hover{
+    color:#000000;
+}

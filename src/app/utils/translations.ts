@@ -38,7 +38,13 @@ export const en = {
     'RATE_CHAT': 'Rate chat',
     'WELLCOME_TITLE': 'Hi, wellcome to Tiledesk',
     'WELLCOME_MSG': 'How can we help?',
-    'OPTIONS': 'options'
+    'OPTIONS': 'options',
+
+    'SOUND_OFF': 'sound off',
+    'SOUND_ON': 'sound on',
+    'LOGOUT': 'logout',
+    'CLOSE': 'close',
+    'PREV_CONVERSATIONS': 'Previous conversations'
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -81,5 +87,11 @@ export const it = {
     'RATE_CHAT': 'Valuta chat',
     'WELLCOME_TITLE': 'Ciao, benvenuto su Tiledesk',
     'WELLCOME_MSG': 'Come possiamo aiutarti?',
-    'OPTIONS': 'opzioni'
+    'OPTIONS': 'opzioni',
+
+    'SOUND_OFF': 'suono spento',
+    'SOUND_ON': 'suono acceso',
+    'LOGOUT': 'disconnetti',
+    'CLOSE': 'chiudi',
+    'PREV_CONVERSATIONS': 'Conversazioni precedenti'
 };

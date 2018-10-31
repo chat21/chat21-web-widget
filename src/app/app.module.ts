@@ -44,6 +44,7 @@ import { ConversationComponent } from './components/conversation/conversation.co
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
+import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { PreviewLoadingFilesComponent } from './components/preview-loading-files
     ConversationComponent,
     PrechatFormComponent,
     EyeeyeCatcherCardComponent,
-    PreviewLoadingFilesComponent
+    PreviewLoadingFilesComponent,
+    MenuOptionsComponent
   ],
   imports: [
     BrowserModule,

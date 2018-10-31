@@ -15,6 +15,7 @@ export class ConversationModel {
         public time_last_message: string,
         public color: string,
         public avatar: string,
-        public image: string
+        public image: string,
+        public badge: number
     ) {}
 }

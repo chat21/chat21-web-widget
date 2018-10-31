@@ -1,7 +1,7 @@
 <div id='c21-app-list-conversations'>
 
-  <div class="c21-header">
-      <div class="c21-title">Conversazioni precedenti</div>
+  <div *ngIf="conversations.lenght > 0" class="c21-header">
+      <div class="c21-title">{{g.PREV_CONVERSATIONS}}</div>
       <!-- <div class="c21-button">vedi tutte</div> -->
       <div class="clear"></div>
   </div>
@@ -21,6 +21,7 @@
             <div class="truncate c21-name">{{conversation.sender_fullname }}</div>
             <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
           </div>
+          <div *ngIf="conversation.badge > 0" class="c21-divBudge">{{conversation.badge}}</div>
         </div>
         <div class="clear"></div>
       </div>

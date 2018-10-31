@@ -1,129 +1,148 @@
-<div class="chat21-modal-content modal-body">
-    <!-- 
-    ***************  STEP 0  ***************** 
-    -->
-    <div *ngIf="step==0" class="step-rate">
-        <!-- HEADER -->
-        <div class="modal-header chat21-sheet-header" [ngStyle]="{'background-color': themeColor}" >
-            <!-- TITLE HEADER -->
-            <div class="chat21-sheet-header-title-container">
-                <div class="chat21-sheet-header-title" [ngStyle]="{'color': themeForegroundColor}">
-                    <span> {{ CUSTOMER_SATISFACTION }}</span>
-                </div>
-            </div>
-            <!-- BUTTONS HEADER -->
+<div id="chat21-star-rating-widget">
+    <!-- HEADER -->
+    <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
+        <div class="c21-header-container">
+
             <!-- ICON CLOSE CHAT -->
-            <a  class="header-button right" (click)="closeRate()">
-                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-                    <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title>
-                </svg>
-            </a>
-        </div>
-        <!-- CONTENT -->
-        <div class="modal-content">
-            <div class="default-text">{{ YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
-            <fieldset class="chat21-rating">
-                <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label class = "full" for="star5" title="eccellente - 5 stars"></label>
-                <input type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" /><label class = "full" for="star4" title="ottimo - 4 stars"></label>
-                <input type="radio" id="star3" name="rating" value="3" (click)="openRate($event)" /><label class = "full" for="star3" title="buono - 3 stars"></label>
-                <input type="radio" id="star2" name="rating" value="2" (click)="openRate($event)" /><label class = "full" for="star2" title="sufficiente - 2 stars"></label>
-                <input type="radio" id="star1" name="rating" value="1" (click)="openRate($event)" /><label class = "full" for="star1" title="scarso - 1 star"></label>                                 
-            </fieldset>
-        </div>
-        <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" 
-            [ngStyle]="{'background-color': themeColor, 'border-color': themeColor}" (click)="dowloadTranscript()">
-            <span [ngStyle]="{'color': themeForegroundColor}">{{ DOWNLOAD_TRANSCRIPT }}</span>
-        </button>
-    </div>
-
-
-    <!-- 
-    ***************  STEP 1  ***************** 
-    -->
-    <div *ngIf="step==1" class="step-rate">
-        <!-- HEADER -->
-        <div class="modal-header chat21-sheet-header" [ngStyle]="{'background-color': themeColor}" >
-            <!-- TITLE HEADER -->
-            <div class="chat21-sheet-header-title-container">
-                <div class="chat21-sheet-header-title" [ngStyle]="{'color': themeForegroundColor}">
-                    <span> {{ CUSTOMER_SATISFACTION }}</span>
+            <div class="c21-header-button">
+                <div class="c21-close-button c21-small" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
+                    <div class="c21-close-button-body" (click)="returnClosePage()">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
+                            xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0V0z" />
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                            <!-- <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title> -->
+                        </svg>
+                    </div>
                 </div>
             </div>
-            <!-- BUTTONS HEADER -->
             <!-- ICON BACK -->
-            <a class="header-button left" (click)="prevStep()">
-                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+            <div *ngIf="step > 0" class="c21-header-button c21-left" (click)="prevStep()">
+                <svg class="c21-button" role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
+                    width="24px" height="24px" viewBox="0 0 24 24">
                     <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
-                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
-                    <title id="altIconTitle">{{BUTTON_PREV}}</title>
+                    <path fill="none" d="M0 0h24v24H0V0z" />
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
+                    <title id="altIconTitle">BUTTON_PREV</title>
                 </svg>
-            </a>
-            <!-- ICON CLOSE CHAT -->
-            <a  class="header-button right" (click)="closeRate()">
-                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-                    <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title>
-                </svg>
-            </a>
-        </div>
-        <!-- CONTENT -->
-        <div class="modal-content">
-            <div class="chat21-yourRating">
-                <!-- il tuo voto: -->
-                <p class="default-text">{{ YOUR_RATING }}</p>
-                <div class="chat21-stars">
-                    <span *ngIf="rate>0" class="fa fa-star checked"></span>
-                    <span *ngIf="rate>1" class="fa fa-star checked"></span>
-                    <span *ngIf="rate>2" class="fa fa-star checked"></span>
-                    <span *ngIf="rate>3" class="fa fa-star checked"></span>
-                    <span *ngIf="rate>4" class="fa fa-star checked"></span>
-                </div>
-                <!-- Scrivi la tua opinione...(opzionale) -->
-                <textarea #textbox rows="1" id="chat21-message-rate-context" class='textarea-rate' placeholder="{{ WRITE_YOUR_OPINION }}" ></textarea>
-                <button class="btn-primary" [ngStyle]="{'background-color': themeForegroundColor, 'border-color': themeColor, 'color': themeColor}" (click)="sendRate()">{{ SUBMIT }}</button>
             </div>
-        </div>
-        <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" 
-            [ngStyle]="{'background-color': themeColor, 'border-color': themeColor}" (click)="dowloadTranscript()">
-            <span [ngStyle]="{'color': themeForegroundColor}">{{ DOWNLOAD_TRANSCRIPT }}</span>
-        </button>
-    </div>
 
-    <!-- 
-    ***************  STEP 2  ***************** 
-    -->
-    <div *ngIf="step==2">
-        <!-- HEADER -->
-        <div class="modal-header chat21-sheet-header" [ngStyle]="{'background-color': themeColor}" >
-            <!-- TITLE HEADER -->
-            <div class="chat21-sheet-header-title-container">
-                <div class="chat21-sheet-header-title" [ngStyle]="{'color': themeForegroundColor}">
-                    <span> {{ CUSTOMER_SATISFACTION }}</span>
+            <!-- CONTENT HEADER -->
+            <div class="c21-header-content">
+                <!-- TITLE HEADER -->
+                <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
+                    <span>{{ g.CUSTOMER_SATISFACTION }}</span>
                 </div>
             </div>
-            <!-- BUTTONS HEADER -->
-            <!-- ICON CLOSE CHAT -->
-            <a  class="header-button right" (click)="closeRate()">
-                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                    <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-                    <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title>
-                </svg>
-            </a>
+
         </div>
-        <!-- CONTENT -->
-        <div class="modal-content">
-            <h1 class="default-title">{{ THANK_YOU_FOR_YOUR_EVALUATION }}</h1>
-            <p class="default-text">{{ YOUR_RATING_HAS_BEEN_RECEIVED }}</p>
-            <div class="modal-button-ok" [ngStyle]="{ 'color': themeColor }" (click)="closeRate()">OK</div>
+    </div>
+
+
+    <!-- CONTENT -->
+    <div class="c21-body">
+
+        <div class="c21-body-container">
+
+            <div class="c21-body-content">
+
+                <!-- 
+                ***************  STEP 0  ***************** 
+                -->
+                <div *ngIf="step==0" class="step-rate">
+
+                    <!-- CONTENT -->
+                    <div class="modal-content">
+                        <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
+                        <fieldset class="chat21-rating">
+                            <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label
+                                class="full c21-button" for="star5" title="eccellente - 5 stars"></label>
+                            <input type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" /><label
+                                class="full c21-button" for="star4" title="ottimo - 4 stars"></label>
+                            <input type="radio" id="star3" name="rating" value="3" (click)="openRate($event)" /><label
+                                class="full c21-button" for="star3" title="buono - 3 stars"></label>
+                            <input type="radio" id="star2" name="rating" value="2" (click)="openRate($event)" /><label
+                                class="full c21-button" for="star2" title="sufficiente - 2 stars"></label>
+                            <input type="radio" id="star1" name="rating" value="1" (click)="openRate($event)" /><label
+                                class="full c21-button" for="star1" title="scarso - 1 star"></label>
+                        </fieldset>
+                    </div>
+                    <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                        (click)="dowloadTranscript()">
+                        <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                    </button>
+                </div>
+
+
+                <!-- 
+                ***************  STEP 1  ***************** 
+                -->
+                <div *ngIf="step==1" class="step-rate">
+                    <!-- CONTENT -->
+
+                    <div class="c21-step-content">
+                        <!-- il tuo voto: -->
+                        <p class="default-text">{{ g.YOUR_RATING }}</p>
+                        <div class="chat21-stars">
+                            <span *ngIf="rate>0" class="fa fa-star checked"></span>
+                            <span *ngIf="rate>1" class="fa fa-star checked"></span>
+                            <span *ngIf="rate>2" class="fa fa-star checked"></span>
+                            <span *ngIf="rate>3" class="fa fa-star checked"></span>
+                            <span *ngIf="rate>4" class="fa fa-star checked"></span>
+                        </div>
+                        <div class="clear"></div>
+                        <!-- Scrivi la tua opinione...(opzionale) -->
+                        <textarea #textbox rows="1" id="chat21-message-rate-context" class='textarea-rate'
+                            placeholder="{{ g.WRITE_YOUR_OPINION }}">{{message}}</textarea>
+                        <button class="btn-primary" [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
+                            (click)="sendRate()">{{ g.SUBMIT }}</button>
+                    </div>
+
+                    <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                        (click)="dowloadTranscript()">
+                        <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                    </button>
+
+                </div>
+
+                <!-- 
+                ***************  STEP 2  ***************** 
+                -->
+                <div *ngIf="step==2" class="step-rate">
+                
+                    <!-- CONTENT -->
+                    <div class="c21-step-content">
+                        <h1 class="default-title">{{ g.THANK_YOU_FOR_YOUR_EVALUATION }}</h1>
+                        <p class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</p>
+                    </div>
+                    
+                    <button class="btn-primary" 
+                    [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
+                    (click)="returnClosePage()">
+                        <span>{{ g.CLOSE }}</span>
+                    </button>
+
+                    <button *ngIf="displayDownloadTranscriptBtn !== true" 
+                    class="btn-primary" 
+                    [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    (click)="dowloadTranscript()">
+                        <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                    </button>
+
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+
         </div>
-        <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" 
-            [ngStyle]="{'background-color': themeColor, 'border-color': themeColor}" (click)="dowloadTranscript()">
-            <span [ngStyle]="{'color': themeForegroundColor}">{{ DOWNLOAD_TRANSCRIPT }}</span>
-        </button>
 
     </div>
-    
+
 </div>
-
-

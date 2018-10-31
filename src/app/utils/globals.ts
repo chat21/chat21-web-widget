@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
@@ -11,6 +12,11 @@ import { TemplateBindingParseResult } from '@angular/compiler';
 @Injectable()
 export class Globals {
 
+
+  // ========= begin:: sottoscrizioni ======= //
+  //subscriptions: Subscription[] = []; /** */
+  // ========= end:: sottoscrizioni ======= //
+
   // ============ BEGIN: SET FUNCTION BY UTILS ==============//
   getParameterByName = getParameterByName;
 
@@ -21,13 +27,20 @@ export class Globals {
   default_settings;
   isMobile;
   isLogged;
+  isSoundActive;
+  isLogoutEnabled;
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
-  departmentSelected: DepartmentModel;
+  
   attributes: any;
   token: string;
   lang: string;
+  conversationsBadge: number;
+  activeConversation: string;
+  isOpenStartRating: boolean;
+  departments: DepartmentModel[];
+  departmentSelected: DepartmentModel;
 
 
   // ============ BEGIN: LABELS ==============//
@@ -58,6 +71,21 @@ export class Globals {
   WELLCOME_TITLE: string;
   WELLCOME_MSG: string;
   OPTIONS: string;
+  SOUND_ON: string;
+  SOUND_OFF: string;
+  LOGOUT: string;
+  CUSTOMER_SATISFACTION: string;
+  YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
+  DOWNLOAD_TRANSCRIPT: string;
+  YOUR_RATING: string;
+  WRITE_YOUR_OPINION: string;
+  SUBMIT: string;
+  THANK_YOU_FOR_YOUR_EVALUATION: string;
+  YOUR_RATING_HAS_BEEN_RECEIVED: string;
+  CLOSE: string;
+  PREV_CONVERSATIONS: string;
+
+
 
 
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
@@ -106,7 +134,7 @@ export class Globals {
     }
 
     console.log(' ---------------- 2: set lang ---------------- ');
-    this.lang = 'en';
+    // this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
     this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
 
@@ -164,6 +192,21 @@ export class Globals {
     this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
     this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
     this.OPTIONS = this.translatorService.translate('OPTIONS');
+    this.SOUND_ON = this.translatorService.translate('SOUND_ON');
+    this.SOUND_OFF = this.translatorService.translate('SOUND_OFF');
+    this.LOGOUT = this.translatorService.translate('LOGOUT');
+
+    this.CUSTOMER_SATISFACTION = this.translatorService.translate('CUSTOMER_SATISFACTION');
+    this.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = this.translatorService.translate('YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE');
+    this.DOWNLOAD_TRANSCRIPT = this.translatorService.translate('DOWNLOAD_TRANSCRIPT');
+    this.YOUR_RATING = this.translatorService.translate('YOUR_RATING');
+    this.WRITE_YOUR_OPINION = this.translatorService.translate('WRITE_YOUR_OPINION');
+    this.SUBMIT = this.translatorService.translate('SUBMIT');
+
+    this.THANK_YOU_FOR_YOUR_EVALUATION = this.translatorService.translate('THANK_YOU_FOR_YOUR_EVALUATION');
+    this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
+    this.CLOSE = this.translatorService.translate('CLOSE');
+    this.PREV_CONVERSATIONS = this.translatorService.translate('PREV_CONVERSATIONS');
   }
 
   /**
@@ -171,11 +214,12 @@ export class Globals {
    */
   initParameters() {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
-    this.autoStart = true; // da aggiungere!!!!        /** start Authentication and startUI */
-    this.isShown = true; // da aggiungere!!!!          /** show/hide all widget -> js call: showAllWidget */
-    this.isOpen = false;                        /** show/hide window widget -> js call: hideAllWidget */
-    this.startFromHome = false; // da aggiungere!!!!   /** start from Home or Conversation */
+    this.autoStart = true; // da aggiungere!!!!         /** start Authentication and startUI */
+    this.isShown = true; // da aggiungere!!!!           /** show/hide all widget -> js call: showAllWidget */
+    this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
+    this.startFromHome = true; // da aggiungere!!!!    /** start from Home or Conversation */
 
+    this.isOpenStartRating = false;                     /** show/hide all rating chat */
     // tslint:disable-next-line:max-line-length
     this.projectid = '';                        /** The TileDesk project id. Find your TileDesk ProjectID in the TileDesk Dashboard under the Widget menu. */
 
@@ -230,9 +274,14 @@ export class Globals {
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
+    // this.isSoundActive = true;
+    this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
     this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
-
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
+    // tslint:disable-next-line:max-line-length
+    this.isSoundActive = (localStorage.getItem('isSoundActive')) ? true : false;
+    this.conversationsBadge = 0;
+    this.activeConversation = '';
     // ============ END: SET INTERNAL PARAMETERS ==============//
 
   }
@@ -338,6 +387,12 @@ export class Globals {
     if (TEMP !== null) {
       this.isShown = (TEMP === true) ? true : false;
     }
+
+    TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
+    if (TEMP !== null) {
+      this.isLogoutEnabled = (TEMP === true) ? true : false;
+    }
+
   }
 
   /**
@@ -467,6 +522,11 @@ export class Globals {
     if (TEMP !== undefined) {
       this.isShown = (TEMP === false) ? false : true;
     }
+    TEMP = window['tiledeskSettings']['isLogoutEnabled'];
+    if (TEMP !== undefined) {
+      this.isLogoutEnabled = (TEMP === false) ? false : true;
+    }
+
 
   }
 
@@ -562,6 +622,10 @@ export class Globals {
     if (this.getParameterByName('tiledesk_isShown')) {
       this.isShown = true;
     }
+    if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
+      this.isLogoutEnabled = true;
+    }
+
   }
 
 
@@ -584,7 +648,7 @@ export class Globals {
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle
+      'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled
     };
   }
 

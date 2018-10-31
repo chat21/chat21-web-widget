@@ -31,9 +31,6 @@ export class AuthService {
   }
 
 
-  
-
-
 
   onAuthStateChanged() {
     const that = this;
@@ -143,51 +140,57 @@ export class AuthService {
   }
 
 
-  logout() {
-    return this.firebaseAuth.auth.signOut();
-  }
+  
 
+
+  // signOut() {
+  //   return firebase.auth().signOut();
+  //   // .then(function() {
+  //   //   // Sign-out successful.
+  //   // }).catch(function(error) {
+  //   //   // An error happened.
+  //   // });
+  // }
+
+
+
+
+  // signup(email: string, password: string) {
+  //   this.firebaseAuth
+  //     .auth
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(value => {
+  //       console.log('Success!', value);
+  //     })
+  //     .catch(err => {
+  //       console.log('Something went wrong:', err.message);
+  //     });
+  // }
+
+  // login(email: string, password: string) {
+  //   this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+  //     .then(value => {
+  //       console.log('Nice, it worked!');
+  //     })
+  //     .catch(err => {
+  //       console.log('Something went wrong:', err.message);
+  //     });
+  // }
 
   signOut() {
-    return firebase.auth().signOut();
-    // .then(function() {
-    //   // Sign-out successful.
-    // }).catch(function(error) {
-    //   // An error happened.
-    // });
+    const that = this;
+    return this.firebaseAuth.auth.signOut()
+    .then(value => {
+      console.log('Nice, signOut OK!');
+      that.unsubscribe();
+      that.obsLoggedUser.next(-1);
+    })
+    .catch(err => {
+      console.log('Something went wrong in signOut:', err.message);
+      that.obsLoggedUser.next(firebase.auth().currentUser);
+    });
   }
 
-
-
-  signup(email: string, password: string) {
-    this.firebaseAuth
-      .auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('Success!', value);
-      })
-      .catch(err => {
-        console.log('Something went wrong:', err.message);
-      });
-  }
-
-  login(email: string, password: string) {
-    this.firebaseAuth
-      .auth
-      .signInWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('Nice, it worked!');
-      })
-      .catch(err => {
-        console.log('Something went wrong:', err.message);
-      });
-  }
-
-  logout2() {
-    this.firebaseAuth
-      .auth
-      .signOut();
-  }
 
   // /jwt/decode?project_id=123
   public decode(token, projectId) {

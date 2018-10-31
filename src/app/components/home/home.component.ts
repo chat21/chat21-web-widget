@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit {
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
   @Output() eventClose = new EventEmitter();
+  @Output() eventSignOut = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========/
 
@@ -29,7 +30,7 @@ export class HomeComponent implements OnInit {
   // ========= end:: component variables ======= //
 
 
-  isOpenMenuOptions = false;
+
 
   constructor(
     public g: Globals
@@ -51,7 +52,7 @@ export class HomeComponent implements OnInit {
 
     this.colorGradient = 'linear-gradient(' + this.g.themeColor + ', ' + this.themeColor50 + ')';
     this.colorBck = '#000000';
-    
+
   }
 
 
@@ -70,9 +71,16 @@ export class HomeComponent implements OnInit {
     this.eventClose.emit();
   }
 
-  f21_toggle_options() {
-    this.isOpenMenuOptions = !this.isOpenMenuOptions;
+
+
+  /**
+   * MODAL MENU SETTINGS:
+   * logout
+   */
+  returnSignOut() {
+    this.eventSignOut.emit();
   }
+
   // ========= end:: ACTIONS ============//
 
 }
