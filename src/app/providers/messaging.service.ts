@@ -30,12 +30,12 @@ export class MessagingService {
   messages: Array<MessageModel>;
 
   obsAdded: any;
-  observableWidgetActive: any;
+  // observableWidgetActive: any;
 
   firebaseMessagesKey: any;
   conversationRef: any;
   conversationsRef: any;                    /** ref nodo conversazioni: check if conversation is closed */
-  isWidgetActive: boolean;
+  // isWidgetActive: boolean;
   channel_type: string;
   API_URL: string;
   departments: DepartmentModel[];
@@ -52,7 +52,7 @@ export class MessagingService {
       throw new Error('apiUrl is not defined');
     }
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
-    this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
+    // this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
 
@@ -447,10 +447,10 @@ export class MessagingService {
 
 
   /** */
-  setRating(rate) {
-    console.log('setRating **************', rate);
-    this.observableWidgetActive.next(false);
-  }
+  // setRating(rate) {
+  //   console.log('setRating **************', rate);
+  //   this.observableWidgetActive.next(false);
+  // }
 
   /** */
   updateMetadataMessage(uid, metadata) {

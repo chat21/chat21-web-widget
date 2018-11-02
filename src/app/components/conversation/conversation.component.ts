@@ -45,6 +45,7 @@ export class ConversationComponent implements OnInit {
   idDivScroll = 'c21-contentScroll'; // id div da scrollare
   showButtonToBottom = false;
   NUM_BADGES = 0;
+  audio: any;
   // ========= end:: gestione scroll view messaggi ======= //
 
 
@@ -319,6 +320,7 @@ export class ConversationComponent implements OnInit {
           }, 0);
         } else {
           that.NUM_BADGES++;
+          that.soundMessage();
         }
       }
     });
@@ -977,4 +979,21 @@ export class ConversationComponent implements OnInit {
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
 
+
+  /**
+   * regola sound message:
+   * se lo invio io -> NO SOUND
+   * se non sono nella conversazione -> SOUND
+   * se sono nella conversazione in fondo alla pagina -> NO SOUND
+   * altrimenti -> SOUND
+   */
+  soundMessage() {
+    if ( this.g.isSoundActive ) {
+      console.log('****** soundMessage *****');
+      this.audio = new Audio();
+      this.audio.src = './assets/sounds/Carme.mp3';
+      this.audio.load();
+      this.audio.play();
+    }
+  }
 }

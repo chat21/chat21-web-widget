@@ -10,17 +10,18 @@ export class MenuOptionsComponent implements OnInit {
    // ========= begin:: Input/Output values ============//
    @Output() eventSignOut = new EventEmitter();
    // ========= end:: Input/Output values ============//
-  isOpenMenuOptions = false;
-
+  themeColor50: string;
   constructor(
     public g: Globals
   ) { }
 
   ngOnInit() {
+    this.themeColor50 = this.g.themeColor + '7F';
   }
 
   f21_toggle_options() {
-    this.isOpenMenuOptions = !this.isOpenMenuOptions;
+    console.log('f21_toggle_options', this.g.isOpenMenuOptions);
+    this.g.isOpenMenuOptions = !this.g.isOpenMenuOptions;
   }
   toggleSound() {
     this.g.isSoundActive = !this.g.isSoundActive;
@@ -32,6 +33,7 @@ export class MenuOptionsComponent implements OnInit {
   }
 
   signOut() {
+    this.g.isOpenMenuOptions = false;
     this.eventSignOut.emit();
   }
 

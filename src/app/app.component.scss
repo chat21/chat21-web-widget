@@ -240,7 +240,7 @@ div.clear {
 
     /* MESSAGE CONTAINER GENERAL */
     #chat21-conversations {
-
+        border-radius: '0px';
         .msg_container {
             overflow: hidden;
             display: flex;
@@ -339,10 +339,11 @@ div.clear {
         display: none;
         position: fixed;
         /* height: 80%; */
-        height: 80%; /* nk */
+        // height: 80%; /* nk */
         /* width: 320px; */
         width: 376px; /* nk */
         /* bottom: 100px; */
+        top: 20px;
         bottom: 90px; /* nk: replace the above bottom value for the new launcher chat icon (background- color instead of background image) */
         overflow: hidden;
         /* border-radius: 10px; */

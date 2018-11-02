@@ -11,6 +11,8 @@ import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { TranslatorService } from './providers/translator.service';
+import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
+
 
 
 // utils
@@ -24,20 +26,20 @@ import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from 
     // providers: [AgentAvailabilityService, TranslatorService]
 })
 
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AppComponent implements OnInit, OnDestroy {
 
     // ========= begin:: parametri di stato widget ======= //
     isInitialized = false;              /** if true show button */
-
-    isOpenHome = true;                  /**  check open/close component home ( sempre visibile xchè il primo dello stack ) */
+    isOpenHome = true;                  /** check open/close component home ( sempre visibile xchè il primo dello stack ) */
     isOpenConversation = false;         /** check open/close component conversation if is true  */
-    isOpenSelectionDepartment = false;   /** check open/close modal select department */
+    isOpenSelectionDepartment = false;  /** check open/close modal select department */
     isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
 
-    isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
-    isModalLeaveChatActive = false;     /** ???? */
+    // isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
+    // isModalLeaveChatActive = false;     /** ???? */
     departments = [];
+    marginBottom: number;
     // ========= end:: parametri di stato widget ======= //
 
 
@@ -69,7 +71,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public translatorService: TranslatorService,
         public authService: AuthService,
         public messagingService: MessagingService,
-        public contactService: ContactService
+        public contactService: ContactService,
+        public chatPresenceHandlerService: ChatPresenceHandlerService
     ) {
         this.initAll();
     }
@@ -88,7 +91,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         /**
          * SUBSCRIBE TO ASINC LOGIN FUNCTION
          */
-
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
                 console.log(' currentUser:::: ', user);
@@ -116,16 +118,25 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     // that.openIfCallOutTimer();
                     that.startUI();
                     that.triggeisLoggedInEvent();
+                    console.log(' 1 - IMPOSTO STATO CONNESSO UTENTE ');
+                    that.chatPresenceHandlerService.setupMyPresence(that.g.senderId);
                 }
             });
         });
         this.subscriptions.push(obsLoggedUser);
     }
 
-    ngAfterViewInit() {
-    }
 
-
+    /**
+     * INITIALIZE:
+     * 1 - set LANG
+     * 2 - set MOBILE
+     * 3 - add Component to Window
+     * 4 - trigget Load Params Event
+     * 5 - set Is Widget Open Or Active
+     * 6 - get MongDb Departments
+     * 7 - set isInitialized and enable principal button
+     */
     private initAll() {
         // set lang and in global variables
         console.log(' ---------------- SET LANG ---------------- ');
@@ -141,10 +152,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(' ---------------- CONSTRUCTOR ---------------- ');
 
         this.g.initialize(this.el);
-        console.log(' ---------------- A1 ---------------- ');
+        console.log(' ---------------- A0 ---------------- ');
 
-        // ATTENZIONE TESTAREREEEE QUESTO SPOSTAMENTO..
         this.addComponentToWindow(this.ngZone);
+        console.log(' ---------------- A1 ---------------- ');
 
         this.triggetLoadParamsEvent();
         console.log(' ---------------- A2 ---------------- ');
@@ -152,19 +163,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setIsWidgetOpenOrActive();
         console.log(' ---------------- A3 ---------------- ');
 
-        this.isInitialized = true;
-        // this.g.isShown = false;
-
-        console.log(' ---------------- A4 ---------------- ');
         this.getMongDbDepartments();
+        console.log(' ---------------- A4 ---------------- ');
+
+        /** mostro il pulsante principale dopo l'init */
+        this.isInitialized = true;
+
+        this.marginBottom = +this.g.marginY + 70;
+
+        this.chatPresenceHandlerService.initialize();
 
     }
 
 
-
+    // ========= begin:: GET DEPARTEMENTS ============//
     /**
      * recupero elenco dipartimenti
-     * - recupero il token fisso
      * - mi sottoscrivo al servizio
      * - se c'è un solo dipartimento la setto di default
      * - altrimenti visualizzo la schermata di selezione del dipartimento
@@ -173,26 +187,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const that = this;
         console.log('getMongDbDepartments ::::', this.g.projectid);
         this.messagingService.getMongDbDepartments(this.g.projectid)
-        .subscribe(response => {
-            that.g.departments = response;
-            that.initDepartments();
-        },
-        errMsg => {
-            console.log('http ERROR MESSAGE', errMsg);
-        },
-        () => {
-            console.log('API ERROR NESSUNO');
-        });
+            .subscribe(response => {
+                that.g.departments = response;
+                that.initDepartments();
+            },
+                errMsg => {
+                    console.log('http ERROR MESSAGE', errMsg);
+                },
+                () => {
+                    console.log('API ERROR NESSUNO');
+                });
     }
 
-    /** */
+    /**
+     * INIT DEPARTMENT:
+     * get departments list
+     * set department default
+    */
     initDepartments() {
         this.g.departmentSelected = null;
-        console.log('initDepartments ::::', this.g.departments);
-
         console.log('SET DEPARTMENT DEFAULT ::::', this.g.departments[0]);
         this.setDepartment(this.g.departments[0]);
-
         let i = 0;
         this.g.departments.forEach(department => {
             if (department['default'] === true) {
@@ -201,7 +216,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             i++;
         });
-
         if (this.g.departments.length === 1) {
             // UN SOLO DEPARTMENT
             console.log('DEPARTMENT FIRST ::::', this.g.departments[0]);
@@ -213,9 +227,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
         }
     }
+
     /**
-     *
-     */
+     * SET DEPARTMENT:
+     * set department selected
+     * save department selected in attributes
+     * save attributes in localstorage
+    */
     setDepartment(department) {
         this.g.departmentSelected = department;
         if (this.g.attributes) {
@@ -225,12 +243,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
         }
     }
+    // ========= end:: GET DEPARTEMENTS ============//
 
+
+    // ========= begin:: AUTHENTICATION ============//
     /**
-     *
+     * SET AUTHENTICATION:
+     * authenticate in chat
      */
     private setAuthentication() {
-
         /**
          * 0 - controllo se è stato passato email e psw
          *  SI - mi autentico con email e psw
@@ -253,7 +274,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log(' ---------------- 10 ---------------- ');
             // se esistono email e psw faccio un'autenticazione firebase con email
             this.authService.authenticateFirebaseWithEmailAndPassword(this.g.userEmail, this.g.userPassword);
-
         } else if (this.g.userId) {
             // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
             console.log(' ---------------- 11 ---------------- ');
@@ -261,6 +281,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.g.senderId = this.g.userId;
             this.g.isLogged = true;
             this.startUI();
+            console.log(' 11 - IMPOSTO STATO CONNESSO UTENTE ');
+            this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
         } else if (this.g.userToken) {
             // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
             // !!! DA TESTARE NON FUNZIONA !!! //
@@ -271,12 +293,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (currentUser) {
             //  SONO GIA' AUTENTICATO
             console.log(' ---------------- 13 ---------------- ');
-            console.log(' currentUser', currentUser);
             this.g.senderId = currentUser.uid;
             this.g.isLogged = true;
             console.log(' this.g.senderId', this.g.senderId);
             console.log(' this.g.isLogged', this.g.isLogged);
             this.startUI();
+            console.log(' 13 - IMPOSTO STATO CONNESSO UTENTE ');
+            this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
 
         } else {
             //  AUTENTICAZIONE ANONIMA
@@ -284,18 +307,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log(' authenticateFirebaseAnonymously');
             this.authService.authenticateFirebaseAnonymously();
         }
-
     }
+    // ========= end:: AUTHENTICATION ============//
 
 
+    // ========= begin:: START UI ============//
+    /**
+     * set opening priority widget
+     */
     private startUI() {
         console.log(' ============ startUI ===============');
-        /** TEST  */
         this.isOpenHome = true;
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
         this.isOpenSelectionDepartment = false;
-
         if (this.g.startFromHome) {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
@@ -308,7 +333,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            console.log(' ============ apro dipartimenti ===============');
             this.isOpenPrechatForm = false;
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
@@ -319,46 +343,38 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
     }
-
+    // ========= end:: START UI ============//
 
 
     // ========= begin:: COMPONENT TO WINDOW ============//
-
-    // http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
     /**
-     *
-     * @param ngZone
+     * http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
      */
     private addComponentToWindow(ngZone) {
         if (window['tiledesk']) {
             window['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
-
             /** */
             window['tiledesk'].setUserInfo = function (userInfo) {
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
                 });
             };
-
             /** loggin with token */
             window['tiledesk'].signInWithCustomToken = function (token) {
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
                 });
             };
-
             /** loggin anonymous */
             window['tiledesk'].signInAnonymous = function () {
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
-
             // window['tiledesk'].on = function (event_name, handler) {
             //     console.log("addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
-
             /** show all widget */
             window['tiledesk'].show = function () {
                 console.log('!!!showAllWidget');
@@ -366,7 +382,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.showAllWidget();
                 });
             };
-
             /** hidden all widget */
             window['tiledesk'].hide = function () {
                 console.log('!!!hideAllWidget');
@@ -374,7 +389,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.hideAllWidget();
                 });
             };
-
             /** close window chat */
             window['tiledesk'].close = function () {
                 console.log('!!!f21_close');
@@ -382,7 +396,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.f21_close();
                 });
             };
-
             /** open window chat */
             window['tiledesk'].open = function () {
                 console.log('!!!f21_open');
@@ -390,8 +403,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                     window['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
-
-            /** setS tate PreChatForm close/open */
+            /** set state PreChatForm close/open */
             window['tiledesk'].setStatePreChatForm = function (state) {
                 console.log('!!!openClosePreChatForm', state);
                 ngZone.run(() => {
@@ -401,28 +413,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    /**
-     *
-     * @param token
-     */
+    /** */
     private signInWithCustomToken(token) {
         console.log('signInWithCustomToken token ', token);
-        // console.log('this.g', this.g);
         const that = this;
         this.authService.createFirebaseToken(token, this.g.projectid)
             .subscribe(response => {
                 that.authService.decode(token, that.g.projectid)
                     .subscribe(resDec => {
                         console.log('resDec', resDec.decoded);
-                        console.log('email', resDec.decoded.email);
-                        console.log('name', resDec.decoded.name);
-                        console.log('external_id', resDec.decoded.external_id);
-                        console.log('iat', resDec.decoded.iat);
-
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
-                        console.log('g', that.g);
-
                         const firebaseToken = response.firebaseToken;
                         console.log('firebaseToken', firebaseToken);
                         that.g.userToken = firebaseToken;
@@ -431,14 +432,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    /**
-     *
-     */
+    /** */
     private signInAnonymous() {
         console.log('signInAnonymous ');
         this.authService.authenticateFirebaseAnonymously();
     }
 
+    /** */
     private setStatePreChatForm(state) {
         if (state != null) {
             this.g.preChatForm = state;
@@ -447,112 +447,58 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('this.isOpenPrechatForm ', this.isOpenPrechatForm);
     }
 
-    signOut() {
-        this.authService.signOut();
+    /** show all widget */
+    private showAllWidget() {
+        this.g.isShown = true;
     }
 
-    // private setUserInfo(userInfo) {
-    //     console.log('this.attributes', this.g.attributes);
-    //     console.log('userInfo', userInfo);
-    //     if (userInfo) {
-    //         Object.assign(this.g.attributes, userInfo);
-    //         // if (userInfo.userFullname) {
-    //         //     this.attributes.userFullname = userInfo.userFullname;
-    //         // }
-    //         // if (userInfo.userEmail) {
-    //         //     this.attributes.userEmail = userInfo.userEmail;
-    //         // }
-    //     }
-    // }
+    /** hide all widget */
+    private hideAllWidget() {
+        this.g.isShown = false;
+    }
+
+    /** open popup conversation */
+    private f21_open() {
+        console.log('f21_open senderId: ', this.g.senderId);
+        if (this.g.senderId) {
+            this.g.isOpen = true; // !this.isOpen;
+            this.isInitialized = true;
+            localStorage.setItem('isOpen', 'true');
+            // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+        }
+    }
+
+    /** close popup conversation */
+    private f21_close() {
+        console.log('isOpen::', this.g.isOpen);
+        this.g.isOpen = false;
+        localStorage.setItem('isOpen', 'false');
+    }
 
     // ========= end:: COMPONENT TO WINDOW ============//
 
 
 
+    // ============ begin: functions pass values to external ============//
     /** */
-    setIsWidgetOpenOrActive() {
-        if (localStorage.getItem('isOpen') === 'true') {
-            this.g.isOpen = true;
-        } else if (localStorage.getItem('isOpen') === 'false') {
-            this.g.isOpen = false;
-        }
-        this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
+    private triggeisLoggedInEvent() {
+        console.log(' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged);
+        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
+        this.el.nativeElement.dispatchEvent(isLoggedIn);
     }
 
-
-    /**
-     * genero un nuovo conversationWith
-     * al login o all'apertura di una nuova conversazione
-     */
-    generateNewUidConversation() {
-        console.log('generateUidConversation **************', this.g.senderId);
-        return this.messagingService.generateUidConversation(this.g.senderId);
+    /** */
+    private triggetLoadParamsEvent() {
+        console.log(' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings);
+        const default_settings = this.g.default_settings;
+        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
+        this.el.nativeElement.dispatchEvent(loadParams);
     }
-
-    /**
-     * recupero url immagine profilo
-     * @param uid
-     */
-    getUrlImgProfile(uid): string {
-        // tslint:disable-next-line:curly
-        if (!uid) return this.IMG_PROFILE_SUPPORT;
-        const profile = this.contactService.getContactProfile(uid);
-        if (profile && profile.imageurl) {
-            return profile.imageurl;
-        } else {
-            return this.IMG_PROFILE_SUPPORT;
-        }
-    }
-
-    /**
-     * premendo sul pulsante 'APRI UNA NW CONVERSAZIONE'
-     * attivo una nuova conversazione
-     */
-    startNwConversation() {
-        console.log('AppComponent::startNwConversation');
-        // this.ngOnDestroy();
-        this.g.recipientId = this.generateNewUidConversation();
-        console.log(' recipientId: ', this.g.recipientId);
-        console.log(' senderId: ', this.g.senderId);
-        console.log(' projectid: ', this.g.projectid);
-        console.log(' channelType: ', this.g.channelType);
-    }
-
-    // convertMessage(msg) {
-    //     let messageText = encodeHTML(msg);
-    //     messageText = urlify(messageText);
-    //     // console.log('messageText: ' + messageText);
-    //     return messageText;
-    // }
-
-    // openModal(id) {
-    //     if ( id === 'isModalLeaveChatActive' ) {
-    //         this.isModalLeaveChatActive = (this.isModalLeaveChatActive ? false : true);
-    //     }
-    // }
-
-    // leaveChat() {
-    //     this.openModal('isModalLeaveChatActive');
-    //     this.messagingService.closeConversation();
-    // }
-
-    /**
-     * attivo bottone valuta
-     */
-    // checkChatClosed(attributes) {
-    //     // console.log('ADD BUTTON VALUTA *****', attributes);
-    //     if ( attributes['subtype'] === 'info/support' && attributes['messagelabel'].key === 'CHAT_CLOSED' ) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
+    // ============ end: functions pass values to external ============//
 
 
     // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
-    /**
-     * elimino tutte le sottoscrizioni
-     */
+    /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
         console.log('this.subscriptions', this.subscriptions);
         if (window['tiledesk']) {
@@ -573,56 +519,50 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-
-
-
-    // ============ begin: functions called on addComponentToWindow ============//
-
-    /** show all widget */
-    showAllWidget() {
-        this.g.isShown = true;
+    // ========= begin:: FUNCTIONS ============//
+    /** */
+    signOut() {
+        console.log(' 1 - CANCELLO UTENTE DAL NODO PRESENZE');
+        this.chatPresenceHandlerService.goOffline();
+        this.authService.signOut();
     }
 
-    /** hide all widget */
-    hideAllWidget() {
-        this.g.isShown = false;
-    }
-
-    /** open popup conversation */
-    f21_open() {
-        console.log('f21_open senderId: ', this.g.senderId);
-        if (this.g.senderId) {
-            this.g.isOpen = true; // !this.isOpen;
-            this.isInitialized = true;
-            localStorage.setItem('isOpen', 'true');
-            // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+    /**
+     * get status window chat from localStorage
+     * set status window chat open/close
+     */
+    setIsWidgetOpenOrActive() {
+        if (localStorage.getItem('isOpen') === 'true') {
+            this.g.isOpen = true;
+        } else if (localStorage.getItem('isOpen') === 'false') {
+            this.g.isOpen = false;
         }
+        // this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
     }
 
-    /** close popup conversation */
-    f21_close() {
-        console.log('isOpen::', this.g.isOpen);
-        this.g.isOpen = false;
-        localStorage.setItem('isOpen', 'false');
+    /**
+     * genero un nuovo conversationWith
+     * al login o all'apertura di una nuova conversazione
+     */
+    generateNewUidConversation() {
+        console.log('generateUidConversation **************', this.g.senderId);
+        return this.messagingService.generateUidConversation(this.g.senderId);
     }
 
-    /** */
-    private triggeisLoggedInEvent() {
-        console.log(' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged);
-        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
-        this.el.nativeElement.dispatchEvent(isLoggedIn);
+    /**
+     * premendo sul pulsante 'APRI UNA NW CONVERSAZIONE'
+     * attivo una nuova conversazione
+     */
+    startNwConversation() {
+        console.log('AppComponent::startNwConversation');
+        // this.ngOnDestroy();
+        this.g.recipientId = this.generateNewUidConversation();
+        console.log(' recipientId: ', this.g.recipientId);
+        console.log(' senderId: ', this.g.senderId);
+        console.log(' projectid: ', this.g.projectid);
+        console.log(' channelType: ', this.g.channelType);
     }
-
-    /** */
-    private triggetLoadParamsEvent() {
-        console.log(' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings);
-        const default_settings = this.g.default_settings;
-        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
-        this.el.nativeElement.dispatchEvent(loadParams);
-    }
-
-    // ============ end: functions called on addComponentToWindow ============//
-
+    // ========= end:: FUNCTIONS ============//
 
 
 
@@ -636,10 +576,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     openCloseWidget($event) {
         this.g.isOpen = $event;
         console.log('openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId);
-        // this.displayEyeCatcherCard = 'none';
-        // this.displayEyeCatcherCardCloseBtnWrapper = 'none';
-        // this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
-        // this.displayEyeCatcherCardCloseBtn = 'none';
     }
 
     /**
@@ -763,7 +699,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenConversation = false;
     }
 
-
     /**
      * MODAL MENU SETTINGS:
      * logout
@@ -771,7 +706,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     returnSignOut() {
         this.signOut();
     }
-
 
     /**
      * MODAL RATING WIDGET:
@@ -782,7 +716,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenPrechatForm = false;
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
-        this.g.isOpenStartRating = !this.g.isOpenStartRating;
+        this.g.isOpenStartRating = false;
     }
 
     /**
@@ -790,25 +724,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      * complete rate chat
      */
     returnRateChatComplete() {
-
+        this.isOpenHome = true;
+        this.isOpenPrechatForm = false;
+        this.isOpenConversation = false;
+        this.isOpenSelectionDepartment = false;
+        this.g.isOpenStartRating = false;
     }
-
-
-
-    // private returnToHome() {
-    //     this.isOpenSelectionDepartment = false;
-    //     this.isOpenPrechatForm = false;
-    //     // this.g.isOpenConversation = false;
-    // }
-
-    // private returnCloseForm() {
-    //     this.g.attributes.userFullname = this.g.userFullname;
-    //     this.g.attributes.userEmail = this.g.userEmail;
-    //     if (this.g.attributes) {
-    //         localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
-    //     }
-    //     this.isOpenPrechatForm = false;
-    // }
 
     // ========= end:: CALLBACK FUNCTIONS ============//
 }

@@ -55,7 +55,7 @@ export class ConversationsService {
       if (conversation.sender !== that.senderId ) {
         // const badge = (conversation.is_new) ? 1 : 0;
         // that.updateBadge(conversation, badge);
-        if ( conversation.badge > 0 ) {
+        if ( conversation.is_new === true ) {
           that.updateConversationBadge();
         }
         that.soundMessage();
@@ -82,7 +82,7 @@ export class ConversationsService {
             badge = (conversationTEMP.badge) ? conversationTEMP.badge + 1 : 1;
             that.soundMessage();
           }
-          that.updateBadge(conversation, badge);
+          //that.updateBadge(conversation, badge);
           that.updateConversationBadge();
         }
       }
@@ -109,7 +109,7 @@ export class ConversationsService {
   updateConversationBadge() {
     let conversationsBadge = 0;
     this.conversations.forEach(element => {
-      if ( element.badge > 0 ) {
+      if ( element.is_new === true ) {
         conversationsBadge ++;
       }
     });
@@ -117,15 +117,21 @@ export class ConversationsService {
   }
 
 
-  updateBadge(conversation, badge) {
-    const urlUpdate = this.urlConversation + conversation.recipient + '/badge/';
-    const update = {};
-    // tslint:disable-next-line:no-unused-expression
-    update [urlUpdate] = badge;
-    console.log('**** updateBadge::' + urlUpdate);
-    return firebase.database().ref().update(update);
-  }
+  // updateBadge(conversation, badge) {
+  //   const urlUpdate = this.urlConversation + conversation.recipient + '/badge/';
+  //   const update = {};
+  //   update [urlUpdate] = badge;
+  //   console.log('**** updateBadge::' + urlUpdate);
+  //   return firebase.database().ref().update(update);
+  // }
 
+  updateIsNew(conversation) {
+    const urlUpdate = this.urlConversation + conversation.recipient;
+    const update = {};
+    update['/is_new'] = false;
+    console.log('**** updateIsNew::' + urlUpdate);
+    return firebase.database().ref(urlUpdate).update(update);
+  }
 
   private setConversation(childSnapshot) {
     const that = this;
@@ -149,13 +155,17 @@ export class ConversationsService {
   }
 
   /**
-   *
+   * regola sound message:
+   * se lo invio io -> NO SOUND
+   * se non sono nella conversazione -> SOUND
+   * se sono nella conversazione in fondo alla pagina -> NO SOUND
+   * altrimenti -> SOUND
    */
   soundMessage() {
     if ( this.g.isSoundActive ) {
       console.log('****** soundMessage *****');
       this.audio = new Audio();
-      this.audio.src = '../../assets/Carme.mp3';
+      this.audio.src = './assets/sounds/Carme.mp3';
       this.audio.load();
       this.audio.play();
     }

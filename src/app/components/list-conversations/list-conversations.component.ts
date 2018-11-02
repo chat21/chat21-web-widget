@@ -75,7 +75,8 @@ export class ListConversationsComponent implements OnInit {
   private openConversationByID(conversation) {
     console.log('openConversationByID: ', conversation);
     if ( conversation ) {
-      this.conversationsService.updateBadge(conversation, 0);
+      // this.conversationsService.updateBadge(conversation, 0);
+      this.conversationsService.updateIsNew(conversation);
       this.conversationsService.updateConversationBadge();
       this.eventSelctedConv.emit(conversation);
     }

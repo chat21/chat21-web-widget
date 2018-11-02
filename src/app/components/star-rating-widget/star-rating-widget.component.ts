@@ -60,38 +60,7 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.themeForegroundColor);
     this.displayDownloadTranscriptBtn = this.g.allowTranscriptDownload; //????????
     this.step = 0;
-
-    // const that = this;
-    // // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    // const subscriptionIsConversationClosed: Subscription = this.starRatingWidgetService.observable.subscribe(isConversationClosed => {
-    //   // that.isConversationClosed = isConversationClosed;
-    //   if (isConversationClosed === false) {
-    //     // localStorage.removeItem('isWidgetActive'); ????? a cosa serve ????
-    //     console.log('CHIUDOOOOO!!!!:', that.isConversationClosed);
-    //   } else if (isConversationClosed === true) {
-    //     console.log('APROOOOOOOO!!!!:');
-    //     // localStorage.setItem('isWidgetActive', 'true');
-    //   }
-    //   that.isConversationClosed = isConversationClosed;
-    // });
-    // this.subscriptions.push(subscriptionIsWidgetActive);
-
-
   }
-
-
-
-  // private translate() {
-  //   this.CUSTOMER_SATISFACTION = this.translatorService.translate('CUSTOMER_SATISFACTION');
-  //   this.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = this.translatorService.translate('YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE');
-  //   this.DOWNLOAD_TRANSCRIPT = this.translatorService.translate('DOWNLOAD_TRANSCRIPT');
-  //   this.BACK = this.translatorService.translate('BACK');
-  //   this.YOUR_RATING = this.translatorService.translate('YOUR_RATING');
-  //   this.WRITE_YOUR_OPINION = this.translatorService.translate('WRITE_YOUR_OPINION');
-  //   this.SUBMIT = this.translatorService.translate('SUBMIT');
-  //   this.THANK_YOU_FOR_YOUR_EVALUATION = this.translatorService.translate('THANK_YOU_FOR_YOUR_EVALUATION');
-  //   this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
-  // }
 
   dowloadTranscript() {
     this.starRatingWidgetService._dowloadTranscript();

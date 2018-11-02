@@ -46,6 +46,8 @@ import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eye
 import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 
+import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -91,7 +93,8 @@ import { MenuOptionsComponent } from './components/menu-options/menu-options.com
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    Globals
+    Globals,
+    ChatPresenceHandlerService
   ],
   bootstrap: [AppComponent]
 })

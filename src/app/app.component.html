@@ -5,13 +5,17 @@
     <!-- 
     ****** LAUNCHER BUTTON ******
     -->
-    <app-launcher-button *ngIf="isInitialized" (eventOpenCloseWidget)="openCloseWidget($event)"></app-launcher-button>
+    <app-launcher-button *ngIf="isInitialized" 
+    (eventOpenCloseWidget)="openCloseWidget($event)"
+    ></app-launcher-button>
 
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
-    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" [ngStyle]=" {'border-radius': '0px' }" [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }">
-        
+    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" 
+    [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }"
+    [ngStyle] = "{'bottom': marginBottom+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
+    >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
             <app-home 
             [senderId]="senderId"

@@ -71,6 +71,10 @@ export class HomeComponent implements OnInit {
     this.eventClose.emit();
   }
 
+  hideMenuOptions() {
+    console.log('hideMenuOptions');
+    this.g.isOpenMenuOptions = false;
+  }
 
 
   /**

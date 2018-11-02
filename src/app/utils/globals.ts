@@ -32,7 +32,7 @@ export class Globals {
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
-  
+
   attributes: any;
   token: string;
   lang: string;
@@ -41,6 +41,7 @@ export class Globals {
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
   departmentSelected: DepartmentModel;
+  isOpenMenuOptions: boolean;
 
 
   // ============ BEGIN: LABELS ==============//
@@ -115,6 +116,8 @@ export class Globals {
   userId;
   userPassword;
   userToken;
+  marginX;
+  marginY;
 
 
   constructor(
@@ -214,26 +217,26 @@ export class Globals {
    */
   initParameters() {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
-    this.autoStart = true; // da aggiungere!!!!         /** start Authentication and startUI */
-    this.isShown = true; // da aggiungere!!!!           /** show/hide all widget -> js call: showAllWidget */
+    this.autoStart = true;                              /** start Authentication and startUI */
+    this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
-    this.startFromHome = true; // da aggiungere!!!!    /** start from Home or Conversation */
+    this.startFromHome = true;                          /** start from Home or Conversation */
 
     this.isOpenStartRating = false;                     /** show/hide all rating chat */
     // tslint:disable-next-line:max-line-length
-    this.projectid = '';                        /** The TileDesk project id. Find your TileDesk ProjectID in the TileDesk Dashboard under the Widget menu. */
+    this.projectid = '';                                /** The TileDesk project id. Find your TileDesk ProjectID in the TileDesk Dashboard under the Widget menu. */
 
     // tslint:disable-next-line:max-line-length
-    this.preChatForm = false;                   /** You can require customers to enter information like name and email before sending a chat message by enabling the Pre-Chat form. Permitted values: true, false. The default value is false. */
+    this.preChatForm = false;                           /** You can require customers to enter information like name and email before sending a chat message by enabling the Pre-Chat form. Permitted values: true, false. The default value is false. */
 
     // tslint:disable-next-line:max-line-length
-    this.align = 'right';                       /** if it is true, the chat window is automatically open when the widget is loaded. Permitted values: true, false. Default value : false */
+    this.align = 'right';                               /** if it is true, the chat window is automatically open when the widget is loaded. Permitted values: true, false. Default value : false */
 
     // tslint:disable-next-line:max-line-length
-    this.calloutTimer = -1;                     /** Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds), 10 (After 10 seconds). */
+    this.calloutTimer = -1;                             /** Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds), 10 (After 10 seconds). */
 
-    this.calloutTitle = ''; // da aggiungere!!!!       /** title box callout */
-    this.calloutMsg = ''; // da aggiungere!!!!         /** message box callout */
+    this.calloutTitle = '';                             /** title box callout */
+    this.calloutMsg = '';                               /** message box callout */
 
     // tslint:disable-next-line:max-line-length
     this.userFullname = '';                     /** userFullname: Current user fullname. Set this parameter to specify the visitor fullname. */
@@ -265,6 +268,9 @@ export class Globals {
     this.logoChat = './assets/images/tiledesk_logo_white_small.png'; /** url img logo */
     this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
     this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
+
+    this.marginX = '20px';                      /** set margin left or rigth widget  */
+    this.marginY = '20px';                      /** set margin bottom widget */
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -282,6 +288,7 @@ export class Globals {
     this.isSoundActive = (localStorage.getItem('isSoundActive')) ? true : false;
     this.conversationsBadge = 0;
     this.activeConversation = '';
+    this.isOpenMenuOptions = false;             /** open/close menu options  */
     // ============ END: SET INTERNAL PARAMETERS ==============//
 
   }
@@ -350,6 +357,14 @@ export class Globals {
     TEMP = el.nativeElement.getAttribute('align');
     if (TEMP !== null) {
       this.align = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('marginX');
+    if (TEMP !== null) {
+      this.marginX = TEMP;
+    }
+    TEMP = el.nativeElement.getAttribute('marginY');
+    if (TEMP !== null) {
+      this.marginY = TEMP;
     }
     TEMP = el.nativeElement.getAttribute('calloutTimer');
     if (TEMP !== null) {
@@ -460,6 +475,14 @@ export class Globals {
     TEMP = window['tiledeskSettings']['align'];
     if (TEMP !== undefined) {
       this.align = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['marginX'];
+    if (TEMP !== undefined) {
+      this.marginX = TEMP;
+    }
+    TEMP = window['tiledeskSettings']['marginY'];
+    if (TEMP !== undefined) {
+      this.marginY = TEMP;
     }
     TEMP = window['tiledeskSettings']['calloutTimer'];
     if (TEMP !== undefined) {
@@ -582,6 +605,12 @@ export class Globals {
     if (this.getParameterByName('tiledesk_align')) {
       this.align = this.getParameterByName('tiledesk_align');
     }
+    if (this.getParameterByName('tiledesk_marginX')) {
+      this.marginX = this.getParameterByName('tiledesk_marginX');
+    }
+    if (this.getParameterByName('tiledesk_marginY')) {
+      this.marginY = this.getParameterByName('tiledesk_marginY');
+    }
     if (this.getParameterByName('tiledesk_wellcomemsg')) {
       this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
     }
@@ -606,7 +635,6 @@ export class Globals {
     if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
       this.showWidgetNameInConversation = true;
     }
-
     if (this.getParameterByName('tiledesk_startFromHome')) {
       this.startFromHome = true;
     }
@@ -648,7 +676,8 @@ export class Globals {
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled
+      'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
+      'marginX': this.marginX, 'marginY': this.marginY
     };
   }
 
