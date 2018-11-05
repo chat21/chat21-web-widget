@@ -188,15 +188,16 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log('getMongDbDepartments ::::', this.g.projectid);
         this.messagingService.getMongDbDepartments(this.g.projectid)
             .subscribe(response => {
+                // console.log('response DEP ::::', response);
                 that.g.departments = response;
                 that.initDepartments();
             },
-                errMsg => {
-                    console.log('http ERROR MESSAGE', errMsg);
-                },
-                () => {
-                    console.log('API ERROR NESSUNO');
-                });
+            errMsg => {
+                console.log('http ERROR MESSAGE', errMsg);
+            },
+            () => {
+                console.log('API ERROR NESSUNO');
+            });
     }
 
     /**
@@ -206,11 +207,13 @@ export class AppComponent implements OnInit, OnDestroy {
     */
     initDepartments() {
         this.g.departmentSelected = null;
+        this.g.departmentDefault = null;
         console.log('SET DEPARTMENT DEFAULT ::::', this.g.departments[0]);
         this.setDepartment(this.g.departments[0]);
         let i = 0;
         this.g.departments.forEach(department => {
             if (department['default'] === true) {
+                this.g.departmentDefault = department;
                 this.g.departments.splice(i, 1);
                 return;
             }

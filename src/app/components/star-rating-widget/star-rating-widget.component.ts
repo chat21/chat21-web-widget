@@ -88,17 +88,17 @@ export class StarRatingWidgetComponent implements OnInit {
     console.log('sendRate!!!::', this.message);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate(this.rate, this.message)
+    this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
     .subscribe(
       response => {
         console.log('OK sender ::::', response);
         // pubblico var isWidgetActive
-        that.nextStep();
+        that.closeRate();
       },
       errMsg => {
-        console.log('httpSendRate ERROR MESSAGE', errMsg);
+        // console.error('httpSendRate ERROR MESSAGE', errMsg);
         // window.alert('MSG_GENERIC_SERVICE_ERROR');
-        that.nextStep();
+        that.closeRate();
       },
       () => {
         // console.log('API ERROR NESSUNO');
@@ -109,6 +109,7 @@ export class StarRatingWidgetComponent implements OnInit {
   closeRate() {
     this.starRatingWidgetService.setOsservable(false);
     this.step = 0;
+    this.returnClosePage();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface

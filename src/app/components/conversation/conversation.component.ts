@@ -91,7 +91,7 @@ export class ConversationComponent implements OnInit {
   public areAgentsAvailableText: string;
   public areAgentsAvailable: Boolean = false;
   // ========= end::agent availability
-
+  
 
   // ========== begin:: set icon status message
   MSG_STATUS_SENT = MSG_STATUS_SENT;
@@ -120,6 +120,12 @@ export class ConversationComponent implements OnInit {
     console.log(' projectid: ', this.g.projectid);
     console.log(' channelType: ', this.g.channelType);
     console.log(' onSelectDepartment: ', this.g.departmentSelected);
+    // set first message customized for department
+    if (this.g.departmentDefault.online_msg) {
+      this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
+    } else if (this.g.departmentDefault.offline_msg) {
+      this.g.LABEL_FIRST_MSG = this.g.departmentDefault.offline_msg;
+    }
     this.setFocusOnId('chat21-main-message-context');
   }
 

@@ -44,15 +44,15 @@ export class StarRatingWidgetService {
     // });
 
   }
-
-  httpSendRate(rate, message): Observable<string> {
+  
+  httpSendRate(rate, message, requestid): Observable<string> {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
     // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
     // tslint:disable-next-line:max-line-length
-    const url = this.API_URL + 'chat/support/tilechat/requests/' + this.requestid + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
+    const url = this.API_URL + 'chat/support/tilechat/requests/' + requestid + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
     console.log('url: ', url);
     const body = {
       'rating': rate,

@@ -41,6 +41,7 @@ export class Globals {
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
   departmentSelected: DepartmentModel;
+  departmentDefault: DepartmentModel;
   isOpenMenuOptions: boolean;
 
 
