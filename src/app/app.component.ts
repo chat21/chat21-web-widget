@@ -75,10 +75,26 @@ export class AppComponent implements OnInit, OnDestroy {
         public chatPresenceHandlerService: ChatPresenceHandlerService
     ) {
         this.initAll();
+        this.getMongDbDepartments();
+        console.log(' ---------------- A4 ---------------- ');
+
     }
 
 
+    /**
+     * 1 - init
+     * 2 - auth
+     * 3 - start
+     */
     ngOnInit() {
+        // this.setLoginSubscription();
+    }
+
+
+    /**
+     *
+     */
+    setLoginSubscription() {
         // this.setSubscriptions();
         const that = this;
         /**
@@ -126,7 +142,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscriptions.push(obsLoggedUser);
     }
 
-
     /**
      * INITIALIZE:
      * 1 - set LANG
@@ -160,12 +175,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.triggetLoadParamsEvent();
         console.log(' ---------------- A2 ---------------- ');
 
-        this.setIsWidgetOpenOrActive();
-        console.log(' ---------------- A3 ---------------- ');
-
-        this.getMongDbDepartments();
-        console.log(' ---------------- A4 ---------------- ');
-
         /** mostro il pulsante principale dopo l'init */
         this.isInitialized = true;
 
@@ -187,23 +196,24 @@ export class AppComponent implements OnInit, OnDestroy {
         const that = this;
         console.log('getMongDbDepartments ::::', this.g.projectid);
         this.messagingService.getMongDbDepartments(this.g.projectid)
-            .subscribe(response => {
-                // console.log('response DEP ::::', response);
-                that.g.departments = response;
-                that.initDepartments();
-            },
-            errMsg => {
-                console.log('http ERROR MESSAGE', errMsg);
-            },
-            () => {
-                console.log('API ERROR NESSUNO');
-            });
+        .subscribe(response => {
+            // console.log('response DEP ::::', response);
+            that.g.departments = response;
+            that.initDepartments();
+        },
+        errMsg => {
+            console.log('http ERROR MESSAGE', errMsg);
+        },
+        () => {
+            console.log('API ERROR NESSUNO');
+        });
     }
 
     /**
      * INIT DEPARTMENT:
      * get departments list
      * set department default
+     * CALL AUTHENTICATION
     */
     initDepartments() {
         this.g.departmentSelected = null;
@@ -229,6 +239,9 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
         }
+
+        /****** */
+        this.setLoginSubscription();
     }
 
     /**
@@ -319,7 +332,11 @@ export class AppComponent implements OnInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
-        console.log(' ============ startUI ===============');
+        console.log(' ---------------- A3 ---------------- ');
+        this.setIsWidgetOpenOrActive();
+
+        console.log(' ============ startUI ===============', this.g.departmentSelected, this.g.isLogged);
+
         this.isOpenHome = true;
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
@@ -345,6 +362,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.isOpenConversation = true;
             }
         }
+
     }
     // ========= end:: START UI ============//
 
@@ -427,6 +445,8 @@ export class AppComponent implements OnInit, OnDestroy {
                         console.log('resDec', resDec.decoded);
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
+                        that.g.attributes.userEmail = resDec.decoded.email;
+                        that.g.attributes.userFullname = resDec.decoded.name;
                         const firebaseToken = response.firebaseToken;
                         console.log('firebaseToken', firebaseToken);
                         that.g.userToken = firebaseToken;
@@ -526,8 +546,10 @@ export class AppComponent implements OnInit, OnDestroy {
     /** */
     signOut() {
         console.log(' 1 - CANCELLO UTENTE DAL NODO PRESENZE');
+        localStorage.removeItem('attributes');
         this.chatPresenceHandlerService.goOffline();
         this.authService.signOut();
+
     }
 
     /**

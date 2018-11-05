@@ -67,7 +67,7 @@
                                 class="full c21-button" for="star1" title="scarso - 1 star"></label>
                         </fieldset>
                     </div>
-                    <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    <button *ngIf="g.allowTranscriptDownload !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                     </button>
@@ -98,7 +98,7 @@
                             (click)="sendRate()">{{ g.SUBMIT }}</button>
                     </div>
 
-                    <button *ngIf="displayDownloadTranscriptBtn !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    <button *ngIf="g.allowTranscriptDownload !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                     </button>
@@ -122,7 +122,7 @@
                         <span>{{ g.CLOSE }}</span>
                     </button>
 
-                    <button *ngIf="displayDownloadTranscriptBtn !== true" 
+                    <button *ngIf="g.allowTranscriptDownload !== true" 
                     class="btn-primary" 
                     [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                     (click)="dowloadTranscript()">

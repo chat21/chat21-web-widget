@@ -95,6 +95,7 @@ export class ConversationsService {
       if (index > -1) {
         that.conversations.splice(index, 1);
       }
+      that.updateConversationBadge();
       // apro votazione
     });
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StarRatingWidgetService } from './star-rating-widget.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
@@ -13,6 +13,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // ========= begin:: Input/Output values ===========//
   @Output() eventClosePage = new EventEmitter();
   @Output() eventCloseRate = new EventEmitter();
+  // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========//
 
   // ========= begin:: Input/Output values ===========/
@@ -20,7 +21,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // @Output() eventSelctedConv = new EventEmitter<string>();
   // @Output() eventClose = new EventEmitter();
   // @Output() eventSignOut = new EventEmitter();
-  // @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  
   // ========= end:: Input/Output values ===========/
 
 
@@ -36,7 +37,6 @@ export class StarRatingWidgetComponent implements OnInit {
   private rate: number;
   step: number;
   message: string;
-  private displayDownloadTranscriptBtn: boolean;
 
   // STRING (FOR TRANSLATION) PASSED IN THE TEMPLATE
   // CUSTOMER_SATISFACTION: string;
@@ -56,14 +56,11 @@ export class StarRatingWidgetComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.themeColor);
-    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.themeForegroundColor);
-    this.displayDownloadTranscriptBtn = this.g.allowTranscriptDownload; //????????
     this.step = 0;
   }
 
   dowloadTranscript() {
-    this.starRatingWidgetService._dowloadTranscript();
+    this.starRatingWidgetService._dowloadTranscript(this.g.recipientId);
   }
 
   openRate(e) {

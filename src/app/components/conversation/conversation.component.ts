@@ -91,7 +91,7 @@ export class ConversationComponent implements OnInit {
   public areAgentsAvailableText: string;
   public areAgentsAvailable: Boolean = false;
   // ========= end::agent availability
-  
+
 
   // ========== begin:: set icon status message
   MSG_STATUS_SENT = MSG_STATUS_SENT;
@@ -119,12 +119,13 @@ export class ConversationComponent implements OnInit {
     console.log(' senderId: ', this.g.senderId);
     console.log(' projectid: ', this.g.projectid);
     console.log(' channelType: ', this.g.channelType);
-    console.log(' onSelectDepartment: ', this.g.departmentSelected);
+    console.log(' departmentDefault: ', this.g.departmentDefault);
     // set first message customized for department
     if (this.g.departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
-    } else if (this.g.departmentDefault.offline_msg) {
-      this.g.LABEL_FIRST_MSG = this.g.departmentDefault.offline_msg;
+    }
+    if (this.g.departmentDefault.offline_msg) {
+      this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -502,8 +503,8 @@ export class ConversationComponent implements OnInit {
           if (this.g.showWidgetNameInConversation && this.g.showWidgetNameInConversation === true) {
             recipientFullname += ' - ' + this.g.widgetTitle;
           }
-          console.error('this.g.userFullname:', this.g.userFullname);
-          console.error('recipientFullname:', recipientFullname);
+          console.log('this.g.userFullname:', this.g.userFullname);
+          console.log('recipientFullname:', recipientFullname);
           // tslint:disable-next-line:max-line-length
           const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.g.projectid, this.g.channelType);
           this.triggerAfterSendMessageEvent(messageSent);

@@ -12,27 +12,27 @@
 
                 <!-- CONTENT HEADER -->
                 <div class="c21-header-content">
-
+                    
                     <!-- ICON CLOSE CHAT -->
                     <div class="c21-header-button c21-right c21-close" >
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-                            <title id="altIconTitle">BUTTON_CLOSE_CHAT</title>
+                            <title id="altIconTitle">{{g.BUTTON_CLOSE_TO_ICON}}</title>
                         </svg>
                     </div>
 
                     <!-- ICON VOLUME -->
                     <div class="c21-header-button c21-right" (click)="toggleSound()">
-                        <svg *ngIf="!g.isSoundActive" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <svg *ngIf="!g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path d="M4.34 2.93L2.93 4.34 7.29 8.7 7 9H3v6h4l5 5v-6.59l4.18 4.18c-.65.49-1.38.88-2.18 1.11v2.06c1.34-.3 2.57-.92 3.61-1.75l2.05 2.05 1.41-1.41L4.34 2.93zM10 15.17L7.83 13H5v-2h2.83l.88-.88L10 11.41v3.76zM19 12c0 .82-.15 1.61-.41 2.34l1.53 1.53c.56-1.17.88-2.48.88-3.87 0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zm-7-8l-1.88 1.88L12 7.76zm4.5 8c0-1.77-1.02-3.29-2.5-4.03v1.79l2.48 2.48c.01-.08.02-.16.02-.24z"/>
-                            <!-- <path fill="none" d="M0 0h24v24H0V0z"/>
-                            <path d="M14 8.83v6.34L11.83 13H9v-2h2.83L14 8.83M16 4l-5 5H7v6h4l5 5V4z"/> -->
+                            <title id="altIconTitle">{{g.SOUND_OFF}}</title>
                         </svg>
 
-                        <svg *ngIf="g.isSoundActive" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <svg *ngIf="g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/>
+                            <title id="altIconTitle">{{g.SOUND_ON}}</title>
                         </svg>
                         
                     </div>
@@ -42,7 +42,7 @@
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
                             <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
                             <path fill="none" d="M0 0h24v24H0V0z"/><path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>
-                            <title id="altIconTitle">{{BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
+                            <title id="altIconTitle">{{g.BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
                         </svg>
                     </div>
 
@@ -59,7 +59,7 @@
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
                             <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
                             <path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
-                            <title id="altIconTitle">BUTTON_PREV</title>
+                            <title id="altIconTitle">{{g.PREV_CONVERSATIONS}}</title>
                         </svg>
                     </div>
 
@@ -95,13 +95,13 @@
                     <!-- // AVATAR -->
 
                     <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
-                    <div *ngIf="!areAgentsAvailable && isNewConversation && availableAgentsStatus && messages.length == 0" 
+                    <!-- <div *ngIf="!areAgentsAvailable && isNewConversation && availableAgentsStatus && messages.length == 0" 
                         class="chat21-agents-available chat21-agents-available-is-new-conversation" 
                         [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
                         >
                         <span style="font-size:18px">🤔</span>  
                         <span>{{ g.ALL_AGENTS_OFFLINE_LABEL }}</span>
-                    </div>
+                    </div> -->
 
                     <!-- // nk - to edit: display the msg of welcome msg if exist -->
                     <div *ngIf="isNewConversation && availableAgentsStatus && messages.length == 0" 

@@ -42,17 +42,16 @@ export class StarRatingWidgetService {
     //     }, 100);
     //   }
     // });
-
   }
-  
-  httpSendRate(rate, message, requestid): Observable<string> {
+
+  httpSendRate(rate, message, recipientId): Observable<string> {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
     // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
     // tslint:disable-next-line:max-line-length
-    const url = this.API_URL + 'chat/support/tilechat/requests/' + requestid + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
+    const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
     console.log('url: ', url);
     const body = {
       'rating': rate,
@@ -80,8 +79,8 @@ export class StarRatingWidgetService {
     this.obsCloseConversation.next(bool);
   }
 
-  _dowloadTranscript() {
-    const url = 'https://api.tiledesk.com/v1/public/requests/' + this.requestid + '/messages.html';
+  _dowloadTranscript(recipientId) {
+    const url = 'https://api.tiledesk.com/v1/public/requests/' + recipientId + '/messages.html';
     window.open(url, '_blank');
   }
 
