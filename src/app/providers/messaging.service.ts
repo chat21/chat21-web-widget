@@ -285,7 +285,7 @@ export class MessagingService {
       const message = childSnapshot.val();
       console.log('child_added *****', childSnapshot.val());
       if ( that.checkMessage(message) ) {
-        console.log('gesù cristo *****');
+        
         // imposto il giorno del messaggio
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         const msg = new MessageModel(
@@ -313,7 +313,6 @@ export class MessagingService {
         that.obsAdded.next(msg);
 
         if (message && message.sender === that.senderId) {
-          console.log('la madonna *****', that.messages);
           // && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
           // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
