@@ -3,7 +3,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } 
 import { Globals } from '../../utils/globals';
 
 @Component({
-  selector: 'app-prechat-form',
+  selector: 'tiledeskwidget-prechat-form',
   templateUrl: './prechat-form.component.html',
   styleUrls: ['./prechat-form.component.scss']
 })

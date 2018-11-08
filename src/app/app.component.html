@@ -5,9 +5,9 @@
     <!-- 
     ****** LAUNCHER BUTTON ******
     -->
-    <app-launcher-button *ngIf="isInitialized" 
+    <tiledeskwidget-launcher-button *ngIf="isInitialized" 
     (eventOpenCloseWidget)="openCloseWidget($event)"
-    ></app-launcher-button>
+    ></tiledeskwidget-launcher-button>
 
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
@@ -17,21 +17,30 @@
     [ngStyle] = "{'bottom': marginBottom+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
-            <app-home 
+            <tiledeskwidget-home 
             [senderId]="senderId"
             (eventClose)="returnClose()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
             (eventSignOut)="returnSignOut()"
-            ></app-home>
+            (eventOpenArchivedConv)="returnOpenArchivedConversation()"
+            ></tiledeskwidget-home>
         </div>
 
 
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
-            <app-conversation 
+            <tiledeskwidget-conversation 
             [recipientId]="recipientId"
             (eventClose)="returnCloseConversation()" 
-            ></app-conversation>
+            ></tiledeskwidget-conversation>
+        </div>
+
+        <div *ngIf="isOpenArchivedConversation && g.senderId" class="modal-page" [class.active]="true">
+            <tiledeskwidget-list-archived-conversations 
+            [senderId]="recipientId"
+            (eventClosePage)="returnCloseArchivedConversation()" 
+            (eventSelctedConv)="returnSelectedConversation($event)"
+            ></tiledeskwidget-list-archived-conversations>
         </div>
     
     
@@ -41,10 +50,10 @@
         ****************************************
         -->
         <div class="modal-page" [class.active]="isOpenSelectionDepartment">
-            <app-selection-department 
+            <tiledeskwidget-selection-department 
             (eventClosePage)="returnCloseModalDepartment()"
             (eventDepartmentSelected)="returnDepartmentSelected($event)" 
-            ></app-selection-department>
+            ></tiledeskwidget-selection-department>
         </div>
     
 
@@ -54,10 +63,10 @@
         *******************************************
         -->
         <div class="modal-page" [class.active]="isOpenPrechatForm">
-            <app-prechat-form
+            <tiledeskwidget-prechat-form
             (eventClosePage)="returnCloseModalPrechatForm()" 
             (eventCloseForm)="returnPrechatFormComplete()"
-            ></app-prechat-form>
+            ></tiledeskwidget-prechat-form>
         </div>
 
             
@@ -67,10 +76,10 @@
         ****************************************
         -->
         <div class="modal-page" [class.active]="g.isOpenStartRating">
-            <app-star-rating-widget 
+            <tiledeskwidget-star-rating-widget 
             (eventClosePage)="returnCloseModalRateChat()" 
             (eventCloseRate)="returnRateChatComplete()"
-            ></app-star-rating-widget>
+            ></tiledeskwidget-star-rating-widget>
         </div>
 
 
@@ -81,8 +90,8 @@
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
     -->
-    <app-eyeeye-catcher-card *ngIf="g.senderId"
+    <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
     (eventOpenChat)="returnOpenChat()" 
-    ></app-eyeeye-catcher-card>                            
+    ></tiledeskwidget-eyeeye-catcher-card>                            
     
 </div>

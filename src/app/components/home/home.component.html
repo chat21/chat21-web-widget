@@ -53,12 +53,14 @@
                 <div class="c21-cards">
 
                     <div class="c21-card" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
-
-                        <app-list-conversations 
+            
+                        <tiledeskwidget-list-conversations 
                         [senderId]="senderId"
                         (eventNewConv)="returnNewConversation()" 
-                        (eventSelctedConv)="returnSelectedConversation($event)">
-                        </app-list-conversations>
+                        (eventSelctedConv)="returnSelectedConversation($event)"
+                        (eventOpenArchivedConv)="returnOpenArchivedConversation()"
+                        >
+                        </tiledeskwidget-list-conversations>
 
                     </div>
 
@@ -73,9 +75,9 @@
 
     <!-- FOOTER -->
     <div class="c21-footer">
-        <app-menu-options
+        <tiledeskwidget-menu-options
         (eventSignOut)="returnSignOut()" 
-        ></app-menu-options>
+        ></tiledeskwidget-menu-options>
         <div class="c21-powered-by">
             <div id="c21-powered-by" [innerHTML]="g.poweredBy"></div>
             <div class="build_version">{{g.BUILD_VERSION}}</div>

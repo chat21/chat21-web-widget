@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
 @Component({
-  selector: 'app-menu-options',
+  selector: 'tiledeskwidget-menu-options',
   templateUrl: './menu-options.component.html',
   styleUrls: ['./menu-options.component.scss']
 })

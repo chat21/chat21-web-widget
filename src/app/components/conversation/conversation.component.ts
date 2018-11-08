@@ -22,7 +22,7 @@ import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForU
 // import { detectIfIsMobile} from './utils/utils';
 
 @Component({
-  selector: 'app-conversation',
+  selector: 'tiledeskwidget-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss']
 })
@@ -292,8 +292,9 @@ export class ConversationComponent implements OnInit {
    */
   setSubscriptions() {
     const that = this;
+    this.starRatingWidgetService.setOsservable(false);
     // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    console.log('CHIUDOOOOO!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService);
+    console.log('setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService);
     const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
     .subscribe(isOpenStartRating => {
       that.g.isOpenStartRating = isOpenStartRating;

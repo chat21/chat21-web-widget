@@ -1,4 +1,4 @@
-var tiledeskroot = document.createElement('app-root');
+var tiledeskroot = document.createElement('tiledeskwidget-root');
 
 var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
 console.log("tiledeskScriptLocation", tiledeskScriptLocation);

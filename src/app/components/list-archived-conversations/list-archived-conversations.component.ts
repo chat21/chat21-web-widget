@@ -10,18 +10,16 @@ import { ConversationModel } from '../../../models/conversation';
 
 
 @Component({
-  selector: 'tiledeskwidget-list-conversations',
-  templateUrl: './list-conversations.component.html',
-  styleUrls: ['./list-conversations.component.scss']
+  selector: 'tiledeskwidget-list-archived-conversations',
+  templateUrl: './list-archived-conversations.component.html',
+  styleUrls: ['./list-archived-conversations.component.scss']
 })
 
-export class ListConversationsComponent implements OnInit {
+export class ListArchivedConversationsComponent implements OnInit {
 
   // ========= begin:: Input/Output values ============//
-  @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
-  @Output() eventClose = new EventEmitter();
-  @Output() eventOpenArchivedConv = new EventEmitter();
+  @Output() eventClosePage = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ============//
 
@@ -44,7 +42,7 @@ export class ListConversationsComponent implements OnInit {
     public g: Globals,
     public conversationsService: ConversationsService
   ) {
-    //this.initialize();
+
   }
 
   ngOnInit() {
@@ -63,17 +61,16 @@ export class ListConversationsComponent implements OnInit {
     console.log('themeForegroundColor: ', this.g.themeForegroundColor);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
-    this.conversations = this.conversationsService.conversations;
-    this.conversationsService.checkListConversations();
+    this.conversations = this.conversationsService.archivedConversations;
+    this.conversationsService.checkListArchivedConversations();
+    console.log('conversations: ', this.conversations);
   }
 
 
   // ========= begin:: ACTIONS ============//
-  openNewConversation() {
-    this.eventNewConv.emit();
-  }
-  returnOpenArchivedConversation() {
-    this.eventOpenArchivedConv.emit();
+
+  returnClosePage() {
+    this.eventClosePage.emit();
   }
 
   private openConversationByID(conversation) {
@@ -88,3 +85,4 @@ export class ListConversationsComponent implements OnInit {
   // ========= end:: ACTIONS ============//
 
 }
+

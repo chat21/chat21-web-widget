@@ -117,13 +117,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "tiledeskwidget",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "tiledeskwidget",
       "kebab-case"
     ],
     "use-input-property-decorator": true,

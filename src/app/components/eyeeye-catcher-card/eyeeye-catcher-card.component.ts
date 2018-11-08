@@ -3,7 +3,7 @@ import { Globals } from '../../utils/globals';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
-  selector: 'app-eyeeye-catcher-card',
+  selector: 'tiledeskwidget-eyeeye-catcher-card',
   templateUrl: './eyeeye-catcher-card.component.html',
   styleUrls: ['./eyeeye-catcher-card.component.scss'],
   animations: [

@@ -14,9 +14,13 @@ import { avatarPlaceholder, getColorBck, getFromNow } from '../utils/utils';
 @Injectable()
 export class ConversationsService {
   conversations: ConversationModel[];
+  archivedConversations: ConversationModel[];
   tenant: string;
   senderId: string;
   urlConversation: string;
+  urlArchivedConversation: string;
+
+
   conversationRef: any;
   audio: any;
 
@@ -36,26 +40,27 @@ export class ConversationsService {
   public initialize(senderId, tenant) {
     console.log('*******************>>>>>>>>>>>>> initialize ConversationsService:: ', senderId, tenant);
     this.conversations = [];
+    this.archivedConversations = [];
     this.tenant = tenant;
     this.senderId = senderId;
-    this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' ;
+    this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
+    this.urlArchivedConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/archived_conversations/';
   }
 
-  public checkListConversations() {
+  public checkListArchivedConversations() {
     const that = this;
-    const firebaseConversations = firebase.database().ref(this.urlConversation);
-    this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(3);
-    // this.conversationRef.on('value', function(snapshot) {
+    const firebaseConversations = firebase.database().ref(this.urlArchivedConversation);
+    const ref = firebaseConversations.orderByChild('timestamp').limitToLast(1000);
+
+    console.log('checkListArchivedConversations *****', this.urlArchivedConversation);
 
     //// SUBSCRIBE ADDED ////
-    this.conversationRef.on('child_added', function(childSnapshot) {
+    ref.on('child_added', function (childSnapshot) {
       console.log('childSnapshot.val() *****', childSnapshot.val());
       const conversation = that.setConversation(childSnapshot);
-      that.conversations.unshift(conversation); // insert item top array
-      if (conversation.sender !== that.senderId ) {
-        // const badge = (conversation.is_new) ? 1 : 0;
-        // that.updateBadge(conversation, badge);
-        if ( conversation.is_new === true ) {
+      that.archivedConversations.unshift(conversation); // insert item top array
+      if (conversation.sender !== that.senderId) {
+        if (conversation.is_new === true) {
           that.updateConversationBadge();
         }
         that.soundMessage();
@@ -63,7 +68,66 @@ export class ConversationsService {
     });
 
     //// SUBSCRIBE CHANGED ////
-    this.conversationRef.on('child_changed', function(childSnapshot) {
+    ref.on('child_changed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
+      const conversationTEMP = that.archivedConversations[index];
+      const conversation = that.setConversation(childSnapshot);
+      that.archivedConversations.splice(index, 1, conversation);
+      if (conversation.sender !== that.senderId) {
+        // mi è arrivato un nw messaggio o è cambiato lo stato di badge
+        if (conversation.timestamp !== conversationTEMP.timestamp) {
+          // nuovo messaggio con conversazione aperta o chiusa
+          let badge;
+          if (that.g.activeConversation === conversation.recipient) {
+            // aperta: resetto il badge
+            badge = 0;
+          } else {
+            // chiusa: incremento budget, attivo sound
+            badge = (conversationTEMP.badge) ? conversationTEMP.badge + 1 : 1;
+            that.soundMessage();
+          }
+          that.updateConversationBadge();
+        }
+      }
+      console.log('child_changed *****', that.archivedConversations, index);
+    });
+
+    //// SUBSCRIBE REMOVED ////
+    ref.on('child_removed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
+      if (index > -1) {
+        that.archivedConversations.splice(index, 1);
+      }
+      that.updateConversationBadge();
+    });
+
+  }
+
+
+
+  public checkListConversations() {
+    const that = this;
+    const firebaseConversations = firebase.database().ref(this.urlConversation);
+    this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(1000);
+    // this.conversationRef.on('value', function(snapshot) {
+
+    //// SUBSCRIBE ADDED ////
+    this.conversationRef.on('child_added', function (childSnapshot) {
+      console.log('childSnapshot.val() *****', childSnapshot.val());
+      const conversation = that.setConversation(childSnapshot);
+      that.conversations.unshift(conversation); // insert item top array
+      if (conversation.sender !== that.senderId) {
+        // const badge = (conversation.is_new) ? 1 : 0;
+        // that.updateBadge(conversation, badge);
+        if (conversation.is_new === true) {
+          that.updateConversationBadge();
+        }
+        that.soundMessage();
+      }
+    });
+
+    //// SUBSCRIBE CHANGED ////
+    this.conversationRef.on('child_changed', function (childSnapshot) {
       const index = that.searchIndexInArrayForUid(that.conversations, childSnapshot.key);
       const conversationTEMP = that.conversations[index];
       const conversation = that.setConversation(childSnapshot);
@@ -71,7 +135,7 @@ export class ConversationsService {
       that.conversations.splice(index, 1, conversation);
       if (conversation.sender !== that.senderId) {
         // mi è arrivato un nw messaggio o è cambiato lo stato di badge
-        if (conversation.timestamp !==  conversationTEMP.timestamp ) {
+        if (conversation.timestamp !== conversationTEMP.timestamp) {
           // nuovo messaggio con conversazione aperta o chiusa
           let badge;
           if (that.g.activeConversation === conversation.recipient) {
@@ -90,7 +154,7 @@ export class ConversationsService {
     });
 
     //// SUBSCRIBE REMOVED ////
-    this.conversationRef.on('child_removed', function(childSnapshot) {
+    this.conversationRef.on('child_removed', function (childSnapshot) {
       const index = that.searchIndexInArrayForUid(that.conversations, childSnapshot.key);
       if (index > -1) {
         that.conversations.splice(index, 1);
@@ -110,8 +174,8 @@ export class ConversationsService {
   updateConversationBadge() {
     let conversationsBadge = 0;
     this.conversations.forEach(element => {
-      if ( element.is_new === true ) {
-        conversationsBadge ++;
+      if (element.is_new === true) {
+        conversationsBadge++;
       }
     });
     this.g.conversationsBadge = conversationsBadge;
@@ -163,7 +227,7 @@ export class ConversationsService {
    * altrimenti -> SOUND
    */
   soundMessage() {
-    if ( this.g.isSoundActive ) {
+    if (this.g.isSoundActive) {
       console.log('****** soundMessage *****');
       this.audio = new Audio();
       this.audio.src = './assets/sounds/Carme.mp3';

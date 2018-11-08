@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } fro
 import { Globals } from '../../utils/globals';
 
 @Component({
-  selector: 'app-home',
+  selector: 'tiledeskwidget-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   @Output() eventSelctedConv = new EventEmitter<string>();
   @Output() eventClose = new EventEmitter();
   @Output() eventSignOut = new EventEmitter();
+  @Output() eventOpenArchivedConv = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========/
 
@@ -59,6 +60,10 @@ export class HomeComponent implements OnInit {
   // ========= begin:: ACTIONS ============//
   returnNewConversation() {
     this.eventNewConv.emit();
+  }
+  
+  returnOpenArchivedConversation() {
+    this.eventOpenArchivedConv.emit();
   }
 
   returnSelectedConversation($event) {

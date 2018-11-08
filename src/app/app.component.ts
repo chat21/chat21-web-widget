@@ -19,7 +19,7 @@ import { ChatPresenceHandlerService } from './providers/chat-presence-handler.se
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
 
 @Component({
-    selector: 'app-root',
+    selector: 'tiledeskwidget-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None /* it allows to customize 'Powered By' */
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     isInitialized = false;              /** if true show button */
     isOpenHome = true;                  /** check open/close component home ( sempre visibile xchè il primo dello stack ) */
     isOpenConversation = false;         /** check open/close component conversation if is true  */
+    isOpenArchivedConversation = false;
     isOpenSelectionDepartment = false;  /** check open/close modal select department */
     isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
@@ -341,6 +342,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
         this.isOpenSelectionDepartment = false;
+        this.isOpenArchivedConversation = false;
         if (this.g.startFromHome) {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
@@ -465,9 +467,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private setStatePreChatForm(state) {
         if (state != null) {
             this.g.preChatForm = state;
-            this.isOpenPrechatForm = state;
+            // this.isOpenPrechatForm = state;
         }
-        console.log('this.isOpenPrechatForm ', this.isOpenPrechatForm);
+        // console.log('this.isOpenPrechatForm ', this.isOpenPrechatForm);
     }
 
     /** show all widget */
@@ -699,6 +701,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.startNwConversation();
     }
 
+    /**
+     * MODAL HOME:
+     * open archived-conversation
+     */
+    private returnOpenArchivedConversation() {
+        this.isOpenHome = true;
+        this.isOpenConversation = false;
+        this.isOpenArchivedConversation = true;
+    }
 
     /**
      * MODAL EYE CATCHER CARD:
@@ -713,15 +724,18 @@ export class AppComponent implements OnInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
-        const that = this;
-        // parte animazione per chiudere conversazione
         this.isOpenHome = true;
-        // setTimeout(function () {
-        //     // cache conversazioni
-        //     // aggiorno cache dopo load
-        //     that.isOpenHome = true;
-        // }, 1);
         this.isOpenConversation = false;
+    }
+
+    /**
+     * MODAL ARCHIVED CONVERSATION:
+     * close archived-conversation
+     */
+    private returnCloseArchivedConversation() {
+        this.isOpenHome = true;
+        this.isOpenConversation = false;
+        this.isOpenArchivedConversation = false;
     }
 
     /**

@@ -2,7 +2,7 @@
 
   <div *ngIf="conversations.length > 0" class="c21-header">
       <div class="c21-title">{{g.PREV_CONVERSATIONS}}</div>
-      <!-- <div class="c21-button">vedi tutte</div> -->
+      <div class="c21-button" (click)="returnOpenArchivedConversation()">vedi tutte</div>
       <div class="clear"></div>
   </div>
 

@@ -528,7 +528,8 @@
     z-index: 999999004;
     position: absolute;
     /* top: 48px; */ /* changed the chat21-modal-select height because of has been changed the chat21-sheet-header height */
-    top: 52px;
+    /* top: 52px; */
+    top:0;
     right: 0;
     /* bottom: 70px; */
     bottom: 42px;
@@ -678,10 +679,9 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 #chat21-conversations .msg_receive{
     background-color: #f7f7f7;
     color: #000000;
-    margin-right: 20px;
-    margin-left: 0;
     max-width: calc(100% - 60px);
     min-width: 14px;
+    margin: 0 20px 4px 10px;
 }
 
 /* .messages.msg_receive a */
@@ -692,11 +692,9 @@ https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-th
 #chat21-conversations .time {
     font-size: 0.7em;
     color: #aaaaaa;
-    margin-bottom: 0px;
-    margin-top: -2px;
     text-align: left;
-    margin-left: 46px;
-    padding-bottom: 10px;
+    margin: 0px;
+    padding: 0px;
 }
 #chat21-conversations .time.sender{
     text-align: right;
@@ -1307,7 +1305,7 @@ div#chat21-end-footer:hover div.build_version{
 
 
 #chat21-buttonToBottom {
-    position: initial;
+    position: relative;
     margin-right: 10px;
     margin-top: -40px;
     float: right;    

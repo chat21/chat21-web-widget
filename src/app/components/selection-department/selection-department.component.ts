@@ -4,7 +4,7 @@ import { DepartmentModel } from '../../../models/department';
 import { MessagingService } from '../../providers/messaging.service';
 
 @Component({
-    selector: 'app-selection-department',
+    selector: 'tiledeskwidget-selection-department',
     templateUrl: './selection-department.component.html',
     styleUrls: ['./selection-department.component.scss']
 })

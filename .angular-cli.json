@@ -20,7 +20,7 @@
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
+      "prefix": "tiledeskwidget",
       "styles": [
         "sass/styles.scss"
       ],

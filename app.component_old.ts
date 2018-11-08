@@ -2214,15 +2214,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    openModal(id) {
-        if ( id === 'isModalLeaveChatActive' ) {
-            this.isModalLeaveChatActive = (this.isModalLeaveChatActive ? false : true);
-        }
-    }
-    leaveChat() {
-        this.openModal('isModalLeaveChatActive');
-        this.messagingService.closeConversation();
-    }
+    // openModal(id) {
+    //     if ( id === 'isModalLeaveChatActive' ) {
+    //         this.isModalLeaveChatActive = (this.isModalLeaveChatActive ? false : true);
+    //     }
+    // }
+    // leaveChat() {
+    //     this.openModal('isModalLeaveChatActive');
+    //     this.messagingService.closeConversation();
+    // }
 
     dowloadTranscript() {
         const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';

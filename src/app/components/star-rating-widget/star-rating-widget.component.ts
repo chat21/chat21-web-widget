@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 
 @Component({
-  selector: 'app-star-rating-widget',
+  selector: 'tiledeskwidget-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
   styleUrls: ['./star-rating-widget.component.scss']
 })
@@ -117,6 +117,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
     console.log(' closePage: ');
+    this.starRatingWidgetService.setOsservable(false);
     this.eventClosePage.emit();
   }
   // ========= end:: ACTIONS ============//

@@ -4,7 +4,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 // vedi: https://angular.io/guide/animations
 
 @Component({
-  selector: 'app-launcher-button',
+  selector: 'tiledeskwidget-launcher-button',
   templateUrl: './launcher-button.component.html',
   styleUrls: ['./launcher-button.component.scss'],
   animations: [
