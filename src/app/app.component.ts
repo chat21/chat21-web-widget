@@ -42,7 +42,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 // ])
 
 @Component({
-    selector: 'app-root',
+    selector: 'tiledeskwidget-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
