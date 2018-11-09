@@ -1,4 +1,4 @@
-<div id='c21-app-list-archived-conversations'>
+<div id='c21-app-list-all-conversations'>
 
   <!-- HEADER -->
   <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
@@ -19,7 +19,7 @@
         </div>
 
         <!-- ICON VOLUME -->
-        <div class="c21-header-button c21-right" (click)="toggleSound()">
+        <!-- <div class="c21-header-button c21-right" (click)="toggleSound()">
           <svg *ngIf="!g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0V0z" />
@@ -34,18 +34,18 @@
             <title id="altIconTitle">{{g.SOUND_ON}}</title>
           </svg>
 
-        </div>
+        </div> -->
 
         <!-- ICON TRANSCRIPT -->
-        <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1" (click)="dowloadTranscript()">
+        <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1" (click)="dowloadTranscript()">
           <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
             width="24px" height="24px" viewBox="0 0 24 24">
-            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
+      
             <path fill="none" d="M0 0h24v24H0V0z" />
             <path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z" />
             <title id="altIconTitle">{{g.BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
           </svg>
-        </div>
+        </div> -->
 
         <!-- ICON EDIT PROFILE -->
         <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1">
@@ -69,9 +69,9 @@
         <!-- TITLE HEADER -->
         <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
           <span>{{g.widgetTitle}}</span>
-          <span id="agent-available-status">{{areAgentsAvailableText}}</span>
+          <!-- <span id="agent-available-status">{{areAgentsAvailableText}}</span> -->
         </div>
-        <p class="c21-header-writing">{{writingMessage}}</p>
+        <!-- <p class="c21-header-writing">{{writingMessage}}</p> -->
 
       </div>
 
@@ -98,6 +98,7 @@
             <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
           </div>
           <div *ngIf="conversation.is_new" [ngStyle]="{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
+          <div *ngIf="conversation.archived" class="c21-lablel-close">CHIUSA</div>
         </div>
         <div class="clear"></div>
       </div>

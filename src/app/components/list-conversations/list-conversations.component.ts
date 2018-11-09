@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgZone, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -21,7 +21,7 @@ export class ListConversationsComponent implements OnInit {
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
   @Output() eventClose = new EventEmitter();
-  @Output() eventOpenArchivedConv = new EventEmitter();
+  @Output() eventOpenAllConv = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ============//
 
@@ -42,6 +42,7 @@ export class ListConversationsComponent implements OnInit {
 
   constructor(
     public g: Globals,
+    private ngZone: NgZone,
     public conversationsService: ConversationsService
   ) {
     //this.initialize();
@@ -63,8 +64,18 @@ export class ListConversationsComponent implements OnInit {
     console.log('themeForegroundColor: ', this.g.themeForegroundColor);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
-    this.conversations = this.conversationsService.conversations;
-    this.conversationsService.checkListConversations();
+    this.conversationsService.checkListConversations(3);
+
+    // this.conversations = this.conversationsService.openConversations;
+
+    const that = this;
+    const subOpenConversations = this.conversationsService.obsOpenConversations.subscribe((conversations) => {
+      this.ngZone.run(() => {
+        this.conversations = conversations;
+        console.log(' conversations:::: ', that.conversations);
+      });
+    });
+    // this.subscriptions.push(subOpenConversations);
   }
 
 
@@ -72,8 +83,8 @@ export class ListConversationsComponent implements OnInit {
   openNewConversation() {
     this.eventNewConv.emit();
   }
-  returnOpenArchivedConversation() {
-    this.eventOpenArchivedConv.emit();
+  returnOpenAllConversation() {
+    this.eventOpenAllConv.emit();
   }
 
   private openConversationByID(conversation) {

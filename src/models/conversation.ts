@@ -16,6 +16,7 @@ export class ConversationModel {
         public color: string,
         public avatar: string,
         public image: string,
-        public badge: number
+        public badge: number,
+        public archived: boolean
     ) {}
 }

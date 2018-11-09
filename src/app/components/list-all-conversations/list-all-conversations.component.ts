@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgZone, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -10,12 +10,12 @@ import { ConversationModel } from '../../../models/conversation';
 
 
 @Component({
-  selector: 'tiledeskwidget-list-archived-conversations',
-  templateUrl: './list-archived-conversations.component.html',
-  styleUrls: ['./list-archived-conversations.component.scss']
+  selector: 'tiledeskwidget-list-all-conversations',
+  templateUrl: './list-all-conversations.component.html',
+  styleUrls: ['./list-all-conversations.component.scss']
 })
 
-export class ListArchivedConversationsComponent implements OnInit {
+export class ListAllConversationsComponent implements OnInit {
 
   // ========= begin:: Input/Output values ============//
   @Output() eventSelctedConv = new EventEmitter<string>();
@@ -40,6 +40,7 @@ export class ListArchivedConversationsComponent implements OnInit {
 
   constructor(
     public g: Globals,
+    private ngZone: NgZone,
     public conversationsService: ConversationsService
   ) {
 
@@ -61,9 +62,20 @@ export class ListArchivedConversationsComponent implements OnInit {
     console.log('themeForegroundColor: ', this.g.themeForegroundColor);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
-    this.conversations = this.conversationsService.archivedConversations;
+    // this.conversations = this.conversationsService.allConversations;
+
+    this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
-    console.log('conversations: ', this.conversations);
+
+
+    const that = this;
+    const subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
+      this.ngZone.run(() => {
+        this.conversations = conversations;
+        console.log(' conversations:::: ', that.conversations);
+      });
+    });
+    //this.subscriptions.push(subAllConversations);
   }
 
 
@@ -76,9 +88,7 @@ export class ListArchivedConversationsComponent implements OnInit {
   private openConversationByID(conversation) {
     console.log('openConversationByID: ', conversation);
     if ( conversation ) {
-      // this.conversationsService.updateBadge(conversation, 0);
       this.conversationsService.updateIsNew(conversation);
-      this.conversationsService.updateConversationBadge();
       this.eventSelctedConv.emit(conversation);
     }
   }

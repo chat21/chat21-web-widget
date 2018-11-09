@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 // services
 import { Globals } from '../utils/globals';
 
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { avatarPlaceholder, getColorBck, getFromNow } from '../utils/utils';
+import { avatarPlaceholder, getColorBck, getFromNow, compareValues } from '../utils/utils';
 
 
 
 
 @Injectable()
 export class ConversationsService {
-  conversations: ConversationModel[];
+  openConversations: ConversationModel[];
   archivedConversations: ConversationModel[];
+  allConversations: ConversationModel[];
+  obsAllConversations: any;
+  obsOpenConversations: any;
+
   tenant: string;
   senderId: string;
   urlConversation: string;
@@ -23,7 +29,6 @@ export class ConversationsService {
 
   conversationRef: any;
   audio: any;
-
   badgeConversations: number;
 
   avatarPlaceholder = avatarPlaceholder;
@@ -33,62 +38,110 @@ export class ConversationsService {
   constructor(
     public g: Globals
   ) {
-    this.conversations = new Array<ConversationModel>();
+    this.allConversations = new Array<ConversationModel>();
+    this.openConversations = new Array<ConversationModel>();
+    this.archivedConversations = new Array<ConversationModel>();
+
+    this.obsAllConversations = new BehaviorSubject<[ConversationModel]>(null);
+    this.obsOpenConversations = new BehaviorSubject<[ConversationModel]>(null);
   }
 
 
   public initialize(senderId, tenant) {
     console.log('*******************>>>>>>>>>>>>> initialize ConversationsService:: ', senderId, tenant);
-    this.conversations = [];
+    this.openConversations = [];
     this.archivedConversations = [];
+    this.allConversations = [];
     this.tenant = tenant;
     this.senderId = senderId;
     this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
     this.urlArchivedConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/archived_conversations/';
   }
 
-  public checkListArchivedConversations() {
+
+  // ============== begin:: subscribe to conversations ================//
+  public checkListConversations(limit?) {
+    if (!limit || limit <= 0) { limit = 100; }
+    const that = this;
+    const firebaseConversations = firebase.database().ref(this.urlConversation);
+    this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
+    console.log('checkListAllConversations *****', this.urlConversation);
+
+    //// SUBSCRIBE ADDED ////
+    this.conversationRef.on('child_added', function (childSnapshot) {
+      console.log('childSnapshot.val() *****', childSnapshot.val());
+      const conversation = that.setConversation(childSnapshot, false);
+      that.openConversations.unshift(conversation); // insert item top array
+
+      that.updateConversations();
+      that.checkIsNew(conversation);
+      that.checkIsSound(conversation);
+      that.updateConversationBadge();
+
+      that.obsOpenConversations.next(that.openConversations);
+    });
+
+    //// SUBSCRIBE CHANGED ////
+    this.conversationRef.on('child_changed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.openConversations, childSnapshot.key);
+      const conversation = that.setConversation(childSnapshot, false);
+      that.openConversations.splice(index, 1, conversation);
+
+      that.updateConversations();
+      that.checkIsNew(conversation);
+      that.checkIsSound(conversation);
+      that.updateConversationBadge();
+
+      that.obsOpenConversations.next(that.openConversations);
+      console.log('child_changed *****', that.openConversations, index);
+    });
+
+    //// SUBSCRIBE REMOVED ////
+    this.conversationRef.on('child_removed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.openConversations, childSnapshot.key);
+      if (index > -1) {
+        that.openConversations.splice(index, 1);
+        that.updateConversations();
+        that.obsOpenConversations.next(that.openConversations);
+      }
+      that.updateConversationBadge();
+    });
+  }
+  // ============== end:: subscribe to conversations ================//
+
+
+
+  // ========= begin:: subscribe to archived conversations ============//
+  public checkListArchivedConversations(limit?) {
+    if (!limit || limit <= 0) { limit = 100; }
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlArchivedConversation);
-    const ref = firebaseConversations.orderByChild('timestamp').limitToLast(1000);
-
-    console.log('checkListArchivedConversations *****', this.urlArchivedConversation);
+    const ref = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
+    console.log('checkListAllConversations *****', this.urlArchivedConversation);
 
     //// SUBSCRIBE ADDED ////
     ref.on('child_added', function (childSnapshot) {
       console.log('childSnapshot.val() *****', childSnapshot.val());
-      const conversation = that.setConversation(childSnapshot);
+      const conversation = that.setConversation(childSnapshot, true);
       that.archivedConversations.unshift(conversation); // insert item top array
-      if (conversation.sender !== that.senderId) {
-        if (conversation.is_new === true) {
-          that.updateConversationBadge();
-        }
-        that.soundMessage();
-      }
+
+      that.updateConversations();
+      that.checkIsNew(conversation);
+      that.checkIsSound(conversation);
+      that.updateConversationBadge();
     });
 
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
+      const conversation = that.setConversation(childSnapshot, true);
       const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
-      const conversationTEMP = that.archivedConversations[index];
-      const conversation = that.setConversation(childSnapshot);
       that.archivedConversations.splice(index, 1, conversation);
-      if (conversation.sender !== that.senderId) {
-        // mi è arrivato un nw messaggio o è cambiato lo stato di badge
-        if (conversation.timestamp !== conversationTEMP.timestamp) {
-          // nuovo messaggio con conversazione aperta o chiusa
-          let badge;
-          if (that.g.activeConversation === conversation.recipient) {
-            // aperta: resetto il badge
-            badge = 0;
-          } else {
-            // chiusa: incremento budget, attivo sound
-            badge = (conversationTEMP.badge) ? conversationTEMP.badge + 1 : 1;
-            that.soundMessage();
-          }
-          that.updateConversationBadge();
-        }
-      }
+
+      that.updateConversations();
+      that.checkIsNew(conversation);
+      that.checkIsSound(conversation);
+      that.updateConversationBadge();
+
       console.log('child_changed *****', that.archivedConversations, index);
     });
 
@@ -97,84 +150,84 @@ export class ConversationsService {
       const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
       if (index > -1) {
         that.archivedConversations.splice(index, 1);
+        that.updateConversations();
       }
       that.updateConversationBadge();
     });
+  }
+  // ========= end:: subscribe to archived conversations ============//
 
+  /**
+   * 1 - concat array conversations
+   * 2 - order array
+   * 3 - aggiorno stato conversazione
+   */
+  public updateConversations() {
+    const TEMP = this.openConversations.concat(this.archivedConversations);
+    const result = [];
+    const map = new Map();
+    for (const item of TEMP) {
+      if (!map.has(item.uid)) {
+        map.set(item.uid, true);    // set any value to Map
+        result.push(item);
+      }
+    }
+    this.allConversations = result;
+
+    // this.allConversations.map(item => item.uid).filter((value, index, self) => self.indexOf(value) === index);
+    this.allConversations.sort(compareValues('timestamp', 'desc'));
+    this.obsAllConversations.next(this.allConversations);
+
+  }
+
+  /**
+   *
+   */
+  public checkIsSound(conversation) {
+    if (this.g.activeConversation !== conversation.recipient && conversation.sender !== this.senderId) {
+      // const badge = (conversation.is_new) ? 1 : 0;
+      // that.updateBadge(conversation, badge);
+      this.soundMessage();
+    }
   }
 
 
 
-  public checkListConversations() {
-    const that = this;
-    const firebaseConversations = firebase.database().ref(this.urlConversation);
-    this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(1000);
-    // this.conversationRef.on('value', function(snapshot) {
+  // ========= begin:: isNew value in conversation ============//
 
-    //// SUBSCRIBE ADDED ////
-    this.conversationRef.on('child_added', function (childSnapshot) {
-      console.log('childSnapshot.val() *****', childSnapshot.val());
-      const conversation = that.setConversation(childSnapshot);
-      that.conversations.unshift(conversation); // insert item top array
-      if (conversation.sender !== that.senderId) {
-        // const badge = (conversation.is_new) ? 1 : 0;
-        // that.updateBadge(conversation, badge);
-        if (conversation.is_new === true) {
-          that.updateConversationBadge();
-        }
-        that.soundMessage();
-      }
-    });
-
-    //// SUBSCRIBE CHANGED ////
-    this.conversationRef.on('child_changed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.conversations, childSnapshot.key);
-      const conversationTEMP = that.conversations[index];
-      const conversation = that.setConversation(childSnapshot);
-      // conversation.badge = conversationTEMP.badge + 1;
-      that.conversations.splice(index, 1, conversation);
-      if (conversation.sender !== that.senderId) {
-        // mi è arrivato un nw messaggio o è cambiato lo stato di badge
-        if (conversation.timestamp !== conversationTEMP.timestamp) {
-          // nuovo messaggio con conversazione aperta o chiusa
-          let badge;
-          if (that.g.activeConversation === conversation.recipient) {
-            // aperta: resetto il badge
-            badge = 0;
-          } else {
-            // chiusa: incremento budget, attivo sound
-            badge = (conversationTEMP.badge) ? conversationTEMP.badge + 1 : 1;
-            that.soundMessage();
-          }
-          //that.updateBadge(conversation, badge);
-          that.updateConversationBadge();
-        }
-      }
-      console.log('child_changed *****', that.conversations, index);
-    });
-
-    //// SUBSCRIBE REMOVED ////
-    this.conversationRef.on('child_removed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.conversations, childSnapshot.key);
-      if (index > -1) {
-        that.conversations.splice(index, 1);
-      }
-      that.updateConversationBadge();
-      // apro votazione
-    });
-
-    // this.conversationRef.once('value').then(function(snapshot) {
-    //   snapshot.forEach( function(childSnapshot) {
-    //     that.addConversation(childSnapshot);
-    //   });
-    // });
+  /**
+   * check if new or modify conversation is on active conversation
+   */
+  public checkIsNew(conversation) {
+    if ( this.g.activeConversation === conversation.uid ) {
+      this.updateIsNew(conversation);
+    }
   }
+
+  /** */
+  public updateIsNew(conversation) {
+    let urlUpdate = '';
+    if (conversation.archived === true) {
+      urlUpdate = this.urlArchivedConversation + conversation.recipient;
+    } else {
+      urlUpdate = this.urlConversation + conversation.recipient;
+    }
+    const update = {};
+    update['/is_new'] = false;
+    console.log('**** updateIsNew::' + urlUpdate);
+    return firebase.database().ref(urlUpdate).update(update);
+  }
+  // ========= end:: isNew value in conversation ============//
+
+
+
+
 
 
   updateConversationBadge() {
     let conversationsBadge = 0;
-    this.conversations.forEach(element => {
-      if (element.is_new === true) {
+    this.allConversations.forEach(element => {
+      if (element.is_new === true && element.archived === false) {
         conversationsBadge++;
       }
     });
@@ -190,22 +243,17 @@ export class ConversationsService {
   //   return firebase.database().ref().update(update);
   // }
 
-  updateIsNew(conversation) {
-    const urlUpdate = this.urlConversation + conversation.recipient;
-    const update = {};
-    update['/is_new'] = false;
-    console.log('**** updateIsNew::' + urlUpdate);
-    return firebase.database().ref(urlUpdate).update(update);
-  }
 
-  private setConversation(childSnapshot) {
+  private setConversation(childSnapshot, archived) {
     const that = this;
     // console.log('snapshot.val() *****', that.senderId, childSnapshot.val());
     if (childSnapshot.val()) {
       const conversation: ConversationModel = childSnapshot.val();
+      conversation.uid = childSnapshot.key;
       conversation.last_message_text = conversation.last_message_text;
       const timestampNumber = conversation.timestamp / 1000;
       conversation.time_last_message = that.getFromNow(timestampNumber);
+      conversation.archived = archived;
       // if (conversation.sender !== that.senderId) {
       //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
       //   conversation.color = that.getColorBck(conversation.sender_fullname);

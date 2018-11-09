@@ -1,5 +1,5 @@
 
-#c21-app-list-archived-conversations{
+#c21-app-list-all-conversations {
     position: relative;
     display: block;
     width: 100%;
@@ -94,12 +94,12 @@
         position: relative;
         display: block;
         width: 100%;
-        height: auto;
+        height: calc( 100% - 52px );
         top: 0px;
         font-size: 1em;
         -webkit-box-shadow: none;
         box-shadow: none;
-        overflow: hidden;
+        overflow: scroll;
 
 
         .c21-item-conversation {
@@ -241,5 +241,17 @@
         display: inline-block;
     }
       
+    .c21-lablel-close{
+        border: 1px solid #e2e2e2;
+        background-color: #ececec;
+        padding: 4px;
+        border-radius: 4px;
+        position: absolute;
+        right: 0px;
+        bottom: 8px;
+        margin-right: -10px;
+        color: #858585;
+        font-weight: 500;
+    }
 }
   

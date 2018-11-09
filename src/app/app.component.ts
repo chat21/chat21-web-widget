@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     isInitialized = false;              /** if true show button */
     isOpenHome = true;                  /** check open/close component home ( sempre visibile xchè il primo dello stack ) */
     isOpenConversation = false;         /** check open/close component conversation if is true  */
-    isOpenArchivedConversation = false;
+    isOpenAllConversation = false;
     isOpenSelectionDepartment = false;  /** check open/close modal select department */
     isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
@@ -342,7 +342,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isOpenConversation = false;
         this.isOpenPrechatForm = false;
         this.isOpenSelectionDepartment = false;
-        this.isOpenArchivedConversation = false;
+        this.isOpenAllConversation = false;
         if (this.g.startFromHome) {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
@@ -703,12 +703,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /**
      * MODAL HOME:
-     * open archived-conversation
+     * open all-conversation
      */
-    private returnOpenArchivedConversation() {
+    private returnOpenAllConversation() {
         this.isOpenHome = true;
         this.isOpenConversation = false;
-        this.isOpenArchivedConversation = true;
+        this.isOpenAllConversation = true;
     }
 
     /**
@@ -729,13 +729,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * MODAL ARCHIVED CONVERSATION:
-     * close archived-conversation
+     * MODAL ALL CONVERSATION:
+     * close all-conversation
      */
-    private returnCloseArchivedConversation() {
+    private returnCloseAllConversation() {
         this.isOpenHome = true;
         this.isOpenConversation = false;
-        this.isOpenArchivedConversation = false;
+        this.isOpenAllConversation = false;
     }
 
     /**

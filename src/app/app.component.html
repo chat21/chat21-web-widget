@@ -23,11 +23,18 @@
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
             (eventSignOut)="returnSignOut()"
-            (eventOpenArchivedConv)="returnOpenArchivedConversation()"
+            (eventOpenAllConv)="returnOpenAllConversation()"
             ></tiledeskwidget-home>
         </div>
 
-
+        <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page" [class.active]="true">
+            <tiledeskwidget-list-all-conversations 
+            [senderId]="recipientId"
+            (eventClosePage)="returnCloseAllConversation()" 
+            (eventSelctedConv)="returnSelectedConversation($event)"
+            ></tiledeskwidget-list-all-conversations>
+        </div>
+        
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
@@ -35,13 +42,7 @@
             ></tiledeskwidget-conversation>
         </div>
 
-        <div *ngIf="isOpenArchivedConversation && g.senderId" class="modal-page" [class.active]="true">
-            <tiledeskwidget-list-archived-conversations 
-            [senderId]="recipientId"
-            (eventClosePage)="returnCloseArchivedConversation()" 
-            (eventSelctedConv)="returnSelectedConversation($event)"
-            ></tiledeskwidget-list-archived-conversations>
-        </div>
+        
     
     
         <!-- 

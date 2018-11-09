@@ -1,5 +1,5 @@
 environment=$(< current_version.ts)
-start="CURR_VER_PROD = '0."
+start="CURR_VER_PROD = '1."
 end="'"
 one=${environment#*$start}
 build=${one%%$end*} #two=${one%,*} -> %% prendo la prima istanza; % prendo la seconda

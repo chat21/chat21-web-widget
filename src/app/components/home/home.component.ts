@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   @Output() eventSelctedConv = new EventEmitter<string>();
   @Output() eventClose = new EventEmitter();
   @Output() eventSignOut = new EventEmitter();
-  @Output() eventOpenArchivedConv = new EventEmitter();
+  @Output() eventOpenAllConv = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========/
 
@@ -61,9 +61,9 @@ export class HomeComponent implements OnInit {
   returnNewConversation() {
     this.eventNewConv.emit();
   }
-  
-  returnOpenArchivedConversation() {
-    this.eventOpenArchivedConv.emit();
+
+  returnOpenAllConversation() {
+    this.eventOpenAllConv.emit();
   }
 
   returnSelectedConversation($event) {

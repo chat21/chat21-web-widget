@@ -47,7 +47,7 @@ import { PreviewLoadingFilesComponent } from './components/preview-loading-files
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
-import { ListArchivedConversationsComponent } from './components/list-archived-conversations/list-archived-conversations.component';
+import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +65,7 @@ import { ListArchivedConversationsComponent } from './components/list-archived-c
     EyeeyeCatcherCardComponent,
     PreviewLoadingFilesComponent,
     MenuOptionsComponent,
-    ListArchivedConversationsComponent
+    ListAllConversationsComponent
   ],
   imports: [
     BrowserModule,
