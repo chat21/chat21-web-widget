@@ -50,7 +50,7 @@ export class TranslatorService {
       // user language valid
       this.language = language;
     }
-
+    this.language = this.language.substring(0, 2);
     // retrieve the translation
     this.getLanguageObject(this.language);
 
