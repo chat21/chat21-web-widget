@@ -533,11 +533,20 @@ export class MessagingService {
 
   private checkRemoveConversation() {
     const that = this;
+
     const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith ;
     this.conversationRef = firebase.database().ref(urlConversation);
     this.conversationRef.on('child_removed', function (snap) {
       // console.log('child_removed', snap );
       if ( snap.key === 'sender') {
+
+    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
+    console.log('checkRemoveConversation ***********************', urlConversation);
+    // const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith;
+    this.conversationRef = firebase.database().ref(urlConversation);
+    this.conversationRef.on('child_removed', function (childSnapshot) {
+      console.log('child_removed ***********************', childSnapshot.key, childSnapshot.val());
+      if (childSnapshot.key === that.conversationWith) {
         that.closeConversation();
       }
     });
