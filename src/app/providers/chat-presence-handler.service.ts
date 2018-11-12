@@ -146,8 +146,8 @@ export class ChatPresenceHandlerService {
       console.log('goOffline 1', this.myConnectionsRef);
       this.myConnectionsRef.remove();
       console.log('goOffline 2', this.myConnectionsRef);
+      this.myConnectionsRef = null;
     }
-    this.myConnectionsRef = null;
   }
 
   removeLastOnlineReference() {

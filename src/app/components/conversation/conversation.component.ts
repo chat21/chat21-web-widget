@@ -18,7 +18,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { strip_tags, isPopupUrl, popupUrl, setHeaderDate, searchIndexInArrayForUid, urlify, encodeHTML } from '../../utils/utils';
+import { isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 // import { detectIfIsMobile} from './utils/utils';
 
 @Component({
@@ -31,6 +31,7 @@ export class ConversationComponent implements OnInit {
 
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
+  @Output() eventCloseWidget = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   // @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // @Input() departmentSelected: string;
@@ -39,6 +40,7 @@ export class ConversationComponent implements OnInit {
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
   writingMessage = '';    // messaggio sta scrivendo...
+  isMenuShow = false;
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -438,12 +440,13 @@ export class ConversationComponent implements OnInit {
 
   private performSendingMessage() {
       // const msg = document.getElementsByClassName('f21textarea')[0];
-      const msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+      let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
       if (msg && msg.trim() !== '') {
           // console.log('sendMessage -> ', this.textInputTextArea);
           //this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           //this.setDepartment();
+          msg = replaceBr(msg);
           this.sendMessage(msg, TYPE_MSG_TEXT);
           //this.scrollToBottom();
           this.restoreTextArea();
@@ -945,6 +948,11 @@ export class ConversationComponent implements OnInit {
     this.eventClose.emit();
   }
 
+  returnCloseWidget() {
+    this.g.activeConversation = null;
+    this.eventCloseWidget.emit();
+  }
+
   dowloadTranscript() {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
     window.open(url, '_blank');
@@ -957,6 +965,10 @@ export class ConversationComponent implements OnInit {
     } else {
       localStorage.removeItem('isSoundActive');
     }
+  }
+
+  toggleMenu() {
+    this.isMenuShow = !this.isMenuShow;
   }
 
 
@@ -999,7 +1011,7 @@ export class ConversationComponent implements OnInit {
     if ( this.g.isSoundActive ) {
       console.log('****** soundMessage *****');
       this.audio = new Audio();
-      this.audio.src = './assets/sounds/Carme.mp3';
+      this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();
       this.audio.play();
     }

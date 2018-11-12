@@ -86,6 +86,7 @@ export class Globals {
   YOUR_RATING_HAS_BEEN_RECEIVED: string;
   CLOSE: string;
   PREV_CONVERSATIONS: string;
+  YOU: string;
 
 
 
@@ -211,6 +212,7 @@ export class Globals {
     this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
     this.CLOSE = this.translatorService.translate('CLOSE');
     this.PREV_CONVERSATIONS = this.translatorService.translate('PREV_CONVERSATIONS');
+    this.YOU = this.translatorService.translate('YOU');
   }
 
   /**

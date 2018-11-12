@@ -382,13 +382,13 @@
 
 @media (max-width: 451px) {
     #chat21-conversation-component {
-    }
-    .c21-header {
-        .c21-header-container {    
-            .c21-header-content {
-                .c21-header-button {
-                    &.c21-close {
-                        display: flex;
+        .c21-header {
+            .c21-header-container {    
+                .c21-header-content {
+                    .c21-header-button {
+                        &.c21-close {
+                            display: flex;
+                        }
                     }
                 }
             }

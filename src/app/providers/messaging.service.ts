@@ -13,12 +13,11 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '../utils/constants';
 // utils
-import { searchIndexInArrayForUid, setHeaderDate } from '../utils/utils';
+import { searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 
 
 @Injectable()
 export class MessagingService {
-
   tenant: string;
   senderId: string;
   conversationWith: string;
@@ -127,6 +126,8 @@ export class MessagingService {
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
       console.log('child_added *****', childSnapshot.val());
+      const text = replaceBr(message['text']);
+
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
         const dateSendingMessage = setHeaderDate(message['timestamp']);
@@ -139,7 +140,7 @@ export class MessagingService {
           message['sender_fullname'],
           message['status'],
           message['metadata'],
-          message['text'],
+          text,
           message['timestamp'],
           dateSendingMessage,
           message['type'],
@@ -282,16 +283,7 @@ export class MessagingService {
 
 
   /**
-   * 
-   * @param senderFullname 
-   * @param msg 
-   * @param type 
-   * @param metadata 
-   * @param conversationWith 
-   * @param recipientFullname 
-   * @param attributes 
-   * @param projectid 
-   * @param channel_type 
+   *
    */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
     console.log('SEND MESSAGE: ', msg);

@@ -347,7 +347,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = false;
-        } else if (this.g.preChatForm) {
+        } else if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
             this.isOpenPrechatForm = true;
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
@@ -545,10 +545,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     // ========= begin:: FUNCTIONS ============//
-    /** */
+    /**
+     * 1 - clear local storage
+     * 2 - remove user in firebase
+    */
     signOut() {
-        console.log(' 1 - CANCELLO UTENTE DAL NODO PRESENZE');
-        localStorage.removeItem('attributes');
+        console.log(' SIGNOUT ');
+        // localStorage.removeItem('attributes');
+        localStorage.clear();
         this.chatPresenceHandlerService.goOffline();
         this.authService.signOut();
 
@@ -595,6 +599,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     // ========= begin:: CALLBACK FUNCTIONS ============//
+
+    /**
+     * MOBILE VERSION:
+     * onClick button close widget
+     */
+    returnCloseWidget() {
+        this.g.isOpen = false;
+    }
 
     /**
      * LAUNCHER BUTTON:
@@ -681,7 +693,7 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log('returnNewConversation in APP COMPONENT');
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
-        if (this.g.preChatForm) {
+        if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
             this.isOpenConversation = false;
             this.isOpenPrechatForm = true;
             this.isOpenSelectionDepartment = false;

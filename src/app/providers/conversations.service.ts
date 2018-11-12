@@ -246,7 +246,7 @@ export class ConversationsService {
 
   private setConversation(childSnapshot, archived) {
     const that = this;
-    // console.log('snapshot.val() *****', that.senderId, childSnapshot.val());
+    console.log('snapshot.val() *****', that.senderId, childSnapshot.val());
     if (childSnapshot.val()) {
       const conversation: ConversationModel = childSnapshot.val();
       conversation.uid = childSnapshot.key;
@@ -254,6 +254,10 @@ export class ConversationsService {
       const timestampNumber = conversation.timestamp / 1000;
       conversation.time_last_message = that.getFromNow(timestampNumber);
       conversation.archived = archived;
+
+      if (conversation.sender === that.senderId) {
+        conversation.sender_fullname = this.g.YOU;
+      }
       // if (conversation.sender !== that.senderId) {
       //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
       //   conversation.color = that.getColorBck(conversation.sender_fullname);
@@ -278,7 +282,7 @@ export class ConversationsService {
     if (this.g.isSoundActive) {
       console.log('****** soundMessage *****');
       this.audio = new Audio();
-      this.audio.src = './assets/sounds/Carme.mp3';
+      this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();
       this.audio.play();
     }

@@ -1,13 +1,15 @@
 
 <!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
-<div *ngIf="!g.isMobile" class="eye-catcher-card"  [ngStyle]="{'display':displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+<div *ngIf="!g.isMobile" class="eye-catcher-card"  
+[ngStyle]="{ 'display':displayEyeCatcherCard, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
+(mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
     <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
     <div>
         <div class="eye-catcher-card-close-btn-wrapper" 
             [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
             <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
-                <img class="eye-catcher-card-close-btn-img" src="{{baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
+                <img class="eye-catcher-card-close-btn-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
             </div>
         </div>
     </div>
@@ -16,7 +18,7 @@
     <!-- <div *ngIf="!g.isMobile">
         <div class="eye-catcher-card-close-btn-img-is-mobile-wrapper" (click)="closeEyeCatcherCardWhenMobile()" 
             [ngStyle]="{'display':displayEyeCatcherCardCloseBtnIsMobileWrapper}">
-            <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
+            <img class="eye-catcher-card-close-btn-img-is-mobile" src="{{g.baseLocation}}/assets/images/tiledesk-chat-close-dark-gray.svg"/>
         </div>
     </div> -->
 
@@ -25,7 +27,7 @@
 
         <div class="eye-catcher_column ec_left" >
             <!-- <div class="eye-catcher-card-img-wrapper" [ngStyle]="{'background-color': g.themeColor }">
-                <img class="chat21-card-img" src="{{baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
+                <img class="chat21-card-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
             </div> -->
             <div [@rotatedState]='state' class="eye-catcher-card-emoticons-wrapper">
                 <span  class="chat21-card-emoticons">✋ </span>

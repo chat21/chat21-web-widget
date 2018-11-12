@@ -3,13 +3,6 @@
     <!-- [class.active]="isLogged" -->
 
     <!-- 
-    ****** LAUNCHER BUTTON ******
-    -->
-    <tiledeskwidget-launcher-button *ngIf="isInitialized" 
-    (eventOpenCloseWidget)="openCloseWidget($event)"
-    ></tiledeskwidget-launcher-button>
-
-    <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
     <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" 
@@ -19,7 +12,7 @@
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-home 
             [senderId]="senderId"
-            (eventClose)="returnClose()" 
+            (eventClose)="returnCloseWidget()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"
             (eventSignOut)="returnSignOut()"
@@ -39,6 +32,7 @@
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
             (eventClose)="returnCloseConversation()" 
+            (eventCloseWidget)="returnCloseWidget()"
             ></tiledeskwidget-conversation>
         </div>
 
@@ -93,6 +87,14 @@
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
     (eventOpenChat)="returnOpenChat()" 
-    ></tiledeskwidget-eyeeye-catcher-card>                            
+    ></tiledeskwidget-eyeeye-catcher-card>     
+    
+    
+     <!-- 
+    ****** LAUNCHER BUTTON ******
+    -->
+    <tiledeskwidget-launcher-button *ngIf="isInitialized" 
+    (eventOpenCloseWidget)="openCloseWidget($event)"
+    ></tiledeskwidget-launcher-button>
     
 </div>
