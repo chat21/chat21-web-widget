@@ -1,0 +1,260 @@
+<style>
+app-list-conversations{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.truncate{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.header-component{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #777777;
+}
+.header-component .title{
+  font-size: 14px;
+  font-weight: 400;
+  padding: 16px 24px;
+  float:left;
+}
+.header-component .button{
+  font-size: 12px;
+  float: right;
+  margin: 0px;
+  padding: 16px 24px;
+}
+
+
+
+.item-conversation {
+  width: 100%;
+  /* width: calc(100% - 48px); */
+  width: 100%;
+  height: auto;
+  position: relative;
+  margin: auto;
+  padding: 0px 0px;
+  cursor: pointer;
+
+  pointer-events: auto;
+  transition: background-color .25s ease;
+  -moz-transition: background-color .25s ease;
+  -webkit-transition: background-color .25s ease;
+  -o-transition: background-color .25s ease;
+}
+
+.item-conversation:hover,
+.item-conversation:focus,
+.item-conversation:active {
+  outline-width: 0px;
+  background-color: #fafafa;
+}
+
+.body-conv{
+  border-top: 1px solid #eee;
+  width: calc(100% - 48px);
+  position: relative;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.item-conversation .left-conv{
+  width: auto;
+  height: 100%;
+  float: left;
+  display: flex;
+  align-items: center;
+}
+
+
+.item-conversation .left-conv .icon-avatar{
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 34px;
+    width: 34px;
+    line-height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #aaaaaa70;
+}
+
+.item-conversation .left-conv .icon-avatar .avatar-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.item-conversation .left-conv .icon-avatar .avatar-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 2px 0 0 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+
+.item-conversation .right-conv {
+  width: calc( 100% - 50px);
+  margin-left: 15px;
+  height: auto;
+  float: left;
+  padding: 17px 0;
+}
+
+.item-conversation .right-conv .last-time {
+  font-size: 0.8em;
+  color: #aaaaaa;
+  float: right;
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+}
+
+
+.item-conversation .right-conv .name {
+  font-weight: 700;
+  color: #3a3c4c;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.item-conversation .right-conv .msg {
+  font-weight: 200;
+  color: #3a3c4c;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.item-conversation .right-conv .not-read.msg {
+  font-weight: 500;
+}
+
+.footer-component{
+  width: calc(100% - 48px);
+  height: auto;
+  position: relative;
+  margin: auto;
+  padding: 0px;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+
+/**
+* CSS BUTTON
+*/
+.button-primary{
+  width: auto;
+  height: 40px;
+  line-height: 40px;
+  margin: 16px 0;
+  padding: 0 24px;
+  opacity: 1;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  font-size: 13px;
+  border-radius: 40px;
+  cursor: pointer;
+
+  pointer-events: auto;
+  transition: opacity .25s ease;
+  -moz-transition: opacity .25s ease;
+  -webkit-transition: opacity .25s ease;
+  -o-transition: opacity .25s ease;
+}
+
+.button-primary:hover,
+.button-primary:focus,
+.button-primary:active {
+  outline-width: 0px;
+  opacity: 0.8;
+}
+
+.v-align-center{
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  float: left;
+}
+.label-button{
+  margin-left: 8px; 
+  font-weight: 600;
+}
+
+
+/**
+* CSS GENERICI
+*/
+div.clear {
+    clear:both;
+}
+
+
+</style>
+
+<div class="header-component">
+
+    <div class="title">Conversazioni precedenti</div>
+    <div class="button">vedi tutte</div>
+    <div class="clear"></div>
+
+</div>
+
+<div class="content-component">
+
+  <div *ngFor="let conversation of conversations">
+    <div class="item-conversation" (click)="openConversationByID(conversation)">
+      <div class="body-conv">
+        <div class="left-conv">
+          <div class="icon-avatar" >
+            <div #avatarPlaceholder *ngIf="!conversation.image" [style.background-color]="conversation.color" class="avatar-placeholder" [innerHTML]="conversation.avatar"></div>
+            <div #avatarImage *ngIf="conversation.image" class="avatar-image" [style.background-image]="'url(' + conversation.image + ')'"></div>
+          </div>
+        </div>
+        <div class="right-conv">
+          <div class="last-time">{{conversation.time_last_message}}</div>
+          <div class="truncate name">{{conversation.sender_fullname }}</div>
+          <div [class.not-read]="conversation.is_new" class="truncate msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-component"> 
+
+  <button class="button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': themeColor, 'border-color': themeColor, 'color': themeForegroundColor }">
+      <span class="v-align-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': themeForegroundColor}"/>
+          <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+      </span>
+      <span class="v-align-center label-button">
+        {{LABEL_START_NW_CONV}}
+      </span>  
+      <div class="clear"></div>
+  </button>
+
+</div>

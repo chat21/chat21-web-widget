@@ -1,0 +1,288 @@
+<style>
+#tilechat-container{
+  background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+}
+
+#tilechat-container .tilechat-messenger-header {
+  position: relative;
+  min-height: 75px;
+  /* background: linear-gradient(135deg,rgb(35, 146, 236),rgb(13, 92, 156)); */
+  background-blend-mode: overlay;
+  color: #fff;
+  -webkit-transition: height .16s ease-out;
+  transition: height .16s ease-out;
+  height: 252px;
+}
+
+#tilechat-container .tilechat-home-screen-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 40px;
+    padding-bottom: 87px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#tilechat-container .tilechat-home-screen-header-logo {
+    height: 32px;
+    padding-bottom: 16px;
+}
+#tilechat-container .tilechat-home-screen-header-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto 0;
+    display: block;
+}
+#tilechat-container .tilechat-fit-text, 
+#tilechat-container .tilechat-fit-text>span {
+    /* white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; */
+
+    font-size: 30px;
+    max-width: 296px;
+}
+
+#tilechat-container .tilechat-home-screen-header-greeting {
+    color: rgb(255, 255, 255);
+    display: block;
+    line-height: 1.5em;
+}
+#tilechat-container .tilechat-home-screen-header-intro {
+    color: rgba(255, 255, 255, 0.7);
+    display: block;
+    font-size: 1em;
+    line-height: 1.5em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.tilechat-end-footer{
+    position: absolute;
+    bottom: 0px;
+    height: 50px;
+    background-color: white;
+    width: 100%;
+    box-shadow: 0 -10px 10px 1px rgba(0,0,0,.06);
+}
+.build_version {
+    display: none;
+    font-size: 10px;
+    color:#777777;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+.tilechat-end-footer:hover div.build_version{
+    display: block;
+}
+
+/*-----------------------*/
+
+
+#tilechat-container .tilechat-messenger-body {
+    /* position: relative; */
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    /* background-color: #fff; */
+    -webkit-box-shadow: inset 0 21px 4px -20px rgba(0,0,0,.2);
+    box-shadow: inset 0 21px 4px -20px rgba(0,0,0,.2);
+
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background-color: transparent;
+    height: 100%;
+    overflow: scroll;
+}
+#tilechat-container .tilechat-home-screen {
+    /* z-index: 2147483002;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto; */
+}
+#tilechat-container .tilechat-home-screen-body {
+    padding-bottom: 55px;
+    padding-top: 188px;
+}
+#tilechat-container .tilechat-home-screen-body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 16px;
+    min-height: 100%;
+}
+#tilechat-container .tilechat-home-screen-cards-container {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+}
+
+#tilechat-container .tilechat-home-screen-conversation-card {
+    margin-bottom: 17px;
+    background-color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #000;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(40, 110, 250, 0.5);
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(40, 110, 250, 0.5);
+}
+
+/****************/
+#tilechat-container .tilechat-messenger-header-buttons-close-button {
+    z-index: 2147483003;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    top: 0;
+    right: 0;
+    background-position: 50%;
+    margin: 12px 8px 12px 2px;
+    color: #ffffff;
+    /* display: none; */
+}
+
+#tilechat-container .tilechat-messenger-header-buttons-close-button-body {
+    cursor: pointer;
+    width: 51px;
+    height: 51px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.0);
+}
+#tilechat-container .tilechat-messenger-header-buttons-close-button-body:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+svg{
+  margin: 0 auto;
+  fill: #ffffff;
+}
+
+
+.tilechat-home-screen-conversations-footer{
+  min-height: 80px;
+}
+
+.chat21-button-new {
+          position: absolute;
+          cursor: pointer;
+          margin-left: 10px;
+          margin-right: 30px;
+          outline: 0!important;
+          background-color: rgb(42, 106, 193);
+          border-color: rgb(42, 106, 193);
+      }
+    .chat21b-box-new-conversation {
+        margin: 25px 6px 6px;
+        height: 44px;
+        position: relative;
+        border-radius: 40px;
+        background-color: #fff;
+        z-index: 100;
+        font-size: 13px;
+        color: #2a6ac1;
+        cursor: pointer;
+        opacity: 1;
+        text-align: center;
+    }
+</style>
+
+
+<div id="tilechat-container">
+
+    <!-- HEADER -->
+    <div class="tilechat-messenger-header " [ngStyle]="{'background-color': themeColor, 'color': themeForegroundColor }">
+
+        <div class="tilechat-home-screen-header tilechat-messenger-header-view-enter-done">
+          
+          <!-- ICON CLOSE CHAT -->
+          <div class="tilechat-messenger-header-buttons header-button close">
+            <div class="tilechat-messenger-header-buttons-close-button tilechat-home-screen-header-close-button" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
+              <div class="tilechat-messenger-header-buttons-close-button-body" (click)="f21_close()">
+                    <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+                        <!-- <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title> -->
+                    </svg>
+              </div>
+            </div>
+          </div>
+
+          
+          <!-- CONTENT HEADER -->
+          <div class="tilechat-home-screen-header-body-container" style="transform: translateY(0px); opacity: 1;">
+            <div class="tilechat-home-screen-header-body">
+              <!-- LOGO HEADER -->
+              <div class="tilechat-home-screen-header-logo">
+                <img src="./assets/images/tiledesk_logo_white_small.png" alt="tilechat logo">
+              </div>
+              <!-- WELLCOME HEADER -->
+              <div class="tilechat-fit-text" style="font-size: 30px; max-width: 296px;">
+                <span class="tilechat-home-screen-header-greeting">{{WELLCOME_TITLE}} {{widgetTitle}} 👋</span>
+              </div>
+              <!-- MESSAGE HEADER -->
+              <span *ngIf="wellcomeMsg" class="tilechat-home-screen-header-intro">{{wellcomeMsg}}</span>
+            </div>
+          </div>
+
+
+        </div>
+
+    </div>
+    
+
+
+    <!-- CONTENT -->
+    <div class="tilechat-messenger-body">
+
+      <div class="tilechat-home-screen">
+
+        <div class="tilechat-home-screen-body" style="padding-top: 188px;">
+          
+          <div class="tilechat-home-screen-cards-container">
+
+              <div class="tilechat-home-screen-conversation-card">
+
+                <app-list-conversations 
+                (eventNewConv)="returnNewConversation()" 
+                (eventSelctedConv)="returnSelectedConversation($event)">
+                </app-list-conversations>
+        
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="tilechat-end-footer">
+        <div class="tilechat-powered-by" [innerHTML]="globals.poweredBy">
+            <!-- (click)="openRate()" -->
+            <!-- <a target="_blank" href="http://www.chat21.org/">Powered by <b>Chat21</b></a> -->
+        </div>
+        <div class="build_version">{{globals.BUILD_VERSION}}</div>
+    </div>
+
+
+</div>

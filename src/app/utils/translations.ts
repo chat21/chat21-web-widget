@@ -20,18 +20,24 @@ export const en = {
     "CALLOUT_MSG_PLACEHOLDER": "Click here and start chatting with us!",
     'CUSTOMER_SATISFACTION': 'Customer satisfaction',
     'YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE': 'your opinion on our customer service',
-    'DOWNLOAD_TRANSCRIPT': 'Download Transcript',
+    'DOWNLOAD_TRANSCRIPT': 'Download transcript',
     'BACK': 'Back',
-    'YOUR_RATING': 'your rating:',
+    'YOUR_RATING': 'your rating',
     'WRITE_YOUR_OPINION': 'Write your opinion ... (optional)',
     'SUBMIT': 'Submit',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Thank you for your evaluation',
     'YOUR_RATING_HAS_BEEN_RECEIVED' : 'your rating has been received',
-    'ALT_BUTTON_CLOSE_CHAT': 'Exit the chat',
+
     'ALERT_LEAVE_CHAT': 'Do you want to leave the chat?',
     'YES': 'Yes',
-    'NO': 'No'
-}
+    'NO': 'No',
+    'BUTTON_CLOSE_TO_ICON': 'Minimize chat',
+    'BUTTON_EDIT_PROFILE': 'Update profile',
+    'BUTTON_DOWNLOAD_TRANSCRIPT': 'Download transcript',
+    'RATE_CHAT': 'Rate chat',
+    'WELLCOME_TITLE': 'Hi, wellcome to',
+    'WELLCOME_MSG': 'How can we help?'
+};
 
 // "LABEL_START_NW_CONV": "INIZIA UNA NUOVA CONVERSAZIONE",
 export const it = {
@@ -55,15 +61,21 @@ export const it = {
     "CALLOUT_MSG_PLACEHOLDER": "Clicca qui e inizia a chattare con noi!",
     'CUSTOMER_SATISFACTION': 'Valutazione servizio',
     'YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE': 'il tuo giudizio sul nostro servizio clienti',
-    'DOWNLOAD_TRANSCRIPT': 'Scarica Transcript',
+    'DOWNLOAD_TRANSCRIPT': 'Scarica transcript',
     'BACK': 'Indietro',
-    'YOUR_RATING': 'il tuo voto:',
+    'YOUR_RATING': 'il tuo voto',
     'WRITE_YOUR_OPINION': 'Scrivi la tua opinione...(opzionale)',
     'SUBMIT': 'Invia',
     'THANK_YOU_FOR_YOUR_EVALUATION': 'Grazie per la tua valutazione',
     'YOUR_RATING_HAS_BEEN_RECEIVED' : 'il tuo voto è stato ricevuto',
-    'ALT_BUTTON_CLOSE_CHAT': 'Esci dalla chat',
+
     'ALERT_LEAVE_CHAT': 'Vuoi abbandonare la conversazione?',
     'YES': 'Yes',
-    'NO': 'No'
-}
+    'NO': 'No',
+    'BUTTON_CLOSE_TO_ICON': 'Riduci a icona la chat',
+    'BUTTON_EDIT_PROFILE': 'Modifica profilo',
+    'BUTTON_DOWNLOAD_TRANSCRIPT': 'Scarica transcript',
+    'RATE_CHAT': 'Valuta chat',
+    'WELLCOME_TITLE': 'Ciao, benvenuto su',
+    'WELLCOME_MSG': 'Come possiamo aiutarti?'
+};
