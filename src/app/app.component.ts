@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
 // services
+import { Globals } from './utils/globals';
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
@@ -41,9 +42,9 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 // ])
 
 @Component({
-    selector: 'app-root',
+    selector: 'tiledeskwidget-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+    styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
     animations: [
         trigger(
@@ -118,6 +119,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
 
     BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
+
     CLIENT_BROWSER = navigator.userAgent;
 
     textInputTextArea: String;
@@ -130,8 +132,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         'height': this.HEIGHT_DEFAULT,
         'max-height': '100px',
         'border': 'none',
-        'padding': '10px'
+        'padding': '10px 40px',
+        'margin': '10px 0',
+        'line-height': 'normal'
     };
+
+
     selectedFiles: FileList;
     isWidgetActive: boolean;
     isModalLeaveChatActive = false;
@@ -148,7 +154,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     filterSystemMsg = true; // se è true i messaggi inviati da system non vengono visualizzati
 
     writingMessage = '';
-
     userId: string;
     userFullname: string;
     userEmail: string;
@@ -172,6 +177,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     themeForegroundColor: string;
     allowTranscriptDownload: boolean;
     showWidgetNameInConversation: boolean;
+    isOpenHP: boolean;
 
     private aliveSubLoggedUser = true;
     private isNewConversation = true;
@@ -190,7 +196,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private LABEL_START_NW_CONV: string;
     private LABEL_FIRST_MSG: string;
     private LABEL_FIRST_MSG_NO_AGENTS: string;
-    private LABEL_SELECT_TOPIC: string;
+    LABEL_SELECT_TOPIC: string;
     private LABEL_COMPLETE_FORM: string;
     private LABEL_FIELD_NAME: string;
     private LABEL_ERROR_FIELD_NAME: string;
@@ -203,10 +209,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private ALL_AGENTS_OFFLINE_LABEL: string;
     CALLOUT_TITLE_PLACEHOLDER: string;
     CALLOUT_MSG_PLACEHOLDER: string;
-    ALT_BUTTON_CLOSE_CHAT: string;
+
     ALERT_LEAVE_CHAT: string;
     YES: string;
     NO: string;
+    BUTTON_CLOSE_TO_ICON: string;
+    BUTTON_EDIT_PROFILE: string;
+    BUTTON_DOWNLOAD_TRANSCRIPT: string;
+    RATE_CHAT: string;
 
     // // ========= begin::hardcoded translations
     // LABEL_PLACEHOLDER = 'Scrivi la tua domanda...'; // 'Type your message...';  // type your message...
@@ -244,7 +254,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     isMobile: boolean;
 
 
+    stylePrimaryColor = {};
+    styleSecondColor = {};
+    styleBckColor = {};
+    styleBtnPrimary = {};
+
+
     constructor(
+        private globals: Globals,
         private zone: NgZone,
         public authService: AuthService,
         public messagingService: MessagingService,
@@ -257,21 +274,25 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         private translatorService: TranslatorService,
         private ngZone: NgZone
     ) {
-        moment.locale('it');
-        this.initAll();
 
+        this.lang = this.translatorService.getBrowserLanguage() ?
+        this.translatorService.getBrowserLanguage() :
+        this.translatorService.getDefaultLanguage();
+        console.log(' ---------------- LANG ---------------- ', this.lang);
+        this.globals.isOpenHP = false;
+        this.globals.BUILD_VERSION = this.BUILD_VERSION;
+        moment.locale(this.lang);
+        this.initAll();
         this.convertHex('#FF00FF ', 50);
     }
 
 
     // function convertHex(hex, opacity) {
     convertHex(hex, opacity) {
-
         hex = hex.replace('#', '');
         const r = parseInt(hex.substring(0, 2), 16);
         const g = parseInt(hex.substring(2, 4), 16);
         const b = parseInt(hex.substring(4, 6), 16);
-
         const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
         console.log('CONVERT HEX TO RGBA ', result);
         return result;
@@ -279,10 +300,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private initAll() {
         this.detectIfIsMobile();
-
         // RElated to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
-
         console.log(' ---------------- CONSTRUCTOR ---------------- ');
 
         this.initParameters();
@@ -361,7 +380,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         // console.log("constructor.subLoggedUser", user);
                         // that.senderId = user.uid;
                         that.senderId = user.user.uid;
-                        // console.log("constructor.subLoggedUser", that.senderId);
+                        that.globals.senderId = user.user.uid;
+                        // console.log("that.globals.senderId", that.globals.senderId);
                         // that.initConversation();
 
                         that.createConversation();
@@ -375,7 +395,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     } else {
                         that.isLogged = false;
-                        console.log('IS_LOGGED', that.isLogged);
+                        console.log('IS_NOT_LOGGED', that.isLogged);
 
                         // set auth
                         // if (this.userEmail && this.userPassword) {
@@ -419,6 +439,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
         this.addComponentToWindow(this.ngZone);
+
+
+
+        // SET CUSTOM COLOR
+        this.stylePrimaryColor = {
+            'color': this.themeColor
+        };
+        this.styleSecondColor = {
+            'color': this.themeForegroundColor
+        };
+        this.styleBckColor = {
+            'background-color': this.themeColor
+        };
+        this.styleBtnPrimary = {
+            'background-color': this.themeForegroundColor,
+            'color': this.themeColor,
+            'border-color': this.themeColor
+        };
 
     }
 
@@ -506,6 +544,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private initParameters() {
 
         this.tenant = environment.tenant;
+        this.globals.tenant = this.tenant;
+
         this.preChatForm = false;
         // this.chatName = 'TileDesk';
         // tslint:disable-next-line:max-line-length
@@ -528,16 +568,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // for retrocompatibility 0.9 (without tiledesk.js)
         this.baseLocation = 'https://widget.tiledesk.com';
-
         if (window['tiledesk']) {
             this.baseLocation = window['tiledesk'].getBaseLocation();
         }
         // console.log('baseLocation', this.baseLocation);
+        this.globals.baseLocation =  this.baseLocation;
 
 
         this.lang = this.translatorService.getBrowserLanguage() ?
-            this.translatorService.getBrowserLanguage() :
-            this.translatorService.getDefaultLanguage();
+        this.translatorService.getBrowserLanguage() :
+        this.translatorService.getDefaultLanguage();
+        this.globals.lang = this.lang;
     }
 
     private addComponentToWindow(ngZone) {
@@ -597,6 +638,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'allowTranscriptDownload': this.allowTranscriptDownload
         };
 
+        // set global variables
+        this.globals.themeColor = this.themeColor;
+        this.globals.themeForegroundColor = this.themeForegroundColor;
+
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
 
         console.log(' ---------------- 2b ---------------- ');
@@ -624,10 +669,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ALL_AGENTS_OFFLINE_LABEL = this.translatorService.translate('ALL_AGENTS_OFFLINE_LABEL');
         this.CALLOUT_TITLE_PLACEHOLDER = this.translatorService.translate('CALLOUT_TITLE_PLACEHOLDER');
         this.CALLOUT_MSG_PLACEHOLDER = this.translatorService.translate('CALLOUT_MSG_PLACEHOLDER');
-        this.ALT_BUTTON_CLOSE_CHAT = this.translatorService.translate('ALT_BUTTON_CLOSE_CHAT');
+
         this.ALERT_LEAVE_CHAT = this.translatorService.translate('ALERT_LEAVE_CHAT');
         this.YES = this.translatorService.translate('YES');
         this.NO = this.translatorService.translate('NO');
+
+        this.BUTTON_CLOSE_TO_ICON = this.translatorService.translate('BUTTON_CLOSE_TO_ICON');
+        this.BUTTON_EDIT_PROFILE = this.translatorService.translate('BUTTON_EDIT_PROFILE');
+        this.BUTTON_DOWNLOAD_TRANSCRIPT = this.translatorService.translate('BUTTON_DOWNLOAD_TRANSCRIPT');
+        this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
+
     }
 
     /** */
@@ -640,6 +691,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         //// get isWidgetActive (poll) from storage;
         this.isWidgetActive = (sessionStorage.getItem('isWidgetActive')) ? true : false;
+
+        if (localStorage.getItem('isOpen') === 'true') {
+            this.isOpen = true;
+        } else if (localStorage.getItem('isOpen') === 'false') {
+            this.isOpen = false;
+        }
+        //// get isWidgetActive (poll) from storage;
+        this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
+
     }
 
     private getVariableUrlParameters() {
@@ -780,37 +840,30 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('»»» GET VARIABLE URL PARAMETERS - ALLOW TRANSCRIPT DOWNLOAD ', this.showWidgetNameInConversation);
         }
 
+        this.globals.widgetTitle = this.widgetTitle;
+        this.globals.wellcomeMsg = this.wellcomeMsg;
+        this.globals.poweredBy = this.poweredBy;
+
     }
 
     private setAvailableAgentsStatus() {
         this.agentAvailabilityService
-            .getAvailableAgents(this.projectid)
-            .subscribe(
-                (availableAgents) => {
-                    console.log('availableAgents', availableAgents);
-
-                    if (availableAgents.length <= 0) {
-                        this.areAgentsAvailable = false;
-                        this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
-                    } else {
-                        this.areAgentsAvailable = true;
-                        this.areAgentsAvailableText = this.AGENT_AVAILABLE;
-                    }
-
-                    // console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
-                }, (error) => {
-                    // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
-                    console.error('setOnlineStatus::setAvailableAgentsStatus', error);
-
-                }, () => {
-
-                }
-            );
-        // , (error) => {
-        //     console.log("OUTER-setOnlineStatus::setAvailableAgentsStatus::error", error);
-        // },() => {
-
-        // }
+        .getAvailableAgents(this.projectid)
+        .subscribe( (availableAgents) => {
+          console.log('availableAgents', availableAgents);
+          if (availableAgents.length <= 0) {
+              this.areAgentsAvailable = false;
+              this.areAgentsAvailableText = this.AGENT_NOT_AVAILABLE;
+          } else {
+              this.areAgentsAvailable = true;
+              this.areAgentsAvailableText = this.AGENT_AVAILABLE;
+          }
+          // console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', this.areAgentsAvailable);
+        }, (error) => {
+          // console.error("INNER-setOnlineStatus::setAvailableAgentsStatus::error", error);
+          console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+        }, () => {
+        });
     }
 
     private getParameterByName(name) {
@@ -1160,6 +1213,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.attributes.userEmail = this.userEmail;
         if (this.attributes) {
             sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
+            localStorage.setItem('attributes', JSON.stringify(this.attributes));
         }
         this.preChatForm = false;
         this.setFocusOnId('chat21-main-message-context');
@@ -1175,58 +1229,46 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     setSubscriptions() {
         // console.log('setSubscriptions: ');
         const that = this;
+
         // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
         const subscriptionIsWidgetActive: Subscription = this.starRatingWidgetService.observable
-            .subscribe(isWidgetActive => {
-                that.isWidgetActive = isWidgetActive;
-                if (isWidgetActive === false) {
-                    sessionStorage.removeItem('isWidgetActive');
-                    // this.conversationWith = null;
-                    // this.generateNewUidConversation();
-                    console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
-                } else if (isWidgetActive === true) {
-                    console.log('APROOOOOOOO!!!!:');
-                    sessionStorage.setItem('isWidgetActive', 'true');
-                    that.isConversationOpen = false;
-                }
-            });
+        .subscribe(isWidgetActive => {
+            that.isWidgetActive = isWidgetActive;
+            if (isWidgetActive === false) {
+                sessionStorage.removeItem('isWidgetActive');
+                localStorage.removeItem('isWidgetActive');
+                // this.conversationWith = null;
+                // this.generateNewUidConversation();
+                console.log('CHIUDOOOOO!!!!:', that.isConversationOpen, isWidgetActive);
+            } else if (isWidgetActive === true) {
+                console.log('APROOOOOOOO!!!!:');
+                sessionStorage.setItem('isWidgetActive', 'true');
+                localStorage.setItem('isWidgetActive', 'true');
+                that.isConversationOpen = false;
+            }
+        });
         this.subscriptions.push(subscriptionIsWidgetActive);
 
         // NUOVO MESSAGGIO!!
-        const obsAddedMessage: Subscription = this.messagingService.obsAdded
-            .subscribe(newMessage => {
-                if (that.scrollMe) {
-                    const divScrollMe = that.scrollMe.nativeElement;
-                    const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
-                    if (checkContentScrollPosition) {
-                        // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-                        // console.log('------->sono alla fine dello scrooll: ');
-                        setTimeout(function () {
-                            that.scrollToBottom();
-                        }, 500);
-                    } else {
-                        // mostro badge
-                        that.NUM_BADGES++;
-                    }
-                }
-            });
-        this.subscriptions.push(obsAddedMessage);
-
-
-        // var textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
-        // var in_dom = document.body.contains(textArea);
-        // var observer = new MutationObserver(function (mutations) {
-        //     if (document.body.contains(textArea)) {
-        //         if (!in_dom) {
-        //             console.log("element inserted");
+        // const obsAddedMessage: Subscription = this.messagingService.obsAdded
+        //     .subscribe(newMessage => {
+        //         if (that.scrollMe) {
+        //             const divScrollMe = that.scrollMe.nativeElement;
+        //             const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+        //             if (checkContentScrollPosition) {
+        //                 // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+        //                 // console.log('------->sono alla fine dello scrooll: ');
+        //                 setTimeout(function () {
+        //                     that.scrollToBottom();
+        //                 }, 500);
+        //             } else {
+        //                 // mostro badge
+        //                 that.NUM_BADGES++;
+        //             }
         //         }
-        //         in_dom = true;
-        //     } else if (in_dom) {
-        //         in_dom = false;
-        //         console.log("element removed");
-        //     }
-        // });
-        // observer.observe(document.body, { childList: true });
+        //     });
+        // this.subscriptions.push(obsAddedMessage);
+
     }
 
     ngOnInit() {
@@ -1273,7 +1315,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.attributes = this.setAttributes();
         // console.log('RESET MESSAGES AND ADD SUBSCRIBES: ', this.messages);
         this.setSubscriptions();
-
         this.openSelectionDepartment = false;
         if (!this.attributes.departmentId) {
             this.departmentSelected = null;
@@ -1289,15 +1330,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.userFullname = this.attributes.userFullname;
             this.preChatForm = false;
         }
-
-
         this.checkWritingMessages();
-
     }
 
     setAttributes(): any {
-        let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
         // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
+        let attributes: any = JSON.parse(localStorage.getItem('attributes'));
         if (!attributes || attributes === 'undefined') {
             attributes = {
                 client: this.CLIENT_BROWSER,
@@ -1320,6 +1358,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
             sessionStorage.setItem('attributes', JSON.stringify(attributes));
+            localStorage.setItem('attributes', JSON.stringify(attributes));
         }
         return attributes;
     }
@@ -1331,7 +1370,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('generateUidConversation **************', this.conversationWith, this.senderId);
         this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
     }
-
 
     /**
      * IMPOSTO: senderId, recipientId, conversationId, conversationWith
@@ -1385,14 +1423,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.conversationWith = this.recipientId;
         } else {
             // channelType = CHANNEL_TYPE_GROUP;
-            this.conversationWith = sessionStorage.getItem(this.senderId);
+            // this.conversationWith = sessionStorage.getItem(this.senderId);
+            this.conversationWith = localStorage.getItem(this.senderId);
             if (!this.conversationWith) {
                 this.conversationWith = this.messagingService.generateUidConversation(this.senderId);
             }
         }
 
         // console.log("createConversation.conversationWith", this.conversationWith);
-
         if (!this.channelType || (this.channelType !== CHANNEL_TYPE_GROUP && this.channelType !== CHANNEL_TYPE_DIRECT)) {
             this.channelType = channelTypeTEMP;
         }
@@ -1404,7 +1442,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log('checkListMessages: ', snapshot);
                 if (snapshot.exists()) {
                     that.isNewConversation = false;
-                    console.log('IS NEW CONVERSATION ?', that.isNewConversation);
+                    console.log('IS NOT NEW CONVERSATION ?', that.isNewConversation);
                     setTimeout(function () {
                         if (that.messages.length === 0) {
                             that.isNewConversation = true;
@@ -1428,6 +1466,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
 
                 setTimeout(function () {
+                    console.log('GET listMessages: ', that.conversationWith);
                     that.messagingService.listMessages(that.conversationWith);
                 }, 500);
 
@@ -1437,35 +1476,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    // checkWritingMessages() {
-    //     // this.messagingService.checkWritingMessages();
-    //     const that = this;
-    //     const subscription: Subscription = this.messagingService.obsCheckWritingMessages
-    //         // .takeWhile(() => that.subscriptionIsWriting)
-    //         .subscribe(resp => {
-    //             //console.log('2 - subscribe IS: ', resp + ' ****************');
-    //             if (resp) {
-    //                 setTimeout(function () {
-    //                     that.writingMessage = this.LABEL_WRITING;
-    //                 }, 1000);
-    //             } else {
-    //                 that.writingMessage = '';
-    //             }
-    //         });
-
-    // }
-
     checkWritingMessages() {
         const that = this;
         const messagesRef = this.messagingService.checkWritingMessages(this.tenant, this.conversationWith);
         messagesRef.on('value', function (writing) {
-            // .then(function(writing) {
-            // console.log('checkWritingMessages >>>>>>>>>: ', writing);
             if (writing.exists()) {
-                // console.log('WritingMessages >>>>>>>>> OKKKK ');
                 that.writingMessage = that.LABEL_WRITING;
             } else {
-                // console.log('WritingMessages >>>>>>>>> NOOOOO ');
                 that.writingMessage = '';
             }
         });
@@ -1483,17 +1500,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messagingService.getMongDbDepartments(token, this.projectid)
             .subscribe(
                 response => {
-                    console.log('OK DEPARTMENTS ::::', response);
                     this.departments = response;
+                    console.log('OK DEPARTMENTS ::::', this.departments[0]);
+                    // DEPARTMENT DEFAULT SEMPRE PRESENTE
                     if (this.departments.length === 1) {
                         // this.setDepartment(this.departments[0]);
                         this.openSelectionDepartment = false;
                         this.departmentSelected = this.departments[0];
                         this.setFocusOnId('chat21-main-message-context');
                         console.log('this.departmentSelected ::::', this.departmentSelected);
-                    } else if (this.departments.length > 0) {
+                    } else if (this.departments.length === 2) {
+                        // UN SOLO DEPARTMENT
+                        this.openSelectionDepartment = false;
+                        this.departmentSelected = this.departments[1];
+                        this.setFocusOnId('chat21-main-message-context');
+                        console.log('this.departmentSelected ::::', this.departmentSelected);
+                    } else if (this.departments.length > 2) {
                         this.setFocusOnId('chat21-modal-select');
-                        // escludo department con default == true
                         let i = 0;
                         this.departments.forEach(department => {
                             // console.log('DEPARTMENT ::::', department);
@@ -1539,6 +1562,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('setAttributes setDepartment: ', JSON.stringify(this.attributes));
             if (this.attributes) {
                 sessionStorage.setItem('attributes', JSON.stringify(this.attributes));
+                localStorage.setItem('attributes', JSON.stringify(this.attributes));
             }
             // JSON.stringify(this.attributes)
         }
@@ -1594,6 +1618,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.senderId) {
             this.isOpen = true; // !this.isOpen;
             sessionStorage.setItem('isOpen', 'true');
+            localStorage.setItem('isOpen', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
             // console.log('f21_open   ---- isOpen::', this.isOpen, this.attributes.departmentId);
             this.scrollToBottom();
@@ -1613,6 +1638,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.restoreTextArea();
         this.isOpen = false;
         sessionStorage.setItem('isOpen', 'false');
+        localStorage.setItem('isOpen', 'false');
         // sessionStorage.removeItem('isOpen');
     }
 
@@ -2166,6 +2192,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
+
     convertMessage(msg) {
         let messageText = encodeHTML(msg);
         messageText = urlify(messageText);
@@ -2204,5 +2231,66 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messagingService.closeConversation();
     }
 
+    dowloadTranscript() {
+        const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
+        window.open(url, '_blank');
+    }
 
+    checkChatClosed(attributes) {
+        // console.log('ADD BUTTON VALUTA *****', attributes);
+        if ( attributes['subtype'] === 'info/support' && attributes['messagelabel'].key === 'CHAT_CLOSED' ) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    // DYNAMIC COLOR CSS BUTTON  //
+    styleButtonLeave(event) {
+        event.target.style.backgroundColor =  this.themeForegroundColor;
+        event.target.style.borderColor = this.themeColor;
+        event.target.style.color  = this.themeColor;
+    }
+    styleButtonOver(event) {
+        event.target.style.backgroundColor = this.themeColor;
+        event.target.style.borderColor = this.themeForegroundColor;
+        event.target.style.color  = this.themeForegroundColor;
+    }
+
+    // CALLBACK COMPONENT SELECT  //
+    returnDepartmentSelected($event) {
+        if ( $event ) {
+            console.log('onSelectDepartment: ', $event);
+            this.openSelectionDepartment = false;
+            this.departmentSelected = $event;
+            this.setFocusOnId('chat21-main-message-context');
+        }
+    }
+
+    private openHP() {
+        this.globals.isOpenHP = true;
+    }
+
+    private returnSelectedConversation($event) {
+        if ( $event ) {
+            this.globals.isOpenHP = false;
+            this.recipientId = $event.recipient;
+            console.log('onSelectConversation in APP COMPONENT: ', this.recipientId, this.globals.isOpenHP);
+            this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
+            this.createConversation();
+            this.messages = this.messagingService.messages;
+
+        }
+    }
+    private returnNewConversation() {
+        console.log('returnNewConversation in APP COMPONENT');
+        this.globals.isOpenHP = false;
+        this.recipientId = null;
+        this.startNwConversation();
+    }
+
+    private returnClose() {
+        this.f21_close();
+    }
 }

@@ -163,6 +163,7 @@ export class MessagingService {
     this.conversationWith = conversationWith;
     const that = this;
     // /apps/tilechat/typings/<GROUP_ID>/<USER_ID> = 1
+
     const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
     console.log('checkWritingMessages *****', urlNodeFirebase);
     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
@@ -282,9 +283,9 @@ export class MessagingService {
     // ADDED
     this.messagesRef.on('child_added', function(childSnapshot) {
       const message = childSnapshot.val();
-      // console.log('child_added *****', childSnapshot.val());
+      console.log('child_added *****', childSnapshot.val());
       if ( that.checkMessage(message) ) {
-
+        
         // imposto il giorno del messaggio
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         const msg = new MessageModel(
@@ -319,17 +320,16 @@ export class MessagingService {
           const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
           // console.log('index *****', index, childSnapshot.key);
           if (index < 0) {
-            // console.log('--------> ADD MSG', index);
+            console.log('--------> ADD MSG', index, msg);
             that.messages.push(msg);
           }
         } else {
+          console.log('--------> ADD MSG', msg);
           // se msg è inviato da me cambio status
           that.messages.push(msg);
         }
 
         that.messages.sort(that.compareValues('timestamp', 'asc'));
-
-
       }
     });
   }
@@ -533,10 +533,22 @@ export class MessagingService {
 
   private checkRemoveConversation() {
     const that = this;
-    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith;
+
+    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith ;
+    this.conversationRef = firebase.database().ref(urlConversation);
+    this.conversationRef.on('child_removed', function (snap) {
+      // console.log('child_removed', snap );
+      if ( snap.key === 'sender') {
+
+    const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
+    console.log('checkRemoveConversation ***********************', urlConversation);
+    // const urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/' + this.conversationWith;
     this.conversationRef = firebase.database().ref(urlConversation);
     this.conversationRef.on('child_removed', function (childSnapshot) {
-      that.closeConversation();
+      console.log('child_removed ***********************', childSnapshot.key, childSnapshot.val());
+      if (childSnapshot.key === that.conversationWith) {
+        that.closeConversation();
+      }
     });
   }
 
@@ -555,6 +567,7 @@ export class MessagingService {
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
     sessionStorage.setItem(uid, key);
+    localStorage.setItem(uid, key);
     this.conversationWith = key;
     return key;
   }

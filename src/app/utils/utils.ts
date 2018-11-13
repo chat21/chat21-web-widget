@@ -37,6 +37,20 @@ export function convertDayToString(day) {
     return arrayDays[day];
 }
 
+export function convertMessage(messageText) {
+  messageText = convert(messageText);
+  return messageText;
+}
+
+// function convert(str) {
+//   str = str.replace(/>/g, '&gt;');
+//   str = str.replace(/</g, '&lt;');
+//   str = str.replace(/"/g, '&quot;');
+//   str = str.replace(/'/g, '&#039;');
+//   return str;
+// }
+
+
 /**
  * restituiso indice item nell'array con uid == key
  * @param items
@@ -143,3 +157,33 @@ export function strip_tags(html) {
   return (html.replace( /<.*?>/g, '' )).trim();
 }
 
+
+export function avatarPlaceholder(conversation_with_fullname) {
+  let initials = '';
+  if (conversation_with_fullname) {
+      const arrayName = conversation_with_fullname.split(' ');
+      arrayName.forEach(member => {
+          if (member.trim().length > 1 && initials.length < 3) {
+              initials += member.substring(0, 1).toUpperCase();
+          }
+      });
+  }
+  return initials;
+}
+
+export function getColorBck(str) {
+  const arrayBckColor = ['#fba76f', '#80d066', '#73cdd0', '#ecd074', '#6fb1e4', '#f98bae'];
+  let num = 0;
+  if (str) {
+      const code = str.charCodeAt((str.length - 1));
+      num = Math.round(code % arrayBckColor.length);
+      console.log('************** code', str.length, code, arrayBckColor.length, num);
+  }
+  return arrayBckColor[num];
+}
+
+export function getFromNow(timestamp) {
+  moment.locale(window.navigator.language);
+  const date_as_string = moment.unix(timestamp).fromNow();
+  return date_as_string;
+}

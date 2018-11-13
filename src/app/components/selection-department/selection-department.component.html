@@ -1,0 +1,28 @@
+<div class="chat21-modal-content modal-body">
+    <!-- HEADER -->
+    <div class="header-modal chat21-sheet-header" [ngStyle]="{'background-color': themeColor}" >
+        <!-- TITLE HEADER -->
+        <div class="chat21-sheet-header-title-container">
+            <div class="chat21-sheet-header-title" [ngStyle]="{'color': themeForegroundColor}">
+                <span>{{LABEL_SELECT_TOPIC}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="modal-content">
+        <ul class="chat21-content-modal-select">
+            <li *ngFor="let department of departments; let i = index" (click)="onSelectDepartment(department)">
+                <span [ngStyle]="{'background-color': themeColor, 'color': themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
+                <span class="default-text" >{{department?.name}}</span>
+            </li>
+        </ul>
+    </div>
+  </div>
+
+<!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE DEPARTMENT SELECTION VIEW  -->
+            <!-- <div *ngIf="!areAgentsAvailable" class="chat21-agents-available">
+               <span> {{ ALL_AGENTS_OFFLINE_LABEL  }}</span>
+            </div> -->
+
+            

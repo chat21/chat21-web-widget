@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { StarRatingWidgetService } from './star-rating-widget.service';
 import { TranslatorService } from '../../providers/translator.service';
 
@@ -7,16 +6,16 @@ import { TranslatorService } from '../../providers/translator.service';
 @Component({
   selector: 'app-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
-  styleUrls: ['./star-rating-widget.component.css']
+  styleUrls: ['./star-rating-widget.component.scss']
 })
 export class StarRatingWidgetComponent implements OnInit {
-  @Input() parentThemeColor: string;
-  @Input() parentThemeForegroundColor: string;
+  @Input() themeColor: string;
+  @Input() themeForegroundColor: string;
   @Input() parentAllowTranscriptDownload: boolean;
 
   private rate: number;
-  public step: number;
-  displayDownloadTranscriptBtn: boolean;
+  step: number;
+  private displayDownloadTranscriptBtn: boolean;
 
   // STRING (FOR TRANSLATION) PASSED IN THE TEMPLATE
   CUSTOMER_SATISFACTION: string;
@@ -35,11 +34,10 @@ export class StarRatingWidgetComponent implements OnInit {
   ) {  }
 
   ngOnInit() {
-    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.parentThemeColor);
-    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.parentThemeForegroundColor);
+    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.themeColor);
+    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.themeForegroundColor);
     console.log('START-RATING-WIDGET - PARENT ALLOW-TRANSCRIPT-DOWNLOAD: ', this.parentAllowTranscriptDownload);
     this.displayDownloadTranscriptBtn = this.parentAllowTranscriptDownload;
-
     this.translate();
     this.step = 0;
   }
@@ -84,23 +82,21 @@ export class StarRatingWidgetComponent implements OnInit {
     const that = this;
     // chiamo servizio invio segnalazione
     this.starRatingWidgetService.httpSendRate(this.rate, message)
-      .subscribe(
-        response => {
-          console.log('OK sender ::::', response);
-          // pubblico var isWidgetActive
-          that.nextStep();
-        },
-        errMsg => {
-          console.log('httpSendRate ERROR MESSAGE', errMsg);
-          // window.alert('MSG_GENERIC_SERVICE_ERROR');
-          that.nextStep();
-
-        },
-        () => {
-          // console.log('API ERROR NESSUNO');
-        }
-      );
-
+    .subscribe(
+      response => {
+        console.log('OK sender ::::', response);
+        // pubblico var isWidgetActive
+        that.nextStep();
+      },
+      errMsg => {
+        console.log('httpSendRate ERROR MESSAGE', errMsg);
+        // window.alert('MSG_GENERIC_SERVICE_ERROR');
+        that.nextStep();
+      },
+      () => {
+        // console.log('API ERROR NESSUNO');
+      }
+    );
   }
 
   closeRate() {
@@ -108,6 +104,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.step = 0;
   }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.step = 0;
   }
