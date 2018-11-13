@@ -3,6 +3,8 @@ import { StarRatingWidgetService } from './star-rating-widget.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 
+
+
 @Component({
   selector: 'tiledeskwidget-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
@@ -21,7 +23,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // @Output() eventSelctedConv = new EventEmitter<string>();
   // @Output() eventClose = new EventEmitter();
   // @Output() eventSignOut = new EventEmitter();
-  
+
   // ========= end:: Input/Output values ===========/
 
 
@@ -68,7 +70,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.rate = parseInt(e.srcElement.value, 0);
     setTimeout(function () {
       that.step = 1;
-      // console.log('VOTA!!!::', that.step, that.rate);
+      //  this.g.wdLog(['VOTA!!!::', that.step, that.rate);
     }, 300);
   }
 
@@ -82,13 +84,13 @@ export class StarRatingWidgetComponent implements OnInit {
 
   sendRate() {
     this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-    console.log('sendRate!!!::', this.message);
+     this.g.wdLog(['sendRate!!!::', this.message]);
     const that = this;
     // chiamo servizio invio segnalazione
     this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
     .subscribe(
       response => {
-        console.log('OK sender ::::', response);
+         this.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
         that.closeRate();
       },
@@ -98,7 +100,7 @@ export class StarRatingWidgetComponent implements OnInit {
         that.closeRate();
       },
       () => {
-        // console.log('API ERROR NESSUNO');
+        //  this.g.wdLog(['API ERROR NESSUNO');
       }
     );
   }
@@ -116,7 +118,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-    console.log(' closePage: ');
+     this.g.wdLog([' closePage: ']);
     this.starRatingWidgetService.setOsservable(false);
     this.eventClosePage.emit();
   }

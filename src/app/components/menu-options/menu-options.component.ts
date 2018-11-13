@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
+
 @Component({
   selector: 'tiledeskwidget-menu-options',
   templateUrl: './menu-options.component.html',
@@ -20,7 +21,7 @@ export class MenuOptionsComponent implements OnInit {
   }
 
   f21_toggle_options() {
-    console.log('f21_toggle_options', this.g.isOpenMenuOptions);
+     this.g.wdLog(['f21_toggle_options', this.g.isOpenMenuOptions]);
     this.g.isOpenMenuOptions = !this.g.isOpenMenuOptions;
   }
   toggleSound() {

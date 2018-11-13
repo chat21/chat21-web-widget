@@ -2,6 +2,7 @@ import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
 import { ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
 
+
 /**
  * calcolo il tempo trascorso tra due date
  * e lo formatto come segue:
@@ -14,7 +15,6 @@ export function setHeaderDate(timestamp): string {
   const date = new Date(timestamp);
   const now: Date = new Date();
   let labelDays = '';
-  // console.log('setHeaderDate **************', now, date);
   if (now.getFullYear() !== date.getFullYear()) {
     labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();
   } else if (now.getMonth() !== date.getMonth()) {
@@ -73,8 +73,7 @@ export function urlify(text) {
       url = 'http://' + url;
     }
     // url = convertUrlToTag(url);
-    // console.log('convertUrlToTag 2 **************', url);
-    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    return '<a class="c21-link" href="' + url + '" target="_blank">' + url + '</a>';
   });
 }
 
@@ -84,9 +83,8 @@ function convertUrlToTag(url) {
   if (TEMP) { popup = TEMP.split('&')[0]; }
   // tslint:disable-next-line:no-unused-expression
   (TEMP === 'true') ? popup = true : popup = false;
-  console.log('convertUrlToTag 1 **************', TEMP);
   // tslint:disable-next-line:curly
-  if (popup !== true) return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  if (popup !== true) return '<a class="c21-link" href="' + url + '" target="_blank">' + url + '</a>';
   // tslint:disable-next-line:curly
   else return '<p (click)="openPopup2()">zzz</p>';
 
@@ -94,18 +92,12 @@ function convertUrlToTag(url) {
   //// <a href="#" onclick="openPopup(' + url + ')">' + url + '</a>';
 }
 
-export function openPopup2() {
-  // const myWindow = window.open(url, 'Video Chat', 'width=100%,height=300');
-  console.log('myWindow 1 **************');
-  // return myWindow;
-}
 
 export function isPopupUrl(url) {
   const TEMP = url.split('popup=')[1];
   // può essere seguito da & oppure "
   if (TEMP) {
     if (TEMP.startsWith('true')) {
-      // console.log('isPopupUrl::::: ', TEMP.startsWith('true'));
       return true;
     } else {
       return false;
@@ -183,7 +175,6 @@ export function getColorBck(str) {
   if (str) {
     const code = str.charCodeAt((str.length - 1));
     num = Math.round(code % arrayBckColor.length);
-    console.log('************** code', str.length, code, arrayBckColor.length, num);
   }
   return arrayBckColor[num];
 }
@@ -196,7 +187,6 @@ export function getFromNow(timestamp) {
 
 export function detectIfIsMobile() {
   const isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
-  console.log('»»» IS MOBILE ', isMobile);
   return isMobile;
 }
 
@@ -206,7 +196,6 @@ export function convertHex(hex, opacity) {
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
   const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-  console.log('CONVERT HEX TO RGBA ', result);
   return result;
 }
 
@@ -222,12 +211,9 @@ export function getParameterByName(name) {
   // if (!url) url = window.location.href;
   const url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
-  // console.log('»»» getParameterByName NAME ', name);
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
-  // console.log('»»» getParameterByName RESULT ', results);
   if (!results) { return null; }
   if (!results[2]) { return ''; }
-  // console.log('»»» getParameterByName RESULT[2] ', results[2]);
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 

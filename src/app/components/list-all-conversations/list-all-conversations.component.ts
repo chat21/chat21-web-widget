@@ -51,15 +51,15 @@ export class ListAllConversationsComponent implements OnInit {
   }
 
   initialize() {
-    console.log('initialize: ListConversationsComponent');
+    this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
 
-    console.log('senderId: ', this.senderId);
-    console.log('tenant: ', this.tenant);
-    console.log('themeColor: ', this.g.themeColor);
-    console.log('themeForegroundColor: ', this.g.themeForegroundColor);
+     this.g.wdLog(['senderId: ', this.senderId]);
+     this.g.wdLog(['tenant: ', this.tenant]);
+     this.g.wdLog(['themeColor: ', this.g.themeColor]);
+     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversations = this.conversationsService.allConversations;
@@ -72,10 +72,10 @@ export class ListAllConversationsComponent implements OnInit {
     const subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
       this.ngZone.run(() => {
         this.conversations = conversations;
-        console.log(' conversations:::: ', that.conversations);
+         this.g.wdLog([' conversations:::: ', that.conversations]);
       });
     });
-    //this.subscriptions.push(subAllConversations);
+    // this.subscriptions.push(subAllConversations);
   }
 
 
@@ -86,7 +86,7 @@ export class ListAllConversationsComponent implements OnInit {
   }
 
   private openConversationByID(conversation) {
-    console.log('openConversationByID: ', conversation);
+     this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       this.conversationsService.updateIsNew(conversation);
       this.eventSelctedConv.emit(conversation);

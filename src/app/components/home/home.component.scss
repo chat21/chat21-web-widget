@@ -27,12 +27,17 @@
         }
         .c21-text {
             .c21-text-wellcome {
-                line-height: normal; 
+                font-family: 'Google Sans';
+                overflow: hidden;
+                line-height: 1.2em;
+                font-weight: 400;
                 font-size: 3em; 
             }
             .c21-text-intro {
-                line-height: normal; 
+                display: inline-block;
+                line-height: 3em; 
                 font-size: 1.4em;
+                font-weight: 300;
             }
         }
     }

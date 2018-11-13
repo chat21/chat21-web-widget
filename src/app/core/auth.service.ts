@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
+import { Globals } from '../utils/globals';
+
 @Injectable()
 export class AuthService {
   // public user: Observable<firebase.User>;
@@ -21,7 +23,8 @@ export class AuthService {
 
   constructor(
     private firebaseAuth: AngularFireAuth,
-    public http: Http
+    public http: Http,
+    public g: Globals
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
@@ -37,10 +40,10 @@ export class AuthService {
     // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        console.log('NO CURRENT USER PASSO NULL');
+        that.g.wdLog(['NO CURRENT USER PASSO NULL']);
         that.obsLoggedUser.next(0);
       } else {
-        console.log('PASSO CURRENT USER');
+        that.g.wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;
         that.obsLoggedUser.next(firebase.auth().currentUser);
         // that.obsCurrentUser.next(that.user);
@@ -54,12 +57,12 @@ export class AuthService {
 
 
   getIdToken() {
-    // console.log('Notification permission granted.');
+    //  wdLog(['Notification permission granted.');
     const that = this;
     firebase.auth().currentUser.getIdToken()/* true: forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
-        console.log('******************** ---------------> idToken.', idToken);
+        that.g.wdLog(['******************** ---------------> idToken.', idToken]);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
     });
@@ -84,27 +87,27 @@ export class AuthService {
         const errorMessage = error.message;
         that.unsubscribe();
         that.obsLoggedUser.next(0);
-        console.log('signInAnonymously ERROR: ', errorCode, errorMessage);
+        that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
     });
   }
 
   authenticateFirebaseCustomToken(token) {
-    console.log('authService.authenticateFirebaseCustomToken', token);
+    this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
     const that = this;
     // firebase.auth().currentUser.getIdToken()
     // .then(function(idToken) {
     //   // Send token to your backend via HTTPS
-    //   console.log('idToken: ', idToken);
+    //    wdLog(['idToken: ', idToken);
     //   // ...
     // }).catch(function(error) {
     //   // Handle error
     // });
-   
-      // console.log('token: ', token);
+
+      //  wdLog(['token: ', token);
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
       .then(function(user) {
-        console.log('USER by signInWithCustomToken: ', user);
+        that.g.wdLog(['USER by signInWithCustomToken: ', user]);
         that.user = user;
         that.unsubscribe();
         that.obsLoggedUser.next(firebase.auth().currentUser);
@@ -115,7 +118,7 @@ export class AuthService {
           const errorMessage = error.message;
           that.unsubscribe();
           that.obsLoggedUser.next(0);
-          console.log('authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage);
+          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
       });
   }
 
@@ -135,12 +138,11 @@ export class AuthService {
       const errorMessage = error.message;
       that.unsubscribe();
       that.obsLoggedUser.next(0);
-      console.log('authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage);
+      that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
     });
   }
 
 
-  
 
 
   // signOut() {
@@ -160,20 +162,20 @@ export class AuthService {
   //     .auth
   //     .createUserWithEmailAndPassword(email, password)
   //     .then(value => {
-  //       console.log('Success!', value);
+  //        wdLog(['Success!', value);
   //     })
   //     .catch(err => {
-  //       console.log('Something went wrong:', err.message);
+  //        wdLog(['Something went wrong:', err.message);
   //     });
   // }
 
   // login(email: string, password: string) {
   //   this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
   //     .then(value => {
-  //       console.log('Nice, it worked!');
+  //        wdLog(['Nice, it worked!');
   //     })
   //     .catch(err => {
-  //       console.log('Something went wrong:', err.message);
+  //        wdLog(['Something went wrong:', err.message);
   //     });
   // }
 
@@ -181,12 +183,12 @@ export class AuthService {
     const that = this;
     return this.firebaseAuth.auth.signOut()
     .then(value => {
-      console.log('Nice, signOut OK!');
+      that.g.wdLog(['Nice, signOut OK!']);
       that.unsubscribe();
       that.obsLoggedUser.next(-1);
     })
     .catch(err => {
-      console.log('Something went wrong in signOut:', err.message);
+      that.g.wdLog(['Something went wrong in signOut:', err.message]);
       that.obsLoggedUser.next(firebase.auth().currentUser);
     });
   }

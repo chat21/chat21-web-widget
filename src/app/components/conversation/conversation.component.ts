@@ -116,12 +116,12 @@ export class ConversationComponent implements OnInit {
 
   ngOnInit() {
     // this.initAll();
-    console.log(' ngOnInit: app-conversation ', this.g);
-    console.log(' recipientId: ', this.recipientId);
-    console.log(' senderId: ', this.g.senderId);
-    console.log(' projectid: ', this.g.projectid);
-    console.log(' channelType: ', this.g.channelType);
-    console.log(' departmentDefault: ', this.g.departmentDefault);
+      this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
+      this.g.wdLog([' recipientId: ', this.recipientId]);
+      this.g.wdLog([' senderId: ', this.g.senderId]);
+      this.g.wdLog([' projectid: ', this.g.projectid]);
+      this.g.wdLog([' channelType: ', this.g.channelType]);
+      this.g.wdLog([' departmentDefault: ', this.g.departmentDefault]);
     // set first message customized for department
     if (this.g.departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
@@ -138,16 +138,16 @@ export class ConversationComponent implements OnInit {
   initAll() {
     this.themeColor50 = this.g.themeColor + '7F';
 
-    console.log(' ---------------- 1: setAvailableAgentsStatus ---------------- ');
+    this.g.wdLog([' ---------------- 1: setAvailableAgentsStatus ---------------- ']);
     this.setAvailableAgentsStatus();
 
-    console.log(' ---------------- 2: setConversation ---------------------- ');
+      this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
 
-    console.log(' ---------------- 3: connectConversation ---------------------- ');
+      this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
     this.connectConversation();
 
-    console.log(' ---------------- 4: initializeChatManager ------------------- ');
+      this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     this.initializeChatManager();
 
     this.g.activeConversation = this.conversationWith;
@@ -165,22 +165,47 @@ export class ConversationComponent implements OnInit {
     this.agentAvailabilityService
     .getAvailableAgents(this.g.projectid)
     .subscribe( (availableAgents) => {
-      console.log('availableAgents', availableAgents);
+        this.g.wdLog(['availableAgents', availableAgents]);
       if (availableAgents.length <= 0) {
         that.areAgentsAvailable = false;
         that.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
+        that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
       } else {
         that.areAgentsAvailable = true;
         that.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
+        // add first message
+        that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
       that.availableAgentsStatus = true;
-      console.log('AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.areAgentsAvailableText);
+      that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.areAgentsAvailableText]);
     }, (error) => {
       console.error('setOnlineStatus::setAvailableAgentsStatus', error);
     }, () => {
     });
   }
 
+  addFirstMessage(text) {
+    text = replaceBr(text);
+    const timestampSendingMessage = new Date('01/01/2000').getTime();
+    const msg = new MessageModel(
+      '000000',
+      this.g.lang,
+      this.conversationWith,
+      'Bot',
+      '', // sender
+      'Bot', // sender fullname
+      '200', // status
+      '', // metadata
+      text,
+      timestampSendingMessage,
+      '',
+      TYPE_MSG_TEXT,
+      '', // attributes
+      this.g.channelType,
+      this.g.projectid
+    );
+    this.messages.unshift(msg);
+  }
 
   /**
     * this.g.recipientId:
@@ -196,13 +221,13 @@ export class ConversationComponent implements OnInit {
     *    generateUidConversation
   */
   private setConversation() {
-    console.log('setConversation recipientId: ', this.g.recipientId, this.g.channelType);
+      this.g.wdLog(['setConversation recipientId: ', this.g.recipientId, this.g.channelType]);
     if ( !this.g.recipientId ) { this.g.recipientId = this.setRecipientId(); }
     if ( !this.g.channelType ) { this.g.channelType = this.setChannelType(); }
     this.conversationWith = this.g.recipientId;
-    console.log('createConversation.recipientId', this.g.recipientId);
-    console.log('createConversation.channelType', this.g.channelType);
-    console.log('createConversation.senderId', this.g.senderId);
+      this.g.wdLog(['createConversation.recipientId', this.g.recipientId]);
+      this.g.wdLog(['createConversation.channelType', this.g.channelType]);
+      this.g.wdLog(['createConversation.senderId', this.g.senderId]);
   }
 
   /**
@@ -281,7 +306,7 @@ export class ConversationComponent implements OnInit {
       if (this.g.userFullname) {
         attributes['userFullname'] = this.g.userFullname;
       }
-      console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
+        this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
       localStorage.setItem('attributes', JSON.stringify(attributes));
     }
     return attributes;
@@ -296,14 +321,15 @@ export class ConversationComponent implements OnInit {
     const that = this;
     this.starRatingWidgetService.setOsservable(false);
     // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    console.log('setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService);
+     // tslint:disable-next-line:max-line-length
+      this.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
     const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
     .subscribe(isOpenStartRating => {
       that.g.isOpenStartRating = isOpenStartRating;
       if (isOpenStartRating === false) {
-        console.log('CHIUDOOOOO!!!! StartRating');
+          this.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
       } else if (isOpenStartRating === true) {
-        console.log('APROOOOOOOO!!!! StartRating');
+          this.g.wdLog(['APROOOOOOOO!!!! StartRating']);
       }
     });
     this.subscriptions.push(subscriptionisOpenStartRating);
@@ -317,7 +343,7 @@ export class ConversationComponent implements OnInit {
      */
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
-      console.log('Subscription NEW MSG');
+        this.g.wdLog(['Subscription NEW MSG']);
       if ( that.startScroll || newMessage.sender === that.g.senderId) {
         that.scrollToBottom();
       } else if (that.scrollMe) {
@@ -360,17 +386,17 @@ export class ConversationComponent implements OnInit {
     // const that = this;
     // this.messagingService.checkListMessages(this.conversationWith)
     // .then(function (snapshot) {
-    //     console.log('checkListMessages: ', snapshot);
+    //       this.g.wdLog(['checkListMessages: ', snapshot);
     //     if (snapshot.exists()) {
     //         that.isNewConversation = false;
-    //         console.log('IS NOT NEW CONVERSATION ?', that.isNewConversation);
+    //           this.g.wdLog(['IS NOT NEW CONVERSATION ?', that.isNewConversation);
     //         setTimeout(function () {
     //             if (that.messages.length === 0) {
     //                 that.isNewConversation = true;
     //             }
     //         }, 2000);
     //         // that.isLogged = true;
-    //         // console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-if', that.isLogged);
+    //         //   this.g.wdLog(['IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-if', that.isLogged);
     //         // that.setFocusOnId('chat21-main-message-context');
     //     } else {
     //         /**
@@ -379,20 +405,20 @@ export class ConversationComponent implements OnInit {
     //          * focus sul input messaggio
     //          */
     //         that.isNewConversation = true;
-    //         console.log('IS NEW CONVERSATION ?', that.isNewConversation);
+    //           this.g.wdLog(['IS NEW CONVERSATION ?', that.isNewConversation);
     //         //if (that.g.projectid && !that.g.attributes.departmentId) {
     //             // that.isLogged = false;
-    //             // console.log("IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
+    //             //   this.g.wdLog(["IS_LOGGED", "AppComponent:createConversation:snapshot.exists-else-!department", that.isLogged);
     //             //that.getMongDbDepartments();
     //         //} else {
     //             that.setFocusOnId('chat21-main-message-context');
     //             //that.isLogged = true;
-    //             //console.log('IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-else-department', that.isLogged);
+    //             //  this.g.wdLog(['IS_LOGGED', 'AppComponent:createConversation:snapshot.exists-else-department', that.isLogged);
     //         //}
     //     }
 
     //     setTimeout(function () {
-    //         console.log('GET listMessages: ', that.conversationWith);
+    //           this.g.wdLog(['GET listMessages: ', that.conversationWith);
     //         that.messagingService.listMessages(that.conversationWith);
     //     }, 500);
 
@@ -409,7 +435,7 @@ export class ConversationComponent implements OnInit {
     setTimeout(function () {
         const textarea = document.getElementById(id);
         if (textarea) {
-            // console.log('1--------> FOCUSSSSSS : ', textarea);
+            //   this.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
             textarea.setAttribute('value', ' ');
             textarea.focus();
         }
@@ -432,7 +458,7 @@ export class ConversationComponent implements OnInit {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      console.log('onkeypress **************', this.textInputTextArea);
+        this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
       }
@@ -442,30 +468,30 @@ export class ConversationComponent implements OnInit {
       // const msg = document.getElementsByClassName('f21textarea')[0];
       let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
       if (msg && msg.trim() !== '') {
-          // console.log('sendMessage -> ', this.textInputTextArea);
-          //this.resizeInputField();
+          //   this.g.wdLog(['sendMessage -> ', this.textInputTextArea);
+          // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-          //this.setDepartment();
+          // this.setDepartment();
           msg = replaceBr(msg);
           this.sendMessage(msg, TYPE_MSG_TEXT);
-          //this.scrollToBottom();
+          // this.scrollToBottom();
           this.restoreTextArea();
           this.scrollToBottom();
       }
       // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
       // this.textInputTextArea = '';
-      //this.restoreTextArea();
+      // this.restoreTextArea();
   }
 
   private restoreTextArea() {
-    // console.log('AppComponent:restoreTextArea::restoreTextArea');
+    //   this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
     this.resizeInputField();
     const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
     this.textInputTextArea = ''; // clear the textarea
     if (textArea) {
         textArea.value = '';  // clear the textarea
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
-          console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
+            this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
           console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
@@ -481,7 +507,7 @@ export class ConversationComponent implements OnInit {
      */
     sendMessage(msg, type, metadata?) {
       (metadata) ? metadata = metadata : metadata = '';
-      console.log('SEND MESSAGE: ', msg, type, metadata);
+        this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
           let recipientFullname = this.GUEST_LABEL;
           this.triggerBeforeSendMessageEvent(
@@ -507,8 +533,8 @@ export class ConversationComponent implements OnInit {
           if (this.g.showWidgetNameInConversation && this.g.showWidgetNameInConversation === true) {
             recipientFullname += ' - ' + this.g.widgetTitle;
           }
-          console.log('this.g.userFullname:', this.g.userFullname);
-          console.log('recipientFullname:', recipientFullname);
+            this.g.wdLog(['this.g.userFullname:', this.g.userFullname]);
+            this.g.wdLog(['recipientFullname:', recipientFullname]);
           // tslint:disable-next-line:max-line-length
           const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.g.projectid, this.g.channelType);
           this.triggerAfterSendMessageEvent(messageSent);
@@ -543,17 +569,17 @@ export class ConversationComponent implements OnInit {
    */
 
   onSendPressed(event) {
-    console.log('onSendPressed:event', event);
-    console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
+      this.g.wdLog(['onSendPressed:event', event]);
+      this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
     if (this.isFilePendingToUpload) {
-      console.log('AppComponent::onSendPressed', 'is a file');
+        this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
       // its a file
       this.loadFile();
       this.isFilePendingToUpload = false;
-      console.log('AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
+        this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
     } else {
       if ( this.textInputTextArea.length > 0 ) {
-        console.log('AppComponent::onSendPressed', 'is a message');
+          this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
         // its a message
         this.performSendingMessage();
         // restore the text area
@@ -573,7 +599,7 @@ export class ConversationComponent implements OnInit {
       // }
       // const profile = this.contactService.getContactProfile(uid);
       // if (profile && profile.imageurl) {
-      //     console.log('profile::', profile, ' - profile.imageurl', profile.imageurl);
+      //       this.g.wdLog(['profile::', profile, ' - profile.imageurl', profile.imageurl);
       //     return profile.imageurl;
       // } else {
       //     return this.IMG_PROFILE_SUPPORT;
@@ -590,23 +616,23 @@ export class ConversationComponent implements OnInit {
           return;
       }
       // tslint:disable-next-line:max-line-length
-      // console.log('H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+      //   this.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
       target.style.height = '100%';
       if ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n') {
-          // console.log('PASSO 0');
+          //   this.g.wdLog(['PASSO 0');
           (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
           target.style.height = this.HEIGHT_DEFAULT;
       } else if (target.scrollHeight > target.offsetHeight) {
-          // console.log('PASSO 2');
+          //   this.g.wdLog(['PASSO 2');
           target.style.height = target.scrollHeight + 2 + 'px';
       } else {
-          // console.log('PASSO 3');
+          //   this.g.wdLog(['PASSO 3');
           target.style.height = this.HEIGHT_DEFAULT;
           // segno sto scrivendo
           // target.offsetHeight - 15 + 'px';
       }
       // tslint:disable-next-line:max-line-length
-      // console.log('H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+      //   this.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
   }
 
 
@@ -637,11 +663,11 @@ export class ConversationComponent implements OnInit {
    *
    */
   checkContentScrollPosition(divScrollMe): boolean {
-    // console.log('checkContentScrollPosition ::', divScrollMe);
-    // console.log('divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
-    // console.log('divScrollMe.clientHeight ::', divScrollMe.clientHeight);
+    //   this.g.wdLog(['checkContentScrollPosition ::', divScrollMe);
+    //   this.g.wdLog(['divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
+    //   this.g.wdLog(['divScrollMe.clientHeight ::', divScrollMe.clientHeight);
     if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 40)) {
-        // console.log('SONO ALLA FINE ::');
+        //   this.g.wdLog(['SONO ALLA FINE ::');
         return true;
     } else {
         return false;
@@ -656,23 +682,23 @@ export class ConversationComponent implements OnInit {
     const that = this;
     // const divScrollMe = this.scrollMe.nativeElement;
     setTimeout(function () {
-      // console.log('scrollToBottom ::', divID);
+      //   this.g.wdLog(['scrollToBottom ::', divID);
       try {
         const objDiv = document.getElementById(that.idDivScroll);
         //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
         objDiv.scrollIntoView(false);
 
-        // console.log('checkContentScrollPosition ::', this.divScrollMe);
-        // console.log('divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
-        // console.log('divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
+        //   this.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
+        //   this.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
+        //   this.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
 
         // try {
         //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
         // } catch ( err ) { }
         // // that.badgeNewMessages = 0;
       } catch (err) {
-        console.log('RIPROVO ::');
-        //that.scrollToBottom();
+          this.g.wdLog(['RIPROVO ::']);
+        // that.scrollToBottom();
       }
     }, 0);
   }
@@ -688,17 +714,17 @@ export class ConversationComponent implements OnInit {
    * carico in locale l'immagine selezionata e apro pop up anteprima
    */
   detectFiles(event) {
-    console.log('detectFiles: ', event);
+      this.g.wdLog(['detectFiles: ', event]);
     if (event) {
         this.selectedFiles = event.target.files;
-        console.log('AppComponent:detectFiles::selectedFiles', this.selectedFiles);
+          this.g.wdLog(['AppComponent:detectFiles::selectedFiles', this.selectedFiles]);
         if (this.selectedFiles == null) {
           this.isFilePendingToUpload = false;
         } else {
           this.isFilePendingToUpload = true;
         }
-        console.log('AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload);
-        console.log('fileChange: ', event.target.files);
+          this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
+          this.g.wdLog(['fileChange: ', event.target.files]);
         if (event.target.files.length <= 0) {
           this.isFilePendingToUpload = false;
         } else {
@@ -709,27 +735,27 @@ export class ConversationComponent implements OnInit {
             const nameFile = event.target.files[0].name;
             const typeFile = event.target.files[0].type;
             const reader = new FileReader();
-            console.log('OK preload: ', nameFile, typeFile, reader);
+              this.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
             reader.addEventListener('load', function () {
-              console.log('addEventListener load', reader.result);
+                that.g.wdLog(['addEventListener load', reader.result]);
               that.isFileSelected = true;
               // se inizia con image
               if (typeFile.startsWith('image')) {
                 const imageXLoad = new Image;
-                console.log('onload ', imageXLoad);
+                that.g.wdLog(['onload ', imageXLoad]);
                 imageXLoad.src = reader.result.toString();
                 imageXLoad.title = nameFile;
                 imageXLoad.onload = function () {
-                  console.log('onload immagine');
+                  that.g.wdLog(['onload immagine']);
                   // that.arrayFilesLoad.push(imageXLoad);
                   const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
                   that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
-                  console.log('OK: ', that.arrayFilesLoad[0]);
+                  that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                   // INVIO MESSAGGIO
                   that.loadFile();
                 };
               } else {
-                console.log('onload file');
+                that.g.wdLog(['onload file']);
                 const fileXLoad = {
                   src: reader.result.toString(),
                   title: nameFile
@@ -737,7 +763,7 @@ export class ConversationComponent implements OnInit {
                 // that.arrayFilesLoad.push(imageXLoad);
                 const uid = fileXLoad.src.substring(fileXLoad.src.length - 16);
                 that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
-                console.log('OK: ', that.arrayFilesLoad[0]);
+                that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                 // INVIO MESSAGGIO
                 that.loadFile();
               }
@@ -746,7 +772,7 @@ export class ConversationComponent implements OnInit {
 
             if (event.target.files[0]) {
               reader.readAsDataURL(event.target.files[0]);
-              console.log('reader-result: ', event.target.files[0]);
+                this.g.wdLog(['reader-result: ', event.target.files[0]]);
             }
         }
     }
@@ -754,13 +780,13 @@ export class ConversationComponent implements OnInit {
 
 
   loadFile() {
-        console.log('that.fileXLoad: ', this.arrayFilesLoad);
+          this.g.wdLog(['that.fileXLoad: ', this.arrayFilesLoad]);
         // al momento gestisco solo il caricamento di un'immagine alla volta
         if (this.arrayFilesLoad[0] && this.arrayFilesLoad[0].file) {
             const fileXLoad = this.arrayFilesLoad[0].file;
             const uid = this.arrayFilesLoad[0].uid;
             const type = this.arrayFilesLoad[0].type;
-            console.log('that.fileXLoad: ', type);
+              this.g.wdLog(['that.fileXLoad: ', type]);
             let metadata;
             if (type.startsWith('image')) {
                 metadata = {
@@ -779,14 +805,14 @@ export class ConversationComponent implements OnInit {
                     'uid': uid
                 };
             }
-            console.log('metadata -------> ', metadata);
+              this.g.wdLog(['metadata -------> ', metadata]);
             this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
             this.uploadSingle(metadata, file);
-            //this.isSelected = false;
+            // this.isSelected = false;
         }
     }
 
@@ -798,7 +824,7 @@ export class ConversationComponent implements OnInit {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-        console.log('AppComponent::uploadSingle::', metadata, file);
+          this.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
         const uploadTask = this.upSvc.pushUpload(currentUpload);
@@ -806,8 +832,8 @@ export class ConversationComponent implements OnInit {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
         })
             .then(downloadURL => {
-                console.log('AppComponent::uploadSingle:: downloadURL', downloadURL);
-                console.log(`Successfully uploaded file and got download link - ${downloadURL}`);
+                  this.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+                  this.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
                 metadata.src = downloadURL;
                 let type_message = TYPE_MSG_TEXT;
@@ -826,7 +852,7 @@ export class ConversationComponent implements OnInit {
                 console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
             });
       // this.resetLoadImage();
-      console.log('reader-result: ', file);
+        this.g.wdLog(['reader-result: ', file]);
     }
 
 
@@ -841,7 +867,7 @@ export class ConversationComponent implements OnInit {
           width: metadata.width,
           height: metadata.height
       };
-      // console.log('message::: ', metadata);
+      //   this.g.wdLog(['message::: ', metadata);
       if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
           const rapporto = (metadata['width'] / metadata['height']);
           sizeImage.width = MAX_WIDTH_IMAGES;
@@ -856,20 +882,20 @@ export class ConversationComponent implements OnInit {
      * in caso in cui il messaggio è un'immagine ed è stata inviata dall'utente
      */
     updateMessage(message) {
-      console.log('UPDATE MSG:', message.metadata.uid);
+        this.g.wdLog(['UPDATE MSG:', message.metadata.uid]);
       const index = searchIndexInArrayForUid(this.messages, message.metadata.uid);
       if (index > -1) {
           this.messages[index].uid = message.uid;
           this.messages[index].status = message.status;
           this.messages[index].timestamp = message.timestamp;
           this.messages[index].headerDate = message.headerDate;
-          console.log('UPDATE ok:', this.messages[index]);
+            this.g.wdLog(['UPDATE ok:', this.messages[index]]);
       } else {
           this.messages.push(message);
       }
   }
 
-  
+
 
 
   /**
@@ -878,7 +904,7 @@ export class ConversationComponent implements OnInit {
   // resetLoadImage() {
   //     this.nameFile = '';
   //     this.selectedFiles = null;
-  //     console.log('1 selectedFiles: ', this.selectedFiles);
+  //       this.g.wdLog(['1 selectedFiles: ', this.selectedFiles);
 
   //     delete this.arrayFiles4Load[0];
   //     document.getElementById('chat21-file').nodeValue = null;
@@ -886,7 +912,7 @@ export class ConversationComponent implements OnInit {
   //     this.isSelected = false;
 
   //     this.isFilePendingToUpload = false;
-  //     console.log('AppComponent::resetLoadImage::isFilePendingToUpload:', this.isFilePendingToUpload);
+  //       this.g.wdLog(['AppComponent::resetLoadImage::isFilePendingToUpload:', this.isFilePendingToUpload);
 
   //     // this.restoreTextArea();
   // }
@@ -936,11 +962,11 @@ export class ConversationComponent implements OnInit {
   //     );
   //     // this.messages.push(message);
   //     // message.metadata.uid = message.uid;
-  //     console.log('addLocalMessageImage: ', this.messages);
+  //       this.g.wdLog(['addLocalMessageImage: ', this.messages);
   //     this.isSelected = true;
   //     this.scrollToBottom();
   // }
-  
+
   // ========= end:: functions send image ======= //
 
   returnHome() {
@@ -980,7 +1006,7 @@ export class ConversationComponent implements OnInit {
    */
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    console.log('ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
+      this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
     if (window['tiledesk']) {
         window['tiledesk']['angularcomponent'] = null;
     }
@@ -994,7 +1020,7 @@ export class ConversationComponent implements OnInit {
     });
     this.subscriptions.length = 0;
     this.messagingService.unsubscribeAllReferences();
-    console.log('this.subscriptions', this.subscriptions);
+      this.g.wdLog(['this.subscriptions', this.subscriptions]);
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
@@ -1009,7 +1035,7 @@ export class ConversationComponent implements OnInit {
    */
   soundMessage() {
     if ( this.g.isSoundActive ) {
-      console.log('****** soundMessage *****');
+        this.g.wdLog(['****** soundMessage *****']);
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();

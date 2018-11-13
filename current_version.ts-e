@@ -1,2 +1,2 @@
-export const CURR_VER_DEV = '1.001';
+export const CURR_VER_DEV = '1.005';
 export const CURR_VER_PROD = '1.000';

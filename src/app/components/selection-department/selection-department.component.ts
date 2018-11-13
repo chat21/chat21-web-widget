@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+
 import { DepartmentModel } from '../../../models/department';
 import { MessagingService } from '../../providers/messaging.service';
 
@@ -31,20 +32,20 @@ export class SelectionDepartmentComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('ngOnInit :::: SelectionDepartmentComponent');
+         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
         // this.initDepartments();
     }
 
 
     // initDepartments() {
-    //     console.log('initDepartments ::::', this.g.departments);
+    //      this.g.wdLog(['initDepartments ::::', this.g.departments);
     //     if (this.g.departments.length === 1) {
     //         // DEPARTMENT DEFAULT SEMPRE PRESENTE
-    //         console.log('DEPARTMENT DEFAULT ::::', this.g.departments[0]);
+    //          this.g.wdLog(['DEPARTMENT DEFAULT ::::', this.g.departments[0]);
     //         this.setDepartment(this.g.departments[0]);
     //     } else if (this.g.departments.length === 2) {
     //         // UN SOLO DEPARTMENT
-    //         console.log('DEPARTMENT FIRST ::::', this.g.departments[1]);
+    //          this.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[1]);
     //         this.setDepartment(this.g.departments[1]);
     //     } else if (this.g.departments.length > 2) {
     //         let i = 0;
@@ -69,7 +70,7 @@ export class SelectionDepartmentComponent implements OnInit {
         if (this.g.attributes) {
             this.g.attributes.departmentId = department._id;
             this.g.attributes.departmentName = department.name;
-            console.log('setAttributes setDepartment: ', JSON.stringify(this.g.attributes));
+             this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
             localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
         }
         this.closePage();
@@ -85,7 +86,7 @@ export class SelectionDepartmentComponent implements OnInit {
     // */
     // getMongDbDepartments() {
     //     const that = this;
-    //     console.log('getMongDbDepartments ::::', this.g.projectid);
+    //      this.g.wdLog(['getMongDbDepartments ::::', this.g.projectid);
     //     this.messagingService.getMongDbDepartments( this.g.projectid )
     //     .subscribe(response => {
     //         that.departments = response;
@@ -110,11 +111,11 @@ export class SelectionDepartmentComponent implements OnInit {
     //         // that.isLogged = true;
     //     },
     //     errMsg => {
-    //         console.log('http ERROR MESSAGE', errMsg);
+    //          this.g.wdLog(['http ERROR MESSAGE', errMsg);
     //         // that.isLogged = false;
     //     },
     //     () => {
-    //             // console.log('API ERROR NESSUNO');
+    //             //  this.g.wdLog(['API ERROR NESSUNO');
     //             // attivo pulsante aprichat!!!!!
     //     });
     // }
@@ -124,18 +125,18 @@ export class SelectionDepartmentComponent implements OnInit {
 
     // ========= begin:: ACTIONS ============//
     private onSelectDepartment(department) {
-        console.log(' onSelectDepartment: ', department);
+         this.g.wdLog([' onSelectDepartment: ', department]);
         this.setDepartment(department);
         this.eventDepartmentSelected.emit(department);
     }
 
     openPage() {
-        console.log(' openPage: ');
+         this.g.wdLog([' openPage: ']);
         this.eventOpenPage.emit();
     }
 
     closePage() {
-        console.log(' closePage:  SelectDepartment');
+         this.g.wdLog([' closePage:  SelectDepartment']);
         this.eventClosePage.emit();
     }
     // ========= end:: ACTIONS ============//

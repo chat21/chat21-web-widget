@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
+
+
 @Component({
   selector: 'tiledeskwidget-home',
   templateUrl: './home.component.html',
@@ -40,7 +42,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ngOnInit app-home');
+     this.g.wdLog(['ngOnInit app-home']);
     // get global variables
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
@@ -77,7 +79,7 @@ export class HomeComponent implements OnInit {
   }
 
   hideMenuOptions() {
-    console.log('hideMenuOptions');
+     this.g.wdLog(['hideMenuOptions']);
     this.g.isOpenMenuOptions = false;
   }
 

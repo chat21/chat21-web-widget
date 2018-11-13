@@ -6,6 +6,19 @@
 .default-text {
   margin-bottom: 0px;
 }
+/* star-rating */
+.default-title {
+  font-size: 2em;
+  font-family:'Google Sans';
+  line-height: 1.2em;
+  color:#616161;
+}
+.default-text {
+  font-size: 1.3em;
+  font-family:'Roboto';
+  line-height: 1.2em;
+  color:#616161;
+}
 
 #chat21-star-rating-widget {
   background-color: #ffffff;
@@ -272,3 +285,31 @@
 .c21-step-content{
   margin: 10px 0 20px 0;
 }
+
+.btn-primary
+        {
+            width: auto;
+            min-width: 100px;
+            height: 37px;
+            font-size: 14px;
+            border: 1px solid;
+            border-color: #9a9a9a;
+            border-radius: 20px;
+            background: transparent;
+            margin-right: 0px;
+            margin-bottom: 5px;
+            color: #9a9a9a;
+        }
+
+        .btn-primary 
+        {
+            background-color: #ffffff; 
+            cursor: pointer;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active
+        {
+            outline-width: 0px;
+            color:white;
+        }

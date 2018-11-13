@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+
+
 import { trigger, state, style, animate, transition } from '@angular/animations';
 // vedi: https://angular.io/guide/animations
 
@@ -44,15 +46,15 @@ export class LauncherButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('open_close_handler BUTTON 1: ', this.g.isOpen);
+     this.g.wdLog(['open_close_handler BUTTON 1: ', this.g.isOpen]);
   }
 
   openCloseWidget() {
     if (this.g.isLogged === true) {
-      console.log('1 open_close_handler BUTTON: ', this.g.isOpen);
+       this.g.wdLog(['1 open_close_handler BUTTON: ', this.g.isOpen]);
       this.g.isOpen = !this.g.isOpen;
       localStorage.setItem('isOpen', this.g.isOpen);
-      console.log('2 open_close_handler BUTTON: ', this.g.isOpen);
+       this.g.wdLog(['2 open_close_handler BUTTON: ', this.g.isOpen]);
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }
   }

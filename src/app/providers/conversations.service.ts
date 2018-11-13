@@ -48,7 +48,6 @@ export class ConversationsService {
 
 
   public initialize(senderId, tenant) {
-    console.log('*******************>>>>>>>>>>>>> initialize ConversationsService:: ', senderId, tenant);
     this.openConversations = [];
     this.archivedConversations = [];
     this.allConversations = [];
@@ -65,11 +64,11 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-    console.log('checkListAllConversations *****', this.urlConversation);
+     this.g.wdLog(['checkListAllConversations *****', this.urlConversation]);
 
     //// SUBSCRIBE ADDED ////
     this.conversationRef.on('child_added', function (childSnapshot) {
-      console.log('childSnapshot.val() *****', childSnapshot.val());
+      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
       that.openConversations.unshift(conversation); // insert item top array
 
@@ -93,7 +92,7 @@ export class ConversationsService {
       that.updateConversationBadge();
 
       that.obsOpenConversations.next(that.openConversations);
-      console.log('child_changed *****', that.openConversations, index);
+      that.g.wdLog(['child_changed *****', that.openConversations, index]);
     });
 
     //// SUBSCRIBE REMOVED ////
@@ -117,11 +116,11 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlArchivedConversation);
     const ref = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-    console.log('checkListAllConversations *****', this.urlArchivedConversation);
+     this.g.wdLog(['checkListAllConversations *****', this.urlArchivedConversation]);
 
     //// SUBSCRIBE ADDED ////
     ref.on('child_added', function (childSnapshot) {
-      console.log('childSnapshot.val() *****', childSnapshot.val());
+      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
       that.archivedConversations.unshift(conversation); // insert item top array
 
@@ -142,7 +141,7 @@ export class ConversationsService {
       that.checkIsSound(conversation);
       that.updateConversationBadge();
 
-      console.log('child_changed *****', that.archivedConversations, index);
+      that.g.wdLog(['child_changed *****', that.archivedConversations, index]);
     });
 
     //// SUBSCRIBE REMOVED ////
@@ -214,7 +213,7 @@ export class ConversationsService {
     }
     const update = {};
     update['/is_new'] = false;
-    console.log('**** updateIsNew::' + urlUpdate);
+     this.g.wdLog(['**** updateIsNew::' + urlUpdate]);
     return firebase.database().ref(urlUpdate).update(update);
   }
   // ========= end:: isNew value in conversation ============//
@@ -239,14 +238,14 @@ export class ConversationsService {
   //   const urlUpdate = this.urlConversation + conversation.recipient + '/badge/';
   //   const update = {};
   //   update [urlUpdate] = badge;
-  //   console.log('**** updateBadge::' + urlUpdate);
+  //    this.g.wdLog(['**** updateBadge::' + urlUpdate);
   //   return firebase.database().ref().update(update);
   // }
 
 
   private setConversation(childSnapshot, archived) {
     const that = this;
-    console.log('snapshot.val() *****', that.senderId, childSnapshot.val());
+     this.g.wdLog(['snapshot.val() *****', that.senderId, childSnapshot.val()]);
     if (childSnapshot.val()) {
       const conversation: ConversationModel = childSnapshot.val();
       conversation.uid = childSnapshot.key;
@@ -280,7 +279,7 @@ export class ConversationsService {
    */
   soundMessage() {
     if (this.g.isSoundActive) {
-      console.log('****** soundMessage *****');
+       this.g.wdLog(['****** soundMessage *****']);
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();

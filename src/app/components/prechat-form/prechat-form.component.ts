@@ -64,13 +64,13 @@ export class PrechatFormComponent implements OnInit {
     preChatFormValueChanges$.subscribe(x => {
       that.userFullname = x.name;
       that.userEmail = x.email;
-      console.log(' openNewConversation: ', that.userFullname, that.userEmail);
+       this.g.wdLog([' openNewConversation: ', that.userFullname, that.userEmail]);
     });
   }
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
-    console.log(' openNewConversation: ');
+     this.g.wdLog([' openNewConversation: ']);
     this.attributes['userFullname'] = this.userFullname;
     this.attributes['userEmail'] = this.userEmail;
     if (this.g.attributes) {
@@ -83,7 +83,7 @@ export class PrechatFormComponent implements OnInit {
   }
 
   returnClosePage() {
-    console.log(' closePage: ');
+     this.g.wdLog([' closePage: ']);
     this.eventClosePage.emit();
   }
   // ========= end:: ACTIONS ============//

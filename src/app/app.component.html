@@ -5,7 +5,7 @@
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
-    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window chat21-sheet" 
+    <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window" 
     [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }"
     [ngStyle] = "{'bottom': marginBottom+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >

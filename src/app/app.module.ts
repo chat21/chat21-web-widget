@@ -89,13 +89,13 @@ import { ListAllConversationsComponent } from './components/list-all-conversatio
   providers: [
     AuthService,
     MessagingService,
+    Globals,
     ConversationsService,
     UploadService,
     ContactService,
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    Globals,
     ChatPresenceHandlerService
   ],
   bootstrap: [AppComponent]

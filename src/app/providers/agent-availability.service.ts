@@ -20,16 +20,12 @@ export class AgentAvailabilityService {
 
   constructor(private http: Http) {
     this.API_URL = environment.apiUrl;
-    // console.log('AgentAvailabilityService:: this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
     }
   }
 
   public getAvailableAgents(projectId): Observable<User[]> {
-    // console.log("getAvailableAgents::");
-    // console.log("projectId", projectId);
-    // return an exception if the projectid is undefined, null or not valid
     if (!projectId) {
       return Observable.throw('projectId is not valid');
     }
@@ -40,7 +36,6 @@ export class AgentAvailabilityService {
       return Observable.throw('projectId is undefined');
     }
     const url = this.API_URL + '/projects/' + projectId + '/users/availables';
-    // console.log('AgentAvailabilityService::getAvailableAgents::url', url);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http

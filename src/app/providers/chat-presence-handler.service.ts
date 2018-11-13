@@ -85,7 +85,7 @@ export class ChatPresenceHandlerService {
    */
   onlineRefForUser(userid) {
     const myConnectionsRefURL = this.urlNodeFirebase + '/presence/' + userid + '/connections';
-    console.log('onlineRefForUser *****', myConnectionsRefURL);
+    this.g.wdLog(['onlineRefForUser *****', myConnectionsRefURL]);
     const connectionsRef = firebase.database().ref().child(myConnectionsRefURL);
     return connectionsRef;
   }
@@ -96,20 +96,20 @@ export class ChatPresenceHandlerService {
    * 3 - mi sincronizzo con /.info/connected
    * 4 - se il valore esiste l'utente è online
    * 5 - aggiungo nodo a connection (true)
-   * 6 - aggiungo job su onDisconnect di deviceConnectionRef che rimuove nodo connection 
+   * 6 - aggiungo job su onDisconnect di deviceConnectionRef che rimuove nodo connection
    * 7 - aggiungo job su onDisconnect di lastOnlineRef che imposta timestamp
    * 8 - salvo reference connected nel singlelton !!!!! DA FARE
    * @param userid
    */
   setupMyPresence(userid) {
     const that = this;
-    console.log('setupMyPresence: ', userid);
+    this.g.wdLog(['setupMyPresence: ', userid]);
     this.myConnectionsRef = this.onlineRefForUser(userid);
     this.lastOnlineRef = this.lastOnlineRefForUser(userid);
     const connectedRefURL = '/.info/connected';
     const conn = firebase.database().ref(connectedRefURL);
     conn.on('value', function(dataSnapshot) {
-      // console.log("KEY: ",dataSnapshot,that.deviceConnectionRef);
+      //  wdLog(["KEY: ",dataSnapshot,that.deviceConnectionRef);
       if (dataSnapshot.val()) {
         // if (!that.myConnectionsRef || that.myConnectionsRef==='undefined') {
         if (that.myConnectionsRef) {
@@ -124,7 +124,7 @@ export class ChatPresenceHandlerService {
           const timestamp = now.valueOf();
           that.lastOnlineRef.onDisconnect().set(timestamp);
         } else {
-          console.log('This is an error. self.deviceConnectionRef already set. Cannot be set again.');
+          this.g.wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
         }
       }
     });
@@ -135,7 +135,7 @@ export class ChatPresenceHandlerService {
    * rimuovo la references su connection
    */
   goOffline() {
-    console.log('goOffline.', this.myConnectionsRef);
+    this.g.wdLog(['goOffline.', this.myConnectionsRef]);
     this.removeConnectionReference();
     this.removeLastOnlineReference();
   }
@@ -143,9 +143,9 @@ export class ChatPresenceHandlerService {
   removeConnectionReference() {
     if (this.myConnectionsRef) {
       this.myConnectionsRef.off();
-      console.log('goOffline 1', this.myConnectionsRef);
+      this.g.wdLog(['goOffline 1', this.myConnectionsRef]);
       this.myConnectionsRef.remove();
-      console.log('goOffline 2', this.myConnectionsRef);
+      this.g.wdLog(['goOffline 2', this.myConnectionsRef]);
       this.myConnectionsRef = null;
     }
   }

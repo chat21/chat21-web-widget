@@ -14,7 +14,7 @@ export class Globals {
 
 
   // ========= begin:: sottoscrizioni ======= //
-  //subscriptions: Subscription[] = []; /** */
+  // subscriptions: Subscription[] = []; /** */
   // ========= end:: sottoscrizioni ======= //
 
   // ============ BEGIN: SET FUNCTION BY UTILS ==============//
@@ -120,6 +120,7 @@ export class Globals {
   userToken;
   marginX;
   marginY;
+  isLogEnabled;
 
 
   constructor(
@@ -129,39 +130,39 @@ export class Globals {
 
 
   initialize(el) {
-    console.log(' ---------------- START INIZIALIZE  ---------------- ');
+     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
     // for retrocompatibility 0.9 (without tiledesk.js)
-    console.log(' ---------------- 1: baseLocation ---------------- ');
+     this.wdLog([' ---------------- 1: baseLocation ---------------- ']);
     this.baseLocation = 'https://widget.tiledesk.com';
     if (window['tiledesk']) {
       this.baseLocation = window['tiledesk'].getBaseLocation();
     }
 
-    console.log(' ---------------- 2: set lang ---------------- ');
+     this.wdLog([' ---------------- 2: set lang ---------------- ']);
     // this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
     this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
 
-    console.log(' ---------------- 3: translate ---------------- ');
+     this.wdLog([' ---------------- 3: translate ---------------- ']);
     this.translate();
 
-    console.log(' ---------------- 4: initParameters ---------------- ');
+     this.wdLog([' ---------------- 4: initParameters ---------------- ']);
     this.initParameters();
 
-    console.log(' ---------------- 5: getVariablesFromAttributeHtml ---------------- ');
+     this.wdLog([' ---------------- 5: getVariablesFromAttributeHtml ---------------- ']);
     this.getVariablesFromAttributeHtml(el);
 
-    console.log(' ---------------- 6: getVariablesFromSettings ---------------- ');
+     this.wdLog([' ---------------- 6: getVariablesFromSettings ---------------- ']);
     this.getVariablesFromSettings();
 
-    console.log(' ---------------- 7: getVariableUrlParameters ---------------- ');
+     this.wdLog([' ---------------- 7: getVariableUrlParameters ---------------- ']);
     this.getVariableUrlParameters();
 
-    console.log(' ---------------- 8: setDefaultSettings ---------------- ');
+     this.wdLog([' ---------------- 8: setDefaultSettings ---------------- ']);
     this.setDefaultSettings();
 
-    console.log(' ---------------- 9: setAttributes ---------------- ');
+     this.wdLog([' ---------------- 9: setAttributes ---------------- ']);
     this.attributes = this.setAttributes();
 
   }
@@ -274,6 +275,7 @@ export class Globals {
 
     this.marginX = '20px';                      /** set margin left or rigth widget  */
     this.marginY = '20px';                      /** set margin bottom widget */
+    this.isLogEnabled = false;
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -305,7 +307,7 @@ export class Globals {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
     let TEMP;
     TEMP = el.nativeElement.getAttribute('tenant');
-    console.log(' TEMP: tenant ', TEMP);
+     this.wdLog([' TEMP: tenant ', TEMP]);
     if (TEMP !== null) {
       this.tenant = TEMP;
     }
@@ -409,6 +411,10 @@ export class Globals {
     TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
     if (TEMP !== null) {
       this.isLogoutEnabled = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('isLogEnabled');
+    if (TEMP !== null) {
+      this.isLogEnabled = (TEMP === true) ? true : false;
     }
 
   }
@@ -540,7 +546,7 @@ export class Globals {
       this.wellcomeMsg = TEMP;
     }
     TEMP = window['tiledeskSettings']['autoStart'];
-    console.log(' autoStart::: ', TEMP);
+     this.wdLog([' autoStart::: ', TEMP]);
     if (TEMP !== undefined) {
       this.autoStart = (TEMP === false) ? false : true;
     }
@@ -551,6 +557,10 @@ export class Globals {
     TEMP = window['tiledeskSettings']['isLogoutEnabled'];
     if (TEMP !== undefined) {
       this.isLogoutEnabled = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['isLogEnabled'];
+    if (TEMP !== undefined) {
+      this.isLogEnabled = (TEMP === false) ? false : true;
     }
 
 
@@ -657,6 +667,9 @@ export class Globals {
       this.isLogoutEnabled = true;
     }
 
+    if (this.getParameterByName('tiledesk_isLogEnabled')) {
+      this.isLogEnabled = true;
+    }
   }
 
 
@@ -680,7 +693,7 @@ export class Globals {
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
-      'marginX': this.marginX, 'marginY': this.marginY
+      'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled
     };
   }
 
@@ -712,6 +725,12 @@ export class Globals {
       localStorage.setItem('attributes', JSON.stringify(attributes));
     }
     return attributes;
+  }
+
+  public wdLog(message) {
+    if ( this.isLogEnabled ) {
+       console.log(message);
+    }
   }
 
 }

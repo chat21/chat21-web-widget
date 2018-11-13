@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
@@ -59,13 +60,13 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       if (this.g.isOpen === false) {
-          console.log('»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen);
+           this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
           this.displayEyeCatcherCard = 'block';
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
       } else {
-          console.log('»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ');
+           this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
       }
   }
 
@@ -89,7 +90,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * DISPLAY EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE IS OVER EYE-CATCHER CARD OR
    * OVER THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseEnter() {
-      // console.log('MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
+      //  this.g.wdLog(['MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
       this.displayEyeCatcherCardCloseBtn = 'block';
   }
 
@@ -98,22 +99,22 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * HIDE THE EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE LEAVE THE EYE-CATCHER CARD OR
    * LEAVE THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseLeave() {
-      // console.log('MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
+      //  this.g.wdLog(['MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
       this.displayEyeCatcherCardCloseBtn = 'none';
   }
 
   /**
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
-      console.log('HAS CLICKED CLOSE EYE-CATCHER CARD');
-      this.displayEyeCatcherCard = 'none';
-      this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+        this.g.wdLog(['HAS CLICKED CLOSE EYE-CATCHER CARD']);
+        this.displayEyeCatcherCard = 'none';
+        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 
   // /**
   //  * EYE-CATCHER CARD CLOSE BTN ON MOBILE DEVICE */
   // closeEyeCatcherCardWhenMobile() {
-  //     console.log('HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
+  //      this.g.wdLog(['HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
   //     this.displayEyeCatcherCard = 'none';
   //     this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
   // }

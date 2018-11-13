@@ -45,7 +45,7 @@ export class ListConversationsComponent implements OnInit {
     private ngZone: NgZone,
     public conversationsService: ConversationsService
   ) {
-    //this.initialize();
+    // this.initialize();
   }
 
   ngOnInit() {
@@ -53,15 +53,15 @@ export class ListConversationsComponent implements OnInit {
   }
 
   initialize() {
-    console.log('initialize: ListConversationsComponent');
+     this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
 
-    console.log('senderId: ', this.senderId);
-    console.log('tenant: ', this.tenant);
-    console.log('themeColor: ', this.g.themeColor);
-    console.log('themeForegroundColor: ', this.g.themeForegroundColor);
+     this.g.wdLog(['senderId: ', this.senderId]);
+     this.g.wdLog(['tenant: ', this.tenant]);
+     this.g.wdLog(['themeColor: ', this.g.themeColor]);
+     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     this.conversationsService.checkListConversations(3);
@@ -72,7 +72,7 @@ export class ListConversationsComponent implements OnInit {
     const subOpenConversations = this.conversationsService.obsOpenConversations.subscribe((conversations) => {
       this.ngZone.run(() => {
         this.conversations = conversations;
-        console.log(' conversations:::: ', that.conversations);
+         this.g.wdLog([' conversations:::: ', that.conversations]);
       });
     });
     // this.subscriptions.push(subOpenConversations);
@@ -88,7 +88,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   private openConversationByID(conversation) {
-    console.log('openConversationByID: ', conversation);
+     this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateBadge(conversation, 0);
       this.conversationsService.updateIsNew(conversation);
