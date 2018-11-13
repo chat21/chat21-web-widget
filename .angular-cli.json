@@ -11,8 +11,7 @@
         "assets",
         "favicon.ico",
         "tiledesk.js",
-        "test.html",
-        "test-auth.html"
+        "test.html"
       ],
       "index": "index.html",
       "main": "main.ts",

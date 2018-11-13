@@ -5,127 +5,52 @@
   <title>Tilechat Widget</title>
   <base href="./">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
-    <button id="idShow">
-      SHOW
-    </button>
-    <button id="idHide">
-      HIDE
-    </button>
-    <button id="idOpen">
-      OPEN
-    </button>
-    <button id="idClose">
-      CLOSE
-    </button>
-    <button id="idAuth">
-        AUTH
-    </button>
-
-    <button id="preChatForm">
-        preChatForm
-    </button>
-    
-    
     <script type="application/javascript">
-    $( document ).ready(function() {
-
-
-      
-      // Handler for .ready() called.
       window.tiledeskSettings = 
-      {
-          projectid: "5b55e806c93dde00143163dd",
-          development: true,
-          calloutTimer: 10,
-          userFullname: "Dario",
-          userEmail: "czone555@gmail.com",
-          wellcomeTitle: "Benvenuti su questa chat",
-          wellcomeMsg: "Come possiamo aiutarti?",
-          logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
-          startFromHome: true,
-          preChatForm: true,
-          autoStart: false
-      };
+          {
+              projectid: "5b55e806c93dde00143163dd",
+              projectname: "Demo",
+              development: true,
+              calloutTimer: 10,
+              userFullname: "Andrea Leo",
+              userEmail: "andrea.leo@f21.it",
+             // preChatForm: true
+          };
 
       (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
-        js = d.createElement(s); 
-        js.id = id; //js.async=!0;
+        js = d.createElement(s); js.id = id; //js.async=!0;
         js.src = "./tiledesk.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
+    </script>
 
 
-      localStorage.setItem("user_fullname", "Andrea from localStorage");
-      localStorage.setItem("user_email", "andrea.leo@f21.it");
+
+    <script type="application/javascript">    
+    localStorage.setItem("user_fullname", "Andrea from localStorage");
+    localStorage.setItem("user_email", "andrea.leo@f21.it");
 
 
       window.tileDeskAsyncInit = function() {
-          window.tiledesk.on('loadParams', function(event_data) {
-            window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
-            window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
-            window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
-            window.tiledesk.show();
-            window.tiledesk.open();
-            //window.tiledesk.hide();
-            //window.tiledesk.open();
-        });
-
-        window.tiledesk.on('beforeMessageSend', function(event_data) {
-          var message =  event_data.detail;
-          message.attributes.pagetitle = document.title;
-          message.attributes.userCompany = "Frontiere21";
-        });
-
-        window.tiledesk.on('afterMessageSend', function(event_data) {
-          console.log("afterMessageSend called ", event_data);
-        });
-
-        window.tiledesk.on('isLoggedIn', function(event_data) {
-          console.log("isLoggedIn called ", event_data);
-        });
-        
+      window.tiledesk.on('loadParams', function(event_data) {
+         window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
+         window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
+         window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
+       });
+       window.tiledesk.on('beforeMessageSend', function(event_data) {
+         var message =  event_data.detail;
+         message.attributes.pagetitle = document.title;
+         message.attributes.userCompany = "Frontiere21";
+       });
+       window.tiledesk.on('afterMessageSend', function(event_data) {
+         console.log("afterMessageSend called ", event_data);
+       });
       }
-
-    });
-
-    var isOpenPrechatForm = true;
-
-    $( "#idShow" ).click(function() {
-      alert( "Handler for .click() idShow." );
-      window.tiledesk.show();
-    });
-    $( "#idHide" ).click(function() {
-      alert( "Handler for .click() idHide." );
-      window.tiledesk.hide();
-    });
-    $( "#idOpen" ).click(function() {
-      alert( "Handler for .click() idOpen." );
-      window.tiledesk.open();
-    });
-    $( "#idClose" ).click(function() {
-      alert( "Handler for .click() idClose." );
-      window.tiledesk.close();
-    });
-    $( "#idAuth" ).click(function() {
-      alert( "Handler for .click() idAuth." );
-      window.tiledesk.signInWithCustomToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW5kcmVhIiwiZW1haWwiOiJhbmRyZWEubGVvQGZyb250aWVyZTIxLml0IiwiaWF0IjoxNTQwNDYwOTM2MzkzLCJleHRlcm5hbF9pZCI6IjEyMzQ1NiJ9.wD9YDI3hEXBipoQ7kUIPRqNybFNuXZb9OPEqkxLtJoY");
-      //window.tiledesk.signInAnonymous();
-    });
-    
-    $( "#preChatForm" ).click(function() {
-      isOpenPrechatForm = !isOpenPrechatForm;
-      alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
-      window.tiledesk.setStatePreChatForm(isOpenPrechatForm);
-    });
-    
-      
     </script>
-
 
 </body>
 </html>

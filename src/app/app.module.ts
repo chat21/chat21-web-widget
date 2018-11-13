@@ -39,15 +39,6 @@ import { ListConversationsComponent } from './components/list-conversations/list
 import { HomeComponent } from './components/home/home.component';
 
 import { Globals } from './utils/globals';
-import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
-import { ConversationComponent } from './components/conversation/conversation.component';
-import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
-import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
-import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
-import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
-
-import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
-import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 
 @NgModule({
   declarations: [
@@ -58,14 +49,7 @@ import { ListAllConversationsComponent } from './components/list-all-conversatio
     SelectionDepartmentComponent,
     // NewConversationComponent,
     ListConversationsComponent,
-    HomeComponent,
-    LauncherButtonComponent,
-    ConversationComponent,
-    PrechatFormComponent,
-    EyeeyeCatcherCardComponent,
-    PreviewLoadingFilesComponent,
-    MenuOptionsComponent,
-    ListAllConversationsComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -95,8 +79,7 @@ import { ListAllConversationsComponent } from './components/list-all-conversatio
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    Globals,
-    ChatPresenceHandlerService
+    Globals
   ],
   bootstrap: [AppComponent]
 })

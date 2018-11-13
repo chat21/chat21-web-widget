@@ -1,66 +1,61 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { StarRatingWidgetService } from './star-rating-widget.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Globals } from '../../utils/globals';
+import { TranslatorService } from '../../providers/translator.service';
+
 
 @Component({
-  selector: 'tiledeskwidget-star-rating-widget',
+  selector: 'app-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
   styleUrls: ['./star-rating-widget.component.scss']
 })
 export class StarRatingWidgetComponent implements OnInit {
-
-  // ========= begin:: Input/Output values ===========//
-  @Output() eventClosePage = new EventEmitter();
-  @Output() eventCloseRate = new EventEmitter();
-  // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
-  // ========= end:: Input/Output values ===========//
-
-  // ========= begin:: Input/Output values ===========/
-  // @Output() eventNewConv = new EventEmitter<string>();
-  // @Output() eventSelctedConv = new EventEmitter<string>();
-  // @Output() eventClose = new EventEmitter();
-  // @Output() eventSignOut = new EventEmitter();
-  
-  // ========= end:: Input/Output values ===========/
-
-
-  // ========= begin:: component variables ======= //
-  themeColor;
-  themeForegroundColor;
-  isConversationClosed: boolean;
-  themeColor50: string;
-  colorGradient: string;
-  colorBck: string;
-  // ========= end:: component variables ======= //
+  @Input() themeColor: string;
+  @Input() themeForegroundColor: string;
+  @Input() parentAllowTranscriptDownload: boolean;
 
   private rate: number;
   step: number;
-  message: string;
+  private displayDownloadTranscriptBtn: boolean;
 
   // STRING (FOR TRANSLATION) PASSED IN THE TEMPLATE
-  // CUSTOMER_SATISFACTION: string;
-  // YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
-  // DOWNLOAD_TRANSCRIPT: string;
-  // BACK: string;
-  // YOUR_RATING: string;
-  // WRITE_YOUR_OPINION: string;
-  // SUBMIT: string;
-  // THANK_YOU_FOR_YOUR_EVALUATION: string;
-  // YOUR_RATING_HAS_BEEN_RECEIVED: string;
+  CUSTOMER_SATISFACTION: string;
+  YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
+  DOWNLOAD_TRANSCRIPT: string;
+  BACK: string;
+  YOUR_RATING: string;
+  WRITE_YOUR_OPINION: string;
+  SUBMIT: string;
+  THANK_YOU_FOR_YOUR_EVALUATION: string;
+  YOUR_RATING_HAS_BEEN_RECEIVED: string;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService,
-    public g: Globals
-  ) {
-   }
+    public translatorService: TranslatorService
+  ) {  }
 
   ngOnInit() {
+    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.themeColor);
+    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.themeForegroundColor);
+    console.log('START-RATING-WIDGET - PARENT ALLOW-TRANSCRIPT-DOWNLOAD: ', this.parentAllowTranscriptDownload);
+    this.displayDownloadTranscriptBtn = this.parentAllowTranscriptDownload;
+    this.translate();
     this.step = 0;
   }
 
+  private translate() {
+    this.CUSTOMER_SATISFACTION = this.translatorService.translate('CUSTOMER_SATISFACTION');
+    this.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = this.translatorService.translate('YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE');
+    this.DOWNLOAD_TRANSCRIPT = this.translatorService.translate('DOWNLOAD_TRANSCRIPT');
+    this.BACK = this.translatorService.translate('BACK');
+    this.YOUR_RATING = this.translatorService.translate('YOUR_RATING');
+    this.WRITE_YOUR_OPINION = this.translatorService.translate('WRITE_YOUR_OPINION');
+    this.SUBMIT = this.translatorService.translate('SUBMIT');
+    this.THANK_YOU_FOR_YOUR_EVALUATION = this.translatorService.translate('THANK_YOU_FOR_YOUR_EVALUATION');
+    this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
+  }
+
   dowloadTranscript() {
-    this.starRatingWidgetService._dowloadTranscript(this.g.recipientId);
+    this.starRatingWidgetService._dowloadTranscript();
   }
 
   openRate(e) {
@@ -77,25 +72,26 @@ export class StarRatingWidgetComponent implements OnInit {
   }
 
   prevStep() {
+    this.rate = null;
     this.step = this.step - 1;
   }
 
   sendRate() {
-    this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-    console.log('sendRate!!!::', this.message);
+    const message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
+    console.log('sendRate!!!::', message);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
+    this.starRatingWidgetService.httpSendRate(this.rate, message)
     .subscribe(
       response => {
         console.log('OK sender ::::', response);
         // pubblico var isWidgetActive
-        that.closeRate();
+        that.nextStep();
       },
       errMsg => {
-        // console.error('httpSendRate ERROR MESSAGE', errMsg);
+        console.log('httpSendRate ERROR MESSAGE', errMsg);
         // window.alert('MSG_GENERIC_SERVICE_ERROR');
-        that.closeRate();
+        that.nextStep();
       },
       () => {
         // console.log('API ERROR NESSUNO');
@@ -106,20 +102,11 @@ export class StarRatingWidgetComponent implements OnInit {
   closeRate() {
     this.starRatingWidgetService.setOsservable(false);
     this.step = 0;
-    this.returnClosePage();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.step = 0;
   }
-
-  // ========= begin:: ACTIONS ============//
-  returnClosePage() {
-    console.log(' closePage: ');
-    this.starRatingWidgetService.setOsservable(false);
-    this.eventClosePage.emit();
-  }
-  // ========= end:: ACTIONS ============//
 
 }

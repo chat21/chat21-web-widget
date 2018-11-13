@@ -1,73 +1,68 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+import { TranslatorService } from '../../providers/translator.service';
 
 @Component({
-  selector: 'tiledeskwidget-home',
+  selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  // ========= begin:: Input/Output values ===========/
+  // @Input() themeColor: string;
+  // @Input() themeForegroundColor: string;
+  // @Input() senderId: string;
+  // @Input() tenant: string;
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
-  @Output() eventClose = new EventEmitter();
-  @Output() eventSignOut = new EventEmitter();
-  @Output() eventOpenAllConv = new EventEmitter();
-  @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
-  // ========= end:: Input/Output values ===========/
+  @Output() eventClose = new EventEmitter<string>();
 
 
-  // ========= begin:: component variables ======= //
   themeColor;
   themeForegroundColor;
+  senderId;
   tenant;
   widgetTitle;
   wellcomeMsg;
-  wellcomeTitle;
-  themeColor50: string;
-  colorGradient: string;
-  colorBck: string;
-  // ========= end:: component variables ======= //
 
-
-
+  lang: string;
+  WELLCOME_TITLE: string;
+  
 
   constructor(
-    public g: Globals
+    public globals: Globals,
+    private translatorService: TranslatorService
   ) {
+    this.lang = this.globals.lang;
 
-  }
+    // get global variables
+    this.themeColor = this.globals.tenant;
+    this.senderId = this.globals.senderId;
+    this.themeColor = this.globals.themeColor;
+    this.themeForegroundColor = this.globals.themeForegroundColor;
+
+    this.widgetTitle = this.globals.widgetTitle;
+    this.wellcomeMsg = this.globals.wellcomeMsg;
+
+     /** set lang and translate */
+     this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
+     this.translate();
+   }
 
   ngOnInit() {
-    console.log('ngOnInit app-home');
-    // get global variables
-    this.tenant = this.g.tenant;
-    this.themeColor = this.g.themeColor;
-    this.themeForegroundColor = this.g.themeForegroundColor;
-    this.widgetTitle = this.g.widgetTitle;
-    this.wellcomeMsg = this.g.wellcomeMsg;
-    this.wellcomeTitle = this.g.wellcomeTitle;
-    // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
-    this.themeColor50 = this.g.themeColor + '7F';
-
-    this.colorGradient = 'linear-gradient(' + this.g.themeColor + ', ' + this.themeColor50 + ')';
-    this.colorBck = '#000000';
-
+    console.log('*******************>>>>>>>>>>>>> ngOnInit HomeComponent', this.senderId, this.tenant);
   }
 
+  private translate() {
+    this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
+  }
 
-  // ========= begin:: ACTIONS ============//
   returnNewConversation() {
     this.eventNewConv.emit();
   }
 
-  returnOpenAllConversation() {
-    this.eventOpenAllConv.emit();
-  }
-
   returnSelectedConversation($event) {
     if ( $event ) {
+      console.log('onSelectConversation: ', $event);
       this.eventSelctedConv.emit($event);
     }
   }
@@ -75,21 +70,4 @@ export class HomeComponent implements OnInit {
   f21_close() {
     this.eventClose.emit();
   }
-
-  hideMenuOptions() {
-    console.log('hideMenuOptions');
-    this.g.isOpenMenuOptions = false;
-  }
-
-
-  /**
-   * MODAL MENU SETTINGS:
-   * logout
-   */
-  returnSignOut() {
-    this.eventSignOut.emit();
-  }
-
-  // ========= end:: ACTIONS ============//
-
 }
