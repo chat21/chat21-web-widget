@@ -269,7 +269,7 @@ export class Globals {
     // tslint:disable-next-line:max-line-length
     this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>'; // da aggiungere!!!! /** link nel footer widget */
 
-    this.logoChat = './assets/images/tiledesk_logo_white_small.png'; /** url img logo */
+    this.logoChat = this.baseLocation + '/assets/images/tiledesk_logo_white_small.png'; /** url img logo */
     this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
     this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
 
@@ -666,7 +666,6 @@ export class Globals {
     if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
       this.isLogoutEnabled = true;
     }
-
     if (this.getParameterByName('tiledesk_isLogEnabled')) {
       this.isLogEnabled = true;
     }

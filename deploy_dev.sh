@@ -9,13 +9,15 @@ ver=${one%%$two*}
 one=${environment#*$two}
 build=${one%%$end*}
 
-echo '---->'$ver
+#echo '---->'$ver
 #echo '---->'$build
 ##two=${one%,*} -> %% prendo la prima istanza; % prendo la seconda
-newbuild=$(($build+1))
-if (( $newbuild > 999 )); then
-    NEW_BUILD=0
-    NEW_VER=$(($ver+1))
+#newbuild=$(($build+1))
+newbuild=$(echo "$build + 1" | bc)
+#echo '---->'$newbuild
+if (( $newbuild == 1000 )); then
+    NEW_VER=$(echo "$ver + 1" | bc)
+    NEW_BUILD=$(printf "%03d" 0)
 else
     NEW_VER=$ver
     NEW_BUILD=$(printf "%03d" $newbuild)

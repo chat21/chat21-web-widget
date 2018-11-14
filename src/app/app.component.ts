@@ -399,35 +399,30 @@ export class AppComponent implements OnInit, OnDestroy {
             // };
             /** show all widget */
             window['tiledesk'].show = function () {
-                 this.g.wdLog(['!!!showAllWidget']);
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.showAllWidget();
                 });
             };
             /** hidden all widget */
             window['tiledesk'].hide = function () {
-                 this.g.wdLog(['!!!hideAllWidget']);
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.hideAllWidget();
                 });
             };
             /** close window chat */
             window['tiledesk'].close = function () {
-                 this.g.wdLog(['!!!f21_close']);
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.f21_close();
                 });
             };
             /** open window chat */
             window['tiledesk'].open = function () {
-                 this.g.wdLog(['!!!f21_open']);
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
             /** set state PreChatForm close/open */
             window['tiledesk'].setStatePreChatForm = function (state) {
-                 this.g.wdLog(['!!!openClosePreChatForm', state]);
                 ngZone.run(() => {
                     window['tiledesk']['angularcomponent'].component.setStatePreChatForm(state);
                 });
@@ -513,7 +508,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** */
     private triggetLoadParamsEvent() {
-         this.g.wdLog([' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings]);
+        this.g.wdLog([' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
         this.el.nativeElement.dispatchEvent(loadParams);

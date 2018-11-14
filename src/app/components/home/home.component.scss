@@ -1,78 +1,74 @@
+@import '../../../sass/variables';
+
 #chat21-home-component {
+    position: relative;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
     
+
     .c21-header {
-        position: relative;
         min-height: 75px;
         height: 252px;
-        color: #fff;
-    }
-    .c21-header-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 24px 40px;
-        .c21-logo {
-            height: 32px;
-            padding-bottom: 16px;
-            img {
-                max-width: 100%;
-                max-height: 100%;
-                margin: auto 0;
-                display: block;
-            }
-        }
-        .c21-text {
-            .c21-text-wellcome {
-                font-family: 'Google Sans';
-                overflow: hidden;
-                line-height: 1.2em;
-                font-weight: 400;
-                font-size: 3em; 
-            }
-            .c21-text-intro {
-                display: inline-block;
-                line-height: 3em; 
-                font-size: 1.4em;
-                font-weight: 300;
+        .c21-header-container {
+            padding: 24px 40px;
+            width: auto;
+            .c21-header-content {
+                position: relative;
+                .c21-logo {
+                    height: 32px;
+                    margin-bottom: 16px;
+                    img {
+                        max-width: 100%;
+                        max-height: 100%;
+                        margin: auto 0;
+                        display: block;
+                    }
+                }
+                .c21-text {
+                    .c21-text-wellcome {
+                        font-family: 'Google Sans';
+                        overflow: hidden;
+                        line-height: 1.2em;
+                        font-weight: 400;
+                        font-size: 3em; 
+                    }
+                    .c21-text-intro {
+                        display: inline-block;
+                        line-height: 3em; 
+                        font-size: 1.4em;
+                        font-weight: 300;
+                    }
+                }
             }
         }
     }
 
     .c21-body {
-        position: absolute;
         top: 0px;
-        width: 100%;
-        height: 100%;
         background-color: transparent;
         overflow: scroll;
-        -webkit-box-shadow: inset 0 21px 4px -20px rgba(0,0,0,.2);
-        box-shadow: inset 0 21px 4px -20px rgba(0,0,0,.2);
-    
+        -webkit-box-shadow: inset 0 21px 4px -20px $trasp-light-black;
+        box-shadow: inset 0 21px 4px -20px $trasp-light-black;
         .c21-body-container {
             padding: 0 16px;
             position: relative;
             .c21-body-content {
+                position: relative;
                 padding-top: 38%;
                 margin: 60px 0 40px 0;
                 .c21-cards {
                     .c21-card {
                         position: relative;
                         margin-bottom: 20px;
-                        background-color: #fff;
+                        background-color: #ffffff;
                         border-radius: 3px;
                         font-size: 1.4em;
                         line-height: 1.4;
-                        color: #000;
+                        color: $black;
                         overflow: hidden;
-                        -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1);
-                        box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1);
-                   
-                        // -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(40, 110, 250, 0.5);
-                        // box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(40, 110, 250, 0.5);
+                        -webkit-box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
+                        box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
                     }
                 } 
             } 

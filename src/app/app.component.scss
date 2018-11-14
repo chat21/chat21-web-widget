@@ -3,162 +3,15 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons');
 //https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' 
 
+@import '../sass/normalize.css';
 @import '../sass/variables';
 
 tiledeskwidget-root{
-    font-size: 10px;
-    font-family: 'Roboto','Google Sans', Helvetica, Arial, sans-serif;
-        // background-color: transparent;
-        // z-index: 999999;
-        // font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        // font-size-adjust: none;
-        // font-size: 10px;
-        // font-style: normal;
-        // letter-spacing: normal;
-        // font-stretch: normal;
-        // font-variant: normal;
-        // font-weight: normal;
-        // font: normal normal 100% "Helvetica Neue",Helvetica,Arial,sans-serif;
-        // text-align: left;
-        // -moz-text-align-last: initial;
-        // text-align-last: initial;
-        // text-decoration: none;
-        // -webkit-text-emphasis: none;
-        // text-indent: 0;
-        // text-justify: auto;
-        // text-shadow: none;
-        // text-transform: none;
-        // -webkit-animation: none 0 ease 0 1 normal;
-        // animation: none 0 ease 0 1 normal;
-        // -webkit-animation-play-state: running;
-        // animation-play-state: running;
-        // -webkit-backface-visibility: visible;
-        // backface-visibility: visible;
-        // background: none 0 0 auto repeat scroll padding-box transparent;
-        // background-color: transparent;
-        // background-image: none;
-        // border: 0 none transparent;
-        // border-radius: 0;
-        // bottom: auto;
-        // -webkit-box-decoration-break: slice;
-        // box-decoration-break: slice;
-        // box-shadow: none;
-        // box-sizing: content-box;
-        // -webkit-break-after: auto;
-        // -moz-break-after: auto;
-        // break-after: auto;
-        // -webkit-break-before: auto;
-        // -moz-break-before: auto;
-        // break-before: auto;
-        // -webkit-column-break-inside: auto;
-        // page-break-inside: auto;
-        // break-inside: auto;
-        // caption-side: top;
-        // clear: none;
-        // clip: auto;
-        // color: inherit;
-        // color-profile: auto;
-        // -webkit-column-count: auto;
-        // -moz-column-count: auto;
-        // column-count: auto;
-        // -webkit-column-fill: balance;
-        // -moz-column-fill: balance;
-        // column-fill: balance;
-        // -webkit-column-gap: normal;
-        // -moz-column-gap: normal;
-        // column-gap: normal;
-        // -webkit-column-rule: medium medium #1f1f1f;
-        // -moz-column-rule: medium medium #1f1f1f;
-        // column-rule: medium medium #1f1f1f;
-        // -webkit-column-span: 1;
-        // -moz-column-span: 1;
-        // column-span: 1;
-        // -webkit-column-width: auto;
-        // -moz-column-width: auto;
-        // column-width: auto;
-        // -webkit-columns: auto auto;
-        // -moz-columns: auto auto;
-        // columns: auto auto;
-        // content: normal;
-        // counter-increment: none;
-        // counter-reset: none;
-        // cursor: auto;
-        // direction: ltr;
-        // display: inline;
-        // empty-cells: show;
-        // -webkit-hyphens: manual;
-        // -moz-hyphens: manual;
-        // -ms-hyphens: manual;
-        // hyphens: manual;
-        // image-orientation: auto;
-        // image-rendering: auto;
-        // left: auto;
-        // line-height: initial;
-        // list-style: disc outside none;
-        // margin: 0;
-        // max-height: none;
-        // max-width: none;
-        // min-height: 0;
-        // min-width: 0;
-        // nav-down: auto;
-        // nav-index: auto;
-        // nav-left: auto;
-        // nav-right: auto;
-        // nav-up: auto;
-        // opacity: 1;
-        // orphans: 2;
-        // outline: invert none medium;
-        // outline-offset: 0;
-        // overflow: visible;
-        // padding: 0;
-        // page-break-after: auto;
-        // page-break-before: auto;
-        // page-break-inside: auto;
-        // -webkit-perspective: none;
-        // perspective: none;
-        // -webkit-perspective-origin: 50% 50%;
-        // perspective-origin: 50% 50%;
-        // position: static;
-        // quotes: none;
-        // resize: none;
-        // right: auto;
-        // ruby-align: auto;
-        // ruby-overhang: none;
-        // ruby-position: before;
-        // ruby-span: none;
-        // size: auto;
-        // table-layout: auto;
-        // top: auto;
-        // -webkit-transform: none;
-        // -ms-transform: none;
-        // transform: none;
-        // -webkit-transform-origin: 50% 50% 0;
-        // -ms-transform-origin: 50% 50% 0;
-        // transform-origin: 50% 50% 0;
-        // -webkit-transform-style: flat;
-        // transform-style: flat;
-        // transition: all 0 ease 0;
-        // unicode-bidi: normal;
-        // vertical-align: baseline;
-        // white-space: normal;
-        // widows: 2;
-        // word-break: normal;
-        // word-spacing: normal;
-        // word-wrap: normal;
-        // z-index: auto;
-        // text-align: start;
-        // filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-        // -webkit-font-smoothing: antialiased;
-        // -moz-osx-font-smoothing: grayscale;
-
-    // ========= BEGIN: GENERIC CSS ========= //
-
-    // ========= BEGIN: CSS TAG ========= //
+    // ========= BEGIN: RESET CSS TAG ========= //
     p, a, ul, li, h1, h2, h3, textarea, title, time, svg, small, link, label, input, img,
     form, font, code, button, br, b{
         all: unset;
     }
-
     a:link {
         all: unset;
         color: #ffffff;
@@ -178,12 +31,13 @@ tiledeskwidget-root{
         all: unset;
         color: #ffffff;
     }
- 
+    // ========= END: RESET CSS TAG ========= //
 
-    // ========= END: CSS TAG ========= //
+
+    // ========= BEGIN: GENERIC CSS ========= //
     div.clear {
         all: unset;
-        clear:both;
+        clear: both;
     }
     .truncate{
         white-space: nowrap;
@@ -197,18 +51,35 @@ tiledeskwidget-root{
         float: left;
     }
     .align-left {
-        left:20px;
+        left: 20px;
     }
     .align-right {
-        right:20px;
+        right: 20px;
     }
 
-    // === CSS LINKS === //
-    
+    .c21-divBudge{
+        position: absolute;
+        top: 0;
+        width: auto;
+        height: 12px;
+        min-width: 12px;
+        font-size: 1em;
+        line-height: 1.2em;
+        border-radius: 20%;
+        background-color: $red;
+        color: white;
+        padding: 2px 2px 2px 2px;
+        text-align: center;
+        margin-top: -10px;
+        display: inline-block;
+    }
 
+
+
+    // === CSS LINKS === //
     /* .messages.msg_receive a */
     .msg_receive a { 
-        color: #03a5e8;
+        color: $bck-msg-sent;
     }
 
     // === CSS BUTTON === //
@@ -220,9 +91,9 @@ tiledeskwidget-root{
         padding: 0 24px;
         opacity: 1;
         text-align: center;
-        font-size: 13px;
+        font-size: 1.3em;
         border-radius: 40px;
-        background-color: rgb(42, 106, 193);
+        background-color: $theme-color;
         color: #ffffff;
         cursor: pointer;
         .c21-label-button {
@@ -240,7 +111,7 @@ tiledeskwidget-root{
     /* TIME */
     .time {
         font-size: 1em;
-        color: #aaaaaa;
+        color: $gray;
         text-align: left;
         margin: 0px;
         padding: 0px 40px;
@@ -253,35 +124,77 @@ tiledeskwidget-root{
         padding: 0;
     }
 
-
+    /* LOADING */
+    /*http://tobiasahlin.com/spinkit/*/
+    #chat21-spinner {
+        display: none;
+        width: 70px;
+        min-height: 20px;
+        margin: 20px auto 0;
+        text-align: center;
+    }
+    #chat21-spinner.active {
+        display: block;
+    }
+    #chat21-spinner > div {
+        width: 12px;
+        height: 12px;
+        background-color: $theme-color;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+    #chat21-spinner .chat21-bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+    #chat21-spinner .chat21-bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+    #chat21-spinner span {
+        display: block;
+        margin: 0.5em 0 0 0;
+        color: $theme-color;
+        /* text-transform: uppercase; */
+        font-family: 'Roboto', sans-serif;
+        -webkit-animation: pulse 2000ms linear infinite;
+        -moz-animation: pulse 2000ms linear infinite;
+        animation: pulse 2000ms linear infinite;
+        text-align: center;
+    }
+    @-webkit-keyframes sk-bouncedelay {
+        0%, 80%, 100% { -webkit-transform: scale(0) }
+        40% { -webkit-transform: scale(1.0) }
+    }
+    @keyframes sk-bouncedelay {
+        0%, 80%, 100% { 
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        } 40% { 
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        }
+    }
     // ========= END: GENERIC CSS ========= //
 
+
+    // ========= BEGIN: CSS APP.COMPONENT ========= //
     #chat21-container {
         display: none;
         font-family: 'Roboto','Google Sans', Helvetica, Arial, sans-serif;
         font-size: 10px;
-        font-style: normal;
-        font-stretch: normal;
-        font-variant: normal;
-        font-weight: normal;
-        letter-spacing: normal;
         text-align: left;
-        text-decoration: none;
-        text-shadow: none;
-        text-transform: none;
         background-color: #ffffff;
-        background-image: none;
-        border: 0 none transparent;
-        border-radius: 0;
         &.active{
             display: block;
         }
         
-        
         /* CSS BOX CONTAINER */
         #chat21-conversations {
             border-radius: 0px;
-            box-shadow: rgba(0,0,0,0.18) 0 0 38px;
+            box-shadow: $trasp-light-black 0 0 38px;
             right: 20px;
             display: block;
             overflow-y: hidden;
@@ -294,7 +207,7 @@ tiledeskwidget-root{
             bottom: 90px; 
             right: 20px;
             overflow: hidden;
-            background-color: #fff;
+            background-color: #ffffff;
         }
         .chat21-fullscreen {
             width: 100%;
@@ -315,44 +228,147 @@ tiledeskwidget-root{
             height: 100%;
             width: 100%;
             z-index: 1;
-            background-color: rgba(0, 0, 0, 0.0);
+            background-color: transparent;
             opacity: 0;
             transition: all 0.2s;
             bottom: -100%;
             &.active {
-                background-color: rgba(0, 0, 0, 0.8);
+                background-color: $trasp-black;
                 opacity: 1;
                 transition: all 0.3s;
                 bottom: 0px;
             }
             .modal-content {
-                background-color: #fff;
-                border: 0px solid rgba(0,0,0,0.2);
-                border-radius: .3rem;
+                background-color: #ffffff;
+                border: 0px solid $trasp-light-black;
+                border-radius: 0.3rem;
                 padding: 0px;
                 margin: 20px auto;
-            }
-            h1.modal-title {
-                min-height: 30px;
-                text-align: center;
-                color: #2a6ac1;
-                font-size: 1.2em;
-            }
-            h3.modal-title  {
-                text-align: center;
-                color: #333333;
-                font-size: 0.9em;
-                display: inline-block;
-            }
-            .modal-header button{
-                color: #239C96;
-                font-size: 16px;
-                font-weight: bold;
             }
         }
     }
 
 
+
+    // ========= BEGIN: CSS STANDARD PAGE ========= //
+    .c21-header {
+        overflow: hidden;
+        width: 100%;
+        height: 52px;
+        position: relative;
+        margin: 0;
+        padding: 0;
+        color: #fff;
+
+        .c21-header-container{
+            position: relative;
+            height: 52px;
+            width: 100%;
+            margin: 0 auto;
+
+            .c21-header-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                .c21-header-button{
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    margin: 0 10px 0 10px;
+                    cursor: pointer;
+                    &.c21-right{
+                        float: right;
+                    }
+                    &.c21-left{
+                        float: left;
+                    }
+                    &.c21-close{
+                        display: none;
+                    }
+                }
+
+                .c21-title {
+                    position: absolute;
+                    left: 0;
+                    display: inline-block;
+                    width: calc(100% - 150px);
+                    height: 1.6em;
+                    line-height: 1.6em;
+                    padding: 0px;
+                    margin: 10px 75px;
+                    text-align: center;
+                    font-size: 1.6em;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;             
+                }
+            }
+        }
+    }
+
+    // =================== C21-BODY ===============//
+    .c21-body {
+        position: absolute;
+        top: 53px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0px;
+        margin: 0px auto;
+
+        .c21-body-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: auto;
+            width: auto;
+
+            .c21-body-header {
+                position: absolute;
+                top: 0;
+                left: 30px;
+                right: 30px;
+                padding: 10px 0px;
+                margin: 0px auto;
+                width: auto;
+                height: auto;
+                z-index: 2;
+            }
+
+            .c21-body-content  {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 0;
+                margin: 0px auto;
+                height: auto;
+            }
+
+        }
+        
+        
+
+        //     .c21-message-field {
+        //         padding: 0;
+        //         margin: 0;
+        //         line-height: 1.2em;
+        //         color: #616161;
+        //         font-size: 1.5em;
+        //         text-align: center;
+        //         word-wrap: break-word;
+        //     }
+        // }
+       
+    }
+    // ========= END: CSS STANDARD PAGE ========= //
 
 
     /**************
