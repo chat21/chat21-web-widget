@@ -203,7 +203,7 @@
         </div>
     </div>
 
-    <div *ngIf="isMenuShow" class="c21-options-menu" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50, 'color': g.themeColor }">
+    <div *ngIf="isMenuShow" id="c21-options-menu" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50, 'color': g.themeColor }">
         <!-- ICON VOLUME -->
         <div class="c21-header-button c21-right" (click)="toggleSound()">
             <svg *ngIf="!g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeColor }" xmlns="http://www.w3.org/2000/svg"

@@ -181,7 +181,8 @@ export class AuthService {
 
   signOut() {
     const that = this;
-    return this.firebaseAuth.auth.signOut()
+    // return this.firebaseAuth.auth.signOut()
+    return firebase.auth().signOut()
     .then(value => {
       that.g.wdLog(['Nice, signOut OK!']);
       that.unsubscribe();

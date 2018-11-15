@@ -75,9 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService
     ) {
-        this.initAll();
-        this.getMongDbDepartments();
-        this.g.wdLog(' ---------------- A4 ---------------- ');
+
     }
 
 
@@ -87,7 +85,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * 3 - start
      */
     ngOnInit() {
-        // this.setLoginSubscription();
+        this.initAll();
+        this.getMongDbDepartments();
+        this.g.wdLog(' ---------------- A4 ---------------- ');
     }
 
 
@@ -240,7 +240,7 @@ export class AppComponent implements OnInit, OnDestroy {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
         }
 
-        /****** */
+        /********** LOGIN  ***********/
         this.setLoginSubscription();
     }
 

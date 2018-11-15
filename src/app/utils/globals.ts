@@ -224,7 +224,7 @@ export class Globals {
     this.autoStart = true;                              /** start Authentication and startUI */
     this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
-    this.startFromHome = true;                          /** start from Home or Conversation */
+    this.startFromHome = false;                          /** start from Home or Conversation */
 
     this.isOpenStartRating = false;                     /** show/hide all rating chat */
     // tslint:disable-next-line:max-line-length
@@ -275,7 +275,7 @@ export class Globals {
 
     this.marginX = '20px';                      /** set margin left or rigth widget  */
     this.marginY = '20px';                      /** set margin bottom widget */
-    this.isLogEnabled = false;
+    this.isLogEnabled = true;
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 

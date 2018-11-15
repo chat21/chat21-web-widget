@@ -4,120 +4,8 @@
 @import '../../../sass/variables';
 
 /* MESSAGE CONTAINER SENT */
-    .c21-options-menu{
-        width: auto;
-        height: auto;
-        min-height: 40px;
-        min-width: 100px;
-        max-width: 80%;
-        position: absolute;
-        z-index: 10;
-        top: 40px;
-        right: 15px;
-        border-radius: 3px;
-        font-size: 1.2em;
-        line-height: normal;
-        overflow: hidden;
-        border: 1px solid #d7d7d7;
-        background-color: #ffffff;
-        padding: 20px 0px 10px 0px;
-        
-    }
-    .c21-options-menu .c21-header-button {
-        padding: 6px 10px 6px 10px;
-        display: flex;
-        align-items: center;
-    }
-    
-    .c21-options-menu .c21-header-button:hover {
-        background-color: whitesmoke;
-        cursor: pointer;
-    }
-    .label-menu-item{
-        line-height: 20px;
-        position: relative;
-        margin: 0 10px 0px 10px;
-    }
-    
-    #chat21-main-message-context {
-        overflow: hidden auto;
-        word-wrap: break-word;
-        resize: horizontal;
-        overflow-y: visible;
-        box-sizing: border-box;
-        color: $black;
-        min-width: 100%;
-        outline: 0;
-        resize: none;
-        font-size: 1.3em;
-        line-height: 1.3em;
-        max-height: 110px;
-    
-        height: 20px;
-        padding: 0px 40px;
-        margin: 10px 0px 10px;
-        border: none;
-    }
-    
-     /* message */
-     .msg_receive {
-        background-color: $light-white;
-        color: $black;
-        max-width: calc(100% - 60px);
-        min-width: 14px;
-        margin: 0 20px 4px 10px;
-    }
 
-    .profile_image{
-        position: relative;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        overflow: hidden;
-        background-color: #ffffff;
-        border: 1px solid #e2e2e2;
-    }
-    .profile_image img{
-        max-width: 100%;
-        min-width: 25px;
-        min-height: 25px;
-        object-fit: cover;
-    }
-
-    .msg_container {
-        overflow: hidden;
-        display: flex;
-    }
-    .messages {
-        border-radius: 14px;
-        padding: 6px 6px 6px 6px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        p {
-            font-size: 1.3em;
-            margin: 0 0 0 0;
-            padding: 0 0 0 0;
-            font-style: normal;
-            letter-spacing: normal;
-            font-stretch: normal;
-            font-variant: normal;
-            font-weight: normal;
-            overflow: hidden;
-        }
-        img {
-            border-radius: 8px;
-            padding: 0px;
-            margin-bottom: 0px;
-        }
-    }
     
-    .msg_sent {
-        background-color: $bck-msg-sent;
-        color: $col-msg-sent;
-        margin-right: 0;
-        margin-left: 4px;
-        max-width: calc(100% - 30px);
-        min-width: 14px;
-    }
 
 
 // ============= CSS #chat21-conversation-component ================= //
@@ -128,6 +16,7 @@
     position: relative;
     margin: 0px;
     padding: 0px;
+    // ============= CSS c21-header ================= // 
     .c21-header {
         .c21-header-container{
             .c21-header-content {
@@ -146,7 +35,7 @@
             }
         }
     }
-       
+    // ============= CSS c21-body ================= //
     .c21-body {
         .c21-body-container {
             .c21-body-header {
@@ -189,13 +78,47 @@
                     #c21-contentScroll{
                         padding: 10px;
                     }
-    
+                    .msg_container {
+                        overflow: hidden;
+                        display: flex;
+                    }
                     /* ====== SET MESSAGES ====== */
+                    .messages {
+                        border-radius: 14px;
+                        padding: 6px 6px 6px 6px;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                        p {
+                            font-size: 1.3em;
+                            margin: 0 0 0 0;
+                            padding: 0 0 0 0;
+                            font-style: normal;
+                            letter-spacing: normal;
+                            font-stretch: normal;
+                            font-variant: normal;
+                            font-weight: normal;
+                            overflow: hidden;
+                        }
+                        img {
+                            border-radius: 8px;
+                            padding: 0px;
+                            margin-bottom: 0px;
+                        }
+                    }
                     /* send message */
                     .base_sent {
                         align-items: flex-end;
                         justify-content: flex-end;
                         padding: 2px 0px 4px 40px;
+
+                        .msg_sent {
+                            background-color: $bck-msg-sent;
+                            color: $col-msg-sent;
+                            margin-right: 0;
+                            margin-left: 4px;
+                            max-width: calc(100% - 30px);
+                            min-width: 14px;
+                        }
+
                         .status-message {
                             width: 16px;
                             height: 16px;
@@ -231,7 +154,32 @@
                             width: 28px;
                             height: 28px;
                             margin-right: 6px;
-                        } 
+                        
+                            .profile_image{
+                                position: relative;
+                                width: 25px;
+                                height: 25px;
+                                border-radius: 50%;
+                                overflow: hidden;
+                                background-color: #ffffff;
+                                border: 1px solid #e2e2e2;
+                            }
+                            .profile_image img{
+                                max-width: 100%;
+                                min-width: 25px;
+                                min-height: 25px;
+                                object-fit: cover;
+                            }
+                        }
+                        /* message */
+                        .msg_receive {
+                            background-color: $light-white;
+                            color: $black;
+                            max-width: calc(100% - 60px);
+                            min-width: 14px;
+                            margin: 0 20px 4px 10px;
+                        }
+                        
                     }
     
                     .message_sender_fullname{
@@ -246,7 +194,7 @@
     }
 }
 
-/* FOOTER CONTAINER */ 
+/* ================== CSS chat21-footer ==================== */ 
 #chat21-footer {
     position: absolute;
     bottom: 0;
@@ -256,6 +204,64 @@
     padding: 0;
     box-shadow: 0 -1px 10px 1px $trasp-light-gray;
     background: white;
+    /* resize and hide the text input area */
+    .hidden-text-area {
+        display: hidden;
+        height: 0px;
+    }
+
+    /* show and restore the text area size */
+    .visible-text-area {
+        display: block;
+        height: 100%;
+    }
+
+    /* button scroll to bottom page */
+    #chat21-buttonToBottom {
+        display: flex;
+        position: relative;
+        margin-right: 10px;
+        margin-top: -40px;
+        float: right;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        z-index: 1;
+        cursor: pointer;
+        background-color: #ffffff;
+        border: 1px solid $trasp-light-gray;
+        -webkit-box-shadow: 0 3px 2px $trasp-light-black;
+        box-shadow: 0 3px 2px $trasp-light-black;
+        text-align: center;
+        svg {
+            margin: auto;
+            fill: $gray;
+        }
+    }
+    #chat21-buttonToBottom:hover {
+        background-color: $light-gray;
+    }
+
+    #chat21-main-message-context {
+        overflow: hidden auto;
+        word-wrap: break-word;
+        resize: horizontal;
+        overflow-y: visible;
+        box-sizing: border-box;
+        color: $black;
+        min-width: 100%;
+        outline: 0;
+        resize: none;
+        font-size: 1.3em;
+        line-height: 1.3em;
+        max-height: 110px;
+    
+        height: 20px;
+        padding: 0px 40px;
+        margin: 10px 0px 10px;
+        border: none;
+    }
+
     .chat21-textarea-button {
         position: absolute;
         display: block;
@@ -284,77 +290,44 @@
     }
 }
 
-
-/* button scroll to bottom page */
-#chat21-buttonToBottom {
-    display: flex;
-    position: relative;
-    margin-right: 10px;
-    margin-top: -40px;
-    float: right;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    z-index: 1;
-    cursor: pointer;
+/* ==================== OPTION MENU CONTAINER ==================== */ 
+#c21-options-menu {
+    width: auto;
+    height: auto;
+    min-height: 40px;
+    min-width: 100px;
+    max-width: 80%;
+    position: absolute;
+    z-index: 10;
+    top: 40px;
+    right: 15px;
+    border-radius: 3px;
+    font-size: 1.2em;
+    line-height: normal;
+    overflow: hidden;
+    border: 1px solid #d7d7d7;
     background-color: #ffffff;
-    border: 1px solid $trasp-light-gray;
-    -webkit-box-shadow: 0 3px 2px $trasp-light-black;
-    box-shadow: 0 3px 2px $trasp-light-black;
-    text-align: center;
-    svg {
-        margin: auto;
-        fill: $gray;
+    padding: 20px 0px 10px 0px;
+    .c21-header-button {
+        padding: 6px 10px 6px 10px;
+        display: flex;
+        align-items: center;
     }
-}
-#chat21-buttonToBottom:hover {
-    background-color: $light-gray;
-}
-
-//  /* BOX ALL_AGENTS_OFFLINE_LABEL */
-//  .chat21-agents-available {
-//     font-family: 'Google Sans', sans-serif !important;
-//     /* background-color: yellow; */ /* NK COMMENTED FOR THE NEW STYLE OF THE BOX */
-//     color: black;
-//     padding: 8px 4px 8px 4px;
-//     /* height: 32px; */
-//     /* position: absolute; */
-//     /* bottom: 0; */
-//     /* left: 0; */
-//     /* width: 100%; */
-//     text-align: center;
-//     font-weight: 300;
-// }
-
-// /* NK - CUSTOMIZE THE BOX ALL_AGENTS_OFFLINE_LABEL THAT IS DISPLAYED WHEN THERE IS NOT PRECHAT-FORM AND THERE IS NOT DEPTS */
-// .chat21-agents-available-is-new-conversation {
-//     font-size: 1.3em;
-//     color: #616161;
-//     vertical-align: middle;
-//     width: auto;
-//     border-radius: 3px;
-//     background-color: #ffffff;
-//     -webkit-box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-//     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-//     padding: 5px 10px 10px 10px;
-//     margin: 20px 0;
-// }
-
-
-/* resize and hide the text input area */
-.hidden-text-area {
-    display: hidden;
-    height: 0px;
-}
-
-/* show and restore the text area size */
-.visible-text-area {
-    display: block;
-    height: 100%;
+    .c21-header-button:hover {
+        background-color: whitesmoke;
+        cursor: pointer;
+    }
+    .label-menu-item{
+        line-height: 20px;
+        position: relative;
+        margin: 0 10px 0px 10px;
+    }
+    
 }
 
 
 
+/* ==================== MOBILE VERSION ==================== */ 
 @media (max-width: 451px) {
     #chat21-conversation-component {
         .c21-header {
