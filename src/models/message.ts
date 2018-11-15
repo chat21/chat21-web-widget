@@ -12,7 +12,7 @@ export class MessageModel {
         public status: string,
         public metadata: any,
         public text: string,
-        public timestamp: number,
+        public timestamp: any,
         public headerDate: string,
         public type: string,
         public attributes: any,

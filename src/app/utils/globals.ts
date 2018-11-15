@@ -727,8 +727,9 @@ export class Globals {
   }
 
   public wdLog(message) {
+
     if ( this.isLogEnabled ) {
-       console.log(message);
+       console.log(message.toString());
     }
   }
 

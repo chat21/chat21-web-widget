@@ -1,12 +1,13 @@
 @import '../../../sass/variables';
+@import '../../../sass/normalize.css';
 
 #chat21-home-component {
     position: relative;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
-    
 
+    /*********  c21-header **********/
     .c21-header {
         min-height: 75px;
         height: 252px;
@@ -44,6 +45,7 @@
         }
     }
 
+    /*********  c21-body **********/
     .c21-body {
         top: 0px;
         background-color: transparent;
@@ -75,27 +77,28 @@
         }
     }
 
+    /*********  c21-footer **********/
     .c21-footer {
         position: absolute;
         bottom: 0px;
         height: 30px;
         background-color: white;
         width: 100%;
-        box-shadow: 0 -10px 10px 1px rgba(0,0,0,.03);
+        box-shadow: 0 -10px 10px 1px $trasp-light-gray;
 
-        #c21-powered-by {
-            width: calc(100% - 100px);
+        .c21-powered-by {
             height: 25px;
             text-align: center;
             padding: 0;
             margin: 5px 0;
             position: absolute;
-            color: #777777;
+            color: $gray;
             top: 0;
             left: 50px;
+            right: 50px;
             a {
                 text-decoration: none;
-                color:#777777;
+                color: $gray;
                 font-size: 1.1em;
                 font-weight: 500;
                 line-height: 22px;
@@ -104,19 +107,21 @@
         .build_version {
             display: none;
             font-size: 1em;
-            color:#777777;
+            color: $gray;
             position: absolute;
             bottom: 5px;
             right: 10px;
         }
+        
+        #c21-powered-by:hover {
+            div.build_version {
+                display: block;
+            }
+        }
 
     } 
 
-    .c21-powered-by:hover {
-        div.build_version {
-            display: block;
-        }
-    }
+    
 
 }
   
@@ -129,38 +134,43 @@
 // DA SPOSTARE NEL CSS GENERICO
 /*********************************/
 
-#chat21-container {
-    .c21-header-button {
-        &.close {
-            display: none;
-        }
-        .c21-close-button {
-            position: absolute;
-            width: 51px;
-            height: 51px;
-            top: 0;
-            right: 0;
-            margin: 12px 8px 12px 2px;
-            z-index: 10;
-            .c21-close-button-body {
-                cursor: pointer;
-                width: 51px;
-                height: 51px;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                background-color: rgba(0, 0, 0, 0.0);
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.4);
-                }
-                svg{
-                    margin: 0 auto;
-                    fill: #ffffff;
-                }
-            }
-        }
-    }
-} 
+// #chat21-container {
+    // .c21-header-button {
+    //     &.close {
+    //         display: none;
+    //     }
+        // .c21-close-button {
+        //     position: absolute;
+        //     width: 51px;
+        //     height: 51px;
+        //     top: 0;
+        //     right: 0;
+        //     margin: 12px 8px 12px 2px;
+        //     z-index: 10;
+        //     .c21-close-button-body {
+        //         cursor: pointer;
+        //         width: 51px;
+        //         height: 51px;
+        //         border-radius: 8px;
+        //         display: flex;
+        //         align-items: center;
+        //         background-color: rgba(0, 0, 0, 0.0);
+        //         &:hover {
+        //             background-color: rgba(0, 0, 0, 0.4);
+        //         }
+        //         svg{
+        //             margin: 0 auto;
+        //             fill: #ffffff;
+        //         }
+        //     }
+        // }
+//     }
+// } 
+
+
+/*********************************/
+/******* CSS MOBILE VER **********/
+/*********************************/
 
 @media (max-width: 451px) {
     #chat21-container {
@@ -169,33 +179,3 @@
         }
     } 
 }
-
-
-  
-// .chat21-home-screen-conversations-footer {
-//     min-height: 80px;
-// }
-  
-// .chat21-button-new {
-//     position: absolute;
-//     cursor: pointer;
-//     margin-left: 10px;
-//     margin-right: 30px;
-//     outline: 0!important;
-//     background-color: rgb(42, 106, 193);
-//     border-color: rgb(42, 106, 193);
-// }
-
-// .chat21b-box-new-conversation {
-//     margin: 25px 6px 6px;
-//     height: 44px;
-//     position: relative;
-//     border-radius: 40px;
-//     background-color: #fff;
-//     z-index: 100;
-//     font-size: 1.3em;
-//     color: #2a6ac1;
-//     cursor: pointer;
-//     opacity: 1;
-//     text-align: center;
-// }

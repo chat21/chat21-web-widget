@@ -75,11 +75,13 @@
 
     <!-- FOOTER -->
     <div class="c21-footer">
+
+        
         <tiledeskwidget-menu-options
         (eventSignOut)="returnSignOut()" 
         ></tiledeskwidget-menu-options>
-        <div class="c21-powered-by">
-            <div id="c21-powered-by" [innerHTML]="g.poweredBy"></div>
+        <div id="c21-powered-by">
+            <div class="c21-powered-by" [innerHTML]="g.poweredBy"></div>
             <div class="build_version">{{g.BUILD_VERSION}}</div>
         </div>
     </div>

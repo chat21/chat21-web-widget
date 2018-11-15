@@ -1,8 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Google+Sans:200,400,800');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons');
-//https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' 
-
 @import '../sass/normalize.css';
 @import '../sass/variables';
 
@@ -80,6 +78,38 @@ tiledeskwidget-root{
         text-align: center;
         margin-top: -10px;
         display: inline-block;
+    }
+
+    /** header-buttons **/
+    .c21-header-button {
+        &.close {
+            display: none;
+        }
+    }
+    .c21-close-button {
+        position: absolute;
+        width: 51px;
+        height: 51px;
+        top: 0;
+        right: 0;
+        margin: 12px 8px 12px 2px;
+        z-index: 10;
+        .c21-close-button-body {
+            cursor: pointer;
+            width: 51px;
+            height: 51px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.0);
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            svg{
+                margin: 0 auto;
+                fill: #ffffff;
+            }
+        }
     }
 
 
@@ -389,7 +419,7 @@ tiledeskwidget-root{
             .header-button.close{
                 display: flex;
             }
-            .chat21-window {
+            #chat21-conversations{
                 width: 100%;
                 height: 100%;
                 right: 0px;
