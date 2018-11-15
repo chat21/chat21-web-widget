@@ -1,33 +1,14 @@
-var tiledeskroot = document.createElement('tiledeskwidget-root');
-
-var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
-console.log("tiledeskScriptLocation", tiledeskScriptLocation);
-var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/tiledesk.js","");
-console.log("tiledeskScriptBaseLocation", tiledeskScriptBaseLocation);
-
-window.tiledesk = new function() {
-    //this.type = "macintosh";
-    this.on = function (event_name, handler) {
-            //console.log("addEventListener for "+ event_name, handler);
-            tiledeskroot.addEventListener(event_name, handler);
-    };
-    this.getBaseLocation = function() {
-        return tiledeskScriptBaseLocation;
-    }
-}
-console.log("window.tiledesk created");
-
-
-try {
-    window.tileDeskAsyncInit();
-    console.log("window.tileDeskAsyncInit() called");
-}catch(er) {
-    console.log("error calling window.tileDeskAsyncInit()",er);
+function ready(callbackFunction){
+    if(document.readyState != 'loading')
+      callbackFunction(event)
+    else
+      document.addEventListener("DOMContentLoaded", callbackFunction)
 }
 
-//aTag.setAttribute('href',"yourlink.htm");
-//aTag.innerHTML = "link text";
-document.body.appendChild(tiledeskroot);
+ready(event => {
+    console.log('DOM is ready, call initWidget');
+    initWidget();
+});
 
 function appendJs(url) {
     var script1 = document.createElement('script');
@@ -36,27 +17,53 @@ function appendJs(url) {
     document.body.appendChild(script1);
 }
 
-//  var origin = window.document.location.origin;
-//  console.log("origin", origin);
+  function initWidget() {
+    var tiledeskroot = document.createElement('tiledeskwidget-root');
 
-//  var locationhref = window.document.location.href;
-//  locationhref = locationhref.replace("/tiledesk.js","");
-//  console.log("locationhref", locationhref);
+    var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
+    // console.log("tiledeskScriptLocation", tiledeskScriptLocation);
+    var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/tiledesk.js","");
+    console.log("tiledeskScriptBaseLocation", tiledeskScriptBaseLocation);
+    
+    window.tiledesk = new function() {
+        //this.type = "macintosh";
+        this.on = function (event_name, handler) {
+                //console.log("addEventListener for "+ event_name, handler);
+                tiledeskroot.addEventListener(event_name, handler);
+        };
+        this.getBaseLocation = function() {
+            return tiledeskScriptBaseLocation;
+        }
+    }
+    console.log("window.tiledesk created");
+    
+    
+    try {
+        window.tileDeskAsyncInit();
+        console.log("tileDeskAsyncInit() called");
+    }catch(er) {
+        console.log("tileDeskAsyncInit() doesn't exists",er);
+    }
+    
+    //aTag.setAttribute('href',"yourlink.htm");
+    //aTag.innerHTML = "link text";
+    document.body.appendChild(tiledeskroot);
+    
+   
+    
+    
+    appendJs(tiledeskScriptBaseLocation+'/inline.bundle.js');
+    appendJs(tiledeskScriptBaseLocation+'/polyfills.bundle.js');
+    
+    // if (window.tiledeskSettings && window.tiledeskSettings.development) {
+        appendJs(tiledeskScriptBaseLocation+'/styles.bundle.js');
+        appendJs(tiledeskScriptBaseLocation+'/vendor.bundle.js');
+    // }
+    
+    appendJs(tiledeskScriptBaseLocation+'/main.bundle.js');
+  }
 
-// var locationhref = "."
-// if (window.tiledeskSettings && window.tiledeskSettings.development) {
 
-// }
-
-appendJs(tiledeskScriptBaseLocation+'/inline.bundle.js');
-appendJs(tiledeskScriptBaseLocation+'/polyfills.bundle.js');
-
-// if (window.tiledeskSettings && window.tiledeskSettings.development) {
-    appendJs(tiledeskScriptBaseLocation+'/styles.bundle.js');
-    appendJs(tiledeskScriptBaseLocation+'/vendor.bundle.js');
-// }
-
-appendJs(tiledeskScriptBaseLocation+'/main.bundle.js');
 
 
 

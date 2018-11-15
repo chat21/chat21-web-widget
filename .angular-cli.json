@@ -12,6 +12,7 @@
         "favicon.ico",
         "tiledesk.js",
         "test.html",
+        "test-buttons.html",
         "test-auth.html"
       ],
       "index": "index.html",
