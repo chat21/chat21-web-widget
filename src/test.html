@@ -40,7 +40,7 @@
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); 
-        js.id = id; //js.async=!0;
+        js.id = id; js.async=!0;
         js.src = "./tiledesk.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
@@ -77,7 +77,7 @@
         
       }
       </script>
-      
+
 </head>
 
 
