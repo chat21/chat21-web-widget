@@ -293,8 +293,8 @@ export class MessagingService {
     // const messageString = urlify(msg);
     const that = this;
     const now: Date = new Date();
-    const timestamp = now.valueOf();
-    // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
+    // const timestamp = now.valueOf();
+    const timestamp =  firebase.database.ServerValue.TIMESTAMP;
     const language = navigator.language;
     // document.documentElement.lang;
     // const sender_fullname = this.loggedUser.fullname;

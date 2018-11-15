@@ -2,11 +2,7 @@
 // $f21ico-done: image-url('../assets/images/f21ico-done.svg', false, false);
 // $f21ico-done_all: image-url('../assets/images/f21ico-done_all.svg', false, false);
 @import '../../../sass/variables';
-
-/* MESSAGE CONTAINER SENT */
-
-    
-
+@import '../../../sass/normalize.css';
 
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
