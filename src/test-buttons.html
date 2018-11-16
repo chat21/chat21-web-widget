@@ -5,22 +5,10 @@
   <title>Tilechat Widget</title>
   <base href="./">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- <script>
-    function ready(callbackFunction){
-      if(document.readyState != 'loading')
-        callbackFunction(event)
-      else
-        document.addEventListener("DOMContentLoaded", callbackFunction)
-    }
-    ready(event => {
-      console.log('DOM is ready.')
-    });
-
-  </script> -->
-
   <script>
+  // Handler for .ready() called.
   window.tiledeskSettings = 
       {
           projectid: "5b55e806c93dde00143163dd",
@@ -77,24 +65,83 @@
         
       }
       </script>
-
 </head>
 
-
+<style>
+  body{
+    background-color: antiquewhite;
+  }
+  a {
+    color:black;
+    background-color: brown;
+    text-decoration: chartreuse;
+    text-decoration-line: overline;
+  }
+</style>
 
 <body>
-    <!-- <body onload="console.log('onload')"> -->
+  <a href="">test</a>
+    <button id="idShow">
+      SHOW
+    </button>
+    <button id="idHide">
+      HIDE
+    </button>
+    <button id="idOpen">
+      OPEN
+    </button>
+    <button id="idClose">
+      CLOSE
+    </button>
+    <button id="idAuth">
+        AUTH
+    </button>
+
+    <button id="preChatForm">
+        preChatForm
+    </button>
+    
+    
+    <script type="application/javascript">
+    $( document ).ready(function() {
+
+      var isOpenPrechatForm = true;
+
+$( "#idShow" ).click(function() {
+  alert( "Handler for .click() idShow." );
+  window.tiledesk.show();
+});
+$( "#idHide" ).click(function() {
+  alert( "Handler for .click() idHide." );
+  window.tiledesk.hide();
+});
+$( "#idOpen" ).click(function() {
+  alert( "Handler for .click() idOpen." );
+  window.tiledesk.open();
+});
+$( "#idClose" ).click(function() {
+  alert( "Handler for .click() idClose." );
+  window.tiledesk.close();
+});
+$( "#idAuth" ).click(function() {
+  alert( "Handler for .click() idAuth." );
+  window.tiledesk.signInWithCustomToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW5kcmVhIiwiZW1haWwiOiJhbmRyZWEubGVvQGZyb250aWVyZTIxLml0IiwiaWF0IjoxNTQwNDYwOTM2MzkzLCJleHRlcm5hbF9pZCI6IjEyMzQ1NiJ9.wD9YDI3hEXBipoQ7kUIPRqNybFNuXZb9OPEqkxLtJoY");
+  //window.tiledesk.signInAnonymous();
+});
+
+$( "#preChatForm" ).click(function() {
+  isOpenPrechatForm = !isOpenPrechatForm;
+  alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
+  window.tiledesk.setStatePreChatForm(isOpenPrechatForm);
+});
 
 
-  <!-- <appdashboard-root><div class="loader">
-    <svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg>
-  </div>
-</appdashboard-root>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/inline.b4980b10908bd07ff0c9.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/polyfills.6165d09f871edfdcf44f.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/scripts.0a5c2942fdd4a53926cd.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/main.2f8b9011807a2aad773f.bundle.js"></script>
- -->
+    });
+
+    
+      
+    </script>
+
 
 </body>
 </html>
