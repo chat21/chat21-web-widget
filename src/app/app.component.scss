@@ -79,7 +79,10 @@ tiledeskwidget-root{
         margin-top: -10px;
         display: inline-block;
     }
-
+    .c21-button{
+        display: inline-flex;
+        cursor: pointer;
+    }
     /** header-buttons **/
     .c21-header-button {
         &.close {

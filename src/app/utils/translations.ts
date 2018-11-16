@@ -45,7 +45,8 @@ export const en = {
     'LOGOUT': 'logout',
     'CLOSE': 'close',
     'PREV_CONVERSATIONS': 'Previous conversations',
-    'YOU': 'Tu'
+    'YOU': 'Tu',
+    'SHOW_ALL_CONV': 'show all'
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -95,5 +96,6 @@ export const it = {
     'LOGOUT': 'disconnetti',
     'CLOSE': 'chiudi',
     'PREV_CONVERSATIONS': 'Conversazioni precedenti',
-    'YOU': 'Tu'
+    'YOU': 'Tu',
+    'SHOW_ALL_CONV': 'vedi tutte'
 };

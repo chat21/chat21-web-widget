@@ -41,10 +41,51 @@
 .c21-button{
     cursor: pointer;
     margin: 10px 0;
-    padding: 0;
+    padding: 0 10px;
     color:#777777;
+    display: flex;
     // font-weight: bold;
 }
-.c21-button:hover{
-    color:#000000;
+.c21-button:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+
+
+#c21-options-menu {
+    width: auto;
+    height: auto;
+    min-height: 40px;
+    min-width: 100px;
+    max-width: 80%;
+    position: absolute;
+    z-index: 10;
+    top: 40px;
+    right: 15px;
+    border-radius: 3px;
+    font-size: 1.2em;
+    line-height: normal;
+    overflow: hidden;
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    padding: 20px 0px 10px 0px;
+}
+
+#c21-options-menu .c21-header-button {
+    padding: 6px 10px 6px 10px;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.label-menu-item {
+    line-height: 20px;
+    position: relative;
+    margin: 0 10px 0px 10px;
+}
+#c21-options-menu .label-menu-item {
+    line-height: 20px;
+    position: relative;
+    margin: 0 10px 0px 10px;
 }

@@ -87,6 +87,7 @@ export class Globals {
   CLOSE: string;
   PREV_CONVERSATIONS: string;
   YOU: string;
+  SHOW_ALL_CONV: string;
 
 
 
@@ -214,6 +215,7 @@ export class Globals {
     this.CLOSE = this.translatorService.translate('CLOSE');
     this.PREV_CONVERSATIONS = this.translatorService.translate('PREV_CONVERSATIONS');
     this.YOU = this.translatorService.translate('YOU');
+    this.SHOW_ALL_CONV = this.translatorService.translate('SHOW_ALL_CONV');
   }
 
   /**
