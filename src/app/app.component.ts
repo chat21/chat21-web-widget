@@ -1,5 +1,6 @@
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
-import * as moment from 'moment';
+// import * as moment from 'moment';
+import * as moment from 'moment/moment';
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import 'rxjs/add/operator/takeWhile';

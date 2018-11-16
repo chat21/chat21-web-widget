@@ -115,7 +115,6 @@
                         <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}">
-
                                 <div *ngFor="let message of messages">
 
                                     <!-- message sender:: -->
@@ -260,7 +259,7 @@
         <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
     </div>
 
-    <div [ngClass]="{'visible-text-area': !isFilePendingToUpload, 'hidden-text-area': isFilePendingToUpload}">
+    <div class="visible-text-area" [class.active]="!isFilePendingToUpload">
         <textarea #textbox rows="1" id="chat21-main-message-context" class='f21textarea' 
             [(ngModel)]="textInputTextArea"
             (ngModelChange)="resizeInputField()" 
@@ -269,7 +268,7 @@
         </textarea>
     </div>
 
-    <label for="chat21-file" class="chat21-textarea-button active" id="chat21-start-upload-doc">
+    <label for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload" id="chat21-start-upload-doc">
         <span class="v-align-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 28 28">
                 <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
@@ -279,7 +278,7 @@
         </span>
     </label>
     <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
-    <div class="chat21-textarea-button" [class.active]="textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">
+    <div class="chat21-textarea-button" [class.active]="!isFilePendingToUpload" [class.active]="textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">
         <span class="v-align-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 28 28">
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" [ngStyle]="{'fill': g.themeColor}" />
@@ -291,6 +290,7 @@
         id="chat21-file" class="inputfile" 
         [ngStyle]="{ 'display': 'none' }"
         (change)="detectFiles($event)" 
+        
     />
     <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
         <span>{{nameFile}}</span>

@@ -1,3 +1,6 @@
+@import '../../../sass/normalize.css';
+@import '../../../sass/variables';
+
 #c21-app-list-conversations{
     position: relative;
     display: block;
@@ -6,7 +9,7 @@
     font-size: 10px;
 
     .c21-header{
-        color: #777777;
+        color: $gray;
         height: auto;
         height: 50px;
         min-height: 50px;
@@ -23,6 +26,7 @@
             line-height: normal;
             padding: 17px 24px;
             float: right;
+            fill: $blue;
         }
     }
     .c21-body {
@@ -81,7 +85,7 @@
                             height: 100%;
                             border-radius: 50%;
                             text-align: center;
-                            font-size: 14px;
+                            font-size: 1.4em;
                             color: #ffffff;
                             font-weight: 500;
                         }
@@ -107,7 +111,7 @@
                     padding: 17px 0;
                     .c21-last-time {
                         font-size: 0.8em;
-                        color: #aaaaaa;
+                        color: $gray;
                         float: right;
                         display: block;
                         padding: 0;
@@ -118,13 +122,13 @@
                     .c21-name {
                         font-weight: 700;
                         color: #3a3c4c;
-                        font-size: 12px;
+                        font-size: 1.2em;
                         line-height: 1.7;
                     }
                     .c21-msg {
                         font-weight: 200;
                         color: #3a3c4c;
-                        font-size: 12px;
+                        font-size: 1.2em;
                         line-height: 1.7;
                     }
                     .not-read.c21-msg {
@@ -143,14 +147,12 @@
         
     }
     .c21-footer {
-        // width: calc(100% - 48px);
         width: auto;
         margin: 0 24px;
         height: auto;
         position: relative;
-        // margin: auto;
-        padding: 0px;
-        border-top: 1px solid #eee;
+        padding: 10px 0px;
+        border-top: 1px solid $light-gray;
         display: flex;
         align-items: center;
         -webkit-box-shadow: none;
@@ -159,7 +161,7 @@
 
     .c21-divBudge {
         position: absolute;
-        top: 30px;
+        top: 40px;
         right: 0px;
         width: 8px;
         height: 8px;
@@ -167,13 +169,19 @@
         font-size: 1.2em;
         line-height: 8px;
         border-radius: 50%;
-        background-color: red;
+        background-color: $blue;
         color: white;
         font-weight: bold;
         padding: 2px 2px;
         text-align: center;
         margin-right: -10px;
         display: inline-block;
+    }
+
+    .c21-label-button {
+        margin-left: 8px;
+        font-weight: 400;
+        font-size: 1.2em;
     }
       
 }

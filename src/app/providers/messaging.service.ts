@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 // import { AngularFireDatabase } from 'angularfire2/database';
 // import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase';
+import 'firebase/database';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -133,6 +134,7 @@ export class MessagingService {
 
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
+        // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         const msg = new MessageModel(
           childSnapshot.key,
@@ -289,10 +291,10 @@ export class MessagingService {
    */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
      this.g.wdLog(['SEND MESSAGE: ', msg]);
-     this.g.wdLog(['metadata:: ', metadata]);
+     this.g.wdLog(['metadata:: ', metadata.toString()]);
     // const messageString = urlify(msg);
     const that = this;
-    const now: Date = new Date();
+    // const now: Date = new Date();
     // const timestamp = now.valueOf();
     const timestamp =  firebase.database.ServerValue.TIMESTAMP;
     const language = navigator.language;
@@ -335,7 +337,7 @@ export class MessagingService {
 
     this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
-     this.g.wdLog(['messaggio **************', this.urlMessages + conversationWith, attributes]);
+     this.g.wdLog(['messaggio **************', message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {

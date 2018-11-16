@@ -5,7 +5,7 @@ import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
-// import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
@@ -70,6 +70,7 @@ console.log('OK IMPORT 4');
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
+    AngularFirestoreModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,

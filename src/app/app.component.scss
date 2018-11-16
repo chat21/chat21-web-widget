@@ -124,7 +124,7 @@ tiledeskwidget-root{
     }
 
     // === CSS BUTTON === //
-    .c21-button-primary{
+    button.c21-button-primary{
         width: auto;
         height: 40px;
         line-height: 40px;
@@ -132,19 +132,20 @@ tiledeskwidget-root{
         padding: 0 24px;
         opacity: 1;
         text-align: center;
-        font-size: 1.3em;
+        font-size: 1em;
         border-radius: 40px;
         background-color: $theme-color;
         color: #ffffff;
+
         cursor: pointer;
         .c21-label-button {
             margin-left: 8px; 
-            font-weight: 600;
+            font-weight: 400;
         }
     }
-    .c21-button-primary:hover,
-    .c21-button-primary:focus,
-    .c21-button-primary:active {
+    button.c21-button-primary:hover,
+    button.c21-button-primary:focus,
+    button.c21-button-primary:active {
         outline-width: 0px;
         opacity: 0.8;
     }
@@ -242,6 +243,7 @@ tiledeskwidget-root{
             right: 20px;
             overflow: hidden;
             background-color: #ffffff;
+            z-index: 1;
             
             border-radius: 0px;
             box-shadow: $trasp-light-black 0 0 38px;

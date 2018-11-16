@@ -20,63 +20,7 @@
 
   </script> -->
 
-  <script>
-  window.tiledeskSettings = 
-      {
-          projectid: "5b55e806c93dde00143163dd",
-          development: true,
-          calloutTimer: 10,
-          userFullname: "Dario",
-          userEmail: "czone555@gmail.com",
-          wellcomeTitle: "Benvenuti su questa chat",
-          wellcomeMsg: "Come possiamo aiutarti?",
-          logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
-          startFromHome: true,
-          preChatForm: true,
-          autoStart: true
-      };
-
-      (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); 
-        js.id = id; js.async=!0;
-        js.src = "./tiledesk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'tiledesk-jssdk'));
-
-
-      localStorage.setItem("user_fullname", "Andrea from localStorage");
-      localStorage.setItem("user_email", "andrea.leo@f21.it");
-
-
-      window.tileDeskAsyncInit = function() {
-          window.tiledesk.on('loadParams', function(event_data) {
-            window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
-            window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
-            window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
-            window.tiledesk.show();
-            window.tiledesk.open();
-            //window.tiledesk.hide();
-            //window.tiledesk.open();
-        });
-
-        window.tiledesk.on('beforeMessageSend', function(event_data) {
-          var message =  event_data.detail;
-          message.attributes.pagetitle = document.title;
-          message.attributes.userCompany = "Frontiere21";
-        });
-
-        window.tiledesk.on('afterMessageSend', function(event_data) {
-          console.log("afterMessageSend called ", event_data);
-        });
-
-        window.tiledesk.on('isLoggedIn', function(event_data) {
-          console.log("isLoggedIn called ", event_data);
-        });
-        
-      }
-      </script>
+  
 
 </head>
 
@@ -86,7 +30,7 @@
     <!-- <body onload="console.log('onload')"> -->
 
 
-  <!-- <appdashboard-root><div class="loader">
+  <appdashboard-root><div class="loader">
     <svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg>
   </div>
 </appdashboard-root>
@@ -94,7 +38,22 @@
 <script type="text/javascript" src="https://support.tiledesk.com/dashboard/polyfills.6165d09f871edfdcf44f.bundle.js"></script>
 <script type="text/javascript" src="https://support.tiledesk.com/dashboard/scripts.0a5c2942fdd4a53926cd.bundle.js"></script>
 <script type="text/javascript" src="https://support.tiledesk.com/dashboard/main.2f8b9011807a2aad773f.bundle.js"></script>
- -->
 
+
+ <script>
+
+  //  window.tiledeskSettings = 
+  //   {
+  //     projectid: "5b55e806c93dde00143163dd",
+  //   };
+  //   (function(d, s, id) {
+  //     var js, fjs = d.getElementsByTagName(s)[0];
+  //     if (d.getElementById(id)) return;
+  //     js = d.createElement(s); js.id = id; //js.async=!0;
+  //     js.src = "https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/1/036/tiledesk.js";
+  //     fjs.parentNode.insertBefore(js, fjs);
+  //   }(document, 'script', 'tiledesk-jssdk'));
+
+    </script>
 </body>
 </html>

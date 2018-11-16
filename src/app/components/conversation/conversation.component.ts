@@ -576,6 +576,7 @@ export class ConversationComponent implements OnInit {
       // its a file
       this.loadFile();
       this.isFilePendingToUpload = false;
+      // disabilito pulsanti
         this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
     } else {
       if ( this.textInputTextArea.length > 0 ) {
@@ -715,6 +716,7 @@ export class ConversationComponent implements OnInit {
    */
   detectFiles(event) {
       this.g.wdLog(['detectFiles: ', event]);
+
     if (event) {
         this.selectedFiles = event.target.files;
           this.g.wdLog(['AppComponent:detectFiles::selectedFiles', this.selectedFiles]);

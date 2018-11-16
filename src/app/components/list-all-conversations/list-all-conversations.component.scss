@@ -1,3 +1,5 @@
+@import '../../../sass/normalize.css';
+@import '../../../sass/variables';
 
 #c21-app-list-all-conversations {
     position: relative;
@@ -109,6 +111,7 @@
             margin: auto;
             padding: 0px 0px;
             cursor: pointer;
+            border-bottom: 1px solid $light-gray;
 
             .c21-body-conv{
                 position: relative;
@@ -224,7 +227,7 @@
 
     .c21-divBudge {
         position: absolute;
-        top: 30px;
+        top: 40px;
         right: 0px;
         width: 8px;
         height: 8px;
@@ -237,7 +240,7 @@
         font-weight: bold;
         padding: 2px 2px;
         text-align: center;
-        margin-right: -10px;
+        margin-right: 0px;
         display: inline-block;
     }
       

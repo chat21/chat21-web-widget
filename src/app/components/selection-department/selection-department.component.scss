@@ -1,3 +1,5 @@
+@import '../../../sass/normalize.css';
+@import '../../../sass/variables';
 #chat21-selection-department {
     background-color: #ffffff;
     width: 100%;
@@ -32,7 +34,7 @@
                     height: auto;
                     padding: 0;
                     text-align: center;
-                    font-size: 1.6em;
+                    font-size: 1.8em;
                     line-height: normal;
                 }
             }
@@ -42,19 +44,25 @@
         padding: 0px;
         margin: 20px auto;
         .c21-body-header{
-            padding: 10px 30px;
+            position: relative;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0px 30px;
             .c21-message-field {
                 padding: 0;
                 margin: 0;
                 line-height: 1.2em;
-                color: #616161;
-                font-size: 1.5em;
+                color: $gray;
+                font-size: 1.6em;
                 text-align: center;
                 word-wrap: break-word;
             }
         }
         .c21-body-content  {
-            padding: 10px 0px;
+            padding: 10px 0px 40px 0px;
+            position: relative;
             
         }
     }
@@ -74,13 +82,14 @@
     position: relative;
     margin: 15px 0;
     padding: 4px 20px;
-    font-size: 1.6em;
+    font-size: 1.4em;
     text-align: left;
-    color: #616161;
+    color: $black;
     line-height: normal;
+    display: block;
 }
 .chat21-content-modal-select > li:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: $trasp-light-gray;
 }
 .chat21-content-modal-select li.selected:hover {
     /* background-color: #BBD8DC !important;
@@ -94,7 +103,7 @@
     -webkit-box-sizing: initial;
     box-sizing: initial;
     display: inline-block;
-    font-size: 12px;
+    font-size: 1.2em;
     padding: 0px;
     line-height: 24px;
     height: 24px;

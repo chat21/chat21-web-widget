@@ -1,3 +1,6 @@
+@import '../../../sass/variables';
+@import '../../../sass/normalize.css';
+
 #chat21-prechat-form {
         background-color: #ffffff;
         width: 100%;
@@ -23,14 +26,17 @@
                 height: 100%;
                 margin: 0 auto;
                 .c21-header-content {
-                    width: 100%;
+                    width: auto;
                     height: auto;
-                    padding: 0 40px;
+                    top: 6px;
+                    left: 40px;
+                    right: 40px;
                     .c21-title {
                         display: inline-block;
                         width: 100%;
                         height: auto;
                         padding: 0;
+                        margin: 10px 0;
                         text-align: center;
                         font-size: 1.6em;
                         line-height: normal;
@@ -43,6 +49,9 @@
             margin: 20px auto;
             .c21-body-header{
                 padding: 10px 30px;
+                position: relative;
+                left: 0;
+                right: 0;
                 .c21-form-message-field {
                     padding: 0;
                     margin: 0;
@@ -55,6 +64,11 @@
             }
             .c21-body-content  {
                 padding: 10px 30px;
+                position: relative;
+
+                .c21-label-button{
+                    font-size: 1.2em;
+                }
                 #chat21-form-container {
                     padding: 0 0 30px 0;
 
@@ -66,7 +80,7 @@
                         margin: 10px 10px 0px 10px;
                     }
                     .text-danger {
-                        color: #a94442;
+                        color: $danger;
                         font-size: 1em;
                         min-height: 20px;
                         background-color: #ffffff;

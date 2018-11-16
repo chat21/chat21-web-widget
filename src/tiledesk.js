@@ -55,10 +55,10 @@ function appendJs(url) {
     appendJs(tiledeskScriptBaseLocation+'/inline.bundle.js');
     appendJs(tiledeskScriptBaseLocation+'/polyfills.bundle.js');
     
-    // if (window.tiledeskSettings && window.tiledeskSettings.development) {
+    if (window.tiledeskSettings && window.tiledeskSettings.development) {
         appendJs(tiledeskScriptBaseLocation+'/styles.bundle.js');
         appendJs(tiledeskScriptBaseLocation+'/vendor.bundle.js');
-    // }
+    }
     
     appendJs(tiledeskScriptBaseLocation+'/main.bundle.js');
   }
