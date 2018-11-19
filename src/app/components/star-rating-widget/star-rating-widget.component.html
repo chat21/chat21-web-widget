@@ -67,6 +67,7 @@
                                 class="full c21-button" for="star1" title="scarso - 1 star"></label>
                         </fieldset>
                     </div>
+                    <div class="clear"></div>
                     <button *ngIf="g.allowTranscriptDownload !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
@@ -82,7 +83,7 @@
 
                     <div class="c21-step-content">
                         <!-- il tuo voto: -->
-                        <p class="default-text">{{ g.YOUR_RATING }}</p>
+                        
                         <div class="chat21-stars">
                             <span *ngIf="rate>0" class="fa fa-star checked"></span>
                             <span *ngIf="rate>1" class="fa fa-star checked"></span>
@@ -90,10 +91,15 @@
                             <span *ngIf="rate>3" class="fa fa-star checked"></span>
                             <span *ngIf="rate>4" class="fa fa-star checked"></span>
                         </div>
-                        <div class="clear"></div>
+                        
+                        <div class="default-text">{{ g.YOUR_RATING }}</div>
+                        
+
                         <!-- Scrivi la tua opinione...(opzionale) -->
                         <textarea #textbox rows="1" id="chat21-message-rate-context" class='textarea-rate'
                             placeholder="{{ g.WRITE_YOUR_OPINION }}">{{message}}</textarea>
+                        <div class="clear"></div>
+
                         <button class="btn-primary" [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
                             (click)="sendRate()">{{ g.SUBMIT }}</button>
                     </div>
@@ -112,8 +118,8 @@
                 
                     <!-- CONTENT -->
                     <div class="c21-step-content">
-                        <h1 class="default-title">{{ g.THANK_YOU_FOR_YOUR_EVALUATION }}</h1>
-                        <p class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</p>
+                        <div class="default-title">{{ g.THANK_YOU_FOR_YOUR_EVALUATION }}</div>
+                        <div class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</div>
                     </div>
                     
                     <button class="btn-primary" 

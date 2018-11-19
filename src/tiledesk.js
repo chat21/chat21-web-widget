@@ -1,6 +1,6 @@
 function ready(callbackFunction){
     if(document.readyState != 'loading')
-      callbackFunction(event)
+      callbackFunction()
     else
       document.addEventListener("DOMContentLoaded", callbackFunction)
 }

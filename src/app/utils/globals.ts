@@ -277,7 +277,7 @@ export class Globals {
 
     this.marginX = '20px';                      /** set margin left or rigth widget  */
     this.marginY = '20px';                      /** set margin bottom widget */
-    this.isLogEnabled = true;
+    this.isLogEnabled = false;
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 

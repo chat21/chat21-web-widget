@@ -1,4 +1,3 @@
-console.log('OK IMPORT 0');
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
@@ -10,8 +9,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
-console.log('OK IMPORT 1');
-
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +16,6 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
-console.log('OK IMPORT 2');
 
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
@@ -35,7 +31,6 @@ import { SelectionDepartmentComponent } from './components/selection-department/
 // import { NewConversationComponent } from './components/new-conversation/new-conversation.component';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
 import { HomeComponent } from './components/home/home.component';
-console.log('OK IMPORT 3');
 
 import { Globals } from './utils/globals';
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
@@ -46,7 +41,9 @@ import { PreviewLoadingFilesComponent } from './components/preview-loading-files
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
-console.log('OK IMPORT 4');
+
+// Import the library module
+import { AngularResizedEventModule } from 'angular-resize-event';
 
 @NgModule({
   declarations: [
@@ -84,6 +81,7 @@ console.log('OK IMPORT 4');
       storageType: 'localStorage'
      }),
     MomentModule,
+    AngularResizedEventModule
   ],
   providers: [
     AuthService,

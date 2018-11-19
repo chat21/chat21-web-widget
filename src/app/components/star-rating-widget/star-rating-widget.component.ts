@@ -92,12 +92,12 @@ export class StarRatingWidgetComponent implements OnInit {
       response => {
          this.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
-        that.closeRate();
+        that.nextStep();
       },
       errMsg => {
         // console.error('httpSendRate ERROR MESSAGE', errMsg);
         // window.alert('MSG_GENERIC_SERVICE_ERROR');
-        that.closeRate();
+        that.nextStep();
       },
       () => {
         //  this.g.wdLog(['API ERROR NESSUNO');

@@ -5,55 +5,26 @@
   <title>Tilechat Widget</title>
   <base href="./">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- <script>
-    function ready(callbackFunction){
-      if(document.readyState != 'loading')
-        callbackFunction(event)
-      else
-        document.addEventListener("DOMContentLoaded", callbackFunction)
-    }
-    ready(event => {
-      console.log('DOM is ready.')
-    });
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
-  </script> -->
-
-  
+  <script>
+    window.tiledeskSettings = 
+    {
+      projectid: "5b55e806c93dde00143163dd",
+    };
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id; //js.async=!0;
+      js.src = "https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/1/048/tiledesk.js";
+      //js.src = "./tiledesk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'tiledesk-jssdk'));
+  </script>
 
 </head>
 
-
-
 <body>
-    <!-- <body onload="console.log('onload')"> -->
-
-
-  <appdashboard-root><div class="loader">
-    <svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg>
-  </div>
-</appdashboard-root>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/inline.b4980b10908bd07ff0c9.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/polyfills.6165d09f871edfdcf44f.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/scripts.0a5c2942fdd4a53926cd.bundle.js"></script>
-<script type="text/javascript" src="https://support.tiledesk.com/dashboard/main.2f8b9011807a2aad773f.bundle.js"></script>
-
-
- <script>
-
-  //  window.tiledeskSettings = 
-  //   {
-  //     projectid: "5b55e806c93dde00143163dd",
-  //   };
-  //   (function(d, s, id) {
-  //     var js, fjs = d.getElementsByTagName(s)[0];
-  //     if (d.getElementById(id)) return;
-  //     js = d.createElement(s); js.id = id; //js.async=!0;
-  //     js.src = "https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/1/036/tiledesk.js";
-  //     fjs.parentNode.insertBefore(js, fjs);
-  //   }(document, 'script', 'tiledesk-jssdk'));
-
-    </script>
 </body>
+
 </html>

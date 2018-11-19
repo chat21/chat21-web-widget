@@ -1,11 +1,10 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
+
 .c21-button {
   cursor: pointer;
 }
-.default-text {
-  margin-bottom: 0px;
-}
+
 /* star-rating */
 .default-title {
   font-size: 2em;
@@ -14,10 +13,11 @@
   color:#616161;
 }
 .default-text {
-  font-size: 1.3em;
+  font-size: 1.4em;
   font-family:'Roboto';
   line-height: 1.2em;
   color:#616161;
+  margin: 0 0 20px 0;
 }
 
 #chat21-star-rating-widget {
@@ -54,13 +54,14 @@
               left: 30px;
               right: 30px;
               .c21-title {
-                  display: inline-block;
-                  width: 100%;
-                  height: auto;
-                  padding: 0;
-                  text-align: center;
-                  font-size: 1.6em;
-                  line-height: normal;
+                display: inline-block;
+                width: 100%;
+                height: auto;
+                padding: 0;
+                margin: 16px 0;
+                text-align: center;
+                font-size: 1.6em;
+                line-height: normal;
               }
           }
       }
@@ -241,11 +242,13 @@
 
   .chat21-stars{
     padding: 0px;
-    position: relative;
+    position: absolute;
+    text-align: right;
     display: block;
-    float: right;
-    top: -15px;
-    right: 36px;
+    top: 0px;
+    right: 40px;
+    /* left: 00px; */
+    width: 70px;
   }
   .chat21-stars > span:before { 
     margin: 0px;
@@ -265,7 +268,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border-radius: 5px;
-    padding: 6px;
+    padding: 10px;
     color: #1a1a1a;
     width: 80%;
     resize: none;
@@ -273,6 +276,8 @@
     border-radius: 0px;
     height: 150px;
     background-color: #efefef;
+    text-align: left;
+
   }
   .textarea-rate:hover,
   .textarea-rate:focus,
@@ -284,6 +289,7 @@
 
 .c21-step-content{
   margin: 10px 0 20px 0;
+  position: relative;
 }
 
 .btn-primary
@@ -299,6 +305,7 @@
             margin-right: 0px;
             margin-bottom: 5px;
             color: #9a9a9a;
+            padding: 0px 10px;
         }
 
         .btn-primary 

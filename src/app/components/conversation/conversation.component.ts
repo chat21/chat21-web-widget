@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
@@ -21,14 +21,22 @@ import { UploadModel } from '../../../models/upload';
 import { isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 // import { detectIfIsMobile} from './utils/utils';
 
+
+// Import the resized event model
+import { ResizedEvent } from 'angular-resize-event/resized-event';
+
+
+
 @Component({
   selector: 'tiledeskwidget-conversation',
   templateUrl: './conversation.component.html',
-  styleUrls: ['./conversation.component.scss']
+  styleUrls: ['./conversation.component.scss'],
+  // tslint:disable-next-line:use-host-property-decorator
+  host: {'(window:resize)': 'onResize($event)'}
 })
 export class ConversationComponent implements OnInit {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
-
+  //@HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
   @Output() eventCloseWidget = new EventEmitter();
@@ -41,6 +49,7 @@ export class ConversationComponent implements OnInit {
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
   writingMessage = '';    // messaggio sta scrivendo...
   isMenuShow = false;
+  isScrolling = false;
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -105,6 +114,7 @@ export class ConversationComponent implements OnInit {
   constructor(
     public el: ElementRef,
     public g: Globals,
+    private ngZone: NgZone,
     public messagingService: MessagingService,
     public upSvc: UploadService,
     public contactService: ContactService,
@@ -112,7 +122,20 @@ export class ConversationComponent implements OnInit {
     public starRatingWidgetService: StarRatingWidgetService
   ) {
     this.initAll();
+    const that = this;
+
+    
+
+
   }
+
+  // onResized(event: ResizedEvent): void {
+  //   const that = this;
+  //   this.ngZone.run(() => {
+  //     that.g.wdLog([' ResizedEvent  ', event]);
+  //     //that.scrollToBottom();
+  //   });
+  // }
 
   ngOnInit() {
     // this.initAll();
@@ -154,6 +177,10 @@ export class ConversationComponent implements OnInit {
     // this.checkListMessages();
   }
 
+  onResize(event) {
+    // tslint:disable-next-line:no-unused-expression
+    this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
+  }
 
 
   /**
@@ -668,9 +695,10 @@ export class ConversationComponent implements OnInit {
     //   this.g.wdLog(['divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
     //   this.g.wdLog(['divScrollMe.clientHeight ::', divScrollMe.clientHeight);
     if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 40)) {
-        //   this.g.wdLog(['SONO ALLA FINE ::');
+        this.g.wdLog(['SONO ALLA FINE ::']);
         return true;
     } else {
+        this.g.wdLog([' NON SONO ALLA FINE ::']);
         return false;
     }
   }
@@ -681,27 +709,32 @@ export class ConversationComponent implements OnInit {
   */
   scrollToBottom() {
     const that = this;
-    // const divScrollMe = this.scrollMe.nativeElement;
-    setTimeout(function () {
-      //   this.g.wdLog(['scrollToBottom ::', divID);
-      try {
-        const objDiv = document.getElementById(that.idDivScroll);
-        //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-        objDiv.scrollIntoView(false);
+    if ( this.isScrolling === false ) {
 
-        //   this.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
-        //   this.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
-        //   this.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
+      // const divScrollMe = this.scrollMe.nativeElement;
+      setTimeout(function () {
+        //   this.g.wdLog(['scrollToBottom ::', divID);
+        try {
+          this.isScrolling = true;
+          const objDiv = document.getElementById(that.idDivScroll);
+          //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+          objDiv.scrollIntoView(false);
+          this.isScrolling = false;
+          //   this.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
+          //   this.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
+          //   this.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
 
-        // try {
-        //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
-        // } catch ( err ) { }
-        // // that.badgeNewMessages = 0;
-      } catch (err) {
-          this.g.wdLog(['RIPROVO ::']);
-        // that.scrollToBottom();
-      }
-    }, 0);
+          // try {
+          //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
+          // } catch ( err ) { }
+          // // that.badgeNewMessages = 0;
+        } catch (err) {
+            // this.g.wdLog(['RIPROVO ::']);
+            this.isScrolling = false;
+          // that.scrollToBottom();
+        }
+      }, 0);
+    }
   }
 
   // ========= end:: functions scroll position ======= //
@@ -725,8 +758,8 @@ export class ConversationComponent implements OnInit {
         } else {
           this.isFilePendingToUpload = true;
         }
-          this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
-          this.g.wdLog(['fileChange: ', event.target.files]);
+        this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
+        this.g.wdLog(['fileChange: ', event.target.files]);
         if (event.target.files.length <= 0) {
           this.isFilePendingToUpload = false;
         } else {
@@ -875,6 +908,7 @@ export class ConversationComponent implements OnInit {
           sizeImage.width = MAX_WIDTH_IMAGES;
           sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
       }
+      // this.scrollToBottom();
       return sizeImage; // h.toString();
   }
 
