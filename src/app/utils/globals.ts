@@ -287,10 +287,10 @@ export class Globals {
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
-    // this.isSoundActive = true;
     this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
     this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
+    this.isSoundActive = true;
     // tslint:disable-next-line:max-line-length
     this.isSoundActive = (localStorage.getItem('isSoundActive')) ? true : false;
     this.conversationsBadge = 0;

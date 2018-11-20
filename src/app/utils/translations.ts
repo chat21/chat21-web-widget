@@ -44,7 +44,7 @@ export const en = {
     'SOUND_ON': 'sound on',
     'LOGOUT': 'logout',
     'CLOSE': 'close',
-    'PREV_CONVERSATIONS': 'Previous conversations',
+    'PREV_CONVERSATIONS': 'Your conversations',
     'YOU': 'Tu',
     'SHOW_ALL_CONV': 'show all'
 };
@@ -95,7 +95,7 @@ export const it = {
     'SOUND_ON': 'suono acceso',
     'LOGOUT': 'disconnetti',
     'CLOSE': 'chiudi',
-    'PREV_CONVERSATIONS': 'Conversazioni precedenti',
+    'PREV_CONVERSATIONS': 'Le tue conversazioni',
     'YOU': 'Tu',
     'SHOW_ALL_CONV': 'vedi tutte'
 };

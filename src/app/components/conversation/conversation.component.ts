@@ -1078,4 +1078,9 @@ export class ConversationComponent implements OnInit {
       this.audio.play();
     }
   }
+
+  hideMenuOptions() {
+    this.g.wdLog(['hideMenuOptions']);
+    this.isMenuShow  = false;
+ }
 }

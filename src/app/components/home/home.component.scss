@@ -94,8 +94,9 @@
             position: absolute;
             color: $gray;
             top: 0;
-            left: 50px;
-            right: 50px;
+            left: 80px;
+            right: 80px;
+            cursor: pointer;
             a {
                 text-decoration: none;
                 color: $gray;
@@ -103,14 +104,18 @@
                 font-weight: 500;
                 line-height: 22px;
             }
+            b{
+                font-weight: bolder;
+            }
         }
         .build_version {
             display: none;
             font-size: 1em;
             color: $gray;
             position: absolute;
-            bottom: 5px;
+            bottom: 0px;
             right: 10px;
+            line-height: 30px;
         }
 
         #c21-powered-by:hover {

@@ -52,23 +52,23 @@
                 <div *ngIf="step==0" class="step-rate">
 
                     <!-- CONTENT -->
-                    <div class="modal-content">
+                    <div class="c21-modal-content">
                         <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
                         <fieldset class="chat21-rating">
-                            <input type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" /><label
-                                class="full c21-button" for="star5" title="eccellente - 5 stars"></label>
-                            <input type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" /><label
-                                class="full c21-button" for="star4" title="ottimo - 4 stars"></label>
-                            <input type="radio" id="star3" name="rating" value="3" (click)="openRate($event)" /><label
-                                class="full c21-button" for="star3" title="buono - 3 stars"></label>
-                            <input type="radio" id="star2" name="rating" value="2" (click)="openRate($event)" /><label
-                                class="full c21-button" for="star2" title="sufficiente - 2 stars"></label>
-                            <input type="radio" id="star1" name="rating" value="1" (click)="openRate($event)" /><label
-                                class="full c21-button" for="star1" title="scarso - 1 star"></label>
+                            <input class="c21-input-star" type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" />
+                            <label class="full c21-button" for="star5" title="eccellente - 5 stars"></label>
+                            <input class="c21-input-star" type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" />
+                            <label class="full c21-button" for="star4" title="ottimo - 4 stars"></label>
+                            <input class="c21-input-star" type="radio" id="star3" name="rating" value="3" (click)="openRate($event)" />
+                            <label class="full c21-button" for="star3" title="buono - 3 stars"></label>
+                            <input class="c21-input-star" type="radio" id="star2" name="rating" value="2" (click)="openRate($event)" />
+                            <label class="full c21-button" for="star2" title="sufficiente - 2 stars"></label>
+                            <input class="c21-input-star" type="radio" id="star1" name="rating" value="1" (click)="openRate($event)" />
+                            <label class="full c21-button" for="star1" title="scarso - 1 star"></label>
                         </fieldset>
                     </div>
                     <div class="clear"></div>
-                    <button *ngIf="g.allowTranscriptDownload !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    <button *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                     </button>
@@ -100,14 +100,16 @@
                             placeholder="{{ g.WRITE_YOUR_OPINION }}">{{message}}</textarea>
                         <div class="clear"></div>
 
-                        <button class="btn-primary" [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
+                        <button class="c21-button-primary" [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
                             (click)="sendRate()">{{ g.SUBMIT }}</button>
+
+                        <button *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                            (click)="dowloadTranscript()">
+                            <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                        </button>
                     </div>
 
-                    <button *ngIf="g.allowTranscriptDownload !== true" class="btn-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
-                        (click)="dowloadTranscript()">
-                        <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
-                    </button>
+                    
 
                 </div>
 
@@ -122,14 +124,14 @@
                         <div class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</div>
                     </div>
                     
-                    <button class="btn-primary" 
+                    <button class="c21-button-primary" 
                     [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
                     (click)="returnClosePage()">
                         <span>{{ g.CLOSE }}</span>
                     </button>
 
                     <button *ngIf="g.allowTranscriptDownload !== true" 
-                    class="btn-primary" 
+                    class="c21-button-primary" 
                     [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                     (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>

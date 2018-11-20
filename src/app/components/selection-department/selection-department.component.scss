@@ -42,14 +42,14 @@
     }
     .c21-body {
         padding: 0px;
-        margin: 20px auto;
+        // margin: 0px auto;
         .c21-body-header{
             position: relative;
             top: 0;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 0px 30px;
+            padding: 20px 30px 0px 30px;
             .c21-message-field {
                 padding: 0;
                 margin: 0;
@@ -61,7 +61,7 @@
             }
         }
         .c21-body-content  {
-            padding: 10px 0px 40px 0px;
+            padding: 0px 0px 40px 0px;
             position: relative;
             
         }
