@@ -370,8 +370,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         that.isLogged = true;
                         console.log('IS_LOGGED', 'AppComponent:constructor:zone-if', that.isLogged);
                         console.log('isLogged', that.isLogged);
+                        that.openIfCallOutTimer();
 
-                        this.openIfCallOutTimer();
+
+                        that.authService.setupMyPresence(that.senderId, that.tenant);
 
                     } else {
                         that.isLogged = false;
@@ -421,6 +423,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.addComponentToWindow(this.ngZone);
 
     }
+
+
 
     detectIfIsMobile() {
         this.isMobile = /Android|iPhone/i.test(window.navigator.userAgent);

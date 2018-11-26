@@ -104,4 +104,58 @@ export class AuthService {
       .signOut();
   }
 
+
+
+    /**
+   * 1 - imposto reference online/offline
+   * 2 - imposto reference lastConnection
+   * 3 - mi sincronizzo con /.info/connected
+   * 4 - se il valore esiste l'utente è online
+   * 5 - aggiungo nodo a connection (true)
+   * 6 - aggiungo job su onDisconnect di deviceConnectionRef che rimuove nodo connection
+   * 7 - aggiungo job su onDisconnect di lastOnlineRef che imposta timestamp
+   * 8 - salvo reference connected nel singlelton !!!!! DA FARE
+   */
+  setupMyPresence(userid, tenant) {
+    const that = this;
+    const myConnectionsRef = this.onlineRefForUser(userid, tenant);
+    const lastOnlineRef = this.lastOnlineRefForUser(userid, tenant);
+    const connectedRefURL = '/.info/connected';
+    const conn = firebase.database().ref(connectedRefURL);
+    conn.on('value', function(dataSnapshot) {
+      if (dataSnapshot.val()) {
+        console.log('self.deviceConnectionRef: ', myConnectionsRef);
+        if (myConnectionsRef) {
+          const conection = true;
+          myConnectionsRef.push(conection);
+          myConnectionsRef.onDisconnect().remove();
+          const now: Date = new Date();
+          const timestamp = now.valueOf();
+          lastOnlineRef.onDisconnect().set(timestamp);
+        } else {
+          console.log('This is an error. self.deviceConnectionRef already set. Cannot be set again.');
+        }
+      }
+    });
+  }
+  /**
+   * recupero la reference di lastOnline del currentUser
+   * usata in setupMyPresence
+   */
+  lastOnlineRefForUser(userid, tenant) {
+    const lastOnlineRefURL = '/apps/' + tenant + '/presence/' + userid + '/lastOnline';
+    const lastOnlineRef = firebase.database().ref().child(lastOnlineRefURL);
+    return lastOnlineRef;
+  }
+
+  /**
+   * recupero la reference di connections (online/offline) del currentUser
+   * usata in setupMyPresence
+   */
+  onlineRefForUser(userid, tenant) {
+    const myConnectionsRefURL = '/apps/' + tenant + '/presence/' + userid + '/connections';
+    const connectionsRef = firebase.database().ref().child(myConnectionsRefURL);
+    return connectionsRef;
+  }
+
 }
