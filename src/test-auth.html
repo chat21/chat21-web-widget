@@ -14,8 +14,9 @@
               projectid: "5b55e806c93dde00143163dd",
               development: true,
               calloutTimer: 10,
-              autoStart:true,
-              startFromHome: false
+              autoStart:false,
+              startFromHome: false,
+              isLogEnabled: true
           };
 
       (function(d, s, id) {
@@ -31,66 +32,17 @@
 
     <script type="application/javascript">    
 
-      function createCORSRequest(method, url, async) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-
-          // Check if the XMLHttpRequest object has a "withCredentials" property.
-          // "withCredentials" only exists on XMLHTTPRequest2 objects.
-          xhr.open(method, url, async);
-          // console.log("xhr12");
-        } else if (typeof XDomainRequest != "undefined") {
-
-          // Otherwise, check if XDomainRequest.
-          // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-          xhr = new XDomainRequest();
-          xhr.open(method, url);
-          // console.log("xhr111");
-
-        } else {
-
-          // Otherwise, CORS is not supported by the browser.
-          xhr = null;
-          // console.log("xhrnull");
-
-        }
-        return xhr;
-      }
+      
 
 
       window.tileDeskAsyncInit = function() {
       window.tiledesk.on('loadParams', function(event_data) {
         console.log("loadParams", event_data);
         console.log("window.tiledesk", window.tiledesk);
-        
-        var httpRequest = createCORSRequest('GET', 'http://192.168.1.56:5000/',false); //set async to false because loadParams must return when the get is complete
-        if (!httpRequest) {
-          throw new Error('CORS not supported');
-        }
-
-        console.log("onreadystatechange1");
-       
-        httpRequest.onload = function() {
-          if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-              // alert(httpRequest.responseText);
-              console.log("httpRequest.responseText", httpRequest.responseText);
-              window.tiledesk.signInWithCustomToken(httpRequest.responseText);
-              return true;
-            } else {
-              alert('There was a problem with the request.');
-            }
-          }         
-        };
-
-        httpRequest.onerror = function() {
-          console.error('There was an error!');
-        };
-
-        httpRequest.send();         
-         return false;
-       });
-      }
+      
+        window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiQW5kcmVhIiwiY29nbm9tZSI6ImxlbyIsImlhdCI6MTU0MzQyNDU3MCwiZXhwIjoxNTQzNDI0NTczfQ.x1QtbKuVprZjgPv9DaeGa7cnzqtZRivgf5Dhv36qNG8");
+      }); 
+    }
     </script>
 
 </body>

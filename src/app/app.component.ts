@@ -448,8 +448,18 @@ export class AppComponent implements OnInit, OnDestroy {
                          this.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
+                    }, error => {
+                        console.error('Error decoding token: ', error);
                     });
+                    // , () => {
+                    //     console.log('!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
+                    // });
+            }, error => {
+                console.error('Error creating firebase token: ', error);
             });
+            // , () => {
+                // console.log('!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
+            // });
     }
 
     /** */

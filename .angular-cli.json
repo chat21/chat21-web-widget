@@ -13,7 +13,8 @@
         "tiledesk.js",
         "test.html",
         "test-buttons.html",
-        "test-auth.html"
+        "test-auth.html",
+        "test-auth-remote.html"
       ],
       "index": "index.html",
       "main": "main.ts",
