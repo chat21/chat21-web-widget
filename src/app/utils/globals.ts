@@ -4,7 +4,8 @@ import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
 import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
 import { DepartmentModel } from '../../models/department';
-import { getParameterByName } from '../utils/utils';
+import { User } from '../../models/User';
+import { convertColorToRGBA, getParameterByName } from '../utils/utils';
 
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
@@ -32,6 +33,7 @@ export class Globals {
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
+  availableAgents: Array<User> = [];
 
   attributes: any;
   token: string;
@@ -44,6 +46,11 @@ export class Globals {
   departmentDefault: DepartmentModel;
   isOpenMenuOptions: boolean;
 
+  areAgentsAvailable = false;
+  areAgentsAvailableText: string;
+  availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
+  signInWithCustomToken: boolean;
+  displayEyeCatcherCard: string;
 
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
@@ -72,6 +79,7 @@ export class Globals {
   RATE_CHAT: string;
   WELLCOME_TITLE: string;
   WELLCOME_MSG: string;
+  WELLCOME: string;
   OPTIONS: string;
   SOUND_ON: string;
   SOUND_OFF: string;
@@ -88,6 +96,9 @@ export class Globals {
   PREV_CONVERSATIONS: string;
   YOU: string;
   SHOW_ALL_CONV: string;
+  START_A_CONVERSATION: string;
+  NO_CONVERSATION: string;
+  SEE_PREVIOUS: string;
 
 
 
@@ -198,6 +209,7 @@ export class Globals {
     this.RATE_CHAT = this.translatorService.translate('RATE_CHAT');
     this.WELLCOME_TITLE = this.translatorService.translate('WELLCOME_TITLE');
     this.WELLCOME_MSG = this.translatorService.translate('WELLCOME_MSG');
+    this.WELLCOME = this.translatorService.translate('WELLCOME');
     this.OPTIONS = this.translatorService.translate('OPTIONS');
     this.SOUND_ON = this.translatorService.translate('SOUND_ON');
     this.SOUND_OFF = this.translatorService.translate('SOUND_OFF');
@@ -216,6 +228,9 @@ export class Globals {
     this.PREV_CONVERSATIONS = this.translatorService.translate('PREV_CONVERSATIONS');
     this.YOU = this.translatorService.translate('YOU');
     this.SHOW_ALL_CONV = this.translatorService.translate('SHOW_ALL_CONV');
+    this.START_A_CONVERSATION = this.translatorService.translate('START_A_CONVERSATION');
+    this.NO_CONVERSATION = this.translatorService.translate('NO_CONVERSATION');
+    this.SEE_PREVIOUS = this.translatorService.translate('SEE_PREVIOUS');
   }
 
   /**
@@ -258,10 +273,10 @@ export class Globals {
     this.fullscreenMode = false;                /** if it is true, the chat window is open in fullscreen mode. Permitted values: true, false. Default value : false */
 
     // tslint:disable-next-line:max-line-length
-    this.themeColor = '#2a6ac1';                /** allows you to change the main widget's color (color of the header, color of the launcher button, other minor elements). Permitted values: Hex color codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101) */
+    this.themeColor = convertColorToRGBA('#2a6ac1', 100);               /** allows you to change the main widget's color (color of the header, color of the launcher button, other minor elements). Permitted values: Hex color codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101) */
 
     // tslint:disable-next-line:max-line-length
-    this.themeForegroundColor = '#ffffff';      /** allows you to change text and icons' color. Permitted values: Hex color codes, e.g. #425635 and RGB color codes, e.g. rgb(66,86,53) */
+    this.themeForegroundColor = convertColorToRGBA('#ffffff', 100);    /** allows you to change text and icons' color. Permitted values: Hex color codes, e.g. #425635 and RGB color codes, e.g. rgb(66,86,53) */
 
     // tslint:disable-next-line:max-line-length
     this.showWidgetNameInConversation = false;  /** If you want to display the widget title in the conversations, set the showWidgetNameInConversation field to true. It is advisable if you need to manage multiple projects. Value type : boolean. The default value is false. */
@@ -296,6 +311,8 @@ export class Globals {
     this.conversationsBadge = 0;
     this.activeConversation = '';
     this.isOpenMenuOptions = false;             /** open/close menu options  */
+    this.signInWithCustomToken = false;
+    this.displayEyeCatcherCard = 'none';
     // ============ END: SET INTERNAL PARAMETERS ==============//
 
   }
@@ -517,11 +534,11 @@ export class Globals {
     }
     TEMP = window['tiledeskSettings']['themeColor'];
     if (TEMP !== undefined) {
-      this.themeColor = TEMP;
+      this.themeColor = convertColorToRGBA(TEMP, 100);
     }
     TEMP = window['tiledeskSettings']['themeForegroundColor'];
     if (TEMP !== undefined) {
-      this.themeForegroundColor = TEMP;
+      this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
     TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
     if (TEMP !== undefined) {
@@ -639,10 +656,12 @@ export class Globals {
       this.fullscreenMode = true;
     }
     if (this.getParameterByName('tiledesk_themecolor')) {
-      this.themeColor = this.getParameterByName('tiledesk_themecolor');
+      const TEMP = this.getParameterByName('tiledesk_themecolor');
+      this.themeColor = convertColorToRGBA(TEMP, 100);
     }
     if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
-      this.themeForegroundColor = this.getParameterByName('tiledesk_themeforegroundcolor');
+      const TEMP = this.getParameterByName('tiledesk_themeforegroundcolor');
+      this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
     if (this.getParameterByName('tiledesk_allowtranscriptdownload')) {
       this.allowTranscriptDownload = true;

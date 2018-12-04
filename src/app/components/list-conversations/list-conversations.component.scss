@@ -16,33 +16,35 @@
         .c21-title{
             font-size: 1.4em;
             font-weight: 400;
+            max-width: 200px;
             line-height: normal;
-            padding: 16px 24px;
+            padding: 16px 0px 16px 24px;
             float:left;
         }
         .c21-button{
             font-size: 1.2em;
             margin: 0px;
             line-height: normal;
-            padding: 17px 24px;
+            padding: 17px 24px 17px 5px;
             float: right;
             fill: $blue;
         }
     }
     .c21-body {
         position: relative;
-        display: block;
-        width: 100%;
+        display: inline-block;
+        width: auto;
         height: auto;
         top: 0px;
         font-size: 1em;
         -webkit-box-shadow: none;
         box-shadow: none;
         overflow: hidden;
-
+        margin: 0px 0px 0 0px;
 
         .c21-item-conversation {
             width: 100%;
+            min-width: 344px;
             height: auto;
             position: relative;
             margin: auto;
@@ -54,7 +56,8 @@
                 border-top: 1px solid #eee;
                 // width: calc(100% - 48px);
                 width: auto;
-                margin: 0 24px;
+                // margin: 0 24px;
+                margin: 0px 20px;
                 position: relative;
                 display: flex;
                 align-items: center;
@@ -145,19 +148,43 @@
             outline-width: 0px;
             background-color: #fafafa;
         }
+
+        .c21-pallozzo{
+            display: inline;
+        }
+
+        .c21-ball {
+            border: 2px solid #ffffff;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            text-align: center;
+            margin-left: -20px;
+            .c21-ball-label {
+                color: #ffffff;
+                margin: auto;
+                font-size: 20px;
+                user-select: none;
+                font-weight: 500;
+            }
+        }
         
     }
     .c21-footer {
         width: auto;
-        margin: 0 24px;
+        margin: 0 20px;
         height: auto;
         position: relative;
-        padding: 10px 0px;
-        border-top: 1px solid $light-gray;
-        display: flex;
+        padding: 0 0 10px 0;
+        border-top: 0px solid $light-gray;
+        display: inline-block;
         align-items: center;
         -webkit-box-shadow: none;
         box-shadow: none;
+        vertical-align: top;
     }
 
     .c21-divBudge {
@@ -175,7 +202,7 @@
         font-weight: bold;
         padding: 2px 2px;
         text-align: center;
-        margin-right: -10px;
+        margin-right: 0px;
         display: inline-block;
     }
 
@@ -184,6 +211,9 @@
         font-weight: 400;
         font-size: 1.2em;
     }
+
+
+    
       
 }
   

@@ -67,7 +67,6 @@ export class ListAllConversationsComponent implements OnInit {
     this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
 
-
     const that = this;
     const subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
       this.ngZone.run(() => {
@@ -75,6 +74,7 @@ export class ListAllConversationsComponent implements OnInit {
          this.g.wdLog([' conversations:::: ', that.conversations]);
       });
     });
+
     // this.subscriptions.push(subAllConversations);
   }
 

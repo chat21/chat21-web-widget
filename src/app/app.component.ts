@@ -13,11 +13,12 @@ import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { TranslatorService } from './providers/translator.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
-
+import { AgentAvailabilityService } from './providers/agent-availability.service';
 
 
 // utils
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
+
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -74,7 +75,8 @@ export class AppComponent implements OnInit, OnDestroy {
         public authService: AuthService,
         public messagingService: MessagingService,
         public contactService: ContactService,
-        public chatPresenceHandlerService: ChatPresenceHandlerService
+        public chatPresenceHandlerService: ChatPresenceHandlerService,
+        private agentAvailabilityService: AgentAvailabilityService
     ) {
 
     }
@@ -154,6 +156,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
+
+        this.startNwConversation();
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
         this.g.lang = setLanguage(this.translatorService);
@@ -183,7 +187,42 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.chatPresenceHandlerService.initialize();
 
+
+        this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
+        this.setAvailableAgentsStatus();
+
     }
+
+
+
+    /**
+   * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
+   * per verificare se c'è un agent disponibile
+   */
+  private setAvailableAgentsStatus() {
+    const that = this;
+    this.agentAvailabilityService
+    .getAvailableAgents(this.g.projectid)
+    .subscribe( (availableAgents) => {
+      this.g.wdLog(['availableAgents->', availableAgents]);
+      if (availableAgents.length <= 0) {
+        that.g.areAgentsAvailable = false;
+        that.g.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
+        //that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+      } else {
+        that.g.areAgentsAvailable = true;
+        that.g.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
+        // add first message
+        this.g.availableAgents = availableAgents;
+        //that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+      }
+      that.g.availableAgentsStatus = true;
+      that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.g.areAgentsAvailableText]);
+    }, (error) => {
+      console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+    }, () => {
+    });
+  }
 
 
     // ========= begin:: GET DEPARTEMENTS ============//
@@ -198,7 +237,7 @@ export class AppComponent implements OnInit, OnDestroy {
          this.g.wdLog(['getMongDbDepartments ::::', this.g.projectid]);
         this.messagingService.getMongDbDepartments(this.g.projectid)
         .subscribe(response => {
-            //  this.g.wdLog(['response DEP ::::', response);
+            that.g.wdLog(['response DEP ::::', response]);
             that.g.departments = response;
             that.initDepartments();
         },
@@ -219,7 +258,7 @@ export class AppComponent implements OnInit, OnDestroy {
     initDepartments() {
         this.g.departmentSelected = null;
         this.g.departmentDefault = null;
-         this.g.wdLog(['SET DEPARTMENT DEFAULT ::::', this.g.departments[0]]);
+        this.g.wdLog(['SET DEPARTMENT DEFAULT ::::', this.g.departments[0]]);
         this.setDepartment(this.g.departments[0]);
         let i = 0;
         this.g.departments.forEach(department => {
@@ -232,13 +271,15 @@ export class AppComponent implements OnInit, OnDestroy {
         });
         if (this.g.departments.length === 1) {
             // UN SOLO DEPARTMENT
-             this.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[0]]);
+            this.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[0]]);
             this.setDepartment(this.g.departments[0]);
-            return false;
+            //return false;
         } else if (this.g.departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
+            this.g.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', this.g.departments[0]]);
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
+            this.g.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', this.g.departments[0]]);
         }
 
         /********** LOGIN  ***********/
@@ -440,6 +481,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 that.authService.decode(token, that.g.projectid)
                     .subscribe(resDec => {
                          this.g.wdLog(['resDec', resDec.decoded]);
+                        that.g.signInWithCustomToken = true;
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
                         that.g.attributes.userEmail = resDec.decoded.email;
@@ -489,7 +531,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** open popup conversation */
     private f21_open() {
-         this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
+        this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
         if (this.g.senderId) {
             this.g.isOpen = true; // !this.isOpen;
             this.isInitialized = true;
@@ -510,6 +552,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     // ============ begin: functions pass values to external ============//
+    // private setSubscriptionNewMsg() {
+    //     const that = this;
+    //     const obsAddedMsg: Subscription = this.messagingService.obsAddedMsg
+    //     .subscribe(msg => {
+    //         console.log('msg:::::' + msg);
+    //         const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: msg });
+    //         this.el.nativeElement.dispatchEvent(beforeMessageRender);
+    //     });
+    // }
+
     /** */
     private triggeisLoggedInEvent() {
          this.g.wdLog([' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged]);
@@ -524,6 +576,13 @@ export class AppComponent implements OnInit, OnDestroy {
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
         this.el.nativeElement.dispatchEvent(loadParams);
     }
+
+    /** */
+    // private triggetBeforeMessageRender(text) {
+    //     this.g.wdLog([' ---------------- triggetBeforeMessageRender ---------------- ', this.g.default_settings]);
+    //     const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: '{json}' });
+    //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
+    // }
     // ============ end: functions pass values to external ============//
 
 
@@ -604,7 +663,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     // ========= begin:: CALLBACK FUNCTIONS ============//
-
     /**
      * MOBILE VERSION:
      * onClick button close widget
@@ -618,6 +676,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * onClick button open/close widget
      */
     openCloseWidget($event) {
+        this.g.displayEyeCatcherCard = 'none';
         this.g.isOpen = $event;
          this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
     }
@@ -743,6 +802,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private returnCloseConversation() {
         this.isOpenHome = true;
         this.isOpenConversation = false;
+        this.startNwConversation();
     }
 
     /**
@@ -773,6 +833,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
         this.g.isOpenStartRating = false;
+        this.startNwConversation();
     }
 
     /**
@@ -785,6 +846,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
         this.g.isOpenStartRating = false;
+        this.startNwConversation();
     }
 
     // ========= end:: CALLBACK FUNCTIONS ============//

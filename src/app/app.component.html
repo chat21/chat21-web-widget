@@ -5,9 +5,10 @@
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
     -->
+
     <div *ngIf="g.isOpen" id="chat21-conversations" class="chat21-window" 
-    [ngClass]="{'align-left' : align === 'left', 'align-right' : align === 'right', 'chat21-fullscreen' : fullscreenMode === true }"
-    [ngStyle] = "{'bottom': marginBottom+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
+    [ngClass]="{'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}"
+    [ngStyle]="{ 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-home 
@@ -31,6 +32,7 @@
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
+            [elRoot]="el"
             (eventClose)="returnCloseConversation()" 
             (eventCloseWidget)="returnCloseWidget()"
             ></tiledeskwidget-conversation>

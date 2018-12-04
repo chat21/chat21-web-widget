@@ -43,7 +43,7 @@
                 <!-- TITLE HEADER -->
                 <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
                     <span>{{g.widgetTitle}}</span>
-                    <span id="agent-available-status">{{areAgentsAvailableText}}</span>
+                    <span id="agent-available-status">{{g.areAgentsAvailableText}}</span>
                 </div>
                 <p class="c21-header-writing">{{writingMessage}}</p>
 
@@ -81,19 +81,19 @@
                     </div> -->
 
                 <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                <div *ngIf="isNewConversation && availableAgentsStatus && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
+                <div *ngIf="isNewConversation && g.availableAgentsStatus && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
                     [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
-                    <div *ngIf="areAgentsAvailable">
+                    <div *ngIf="g.areAgentsAvailable">
                         <span> {{g.LABEL_FIRST_MSG}} </span>
                     </div>
-                    <div *ngIf="!areAgentsAvailable">
+                    <div *ngIf="!g.areAgentsAvailable">
                         <span>{{g.LABEL_FIRST_MSG_NO_AGENTS}}</span>
                     </div>
 
                 </div>
 
                 <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                <div *ngIf="isNewConversation && areAgentsAvailable && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept">
+                <div *ngIf="isNewConversation && g.areAgentsAvailable && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept">
                     {{g.departmentSelected.name}}
                 </div>
 
@@ -165,6 +165,8 @@
                                         </div>
 
                                         <div class="messages msg_receive">
+                                           
+                                            <!-- <div>custom:{{triggerBeforeMessageRender(message)}}</div> -->
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX"
@@ -177,9 +179,12 @@
                                                     is ignored</div>
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}
+                                                    </p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
+                                                    <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
+                                                    <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
                                                     <p [innerHTML]="message.text | linky"></p>
                                                 </ng-template>
                                             </div>

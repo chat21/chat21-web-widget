@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
+
 // import { AngularFireDatabase } from 'angularfire2/database';
 // import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
@@ -32,6 +33,7 @@ export class MessagingService {
   messages: Array<MessageModel>;
 
   obsAdded: any;
+  obsAddedMsg: any;
   // observableWidgetActive: any;
 
   firebaseMessagesKey: any;
@@ -55,6 +57,7 @@ export class MessagingService {
       throw new Error('apiUrl is not defined');
     }
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
+    //this.obsAddedMsg = new BehaviorSubject<string>(null);
     // this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 
@@ -65,6 +68,7 @@ export class MessagingService {
    */
   public getMongDbDepartments(projectId): Observable<DepartmentModel[]> {
     const url = this.API_URL + projectId + '/departments/';
+    this.g.wdLog(['***** getMongDbDepartments *****', url]);
     // const url = `http://api.chat21.org/app1/departments`;
     // tslint:disable-next-line:max-line-length
     // const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnsiZW1haWwiOjEsImZpcnN0bmFtZSI6MSwibGFzdG5hbWUiOjEsInBhc3N3b3JkIjoxLCJpZCI6MX0sImdldHRlcnMiOnt9LCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJsYXN0bmFtZSI6ImluaXQiLCJmaXJzdG5hbWUiOiJpbml0IiwiX2lkIjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsibGFzdG5hbWUiOnRydWUsImZpcnN0bmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImVtYWlsIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJsYXN0bmFtZSI6IlNwb256aWVsbG8iLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJwYXNzd29yZCI6IiQyYSQxMCRkMHBTV3lTQkp5ejFQLmE0Y0QuamwubnpvbW9xMGlXZUlHRmZqRGNQZVhUeENpRUVJOTdNVyIsImVtYWlsIjoic3BvbnppZWxsb0BnbWFpbC5jb20iLCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUifSwiJGluaXQiOnRydWUsImlhdCI6MTUyMTY1MjE3Mn0.-iBbE2gCDrcUF1uh9HdK1kVsIRyRCBi_Pvm7LJEKhbs';
@@ -172,6 +176,7 @@ export class MessagingService {
         } else {
            that.g.wdLog(['--------> ADD MSG', msg]);
           // se msg è inviato da me cambio status
+          //that.obsAddedMsg.next(text);
           that.messages.push(msg);
         }
         that.messages.sort(that.compareValues('timestamp', 'asc'));
@@ -290,9 +295,15 @@ export class MessagingService {
    *
    */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
-     this.g.wdLog(['SEND MESSAGE: ', msg]);
+     this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
      this.g.wdLog(['metadata:: ', metadata.toString()]);
     // const messageString = urlify(msg);
+    if (!senderFullname || senderFullname === '' ) {
+      senderFullname = 'Gest';
+    }
+    if (!recipientFullname || recipientFullname === '' ) {
+      recipientFullname = 'Gest';
+    }
     const that = this;
     // const now: Date = new Date();
     // const timestamp = now.valueOf();
@@ -354,7 +365,7 @@ export class MessagingService {
     const messageRef = conversationRef.push();
     const key = messageRef.key;
     message.uid = key;
-     this.g.wdLog(['messageRef: ', messageRef, key]);
+     this.g.wdLog(['messageRef: ', messageRef]);
     const messageForFirebase = message.asFirebaseMessage();
      this.g.wdLog(['messageForFirebase: ', messageForFirebase]);
     messageRef.set(messageForFirebase, function (error) {

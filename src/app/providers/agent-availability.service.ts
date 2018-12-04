@@ -35,7 +35,8 @@ export class AgentAvailabilityService {
     if (projectId === undefined) {
       return Observable.throw('projectId is undefined');
     }
-    const url = this.API_URL + '/projects/' + projectId + '/users/availables';
+    const url = this.API_URL + 'projects/' + projectId + '/users/availables';
+    console.log(url);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http

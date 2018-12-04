@@ -1,9 +1,9 @@
-import { Component, NgZone, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { Component, NgZone, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { convertMessage } from '../../utils/utils';
+import { setColorFromString, avatarPlaceholder, convertMessage } from '../../utils/utils';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
@@ -15,7 +15,7 @@ import { ConversationModel } from '../../../models/conversation';
   styleUrls: ['./list-conversations.component.scss']
 })
 
-export class ListConversationsComponent implements OnInit {
+export class ListConversationsComponent implements OnInit, OnDestroy {
 
   // ========= begin:: Input/Output values ============//
   @Output() eventNewConv = new EventEmitter<string>();
@@ -25,14 +25,21 @@ export class ListConversationsComponent implements OnInit {
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ============//
 
-
+  // ========= begin:: sottoscrizioni ======= //
+  subscriptions: Subscription[] = []; /** */
+  subOpenConversations;
+  subAllConversations;
+  // ========= end:: sottoscrizioni ======= //
   // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
+  setColorFromString = setColorFromString;
+  avatarPlaceholder = avatarPlaceholder;
   // ========= end:: dichiarazione funzioni ========= //
 
 
   // ========= begin:: variabili del componente ======= //
   conversations: ConversationModel[];
+  allConversations: ConversationModel[];
   tenant = '';
   themeColor = '';
   themeForegroundColor = '';
@@ -45,15 +52,15 @@ export class ListConversationsComponent implements OnInit {
     private ngZone: NgZone,
     public conversationsService: ConversationsService
   ) {
-    // this.initialize();
-  }
-
-  ngOnInit() {
     this.initialize();
   }
 
+  ngOnInit() {
+    // this.initialize();
+  }
+
   initialize() {
-     this.g.wdLog(['initialize: ListConversationsComponent']);
+    this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
@@ -65,17 +72,31 @@ export class ListConversationsComponent implements OnInit {
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     this.conversationsService.checkListConversations(3);
+    this.conversationsService.checkListArchivedConversations();
 
     // this.conversations = this.conversationsService.openConversations;
 
     const that = this;
-    const subOpenConversations = this.conversationsService.obsOpenConversations.subscribe((conversations) => {
-      this.ngZone.run(() => {
-        this.conversations = conversations;
-         this.g.wdLog([' conversations:::: ', that.conversations]);
+    if (!this.subOpenConversations) {
+      this.subOpenConversations = this.conversationsService.obsOpenConversations.subscribe((conversations) => {
+        this.ngZone.run(() => {
+          that.conversations = conversations;
+          that.g.wdLog([' conversations:::: ', that.conversations]);
+        });
       });
-    });
-    // this.subscriptions.push(subOpenConversations);
+      this.subscriptions.push(this.subOpenConversations);
+    }
+
+    if (!this.subAllConversations) {
+      this.subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
+        this.ngZone.run(() => {
+          that.allConversations = conversations;
+          that.g.wdLog([' allConversations:::: ', that.allConversations]);
+        });
+      });
+      this.subscriptions.push(this.subAllConversations);
+    }
+
   }
 
 
@@ -97,5 +118,28 @@ export class ListConversationsComponent implements OnInit {
     }
   }
   // ========= end:: ACTIONS ============//
+
+
+  // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
+    /** elimino tutte le sottoscrizioni */
+    ngOnDestroy() {
+      this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+     if (window['tiledesk']) {
+         window['tiledesk']['angularcomponent'] = null;
+     }
+     this.unsubscribe();
+ }
+
+ /** */
+ unsubscribe() {
+     this.subscriptions.forEach(function (subscription) {
+         subscription.unsubscribe();
+     });
+     this.subscriptions = [];
+     this.subOpenConversations = null;
+     this.subAllConversations = null;
+     this.g.wdLog(['this.subscriptions', this.subscriptions]);
+ }
+ // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
 }

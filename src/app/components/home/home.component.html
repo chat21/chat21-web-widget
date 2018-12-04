@@ -8,6 +8,7 @@
     >
 
         <div class="c21-header-container">
+            
             <!-- ICON CLOSE CHAT -->
             <div class="c21-header-button close">
                 <div class="c21-close-button" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
@@ -23,18 +24,15 @@
 
             <!-- CONTENT HEADER -->
             <div class="c21-header-content">
-
                 <!-- LOGO HEADER -->
                 <div *ngIf="g.logoChat != 'nologo'" class="c21-logo">
                     <img src="{{g.logoChat}}" alt="logo">
                 </div>
-
                 <!-- MESSAGE HEADER -->
                 <div class="c21-text">
-                    <div class="c21-text-wellcome">{{g.wellcomeTitle}} 👋</div>          
+                    <div class="c21-text-wellcome">{{g.wellcomeTitle}}</div>          
                     <div *ngIf="g.wellcomeMsg" class="c21-text-intro">{{g.wellcomeMsg}}</div>
                 </div>
-
             </div>
 
         </div>
@@ -47,13 +45,9 @@
     <div class="c21-body" (click)="hideMenuOptions()">
 
         <div class="c21-body-container">
-
             <div class="c21-body-content">
-
                 <div class="c21-cards">
-
                     <div class="c21-card" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
-            
                         <tiledeskwidget-list-conversations 
                         [senderId]="senderId"
                         (eventNewConv)="returnNewConversation()" 
@@ -61,14 +55,11 @@
                         (eventOpenAllConv)="returnOpenAllConversation()"
                         >
                         </tiledeskwidget-list-conversations>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
+        
 
     </div>
 

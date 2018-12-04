@@ -9,9 +9,11 @@
         <div class="c21-button" *ngIf="!g.isSoundActive" (click)="toggleSound()">{{g.SOUND_ON}}</div>
         <div class="c21-button" *ngIf="g.isSoundActive" (click)="toggleSound()">{{g.SOUND_OFF}}</div>
       -->
+      
+      <div *ngIf="g.signInWithCustomToken && g.userFullname" class="label-menu-wellcome">{{g.WELLCOME}} {{g.userFullname}}</div>
+      
 
       <div class="c21-button" (click)="toggleSound()">
-        
         <svg *ngIf="!g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeColor }" xmlns="http://www.w3.org/2000/svg"
             width="20" height="20" viewBox="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0V0z" />

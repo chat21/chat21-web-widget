@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+import { convertColorToRGBA } from '../../utils/utils';
+
 
 
 @Component({
@@ -17,7 +19,8 @@ export class MenuOptionsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.themeColor50 = this.g.themeColor + '7F';
+    this.themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
+    // this.themeColor50 = this.g.themeColor + '7F';
   }
 
   f21_toggle_options() {

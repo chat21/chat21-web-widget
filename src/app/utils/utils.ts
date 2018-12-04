@@ -169,7 +169,7 @@ export function avatarPlaceholder(conversation_with_fullname) {
   return initials;
 }
 
-export function getColorBck(str) {
+export function setColorFromString(str) {
   const arrayBckColor = ['#fba76f', '#80d066', '#73cdd0', '#ecd074', '#6fb1e4', '#f98bae'];
   let num = 0;
   if (str) {
@@ -190,12 +190,30 @@ export function detectIfIsMobile() {
   return isMobile;
 }
 
-export function convertHex(hex, opacity) {
-  hex = hex.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+export function convertColorToRGBA(color, opacity) {
+  let result = color;
+  // console.log('convertColorToRGBA' + color, opacity);
+  if ( color.indexOf('#') > -1 ) {
+    color = color.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  } else if ( color.indexOf('rgba') > -1 ) {
+    const rgb = color.split(',');
+    const r = rgb[0].substring(5);
+    const g = rgb[1];
+    const b = rgb[2];
+    //const b = rgb[2].substring(1, rgb[2].lenght - 1);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  } else if ( color.indexOf('rgb(') > -1 ) {
+    const rgb = color.split(',');
+    const r = rgb[0].substring(4);
+    const g = rgb[1];
+    const b = rgb[2].substring(1, rgb[2].lenght - 1);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  }
+  console.log('convertColorToRGBA' + color + result);
   return result;
 }
 

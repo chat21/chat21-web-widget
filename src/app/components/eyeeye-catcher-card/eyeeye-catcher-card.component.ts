@@ -23,11 +23,11 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    // ========= end:: Input/Output values ============//
 
   // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
-  state = 'default';
-  displayEyeCatcherCard = 'none';
-  displayEyeCatcherCardCloseBtnWrapper = 'none';
-  displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
-  displayEyeCatcherCardCloseBtn = 'none';
+  state: string;
+//   this.g.displayEyeCatcherCard = 'none';
+  displayEyeCatcherCardCloseBtnWrapper: string;
+  displayEyeCatcherCardCloseBtnIsMobileWrapper: string;
+  displayEyeCatcherCardCloseBtn: string;
   /* EYE-CATCHER CLOSE BUTTON SWITCH */
 
 
@@ -38,6 +38,13 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   }
 
   ngOnInit() {
+      // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
+  this.state = 'default';
+  this.g.displayEyeCatcherCard = 'none';
+  this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+  this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
+  this.displayEyeCatcherCardCloseBtn = 'none';
+  /* EYE-CATCHER CLOSE BUTTON SWITCH */
     this.openIfCallOutTimer();
   }
 
@@ -61,7 +68,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   openEyeCatcher() {
       if (this.g.isOpen === false) {
            this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
-          this.displayEyeCatcherCard = 'block';
+          this.g.displayEyeCatcherCard = 'block';
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
@@ -81,7 +88,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * *** EYE-CATCHER CARD ***
    * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
   openChatFromEyeCatcherCard() {
-      this.displayEyeCatcherCard = 'none';
+      this.g.displayEyeCatcherCard = 'none';
       this.eventOpenChat.emit();
   }
 
@@ -107,7 +114,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
         this.g.wdLog(['HAS CLICKED CLOSE EYE-CATCHER CARD']);
-        this.displayEyeCatcherCard = 'none';
+        this.g.displayEyeCatcherCard = 'none';
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 

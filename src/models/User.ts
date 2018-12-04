@@ -1,5 +1,6 @@
 export interface User {
-    _id: string;
+    id: string;
+    firstname: string;
     updatedAt: any;
     createdAt: any;
     id_project: string;

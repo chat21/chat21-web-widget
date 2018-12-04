@@ -43,12 +43,12 @@
               projectid: "5b55e806c93dde00143163dd",
               development: true,
               calloutTimer: 10,
-              userFullname: "Dario",
-              userEmail: "czone555@gmail.com",
+              // userFullname: "Dario",
+              // userEmail: "czone555@gmail.com",
               wellcomeTitle: "Benvenuti su questa chat",
               wellcomeMsg: "Come possiamo aiutarti?",
               logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
-              startFromHome: true,
+              startFromHome: false,
               preChatForm: true,
               autoStart: false
           };
@@ -85,11 +85,19 @@
             window.tiledesk.on('afterMessageSend', function(event_data) {
               console.log("afterMessageSend called ", event_data);
             });
+            
     
             window.tiledesk.on('isLoggedIn', function(event_data) {
               console.log("isLoggedIn called ", event_data);
             });
             
+
+            window.tiledesk.on('beforeMessageRender', function(event_data) {
+              // var message =  event_data.detail.message;
+              // message.text = message.text.exttext="<>";
+              console.log("beforeMessageRender message", message);
+            }); 
+
           }
     
         });

@@ -233,6 +233,7 @@ tiledeskwidget-root{
         text-align: center;
         margin-top: -10px;
         display: inline-block;
+        box-sizing: initial;
     }
     .c21-button{
         display: inline-flex;
@@ -283,7 +284,7 @@ tiledeskwidget-root{
         width: auto;
         height: 40px;
         line-height: 40px;
-        margin: 16px 0;
+        margin: 8px 0;
         padding: 0 24px;
         opacity: 1;
         text-align: center;

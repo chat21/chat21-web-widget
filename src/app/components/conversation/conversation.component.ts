@@ -18,13 +18,11 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
-// import { detectIfIsMobile} from './utils/utils';
+import { convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
 import { ResizedEvent } from 'angular-resize-event/resized-event';
-
 
 
 @Component({
@@ -41,6 +39,7 @@ export class ConversationComponent implements OnInit {
   @Output() eventClose = new EventEmitter();
   @Output() eventCloseWidget = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
+  @Input() elRoot: ElementRef;
   // @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
@@ -79,16 +78,12 @@ export class ConversationComponent implements OnInit {
   themeColor50: string;
   textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
-
-
   conversationWith: string;
-
   isPopupUrl = isPopupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
-
   isNewConversation = true;
-  availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
-  messages: MessageModel[];
+  //availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
+  messages: Array<MessageModel>;
 
   attributes: any;
   GUEST_LABEL = '';
@@ -99,8 +94,8 @@ export class ConversationComponent implements OnInit {
   subscriptions: Subscription[] = [];
 
   // ========= begin::agent availability
-  public areAgentsAvailableText: string;
-  public areAgentsAvailable: Boolean = false;
+  //public areAgentsAvailableText: string;
+  //public areAgentsAvailable: Boolean = false;
   // ========= end::agent availability
 
 
@@ -122,11 +117,6 @@ export class ConversationComponent implements OnInit {
     public starRatingWidgetService: StarRatingWidgetService
   ) {
     this.initAll();
-    const that = this;
-
-    
-
-
   }
 
   // onResized(event: ResizedEvent): void {
@@ -140,7 +130,7 @@ export class ConversationComponent implements OnInit {
   ngOnInit() {
     // this.initAll();
       this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
-      this.g.wdLog([' recipientId: ', this.recipientId]);
+      this.g.wdLog([' recipientId: ', this.g.recipientId]);
       this.g.wdLog([' senderId: ', this.g.senderId]);
       this.g.wdLog([' projectid: ', this.g.projectid]);
       this.g.wdLog([' channelType: ', this.g.channelType]);
@@ -159,10 +149,9 @@ export class ConversationComponent implements OnInit {
    * do per scontato che this.userId esiste!!!
    */
   initAll() {
-    this.themeColor50 = this.g.themeColor + '7F';
-
-    this.g.wdLog([' ---------------- 1: setAvailableAgentsStatus ---------------- ']);
-    this.setAvailableAgentsStatus();
+    // this.themeColor50 = this.g.themeColor + '7F';
+    this.themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
+    this.messages = [];
 
       this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
@@ -173,6 +162,11 @@ export class ConversationComponent implements OnInit {
       this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     this.initializeChatManager();
 
+
+    this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    this.setAvailableAgentsStatus();
+
+
     this.g.activeConversation = this.conversationWith;
     // this.checkListMessages();
   }
@@ -182,34 +176,47 @@ export class ConversationComponent implements OnInit {
     this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
   }
 
-
   /**
    * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
    * per verificare se c'è un agent disponibile
    */
   private setAvailableAgentsStatus() {
-    const that = this;
-    this.agentAvailabilityService
-    .getAvailableAgents(this.g.projectid)
-    .subscribe( (availableAgents) => {
-        this.g.wdLog(['availableAgents', availableAgents]);
-      if (availableAgents.length <= 0) {
-        that.areAgentsAvailable = false;
-        that.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
-        that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
-      } else {
-        that.areAgentsAvailable = true;
-        that.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
-        // add first message
-        that.addFirstMessage(that.g.LABEL_FIRST_MSG);
-      }
-      that.availableAgentsStatus = true;
-      that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.areAgentsAvailableText]);
-    }, (error) => {
-      console.error('setOnlineStatus::setAvailableAgentsStatus', error);
-    }, () => {
-    });
+    this.g.wdLog(['setAvailableAgentsStatus ----------> ' + this.g.availableAgents.length]);
+    if (this.g.availableAgents.length <= 0) {
+      this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
+    } else {
+      this.addFirstMessage(this.g.LABEL_FIRST_MSG);
+    }
   }
+
+  /**
+   * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
+   * per verificare se c'è un agent disponibile
+   */
+  // private setAvailableAgentsStatus() {
+  //   const that = this;
+  //   this.agentAvailabilityService
+  //   .getAvailableAgents(this.g.projectid)
+  //   .subscribe( (availableAgents) => {
+  //     this.g.wdLog(['availableAgents->', availableAgents]);
+  //     if (availableAgents.length <= 0) {
+  //       that.areAgentsAvailable = false;
+  //       that.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
+  //       that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+  //     } else {
+  //       that.areAgentsAvailable = true;
+  //       that.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
+  //       // add first message
+  //       this.g.availableAgents = availableAgents;
+  //       that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+  //     }
+  //     that.availableAgentsStatus = true;
+  //     that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.areAgentsAvailableText]);
+  //   }, (error) => {
+  //     console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+  //   }, () => {
+  //   });
+  // }
 
   addFirstMessage(text) {
     text = replaceBr(text);
@@ -231,6 +238,7 @@ export class ConversationComponent implements OnInit {
       this.g.channelType,
       this.g.projectid
     );
+    this.g.wdLog(['addFirstMessage ----------> ' + text]);
     this.messages.unshift(msg);
   }
 
@@ -294,6 +302,7 @@ export class ConversationComponent implements OnInit {
       this.contactService.initialize(this.g.senderId, this.g.tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
+      // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
 
@@ -370,7 +379,10 @@ export class ConversationComponent implements OnInit {
      */
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
-        this.g.wdLog(['Subscription NEW MSG']);
+      that.g.wdLog(['Subscription NEW MSG', newMessage]);
+      // if ( newMessage ) {
+      //   that.triggetBeforeMessageRender(newMessage.text);
+      // }
       if ( that.startScroll || newMessage.sender === that.g.senderId) {
         that.scrollToBottom();
       } else if (that.scrollMe) {
@@ -387,6 +399,7 @@ export class ConversationComponent implements OnInit {
         }
       }
     });
+
     this.subscriptions.push(obsAddedMessage);
   }
 
@@ -569,12 +582,24 @@ export class ConversationComponent implements OnInit {
       }
   }
 
+  triggerBeforeMessageRender(message) {
+    // console.log('triggerBeforeMessageRender');
+    try {
+      // tslint:disable-next-line:max-line-length
+      const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: { message: message} });
+      this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+    } catch (e) {
+        console.error('Error triggering triggerBeforeMessageRender', e);
+    }
+  }
+
+
   // tslint:disable-next-line:max-line-length
   private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
     try {
         // tslint:disable-next-line:max-line-length
-        const loadEvent = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-        this.el.nativeElement.dispatchEvent(loadEvent);
+        const beforeMessageSend = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+        this.el.nativeElement.dispatchEvent(beforeMessageSend);
     } catch (e) {
         console.error('Error triggering triggerBeforeSendMessageEvent', e);
     }

@@ -10,7 +10,7 @@ import { Globals } from '../utils/globals';
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { avatarPlaceholder, getColorBck, getFromNow, compareValues } from '../utils/utils';
+import { avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
 
 
 
@@ -34,7 +34,7 @@ export class ConversationsService {
   badgeConversations: number;
 
   avatarPlaceholder = avatarPlaceholder;
-  getColorBck = getColorBck;
+  setColorFromString = setColorFromString;
   getFromNow = getFromNow;
 
   constructor(
@@ -174,11 +174,10 @@ export class ConversationsService {
       }
     }
     this.allConversations = result;
-
     // this.allConversations.map(item => item.uid).filter((value, index, self) => self.indexOf(value) === index);
     this.allConversations.sort(compareValues('timestamp', 'desc'));
+    this.g.wdLog([' updateConversations:::: ', this.allConversations.length]);
     this.obsAllConversations.next(this.allConversations);
-
   }
 
   /**
@@ -261,7 +260,7 @@ export class ConversationsService {
       }
       // if (conversation.sender !== that.senderId) {
       //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
-      //   conversation.color = that.getColorBck(conversation.sender_fullname);
+      //   conversation.color = that.setColorFromString(conversation.sender_fullname);
       // }
       const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
       conversation.image = IMG_PROFILE_SUPPORT;
