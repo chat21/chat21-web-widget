@@ -1,6 +1,6 @@
 {
   "name": "chat21-web-widget",
-  "version": "0.0.23",
+  "version": "0.0.30",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^5.0.2",
     "@angular/common": "^5.0.2",
