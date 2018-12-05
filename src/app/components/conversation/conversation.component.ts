@@ -36,7 +36,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class ConversationComponent implements OnInit {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
-  //@HostListener('window:resize', ['$event'])
+  // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
   @Output() eventCloseWidget = new EventEmitter();
@@ -84,7 +84,7 @@ export class ConversationComponent implements OnInit {
   isPopupUrl = isPopupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   isNewConversation = true;
-  //availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
+  // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
 
   attributes: any;
@@ -97,8 +97,8 @@ export class ConversationComponent implements OnInit {
 
 
   // ========= begin::agent availability
-  //public areAgentsAvailableText: string;
-  //public areAgentsAvailable: Boolean = false;
+  // public areAgentsAvailableText: string;
+  // public areAgentsAvailable: Boolean = false;
   // ========= end::agent availability
 
 
@@ -1088,9 +1088,6 @@ export class ConversationComponent implements OnInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
       this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-    if (window['tiledesk']) {
-        window['tiledesk']['angularcomponent'] = null;
-    }
     this.unsubscribe();
   }
 
