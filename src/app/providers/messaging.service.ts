@@ -299,10 +299,10 @@ export class MessagingService {
      this.g.wdLog(['metadata:: ', metadata.toString()]);
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
-      senderFullname = 'Gest';
+      senderFullname = 'Guest';
     }
     if (!recipientFullname || recipientFullname === '' ) {
-      recipientFullname = 'Gest';
+      recipientFullname = 'Guest';
     }
     const that = this;
     // const now: Date = new Date();
