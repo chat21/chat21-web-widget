@@ -24,6 +24,8 @@ import { convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } f
 // Import the resized event model
 import { ResizedEvent } from 'angular-resize-event/resized-event';
 
+import {DomSanitizer} from '@angular/platform-browser';
+
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -93,6 +95,7 @@ export class ConversationComponent implements OnInit {
   // devo inserirle nel globals
   subscriptions: Subscription[] = [];
 
+
   // ========= begin::agent availability
   //public areAgentsAvailableText: string;
   //public areAgentsAvailable: Boolean = false;
@@ -114,7 +117,8 @@ export class ConversationComponent implements OnInit {
     public upSvc: UploadService,
     public contactService: ContactService,
     private agentAvailabilityService: AgentAvailabilityService,
-    public starRatingWidgetService: StarRatingWidgetService
+    public starRatingWidgetService: StarRatingWidgetService,
+    public sanitizer: DomSanitizer
   ) {
     this.initAll();
   }
@@ -582,12 +586,25 @@ export class ConversationComponent implements OnInit {
       }
   }
 
-  triggerBeforeMessageRender(message) {
+  printMessage(message, messageEl, component) {
+    // console.log('messageEl', messageEl);
+    // console.log('component', component);
+
+    this.triggerBeforeMessageRender(message, messageEl, component);
+    // console.log('triggerBeforeMessageRender after');
+    // TODO Aggiungi linky
+    return message.text;
+  }
+
+  triggerBeforeMessageRender(message, messageEl, component) {
     // console.log('triggerBeforeMessageRender');
     try {
       // tslint:disable-next-line:max-line-length
-      const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: { message: message} });
-      this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+      const beforeMessageRender = new CustomEvent('beforeMessageRender',
+        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
+
+      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+      // console.log('returnEventValue', returnEventValue);
     } catch (e) {
         console.error('Error triggering triggerBeforeMessageRender', e);
     }

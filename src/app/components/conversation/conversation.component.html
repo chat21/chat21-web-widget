@@ -166,7 +166,7 @@
 
                                         <div class="messages msg_receive">
                                            
-                                            <!-- <div>custom:{{triggerBeforeMessageRender(message)}}</div> -->
+                                            <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX"
@@ -175,17 +175,32 @@
 
                                             <!-- message type:: text -->
                                             <div *ngIf="message.type == 'text';">
+                                               
+                                               
                                                 <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                     is ignored</div>
+
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
                                                         (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}
                                                     </p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
+
+
+                                                    <!-- old -->
                                                     <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
                                                     <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
-                                                    <p [innerHTML]="message.text | linky"></p>
+
+
+                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this)"></p>
+                                                    <!-- <p [innerHTML]="videoUrl"></p> -->
+                                                    
+                                                    <!-- <p [innerHTML]="message.print() | linky"></p> -->
+                                                    <!-- <p [innerHTML]="message.text | linky"></p> -->
+
+
+
                                                 </ng-template>
                                             </div>
 

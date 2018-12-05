@@ -50,7 +50,8 @@
               logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
               startFromHome: false,
               preChatForm: true,
-              autoStart: false
+              autoStart: false,
+              isLogEnabled:true
           };
     
           (function(d, s, id) {
@@ -93,9 +94,43 @@
             
 
             window.tiledesk.on('beforeMessageRender', function(event_data) {
-              // var message =  event_data.detail.message;
-              // message.text = message.text.exttext="<>";
-              console.log("beforeMessageRender message", message);
+              // console.log("event_data", event_data);
+              var message =  event_data.detail.message;  
+              var messageEl = event_data.detail.messageEl;
+          
+              console.log("beforeMessageRender message", message, " and messageEl", messageEl);              
+              
+              console.log("innerHTML",messageEl.innerHTML);
+              console.log("innerHTML.indexOf", messageEl.innerHTML.indexOf("box"));
+
+                if (message.text === "ciao" && messageEl.innerHTML.indexOf("box")==-1) {
+                
+                messageEl.innerHTML = message.text + `<br><br><div class="box"><button type="button" onclick="alert('dsd')">Open</button><button type="button" onclick="tiledesk.close()">Close</button><div>`;
+
+                console.log("innerHTML",messageEl.innerHTML);
+              }
+             
+              
+              //if (message.text === "ciao" && !messageEl.getAttribute("rendered")) {
+              // console.log("messageEl.attribute.rendered", messageEl.getAttribute("rendered"));
+                // messageEl.setAttribute("rendered", true);
+
+                
+
+
+
+              // messageEl.innerHTML = message.text +  message.attribues.customJson
+
+
+
+              // var sanitizer = event_data.detail.sanitizer;
+              // console.log("sanitizer", sanitizer);
+              // bypassSecurityTrustHtml
+              // message.text = sanitizer.bypassSecurityTrustHtml('<button type="button">Click Me!</button>');
+              //message.text = sanitizer.bypassSecurityTrustHtml('<b>Click Me!</b>');
+              // message.text ='<button type="button">Click Me!</button>';
+              // event_data.preventDefault();
+              // return false;
             }); 
 
           }
