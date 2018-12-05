@@ -92,22 +92,24 @@
               console.log("isLoggedIn called ", event_data);
             });
             
-
+            
             window.tiledesk.on('beforeMessageRender', function(event_data) {
               // console.log("event_data", event_data);
               var message =  event_data.detail.message;  
               var messageEl = event_data.detail.messageEl;
-          
+              var component = event_data.detail.component;
+              // console.log("component",component);              
+
               console.log("beforeMessageRender message", message, " and messageEl", messageEl);              
               
-              console.log("innerHTML",messageEl.innerHTML);
-              console.log("innerHTML.indexOf", messageEl.innerHTML.indexOf("box"));
+              // console.log("innerHTML",messageEl.innerHTML);
+              // console.log("innerHTML.indexOf", messageEl.innerHTML.indexOf("box"));
 
                 if (message.text === "ciao" && messageEl.innerHTML.indexOf("box")==-1) {
                 
-                messageEl.innerHTML = message.text + `<br><br><div class="box"><button type="button" onclick="alert('dsd')">Open</button><button type="button" onclick="tiledesk.close()">Close</button><div>`;
+                messageEl.innerHTML = message.text + `<br><br><div class="box"><button type="button" onclick="alert('dsd')">Open</button><button type="button" onclick='window.tiledesk.hide()'>Hide</button><div>`;
 
-                console.log("innerHTML",messageEl.innerHTML);
+                // console.log("innerHTML",messageEl.innerHTML);
               }
              
               
