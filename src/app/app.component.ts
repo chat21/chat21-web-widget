@@ -690,7 +690,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * MODAL SELECTION DEPARTMENT:
      * selected department
      */
-    private returnDepartmentSelected($event) {
+    public returnDepartmentSelected($event) {
         if ($event) {
              this.g.wdLog(['onSelectDepartment: ', $event]);
             // this.g.departmentSelected = $event;
@@ -705,7 +705,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * MODAL SELECTION DEPARTMENT:
      * close modal
      */
-    private returnCloseModalDepartment() {
+    public returnCloseModalDepartment() {
          this.g.wdLog(['returnCloseModalDepartment', this.g.senderId]);
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;
@@ -717,7 +717,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * MODAL PRECHATFORM:
      * completed prechatform
      */
-    private returnPrechatFormComplete() {
+    public returnPrechatFormComplete() {
          this.g.wdLog(['returnPrechatFormComplete']);
         this.isOpenHome = true;
         this.isOpenConversation = true;
@@ -728,7 +728,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * MODAL PRECHATFORM:
      * close modal
      */
-    private returnCloseModalPrechatForm() {
+    public returnCloseModalPrechatForm() {
          this.g.wdLog(['returnCloseModalPrechatForm']);
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;

@@ -332,7 +332,7 @@ export class ConversationComponent implements OnInit {
       attributes = {
         client: this.CLIENT_BROWSER,
         sourcePage: location.href,
-        projectId: this.g.projectid,
+        projectId: this.g.projectid
         // departmentId: '',
         // departmentName: '',
         // departmentId: this.departmentSelected._id,
@@ -340,15 +340,18 @@ export class ConversationComponent implements OnInit {
         // userEmail: this.userEmail,
         // userName: this.userFullname
       };
-      if (this.g.userEmail) {
-        attributes['userEmail'] = this.g.userEmail;
-      }
-      if (this.g.userFullname) {
-        attributes['userFullname'] = this.g.userFullname;
-      }
-        this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
-      localStorage.setItem('attributes', JSON.stringify(attributes));
     }
+    if (this.g.userEmail) {
+      attributes['userEmail'] = this.g.userEmail;
+    }
+    if (this.g.userFullname) {
+      attributes['userFullname'] = this.g.userFullname;
+    }
+    if (this.g.senderId) {
+      attributes['requester_id'] = this.g.senderId;
+    }
+    this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
+    localStorage.setItem('attributes', JSON.stringify(attributes));
     return attributes;
   }
 

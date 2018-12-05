@@ -329,26 +329,9 @@ export class MessagingService {
       channel_type,
       projectid
     );
-    // const message = {
-    //   uid: '',
-    //   language: language,
-    //   recipient: conversationWith,
-    //   recipient_fullname: recipientFullname,
-    //   sender: this.senderId,
-    //   sender_fullname: senderFullname,
-    //   status: '',
-    //   metadata: metadata,
-    //   text: msg,
-    //   timestamp: timestamp,
-    //   type: type,
-    //   attributes: attributes,
-    //   channel_type: this.channel_type,
-    //   projectid: projectid
-    // };
-
     this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
-     this.g.wdLog(['messaggio **************', message.toString()]);
+    this.g.wdLog(['messaggio **************', message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
@@ -380,7 +363,6 @@ export class MessagingService {
         that.g.wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message]);
       }
       //   this.g.wdLog(['****** changed *****', that.messages);
-
     });
 
 

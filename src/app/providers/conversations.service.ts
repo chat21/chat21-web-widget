@@ -70,16 +70,17 @@ export class ConversationsService {
 
     //// SUBSCRIBE ADDED ////
     this.conversationRef.on('child_added', function (childSnapshot) {
-      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
+      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
       const conversation = that.setConversation(childSnapshot, false);
-      that.openConversations.unshift(conversation); // insert item top array
-
-      that.updateConversations();
-      that.checkIsNew(conversation);
-      that.checkIsSound(conversation);
-      that.updateConversationBadge();
-
-      that.obsOpenConversations.next(that.openConversations);
+      // tslint:disable-next-line:max-line-length
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
+        that.openConversations.unshift(conversation); // insert item top array
+        that.updateConversations();
+        that.checkIsNew(conversation);
+        that.checkIsSound(conversation);
+        that.updateConversationBadge();
+        that.obsOpenConversations.next(that.openConversations);
+      }
     });
 
     //// SUBSCRIBE CHANGED ////
@@ -87,12 +88,10 @@ export class ConversationsService {
       const index = that.searchIndexInArrayForUid(that.openConversations, childSnapshot.key);
       const conversation = that.setConversation(childSnapshot, false);
       that.openConversations.splice(index, 1, conversation);
-
       that.updateConversations();
       that.checkIsNew(conversation);
       that.checkIsSound(conversation);
       that.updateConversationBadge();
-
       that.obsOpenConversations.next(that.openConversations);
       that.g.wdLog(['child_changed *****', that.openConversations, index]);
     });
@@ -124,12 +123,14 @@ export class ConversationsService {
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      that.archivedConversations.unshift(conversation); // insert item top array
-
-      that.updateConversations();
-      that.checkIsNew(conversation);
-      that.checkIsSound(conversation);
-      that.updateConversationBadge();
+      // tslint:disable-next-line:max-line-length
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
+        that.archivedConversations.unshift(conversation); // insert item top array
+        that.updateConversations();
+        that.checkIsNew(conversation);
+        that.checkIsSound(conversation);
+        that.updateConversationBadge();
+      }
     });
 
     //// SUBSCRIBE CHANGED ////
