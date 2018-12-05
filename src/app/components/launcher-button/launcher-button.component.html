@@ -1,4 +1,5 @@
-<div id="c21-launcher-button" *ngIf="g.isLogged == true" [ngClass]="{'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}"
+<div id="c21-launcher-button" *ngIf="g.isLogged == true" 
+    [ngClass]="{'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}"
     [ngStyle]="{ 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     (click)="openCloseWidget()">
     <!-- 

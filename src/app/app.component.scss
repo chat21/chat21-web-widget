@@ -401,12 +401,16 @@ tiledeskwidget-root{
             overflow: hidden;
             background-color: #ffffff;
             z-index: 1;
-            
+        
             border-radius: 0px;
             box-shadow: $trasp-light-black 0 0 38px;
-            display: block;
+            display: none;
             overflow-y: hidden;
+            &.active {
+                display: block;
+            }
         }
+
         .chat21-window {
             display: none;
         }
