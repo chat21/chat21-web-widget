@@ -124,9 +124,6 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
       this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
-     if (window['tiledesk']) {
-         window['tiledesk']['angularcomponent'] = null;
-     }
      this.unsubscribe();
  }
 
