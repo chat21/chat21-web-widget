@@ -92,22 +92,49 @@
               console.log("isLoggedIn called ", event_data);
             });
             
-            
+            // function sendMessageFromComponent(component) {
+            //     component.sendMessage("hello from web api", "text");
+            //   }
+
             window.tiledesk.on('beforeMessageRender', function(event_data) {
               // console.log("event_data", event_data);
               var message =  event_data.detail.message;  
               var messageEl = event_data.detail.messageEl;
               var component = event_data.detail.component;
+              _globalComponent = component;
+
               // console.log("component",component);              
 
-              console.log("beforeMessageRender message", message, " and messageEl", messageEl);              
+              // console.info("beforeMessageRender message", message, " and messageEl", messageEl);              
               
+              
+             
               // console.log("innerHTML",messageEl.innerHTML);
               // console.log("innerHTML.indexOf", messageEl.innerHTML.indexOf("box"));
 
                 if (message.text === "ciao" && messageEl.innerHTML.indexOf("box")==-1) {
                 
-                messageEl.innerHTML = message.text + `<br><br><div class="box"><button type="button" onclick="alert('dsd')">Open</button><button type="button" onclick='window.tiledesk.hide()'>Hide</button><div>`;
+
+                messageEl.innerHTML = message.text + 
+                  `<br><br>
+                  <div class="box">
+                  <button type="button" onclick='alert("hello")'>Alert</button>
+                  <button type="button" onclick='window.tiledesk.hide()'>Hide</button>
+                  <button type="button" onclick='window.tiledesk.sendMessage("Web Api", "${message.recipient}", "${message.recipient_fullname}", "hello from web api", "text", "group", null)'>Send Message</button>
+                  <button type="button" onclick='_globalComponent.sendMessage("hello from web api", "text")'>Send Message from component</button>
+                  <button type="button" id="button2">Send Message from component2</button>
+                  <div>`;
+
+
+                   var button2 = document.getElementById('button2');
+
+                    button2.addEventListener('click', function (e) {
+                      component.sendMessage("hello from web api", "text");
+                    });
+
+
+
+                //<button type="button" onclick='${component.sendMessage.toString()}'>Send Message from component2</button>
 
                 // console.log("innerHTML",messageEl.innerHTML);
               }

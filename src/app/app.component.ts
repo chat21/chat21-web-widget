@@ -19,7 +19,6 @@ import { AgentAvailabilityService } from './providers/agent-availability.service
 // utils
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
 
-
 @Component({
     selector: 'tiledeskwidget-root',
     templateUrl: './app.component.html',
@@ -208,13 +207,13 @@ export class AppComponent implements OnInit, OnDestroy {
       if (availableAgents.length <= 0) {
         that.g.areAgentsAvailable = false;
         that.g.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
-        //that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+        // that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
       } else {
         that.g.areAgentsAvailable = true;
         that.g.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
         // add first message
         this.g.availableAgents = availableAgents;
-        //that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+        // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
       that.g.availableAgentsStatus = true;
       that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.g.areAgentsAvailableText]);
@@ -273,7 +272,7 @@ export class AppComponent implements OnInit, OnDestroy {
             // UN SOLO DEPARTMENT
             this.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[0]]);
             this.setDepartment(this.g.departments[0]);
-            //return false;
+            // return false;
         } else if (this.g.departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
             this.g.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', this.g.departments[0]]);
@@ -469,10 +468,27 @@ export class AppComponent implements OnInit, OnDestroy {
                     window['tiledesk']['angularcomponent'].component.setStatePreChatForm(state);
                 });
             };
+            window['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component
+                        .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
+                });
+            };
         }
     }
 
+
+
+    private sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+
+        // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
+
+        const messageSent = this.messagingService
+            .sendMessage(senderFullname, text, type, '', recipient, recipientFullname, attributes, null, channel_type);
+        console.log('messageSent', messageSent);
+    }
     /** */
+
     private signInWithCustomToken(token) {
          this.g.wdLog(['signInWithCustomToken token ', token]);
         const that = this;
