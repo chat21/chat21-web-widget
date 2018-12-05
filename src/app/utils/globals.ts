@@ -133,6 +133,7 @@ export class Globals {
   marginX;
   marginY;
   isLogEnabled;
+  filterByRequester;
 
 
   constructor(
@@ -293,6 +294,7 @@ export class Globals {
     this.marginX = '20px';                      /** set margin left or rigth widget  */
     this.marginY = '20px';                      /** set margin bottom widget */
     this.isLogEnabled = false;
+    this.filterByRequester = false;             /** show conversations with conversation.attributes.requester_id == user.uid */
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -434,6 +436,10 @@ export class Globals {
     TEMP = el.nativeElement.getAttribute('isLogEnabled');
     if (TEMP !== null) {
       this.isLogEnabled = (TEMP === true) ? true : false;
+    }
+    TEMP = el.nativeElement.getAttribute('filterByRequester');
+    if (TEMP !== null) {
+      this.filterByRequester = (TEMP === true) ? true : false;
     }
 
   }
@@ -581,7 +587,10 @@ export class Globals {
     if (TEMP !== undefined) {
       this.isLogEnabled = (TEMP === false) ? false : true;
     }
-
+    TEMP = window['tiledeskSettings']['filterByRequester'];
+    if (TEMP !== undefined) {
+      this.filterByRequester = (TEMP === false) ? false : true;
+    }
 
   }
 
@@ -690,6 +699,10 @@ export class Globals {
     if (this.getParameterByName('tiledesk_isLogEnabled')) {
       this.isLogEnabled = true;
     }
+    if (this.getParameterByName('tiledesk_filterByRequester')) {
+      this.filterByRequester = true;
+    }
+
   }
 
 
@@ -713,7 +726,8 @@ export class Globals {
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
-      'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled
+      'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
+      'filterByRequester': this.filterByRequester
     };
   }
 
@@ -748,7 +762,6 @@ export class Globals {
   }
 
   public wdLog(message) {
-
     if ( this.isLogEnabled ) {
        console.log(message.toString());
     }

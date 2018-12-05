@@ -166,7 +166,7 @@
 
                                         <div class="messages msg_receive">
                                            
-                                            <!-- <div>custom:{{triggerBeforeMessageRender(message)}}</div> -->
+                                            <!-- <div [innerHTML]="triggerBeforeMessageRender(message)">custom:</div> -->
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX"

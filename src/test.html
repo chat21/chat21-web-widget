@@ -93,8 +93,10 @@
             
 
             window.tiledesk.on('beforeMessageRender', function(event_data) {
-              // var message =  event_data.detail.message;
-              // message.text = message.text.exttext="<>";
+              var message =  event_data.detail.message;
+              message.text = '<button (click)="openNewConversation()">opzione 1</button>';
+              message.text += '<button (click)="openNewConversation()">opzione 2</button>';
+              message.text += '<button (click)="openNewConversation()">opzione 3</button>';
               console.log("beforeMessageRender message", message);
             }); 
 
