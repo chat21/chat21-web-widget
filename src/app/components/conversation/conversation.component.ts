@@ -594,9 +594,13 @@ export class ConversationComponent implements OnInit {
     // console.log('component', component);
 
     this.triggerBeforeMessageRender(message, messageEl, component);
+
+    const messageText = message.text;
     // console.log('triggerBeforeMessageRender after');
     // TODO Aggiungi linky
-    return message.text;
+    this.triggerAfterMessageRender(message, messageEl, component);
+
+    return messageText;
   }
 
   triggerBeforeMessageRender(message, messageEl, component) {
@@ -612,6 +616,21 @@ export class ConversationComponent implements OnInit {
         console.error('Error triggering triggerBeforeMessageRender', e);
     }
   }
+
+  triggerAfterMessageRender(message, messageEl, component) {
+    // console.log('triggerBeforeMessageRender');
+    try {
+      // tslint:disable-next-line:max-line-length
+      const afterMessageRender = new CustomEvent('afterMessageRender',
+        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
+
+      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+      // console.log('returnEventValue', returnEventValue);
+    } catch (e) {
+        console.error('Error triggering triggerAfterMessageRender', e);
+    }
+  }
+
 
 
   // tslint:disable-next-line:max-line-length

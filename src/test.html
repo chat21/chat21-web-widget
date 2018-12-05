@@ -96,14 +96,14 @@
             //     component.sendMessage("hello from web api", "text");
             //   }
 
-            window.tiledesk.on('beforeMessageRender', function(event_data) {
+            window.tiledesk.on('afterMessageRender', function(event_data) {
               // console.log("event_data", event_data);
               var message =  event_data.detail.message;  
               var messageEl = event_data.detail.messageEl;
               var component = event_data.detail.component;
               // console.log("component",component);              
 
-              // console.info("beforeMessageRender message", message, " and messageEl", messageEl);              
+              // console.info("afterMessageRender message", message, " and messageEl", messageEl);              
               
               
              
@@ -119,7 +119,7 @@
                   <button type="button" onclick='alert("hello")'>Alert</button>
                   <button type="button" onclick='window.tiledesk.hide()'>Hide</button>
                   <button type="button" onclick='window.tiledesk.sendMessage("Web Api", "${message.recipient}", "${message.recipient_fullname}", "hello from web api", "text", "group", null)'>Send Message</button>                  
-                  <button type="button" id="buttonSendMessageFromComponent">Send Message from component2</button>
+                  <button type="button" id="buttonSendMessageFromComponent">Send Message from component</button>
                   <div>`;
 
 
