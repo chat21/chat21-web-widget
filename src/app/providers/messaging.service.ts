@@ -133,7 +133,7 @@ export class MessagingService {
     //// SUBSCRIBE ADDED ////
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
-       that.g.wdLog(['child_added *****', childSnapshot.val()]);
+       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const text = replaceBr(message['text']);
 
       if (that.checkMessage(message)) {
@@ -176,7 +176,7 @@ export class MessagingService {
         } else {
            that.g.wdLog(['--------> ADD MSG', msg]);
           // se msg è inviato da me cambio status
-          //that.obsAddedMsg.next(text);
+          // that.obsAddedMsg.next(text);
           that.messages.push(msg);
         }
         that.messages.sort(that.compareValues('timestamp', 'asc'));

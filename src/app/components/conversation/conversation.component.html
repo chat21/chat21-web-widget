@@ -136,7 +136,8 @@
                                                         (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
-                                                    <p [innerHTML]="message.text | linky"></p>
+                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                    <!-- <p [innerHTML]="message.text | linky"></p> -->
                                                 </ng-template>
                                             </div>
 
@@ -193,7 +194,9 @@
                                                     <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
 
 
-                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this)"></p>
+                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                    <!-- <p [innerHTML]="message.uid | linky"></p> -->
+
                                                     <!-- <p [innerHTML]="videoUrl"></p> -->
                                                     
                                                     <!-- <p [innerHTML]="message.print() | linky"></p> -->

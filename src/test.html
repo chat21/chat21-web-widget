@@ -103,8 +103,8 @@
               var component = event_data.detail.component;
               // console.log("component",component);              
 
-              // console.info("afterMessageRender message", message, " and messageEl", messageEl);              
-              
+               console.info("afterMessageRender message", message, " and messageEl", messageEl);              
+              //  console.info(message.uid);
               
              
               // console.log("innerHTML",messageEl.innerHTML);
@@ -119,14 +119,14 @@
                   <button type="button" onclick='alert("hello")'>Alert</button>
                   <button type="button" onclick='window.tiledesk.hide()'>Hide</button>
                   <button type="button" onclick='window.tiledesk.sendMessage("Web Api", "${message.recipient}", "${message.recipient_fullname}", "hello from web api", "text", "group", null)'>Send Message</button>                  
-                  <button type="button" id="buttonSendMessageFromComponent">Send Message from component</button>
+                  <button type="button" id="buttonSendMessageFromComponent-${message.uid}">Send Message from component</button>
                   <div>`;
 
 
-                   var buttonSendMessageFromComponent = document.getElementById('buttonSendMessageFromComponent');
+                   var buttonSendMessageFromComponent = document.getElementById('buttonSendMessageFromComponent-'+message.uid);
 
                     buttonSendMessageFromComponent.addEventListener('click', function (e) {
-                      component.sendMessage("hello from web api", "text");
+                      component.sendMessage("hello from web api from button"+message.uid, "text");
                     });
 
                 // console.log("innerHTML",messageEl.innerHTML);
