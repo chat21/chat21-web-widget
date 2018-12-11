@@ -20,8 +20,11 @@ export class ConversationsService {
   openConversations: ConversationModel[];
   archivedConversations: ConversationModel[];
   allConversations: ConversationModel[];
+  listConversations: ConversationModel[];
+
   obsAllConversations: any;
   obsOpenConversations: any;
+  obsListConversations: any;
 
   tenant: string;
   senderId: string;
@@ -43,14 +46,17 @@ export class ConversationsService {
     this.allConversations = new Array<ConversationModel>();
     this.openConversations = new Array<ConversationModel>();
     this.archivedConversations = new Array<ConversationModel>();
+    this.listConversations = new Array<ConversationModel>();
 
     this.obsAllConversations = new BehaviorSubject<[ConversationModel]>(null);
     this.obsOpenConversations = new BehaviorSubject<[ConversationModel]>(null);
+    this.obsListConversations = new BehaviorSubject<[ConversationModel]>(null);
+
   }
 
 
   public initialize(senderId, tenant) {
-    this.openConversations = [];
+    // this.openConversations = [];
     this.archivedConversations = [];
     this.allConversations = [];
     this.tenant = tenant;
@@ -59,6 +65,56 @@ export class ConversationsService {
     this.urlArchivedConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/archived_conversations/';
   }
 
+
+  // ============== begin:: subscribe to conversations ================//
+  public checkListConversationsLimit(limit?) {
+    if (!limit || limit <= 0) { limit = 100; }
+    const that = this;
+    const firebaseConversations = firebase.database().ref(this.urlConversation);
+    const refListConvLimit = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
+    this.g.wdLog(['checkListConversationsLimit *****', this.urlConversation]);
+
+    //// SUBSCRIBE ADDED ////
+    refListConvLimit.on('child_added', function (childSnapshot) {
+      that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
+      console.log(childSnapshot.val());
+      const conversation = that.setConversation(childSnapshot, false);
+      // tslint:disable-next-line:max-line-length
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
+        that.listConversations.unshift(conversation); // insert item top array
+        // that.updateConversations();
+        that.checkIsNew(conversation);
+        that.checkIsSound(conversation);
+        that.updateConversationBadge();
+        that.obsListConversations.next(that.listConversations);
+      }
+    });
+
+    //// SUBSCRIBE CHANGED ////
+    refListConvLimit.on('child_changed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+      const conversation = that.setConversation(childSnapshot, false);
+      that.listConversations.splice(index, 1, conversation);
+      that.updateConversations();
+      that.checkIsNew(conversation);
+      that.checkIsSound(conversation);
+      that.updateConversationBadge();
+      that.obsListConversations.next(that.listConversations);
+      that.g.wdLog(['child_changed *****', that.listConversations, index]);
+    });
+
+    //// SUBSCRIBE REMOVED ////
+    refListConvLimit.on('child_removed', function (childSnapshot) {
+      const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+      if (index > -1) {
+        that.listConversations.splice(index, 1);
+        that.updateConversations();
+        that.obsListConversations.next(that.listConversations);
+      }
+      that.updateConversationBadge();
+    });
+  }
+  // ============== end:: subscribe to conversations ================//
 
   // ============== begin:: subscribe to conversations ================//
   public checkListConversations(limit?) {
@@ -263,6 +319,8 @@ export class ConversationsService {
       //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
       //   conversation.color = that.setColorFromString(conversation.sender_fullname);
       // }
+      // this.setImageConversation(conversation, '1');
+
       const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
       conversation.image = IMG_PROFILE_SUPPORT;
       // conversation.badge = 1;
@@ -271,6 +329,26 @@ export class ConversationsService {
     }
     return;
   }
+
+
+  setImageConversation(conv, conversation_with) {
+
+    const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
+    conv.image = IMG_PROFILE_SUPPORT;
+    // if (conv.channel_type === TYPE_DIRECT) {
+        const urlNodeConcacts = '/apps/' + this.tenant + '/contacts/' + conv.sender + '/imageurl/';
+        this.g.wdLog(['setImageConversation *****', urlNodeConcacts]);
+        firebase.database().ref(urlNodeConcacts).once('value')
+        .then(function (snapshot) {
+            if (snapshot.val().trim()) {
+                conv.image = snapshot.val();
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+    // }
+}
 
   /**
    * regola sound message:

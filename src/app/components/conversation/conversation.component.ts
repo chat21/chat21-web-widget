@@ -26,6 +26,7 @@ import { ResizedEvent } from 'angular-resize-event/resized-event';
 
 import {DomSanitizer} from '@angular/platform-browser';
 
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -118,9 +119,12 @@ export class ConversationComponent implements OnInit {
     public contactService: ContactService,
     private agentAvailabilityService: AgentAvailabilityService,
     public starRatingWidgetService: StarRatingWidgetService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public appComponent: AppComponent
   ) {
     this.initAll();
+
+    this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
   }
 
   // onResized(event: ResizedEvent): void {
@@ -140,12 +144,21 @@ export class ConversationComponent implements OnInit {
       this.g.wdLog([' channelType: ', this.g.channelType]);
       this.g.wdLog([' departmentDefault: ', this.g.departmentDefault]);
     // set first message customized for department
-    if (this.g.departmentDefault.online_msg) {
-      this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
-    }
-    if (this.g.departmentDefault.offline_msg) {
-      this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
-    }
+    // if (this.g.departmentDefault.online_msg) {
+    //   this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
+    // }
+    // if (this.g.departmentDefault.offline_msg) {
+    //   this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
+    // }
+
+    const that = this;
+    const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
+      this.ngZone.run(() => {
+        that.scrollToBottom();
+      });
+    });
+    this.subscriptions.push(subscriptionEndRenderMessage);
+
     this.setFocusOnId('chat21-main-message-context');
   }
 
@@ -186,11 +199,19 @@ export class ConversationComponent implements OnInit {
    */
   private setAvailableAgentsStatus() {
     this.g.wdLog(['setAvailableAgentsStatus ----------> ' + this.g.availableAgents.length]);
+     // set first message customized for department
+     if (this.g.departmentDefault.online_msg) {
+      this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
+    }
+    if (this.g.departmentDefault.offline_msg) {
+      this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
+    }
     if (this.g.availableAgents.length <= 0) {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
     } else {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG);
     }
+
   }
 
   /**
@@ -508,6 +529,8 @@ export class ConversationComponent implements OnInit {
         this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
+      } else if (keyCode === 9) {
+        event.preventDefault();
       }
   }
 
@@ -772,9 +795,9 @@ export class ConversationComponent implements OnInit {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
   scrollToBottom() {
+    //this.g.wdLog([' scrollToBottom: ']);
     const that = this;
     if ( this.isScrolling === false ) {
-
       // const divScrollMe = this.scrollMe.nativeElement;
       setTimeout(function () {
         //   this.g.wdLog(['scrollToBottom ::', divID);
@@ -797,7 +820,7 @@ export class ConversationComponent implements OnInit {
             this.isScrolling = false;
           // that.scrollToBottom();
         }
-      }, 0);
+      }, 10);
     }
   }
 
@@ -1144,4 +1167,5 @@ export class ConversationComponent implements OnInit {
     this.g.wdLog(['hideMenuOptions']);
     this.isMenuShow  = false;
  }
+
 }

@@ -57,7 +57,7 @@ export class MessagingService {
       throw new Error('apiUrl is not defined');
     }
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
-    //this.obsAddedMsg = new BehaviorSubject<string>(null);
+    // this.obsAddedMsg = new BehaviorSubject<string>(null);
     // this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
 

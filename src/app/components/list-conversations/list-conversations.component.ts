@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
 import { setColorFromString, avatarPlaceholder, convertMessage } from '../../utils/utils';
+import { ContactService } from '../../providers/contact.service';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
@@ -27,7 +28,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
   // ========= begin:: sottoscrizioni ======= //
   subscriptions: Subscription[] = []; /** */
-  subOpenConversations;
+  // subOpenConversations;
+  subListConversations;
   subAllConversations;
   // ========= end:: sottoscrizioni ======= //
   // ========= begin:: dichiarazione funzioni ======= //
@@ -38,7 +40,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
 
   // ========= begin:: variabili del componente ======= //
-  conversations: ConversationModel[];
+  // conversations: ConversationModel[];
+  firtsConversations: ConversationModel[];
   allConversations: ConversationModel[];
   tenant = '';
   themeColor = '';
@@ -50,41 +53,34 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   constructor(
     public g: Globals,
     private ngZone: NgZone,
-    public conversationsService: ConversationsService
+    public conversationsService: ConversationsService,
+    public contactService: ContactService
   ) {
     this.initialize();
+    this.showConversations();
   }
 
   ngOnInit() {
-    // this.initialize();
+    this.g.wdLog([' ngOnInit:::: ', this.firtsConversations]);
   }
 
-  initialize() {
-    this.g.wdLog(['initialize: ListConversationsComponent']);
-    this.senderId = this.g.senderId;
-    this.tenant = this.g.tenant;
-    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
 
-     this.g.wdLog(['senderId: ', this.senderId]);
-     this.g.wdLog(['tenant: ', this.tenant]);
-     this.g.wdLog(['themeColor: ', this.g.themeColor]);
-     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
-
-    this.conversationsService.initialize(this.senderId, this.tenant);
-    this.conversationsService.checkListConversations(3);
-    this.conversationsService.checkListArchivedConversations();
-
-    // this.conversations = this.conversationsService.openConversations;
-
+  showConversations() {
+    this.g.wdLog([' showConversations:::: ', this.firtsConversations.length]);
     const that = this;
-    if (!this.subOpenConversations) {
-      this.subOpenConversations = this.conversationsService.obsOpenConversations.subscribe((conversations) => {
+    if (!this.subListConversations) {
+      this.subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
         this.ngZone.run(() => {
-          that.conversations = conversations;
-          that.g.wdLog([' conversations:::: ', that.conversations]);
+          // that.conversations = conversations;
+          if (conversations && conversations.lenght > 3) {
+            that.firtsConversations = conversations.slice(0, 3);
+          } else {
+            that.firtsConversations = conversations;
+          }
+          that.g.wdLog([' conversations:::: ', that.firtsConversations]);
         });
       });
-      this.subscriptions.push(this.subOpenConversations);
+      this.subscriptions.push(this.subListConversations);
     }
 
     if (!this.subAllConversations) {
@@ -96,8 +92,41 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
       });
       this.subscriptions.push(this.subAllConversations);
     }
+  }
+
+  initialize() {
+    this.g.wdLog(['initialize: ListConversationsComponent']);
+    this.senderId = this.g.senderId;
+    this.tenant = this.g.tenant;
+    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
+    this.firtsConversations = [];
+
+     this.g.wdLog(['senderId: ', this.senderId]);
+     this.g.wdLog(['tenant: ', this.tenant]);
+     this.g.wdLog(['themeColor: ', this.g.themeColor]);
+     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
+
+    this.conversationsService.initialize(this.senderId, this.tenant);
+    this.conversationsService.checkListConversationsLimit(3);
+    this.conversationsService.checkListArchivedConversations();
+
+    // this.conversations = this.conversationsService.openConversations;
 
   }
+
+  // setImageProfile(agent) {
+  //   //console.log(agent);
+  //   this.contactService.setImageProfile(agent)
+  //   .then(function (snapshot) {
+  //     if (snapshot.val().trim()) {
+  //       agent.image = snapshot.val();
+  //     }
+  //   })
+  //   .catch(function (err) {
+  //       console.log(err);
+  //   });
+  // }
+
 
 
   // ========= begin:: ACTIONS ============//
@@ -122,10 +151,10 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
-    ngOnDestroy() {
-      this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
-     this.unsubscribe();
- }
+  ngOnDestroy() {
+    this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+    this.unsubscribe();
+  }
 
  /** */
  unsubscribe() {
@@ -133,7 +162,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
          subscription.unsubscribe();
      });
      this.subscriptions = [];
-     this.subOpenConversations = null;
+     // this.subOpenConversations = null;
+     this.subListConversations = null;
      this.subAllConversations = null;
      this.g.wdLog(['this.subscriptions', this.subscriptions]);
  }

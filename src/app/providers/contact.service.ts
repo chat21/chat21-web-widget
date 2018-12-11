@@ -63,4 +63,25 @@ export class ContactService {
     return profiloContatto[0];
   }
 
+  // setImageProfile(agent) {
+  //   const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
+  //   agent.image = IMG_PROFILE_SUPPORT;
+  //   const urlNodeConcacts = '/apps/' + this.tenant + '/contacts/' + agent.id + '/imageurl/';
+  //   this.g.wdLog(['setImageConversation *****', urlNodeConcacts]);
+  //   return firebase.database().ref(urlNodeConcacts).once('value');
+  // }
+
+  profileImage(uidContact, format?) {
+    console.log('display format::' + format);
+    if (uidContact && uidContact !== '') {
+      let urlImagesNodeFirebase;
+      if (format === 'thumb') {
+        urlImagesNodeFirebase = '/profiles/' + uidContact + '/thumb_photo.jpg';
+      } else {
+        urlImagesNodeFirebase = '/profiles/' + uidContact + '/photo.jpg';
+      }
+      return firebase.storage().ref().child(urlImagesNodeFirebase).getDownloadURL();
+    }
+  }
+
 }

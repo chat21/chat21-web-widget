@@ -45,7 +45,7 @@
                     <span>{{g.widgetTitle}}</span>
                     <span id="agent-available-status">{{g.areAgentsAvailableText}}</span>
                 </div>
-                <p class="c21-header-writing">{{writingMessage}}</p>
+                <p class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
 
             </div>
 
@@ -80,8 +80,8 @@
                         <span>{{ g.ALL_AGENTS_OFFLINE_LABEL }}</span>
                     </div> -->
 
-                <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                <div *ngIf="isNewConversation && g.availableAgentsStatus && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
+                <!-- // nk - to edit: display the msg of welcome msg if exist && g.availableAgentsStatus -->
+                <div *ngIf="isNewConversation && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
                     [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
                     <div *ngIf="g.areAgentsAvailable">
                         <span> {{g.LABEL_FIRST_MSG}} </span>

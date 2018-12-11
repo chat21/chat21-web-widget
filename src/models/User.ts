@@ -10,4 +10,5 @@ export interface User {
     createdBy: string;
     is_group_member: boolean;
     __v: any;
+    imageurl: string;
 }

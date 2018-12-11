@@ -1,6 +1,7 @@
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 // https://www.davebennett.tech/subscribe-to-variable-change-in-angular-4-service/
 import 'rxjs/add/operator/takeWhile';
@@ -28,6 +29,7 @@ import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from 
 })
 
 export class AppComponent implements OnInit, OnDestroy {
+    obsEndRenderMessage: any;
 
     // ========= begin:: parametri di stato widget ======= //
     isInitialized = false;              /** if true show button */
@@ -35,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     isOpenConversation = false;         /** check open/close component conversation if is true  */
     isOpenAllConversation = false;
     isOpenSelectionDepartment = false;  /** check open/close modal select department */
-    isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
+    //isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
 
     // isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
@@ -75,9 +77,9 @@ export class AppComponent implements OnInit, OnDestroy {
         public messagingService: MessagingService,
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService,
-        private agentAvailabilityService: AgentAvailabilityService
+        private agentAvailabilityService: AgentAvailabilityService,
     ) {
-
+        this.obsEndRenderMessage = new BehaviorSubject(null);
     }
 
 
@@ -212,7 +214,10 @@ export class AppComponent implements OnInit, OnDestroy {
         that.g.areAgentsAvailable = true;
         that.g.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
         // add first message
-        this.g.availableAgents = availableAgents;
+        that.g.availableAgents = availableAgents;
+        availableAgents.forEach(element => {
+            that.setProfileImage(element);
+        });
         // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
       that.g.availableAgentsStatus = true;
@@ -223,6 +228,20 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * carico url immagine profilo passando id utente
+   */
+  setProfileImage(contact) {
+    const that = this;
+    console.log(' ********* displayImage::: ');
+    this.contactService.profileImage(contact.id, 'thumb')
+    .then((url) => {
+        contact.imageurl = url;
+    })
+    .catch((error) => {
+      // console.log("displayImage error::: ",error);
+    });
+  }
 
     // ========= begin:: GET DEPARTEMENTS ============//
     /**
@@ -380,22 +399,22 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.isOpenHome = true;
         this.isOpenConversation = false;
-        this.isOpenPrechatForm = false;
+        this.g.isOpenPrechatForm = false;
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
         if (this.g.startFromHome) {
             this.isOpenConversation = false;
-            this.isOpenPrechatForm = false;
+            this.g.isOpenPrechatForm = false;
             this.isOpenSelectionDepartment = false;
         } else if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
-            this.isOpenPrechatForm = true;
+            this.g.isOpenPrechatForm = true;
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
             if (this.g.departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            this.isOpenPrechatForm = false;
+            this.g.isOpenPrechatForm = false;
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
             if (this.g.departments.length > 1) {
@@ -474,10 +493,22 @@ export class AppComponent implements OnInit, OnDestroy {
                         .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
                 });
             };
+            /** set state PreChatForm close/open */
+            window['tiledesk'].endMessageRender = function () {
+                ngZone.run(() => {
+                    window['tiledesk']['angularcomponent'].component.endMessageRender();
+                });
+            };
+
         }
     }
 
 
+    endMessageRender() {
+        console.log('endMessageRender1111');
+        //pubblico evento scrollToBottom
+        this.obsEndRenderMessage.next();
+    }
 
     private sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
 
@@ -737,7 +768,7 @@ export class AppComponent implements OnInit, OnDestroy {
          this.g.wdLog(['returnPrechatFormComplete']);
         this.isOpenHome = true;
         this.isOpenConversation = true;
-        this.isOpenPrechatForm = false;
+        this.g.isOpenPrechatForm = false;
     }
 
     /**
@@ -749,7 +780,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
-        this.isOpenPrechatForm = false;
+        this.g.isOpenPrechatForm = false;
     }
 
     /**
@@ -780,13 +811,13 @@ export class AppComponent implements OnInit, OnDestroy {
         // altrimenti mostro modale dipartimenti
         if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
             this.isOpenConversation = false;
-            this.isOpenPrechatForm = true;
+            this.g.isOpenPrechatForm = true;
             this.isOpenSelectionDepartment = false;
             if (this.g.departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            this.isOpenPrechatForm = false;
+            this.g.isOpenPrechatForm = false;
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
             if (this.g.departments.length > 1) {
@@ -850,7 +881,7 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnCloseModalRateChat() {
         this.isOpenHome = true;
-        this.isOpenPrechatForm = false;
+        this.g.isOpenPrechatForm = false;
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
         this.g.isOpenStartRating = false;
@@ -863,7 +894,7 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnRateChatComplete() {
         this.isOpenHome = true;
-        this.isOpenPrechatForm = false;
+        this.g.isOpenPrechatForm = false;
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
         this.g.isOpenStartRating = false;

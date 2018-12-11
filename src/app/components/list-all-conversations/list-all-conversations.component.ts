@@ -1,4 +1,5 @@
-import { Component, NgZone, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -15,7 +16,7 @@ import { ConversationModel } from '../../../models/conversation';
   styleUrls: ['./list-all-conversations.component.scss']
 })
 
-export class ListAllConversationsComponent implements OnInit {
+export class ListAllConversationsComponent implements OnInit, OnDestroy {
 
   // ========= begin:: Input/Output values ============//
   @Output() eventSelctedConv = new EventEmitter<string>();
@@ -27,6 +28,9 @@ export class ListAllConversationsComponent implements OnInit {
   // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
   // ========= end:: dichiarazione funzioni ========= //
+
+  // ========= begin:: sottoscrizioni ======= //
+  subscriptions: Subscription[] = []; /** */
 
 
   // ========= begin:: variabili del componente ======= //
@@ -70,12 +74,11 @@ export class ListAllConversationsComponent implements OnInit {
     const that = this;
     const subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
       this.ngZone.run(() => {
-        this.conversations = conversations;
-         this.g.wdLog([' conversations:::: ', that.conversations]);
+        that.conversations = conversations;
+        that.g.wdLog([' conversations:::: ', that.conversations]);
       });
     });
-
-    // this.subscriptions.push(subAllConversations);
+    this.subscriptions.push(subAllConversations);
   }
 
 
@@ -93,6 +96,25 @@ export class ListAllConversationsComponent implements OnInit {
     }
   }
   // ========= end:: ACTIONS ============//
+
+
+  // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
+    /** elimino tutte le sottoscrizioni */
+    ngOnDestroy() {
+      this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+      this.unsubscribe();
+    }
+
+   /** */
+   unsubscribe() {
+       this.subscriptions.forEach(function (subscription) {
+           subscription.unsubscribe();
+       });
+       this.subscriptions = [];
+       this.conversations = [];
+       this.g.wdLog(['this.subscriptions', this.subscriptions]);
+   }
+   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
 }
 

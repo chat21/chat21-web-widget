@@ -42,7 +42,7 @@
                     <form id="chat21-form-container" [formGroup]="preChatFormGroup" novalidate >
                             <!-- (ngSubmit)="save(preChatFormGroup.value, preChatFormGroup.valid)" -->
                         <div class="c21-input-container">
-                            <input type="text" id="form-field-name" formControlName="name" placeholder="{{g.LABEL_FIELD_NAME}}">
+                            <input [attr.disabled]="!g.isOpenPrechatForm? '' : null" type="text" id="form-field-name" formControlName="name" placeholder="{{g.LABEL_FIELD_NAME}}">
                         </div>
                         <div class="text-danger">
                             <small [hidden]="preChatFormGroup.controls.name.valid || preChatFormGroup.controls.name.pristine">
@@ -50,7 +50,7 @@
                             </small>
                         </div>
                         <div class="c21-input-container">
-                            <input type="email" id="form-field-email" formControlName="email" placeholder="{{g.LABEL_FIELD_EMAIL}}">
+                            <input [attr.disabled]="!g.isOpenPrechatForm? '' : null" type="email" id="form-field-email" formControlName="email" placeholder="{{g.LABEL_FIELD_EMAIL}}">
                         </div>
                         <div class="text-danger">
                             <small [hidden]="preChatFormGroup.controls.email.valid || preChatFormGroup.controls.email.pristine">

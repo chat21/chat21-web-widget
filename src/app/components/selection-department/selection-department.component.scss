@@ -103,7 +103,7 @@
     -webkit-box-sizing: initial;
     box-sizing: initial;
     display: inline-block;
-    font-size: 1.2em;
+    font-size: 12px;
     padding: 0px;
     line-height: 24px;
     height: 24px;
@@ -113,6 +113,12 @@
     text-align: center;
     font-weight: 500;
 }
+.chat21-content-modal-select .chat21-name-list {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 24px;
+}
+
 .chat21-content-modal-select .chat21-title{
         margin-left: 10px;
         font-weight: initial;

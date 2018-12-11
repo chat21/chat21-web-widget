@@ -54,7 +54,7 @@
                     <!-- CONTENT -->
                     <div class="c21-modal-content">
                         <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
-                        <fieldset class="chat21-rating">
+                        <fieldset class="chat21-rating" [attr.disabled]="!g.isOpenStartRating? '' : null">
                             <input class="c21-input-star" type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" />
                             <label class="full c21-button" for="star5" title="eccellente - 5 stars"></label>
                             <input class="c21-input-star" type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" />
@@ -68,7 +68,7 @@
                         </fieldset>
                     </div>
                     <div class="clear"></div>
-                    <button *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    <button [attr.disabled]="!g.isOpenStartRating? '' : null" *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                     </button>

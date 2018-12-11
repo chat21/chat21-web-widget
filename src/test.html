@@ -98,6 +98,8 @@
 
             window.tiledesk.on('afterMessageRender', function(event_data) {
               // console.log("event_data", event_data);
+              
+
               var message =  event_data.detail.message;  
               var messageEl = event_data.detail.messageEl;
               var component = event_data.detail.component;
@@ -129,8 +131,11 @@
                       component.sendMessage("hello from web api from button"+message.uid, "text");
                     });
 
+                    
+                    window.tiledesk.endMessageRender();
                 // console.log("innerHTML",messageEl.innerHTML);
               }
+              
              
               
               //if (message.text === "ciao" && !messageEl.getAttribute("rendered")) {
@@ -158,6 +163,8 @@
           }
     
         });
+
+       
     
         var isOpenPrechatForm = true;
     

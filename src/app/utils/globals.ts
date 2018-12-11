@@ -45,6 +45,7 @@ export class Globals {
   departmentSelected: DepartmentModel;
   departmentDefault: DepartmentModel;
   isOpenMenuOptions: boolean;
+  isOpenPrechatForm: boolean;
 
   areAgentsAvailable = false;
   areAgentsAvailableText: string;
@@ -243,6 +244,8 @@ export class Globals {
     this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
     this.startFromHome = false;                          /** start from Home or Conversation */
+
+    this.isOpenPrechatForm = false;                     /** check open/close modal prechatform if g.preChatForm is true  */
 
     this.isOpenStartRating = false;                     /** show/hide all rating chat */
     // tslint:disable-next-line:max-line-length
