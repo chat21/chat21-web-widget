@@ -79,14 +79,18 @@ export class AuthService {
     firebase.auth().signInAnonymously()
     .then(function(user) {
       that.user = user;
-      that.unsubscribe();
+      if (that.unsubscribe) {
+        that.unsubscribe();
+      }
       that.obsLoggedUser.next(firebase.auth().currentUser);
       that.getIdToken();
     })
     .catch(function(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        that.unsubscribe();
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
         that.obsLoggedUser.next(0);
         that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
     });
@@ -110,14 +114,18 @@ export class AuthService {
       .then(function(user) {
         that.g.wdLog(['USER by signInWithCustomToken: ', user]);
         that.user = user;
-        that.unsubscribe();
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
         that.obsLoggedUser.next(firebase.auth().currentUser);
         that.getToken();
       })
       .catch(function(error) {
           const errorCode = error.code;
           const errorMessage = error.message;
-          that.unsubscribe();
+          if (that.unsubscribe) {
+            that.unsubscribe();
+          }
           that.obsLoggedUser.next(0);
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
       });
@@ -130,14 +138,18 @@ export class AuthService {
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function(user) {
       that.user = user;
-      that.unsubscribe();
+      if (that.unsubscribe) {
+        that.unsubscribe();
+      }
       that.obsLoggedUser.next(firebase.auth().currentUser);
       that.getIdToken();
     })
     .catch(function(error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      that.unsubscribe();
+      if (that.unsubscribe) {
+        that.unsubscribe();
+      }
       that.obsLoggedUser.next(0);
       that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
     });
@@ -186,7 +198,9 @@ export class AuthService {
     return firebase.auth().signOut()
     .then(value => {
       that.g.wdLog(['Nice, signOut OK!', value]);
-      that.unsubscribe();
+      if (that.unsubscribe) {
+        that.unsubscribe();
+      }
       that.obsLoggedUser.next(-1);
     })
     .catch(err => {

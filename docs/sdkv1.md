@@ -1,6 +1,4 @@
-# Web SDK version 2.0
-
-For the old versione of the widget see [here](./sdkv1.md). 
+# Web SDK version 1.0
 
 This guide will show you how to get started as quickly as possible with the Web SDK from TileDesk. The Web SDK will give businesses and developers the flexibility to build and customize a chat experience that meet their specific design/brand requirements.
 
@@ -19,7 +17,7 @@ Copy the following script and insert it in the HTML source between the HEAD tags
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id; //js.async=!0;
-            js.src = "https://widget.tiledesk.com/v2/tiledesk.js";
+            js.src = "https://widget.tiledesk.com/tiledesk.js";
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'tiledesk-jssdk'));
     </script>
@@ -43,21 +41,13 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 * **calloutTimer**: Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds),  10 (After 10 seconds).
 
-* **calloutTitle** : The title of the callout window.
-
-* **calloutMsg** :  The message of the callout window.
-
 * **userFullname**: Current user fullname. Set this parameter to specify the visitor fullname.
 
 * **userEmail**: Current user email address. Set this parameter to specify the visitor email address.
 
-* **wellcomeTitle**: The welcome title to show on the widget home page.
-
 * **wellcomeMsg**: Set the widget welcome message. Value type : string
 
 * **widgetTitle**: Set the widget title label shown in the widget header. Value type : string. The default value is Tiledesk.
-
-* **logoChat**: The url of the logo to show on the widget home page.
 
 * **lang** : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
@@ -75,9 +65,9 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 * **allowTranscriptDownload**: allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permitter values: true, false. Default value: false
 
-* **marginX**: Set the side margin, left or right depending on the align property. Default value : 20px
+* **marginX**: Set the side margin, left or right depending on the align property
 
-* **marginY**: Set the distance from the page bottom margin. Default value : 20px
+* **marginY**: Set the distance from the page bottom margin
 
 
 ### Example 1. Widget with user fullname and email
@@ -286,10 +276,3 @@ Example:
       }
 </script>
 ```
-
-
-
-
-# Enabling authenticated visitors in the Chat widget
-You can configure your widget to authenticate visitors using the Javascript API and JWT token.
-More info [here](./auth.md)

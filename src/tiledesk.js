@@ -23,7 +23,7 @@ function appendJs(url) {
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     // console.log("tiledeskScriptLocation", tiledeskScriptLocation);
     var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/tiledesk.js","");
-    console.log("tiledeskScriptBaseLocation", tiledeskScriptBaseLocation);
+   // console.log("tiledeskScriptBaseLocation", tiledeskScriptBaseLocation);
     
     window.tiledesk = new function() {
         //this.type = "macintosh";

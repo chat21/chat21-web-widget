@@ -516,7 +516,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         const messageSent = this.messagingService
             .sendMessage(senderFullname, text, type, '', recipient, recipientFullname, attributes, null, channel_type);
-        console.log('messageSent', messageSent);
+            this.g.wdLog(['messageSent', messageSent]);
     }
     /** */
 
@@ -539,7 +539,7 @@ export class AppComponent implements OnInit, OnDestroy {
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
                     }, error => {
                         console.error('Error decoding token: ', error);
-                        console.log('call signout');
+                       // console.log('call signout');
                         that.signOut();
                     });
                     // , () => {
@@ -547,8 +547,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     // });
             }, error => {
                 console.error('Error creating firebase token: ', error);
-                console.error('Error decoding token: ', error);
-                console.log('call signout');
+                // console.log('call signout');
                 that.signOut();
             });
             // , () => {
