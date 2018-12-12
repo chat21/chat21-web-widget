@@ -11,11 +11,11 @@ ng build --prod --base-href --output-hashing none
 cd dist
 #aws s3 sync . s3://tiledesk-widget/dev/0/$NEW_BUILD/
 #aws --profile f21 s3 sync . s3://tiledesk-widget/
-aws s3 sync . s3://tiledesk-widget/
+aws s3 sync . s3://tiledesk-widget/v2/
 cd ..
 
 #aws --profile f21 cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 
-echo new version deployed on s3://tiledesk-widget/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/index.html
+echo new version deployed $start$NEW_BUILD on s3://tiledesk-widget/v2
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/index.html

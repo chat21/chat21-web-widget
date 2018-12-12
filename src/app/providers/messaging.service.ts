@@ -161,7 +161,7 @@ export class MessagingService {
         // that.deleteWritingMessages(message['sender']);
         // notifico arrivo nuovo messaggio
         //  this.g.wdLog(['NOTIFICO NW MSG *****', that.obsAdded);
-        that.obsAdded.next(msg);
+        //that.obsAdded.next(msg);
         if (message && message.sender === that.senderId) {
           // && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
@@ -180,6 +180,7 @@ export class MessagingService {
           that.messages.push(msg);
         }
         that.messages.sort(that.compareValues('timestamp', 'asc'));
+        that.obsAdded.next(msg);
       }
     });
   }

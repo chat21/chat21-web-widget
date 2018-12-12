@@ -505,8 +505,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     endMessageRender() {
-        console.log('endMessageRender1111');
-        //pubblico evento scrollToBottom
+        console.log('endMessageRender');
         this.obsEndRenderMessage.next();
     }
 

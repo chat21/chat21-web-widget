@@ -1,4 +1,4 @@
-import { NgZone, HostListener, ElementRef, Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
@@ -35,7 +35,7 @@ import { AppComponent } from '../../app.component';
   // tslint:disable-next-line:use-host-property-decorator
   host: {'(window:resize)': 'onResize($event)'}
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, AfterViewInit {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
@@ -161,6 +161,18 @@ export class ConversationComponent implements OnInit {
 
     this.setFocusOnId('chat21-main-message-context');
   }
+
+  ngAfterViewInit() {
+    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    // if (this.scrollMe) {
+    //   const divScrollMe = this.scrollMe.nativeElement;
+    //   const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+    //   if (checkContentScrollPosition) {
+    //     this.scrollToBottom();
+    //   }
+    // }
+  }
+
 
   /**
    * do per scontato che this.userId esiste!!!
@@ -412,16 +424,21 @@ export class ConversationComponent implements OnInit {
       //   that.triggetBeforeMessageRender(newMessage.text);
       // }
       if ( that.startScroll || newMessage.sender === that.g.senderId) {
-        that.scrollToBottom();
+        that.g.wdLog(['1-------']);
+        setTimeout(function () {
+          that.scrollToBottom();
+        }, 100);
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
+          that.g.wdLog(['2-------']);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 0);
+          }, 100);
         } else {
+          that.g.wdLog(['3-------']);
           that.NUM_BADGES++;
           that.soundMessage();
         }
@@ -795,18 +812,18 @@ export class ConversationComponent implements OnInit {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
   scrollToBottom() {
-    //this.g.wdLog([' scrollToBottom: ']);
+    this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
     const that = this;
     if ( this.isScrolling === false ) {
       // const divScrollMe = this.scrollMe.nativeElement;
       setTimeout(function () {
-        //   this.g.wdLog(['scrollToBottom ::', divID);
+
         try {
-          this.isScrolling = true;
+          that.isScrolling = true;
           const objDiv = document.getElementById(that.idDivScroll);
           //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
           objDiv.scrollIntoView(false);
-          this.isScrolling = false;
+          that.isScrolling = false;
           //   this.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
           //   this.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
           //   this.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
@@ -815,9 +832,10 @@ export class ConversationComponent implements OnInit {
           //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
           // } catch ( err ) { }
           // // that.badgeNewMessages = 0;
+          // console.log(objDiv);
         } catch (err) {
-            // this.g.wdLog(['RIPROVO ::']);
-            this.isScrolling = false;
+            // that.g.wdLog(['RIPROVO ::']);
+            that.isScrolling = false;
           // that.scrollToBottom();
         }
       }, 10);
