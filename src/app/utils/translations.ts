@@ -4,7 +4,7 @@ export const en = {
     'LABEL_START_NW_CONV': 'New conversation',
     'LABEL_FIRST_MSG': 'Describe shortly your problem, you will be contacted by an agent.',
     // tslint:disable-next-line:max-line-length
-    'LABEL_FIRST_MSG_NO_AGENTS': 'You can anyway describe your problem. It will be assigned to the support team who will answer you as soon as possible.',
+    'LABEL_FIRST_MSG_NO_AGENTS': '🤔 All operators are offline at the moment. You can anyway describe your problem. It will be assigned to the support team who will answer you as soon as possible.',
     'LABEL_SELECT_TOPIC': 'Select a topic',
     'LABEL_COMPLETE_FORM': 'Complete the form to start a conversation with the next available agent.',
     'LABEL_FIELD_NAME': 'Name',
@@ -59,7 +59,7 @@ export const it = {
     'LABEL_START_NW_CONV': 'Nuova conversazione',
     'LABEL_FIRST_MSG': 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato.',
     // tslint:disable-next-line:max-line-length
-    'LABEL_FIRST_MSG_NO_AGENTS': 'Puoi comunque descrivere il tuo problema. Sarà assegnato al team di supporto che ti risponderà appena possibile.',
+    'LABEL_FIRST_MSG_NO_AGENTS': '🤔 Tutti gli operatori sono offline al momento.Puoi comunque descrivere il tuo problema. Sarà assegnato al team di supporto che ti risponderà appena possibile.',
     'LABEL_SELECT_TOPIC': 'Seleziona un argomento',
     'LABEL_COMPLETE_FORM': 'Completa il form per iniziare una conversazione con il prossimo agente disponibile.',
     'LABEL_FIELD_NAME': 'Nome',
