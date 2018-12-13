@@ -728,7 +728,7 @@ export class AppComponent implements OnInit, OnDestroy {
     openCloseWidget($event) {
         this.g.displayEyeCatcherCard = 'none';
         this.g.isOpen = $event;
-         this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
+        this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
     }
 
     /**
