@@ -78,7 +78,7 @@ export class ConversationsService {
     //// SUBSCRIBE ADDED ////
     refListConvLimit.on('child_added', function (childSnapshot) {
       that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
-      console.log(childSnapshot.val());
+      // console.log(childSnapshot.val());
       const conversation = that.setConversation(childSnapshot, false);
       // tslint:disable-next-line:max-line-length
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
@@ -284,15 +284,15 @@ export class ConversationsService {
 
   updateConversationBadge() {
     let conversationsBadge = 0;
-    console.log("this.listConversations", this.listConversations);
+    // console.log("this.listConversations", this.listConversations);
     this.listConversations.forEach(element => {
-      console.log("element", element);
+      // console.log("element", element);
       if (element.is_new === true && element.archived === false) {
         conversationsBadge++;
       }
     });
-    // this.g.wdLog(['updateConversationBadge', conversationsBadge]);
-    console.log("updateConversationBadge", conversationsBadge);
+    this.g.wdLog(['updateConversationBadge', conversationsBadge]);
+    // console.log("updateConversationBadge", conversationsBadge);
     this.g.conversationsBadge = conversationsBadge;
   }
 

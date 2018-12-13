@@ -208,7 +208,7 @@ export function convertColorToRGBA(color, opacity) {
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
   } else if ( color.indexOf('rgb(') > -1 ) {
     const rgb = color.split(',');
-    console.log(rgb);
+    // console.log(rgb);
     const r = rgb[0].substring(4);
     const g = rgb[1];
     const b = rgb[2].substring(0, rgb[2].length - 1);

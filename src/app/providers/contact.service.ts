@@ -72,7 +72,7 @@ export class ContactService {
   // }
 
   profileImage(uidContact, format?) {
-    console.log('display format::' + format);
+    // console.log('display format::' + format);
     if (uidContact && uidContact !== '') {
       let urlImagesNodeFirebase;
       if (format === 'thumb') {

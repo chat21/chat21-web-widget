@@ -233,7 +233,7 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   setProfileImage(contact) {
     const that = this;
-    console.log(' ********* displayImage::: ');
+    // console.log(' ********* displayImage::: ');
     this.contactService.profileImage(contact.id, 'thumb')
     .then((url) => {
         contact.imageurl = url;
@@ -505,7 +505,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     endMessageRender() {
-        console.log('endMessageRender');
+        // console.log('endMessageRender');
         this.obsEndRenderMessage.next();
     }
 
