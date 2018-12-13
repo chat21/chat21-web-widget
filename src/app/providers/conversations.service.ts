@@ -257,7 +257,7 @@ export class ConversationsService {
    * check if new or modify conversation is on active conversation
    */
   public checkIsNew(conversation) {
-    if ( this.g.activeConversation === conversation.uid ) {
+    if ( this.g.activeConversation === conversation.uid && this.g.isOpen === true ) {
       this.updateIsNew(conversation);
     }
   }
@@ -292,7 +292,7 @@ export class ConversationsService {
       }
     });
     this.g.wdLog(['updateConversationBadge', conversationsBadge]);
-    // console.log("updateConversationBadge", conversationsBadge);
+     // console.log("updateConversationBadge", conversationsBadge);
     this.g.conversationsBadge = conversationsBadge;
   }
 
