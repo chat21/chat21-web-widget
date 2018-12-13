@@ -400,14 +400,13 @@ tiledeskwidget-root{
             overflow: hidden;
             background-color: #ffffff;
             z-index: 1;
-        
             border-radius: 0px;
             box-shadow: $trasp-light-black 0 0 38px;
             display: none;
             overflow-y: hidden;
-            &.active {
-                display: block;
-            }
+            // &.active {
+            //     display: block;
+            // }
             &.full-screen-mode {
                 width: 100%;
                 height: 100%;

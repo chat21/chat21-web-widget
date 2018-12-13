@@ -4,11 +4,12 @@
 
     <!-- 
     ****** WINDOW CHAT CONVERSATION ******
+    [class.active]="g.isOpen" -> su firefox nn funziona bene, aggiunto come style inline
     -->
 
-    <div [class.active]="g.isOpen" id="chat21-conversations" class="chat21-window" 
+    <div id="chat21-conversations" class="chat21-window"
     [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'align-left' : g.align === 'left', 'align-right' : g.align === 'right'}"
-    [ngStyle]="{ 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
+    [ngStyle]="{ 'display': (g.isOpen == true)?'block':'none', 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-home 
