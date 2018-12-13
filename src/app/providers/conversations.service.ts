@@ -284,15 +284,15 @@ export class ConversationsService {
 
   updateConversationBadge() {
     let conversationsBadge = 0;
-    console.log("this.listConversations", this.listConversations);
+    // console.log("this.listConversations", this.listConversations);
     this.listConversations.forEach(element => {
-      console.log("element", element);
+      // console.log("element", element);
       if (element.is_new === true && element.archived === false) {
         conversationsBadge++;
       }
     });
-    // this.g.wdLog(['updateConversationBadge', conversationsBadge]);
-    console.log("updateConversationBadge", conversationsBadge);
+    this.g.wdLog(['updateConversationBadge', conversationsBadge]);
+    // console.log("updateConversationBadge", conversationsBadge);
     this.g.conversationsBadge = conversationsBadge;
   }
 
