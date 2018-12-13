@@ -11,6 +11,7 @@ import { Globals } from '../utils/globals';
 import { ConversationModel } from '../../models/conversation';
 // utils
 import { avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+// import { ConsoleReporter } from 'jasmine';
 
 
 
@@ -134,7 +135,7 @@ export class ConversationsService {
         that.updateConversations();
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);
-        that.updateConversationBadge();
+        // that.updateConversationBadge();
         that.obsOpenConversations.next(that.openConversations);
       }
     });
@@ -147,7 +148,7 @@ export class ConversationsService {
       that.updateConversations();
       that.checkIsNew(conversation);
       that.checkIsSound(conversation);
-      that.updateConversationBadge();
+      // that.updateConversationBadge();
       that.obsOpenConversations.next(that.openConversations);
       that.g.wdLog(['child_changed *****', that.openConversations, index]);
     });
@@ -160,7 +161,7 @@ export class ConversationsService {
         that.updateConversations();
         that.obsOpenConversations.next(that.openConversations);
       }
-      that.updateConversationBadge();
+      // that.updateConversationBadge();
     });
   }
   // ============== end:: subscribe to conversations ================//
@@ -185,7 +186,7 @@ export class ConversationsService {
         that.updateConversations();
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);
-        that.updateConversationBadge();
+        // that.updateConversationBadge();
       }
     });
 
@@ -198,7 +199,7 @@ export class ConversationsService {
       that.updateConversations();
       that.checkIsNew(conversation);
       that.checkIsSound(conversation);
-      that.updateConversationBadge();
+      // that.updateConversationBadge();
 
       that.g.wdLog(['child_changed *****', that.archivedConversations, index]);
     });
@@ -210,7 +211,7 @@ export class ConversationsService {
         that.archivedConversations.splice(index, 1);
         that.updateConversations();
       }
-      that.updateConversationBadge();
+     // that.updateConversationBadge();
     });
   }
   // ========= end:: subscribe to archived conversations ============//
@@ -283,11 +284,15 @@ export class ConversationsService {
 
   updateConversationBadge() {
     let conversationsBadge = 0;
-    this.allConversations.forEach(element => {
+    console.log("this.listConversations", this.listConversations);
+    this.listConversations.forEach(element => {
+      console.log("element", element);
       if (element.is_new === true && element.archived === false) {
         conversationsBadge++;
       }
     });
+    // this.g.wdLog(['updateConversationBadge', conversationsBadge]);
+    console.log("updateConversationBadge", conversationsBadge);
     this.g.conversationsBadge = conversationsBadge;
   }
 
