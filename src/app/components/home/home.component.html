@@ -8,9 +8,10 @@
     >
 
         <div class="c21-header-container">
-            
             <!-- ICON CLOSE CHAT -->
-            <div class="c21-header-button close">
+            <div class="c21-header-button" 
+            [ngStyle]="{'display': (g.hideHeaderCloseButton)?'none':'block'}"
+            >
                 <div class="c21-close-button" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
                     <div class="c21-close-button-body" (click)="f21_close()">
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">

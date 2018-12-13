@@ -119,6 +119,7 @@ export class Globals {
   userEmail;
   widgetTitle;
   fullscreenMode;
+  hideHeaderCloseButton;
   themeColor;
   themeForegroundColor;
   showWidgetNameInConversation;
@@ -148,7 +149,7 @@ export class Globals {
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
     // for retrocompatibility 0.9 (without tiledesk.js)
      this.wdLog([' ---------------- 1: baseLocation ---------------- ']);
-    this.baseLocation = 'https://widget.tiledesk.com';
+    this.baseLocation = 'https://widget.tiledesk.com/v2';
     if (window['tiledesk']) {
       this.baseLocation = window['tiledesk'].getBaseLocation();
     }
@@ -243,7 +244,7 @@ export class Globals {
     this.autoStart = true;                              /** start Authentication and startUI */
     this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
-    this.startFromHome = false;                          /** start from Home or Conversation */
+    this.startFromHome = true;                          /** start from Home or Conversation */
 
     this.isOpenPrechatForm = false;                     /** check open/close modal prechatform if g.preChatForm is true  */
 
@@ -271,7 +272,7 @@ export class Globals {
     this.widgetTitle = 'TileDesk';              /** Set the widget title label shown in the widget header. Value type : string. The default value is Tiledesk. */
 
     // tslint:disable-next-line:max-line-length
-    // ELIMINATA!!! this.hideHeaderCloseButton = false; /** Hide the close button in the widget header. Permitted values: true, false. The default value is false. */
+    this.hideHeaderCloseButton = false;         /** Hide the close button in the widget header. Permitted values: true, false. The default value is false. */
 
     // tslint:disable-next-line:max-line-length
     this.fullscreenMode = false;                /** if it is true, the chat window is open in fullscreen mode. Permitted values: true, false. Default value : false */
@@ -541,6 +542,10 @@ export class Globals {
     if (TEMP !== undefined) {
       this.fullscreenMode = TEMP;
     }
+    TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
+    if (TEMP !== undefined) {
+      this.hideHeaderCloseButton = TEMP;
+    }
     TEMP = window['tiledeskSettings']['themeColor'];
     if (TEMP !== undefined) {
       this.themeColor = convertColorToRGBA(TEMP, 100);
@@ -667,6 +672,9 @@ export class Globals {
     if (this.getParameterByName('tiledesk_fullscreenMode')) {
       this.fullscreenMode = true;
     }
+    if (this.getParameterByName('tiledesk_hideHeaderCloseButton')) {
+      this.hideHeaderCloseButton = (this.getParameterByName('tiledesk_hideHeaderCloseButton') === 'true');
+    }
     if (this.getParameterByName('tiledesk_themecolor')) {
       const TEMP = this.getParameterByName('tiledesk_themecolor');
       this.themeColor = convertColorToRGBA(TEMP, 100);
@@ -723,7 +731,7 @@ export class Globals {
       'lang': this.lang, 'calloutTimer': this.calloutTimer,
       'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
       'wellcomeMsg': this.wellcomeMsg, 'calloutTitle': this.calloutTitle,
-      'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode,
+      'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,

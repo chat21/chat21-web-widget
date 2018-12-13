@@ -204,13 +204,16 @@ export function convertColorToRGBA(color, opacity) {
     const r = rgb[0].substring(5);
     const g = rgb[1];
     const b = rgb[2];
-    // const b = rgb[2].substring(1, rgb[2].lenght - 1);
+    // const b = rgb[2].substring(1, rgb[2].length - 1);
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
   } else if ( color.indexOf('rgb(') > -1 ) {
     const rgb = color.split(',');
+    console.log(rgb);
     const r = rgb[0].substring(4);
     const g = rgb[1];
-    const b = rgb[2].substring(1, rgb[2].lenght - 1);
+    const b = rgb[2].substring(0, rgb[2].length - 1);
+    // console.log(b);
+    // console.log(rgb[2].length);
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
   }
   // console.log('convertColorToRGBA' + color + result);

@@ -160,6 +160,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     this.subscriptions.push(subscriptionEndRenderMessage);
 
     this.setFocusOnId('chat21-main-message-context');
+
+    this.attributes = this.setAttributes();
   }
 
   ngAfterViewInit() {
@@ -351,7 +353,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    */
   initializeChatManager() {
     this.arrayFilesLoad = [];
-    this.attributes = this.setAttributes();
     this.setSubscriptions();
     this.checkWritingMessages();
   }
@@ -360,32 +361,29 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    *
    */
   setAttributes(): any {
-    let attributes: any = JSON.parse(localStorage.getItem('attributes'));
-    if (!attributes || attributes === 'undefined') {
-      attributes = {
-        client: this.CLIENT_BROWSER,
-        sourcePage: location.href,
-        projectId: this.g.projectid
-        // departmentId: '',
-        // departmentName: '',
-        // departmentId: this.departmentSelected._id,
-        // departmentName: this.departmentSelected.name,
-        // userEmail: this.userEmail,
-        // userName: this.userFullname
-      };
+    if (!this.g.attributes || this.g.attributes === 'undefined') {
+      let attributes: any = JSON.parse(localStorage.getItem('attributes'));
+      if (!attributes || attributes === 'undefined') {
+        attributes = {
+          client: this.CLIENT_BROWSER,
+          sourcePage: location.href,
+          projectId: this.g.projectid
+        };
+      }
+      if (this.g.userEmail) {
+        attributes['userEmail'] = this.g.userEmail;
+      }
+      if (this.g.userFullname) {
+        attributes['userFullname'] = this.g.userFullname;
+      }
+      if (this.g.senderId) {
+        attributes['requester_id'] = this.g.senderId;
+      }
+      this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
+      localStorage.setItem('attributes', JSON.stringify(attributes));
+      return attributes;
     }
-    if (this.g.userEmail) {
-      attributes['userEmail'] = this.g.userEmail;
-    }
-    if (this.g.userFullname) {
-      attributes['userFullname'] = this.g.userFullname;
-    }
-    if (this.g.senderId) {
-      attributes['requester_id'] = this.g.senderId;
-    }
-    this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
-    localStorage.setItem('attributes', JSON.stringify(attributes));
-    return attributes;
+    return this.g.attributes;
   }
 
   /**
@@ -817,28 +815,28 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     if ( this.isScrolling === false ) {
       // const divScrollMe = this.scrollMe.nativeElement;
       setTimeout(function () {
-
         try {
           that.isScrolling = true;
           const objDiv = document.getElementById(that.idDivScroll);
           //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-          objDiv.scrollIntoView(false);
+          setTimeout(function () {
+            objDiv.scrollIntoView(false);
+          }, 100);
           that.isScrolling = false;
           //   this.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
           //   this.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
           //   this.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
-
           // try {
           //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
           // } catch ( err ) { }
           // // that.badgeNewMessages = 0;
           // console.log(objDiv);
         } catch (err) {
-            // that.g.wdLog(['RIPROVO ::']);
+            that.g.wdLog(['RIPROVO ::']);
             that.isScrolling = false;
           // that.scrollToBottom();
         }
-      }, 10);
+      }, 0);
     }
   }
 
@@ -1173,11 +1171,14 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    */
   soundMessage() {
     if ( this.g.isSoundActive ) {
-        this.g.wdLog(['****** soundMessage *****']);
+      const that = this;
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
+      this.g.wdLog(['****** soundMessage *****', this.audio.src]);
       this.audio.load();
-      this.audio.play();
+      setTimeout(function() {
+        that.audio.play();
+      }, 0);
     }
   }
 

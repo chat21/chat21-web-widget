@@ -297,7 +297,7 @@ export class MessagingService {
    */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
      this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
-     this.g.wdLog(['metadata:: ', metadata.toString()]);
+     this.g.wdLog(['attributes:: ', attributes.toString()]);
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';
@@ -332,7 +332,7 @@ export class MessagingService {
     );
     this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
-    this.g.wdLog(['messaggio **************', message.toString()]);
+    this.g.wdLog([message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {

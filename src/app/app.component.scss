@@ -240,9 +240,9 @@ tiledeskwidget-root{
     }
     /** header-buttons **/
     .c21-header-button {
-        &.close {
-            display: none;
-        }
+        // &.close {
+        //     display: none;
+        // }
     }
     .c21-close-button {
         position: absolute;
@@ -408,7 +408,18 @@ tiledeskwidget-root{
             &.active {
                 display: block;
             }
+            &.full-screen-mode {
+                width: 100%;
+                height: 100%;
+                right: 0px;
+                top: 0px;
+                left: 0px;
+                bottom: 0px;
+                border-radius: 0px;
+                max-height: none;
+            }
         }
+   
 
         .chat21-window {
             display: none;
@@ -585,7 +596,7 @@ tiledeskwidget-root{
             .header-button.close{
                 display: flex;
             }
-            #chat21-conversations{
+            #chat21-conversations {
                 width: 100%;
                 height: 100%;
                 right: 0px;

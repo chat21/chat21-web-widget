@@ -515,7 +515,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         const messageSent = this.messagingService
             .sendMessage(senderFullname, text, type, '', recipient, recipientFullname, attributes, null, channel_type);
-            this.g.wdLog(['messageSent', messageSent]);
+            this.g.wdLog([messageSent]);
     }
     /** */
 
@@ -737,8 +737,8 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     public returnDepartmentSelected($event) {
         if ($event) {
-             this.g.wdLog(['onSelectDepartment: ', $event]);
-            // this.g.departmentSelected = $event;
+            this.g.wdLog(['onSelectDepartment: ', $event]);
+            this.g.departmentSelected = $event;
             this.startNwConversation();
             this.isOpenHome = true;
             this.isOpenConversation = true;

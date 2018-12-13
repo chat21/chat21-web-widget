@@ -118,7 +118,8 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-     this.g.wdLog([' closePage: ']);
+    this.g.wdLog([' closePage: ']);
+    this.step = 0;
     this.starRatingWidgetService.setOsservable(false);
     this.eventClosePage.emit();
   }
