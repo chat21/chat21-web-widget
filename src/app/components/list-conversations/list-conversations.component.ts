@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { setColorFromString, avatarPlaceholder, convertMessage } from '../../utils/utils';
+import { setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
 import { ContactService } from '../../providers/contact.service';
 
 // models
@@ -66,7 +66,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
 
   showConversations() {
-    this.g.wdLog([' showConversations:::: ', this.firtsConversations.length]);
+    // this.g.wdLog([' showConversations:::: ', this.firtsConversations.length]);
     const that = this;
     if (!this.subListConversations) {
       this.subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
@@ -78,6 +78,9 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
             that.firtsConversations = conversations;
           }
           that.g.wdLog([' conversations:::: ', that.firtsConversations]);
+          if ( that.firtsConversations && that.firtsConversations.length > 0 ) {
+            that.firtsConversations.sort(compareValues('timestamp', 'desc'));
+          }
         });
       });
       this.subscriptions.push(this.subListConversations);
@@ -88,6 +91,9 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
         this.ngZone.run(() => {
           that.allConversations = conversations;
           that.g.wdLog([' allConversations:::: ', that.allConversations]);
+          if ( that.allConversations && that.allConversations.length > 0 ) {
+            that.firtsConversations.sort(compareValues('timestamp', 'desc'));
+          }
         });
       });
       this.subscriptions.push(this.subAllConversations);

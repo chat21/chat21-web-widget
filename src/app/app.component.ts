@@ -583,7 +583,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private f21_open() {
         this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
         if (this.g.senderId) {
-            this.g.isOpen = true; // !this.isOpen;
+            // this.g.isOpen = true; // !this.isOpen;
+            this.g.setIsOpen(true);
             this.isInitialized = true;
             localStorage.setItem('isOpen', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
@@ -593,7 +594,8 @@ export class AppComponent implements OnInit, OnDestroy {
     /** close popup conversation */
     private f21_close() {
          this.g.wdLog(['isOpen::', this.g.isOpen]);
-        this.g.isOpen = false;
+        // this.g.isOpen = false;
+        this.g.setIsOpen(false);
         localStorage.setItem('isOpen', 'false');
     }
 
@@ -678,9 +680,11 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     setIsWidgetOpenOrActive() {
         if (localStorage.getItem('isOpen') === 'true') {
-            this.g.isOpen = true;
+            // this.g.isOpen = true;
+            this.g.setIsOpen(true);
         } else if (localStorage.getItem('isOpen') === 'false') {
-            this.g.isOpen = false;
+            // this.g.isOpen = false;
+            this.g.setIsOpen(false);
         }
         // this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
     }
@@ -718,7 +722,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * onClick button close widget
      */
     returnCloseWidget() {
-        this.g.isOpen = false;
+        // this.g.isOpen = false;
+        this.g.setIsOpen(false);
     }
 
     /**
@@ -727,7 +732,6 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     openCloseWidget($event) {
         this.g.displayEyeCatcherCard = 'none';
-        this.g.isOpen = $event;
         this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
     }
 
