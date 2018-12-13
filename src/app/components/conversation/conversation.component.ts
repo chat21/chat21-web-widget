@@ -124,7 +124,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   ) {
     this.initAll();
 
-    this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
+    // this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
   }
 
   // onResized(event: ResizedEvent): void {
@@ -1176,6 +1176,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.g.wdLog(['****** soundMessage *****', this.audio.src]);
       this.audio.load();
+      // console.log('conversation play');
       setTimeout(function() {
         that.audio.play();
       }, 0);

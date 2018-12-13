@@ -242,7 +242,8 @@ export class ConversationsService {
    *
    */
   public checkIsSound(conversation) {
-    if (this.g.activeConversation !== conversation.recipient && conversation.sender !== this.senderId) {
+    // console.log('conversation', conversation);
+    if (this.g.activeConversation !== conversation.recipient && conversation.sender !== this.senderId && conversation.is_new === true) {
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
       this.soundMessage();
@@ -369,6 +370,7 @@ export class ConversationsService {
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();
       this.audio.play();
+      // console.log('conversations play');
     }
   }
 

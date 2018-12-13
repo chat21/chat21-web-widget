@@ -313,7 +313,9 @@ export class Globals {
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
     // tslint:disable-next-line:max-line-length
-    this.isSoundActive = (localStorage.getItem('isSoundActive')) ? true : false;
+    if (localStorage.getItem('isSoundActive')) {
+      this.isSoundActive = localStorage.getItem('isSoundActive');
+    }
     this.conversationsBadge = 0;
     this.activeConversation = '';
     this.isOpenMenuOptions = false;             /** open/close menu options  */
