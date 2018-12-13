@@ -1128,7 +1128,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     if ( this.g.isSoundActive === true ) {
       localStorage.setItem('isSoundActive', 'true');
     } else {
-      localStorage.removeItem('isSoundActive');
+      localStorage.setItem('isSoundActive', 'false');
     }
   }
 

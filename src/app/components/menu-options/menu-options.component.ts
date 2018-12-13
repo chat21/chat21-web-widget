@@ -32,7 +32,7 @@ export class MenuOptionsComponent implements OnInit {
     if ( this.g.isSoundActive === true ) {
       localStorage.setItem('isSoundActive', 'true');
     } else {
-      localStorage.removeItem('isSoundActive');
+      localStorage.setItem('isSoundActive', 'false');
     }
   }
 
