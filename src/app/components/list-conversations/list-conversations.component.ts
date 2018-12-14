@@ -30,7 +30,10 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = []; /** */
   // subOpenConversations;
   subListConversations;
+
+  // usata per fare la count delle conversazioni totali e se maggiore di 0 mostrare il pulsante Vedi tutte altrimenti disabilitato
   subAllConversations;
+  
   // ========= end:: sottoscrizioni ======= //
   // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
