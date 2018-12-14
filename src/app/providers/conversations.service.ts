@@ -64,6 +64,24 @@ export class ConversationsService {
     this.senderId = senderId;
     this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
     this.urlArchivedConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/archived_conversations/';
+
+    const that = this;
+    /**
+     * se ho aperto il widget:
+     * controllo se sulla conversazione attiva (se esiste ed è una delle 3 in hp cioè appartiene a listConversations)
+     * e aggiorno la conversazione con 'is_new' = false;
+     * in tal caso aggiorno il badge
+     */
+    this.g.obsIsOpen.subscribe((valIsOpen) => {
+      if ( valIsOpen === true ) {
+        that.listConversations.forEach(element => {
+          if ( that.g.activeConversation === element.uid ) {
+            that.updateIsNew(element);
+            that.updateConversationBadge();
+          }
+        });
+      }
+    });
   }
 
 
@@ -262,6 +280,7 @@ export class ConversationsService {
       this.updateIsNew(conversation);
     }
   }
+
 
   /** */
   public updateIsNew(conversation) {

@@ -51,10 +51,11 @@ export class LauncherButtonComponent implements OnInit {
 
   openCloseWidget() {
     if (this.g.isLogged === true) {
-       this.g.wdLog(['1 open_close_handler BUTTON: ', this.g.isOpen]);
-      this.g.isOpen = !this.g.isOpen;
+      this.g.wdLog(['1 open_close_handler BUTTON: ', this.g.isOpen]);
+      //this.g.isOpen = !this.g.isOpen;
+      this.g.setIsOpen(!this.g.isOpen);
       localStorage.setItem('isOpen', this.g.isOpen);
-       this.g.wdLog(['2 open_close_handler BUTTON: ', this.g.isOpen]);
+      this.g.wdLog(['2 open_close_handler BUTTON: ', this.g.isOpen]);
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }
   }

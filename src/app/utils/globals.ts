@@ -9,11 +9,12 @@ import { convertColorToRGBA, getParameterByName } from '../utils/utils';
 
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class Globals {
 
-
+  obsIsOpen = new BehaviorSubject<boolean>(null);
   // ========= begin:: sottoscrizioni ======= //
   // subscriptions: Subscription[] = []; /** */
   // ========= end:: sottoscrizioni ======= //
@@ -137,9 +138,8 @@ export class Globals {
   isLogEnabled;
   filterByRequester;
 
-
   constructor(
-    private translatorService: TranslatorService
+    private translatorService: TranslatorService,
   ) {
   }
 
@@ -779,5 +779,11 @@ export class Globals {
        console.log(message.toString());
     }
   }
+
+  public setIsOpen(val) {
+    this.isOpen = val;
+    this.obsIsOpen.next(val);
+  }
+
 
 }
