@@ -30,7 +30,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = []; /** */
   // subOpenConversations;
   subListConversations;
-  subAllConversations;
+  subArchivedConversations;
   // ========= end:: sottoscrizioni ======= //
   // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
@@ -41,8 +41,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
   // ========= begin:: variabili del componente ======= //
   // conversations: ConversationModel[];
-  firtsConversations: ConversationModel[];
-  allConversations: ConversationModel[];
+  listConversations: Array<ConversationModel>;
+  archivedConversations: Array<ConversationModel>;
   tenant = '';
   themeColor = '';
   themeForegroundColor = '';
@@ -61,42 +61,36 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit:::: ', this.firtsConversations]);
+    this.g.wdLog([' ngOnInit:::: ', this.listConversations]);
   }
 
 
   showConversations() {
-    // this.g.wdLog([' showConversations:::: ', this.firtsConversations.length]);
+    this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
     const that = this;
     if (!this.subListConversations) {
       this.subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
-        this.ngZone.run(() => {
-          // that.conversations = conversations;
-          if (conversations && conversations.lenght > 3) {
-            that.firtsConversations = conversations.slice(0, 3);
-          } else {
-            that.firtsConversations = conversations;
-          }
-          that.g.wdLog([' conversations:::: ', that.firtsConversations]);
-          if ( that.firtsConversations && that.firtsConversations.length > 0 ) {
-            that.firtsConversations.sort(compareValues('timestamp', 'desc'));
-          }
-        });
+          that.ngZone.run(() => {
+            if (conversations && conversations.length > 3) {
+              that.listConversations = conversations.slice(0, 3);
+              that.g.wdLog([' >3 :::: ', that.listConversations.length]);
+            } else if (conversations && conversations.length > 0) {
+              that.listConversations = conversations;
+            }
+            that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
+          });
       });
       this.subscriptions.push(this.subListConversations);
     }
 
-    if (!this.subAllConversations) {
-      this.subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
-        this.ngZone.run(() => {
-          that.allConversations = conversations;
-          that.g.wdLog([' allConversations:::: ', that.allConversations]);
-          if ( that.allConversations && that.allConversations.length > 0 ) {
-            that.firtsConversations.sort(compareValues('timestamp', 'desc'));
-          }
+    if (!this.subArchivedConversations) {
+      this.subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
+        that.ngZone.run(() => {
+          that.archivedConversations = conversations;
+          that.g.wdLog([' archivedConversations:::: ', that.archivedConversations]);
         });
       });
-      this.subscriptions.push(this.subAllConversations);
+      this.subscriptions.push(this.subArchivedConversations);
     }
   }
 
@@ -105,19 +99,20 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
-    this.firtsConversations = [];
+    this.listConversations = [];
+    this.archivedConversations = [];
 
-     this.g.wdLog(['senderId: ', this.senderId]);
-     this.g.wdLog(['tenant: ', this.tenant]);
-     this.g.wdLog(['themeColor: ', this.g.themeColor]);
-     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
+    this.g.wdLog(['senderId: ', this.senderId]);
+    this.g.wdLog(['tenant: ', this.tenant]);
+    this.g.wdLog(['themeColor: ', this.g.themeColor]);
+    this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
-    this.conversationsService.checkListConversationsLimit(3);
+    this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
-
-    // this.conversations = this.conversationsService.openConversations;
-
+    this.listConversations = this.conversationsService.listConversations;
+    this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
+    this.g.wdLog(['this.listConversations', this.listConversations]);
   }
 
   // setImageProfile(agent) {
@@ -170,7 +165,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
      this.subscriptions = [];
      // this.subOpenConversations = null;
      this.subListConversations = null;
-     this.subAllConversations = null;
+     this.subArchivedConversations = null;
      this.g.wdLog(['this.subscriptions', this.subscriptions]);
  }
  // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//

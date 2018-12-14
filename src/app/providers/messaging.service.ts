@@ -99,7 +99,7 @@ export class MessagingService {
    *
    */
   connect(conversationWith) {
-     this.g.wdLog(['***** connect MessagingService *****']);
+    this.g.wdLog(['***** connect MessagingService *****']);
     this.checkRemoveConversation(conversationWith);
     this.checkMessages(conversationWith);
   }

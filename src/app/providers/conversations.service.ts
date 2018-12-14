@@ -18,13 +18,13 @@ import { avatarPlaceholder, setColorFromString, getFromNow, compareValues } from
 
 @Injectable()
 export class ConversationsService {
-  openConversations: ConversationModel[];
-  archivedConversations: ConversationModel[];
-  allConversations: ConversationModel[];
-  listConversations: ConversationModel[];
+  // openConversations: ConversationModel[];
+  archivedConversations: Array<ConversationModel>;
+  // allConversations: ConversationModel[];
+  listConversations: Array<ConversationModel>;
 
-  obsAllConversations: any;
-  obsOpenConversations: any;
+  // obsAllConversations: any;
+  obsArchivedConversations: any;
   obsListConversations: any;
 
   tenant: string;
@@ -44,13 +44,13 @@ export class ConversationsService {
   constructor(
     public g: Globals
   ) {
-    this.allConversations = new Array<ConversationModel>();
-    this.openConversations = new Array<ConversationModel>();
+    // this.allConversations = new Array<ConversationModel>();
+    // this.openConversations = new Array<ConversationModel>();
     this.archivedConversations = new Array<ConversationModel>();
     this.listConversations = new Array<ConversationModel>();
 
-    this.obsAllConversations = new BehaviorSubject<[ConversationModel]>(null);
-    this.obsOpenConversations = new BehaviorSubject<[ConversationModel]>(null);
+    // this.obsAllConversations = new BehaviorSubject<[ConversationModel]>(null);
+    this.obsArchivedConversations = new BehaviorSubject<[ConversationModel]>(null);
     this.obsListConversations = new BehaviorSubject<[ConversationModel]>(null);
 
   }
@@ -58,8 +58,8 @@ export class ConversationsService {
 
   public initialize(senderId, tenant) {
     // this.openConversations = [];
-    this.archivedConversations = [];
-    this.allConversations = [];
+    // this.archivedConversations = [];
+    // this.listConversations = [];
     this.tenant = tenant;
     this.senderId = senderId;
     this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
@@ -85,101 +85,121 @@ export class ConversationsService {
   }
 
 
+  // // ============== begin:: subscribe to conversations ================//
+  // public checkListConversationsLimit(limit?) {
+  //   if (!limit || limit <= 0) { limit = 100; }
+  //   const that = this;
+  //   const firebaseConversations = firebase.database().ref(this.urlConversation);
+  //   const refListConvLimit = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
+  //   this.g.wdLog(['checkListConversationsLimit *****', this.urlConversation]);
+
+  //   //// SUBSCRIBE ADDED ////
+  //   refListConvLimit.on('child_added', function (childSnapshot) {
+  //     that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
+  //     const conversation = that.setConversation(childSnapshot, false);
+  //     // tslint:disable-next-line:max-line-length
+  //     if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
+  //       that.checkIsNew(conversation);
+  //       that.checkIsSound(conversation);
+
+  //       that.listConversations.unshift(conversation); // insert item to top array
+  //       that.g.wdLog(['222 listConversations *****', that.listConversations.length, limit]);
+  //       if (that.listConversations && that.listConversations.length > limit) {
+  //         that.listConversations.slice(0, (limit - 1));
+  //       }
+  //       that.listConversations.sort(compareValues('timestamp', 'desc'));
+  //       that.g.wdLog(['333 listConversations *****']);
+  //       console.log(that.listConversations);
+
+  //       that.updateConversationBadge();
+  //       that.obsListConversations.next(that.listConversations);
+  //     }
+  //   });
+
+  //   //// SUBSCRIBE CHANGED ////
+  //   refListConvLimit.on('child_changed', function (childSnapshot) {
+  //     const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+  //     const conversation = that.setConversation(childSnapshot, false);
+  //     //if (index > 0 ) {
+  //       that.listConversations.splice(index, 1, conversation);
+  //       if (that.listConversations && that.listConversations.length > limit) {
+  //         that.listConversations.slice(0, (limit - 1));
+  //       }
+  //       that.listConversations.sort(compareValues('timestamp', 'desc'));
+  //       that.checkIsNew(conversation);
+  //       that.checkIsSound(conversation);
+  //       that.g.wdLog(['checkListConversationsLimit child_changed *****', that.listConversations.length, index]);
+  
+  //       that.updateConversationBadge();
+  //       that.obsListConversations.next(that.listConversations);
+  //     //}
+
+  //   });
+
+  //   //// SUBSCRIBE REMOVED ////
+  //   refListConvLimit.on('child_removed', function (childSnapshot) {
+  //     const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+  //     if (index > -1) {
+  //       that.listConversations.splice(index, 1);
+  //       that.obsListConversations.next(that.listConversations);
+  //     }
+  //     that.updateConversationBadge();
+  //   });
+  // }
+  // // ============== end:: subscribe to conversations ================//
+
   // ============== begin:: subscribe to conversations ================//
-  public checkListConversationsLimit(limit?) {
-    if (!limit || limit <= 0) { limit = 100; }
-    const that = this;
-    const firebaseConversations = firebase.database().ref(this.urlConversation);
-    const refListConvLimit = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-    this.g.wdLog(['checkListConversationsLimit *****', this.urlConversation]);
-
-    //// SUBSCRIBE ADDED ////
-    refListConvLimit.on('child_added', function (childSnapshot) {
-      that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
-      // console.log(childSnapshot.val());
-      const conversation = that.setConversation(childSnapshot, false);
-      // tslint:disable-next-line:max-line-length
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
-        that.listConversations.unshift(conversation); // insert item top array
-        // that.updateConversations();
-        that.checkIsNew(conversation);
-        that.checkIsSound(conversation);
-        that.updateConversationBadge();
-        that.obsListConversations.next(that.listConversations);
-      }
-    });
-
-    //// SUBSCRIBE CHANGED ////
-    refListConvLimit.on('child_changed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
-      const conversation = that.setConversation(childSnapshot, false);
-      that.listConversations.splice(index, 1, conversation);
-      that.updateConversations();
-      that.checkIsNew(conversation);
-      that.checkIsSound(conversation);
-      that.updateConversationBadge();
-      that.obsListConversations.next(that.listConversations);
-      that.g.wdLog(['child_changed *****', that.listConversations, index]);
-    });
-
-    //// SUBSCRIBE REMOVED ////
-    refListConvLimit.on('child_removed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
-      if (index > -1) {
-        that.listConversations.splice(index, 1);
-        that.updateConversations();
-        that.obsListConversations.next(that.listConversations);
-      }
-      that.updateConversationBadge();
-    });
-  }
-  // ============== end:: subscribe to conversations ================//
-
-  // ============== begin:: subscribe to conversations ================//
-  public checkListConversations(limit?) {
-    if (!limit || limit <= 0) { limit = 100; }
+  public checkListConversations() {
+    const limit = 100;
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-     this.g.wdLog(['checkListAllConversations *****', this.urlConversation]);
+     this.g.wdLog(['checkListConversations *****', this.urlConversation]);
 
     //// SUBSCRIBE ADDED ////
     this.conversationRef.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
       const conversation = that.setConversation(childSnapshot, false);
       // tslint:disable-next-line:max-line-length
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
-        that.openConversations.unshift(conversation); // insert item top array
-        that.updateConversations();
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
+        conversation.attributes.requester_id === that.g.senderId ) ) {
+        that.listConversations.unshift(conversation); // insert item top array
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);
-        // that.updateConversationBadge();
-        that.obsOpenConversations.next(that.openConversations);
+        that.updateConversationBadge();
+        that.listConversations.sort(compareValues('timestamp', 'desc'));
+        that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
+        that.obsListConversations.next(that.listConversations);
       }
     });
 
-    //// SUBSCRIBE CHANGED ////
+    // SUBSCRIBE CHANGED ////
     this.conversationRef.on('child_changed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.openConversations, childSnapshot.key);
       const conversation = that.setConversation(childSnapshot, false);
-      that.openConversations.splice(index, 1, conversation);
-      that.updateConversations();
-      that.checkIsNew(conversation);
-      that.checkIsSound(conversation);
-      // that.updateConversationBadge();
-      that.obsOpenConversations.next(that.openConversations);
-      that.g.wdLog(['child_changed *****', that.openConversations, index]);
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
+        conversation.attributes.requester_id === that.g.senderId ) ) {
+        const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+        if (index > -1) {
+          that.listConversations.splice(index, 1, conversation);
+          that.checkIsNew(conversation);
+          that.checkIsSound(conversation);
+          that.updateConversationBadge();
+          that.listConversations.sort(compareValues('timestamp', 'desc'));
+          that.obsListConversations.next(that.listConversations);
+          that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
+        }
+      }
     });
 
     //// SUBSCRIBE REMOVED ////
     this.conversationRef.on('child_removed', function (childSnapshot) {
-      const index = that.searchIndexInArrayForUid(that.openConversations, childSnapshot.key);
+      const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
       if (index > -1) {
-        that.openConversations.splice(index, 1);
-        that.updateConversations();
-        that.obsOpenConversations.next(that.openConversations);
+        that.listConversations.splice(index, 1);
+        that.listConversations.sort(compareValues('timestamp', 'desc'));
+        that.obsListConversations.next(that.listConversations);
       }
-      // that.updateConversationBadge();
+      that.updateConversationBadge();
     });
   }
   // ============== end:: subscribe to conversations ================//
@@ -192,34 +212,42 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlArchivedConversation);
     const ref = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-     this.g.wdLog(['checkListAllConversations *****', this.urlArchivedConversation]);
+     this.g.wdLog(['checkListArchivedConversations *****', this.urlArchivedConversation]);
 
     //// SUBSCRIBE ADDED ////
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      // tslint:disable-next-line:max-line-length
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
+        conversation.attributes.requester_id === that.g.senderId ) ) {
         that.archivedConversations.unshift(conversation); // insert item top array
-        that.updateConversations();
+       
+        // that.updateConversations();
         that.checkIsNew(conversation);
-        that.checkIsSound(conversation);
+        // that.checkIsSound(conversation);
         // that.updateConversationBadge();
+        that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+        that.obsArchivedConversations.next(that.archivedConversations);
       }
     });
 
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
-      const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
-      that.archivedConversations.splice(index, 1, conversation);
-
-      that.updateConversations();
-      that.checkIsNew(conversation);
-      that.checkIsSound(conversation);
-      // that.updateConversationBadge();
-
-      that.g.wdLog(['child_changed *****', that.archivedConversations, index]);
+      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
+        conversation.attributes.requester_id === that.g.senderId ) ) {
+        const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
+        if (index > -1) {
+          that.archivedConversations.splice(index, 1, conversation);
+          //that.updateConversations();
+          that.checkIsNew(conversation);
+          // that.checkIsSound(conversation);
+          // that.updateConversationBadge();
+          that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+          that.obsArchivedConversations.next(that.archivedConversations);
+          that.g.wdLog([' checkListArchivedConversations child_changed *****', that.archivedConversations, index]);
+        }
+      }
     });
 
     //// SUBSCRIBE REMOVED ////
@@ -227,7 +255,9 @@ export class ConversationsService {
       const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
       if (index > -1) {
         that.archivedConversations.splice(index, 1);
-        that.updateConversations();
+        that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+        that.obsArchivedConversations.next(that.archivedConversations);
+        //that.updateConversations();
       }
      // that.updateConversationBadge();
     });
@@ -239,22 +269,22 @@ export class ConversationsService {
    * 2 - order array
    * 3 - aggiorno stato conversazione
    */
-  public updateConversations() {
-    const TEMP = this.openConversations.concat(this.archivedConversations);
-    const result = [];
-    const map = new Map();
-    for (const item of TEMP) {
-      if (!map.has(item.uid)) {
-        map.set(item.uid, true);    // set any value to Map
-        result.push(item);
-      }
-    }
-    this.allConversations = result;
-    // this.allConversations.map(item => item.uid).filter((value, index, self) => self.indexOf(value) === index);
-    this.allConversations.sort(compareValues('timestamp', 'desc'));
-    this.g.wdLog([' updateConversations:::: ', this.allConversations.length]);
-    this.obsAllConversations.next(this.allConversations);
-  }
+  // public updateConversations() {
+  //   const TEMP = this.openConversations.concat(this.archivedConversations);
+  //   const result = [];
+  //   const map = new Map();
+  //   for (const item of TEMP) {
+  //     if (!map.has(item.uid)) {
+  //       map.set(item.uid, true);    // set any value to Map
+  //       result.push(item);
+  //     }
+  //   }
+  //   this.allConversations = result;
+  //   // this.allConversations.map(item => item.uid).filter((value, index, self) => self.indexOf(value) === index);
+  //   this.allConversations.sort(compareValues('timestamp', 'desc'));
+  //   this.g.wdLog([' updateConversations:::: ', this.allConversations.length]);
+  //   this.obsAllConversations.next(this.allConversations);
+  // }
 
   /**
    *

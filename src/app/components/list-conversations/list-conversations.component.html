@@ -1,6 +1,6 @@
 <div id='c21-app-list-conversations'>
 
-  <div *ngIf="firtsConversations && firtsConversations.length > 0" class="c21-header">
+  <div *ngIf="listConversations && listConversations.length > 0" class="c21-header">
       <div class="c21-title">{{g.PREV_CONVERSATIONS}}</div>
       <div class="c21-button" (click)="returnOpenAllConversation()">
           <div style="display:inline-block; line-height: 18px; margin-right: 10px;">{{g.SHOW_ALL_CONV}}</div>
@@ -10,7 +10,7 @@
           </svg>
       </div>
   </div>
-  <div *ngIf="!firtsConversations || firtsConversations.length == 0" class="c21-header">
+  <div *ngIf="!listConversations || listConversations.length == 0" class="c21-header">
     <div class="c21-title">{{g.NO_CONVERSATION}}</div>
 
     <div *ngIf="!allConversations || allConversations.length > 0" class="c21-button" (click)="returnOpenAllConversation()">
@@ -32,7 +32,7 @@
   <div class="clear"></div>
 
   <div class="c21-body">
-    <div *ngFor="let conversation of firtsConversations">
+    <div *ngFor="let conversation of listConversations">
       <div class="c21-item-conversation" (click)="openConversationByID(conversation)">
         <div class="c21-body-conv">
           <div class="c21-left-conv">
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div *ngIf="!firtsConversations || firtsConversations.length == 0" style="margin-left: 30px;">
+    <div *ngIf="!listConversations || listConversations.length == 0" style="margin-left: 30px;">
         <div *ngFor="let agent of g.availableAgents" class="c21-pallozzo">
           <div class="c21-ball" [ngStyle] = "{ 'background-color':setColorFromString(agent.firstname) }" >
             <span class="c21-ball-label">{{avatarPlaceholder(agent.firstname)}}</span>
