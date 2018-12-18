@@ -66,6 +66,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
 
   showConversations() {
+
     this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
     const that = this;
     if (!this.subListConversations) {
