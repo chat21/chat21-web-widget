@@ -101,7 +101,8 @@ export class Globals {
   START_A_CONVERSATION: string;
   NO_CONVERSATION: string;
   SEE_PREVIOUS: string;
-
+  WAITING_TIME_FOUND: string;
+  WAITING_TIME_NOT_FOUND: string;
 
 
 
@@ -139,8 +140,8 @@ export class Globals {
   filterByRequester;
 
   constructor(
-    private translatorService: TranslatorService,
-  ) {
+    private translatorService: TranslatorService
+      ) {
   }
 
 
@@ -178,7 +179,7 @@ export class Globals {
     this.setDefaultSettings();
 
      this.wdLog([' ---------------- 9: setAttributes ---------------- ']);
-    this.attributes = this.setAttributes();
+     this.attributes = this.setAttributes();
 
   }
 
@@ -234,6 +235,10 @@ export class Globals {
     this.START_A_CONVERSATION = this.translatorService.translate('START_A_CONVERSATION');
     this.NO_CONVERSATION = this.translatorService.translate('NO_CONVERSATION');
     this.SEE_PREVIOUS = this.translatorService.translate('SEE_PREVIOUS');
+
+    this.WAITING_TIME_FOUND = this.translatorService.translate('WAITING_TIME_FOUND');
+    this.WAITING_TIME_NOT_FOUND = this.translatorService.translate('WAITING_TIME_NOT_FOUND');
+  
   }
 
   /**
