@@ -4,10 +4,11 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { convertMessage } from '../../utils/utils';
+import { convertMessage, compareValues } from '../../utils/utils';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -34,7 +35,12 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
 
 
   // ========= begin:: variabili del componente ======= //
-  conversations: ConversationModel[];
+
+  allConversations: ConversationModel[];
+  listConversations: ConversationModel[];
+  archivedConversations: ConversationModel[];
+
+
   tenant = '';
   themeColor = '';
   themeForegroundColor = '';
@@ -59,6 +65,11 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
+    this.subscriptions = [];
+    this.listConversations = [];
+    this.archivedConversations = [];
+    this.allConversations = [];
+
 
      this.g.wdLog(['senderId: ', this.senderId]);
      this.g.wdLog(['tenant: ', this.tenant]);
@@ -68,19 +79,60 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversations = this.conversationsService.allConversations;
 
-    this.conversationsService.checkListConversations();
-    this.conversationsService.checkListArchivedConversations();
+    // this.conversationsService.checkListConversations();
+    // this.conversationsService.checkListArchivedConversations();
 
     const that = this;
-    const subAllConversations = this.conversationsService.obsAllConversations.subscribe((conversations) => {
-      this.ngZone.run(() => {
-        that.conversations = conversations;
-        that.g.wdLog([' conversations:::: ', that.conversations]);
+    const subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
+      that.ngZone.run(() => {
+        that.listConversations = conversations;
+        that.concatAndOrderArray();
+        that.g.wdLog([' ListAllConversationsComponent conversations:::: ', that.listConversations]);
       });
     });
-    this.subscriptions.push(subAllConversations);
+    this.subscriptions.push(subListConversations);
+
+
+    const subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
+      that.ngZone.run(() => {
+        that.archivedConversations = conversations;
+        that.concatAndOrderArray();
+        that.g.wdLog([' ListAllConversationsComponent archivedConversations:::: ', that.allConversations]);
+      });
+    });
+    this.subscriptions.push(subArchivedConversations);
+
   }
 
+  /**
+   * 1 - concat array conversations
+   * 2 - order array
+   * 3 - aggiorno stato conversazione
+   */
+  concatAndOrderArray() {
+    let TEMP;
+    if (this.listConversations && this.listConversations.length > 0 ) {
+      if ( this.archivedConversations && this.archivedConversations.length > 0 ) {
+        TEMP = this.listConversations.concat(this.archivedConversations);
+      } else {
+        TEMP = this.listConversations;
+      }
+    } else if ( this.archivedConversations && this.archivedConversations.length > 0 ) {
+      TEMP = this.archivedConversations;
+    }
+    const result = [];
+    const map = new Map();
+    for (const item of TEMP) {
+      if (!map.has(item.uid)) {
+        map.set(item.uid, true);    // set any value to Map
+        result.push(item);
+      }
+    }
+    this.allConversations = result;
+    this.allConversations.sort(compareValues('timestamp', 'desc'));
+    this.g.wdLog([' concatAndOrderArray:::: ', this.allConversations]);
+    // this.obsAllConversations.next(this.allConversations);
+  }
 
   // ========= begin:: ACTIONS ============//
 
@@ -111,7 +163,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
            subscription.unsubscribe();
        });
        this.subscriptions = [];
-       this.conversations = [];
+       this.allConversations = [];
        this.g.wdLog(['this.subscriptions', this.subscriptions]);
    }
    // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
