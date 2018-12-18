@@ -153,6 +153,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.listConversations = this.conversationsService.listConversations;
     this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
     this.g.wdLog(['this.listConversations', this.listConversations]);
+    this.showWaitingTime();
   }
 
   showWaitingTime() {
