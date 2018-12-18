@@ -41,9 +41,12 @@ import { PreviewLoadingFilesComponent } from './components/preview-loading-files
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
+import { StorageService } from './providers/storage.service';
+
 
 // Import the library module
 import { AngularResizedEventModule } from 'angular-resize-event';
+import { WaitingService } from './providers/waiting.service';
 
 @NgModule({
   declarations: [
@@ -93,7 +96,9 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    ChatPresenceHandlerService
+    ChatPresenceHandlerService,
+    StorageService,
+    WaitingService
   ],
   bootstrap: [AppComponent]
 })
