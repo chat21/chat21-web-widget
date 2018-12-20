@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
+import { StorageService } from '../../providers/storage.service';
 
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
@@ -41,7 +42,8 @@ export class LauncherButtonComponent implements OnInit {
 
   isOpen: boolean;
   constructor(
-    public g: Globals
+    public g: Globals,
+    public storageService: StorageService
   ) {
   }
 
@@ -54,7 +56,7 @@ export class LauncherButtonComponent implements OnInit {
       this.g.wdLog(['1 open_close_handler BUTTON: ', this.g.isOpen]);
       // this.g.isOpen = !this.g.isOpen;
       this.g.setIsOpen(!this.g.isOpen);
-      localStorage.setItem('isOpen', this.g.isOpen);
+      this.storageService.setItem('isOpen', this.g.isOpen);
       this.g.wdLog(['2 open_close_handler BUTTON: ', this.g.isOpen]);
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }

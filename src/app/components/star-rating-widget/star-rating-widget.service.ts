@@ -40,7 +40,7 @@ export class StarRatingWidgetService {
     //      this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - USER UID (alias SENDER ID) ', this.senderId);
     //     setTimeout(() => {
     //       this.requestid = sessionStorage.getItem(this.senderId);
-    //       this.requestid = localStorage.getItem(this.senderId);
+    //       this.requestid = this.storageService.getItem(this.senderId);
     //        this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - REQUEST ID GET FRO STORAGE', this.requestid);
     //     }, 100);
     //   }

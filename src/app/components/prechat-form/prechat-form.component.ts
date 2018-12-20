@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Globals } from '../../utils/globals';
+import { StorageService } from '../../providers/storage.service';
 
 @Component({
   selector: 'tiledeskwidget-prechat-form',
@@ -24,7 +25,8 @@ export class PrechatFormComponent implements OnInit {
 
   constructor(
     public g: Globals,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    public storageService: StorageService
   ) {
 
   }
@@ -74,7 +76,7 @@ export class PrechatFormComponent implements OnInit {
     this.attributes['userFullname'] = this.userFullname;
     this.attributes['userEmail'] = this.userEmail;
     if (this.g.attributes) {
-        localStorage.setItem('attributes', JSON.stringify(this.attributes));
+        this.storageService.setItem('attributes', JSON.stringify(this.attributes));
         // this.g.attributes = this.attributes;
         this.eventCloseForm.emit();
     } else {

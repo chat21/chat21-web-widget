@@ -18,6 +18,7 @@ import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '
 // utils
 import { searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
+import { StorageService } from '../providers/storage.service';
 
 
 @Injectable()
@@ -49,7 +50,8 @@ export class MessagingService {
   constructor(
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
-    public g: Globals
+    public g: Globals,
+    public storageService: StorageService
   ) {
     this.API_URL = environment.apiUrl;
     //  this.g.wdLog(['MessagingService::this.API_URL',  this.API_URL );
@@ -99,7 +101,7 @@ export class MessagingService {
    *
    */
   connect(conversationWith) {
-    this.g.wdLog(['***** connect MessagingService *****']);
+     this.g.wdLog(['***** connect MessagingService *****']);
     this.checkRemoveConversation(conversationWith);
     this.checkMessages(conversationWith);
   }
@@ -416,7 +418,7 @@ export class MessagingService {
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
     // sessionStorage.setItem(uid, key);
-    localStorage.setItem(uid, key);
+    this.storageService.setItem(uid, key);
     this.conversationWith = key;
     return key;
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { convertColorToRGBA } from '../../utils/utils';
+import { StorageService } from '../../providers/storage.service';
 
 
 
@@ -15,7 +16,8 @@ export class MenuOptionsComponent implements OnInit {
    // ========= end:: Input/Output values ============//
   themeColor50: string;
   constructor(
-    public g: Globals
+    public g: Globals,
+    public storageService: StorageService
   ) { }
 
   ngOnInit() {
@@ -30,9 +32,9 @@ export class MenuOptionsComponent implements OnInit {
   toggleSound() {
     this.g.isSoundActive = !this.g.isSoundActive;
     if ( this.g.isSoundActive === true ) {
-      localStorage.setItem('isSoundActive', 'true');
+      this.storageService.setItem('isSoundActive', 'true');
     } else {
-      localStorage.setItem('isSoundActive', 'false');
+      this.storageService.setItem('isSoundActive', 'false');
     }
   }
 

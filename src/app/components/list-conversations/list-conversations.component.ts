@@ -68,7 +68,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     public translatorService: TranslatorService
   ) {
 
-    console.log(this.langService);
+    // console.log(this.langService);
     // https://www.npmjs.com/package/humanize-duration-ts
     // https://github.com/Nightapes/HumanizeDuration.ts/blob/master/src/humanize-duration.ts
     this.humanizer = new HumanizeDuration(this.langService);

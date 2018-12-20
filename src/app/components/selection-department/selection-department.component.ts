@@ -3,6 +3,7 @@ import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
 import { MessagingService } from '../../providers/messaging.service';
+import { StorageService } from '../../providers/storage.service';
 
 @Component({
     selector: 'tiledeskwidget-selection-department',
@@ -26,7 +27,8 @@ export class SelectionDepartmentComponent implements OnInit {
 
     constructor(
         public g: Globals,
-        public messagingService: MessagingService
+        public messagingService: MessagingService,
+        public storageService: StorageService
     ) {
 
     }
@@ -71,7 +73,7 @@ export class SelectionDepartmentComponent implements OnInit {
             this.g.attributes.departmentId = department._id;
             this.g.attributes.departmentName = department.name;
              this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
-            localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
+            this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
         }
         this.closePage();
     }

@@ -10,6 +10,7 @@ import { convertColorToRGBA, getParameterByName } from '../utils/utils';
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { StorageService } from '../providers/storage.service';
 
 @Injectable()
 export class Globals {
@@ -138,10 +139,12 @@ export class Globals {
   marginY;
   isLogEnabled;
   filterByRequester;
+  persistence;
 
   constructor(
-    private translatorService: TranslatorService
-      ) {
+    private translatorService: TranslatorService,
+    // public storageService: StorageService
+  ) {
   }
 
 
@@ -179,7 +182,7 @@ export class Globals {
     this.setDefaultSettings();
 
      this.wdLog([' ---------------- 9: setAttributes ---------------- ']);
-     this.attributes = this.setAttributes();
+    //  this.attributes = this.setAttributes();
 
   }
 
@@ -238,7 +241,6 @@ export class Globals {
 
     this.WAITING_TIME_FOUND = this.translatorService.translate('WAITING_TIME_FOUND');
     this.WAITING_TIME_NOT_FOUND = this.translatorService.translate('WAITING_TIME_NOT_FOUND');
-  
   }
 
   /**
@@ -304,6 +306,7 @@ export class Globals {
     this.marginY = '20px';                      /** set margin bottom widget */
     this.isLogEnabled = false;
     this.filterByRequester = false;             /** show conversations with conversation.attributes.requester_id == user.uid */
+    this.persistence = 'local';
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -318,9 +321,9 @@ export class Globals {
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
     // tslint:disable-next-line:max-line-length
-    if (localStorage.getItem('isSoundActive')) {
-      this.isSoundActive = localStorage.getItem('isSoundActive');
-    }
+    // if (this.storageService.getItem('isSoundActive')) {
+    //   this.isSoundActive = this.storageService.getItem('isSoundActive');
+    // }
     this.conversationsBadge = 0;
     this.activeConversation = '';
     this.isOpenMenuOptions = false;             /** open/close menu options  */
@@ -607,6 +610,11 @@ export class Globals {
       this.filterByRequester = (TEMP === false) ? false : true;
     }
 
+    TEMP = window['tiledeskSettings']['persistence'];
+    if (TEMP !== undefined) {
+      this.persistence = TEMP;
+    }
+
   }
 
 
@@ -745,43 +753,44 @@ export class Globals {
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
       'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
-      'filterByRequester': this.filterByRequester
+      'filterByRequester': this.filterByRequester,
+      'persistence': this.persistence
     };
   }
 
 
-  /**
-   * 9: setAttributes
-   */
-  private setAttributes(): any {
-    const CLIENT_BROWSER = navigator.userAgent;
-    let attributes: any = JSON.parse(localStorage.getItem('attributes'));
-    if (!attributes || attributes === 'undefined') {
-      attributes = {
-        client: CLIENT_BROWSER,
-        sourcePage: location.href,
-        projectId: this.projectid
-        // departmentId: '',
-        // departmentName: '',
-        // departmentId: this.departmentSelected._id,
-        // departmentName: this.departmentSelected.name,
-        // userEmail: this.userEmail,
-        // userName: this.userFullname
-      };
-      if (this.userEmail) {
-        attributes['userEmail'] = this.userEmail;
-      }
-      if (this.userFullname) {
-        attributes['userFullname'] = this.userFullname;
-      }
-      localStorage.setItem('attributes', JSON.stringify(attributes));
-    }
-    return attributes;
-  }
+  // /**
+  //  * 9: setAttributes
+  //  */
+  // private setAttributes(): any {
+  //   const CLIENT_BROWSER = navigator.userAgent;
+  //   let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
+  //   if (!attributes || attributes === 'undefined') {
+  //     attributes = {
+  //       client: CLIENT_BROWSER,
+  //       sourcePage: location.href,
+  //       projectId: this.projectid
+  //       // departmentId: '',
+  //       // departmentName: '',
+  //       // departmentId: this.departmentSelected._id,
+  //       // departmentName: this.departmentSelected.name,
+  //       // userEmail: this.userEmail,
+  //       // userName: this.userFullname
+  //     };
+  //     if (this.userEmail) {
+  //       attributes['userEmail'] = this.userEmail;
+  //     }
+  //     if (this.userFullname) {
+  //       attributes['userFullname'] = this.userFullname;
+  //     }
+  //     this.storageService.setItem('attributes', JSON.stringify(attributes));
+  //   }
+  //   return attributes;
+  // }
 
   public wdLog(message) {
     if ( this.isLogEnabled ) {
-      this.wdLog([message.toString()]);
+       console.log(message.toString());
     }
   }
 
