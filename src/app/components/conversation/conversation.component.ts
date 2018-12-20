@@ -216,13 +216,13 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   private setAvailableAgentsStatus() {
     this.g.wdLog(['setAvailableAgentsStatus ----------> ' + this.g.availableAgents.length]);
      // set first message customized for department
-     if (this.g.departmentDefault.online_msg) {
+     if (this.g.departmentDefault && this.g.departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
     }
-    if (this.g.departmentDefault.offline_msg) {
+    if (this.g.departmentDefault && this.g.departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
     }
-    if (this.g.availableAgents.length <= 0) {
+    if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
     } else {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG);
@@ -314,6 +314,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     recipientIdTEMP = this.storageService.getItem(this.g.senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
+      // console.log("199");
       recipientIdTEMP = this.messagingService.generateUidConversation(this.g.senderId);
     }
     return recipientIdTEMP;
