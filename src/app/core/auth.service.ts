@@ -75,25 +75,44 @@ export class AuthService {
 
 
   authenticateFirebaseAnonymously() {
+    // console.log('authenticateFirebaseAnonymously');
     const that = this;
-    firebase.auth().signInAnonymously()
-    .then(function(user) {
-      that.user = user;
-      if (that.unsubscribe) {
-        that.unsubscribe();
-      }
-      that.obsLoggedUser.next(firebase.auth().currentUser);
-      that.getIdToken();
-    })
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+          firebase.auth().signInAnonymously()
+          .then(function(user) {
+            that.user = user;
+            if (that.unsubscribe) {
+              that.unsubscribe();
+            }
+            that.obsLoggedUser.next(firebase.auth().currentUser);
+            that.getIdToken();
+          })
+          .catch(function(error) {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              if (that.unsubscribe) {
+                that.unsubscribe();
+              }
+              that.obsLoggedUser.next(0);
+              that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
+          });
+        })
     .catch(function(error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        if (that.unsubscribe) {
-          that.unsubscribe();
-        }
-        that.obsLoggedUser.next(0);
-        that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
+      console.error('Error setting firebase auth persistence', error);
     });
+  }
+
+  getFirebaseAuthPersistence() {
+    if (this.g.persistence === 'local') {
+      // console.log('getFirebaseAuthPersistence local');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    } else if (this.g.persistence === 'session') {
+      // console.log('getFirebaseAuthPersistence session');
+      return firebase.auth.Auth.Persistence.SESSION;
+    } else {
+      // console.log('getFirebaseAuthPersistence local as else');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    }
   }
 
   authenticateFirebaseCustomToken(token) {

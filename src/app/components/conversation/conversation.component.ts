@@ -27,6 +27,7 @@ import { ResizedEvent } from 'angular-resize-event/resized-event';
 import {DomSanitizer} from '@angular/platform-browser';
 
 import { AppComponent } from '../../app.component';
+import { StorageService } from '../../providers/storage.service';
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -120,7 +121,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     private agentAvailabilityService: AgentAvailabilityService,
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
-    public appComponent: AppComponent
+    public appComponent: AppComponent,
+    public storageService: StorageService
   ) {
     this.initAll();
 
@@ -214,13 +216,13 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   private setAvailableAgentsStatus() {
     this.g.wdLog(['setAvailableAgentsStatus ----------> ' + this.g.availableAgents.length]);
      // set first message customized for department
-     if (this.g.departmentDefault.online_msg) {
+     if (this.g.departmentDefault && this.g.departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
     }
-    if (this.g.departmentDefault.offline_msg) {
+    if (this.g.departmentDefault && this.g.departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
     }
-    if (this.g.availableAgents.length <= 0) {
+    if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
     } else {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG);
@@ -291,7 +293,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     * 2 - setto conversationWith
     * 2 - setto conversationWith
     *    uguale a recipientId se esiste
-    *    uguale al senderId nel localStorage se esiste
+    *    uguale al senderId nel this.storageService se esiste
     *    generateUidConversation
   */
   private setConversation() {
@@ -309,9 +311,10 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    */
   private setRecipientId() {
     let recipientIdTEMP;
-    recipientIdTEMP = localStorage.getItem(this.g.senderId);
+    recipientIdTEMP = this.storageService.getItem(this.g.senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
+      // console.log("199");
       recipientIdTEMP = this.messagingService.generateUidConversation(this.g.senderId);
     }
     return recipientIdTEMP;
@@ -362,7 +365,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    */
   setAttributes(): any {
     if (!this.g.attributes || this.g.attributes === 'undefined') {
-      let attributes: any = JSON.parse(localStorage.getItem('attributes'));
+      let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
       if (!attributes || attributes === 'undefined') {
         attributes = {
           client: this.CLIENT_BROWSER,
@@ -380,7 +383,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         attributes['requester_id'] = this.g.senderId;
       }
       this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
-      localStorage.setItem('attributes', JSON.stringify(attributes));
+      this.storageService.setItem('attributes', JSON.stringify(attributes));
       return attributes;
     }
     return this.g.attributes;
@@ -1126,9 +1129,9 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   toggleSound() {
     this.g.isSoundActive = !this.g.isSoundActive;
     if ( this.g.isSoundActive === true ) {
-      localStorage.setItem('isSoundActive', 'true');
+      this.storageService.setItem('isSoundActive', 'true');
     } else {
-      localStorage.setItem('isSoundActive', 'false');
+      this.storageService.setItem('isSoundActive', 'false');
     }
   }
 

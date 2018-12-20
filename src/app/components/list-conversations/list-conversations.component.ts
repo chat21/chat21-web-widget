@@ -68,7 +68,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     public translatorService: TranslatorService
   ) {
 
-    console.log(this.langService);
+    // console.log(this.langService);
     // https://www.npmjs.com/package/humanize-duration-ts
     // https://github.com/Nightapes/HumanizeDuration.ts/blob/master/src/humanize-duration.ts
     this.humanizer = new HumanizeDuration(this.langService);
@@ -141,6 +141,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
     this.listConversations = [];
     this.archivedConversations = [];
+    this.waitingTime = -1;
 
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);
@@ -158,12 +159,12 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
 
   showWaitingTime() {
     const that = this;
-     this.g.wdLog(['getWaitingTime ::::', this.g.projectid]);
+     this.g.wdLog(['getWaitingTime', this.g.projectid]);
     this.waitingService.getCurrent(this.g.projectid)
     .subscribe(response => {
         that.g.wdLog(['response waiting', response]);
         // console.log('response waiting ::::', response);
-       if (response && response.length > 0) {
+       if (response && response.length > 0 && response[0].waiting_time_avg) {
         const wt = response[0].waiting_time_avg;
 
         that.waitingTime = wt;

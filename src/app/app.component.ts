@@ -12,6 +12,7 @@ import { Globals } from './utils/globals';
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
+import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
@@ -78,6 +79,7 @@ export class AppComponent implements OnInit, OnDestroy {
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
+        private storageService: StorageService,
     ) {
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
@@ -158,7 +160,6 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private initAll() {
 
-        this.startNwConversation();
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
         this.g.lang = setLanguage(this.translatorService);
@@ -173,6 +174,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
 
         this.g.initialize(this.el);
+        this.g.attributes = this.setAttributes();
+        this.setSound();
+
          this.g.wdLog([' ---------------- A0 ---------------- ']);
 
         this.addComponentToWindow(this.ngZone);
@@ -180,6 +184,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.triggetLoadParamsEvent();
          this.g.wdLog([' ---------------- A2 ---------------- ']);
+
+         this.startNwConversation();
 
         /** mostro il pulsante principale dopo l'init */
         this.isInitialized = true;
@@ -194,7 +200,41 @@ export class AppComponent implements OnInit, OnDestroy {
 
     }
 
+    setSound() {
+        if (this.storageService.getItem('isSoundActive')) {
+            this.g.isSoundActive = this.storageService.getItem('isSoundActive');
+          }
+    }
 
+
+/**
+   * 9: setAttributes
+   */
+  private setAttributes(): any {
+    const CLIENT_BROWSER = navigator.userAgent;
+    let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
+    if (!attributes || attributes === 'undefined') {
+      attributes = {
+        client: CLIENT_BROWSER,
+        sourcePage: location.href,
+        projectId: this.g.projectid
+        // departmentId: '',
+        // departmentName: '',
+        // departmentId: this.departmentSelected._id,
+        // departmentName: this.departmentSelected.name,
+        // userEmail: this.userEmail,
+        // userName: this.userFullname
+      };
+      if (this.g.userEmail) {
+        attributes['userEmail'] = this.g.userEmail;
+      }
+      if (this.g.userFullname) {
+        attributes['userFullname'] = this.g.userFullname;
+      }
+      this.storageService.setItem('attributes', JSON.stringify(attributes));
+    }
+    return attributes;
+  }
 
     /**
    * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
@@ -308,15 +348,15 @@ export class AppComponent implements OnInit, OnDestroy {
      * SET DEPARTMENT:
      * set department selected
      * save department selected in attributes
-     * save attributes in localstorage
+     * save attributes in this.storageService
     */
     setDepartment(department) {
         this.g.departmentSelected = department;
-        if (this.g.attributes) {
+        if (department && this.g.attributes) {
             this.g.attributes.departmentId = department._id;
             this.g.attributes.departmentName = department.name;
              this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
-            localStorage.setItem('attributes', JSON.stringify(this.g.attributes));
+             this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
         }
     }
     // ========= end:: GET DEPARTEMENTS ============//
@@ -586,7 +626,7 @@ export class AppComponent implements OnInit, OnDestroy {
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
-            localStorage.setItem('isOpen', 'true');
+            this.storageService.setItem('isOpen', 'true');
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
     }
@@ -596,7 +636,7 @@ export class AppComponent implements OnInit, OnDestroy {
          this.g.wdLog(['isOpen::', this.g.isOpen]);
         // this.g.isOpen = false;
         this.g.setIsOpen(false);
-        localStorage.setItem('isOpen', 'false');
+        this.storageService.setItem('isOpen', 'false');
     }
 
     // ========= end:: COMPONENT TO WINDOW ============//
@@ -667,26 +707,26 @@ export class AppComponent implements OnInit, OnDestroy {
     */
     signOut() {
          this.g.wdLog([' SIGNOUT ']);
-        // localStorage.removeItem('attributes');
-        localStorage.clear();
+        // this.storageService.removeItem('attributes');
+        this.storageService.clear();
         this.chatPresenceHandlerService.goOffline();
         this.authService.signOut();
 
     }
 
     /**
-     * get status window chat from localStorage
+     * get status window chat from this.storageService
      * set status window chat open/close
      */
     setIsWidgetOpenOrActive() {
-        if (localStorage.getItem('isOpen') === 'true') {
+        if (this.storageService.getItem('isOpen') === 'true') {
             // this.g.isOpen = true;
             this.g.setIsOpen(true);
-        } else if (localStorage.getItem('isOpen') === 'false') {
+        } else if (this.storageService.getItem('isOpen') === 'false') {
             // this.g.isOpen = false;
             this.g.setIsOpen(false);
         }
-        // this.isWidgetActive = (localStorage.getItem('isWidgetActive')) ? true : false;
+        // this.isWidgetActive = (this.storageService.getItem('isWidgetActive')) ? true : false;
     }
 
     /**
@@ -695,6 +735,7 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     generateNewUidConversation() {
          this.g.wdLog(['generateUidConversation **************', this.g.senderId]);
+         // console.log("99");
         return this.messagingService.generateUidConversation(this.g.senderId);
     }
 

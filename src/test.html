@@ -50,8 +50,10 @@
               logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
               startFromHome: false,
               preChatForm: true,
-              autoStart: false,
-              isLogEnabled:true
+              autoStart: true,
+              isLogEnabled:true,
+              persistence: 'session'
+              //persistence: 'local'
           };
     
           (function(d, s, id) {
@@ -169,30 +171,30 @@
         var isOpenPrechatForm = true;
     
         $( "#idShow" ).click(function() {
-          alert( "Handler for .click() idShow." );
+          // alert( "Handler for .click() idShow." );
           window.tiledesk.show();
         });
         $( "#idHide" ).click(function() {
-          alert( "Handler for .click() idHide." );
+          // alert( "Handler for .click() idHide." );
           window.tiledesk.hide();
         });
         $( "#idOpen" ).click(function() {
-          alert( "Handler for .click() idOpen." );
+          // alert( "Handler for .click() idOpen." );
           window.tiledesk.open();
         });
         $( "#idClose" ).click(function() {
-          alert( "Handler for .click() idClose." );
+          // alert( "Handler for .click() idClose." );
           window.tiledesk.close();
         });
         $( "#idAuth" ).click(function() {
-          alert( "Handler for .click() idAuth." );
+          // alert( "Handler for .click() idAuth." );
           window.tiledesk.signInWithCustomToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW5kcmVhIiwiZW1haWwiOiJhbmRyZWEubGVvQGZyb250aWVyZTIxLml0IiwiaWF0IjoxNTQwNDYwOTM2MzkzLCJleHRlcm5hbF9pZCI6IjEyMzQ1NiJ9.wD9YDI3hEXBipoQ7kUIPRqNybFNuXZb9OPEqkxLtJoY");
           //window.tiledesk.signInAnonymous();
         });
         
         $( "#preChatForm" ).click(function() {
           isOpenPrechatForm = !isOpenPrechatForm;
-          alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
+          // alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
           window.tiledesk.setStatePreChatForm(isOpenPrechatForm);
         });
         
