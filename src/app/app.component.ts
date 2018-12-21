@@ -138,6 +138,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.g.wdLog([' this.g.senderId', that.g.senderId]);
                     this.g.wdLog([' this.g.isLogged', that.g.isLogged]);
                     // that.openIfCallOutTimer();
+                    that.startNwConversation();
                     that.startUI();
                     that.triggeisLoggedInEvent();
                     this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
@@ -185,7 +186,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.triggetLoadParamsEvent();
          this.g.wdLog([' ---------------- A2 ---------------- ']);
 
-         this.startNwConversation();
+        //this.startNwConversation();
 
         /** mostro il pulsante principale dopo l'init */
         this.isInitialized = true;
@@ -396,6 +397,7 @@ export class AppComponent implements OnInit, OnDestroy {
              this.g.wdLog(['this.userId:: ', this.g.userId]);
             this.g.senderId = this.g.userId;
             this.g.isLogged = true;
+            this.startNwConversation();
             this.startUI();
              this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
@@ -408,11 +410,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
         } else if (currentUser) {
             //  SONO GIA' AUTENTICATO
-             this.g.wdLog([' ---------------- 13 ---------------- ']);
+            this.g.wdLog([' ---------------- 13 ---------------- ']);
             this.g.senderId = currentUser.uid;
             this.g.isLogged = true;
              this.g.wdLog([' this.g.senderId', this.g.senderId]);
              this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
+             this.startNwConversation(); 
             this.startUI();
              this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
@@ -734,7 +737,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * al login o all'apertura di una nuova conversazione
      */
     generateNewUidConversation() {
-         this.g.wdLog(['generateUidConversation **************', this.g.senderId]);
+         this.g.wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
          // console.log("99");
         return this.messagingService.generateUidConversation(this.g.senderId);
     }

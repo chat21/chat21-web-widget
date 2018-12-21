@@ -102,31 +102,12 @@ export class AuthService {
     });
   }
 
-  getFirebaseAuthPersistence() {
-    if (this.g.persistence === 'local') {
-      // console.log('getFirebaseAuthPersistence local');
-      return firebase.auth.Auth.Persistence.LOCAL;
-    } else if (this.g.persistence === 'session') {
-      // console.log('getFirebaseAuthPersistence session');
-      return firebase.auth.Auth.Persistence.SESSION;
-    } else {
-      // console.log('getFirebaseAuthPersistence local as else');
-      return firebase.auth.Auth.Persistence.LOCAL;
-    }
-  }
+  
 
   authenticateFirebaseCustomToken(token) {
     this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
     const that = this;
-    // firebase.auth().currentUser.getIdToken()
-    // .then(function(idToken) {
-    //   // Send token to your backend via HTTPS
-    //    wdLog(['idToken: ', idToken);
-    //   // ...
-    // }).catch(function(error) {
-    //   // Handle error
-    // });
-
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
       //  wdLog(['token: ', token);
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
@@ -148,29 +129,47 @@ export class AuthService {
           that.obsLoggedUser.next(0);
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
       });
+    })
+    .catch(function(error) {
+      console.error('Error setting firebase auth persistence', error);
+    });
+    // firebase.auth().currentUser.getIdToken()
+    // .then(function(idToken) {
+    //   // Send token to your backend via HTTPS
+    //    wdLog(['idToken: ', idToken);
+    //   // ...
+    // }).catch(function(error) {
+    //   // Handle error
+    // });
+
   }
 
 
 
   authenticateFirebaseWithEmailAndPassword(email, password) {
     const that = this;
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(function(user) {
-      that.user = user;
-      if (that.unsubscribe) {
-        that.unsubscribe();
-      }
-      that.obsLoggedUser.next(firebase.auth().currentUser);
-      that.getIdToken();
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function(user) {
+        that.user = user;
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.getIdToken();
+      })
+      .catch(function(error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.obsLoggedUser.next(0);
+        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
+      });
     })
     .catch(function(error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      if (that.unsubscribe) {
-        that.unsubscribe();
-      }
-      that.obsLoggedUser.next(0);
-      that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
+      console.error('Error setting firebase auth persistence', error);
     });
   }
 
@@ -252,6 +251,18 @@ export class AuthService {
       .map((response) => response.json());
   }
 
+  getFirebaseAuthPersistence() {
+    if (this.g.persistence === 'local') {
+      // console.log('getFirebaseAuthPersistence local');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    } else if (this.g.persistence === 'session') {
+      // console.log('getFirebaseAuthPersistence session');
+      return firebase.auth.Auth.Persistence.SESSION;
+    } else {
+      // console.log('getFirebaseAuthPersistence local as else');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    }
+  }
 
 
 }

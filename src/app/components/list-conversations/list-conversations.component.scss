@@ -11,24 +11,28 @@
     .c21-header{
         color: $gray;
         height: auto;
-        height: 50px;
-        min-height: 50px;
+        // height: 50px;
+        min-height: auto;
         .c21-title{
             font-size: 1.4em;
             font-weight: 400;
             max-width: 200px;
             line-height: normal;
-            padding: 16px 0px 16px 24px;
+            padding: 16px 0px 10px 24px;
             float:left;
         }
         .c21-button{
             font-size: 1.2em;
             margin: 0px;
             line-height: normal;
-            padding: 17px 24px 17px 5px;
+            padding: 17px 24px 11px 5px;
             float: right;
             fill: $blue;
         }
+    }
+    .c21-waiting-time {
+        font-size: 1.2em;
+        padding: 0px 0px 16px 24px;
     }
     .c21-body {
         position: relative;
