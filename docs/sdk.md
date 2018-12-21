@@ -73,11 +73,13 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 * **showWidgetNameInConversation**. If you want to display the widget title in the conversations, set the showWidgetNameInConversation field to true. It is advisable if you need to manage multiple projects. Value type : boolean. The default value is false.
 
-* **allowTranscriptDownload**: allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permitter values: true, false. Default value: false
+* **allowTranscriptDownload**: allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permittet values: true, false. Default value: false
 
 * **marginX**: Set the side margin, left or right depending on the align property. Default value : 20px
 
 * **marginY**: Set the distance from the page bottom margin. Default value : 20px
+
+* **persistence**: You can specify how the Authentication state persists when using the Tiledesk JS SDK. This includes the ability to specify whether a signed in user should be indefinitely persisted until explicit sign out or cleared when the window is closed. Permittet values: local, session. Default value : local. Local value indicates that the state will be persisted even when the browser window is closed. An explicit sign out is needed to clear that state. Session value indicates that the state will only persist in the current session or tab, and will be cleared when the tab or window in which the user authenticated is closed. 
 
 
 ### Example 1. Widget with user fullname and email
