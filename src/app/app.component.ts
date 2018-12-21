@@ -607,7 +607,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private setStatePreChatForm(state) {
         if (state != null) {
             this.g.preChatForm = state;
-            // this.isOpenPrechatForm = state;
+            this.g.isOpenPrechatForm = state;
         }
         //  this.g.wdLog(['this.isOpenPrechatForm ', this.isOpenPrechatForm);
     }

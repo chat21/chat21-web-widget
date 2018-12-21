@@ -212,8 +212,9 @@
                                     </div>
 
 
-                                    <div *ngIf="message.sender!==''" class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
-                                        <time>{{message.timestamp | amTimeAgo}}</time>
+                                    <div *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
+                                        <time >{{message.timestamp  | amTimeAgo}} </time>  
+
                                     </div>
 
                                 </div>

@@ -21,14 +21,6 @@
           </svg>
       </div>
     </div>
-
-    <!-- <div class="c21-button" (click)="returnOpenAllConversation()">
-        <div style="display:inline-block; line-height: 18px; margin-right: 10px;">{{g.SEE_PREVIOUS}}</div>
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7zm-4 6h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
-        </svg>
-    </div> -->
   </div>
   <div class="clear"></div>
 
@@ -40,6 +32,7 @@
 
   <div class="c21-body">
     <div *ngFor="let conversation of listConversations">
+      
       <div class="c21-item-conversation" (click)="openConversationByID(conversation)">
         <div class="c21-body-conv">
           <div class="c21-left-conv">
@@ -58,13 +51,14 @@
         </div>
         <div class="clear"></div>
       </div>
+      
     </div>
 
     <div *ngIf="!listConversations || listConversations.length == 0" style="margin-left: 30px;">
         <div *ngFor="let agent of g.availableAgents" class="c21-pallozzo">
           <div class="c21-ball" [ngStyle] = "{ 'background-color':setColorFromString(agent.firstname) }" >
             <span class="c21-ball-label">{{avatarPlaceholder(agent.firstname)}}</span>
-            <div #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + agent.imageurl + ')'"></div>
+            <div *ngIf="agent.imageurl" #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + agent.imageurl + ')'"></div>
           </div>
         </div>
     </div>

@@ -142,6 +142,7 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
+        console.log('message[timestamp]: ', message['timestamp']);
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],
@@ -173,12 +174,14 @@ export class MessagingService {
           //  this.g.wdLog(['index *****', index, childSnapshot.key);
           if (index < 0) {
             that.g.wdLog(['--------> ADD MSG IMG', index, msg]);
+            msg.status = '150';
             that.messages.push(msg);
           }
         } else {
-           that.g.wdLog(['--------> ADD MSG', msg]);
           // se msg è inviato da me cambio status
           // that.obsAddedMsg.next(text);
+          msg.status = '150';
+          that.g.wdLog(['--------> ADD MSG', msg.status]);
           that.messages.push(msg);
         }
         that.messages.sort(that.compareValues('timestamp', 'asc'));
@@ -309,11 +312,10 @@ export class MessagingService {
     }
     const that = this;
     // const now: Date = new Date();
-    // const timestamp = now.valueOf();
+    // const localTimestamp = now.valueOf();
     const timestamp =  firebase.database.ServerValue.TIMESTAMP;
+    console.log('timestamp: ', timestamp);
     const language = navigator.language;
-    // document.documentElement.lang;
-    // const sender_fullname = this.loggedUser.fullname;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(
       '',
@@ -332,7 +334,7 @@ export class MessagingService {
       channel_type,
       projectid
     );
-    this.messages.push(message);
+    //this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
     this.g.wdLog([message.toString()]);
 
@@ -367,6 +369,7 @@ export class MessagingService {
       }
       //   this.g.wdLog(['****** changed *****', that.messages);
     });
+
 
 
     // this.checkWritingMessages();
