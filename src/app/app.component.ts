@@ -778,7 +778,8 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnCloseWidget() {
         // this.g.isOpen = false;
-        this.g.setIsOpen(false);
+        // this.g.setIsOpen(false);
+        this.f21_close();
     }
 
     /**
