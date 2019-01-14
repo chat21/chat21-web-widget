@@ -33,6 +33,10 @@
         <button id="idAuthAuto">
           AUTH with email & password
         </button>
+
+        <button id="changeWellcomeTitle">
+          Change WellcomeTitle
+        </button>
     
         <button id="preChatForm">
             preChatForm
@@ -247,7 +251,13 @@
           });
 
        
-        
+       $( "#changeWellcomeTitle" ).click(function() {
+        var welcomeTitle = prompt("Please enter the welcometitle", "Custom welcome message");
+        window.tiledesk.angularcomponent.ngZone.run(() => {
+          window.tiledesk.angularcomponent.component.g.wellcomeTitle = welcomeTitle;
+        });
+       });
+
         $( "#preChatForm" ).click(function() {
           isOpenPrechatForm = !isOpenPrechatForm;
           // alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
