@@ -214,20 +214,45 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    * per verificare se c'è un agent disponibile
    */
   private setAvailableAgentsStatus() {
+    this.g.wdLog(['departmentSelected ----------> ', this.g.departmentSelected]);
+
     this.g.wdLog(['setAvailableAgentsStatus ----------> ' + this.g.availableAgents.length]);
-     // set first message customized for department
-     if (this.g.departmentDefault && this.g.departmentDefault.online_msg) {
+    // set first message customized for department
+    if (this.g.departmentDefault && this.g.departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = this.g.departmentDefault.online_msg;
     }
     if (this.g.departmentDefault && this.g.departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = this.g.departmentDefault.offline_msg;
     }
-    if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
-      this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
-    } else {
-      this.addFirstMessage(this.g.LABEL_FIRST_MSG);
-    }
+    // if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
+    //   this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
+    // } else {
+    //   this.addFirstMessage(this.g.LABEL_FIRST_MSG);
+    // }
+    this.getAvailableAgentsForDepartment();
 
+  }
+
+    /**
+   * mi sottoscrivo al nodo /departments/' + idDepartmentSelected + '/operators/';
+   * per verificare se c'è un agent disponibile
+   */
+  private getAvailableAgentsForDepartment() {
+    const that = this;
+    this.agentAvailabilityService
+    .getAvailableAgentsForDepartment(this.g.projectid, this.g.departmentSelected._id)
+    .subscribe( (availableAgents) => {
+      const availableAgentsForDep = availableAgents['available_agents'];
+      console.log(availableAgents);
+      if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
+        that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+      } else {
+        that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+      }
+    }, (error) => {
+      console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+    }, () => {
+    });
   }
 
   /**

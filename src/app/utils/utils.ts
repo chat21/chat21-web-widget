@@ -86,7 +86,7 @@ function convertUrlToTag(url) {
   // tslint:disable-next-line:curly
   if (popup !== true) return '<a class="c21-link" href="' + url + '" target="_blank">' + url + '</a>';
   // tslint:disable-next-line:curly
-  else return '<p (click)="openPopup2()">zzz</p>';
+  else return '<p (click)="openPopup2()">.</p>';
 
   //// '<a href="#" onclick="window.open("www.google.it", "_system");" >' + url + '</a>';
   //// <a href="#" onclick="openPopup(' + url + ')">' + url + '</a>';

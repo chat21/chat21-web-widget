@@ -10,7 +10,7 @@ import { convertColorToRGBA, getParameterByName } from '../utils/utils';
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { StorageService } from '../providers/storage.service';
+// import { StorageService } from '../providers/storage.service';
 
 @Injectable()
 export class Globals {
@@ -379,6 +379,7 @@ export class Globals {
       this.userFullname = TEMP;
     }
     TEMP = el.nativeElement.getAttribute('preChatForm');
+    console.log('preChatForm', TEMP);
     if (TEMP !== null) {
       this.preChatForm = (TEMP === true) ? true : false;
     }
@@ -505,9 +506,12 @@ export class Globals {
       this.userFullname = TEMP;
     }
     TEMP = window['tiledeskSettings']['preChatForm'];
+    console.log('tiledeskSettings preChatForm', TEMP);
     if (TEMP !== undefined) {
       this.preChatForm = (TEMP === false) ? false : true;
     }
+    console.log('tiledeskSettings preChatForm', this.preChatForm);
+
     TEMP = window['tiledeskSettings']['isOpen'];
     if (TEMP !== undefined) {
       this.isOpen = (TEMP === false) ? false : true;

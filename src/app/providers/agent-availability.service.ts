@@ -45,6 +45,27 @@ export class AgentAvailabilityService {
       // .catch(this.handleError);
   }
 
+  public getAvailableAgentsForDepartment(projectId, idDepartmentSelected): Observable<User[]> {
+    if (!projectId) {
+      return Observable.throw('projectId is not valid');
+    }
+    if (projectId == null)  {
+      return Observable.throw('projectId is null');
+    }
+    if (projectId === undefined) {
+      return Observable.throw('projectId is undefined');
+    }
+    const url = this.API_URL + projectId + '/departments/' + idDepartmentSelected + '/operators/';
+    // https://api.tiledesk.com/v1/5ad4c101e774ac0014ae0d07/departments/5ad4c5abe774ac0014ae0d0e/operators/
+    console.log(url);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http
+      .get(url, { headers })
+      .map((response) => response.json());
+      // .catch(this.handleError);
+  }
+
   // private handleError(error: Response | any) {
   //   // console.error('AgentAvailabilityService::handleError', error);
   //   return Observable.throw(error);

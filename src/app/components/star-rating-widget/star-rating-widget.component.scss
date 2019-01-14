@@ -1,8 +1,12 @@
 // @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-@import url(https://use.fontawesome.com/releases/v5.5.0/css/all.css);
+
+
+
+// @import url(https://use.fontawesome.com/releases/v5.5.0/css/all.css);
+
 @import '../../../sass/normalize.css';
 @import '../../../sass/variables';
-
+@import '../../../sass/cleanslate.css';
 
 #chat21-star-rating-widget {
   background-color: #ffffff;
@@ -162,8 +166,8 @@
     }
     label.c21-button:before {
       margin: 5px;
-      content: "\f005";
-      font-family: 'Font Awesome\ 5 Free';
+      // content: "\f005";
+      // font-family: 'Font Awesome\ 5 Free';
       display: inline-block;
       // font-size: 1.5em;
       font-size: 24px;
@@ -198,13 +202,21 @@
       right: 40px;
       width: 70px;
       line-height: 20px;
+      fill: #FFD700;
     }
+    svg.star{
+      fill: #efefef;
+    }
+    svg.star:hover{
+      fill: #FFD700;
+    }
+
     .fa-star:before { 
       margin: 0px;
       font-size: 1em;
-      font-family: 'Font Awesome\ 5 Free';
+      // font-family: 'Font Awesome\ 5 Free';
+      // content: "\f005";
       display: inline-block;
-      content: "\f005";
       color: #FFD700;
     }
 

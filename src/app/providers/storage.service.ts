@@ -26,6 +26,16 @@ export class StorageService {
     }
   }
 
+  public removeItem(key: string) {
+    if (this.g.persistence === 'local') {
+      return localStorage.removeItem(key);
+    } else if (this.g.persistence === 'session') {
+      return sessionStorage.removeItem(key);
+    } else {
+      return localStorage.removeItem(key);
+    }
+  }
+
   public clear () {
     if (this.g.persistence === 'local') {
       return localStorage.clear();
