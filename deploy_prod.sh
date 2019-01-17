@@ -1,15 +1,3 @@
-# environment=$(< current_version.ts)
-# start="CURR_VER_PROD = '1."
-# end="'"
-# one=${environment#*$start}
-# build=${one%%$end*} #two=${one%,*} -> %% prendo la prima istanza; % prendo la seconda
-# NEW_BUILD=$(($build+1))
-# sed -i -e "s/$start$build/$start$NEW_BUILD/g" current_version.ts
-# ng build --prod --base-href --output-hashing none
-# cd dist
-# aws s3 sync . s3://tiledesk-widget/v2/
-# cd ..
-
 environment=$(< current_version.ts)
 start="CURR_VER_PROD = '"
 two="."

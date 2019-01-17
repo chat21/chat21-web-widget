@@ -5,6 +5,174 @@
 
 tiledeskwidget-root {
 
+    position: fixed;
+    z-index: 999999;
+    width: auto;
+    height: auto;
+    bottom: 0px;
+    right: 0px;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size-adjust: none;
+    font-size: 100%;
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font: normal normal 100% "Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-align: left;
+    -moz-text-align-last: initial;
+    text-align-last: initial;
+    text-decoration: none;
+    -webkit-text-emphasis: none;
+    text-indent: 0;
+    text-justify: auto;
+    text-shadow: none;
+    text-transform: none;
+    -webkit-animation: none 0 ease 0 1 normal;
+    animation: none 0 ease 0 1 normal;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    background: none 0 0 auto repeat scroll padding-box transparent;
+    background-color: transparent;
+    background-image: none;
+    border: 0 none transparent;
+    border-radius: 0;
+    bottom: auto;
+    -webkit-box-decoration-break: slice;
+    box-decoration-break: slice;
+    box-shadow: none;
+    box-sizing: content-box;
+    -webkit-break-after: auto;
+    -moz-break-after: auto;
+    break-after: auto;
+    -webkit-break-before: auto;
+    -moz-break-before: auto;
+    break-before: auto;
+    -webkit-column-break-inside: auto;
+    page-break-inside: auto;
+    break-inside: auto;
+    caption-side: top;
+    clear: none;
+    clip: auto;
+    color: inherit;
+    -webkit-column-count: auto;
+    -moz-column-count: auto;
+    column-count: auto;
+    -webkit-column-fill: balance;
+    -moz-column-fill: balance;
+    column-fill: balance;
+    -webkit-column-gap: normal;
+    -moz-column-gap: normal;
+    column-gap: normal;
+    -webkit-column-rule: medium medium #1f1f1f;
+    -moz-column-rule: medium medium #1f1f1f;
+    column-rule: medium medium #1f1f1f;
+    -webkit-column-span: 1;
+    -moz-column-span: 1;
+    column-span: 1;
+    -webkit-column-width: auto;
+    -moz-column-width: auto;
+    column-width: auto;
+    -webkit-columns: auto auto;
+    -moz-columns: auto auto;
+    columns: auto auto;
+    content: normal;
+    counter-increment: none;
+    counter-reset: none;
+    cursor: auto;
+    direction: ltr;
+    display: inline;
+    empty-cells: show;
+    -webkit-hyphens: manual;
+    -moz-hyphens: manual;
+    -ms-hyphens: manual;
+    hyphens: manual;
+    image-orientation: auto;
+    image-rendering: auto;
+    left: auto;
+    line-height: initial;
+    list-style: disc outside none;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    nav-down: auto;
+    nav-index: auto;
+    nav-left: auto;
+    nav-right: auto;
+    nav-up: auto;
+    opacity: 1;
+    orphans: 2;
+    outline: invert none medium;
+    outline-offset: 0;
+    overflow: visible;
+    padding: 0;
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: auto;
+    -webkit-perspective: none;
+    perspective: none;
+    -webkit-perspective-origin: 50% 50%;
+    perspective-origin: 50% 50%;
+    // position: static;
+    quotes: none;
+    resize: none;
+    right: auto;
+    ruby-align: auto;
+    ruby-overhang: none;
+    ruby-position: before;
+    ruby-span: none;
+    size: auto;
+    table-layout: auto;
+    top: auto;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    -webkit-transform-origin: 50% 50% 0;
+    -ms-transform-origin: 50% 50% 0;
+    transform-origin: 50% 50% 0;
+    -webkit-transform-style: flat;
+    transform-style: flat;
+    transition: all 0 ease 0;
+    unicode-bidi: normal;
+    vertical-align: baseline;
+    white-space: normal;
+    widows: 2;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    text-align: start;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    // display: none;
+    // background-color: #ffffff;
+
+    // ========= BEGIN: RESET CSS TAG ========= //
+    p, a, ul, li, h1, h2, h3, textarea, title, time, svg, small, link, label, input, img,
+    form, font, code, button, br, b{
+        // all: unset;
+    }
+    textarea,
+    textarea:visited,
+    textarea:focus,
+    textarea:hover,
+    textarea:active{
+        all: unset;
+        line-height: 15px!important;
+        outline: none!important;
+        box-shadow:none!important;;
+        border: 0px solid $trasp-light-black!important;;
+    }
+
     // ========= BEGIN: CSS APP.COMPONENT ========= //
     #chat21-container {
         display: none;
