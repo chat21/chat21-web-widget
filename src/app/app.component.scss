@@ -1,383 +1,9 @@
-
 @import url('https://fonts.googleapis.com/css?family=Google+Sans:200,400,800');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons');
-@import '../sass/normalize.css';
-@import '../sass/cleanslate.css';
+@import '../sass/normalize.scss';
 @import '../sass/variables';
 
 tiledeskwidget-root {
-    position: fixed;
-    z-index: 999999;
-    width: auto;
-    height: auto;
-    bottom: 0px;
-    right: 0px;
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size-adjust: none;
-    font-size: 100%;
-    font-style: normal;
-    letter-spacing: normal;
-    font-stretch: normal;
-    font-variant: normal;
-    font-weight: normal;
-    font: normal normal 100% "Helvetica Neue",Helvetica,Arial,sans-serif;
-    text-align: left;
-    -moz-text-align-last: initial;
-    text-align-last: initial;
-    text-decoration: none;
-    -webkit-text-emphasis: none;
-    text-indent: 0;
-    text-justify: auto;
-    text-shadow: none;
-    text-transform: none;
-    -webkit-animation: none 0 ease 0 1 normal;
-    animation: none 0 ease 0 1 normal;
-    -webkit-animation-play-state: running;
-    animation-play-state: running;
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
-    background: none 0 0 auto repeat scroll padding-box transparent;
-    background-color: transparent;
-    background-image: none;
-    border: 0 none transparent;
-    border-radius: 0;
-    bottom: auto;
-    -webkit-box-decoration-break: slice;
-    box-decoration-break: slice;
-    box-shadow: none;
-    box-sizing: content-box;
-    -webkit-break-after: auto;
-    -moz-break-after: auto;
-    break-after: auto;
-    -webkit-break-before: auto;
-    -moz-break-before: auto;
-    break-before: auto;
-    -webkit-column-break-inside: auto;
-    page-break-inside: auto;
-    break-inside: auto;
-    caption-side: top;
-    clear: none;
-    clip: auto;
-    color: inherit;
-    -webkit-column-count: auto;
-    -moz-column-count: auto;
-    column-count: auto;
-    -webkit-column-fill: balance;
-    -moz-column-fill: balance;
-    column-fill: balance;
-    -webkit-column-gap: normal;
-    -moz-column-gap: normal;
-    column-gap: normal;
-    -webkit-column-rule: medium medium #1f1f1f;
-    -moz-column-rule: medium medium #1f1f1f;
-    column-rule: medium medium #1f1f1f;
-    -webkit-column-span: 1;
-    -moz-column-span: 1;
-    column-span: 1;
-    -webkit-column-width: auto;
-    -moz-column-width: auto;
-    column-width: auto;
-    -webkit-columns: auto auto;
-    -moz-columns: auto auto;
-    columns: auto auto;
-    content: normal;
-    counter-increment: none;
-    counter-reset: none;
-    cursor: auto;
-    direction: ltr;
-    display: inline;
-    empty-cells: show;
-    -webkit-hyphens: manual;
-    -moz-hyphens: manual;
-    -ms-hyphens: manual;
-    hyphens: manual;
-    image-orientation: auto;
-    image-rendering: auto;
-    left: auto;
-    line-height: initial;
-    list-style: disc outside none;
-    margin: 0;
-    max-height: none;
-    max-width: none;
-    min-height: 0;
-    min-width: 0;
-    nav-down: auto;
-    nav-index: auto;
-    nav-left: auto;
-    nav-right: auto;
-    nav-up: auto;
-    opacity: 1;
-    orphans: 2;
-    outline: invert none medium;
-    outline-offset: 0;
-    overflow: visible;
-    padding: 0;
-    page-break-after: auto;
-    page-break-before: auto;
-    page-break-inside: auto;
-    -webkit-perspective: none;
-    perspective: none;
-    -webkit-perspective-origin: 50% 50%;
-    perspective-origin: 50% 50%;
-    // position: static;
-    quotes: none;
-    resize: none;
-    right: auto;
-    ruby-align: auto;
-    ruby-overhang: none;
-    ruby-position: before;
-    ruby-span: none;
-    size: auto;
-    table-layout: auto;
-    top: auto;
-    -webkit-transform: none;
-    -ms-transform: none;
-    transform: none;
-    -webkit-transform-origin: 50% 50% 0;
-    -ms-transform-origin: 50% 50% 0;
-    transform-origin: 50% 50% 0;
-    -webkit-transform-style: flat;
-    transform-style: flat;
-    transition: all 0 ease 0;
-    unicode-bidi: normal;
-    vertical-align: baseline;
-    white-space: normal;
-    widows: 2;
-    word-break: normal;
-    word-spacing: normal;
-    word-wrap: normal;
-    text-align: start;
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    // display: none;
-    // background-color: #ffffff;
-
-    // ========= BEGIN: RESET CSS TAG ========= //
-    p, a, ul, li, h1, h2, h3, textarea, title, time, svg, small, link, label, input, img,
-    form, font, code, button, br, b{
-        // all: unset;
-    }
-    textarea,
-    textarea:visited,
-    textarea:focus,
-    textarea:hover,
-    textarea:active{
-        all: unset;
-        line-height: 15px!important;
-        outline: none!important;
-        box-shadow:none!important;;
-        border: 0px solid $trasp-light-black!important;;
-    }
-    a:link {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* visited link */
-    a:visited {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* mouse over link */
-    a:hover {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* selected link */
-    a:active {
-        // all: unset;
-        color: #ffffff;
-    }
-    // ========= END: RESET CSS TAG ========= //
-
-
-    // ========= BEGIN: GENERIC CSS ========= //
-    div.clear {
-        all: unset;
-        clear: both;
-    }
-    .truncate{
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-    .v-align-center{
-        display: inline-flex;
-        align-items: center;
-        height: 100%;
-        float: left;
-    }
-    .align-left {
-        left: 20px;
-    }
-    .align-right {
-        right: 20px;
-    }
-
-    .c21-divBudge{
-        position: absolute;
-        top: 0;
-        width: auto;
-        height: 12px;
-        min-width: 12px;
-        font-size: 1em;
-        line-height: 1.2em;
-        border-radius: 20%;
-        background-color: $red;
-        color: white;
-        padding: 2px 2px 2px 2px;
-        text-align: center;
-        margin-top: -10px;
-        display: inline-block;
-        box-sizing: initial;
-    }
-    .c21-button{
-        display: inline-flex;
-        cursor: pointer;
-    }
-    /** header-buttons **/
-    .c21-header-button {
-        // &.close {
-        //     display: none;
-        // }
-    }
-    .c21-close-button {
-        position: absolute;
-        width: 51px;
-        height: 51px;
-        top: 0;
-        right: 0;
-        margin: 12px 8px 12px 2px;
-        z-index: 10;
-        .c21-close-button-body {
-            cursor: pointer;
-            width: 51px;
-            height: 51px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.0);
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.4);
-            }
-            svg{
-                margin: 0 auto;
-                fill: #ffffff;
-            }
-        }
-    }
-
-
-
-    // === CSS LINKS === //
-    /* .messages.msg_receive a */
-    .msg_receive a { 
-        color: $bck-msg-sent;
-    }
-
-    // === CSS BUTTON === //
-    button.c21-button-primary{
-        width: auto;
-        height: 40px;
-        line-height: 40px;
-        margin: 8px 0;
-        padding: 0 24px;
-        opacity: 1;
-        text-align: center;
-        font-size: 1em;
-        border-radius: 40px;
-        background-color: $theme-color;
-        color: #ffffff;
-        border: 0px;
-
-        cursor: pointer;
-        .c21-label-button {
-            margin-left: 8px; 
-            font-weight: 400;
-        }
-    }
-    button.c21-button-primary:hover,
-    button.c21-button-primary:focus,
-    button.c21-button-primary:active {
-        outline-width: 0px;
-        opacity: 0.8;
-    }
-
-    /* TIME */
-    .time {
-        font-size: 1em;
-        color: $gray;
-        text-align: left;
-        margin: 0px;
-        padding: 0px 40px;
-        margin-top: -2px;
-        background-color: transparent;
-    }
-    .time.sender{
-        text-align: right;
-        margin-right: 24px;
-        padding: 0;
-    }
-
-    /* LOADING */
-    /*http://tobiasahlin.com/spinkit/*/
-    #chat21-spinner {
-        display: none;
-        width: 70px;
-        min-height: 20px;
-        margin: 20px auto 0;
-        text-align: center;
-    }
-    #chat21-spinner.active {
-        display: block;
-    }
-    #chat21-spinner > div {
-        width: 12px;
-        height: 12px;
-        background-color: $theme-color;
-        border-radius: 100%;
-        display: inline-block;
-        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    }
-    #chat21-spinner .chat21-bounce1 {
-        -webkit-animation-delay: -0.32s;
-        animation-delay: -0.32s;
-    }
-    #chat21-spinner .chat21-bounce2 {
-        -webkit-animation-delay: -0.16s;
-        animation-delay: -0.16s;
-    }
-    #chat21-spinner span {
-        display: block;
-        margin: 0.5em 0 0 0;
-        color: $theme-color;
-        /* text-transform: uppercase; */
-        font-family: 'Roboto', sans-serif;
-        -webkit-animation: pulse 2000ms linear infinite;
-        -moz-animation: pulse 2000ms linear infinite;
-        animation: pulse 2000ms linear infinite;
-        text-align: center;
-    }
-    @-webkit-keyframes sk-bouncedelay {
-        0%, 80%, 100% { -webkit-transform: scale(0) }
-        40% { -webkit-transform: scale(1.0) }
-    }
-    @keyframes sk-bouncedelay {
-        0%, 80%, 100% { 
-        -webkit-transform: scale(0);
-        transform: scale(0);
-        } 40% { 
-        -webkit-transform: scale(1.0);
-        transform: scale(1.0);
-        }
-    }
-    // ========= END: GENERIC CSS ========= //
-
 
     // ========= BEGIN: CSS APP.COMPONENT ========= //
     #chat21-container {
@@ -389,7 +15,196 @@ tiledeskwidget-root {
         &.active{
             display: block;
         }
-        
+
+        // ========= BEGIN: GENERIC CSS ========= //
+        a:link {
+            color: #ffffff;
+        }
+        /* visited link */
+        a:visited {
+            color: #ffffff;
+        }
+        /* mouse over link */
+        a:hover {
+            color: #ffffff;
+        }
+        /* selected link */
+        a:active {
+            color: #ffffff;
+        }
+        div.clear {
+            all: unset;
+            clear: both;
+        }
+        .truncate{
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .v-align-center{
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            float: left;
+        }
+        .c21-align-left {
+            left: 20px;
+        }
+        .c21-align-right {
+            right: 20px;
+        }
+        /* TIME */
+        .time {
+            font-size: 1em;
+            color: $gray;
+            text-align: left;
+            margin: 0px;
+            padding: 0px 40px;
+            margin-top: -2px;
+            background-color: transparent;
+        }
+        .time.sender{
+            text-align: right;
+            margin-right: 24px;
+            padding: 0;
+        }
+
+        // === CSS LINKS === //
+        /* .messages.msg_receive a */
+        .msg_receive a { 
+            color: $bck-msg-sent;
+        }
+
+        // === CSS BUTTON === //
+        button.c21-button-primary{
+            width: auto;
+            height: 40px;
+            line-height: 40px;
+            margin: 8px 0;
+            padding: 0 24px;
+            opacity: 1;
+            text-align: center;
+            font-size: 1em;
+            border-radius: 40px;
+            background-color: $theme-color;
+            color: #ffffff;
+            border: 0px;
+
+            cursor: pointer;
+            .c21-label-button {
+                margin-left: 8px; 
+                font-weight: 400;
+            }
+        }
+        button.c21-button-primary:hover,
+        button.c21-button-primary:focus,
+        button.c21-button-primary:active {
+            outline-width: 0px;
+            opacity: 0.8;
+        }
+
+        .c21-divBudge{
+            position: absolute;
+            top: 0;
+            width: auto;
+            height: 12px;
+            min-width: 12px;
+            font-size: 1em;
+            line-height: 1.2em;
+            border-radius: 20%;
+            background-color: $red;
+            color: white;
+            padding: 2px 2px 2px 2px;
+            text-align: center;
+            margin-top: -10px;
+            display: inline-block;
+            box-sizing: initial;
+        }
+        .c21-button{
+            display: inline-flex;
+            cursor: pointer;
+        }
+        /** header-buttons **/
+        .c21-close-button {
+            position: absolute;
+            width: 51px;
+            height: 51px;
+            top: 0;
+            right: 0;
+            margin: 12px 8px 12px 2px;
+            z-index: 10;
+            .c21-close-button-body {
+                cursor: pointer;
+                width: 51px;
+                height: 51px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.0);
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.4);
+                }
+                svg{
+                    margin: 0 auto;
+                    fill: #ffffff;
+                }
+            }
+        }
+         /* LOADING */
+        /*http://tobiasahlin.com/spinkit/*/
+        #chat21-spinner {
+            display: none;
+            width: 70px;
+            min-height: 20px;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+        #chat21-spinner.active {
+            display: block;
+        }
+        #chat21-spinner > div {
+            width: 12px;
+            height: 12px;
+            background-color: $theme-color;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+        #chat21-spinner .chat21-bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+        #chat21-spinner .chat21-bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+        #chat21-spinner span {
+            display: block;
+            margin: 0.5em 0 0 0;
+            color: $theme-color;
+            /* text-transform: uppercase; */
+            font-family: 'Roboto', sans-serif;
+            -webkit-animation: pulse 2000ms linear infinite;
+            -moz-animation: pulse 2000ms linear infinite;
+            animation: pulse 2000ms linear infinite;
+            text-align: center;
+        }
+        @-webkit-keyframes sk-bouncedelay {
+            0%, 80%, 100% { -webkit-transform: scale(0) }
+            40% { -webkit-transform: scale(1.0) }
+        }
+        @keyframes sk-bouncedelay {
+            0%, 80%, 100% { 
+            -webkit-transform: scale(0);
+            transform: scale(0);
+            } 40% { 
+            -webkit-transform: scale(1.0);
+            transform: scale(1.0);
+            }
+        }
+        // ========= END: GENERIC CSS ========= //
+   
         /* CSS BOX CONTAINER */
         #chat21-conversations {
             position: fixed;
@@ -405,9 +220,7 @@ tiledeskwidget-root {
             box-shadow: $trasp-light-black 0 0 38px;
             display: none;
             overflow-y: hidden;
-            // &.active {
-            //     display: block;
-            // }
+
             &.full-screen-mode {
                 width: 100%;
                 height: 100%;
