@@ -9,7 +9,7 @@
     -->
 
     <div id="chat21-conversations" class="chat21-window"
-    [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align === 'right'}"
+    [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'display': (g.isOpen == true)?'block':'none', 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
