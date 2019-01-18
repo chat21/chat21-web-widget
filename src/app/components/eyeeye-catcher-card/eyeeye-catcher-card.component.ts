@@ -20,6 +20,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
 
    // ========= begin:: Input/Output values ============//
    @Output()   eventOpenChat  = new EventEmitter();
+   @Output()   eventOpenEyeCatcher = new EventEmitter();
    // ========= end:: Input/Output values ============//
 
   // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
@@ -67,7 +68,8 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       if (this.g.isOpen === false) {
-           this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
+          this.eventOpenEyeCatcher.emit();
+          this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
           this.g.displayEyeCatcherCard = 'block';
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
