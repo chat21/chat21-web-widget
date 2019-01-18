@@ -61,4 +61,5 @@ export class LauncherButtonComponent implements OnInit {
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }
   }
+
 }

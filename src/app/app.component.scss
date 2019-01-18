@@ -1,10 +1,10 @@
-
 @import url('https://fonts.googleapis.com/css?family=Google+Sans:200,400,800');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons');
-@import '../sass/normalize.css';
+@import '../sass/normalize.scss';
 @import '../sass/variables';
 
-tiledeskwidget-root{
+tiledeskwidget-root {
+
     position: fixed;
     z-index: 999999;
     width: auto;
@@ -172,211 +172,6 @@ tiledeskwidget-root{
         box-shadow:none!important;;
         border: 0px solid $trasp-light-black!important;;
     }
-    a:link {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* visited link */
-    a:visited {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* mouse over link */
-    a:hover {
-        // all: unset;
-        color: #ffffff;
-    }
-    /* selected link */
-    a:active {
-        // all: unset;
-        color: #ffffff;
-    }
-    // ========= END: RESET CSS TAG ========= //
-
-
-    // ========= BEGIN: GENERIC CSS ========= //
-    div.clear {
-        all: unset;
-        clear: both;
-    }
-    .truncate{
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-    .v-align-center{
-        display: inline-flex;
-        align-items: center;
-        height: 100%;
-        float: left;
-    }
-    .align-left {
-        left: 20px;
-    }
-    .align-right {
-        right: 20px;
-    }
-
-    .c21-divBudge{
-        position: absolute;
-        top: 0;
-        width: auto;
-        height: 12px;
-        min-width: 12px;
-        font-size: 1em;
-        line-height: 1.2em;
-        border-radius: 20%;
-        background-color: $red;
-        color: white;
-        padding: 2px 2px 2px 2px;
-        text-align: center;
-        margin-top: -10px;
-        display: inline-block;
-        box-sizing: initial;
-    }
-    .c21-button{
-        display: inline-flex;
-        cursor: pointer;
-    }
-    /** header-buttons **/
-    .c21-header-button {
-        // &.close {
-        //     display: none;
-        // }
-    }
-    .c21-close-button {
-        position: absolute;
-        width: 51px;
-        height: 51px;
-        top: 0;
-        right: 0;
-        margin: 12px 8px 12px 2px;
-        z-index: 10;
-        .c21-close-button-body {
-            cursor: pointer;
-            width: 51px;
-            height: 51px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.0);
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.4);
-            }
-            svg{
-                margin: 0 auto;
-                fill: #ffffff;
-            }
-        }
-    }
-
-
-
-    // === CSS LINKS === //
-    /* .messages.msg_receive a */
-    .msg_receive a { 
-        color: $bck-msg-sent;
-    }
-
-    // === CSS BUTTON === //
-    button.c21-button-primary{
-        width: auto;
-        height: 40px;
-        line-height: 40px;
-        margin: 8px 0;
-        padding: 0 24px;
-        opacity: 1;
-        text-align: center;
-        font-size: 1em;
-        border-radius: 40px;
-        background-color: $theme-color;
-        color: #ffffff;
-        border: 0px;
-
-        cursor: pointer;
-        .c21-label-button {
-            margin-left: 8px; 
-            font-weight: 400;
-        }
-    }
-    button.c21-button-primary:hover,
-    button.c21-button-primary:focus,
-    button.c21-button-primary:active {
-        outline-width: 0px;
-        opacity: 0.8;
-    }
-
-    /* TIME */
-    .time {
-        font-size: 1em;
-        color: $gray;
-        text-align: left;
-        margin: 0px;
-        padding: 0px 40px;
-        margin-top: -2px;
-        background-color: transparent;
-    }
-    .time.sender{
-        text-align: right;
-        margin-right: 24px;
-        padding: 0;
-    }
-
-    /* LOADING */
-    /*http://tobiasahlin.com/spinkit/*/
-    #chat21-spinner {
-        display: none;
-        width: 70px;
-        min-height: 20px;
-        margin: 20px auto 0;
-        text-align: center;
-    }
-    #chat21-spinner.active {
-        display: block;
-    }
-    #chat21-spinner > div {
-        width: 12px;
-        height: 12px;
-        background-color: $theme-color;
-        border-radius: 100%;
-        display: inline-block;
-        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    }
-    #chat21-spinner .chat21-bounce1 {
-        -webkit-animation-delay: -0.32s;
-        animation-delay: -0.32s;
-    }
-    #chat21-spinner .chat21-bounce2 {
-        -webkit-animation-delay: -0.16s;
-        animation-delay: -0.16s;
-    }
-    #chat21-spinner span {
-        display: block;
-        margin: 0.5em 0 0 0;
-        color: $theme-color;
-        /* text-transform: uppercase; */
-        font-family: 'Roboto', sans-serif;
-        -webkit-animation: pulse 2000ms linear infinite;
-        -moz-animation: pulse 2000ms linear infinite;
-        animation: pulse 2000ms linear infinite;
-        text-align: center;
-    }
-    @-webkit-keyframes sk-bouncedelay {
-        0%, 80%, 100% { -webkit-transform: scale(0) }
-        40% { -webkit-transform: scale(1.0) }
-    }
-    @keyframes sk-bouncedelay {
-        0%, 80%, 100% { 
-        -webkit-transform: scale(0);
-        transform: scale(0);
-        } 40% { 
-        -webkit-transform: scale(1.0);
-        transform: scale(1.0);
-        }
-    }
-    // ========= END: GENERIC CSS ========= //
-
 
     // ========= BEGIN: CSS APP.COMPONENT ========= //
     #chat21-container {
@@ -388,7 +183,196 @@ tiledeskwidget-root{
         &.active{
             display: block;
         }
-        
+
+        // ========= BEGIN: GENERIC CSS ========= //
+        a:link {
+            color: #ffffff;
+        }
+        /* visited link */
+        a:visited {
+            color: #ffffff;
+        }
+        /* mouse over link */
+        a:hover {
+            color: #ffffff;
+        }
+        /* selected link */
+        a:active {
+            color: #ffffff;
+        }
+        div.clear {
+            all: unset;
+            clear: both;
+        }
+        .truncate{
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .v-align-center{
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            float: left;
+        }
+        .c21-align-left {
+            left: 20px;
+        }
+        .c21-align-right {
+            right: 20px;
+        }
+        /* TIME */
+        .time {
+            font-size: 1em;
+            color: $gray;
+            text-align: left;
+            margin: 0px;
+            padding: 0px 40px;
+            margin-top: -2px;
+            background-color: transparent;
+        }
+        .time.sender{
+            text-align: right;
+            margin-right: 24px;
+            padding: 0;
+        }
+
+        // === CSS LINKS === //
+        /* .messages.msg_receive a */
+        .msg_receive a { 
+            color: $bck-msg-sent;
+        }
+
+        // === CSS BUTTON === //
+        button.c21-button-primary{
+            width: auto;
+            height: 40px;
+            line-height: 40px;
+            margin: 8px 0;
+            padding: 0 24px;
+            opacity: 1;
+            text-align: center;
+            font-size: 1em;
+            border-radius: 40px;
+            background-color: $theme-color;
+            color: #ffffff;
+            border: 0px;
+
+            cursor: pointer;
+            .c21-label-button {
+                margin-left: 8px; 
+                font-weight: 400;
+            }
+        }
+        button.c21-button-primary:hover,
+        button.c21-button-primary:focus,
+        button.c21-button-primary:active {
+            outline-width: 0px;
+            opacity: 0.8;
+        }
+
+        .c21-divBudge{
+            position: absolute;
+            top: 0;
+            width: auto;
+            height: 12px;
+            min-width: 12px;
+            font-size: 1em;
+            line-height: 1.2em;
+            border-radius: 20%;
+            background-color: $red;
+            color: white;
+            padding: 2px 2px 2px 2px;
+            text-align: center;
+            margin-top: -10px;
+            display: inline-block;
+            box-sizing: initial;
+        }
+        .c21-button{
+            display: inline-flex;
+            cursor: pointer;
+        }
+        /** header-buttons **/
+        .c21-close-button {
+            position: absolute;
+            width: 51px;
+            height: 51px;
+            top: 0;
+            right: 0;
+            margin: 12px 8px 12px 2px;
+            z-index: 10;
+            .c21-close-button-body {
+                cursor: pointer;
+                width: 51px;
+                height: 51px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.0);
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.4);
+                }
+                svg{
+                    margin: 0 auto;
+                    fill: #ffffff;
+                }
+            }
+        }
+         /* LOADING */
+        /*http://tobiasahlin.com/spinkit/*/
+        #chat21-spinner {
+            display: none;
+            width: 70px;
+            min-height: 20px;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+        #chat21-spinner.active {
+            display: block;
+        }
+        #chat21-spinner > div {
+            width: 12px;
+            height: 12px;
+            background-color: $theme-color;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+        #chat21-spinner .chat21-bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+        #chat21-spinner .chat21-bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+        #chat21-spinner span {
+            display: block;
+            margin: 0.5em 0 0 0;
+            color: $theme-color;
+            /* text-transform: uppercase; */
+            font-family: 'Roboto', sans-serif;
+            -webkit-animation: pulse 2000ms linear infinite;
+            -moz-animation: pulse 2000ms linear infinite;
+            animation: pulse 2000ms linear infinite;
+            text-align: center;
+        }
+        @-webkit-keyframes sk-bouncedelay {
+            0%, 80%, 100% { -webkit-transform: scale(0) }
+            40% { -webkit-transform: scale(1.0) }
+        }
+        @keyframes sk-bouncedelay {
+            0%, 80%, 100% { 
+            -webkit-transform: scale(0);
+            transform: scale(0);
+            } 40% { 
+            -webkit-transform: scale(1.0);
+            transform: scale(1.0);
+            }
+        }
+        // ========= END: GENERIC CSS ========= //
+   
         /* CSS BOX CONTAINER */
         #chat21-conversations {
             position: fixed;
@@ -404,9 +388,7 @@ tiledeskwidget-root{
             box-shadow: $trasp-light-black 0 0 38px;
             display: none;
             overflow-y: hidden;
-            // &.active {
-            //     display: block;
-            // }
+
             &.full-screen-mode {
                 width: 100%;
                 height: 100%;

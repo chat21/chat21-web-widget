@@ -186,7 +186,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.triggetLoadParamsEvent();
          this.g.wdLog([' ---------------- A2 ---------------- ']);
 
-        //this.startNwConversation();
+        // this.startNwConversation();
 
         /** mostro il pulsante principale dopo l'init */
         this.isInitialized = true;
@@ -198,6 +198,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
         this.setAvailableAgentsStatus();
+
+        // da spostare!!
+        const TEMP = this.storageService.getItem('preChatForm');
+        this.g.wdLog([' ---------------- TEMP:', TEMP, this.g.preChatForm]);
+        if (TEMP !== undefined && TEMP !== null) {
+            this.g.preChatForm = TEMP;
+        }
+        this.g.wdLog([' ---------------- this.g.preChatForm:', this.g.preChatForm]);
 
     }
 
@@ -219,21 +227,17 @@ export class AppComponent implements OnInit, OnDestroy {
         client: CLIENT_BROWSER,
         sourcePage: location.href,
         projectId: this.g.projectid
-        // departmentId: '',
-        // departmentName: '',
-        // departmentId: this.departmentSelected._id,
-        // departmentName: this.departmentSelected.name,
-        // userEmail: this.userEmail,
-        // userName: this.userFullname
       };
-      if (this.g.userEmail) {
-        attributes['userEmail'] = this.g.userEmail;
-      }
-      if (this.g.userFullname) {
-        attributes['userFullname'] = this.g.userFullname;
-      }
-      this.storageService.setItem('attributes', JSON.stringify(attributes));
     }
+
+    if (this.g.userEmail) {
+        attributes['userEmail'] = this.g.userEmail;
+    }
+    if (this.g.userFullname) {
+        attributes['userFullname'] = this.g.userFullname;
+    }
+    this.storageService.setItem('attributes', JSON.stringify(attributes));
+    this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
     return attributes;
   }
 
@@ -415,7 +419,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.g.isLogged = true;
              this.g.wdLog([' this.g.senderId', this.g.senderId]);
              this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
-             this.startNwConversation(); 
+             this.startNwConversation();
             this.startUI();
              this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
@@ -525,9 +529,9 @@ export class AppComponent implements OnInit, OnDestroy {
                 });
             };
             /** set state PreChatForm close/open */
-            window['tiledesk'].setStatePreChatForm = function (state) {
+            window['tiledesk'].setPreChatForm = function (state) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.setStatePreChatForm(state);
+                    window['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
             window['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
@@ -579,6 +583,8 @@ export class AppComponent implements OnInit, OnDestroy {
                          this.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
+                        that.setAttributes();
+
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // console.log('call signout');
@@ -604,10 +610,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     /** */
-    private setStatePreChatForm(state) {
+    private setPreChatForm(state) {
         if (state != null) {
             this.g.preChatForm = state;
-            this.g.isOpenPrechatForm = state;
+            // this.g.isOpenPrechatForm = state;
+            if ( state === true ) {
+                this.storageService.setItem('preChatForm', state);
+            } else {
+                this.storageService.removeItem('preChatForm');
+            }
         }
         //  this.g.wdLog(['this.isOpenPrechatForm ', this.isOpenPrechatForm);
     }
@@ -767,7 +778,8 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnCloseWidget() {
         // this.g.isOpen = false;
-        this.g.setIsOpen(false);
+        // this.g.setIsOpen(false);
+        this.f21_close();
     }
 
     /**
@@ -852,7 +864,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * home - stack 0
      */
     private returnNewConversation() {
-         this.g.wdLog(['returnNewConversation in APP COMPONENT']);
+         this.g.wdLog(['returnNewConversation in APP COMPONENT', this.g.preChatForm]);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
         if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {

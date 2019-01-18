@@ -8,7 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
-
+<style>
+.align-right {
+    text-align: right;
+}
+</style>
 <body>
 
         <button id="idShow">
@@ -55,7 +59,7 @@
               wellcomeTitle: "Benvenuti su questa chat",
               wellcomeMsg: "Come possiamo aiutarti?",
               logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
-              startFromHome: false,
+              startFromHome: true,
               preChatForm: true,
               autoStart: true,
               isLogEnabled:true,
@@ -257,7 +261,7 @@
         $( "#preChatForm" ).click(function() {
           isOpenPrechatForm = !isOpenPrechatForm;
           // alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
-          window.tiledesk.setStatePreChatForm(isOpenPrechatForm);
+          window.tiledesk.setPreChatForm(isOpenPrechatForm);
         });
 
 

@@ -1,4 +1,4 @@
-<div id="chat21-conversation-component">
+<div id="chat21-conversation-component" >
     <!-- HEADER -->
     <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
 
@@ -81,7 +81,7 @@
                     </div> -->
 
                 <!-- // nk - to edit: display the msg of welcome msg if exist && g.availableAgentsStatus -->
-                <div *ngIf="isNewConversation && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
+                <!-- <div *ngIf="isNewConversation && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
                     [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
                     <div *ngIf="g.areAgentsAvailable">
                         <span> {{g.LABEL_FIRST_MSG}} </span>
@@ -89,13 +89,12 @@
                     <div *ngIf="!g.areAgentsAvailable">
                         <span>{{g.LABEL_FIRST_MSG_NO_AGENTS}}</span>
                     </div>
-
-                </div>
+                </div> -->
 
                 <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                <div *ngIf="isNewConversation && g.areAgentsAvailable && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept">
+                <!-- <div *ngIf="isNewConversation && g.areAgentsAvailable && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept">
                     {{g.departmentSelected.name}}
-                </div>
+                </div> -->
 
             </div>
 

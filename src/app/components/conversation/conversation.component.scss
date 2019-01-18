@@ -2,7 +2,7 @@
 // $f21ico-done: image-url('../assets/images/f21ico-done.svg', false, false);
 // $f21ico-done_all: image-url('../assets/images/f21ico-done_all.svg', false, false);
 @import '../../../sass/variables';
-@import '../../../sass/normalize.css';
+// @import '../../../sass/normalize.css';
 
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
@@ -307,6 +307,7 @@
         font-size: 1.3em;
         line-height: 1.3em;
         max-height: 110px;
+        min-height: auto;
     
         height: 20px;
         padding: 0px 40px;
