@@ -88,7 +88,7 @@ function convertUrlToTag(url) {
   // tslint:disable-next-line:curly
   else return '<p (click)="openPopup2()">.</p>';
 
-  //// '<a href="#" onclick="window.open("www.google.it", "_system");" >' + url + '</a>';
+  //// '<a href="#" onclick="windowContext.open("www.google.it", "_system");" >' + url + '</a>';
   //// <a href="#" onclick="openPopup(' + url + ')">' + url + '</a>';
 }
 
@@ -107,7 +107,7 @@ export function isPopupUrl(url) {
   }
 }
 
-export function popupUrl(html, title) {
+export function popupUrl(windowContext, html, title) {
   const url = this.strip_tags(html);
   const w = 600;
   const h = 600; // screen.height - 40;
@@ -116,8 +116,8 @@ export function popupUrl(html, title) {
 
   // tslint:disable-next-line:whitespace
   // tslint:disable-next-line:max-line-length
-  const newWindow = window.open(url, '_blank', 'fullscreen=1, titlebar=0, toolbar=no, location=0, status=0, menubar=0, scrollbars=0, resizable=0, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-  if (window.focus) {
+  const newWindow = windowContext.open(url, '_blank', 'fullscreen=1, titlebar=0, toolbar=no, location=0, status=0, menubar=0, scrollbars=0, resizable=0, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+  if (windowContext.focus) {
     newWindow.focus();
   }
 }
@@ -179,14 +179,14 @@ export function setColorFromString(str) {
   return arrayBckColor[num];
 }
 
-export function getFromNow(timestamp) {
-  moment.locale(window.navigator.language);
+export function getFromNow(windowContext, timestamp) {
+  moment.locale(windowContext.navigator.language);
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;
 }
 
-export function detectIfIsMobile() {
-  const isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
+export function detectIfIsMobile(windowContext) {
+  const isMobile = /Android|iPhone/i.test(windowContext.navigator.userAgent);
   return isMobile;
 }
 
@@ -221,16 +221,16 @@ export function convertColorToRGBA(color, opacity) {
 }
 
 
-export function setLanguage(translatorService) {
-  if (translatorService.getBrowserLanguage()) {
-    return translatorService.getBrowserLanguage();
+export function setLanguage(windowContext, translatorService) {
+  if (translatorService.getBrowserLanguage(windowContext)) {
+    return translatorService.getBrowserLanguage(windowContext);
   }
-  return translatorService.getDefaultLanguage();
+  return translatorService.getDefaultLanguage(windowContext);
 }
 
-export function getParameterByName(name) {
-  // if (!url) url = window.location.href;
-  const url = window.location.href;
+export function getParameterByName(windowContext, name) {
+  // if (!url) url = windowContext.location.href;
+  const url = windowContext.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
   if (!results) { return null; }

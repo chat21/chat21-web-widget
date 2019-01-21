@@ -132,7 +132,7 @@
                                                     is ignored</div>
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
                                                     <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
@@ -182,7 +182,7 @@
 
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}
+                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
                                                     </p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>

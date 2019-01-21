@@ -84,7 +84,7 @@ export class StarRatingWidgetService {
 
   _dowloadTranscript(recipientId) {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + recipientId + '/messages.html';
-    window.open(url, '_blank');
+    this.g.windowContext.open(url, '_blank');
   }
 
 }

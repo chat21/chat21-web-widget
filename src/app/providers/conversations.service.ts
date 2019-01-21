@@ -98,6 +98,7 @@ export class ConversationsService {
   //     that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
   //     const conversation = that.setConversation(childSnapshot, false);
   //     // tslint:disable-next-line:max-line-length
+  // tslint:disable-next-line:max-line-length
   //     if ( that.g.filterByRequester === false || (that.g.filterByRequester === true && conversation.attributes.requester_id === that.g.senderId ) ) {
   //       that.checkIsNew(conversation);
   //       that.checkIsSound(conversation);
@@ -129,7 +130,6 @@ export class ConversationsService {
   //       that.checkIsNew(conversation);
   //       that.checkIsSound(conversation);
   //       that.g.wdLog(['checkListConversationsLimit child_changed *****', that.listConversations.length, index]);
-  
   //       that.updateConversationBadge();
   //       that.obsListConversations.next(that.listConversations);
   //     //}
@@ -221,7 +221,7 @@ export class ConversationsService {
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes.requester_id === that.g.senderId ) ) {
         that.archivedConversations.unshift(conversation); // insert item top array
-       
+
         // that.updateConversations();
         that.checkIsNew(conversation);
         // that.checkIsSound(conversation);
@@ -239,7 +239,7 @@ export class ConversationsService {
         const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index > -1) {
           that.archivedConversations.splice(index, 1, conversation);
-          //that.updateConversations();
+          // that.updateConversations();
           that.checkIsNew(conversation);
           // that.checkIsSound(conversation);
           // that.updateConversationBadge();
@@ -257,7 +257,7 @@ export class ConversationsService {
         that.archivedConversations.splice(index, 1);
         that.archivedConversations.sort(compareValues('timestamp', 'desc'));
         that.obsArchivedConversations.next(that.archivedConversations);
-        //that.updateConversations();
+        // that.updateConversations();
       }
      // that.updateConversationBadge();
     });
@@ -364,7 +364,7 @@ export class ConversationsService {
       conversation.uid = childSnapshot.key;
       conversation.last_message_text = conversation.last_message_text;
       const timestampNumber = conversation.timestamp / 1000;
-      conversation.time_last_message = that.getFromNow(timestampNumber);
+      conversation.time_last_message = that.getFromNow(this.g.windowContext, timestampNumber);
       conversation.archived = archived;
 
       if (conversation.sender === that.senderId) {

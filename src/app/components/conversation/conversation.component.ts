@@ -714,8 +714,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   private triggerAfterSendMessageEvent(message) {
     try {
         // tslint:disable-next-line:max-line-length
-        const loadEvent = new CustomEvent('afterMessageSend', { detail: { message: message } });
-        this.el.nativeElement.dispatchEvent(loadEvent);
+        const afterMessageSend = new CustomEvent('afterMessageSend', { detail: { message: message } });
+        this.el.nativeElement.dispatchEvent(afterMessageSend);
     } catch (e) {
         console.error('Error triggering triggerAfterSendMessageEvent', e);
     }
@@ -1148,7 +1148,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
 
   dowloadTranscript() {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
-    window.open(url, '_blank');
+    this.g.windowContext.open(url, '_blank');
   }
 
   toggleSound() {

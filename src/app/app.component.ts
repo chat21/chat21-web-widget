@@ -93,7 +93,15 @@ export class AppComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.initAll();
         this.getMongDbDepartments();
+        this.triggerOnInit();
         this.g.wdLog(' ---------------- A4 ---------------- ');
+    }
+
+    private triggerOnInit() {
+        this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
+        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
     }
 
 
@@ -154,37 +162,43 @@ export class AppComponent implements OnInit, OnDestroy {
      * 1 - set LANG
      * 2 - set MOBILE
      * 3 - add Component to Window
-     * 4 - trigget Load Params Event
+     * 4 - trigger Load Params Event
      * 5 - set Is Widget Open Or Active
      * 6 - get MongDb Departments
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
 
+
+        this.g.initialize(this.el);
+
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
-        this.g.lang = setLanguage(this.translatorService);
+        this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
         moment.locale(this.g.lang);
         this.g.wdLog([' lang: ', this.g.lang]);
 
         // detect is mobile
-        this.g.isMobile = detectIfIsMobile();
+        this.g.isMobile = detectIfIsMobile(this.g.windowContext);
 
         // Related to https://github.com/firebase/angularfire/issues/970
         localStorage.removeItem('firebase:previous_websocket_failure');
         this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
 
-        this.g.initialize(this.el);
-        this.g.attributes = this.setAttributes();
+        this.g.attributes = this.setAttributesFromStorageService();
         this.setSound();
+
+        this.g.wdLog([' ---------------- A3 ---------------- ']);
+        this.setIsWidgetOpenOrActive();
+
+        this.triggerLoadParamsEvent();
+        this.g.wdLog([' ---------------- A2 ---------------- ']);
+
 
          this.g.wdLog([' ---------------- A0 ---------------- ']);
 
         this.addComponentToWindow(this.ngZone);
          this.g.wdLog([' ---------------- A1 ---------------- ']);
-
-        this.triggetLoadParamsEvent();
-         this.g.wdLog([' ---------------- A2 ---------------- ']);
 
         // this.startNwConversation();
 
@@ -219,7 +233,7 @@ export class AppComponent implements OnInit, OnDestroy {
 /**
    * 9: setAttributes
    */
-  private setAttributes(): any {
+  private setAttributesFromStorageService(): any {
     const CLIENT_BROWSER = navigator.userAgent;
     let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
     if (!attributes || attributes === 'undefined') {
@@ -439,8 +453,6 @@ export class AppComponent implements OnInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
-         this.g.wdLog([' ---------------- A3 ---------------- ']);
-        this.setIsWidgetOpenOrActive();
 
          this.g.wdLog([' ============ startUI ===============', this.g.departmentSelected, this.g.isLogged]);
 
@@ -480,70 +492,72 @@ export class AppComponent implements OnInit, OnDestroy {
      * http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
      */
     private addComponentToWindow(ngZone) {
-        if (window['tiledesk']) {
-            window['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
+        const that = this;
+        if (this.g.windowContext['tiledesk']) {
+            this.g.windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
             /** */
-            window['tiledesk'].setUserInfo = function (userInfo) {
+            this.g.windowContext['tiledesk'].setUserInfo = function (userInfo) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
                 });
             };
             /** loggin with token */
-            window['tiledesk'].signInWithCustomToken = function (token) {
+            this.g.windowContext['tiledesk'].signInWithCustomToken = function (token) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
                 });
             };
             /** loggin anonymous */
-            window['tiledesk'].signInAnonymous = function () {
+            this.g.windowContext['tiledesk'].signInAnonymous = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.signInAnonymous();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
-            // window['tiledesk'].on = function (event_name, handler) {
+            // this.g.windowContext'tiledesk'].on = function (event_name, handler) {
             //      this.g.wdLog(["addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
             /** show all widget */
-            window['tiledesk'].show = function () {
+            this.g.windowContext['tiledesk'].show = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.showAllWidget();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.showAllWidget();
                 });
             };
             /** hidden all widget */
-            window['tiledesk'].hide = function () {
+            this.g.windowContext['tiledesk'].hide = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.hideAllWidget();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.hideAllWidget();
                 });
             };
             /** close window chat */
-            window['tiledesk'].close = function () {
+            this.g.windowContext['tiledesk'].close = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.f21_close();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_close();
                 });
             };
             /** open window chat */
-            window['tiledesk'].open = function () {
+            this.g.windowContext['tiledesk'].open = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.f21_open();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
             /** set state PreChatForm close/open */
-            window['tiledesk'].setPreChatForm = function (state) {
+            this.g.windowContext['tiledesk'].setPreChatForm = function (state) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.setPreChatForm(state);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
-            window['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+            this.g.windowContext['tiledesk']
+                .sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component
+                    that.g.windowContext['tiledesk']['angularcomponent'].component
                         .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
                 });
             };
             /** set state PreChatForm close/open */
-            window['tiledesk'].endMessageRender = function () {
+            this.g.windowContext['tiledesk'].endMessageRender = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.endMessageRender();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.endMessageRender();
                 });
             };
 
@@ -583,7 +597,7 @@ export class AppComponent implements OnInit, OnDestroy {
                          this.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        that.setAttributes();
+                        that.setAttributesFromStorageService();
 
                     }, error => {
                         console.error('Error decoding token: ', error);
@@ -637,13 +651,31 @@ export class AppComponent implements OnInit, OnDestroy {
     private f21_open() {
         this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
         if (this.g.senderId) {
+            // this.triggerBeforeOpenEvent();
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
+            this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
     }
+
+    // private triggerBeforeOpenEvent() {
+    //     console.log("triggerBeforeOpenEvent");
+    //     this.g.wdLog([' ---------------- triggerBeforeOpenEvent ---------------- ', this.g.default_settings]);
+    //     const default_settings = this.g.default_settings;
+    //     const beforeOpen = new CustomEvent('beforeOpen', { detail: { default_settings: default_settings } });
+    //     this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeOpen);
+    // }
+    private triggerOnOpenEvent() {
+        this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
+        // this.el.nativeElement.dispatchEvent(onOpen);
+        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+    }
+
 
     /** close popup conversation */
     private f21_close() {
@@ -651,6 +683,22 @@ export class AppComponent implements OnInit, OnDestroy {
         // this.g.isOpen = false;
         this.g.setIsOpen(false);
         this.storageService.setItem('isOpen', 'false');
+        this.triggerOnCloseEvent();
+    }
+
+    private triggerOnCloseEvent() {
+        this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
+        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+    }
+
+
+    private triggerOnOpenEyeCatcherEvent() {
+        this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
+        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
     }
 
     // ========= end:: COMPONENT TO WINDOW ============//
@@ -676,16 +724,17 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     /** */
-    private triggetLoadParamsEvent() {
-        this.g.wdLog([' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings]);
+    private triggerLoadParamsEvent() {
+        this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
         this.el.nativeElement.dispatchEvent(loadParams);
+        // this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(loadParams);
     }
 
     /** */
-    // private triggetBeforeMessageRender(text) {
-    //     this.g.wdLog([' ---------------- triggetBeforeMessageRender ---------------- ', this.g.default_settings]);
+    // private triggerBeforeMessageRender(text) {
+    //     this.g.wdLog([' ---------------- triggerBeforeMessageRender ---------------- ', this.g.default_settings]);
     //     const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: '{json}' });
     //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
     // }
@@ -696,8 +745,8 @@ export class AppComponent implements OnInit, OnDestroy {
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
          this.g.wdLog(['this.subscriptions', this.subscriptions]);
-        if (window['tiledesk']) {
-            window['tiledesk']['angularcomponent'] = null;
+        if (this.g.windowContext['tiledesk']) {
+            this.g.windowContext['tiledesk']['angularcomponent'] = null;
         }
         this.unsubscribe();
     }
@@ -789,6 +838,12 @@ export class AppComponent implements OnInit, OnDestroy {
     openCloseWidget($event) {
         this.g.displayEyeCatcherCard = 'none';
         this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
+
+        if (this.g.isOpen) {
+            this.triggerOnOpenEvent();
+        } else {
+            this.triggerOnCloseEvent();
+        }
     }
 
     /**
@@ -959,5 +1014,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.startNwConversation();
     }
 
+
+    returneventOpenEyeCatcher() {
+        this.triggerOnOpenEyeCatcherEvent();
+    }
     // ========= end:: CALLBACK FUNCTIONS ============//
 }

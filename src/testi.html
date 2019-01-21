@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script type="application/javascript">
+              
+              // Handler for .ready() called.
+              window.tiledeskSettings = 
+              {
+                  projectid: "5b55e806c93dde00143163dd",
+                  development: true,
+                  calloutTimer: 5,
+                  // userFullname: "Dario",
+                  // userEmail: "czone555@gmail.com",
+                  wellcomeTitle: "Benvenuti su questa chat",
+                  wellcomeMsg: "Come possiamo aiutarti?",
+                  logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
+                  // startFromHome: false,
+                  // preChatForm: true,
+                  // autoStart: true,
+                  // isLogEnabled:true,
+                  //persistence: 'session'
+                  //persistence: 'local'
+              };
+        
+              (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); 
+                js.id = id; //js.async=!0;
+                js.src = "./launch.js";
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'tiledesk-jssdk'));
+              
+              window.tileDeskAsyncInit = function() {
+                  console.log("testi.html tileDeskAsyncInit")
+                window.tiledesk.on('loadParams', function(event_data) {
+                    console.log("testi.html loadParams");
+                    alert("1");
+                });
+              };
+            </script>
+    </head>
+    <body>
+        cc
+    </body>
+</html>
