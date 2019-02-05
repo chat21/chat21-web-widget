@@ -28,6 +28,6 @@ cd dist
 aws s3 sync . s3://tiledesk-widget-pre/v2/
 cd ..
 
-aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
+#aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
 echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
