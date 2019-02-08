@@ -185,8 +185,16 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
       //   that.waitingTimeMessage = 'waiting_time_not_found';
       //   // that.waitingTimeMessage = 'Will reply as soon as they can';
       //  }
-       
     });
+}
+
+checkShowAllConversation() {
+  if (this.archivedConversations && this.archivedConversations.length > 0) {
+    return true;
+  } else if (this.listConversations && this.listConversations.length > 0) {
+    return true;
+  }
+  return false;
 }
 // msToTime(duration) {
 //   let milliseconds = parseInt((duration % 1000) / 100),

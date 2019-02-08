@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 1.012
+- Fixes bug show all conversations with only archived conversations 
+
 ### 1.011
 - Fixes bug css rating 
 

@@ -120,8 +120,10 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     } else if ( this.archivedConversations && this.archivedConversations.length > 0 ) {
       TEMP = this.archivedConversations;
     }
+    if (!TEMP) { return; }
     const result = [];
     const map = new Map();
+
     for (const item of TEMP) {
       if (!map.has(item.uid)) {
         map.set(item.uid, true);    // set any value to Map
