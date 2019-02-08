@@ -37,6 +37,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // ========= end:: component variables ======= //
 
   private rate: number;
+  mouseRate: number;
   step: number;
   message: string;
 
@@ -67,11 +68,16 @@ export class StarRatingWidgetComponent implements OnInit {
 
   openRate(e) {
     const that = this;
-    this.rate = parseInt(e.srcElement.value, 0);
+    this.rate = e; // parseInt(e.srcElement.value, 0);
     setTimeout(function () {
       that.step = 1;
-      //  this.g.wdLog(['VOTA!!!::', that.step, that.rate);
+      // that.g.wdLog(['VOTA!!!::', that.step, that.rate] );
     }, 300);
+  }
+
+  mouseOverRate(number) {
+    const that = this;
+    this.mouseRate = number;
   }
 
   nextStep() {

@@ -69,13 +69,12 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   openEyeCatcher() {
       if (this.g.isOpen === false) {
           this.eventOpenEyeCatcher.emit();
-          this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
           this.g.displayEyeCatcherCard = 'block';
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
       } else {
-           this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
+         // this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
       }
   }
 
@@ -115,7 +114,6 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   /**
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
-        this.g.wdLog(['HAS CLICKED CLOSE EYE-CATCHER CARD']);
         this.g.displayEyeCatcherCard = 'none';
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }

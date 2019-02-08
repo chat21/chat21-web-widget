@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 1.011
+- Fixes bug css rating 
+
 ### 1.010
 - Fixes bug load image profile 
 - limit number agents to 5

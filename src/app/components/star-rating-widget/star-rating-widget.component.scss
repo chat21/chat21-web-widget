@@ -155,7 +155,9 @@
     }
     label.c21-button {
       position: relative;
-      float: right;
+      // float: right;
+      display: inline;
+      float: none;
       color: #C8C8C8;
     }
     label.c21-button:before {
@@ -202,6 +204,9 @@
       fill: #efefef;
     }
     svg.star:hover{
+      fill: #FFD700;
+    }
+    svg.star.active{
       fill: #FFD700;
     }
 
