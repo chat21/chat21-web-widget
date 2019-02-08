@@ -1,6 +1,6 @@
 import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
-import { ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
+import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
 
 
 /**
@@ -259,4 +259,13 @@ export function compareValues(key, order = 'asc') {
       (order === 'desc') ? (comparison * -1) : comparison
     );
   };
+}
+
+/**
+ *
+ * @param uid
+ */
+export function getImageUrlThumb(uid: string) {
+  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
+  return imageurl;
 }

@@ -11,6 +11,7 @@ import { TranslatorService } from '../../providers/translator.service';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
+import { User } from '../../../models/User';
 // import * as moment from 'moment/moment';
 // import 'moment-duration-format';
 import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
@@ -52,6 +53,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   themeColor = '';
   themeForegroundColor = '';
   LABEL_START_NW_CONV: string;
+  availableAgents: Array<User> = [];
   // ========= end:: variabili del componente ======== //
 
   waitingTime: Number;
@@ -142,6 +144,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.listConversations = [];
     this.archivedConversations = [];
     this.waitingTime = -1;
+
+    this.availableAgents = this.g.availableAgents.slice(0, 5);
 
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);

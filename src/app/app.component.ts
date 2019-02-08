@@ -19,7 +19,7 @@ import { AgentAvailabilityService } from './providers/agent-availability.service
 
 
 // utils
-import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
+import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -261,7 +261,8 @@ export class AppComponent implements OnInit, OnDestroy {
         // add first message
         that.g.availableAgents = availableAgents;
         availableAgents.forEach(element => {
-            that.setProfileImage(element);
+            // that.setProfileImage(element);
+            element.imageurl = getImageUrlThumb(element.id);
         });
         // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
@@ -273,20 +274,20 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * carico url immagine profilo passando id utente
-   */
-  setProfileImage(contact) {
-    const that = this;
-    // console.log(' ********* displayImage::: ');
-    this.contactService.profileImage(contact.id, 'thumb')
-    .then((url) => {
-        contact.imageurl = url;
-    })
-    .catch((error) => {
-      // console.log("displayImage error::: ",error);
-    });
-  }
+//   /**
+//    * carico url immagine profilo passando id utente
+//    */
+//   setProfileImage(contact) {
+//     const that = this;
+//     // console.log(' ********* displayImage::: ');
+//     this.contactService.profileImage(contact.id, 'thumb')
+//     .then((url) => {
+//         contact.imageurl = url;
+//     })
+//     .catch((error) => {
+//       // console.log("displayImage error::: ",error);
+//     });
+//   }
 
     // ========= begin:: GET DEPARTEMENTS ============//
     /**
@@ -641,6 +642,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.g.setIsOpen(true);
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
+            this.g.displayEyeCatcherCard = 'none';
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
     }

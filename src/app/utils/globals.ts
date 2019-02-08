@@ -31,7 +31,7 @@ export class Globals {
   isMobile;
   isLogged;
   isSoundActive;
-  isLogoutEnabled;
+  // isLogoutEnabled;
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
@@ -140,6 +140,10 @@ export class Globals {
   isLogEnabled;
   filterByRequester;
   persistence;
+
+  showWaitTime;
+  showAvailableAgents;
+  showLogoutOption;
 
   constructor(
     private translatorService: TranslatorService,
@@ -307,6 +311,9 @@ export class Globals {
     this.isLogEnabled = false;
     this.filterByRequester = false;             /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
+    this.showWaitTime = true;
+    this.showAvailableAgents = true;
+    this.showLogoutOption = true;
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -316,7 +323,7 @@ export class Globals {
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
-    this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
+    // this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
     this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
@@ -444,10 +451,10 @@ export class Globals {
       this.isShown = (TEMP === true) ? true : false;
     }
 
-    TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
-    if (TEMP !== null) {
-      this.isLogoutEnabled = (TEMP === true) ? true : false;
-    }
+    // TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
+    // if (TEMP !== null) {
+    //   this.isLogoutEnabled = (TEMP === true) ? true : false;
+    // }
     TEMP = el.nativeElement.getAttribute('isLogEnabled');
     if (TEMP !== null) {
       this.isLogEnabled = (TEMP === true) ? true : false;
@@ -601,10 +608,10 @@ export class Globals {
     if (TEMP !== undefined) {
       this.isShown = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['isLogoutEnabled'];
-    if (TEMP !== undefined) {
-      this.isLogoutEnabled = (TEMP === false) ? false : true;
-    }
+    // TEMP = window['tiledeskSettings']['isLogoutEnabled'];
+    // if (TEMP !== undefined) {
+    //   this.isLogoutEnabled = (TEMP === false) ? false : true;
+    // }
     TEMP = window['tiledeskSettings']['isLogEnabled'];
     if (TEMP !== undefined) {
       this.isLogEnabled = (TEMP === false) ? false : true;
@@ -617,6 +624,19 @@ export class Globals {
     TEMP = window['tiledeskSettings']['persistence'];
     if (TEMP !== undefined) {
       this.persistence = TEMP;
+    }
+
+    TEMP = window['tiledeskSettings']['showWaitTime'];
+    if (TEMP !== undefined) {
+      this.showWaitTime = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['showAvailableAgents'];
+    if (TEMP !== undefined) {
+      this.showAvailableAgents = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['showLogoutOption'];
+    if (TEMP !== undefined) {
+      this.showLogoutOption = (TEMP === false) ? false : true;
     }
 
   }
@@ -723,14 +743,27 @@ export class Globals {
     if (this.getParameterByName('tiledesk_isShown')) {
       this.isShown = true;
     }
-    if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
-      this.isLogoutEnabled = true;
-    }
+    // if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
+    //   this.isLogoutEnabled = true;
+    // }
     if (this.getParameterByName('tiledesk_isLogEnabled')) {
       this.isLogEnabled = true;
     }
     if (this.getParameterByName('tiledesk_filterByRequester')) {
       this.filterByRequester = true;
+    }
+
+    if (this.getParameterByName('tiledesk_showWaitTime')) {
+      const TEMP = this.getParameterByName('tiledesk_showWaitTime');
+      this.showWaitTime = (TEMP === 'false') ? false : true;
+    }
+    if (this.getParameterByName('tiledesk_showAvailableAgents')) {
+      const TEMP = this.getParameterByName('tiledesk_showAvailableAgents');
+      this.showAvailableAgents = (TEMP === 'false') ? false : true;
+    }
+    if (this.getParameterByName('tiledesk_showLogoutOption')) {
+      const TEMP = this.getParameterByName('tiledesk_showLogoutOption');
+      this.showLogoutOption = (TEMP === 'false') ? false : true;
     }
 
   }
@@ -755,10 +788,11 @@ export class Globals {
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
-      'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
-      'filterByRequester': this.filterByRequester,
-      'persistence': this.persistence
+      'wellcomeTitle': this.wellcomeTitle, 'marginX': this.marginX,
+      'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
+      'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
+      'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
+      'showLogoutOption': this.showLogoutOption
     };
   }
 
