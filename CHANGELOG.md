@@ -1,6 +1,6 @@
 # chat21-web-widget ver 2.0
 
-### 1.013
+### 1.014
 - Fixes bug conversation.attributes
 
 ### 1.012
