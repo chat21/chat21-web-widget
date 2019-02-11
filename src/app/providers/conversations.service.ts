@@ -162,7 +162,7 @@ export class ConversationsService {
       const conversation = that.setConversation(childSnapshot, false);
       // tslint:disable-next-line:max-line-length
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes.requester_id === that.g.senderId ) ) {
+        conversation.attributes !== null && conversation.attributes.requester_id === that.g.senderId ) ) {
         that.listConversations.unshift(conversation); // insert item top array
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);
@@ -177,7 +177,7 @@ export class ConversationsService {
     this.conversationRef.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, false);
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes.requester_id === that.g.senderId ) ) {
+        conversation.attributes !== null && conversation.attributes.requester_id === that.g.senderId ) ) {
         const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
         if (index > -1) {
           that.listConversations.splice(index, 1, conversation);
@@ -219,7 +219,7 @@ export class ConversationsService {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes.requester_id === that.g.senderId ) ) {
+        conversation.attributes !== null && conversation.attributes.requester_id === that.g.senderId ) ) {
         that.archivedConversations.unshift(conversation); // insert item top array
        
         // that.updateConversations();
@@ -235,7 +235,7 @@ export class ConversationsService {
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes.requester_id === that.g.senderId ) ) {
+        conversation.attributes !== null && conversation.attributes.requester_id === that.g.senderId ) ) {
         const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index > -1) {
           that.archivedConversations.splice(index, 1, conversation);
