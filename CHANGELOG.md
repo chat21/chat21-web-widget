@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 1.015
+- Fixes bug requester_id in attributes
+
 ### 1.014
 - Fixes bug conversation.attributes
 
