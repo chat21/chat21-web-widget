@@ -229,12 +229,14 @@ export class AppComponent implements OnInit, OnDestroy {
         projectId: this.g.projectid
       };
     }
-
     if (this.g.userEmail) {
         attributes['userEmail'] = this.g.userEmail;
     }
     if (this.g.userFullname) {
         attributes['userFullname'] = this.g.userFullname;
+    }
+    if (this.g.senderId) {
+        attributes['requester_id'] = this.g.senderId;
     }
     this.storageService.setItem('attributes', JSON.stringify(attributes));
     this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
