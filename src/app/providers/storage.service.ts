@@ -7,32 +7,35 @@ export class StorageService {
   constructor(public g: Globals) { }
 
   public getItem (key): any {
+    const newKey = this.g.projectid + '_' + key;
     if (this.g.persistence === 'local') {
-      return localStorage.getItem(key);
+      return localStorage.getItem(newKey);
     } else if (this.g.persistence === 'session') {
-      return sessionStorage.getItem(key);
+      return sessionStorage.getItem(newKey);
     } else {
-      return localStorage.getItem(key);
+      return localStorage.getItem(newKey);
     }
   }
 
   public setItem (key, value) {
+    const newKey = this.g.projectid + '_' + key;
     if (this.g.persistence === 'local') {
-      return localStorage.setItem(key, value);
+      return localStorage.setItem(newKey, value);
     } else if (this.g.persistence === 'session') {
-      return sessionStorage.setItem(key, value);
+      return sessionStorage.setItem(newKey, value);
     } else {
-      return localStorage.setItem(key, value);
+      return localStorage.setItem(newKey, value);
     }
   }
 
   public removeItem(key: string) {
+    const newKey = this.g.projectid + '_' + key;
     if (this.g.persistence === 'local') {
-      return localStorage.removeItem(key);
+      return localStorage.removeItem(newKey);
     } else if (this.g.persistence === 'session') {
-      return sessionStorage.removeItem(key);
+      return sessionStorage.removeItem(newKey);
     } else {
-      return localStorage.removeItem(key);
+      return localStorage.removeItem(newKey);
     }
   }
 

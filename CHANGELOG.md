@@ -1,5 +1,9 @@
 # chat21-web-widget ver 2.0
 
+### 1.016
+- renames all keys of elements in sessionStorage ("projectId_"+key)
+- Fixes bug hideHeaderCloseButton in detail conversation
+
 ### 1.015
 - Fixes bug requester_id in attributes
 

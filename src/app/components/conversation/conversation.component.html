@@ -8,7 +8,7 @@
             <div class="c21-header-content">
 
                 <!-- ICON CLOSE CHAT -->
-                <div class="c21-header-button c21-right c21-close" (click)="returnCloseWidget()">
+                <div class="c21-header-button c21-right c21-close" [ngStyle]="{'display': (g.hideHeaderCloseButton)?'none':'flex'}" (click)="returnCloseWidget()">
                     <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
                         width="24px" height="24px" viewBox="0 0 24 24">
                         <path fill="none" d="M0 0h24v24H0V0z" />
