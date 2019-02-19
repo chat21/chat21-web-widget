@@ -28,7 +28,7 @@ export class MessageModel {
             sender: this.sender,
             sender_fullname: this.sender_fullname,
             status: this.status,
-            metadata: this.metadata,
+            // metadata: this.metadata,
             text: this.text,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             // headerDate: this.headerDate,
