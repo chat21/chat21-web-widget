@@ -155,19 +155,22 @@
                                     <!-- message recipient:: -->
                                     <div *ngIf="message.sender != g.senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
                                     <div *ngIf="message.sender != g.senderId;" class="msg_container base_receive">
-
                                         <div class="content-avatar">
-                                            <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> 
-                                                -->
+                                            <!-- 
+                                            <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> 
+                                            -->
+                                            <!-- 
                                             <div class="profile_image">
                                                 <img src="{{getUrlImgProfile(message.sender)}}" />
+                                            </div> 
+                                            -->
+                                            <div class="c21-icon-avatar">
+                                                <div #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + getUrlImgProfile(message.sender) + ')'"></div>
                                             </div>
                                         </div>
-
-                                        <div class="messages msg_receive">
-                                           
+                                        
+                                        <div class="messages msg_receive">  
                                             <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
-
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"

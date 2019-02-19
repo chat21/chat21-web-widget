@@ -1,5 +1,9 @@
 # chat21-web-widget ver 2.0
 
+### 1.018
+- Adds user's icon in conversation
+- Fixes bug requester_id in setSttributes (app.component)
+
 ### 1.017
 - changes css of rating component
 

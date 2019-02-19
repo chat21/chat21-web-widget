@@ -18,7 +18,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+import { getImageUrlThumb, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -751,17 +751,10 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * @param uid
      */
     getUrlImgProfile(uid): string {
-      return this.IMG_PROFILE_SUPPORT;
-      // if (!uid) {
-      //   return this.IMG_PROFILE_SUPPORT;
-      // }
-      // const profile = this.contactService.getContactProfile(uid);
-      // if (profile && profile.imageurl) {
-      //       this.g.wdLog(['profile::', profile, ' - profile.imageurl', profile.imageurl);
-      //     return profile.imageurl;
-      // } else {
-      //     return this.IMG_PROFILE_SUPPORT;
-      // }
+      if (!uid || uid === 'system' ) {
+        return this.IMG_PROFILE_SUPPORT;
+      }
+      return getImageUrlThumb(uid);
   }
 
   /**
