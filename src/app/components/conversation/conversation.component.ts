@@ -751,9 +751,9 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * @param uid
      */
     getUrlImgProfile(uid): string {
-      if (!uid || uid === 'system' ) {
-        return this.IMG_PROFILE_SUPPORT;
-      }
+      // if (!uid || uid === 'system' ) {
+      //   return this.IMG_PROFILE_SUPPORT;
+      // }
       return getImageUrlThumb(uid);
   }
 

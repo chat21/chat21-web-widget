@@ -177,7 +177,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
 
         this.g.initialize(this.el);
-        //this.g.attributes = this.setAttributes();
+        this.g.attributes = this.setAttributes();
         this.setSound();
 
          this.g.wdLog([' ---------------- A0 ---------------- ']);
@@ -242,7 +242,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.storageService.setItem('attributes', JSON.stringify(attributes));
     this.g.wdLog([' ---------------- setAttributes 111 ---------------- ', attributes]);
-    console.log(attributes);
     return attributes;
   }
 
