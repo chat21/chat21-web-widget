@@ -37,7 +37,7 @@ import { LauncherButtonComponent } from './components/launcher-button/launcher-b
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
-// import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
+import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
@@ -61,7 +61,7 @@ import { WaitingService } from './providers/waiting.service';
     ConversationComponent,
     PrechatFormComponent,
     EyeeyeCatcherCardComponent,
-    // PreviewLoadingFilesComponent,
+    PreviewLoadingFilesComponent,
     MenuOptionsComponent,
     ListAllConversationsComponent
   ],
