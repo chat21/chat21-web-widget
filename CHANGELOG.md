@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 1.017
+- changes css of rating component
+
 ### 1.016
 - renames all keys of elements in sessionStorage ("projectId_"+key)
 - Fixes bug hideHeaderCloseButton in detail conversation

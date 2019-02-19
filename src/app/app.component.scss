@@ -271,6 +271,22 @@ tiledeskwidget-root {
             opacity: 0.8;
         }
 
+        button.c21-button-link {
+            font-weight: 400;
+            font-size: 14px;
+            color: $theme-color;;
+            text-decoration: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        button.c21-button-link:hover,
+        button.c21-button-link:focus,
+        button.c21-button-link:active {
+            text-decoration: underline;
+            outline: none;
+        }
+
         .c21-divBudge{
             position: absolute;
             top: 0;
