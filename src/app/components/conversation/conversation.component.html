@@ -165,7 +165,9 @@
                                             </div> 
                                             -->
                                             <div class="c21-icon-avatar">
-                                                <div #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + getUrlImgProfile(message.sender) + ')'"></div>
+                                                <div class="profile_image">
+                                                    <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src='https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png'" />
+                                                </div> 
                                             </div>
                                         </div>
                                         

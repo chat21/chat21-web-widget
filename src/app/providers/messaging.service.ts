@@ -142,7 +142,7 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
-        console.log('message[timestamp]: ', message['timestamp']);
+        // console.log('message[timestamp]: ', message['timestamp']);
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],
@@ -314,7 +314,7 @@ export class MessagingService {
     // const now: Date = new Date();
     // const localTimestamp = now.valueOf();
     const timestamp =  firebase.database.ServerValue.TIMESTAMP;
-    console.log('timestamp: ', timestamp);
+    // console.log('timestamp: ', timestamp);
     const language = navigator.language;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(
