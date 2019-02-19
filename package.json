@@ -1,6 +1,6 @@
 {
   "name": "chat21-web-widget",
-  "version": "0.0.23",
+  "version": "0.0.30",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^5.0.2",
     "@angular/common": "^5.0.2",
@@ -23,6 +23,7 @@
     "@angular/router": "^5.0.2",
     "angular-2-local-storage": "^1.0.1",
     "angular-linky": "^1.2.2",
+    "angular-resize-event": "^0.4.4",
     "angular2-moment": "^1.8.0",
     "angular2-uuid": "^1.1.1",
     "angularfire2": "^5.0.0-rc.9",
@@ -30,6 +31,7 @@
     "core-js": "^2.5.1",
     "custom-event-polyfill": "^1.0.6",
     "firebase": "^5.0.4",
+    "humanize-duration-ts": "^2.0.0",
     "intl": "^1.2.5",
     "ionicons": "^3.0.0",
     "less": "^2.7.3",

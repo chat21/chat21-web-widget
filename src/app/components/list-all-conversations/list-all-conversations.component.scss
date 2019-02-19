@@ -1,0 +1,261 @@
+@import '../../../sass/variables';
+// @import '../../../sass/normalize.css';
+
+#c21-app-list-all-conversations {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    font-size: 10px;
+
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+
+
+    .c21-header {
+        overflow: hidden;
+        width: 100%;
+        height: 52px;
+        position: relative;
+        margin: 0;
+        padding: 0;
+
+        .c21-header-container{
+            position: relative;
+            height: 52px;
+            width: 100%;
+            margin: 0 auto;
+
+            .c21-header-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                .c21-header-button{
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    margin: 0 10px 0 10px;
+                    cursor: pointer;
+
+                    &.c21-right{
+                        float: right;
+                    }
+                    &.c21-left{
+                        float: left;
+                    }
+                    &.c21-close{
+                        display: none;
+                    }
+                }
+
+                .c21-title {
+                    position: absolute;
+                    left: 0;
+                    display: inline-block;
+                    width: calc(100% - 150px);
+                    height: 1.6em;
+                    line-height: 1.6em;
+                    padding: 0px;
+                    margin: 10px 75px;
+                    text-align: center;
+                    font-size: 1.6em;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;             
+                }
+
+                .c21-header-writing{
+                    position: absolute;
+                    bottom: 4px;
+                    width: 100%;
+                    text-align: center;
+                    margin: 0px;
+                    padding: 0px;
+                    font-size: 1.2em;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+    .c21-body {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: calc( 100% - 52px );
+        top: 0px;
+        font-size: 1em;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        overflow: scroll;
+
+
+        .c21-item-conversation {
+            width: 100%;
+            height: auto;
+            position: relative;
+            margin: auto;
+            padding: 0px 0px;
+            cursor: pointer;
+            border-bottom: 1px solid $light-gray;
+
+            .c21-body-conv{
+                position: relative;
+                // border-top: 1px solid #eee;
+                // width: calc(100% - 48px);
+                width: auto;
+                margin: 0 24px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                max-height: 80px;
+  
+                .c21-left-conv {
+                    width: auto;
+                    height: 100%;
+                    float: left;
+                    display: flex;
+                    align-items: center;
+
+                    .c21-icon-avatar {
+                        position: relative;
+                        padding: 0;
+                        margin: 0;
+                        height: 34px;
+                        width: 34px;
+                        line-height: 34px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        background-color: #aaaaaa70;
+                        .c21-avatar-placeholder {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            text-align: center;
+                            font-size: 14px;
+                            color: #ffffff;
+                            font-weight: 500;
+                        }
+                        .c21-avatar-image {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            margin: 2px 0 0 0;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: cover;
+                        }
+                    }
+                }
+
+                .c21-right-conv {
+                    width: calc( 100% - 50px);
+                    margin-left: 15px;
+                    height: auto;
+                    float: left;
+                    padding: 17px 0;
+                    .c21-last-time {
+                        font-size: 0.8em;
+                        color: #aaaaaa;
+                        float: right;
+                        display: block;
+                        padding: 0;
+                        margin: 0;
+                        width: auto;
+                        height: auto;
+                    }
+                    .c21-name {
+                        font-weight: 700;
+                        color: #3a3c4c;
+                        font-size: 12px;
+                        line-height: 1.7;
+                        min-height: 20px;
+                    }
+                    .c21-msg {
+                        font-weight: 200;
+                        color: #3a3c4c;
+                        font-size: 12px;
+                        line-height: 1.7;
+                    }
+                    .not-read.c21-msg {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    
+        .c21-item-conversation:hover,
+        .c21-item-conversation:focus,
+        .c21-item-conversation:active {
+            outline-width: 0px;
+            background-color: #fafafa;
+        }
+        
+    }
+    .c21-footer {
+        // width: calc(100% - 48px);
+        width: auto;
+        margin: 0 24px;
+        height: auto;
+        position: relative;
+        // margin: auto;
+        padding: 0px;
+        border-top: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .c21-divBudge {
+        position: absolute;
+        top: 40px;
+        right: 0px;
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+        font-size: 1.2em;
+        line-height: 10px;
+        border-radius: 50%;
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        padding: 0px;
+        text-align: center;
+        margin-right: 0px;
+        display: inline-block;
+    }
+      
+    .c21-lablel-close{
+        border: 1px solid #e2e2e2;
+        background-color: #ececec;
+        padding: 4px;
+        border-radius: 4px;
+        position: absolute;
+        right: 0px;
+        bottom: 8px;
+        margin-right: -10px;
+        color: #858585;
+        font-weight: 500;
+    }
+}
+  

@@ -54,3 +54,7 @@ export const BCK_COLOR_CONVERSATION_UNSELECTED = '#FFFFFF';
 // export const LABEL_NO_MSG_HERE = 'Ancora nessun messaggio qui...';
 
 // export const CLIENT_BROWSER = 'browser';
+
+// links
+export const FIREBASESTORAGE_BASE_URL_IMAGE = 'https://firebasestorage.googleapis.com/v0/b/chat-v2-dev.appspot.com/o/';
+

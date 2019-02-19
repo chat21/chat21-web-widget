@@ -1,0 +1,97 @@
+#c21-menu-options{
+    .modal-menu-options {
+        width: auto;
+        height: auto;
+        min-height: 40px;
+        min-width: 100px;
+        max-width: 80%;
+        position: absolute;
+        bottom: 40px;
+        left: 5px;
+        border-radius: 3px;
+        font-size: 1.2em;
+        line-height: normal;
+        overflow: hidden;
+        border: 1px solid #d7d7d7;  
+        background-color: #ffffff; 
+    }
+    
+    .button-menu-options {
+        position: absolute;
+        width: auto;
+        line-height: 12px;
+        font-size: 1em;
+        font-weight: bold;
+        color: #777777;
+        display: inline-block;
+        align-items: center;
+        margin: 4px 4px;
+        padding: 5px 5px;
+        cursor: pointer;
+    }
+    .button-menu-options:hover{
+        background-color: whitesmoke;
+    }
+}
+
+
+
+
+
+.c21-button{
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 0 10px;
+    color:#777777;
+    display: flex;
+    // font-weight: bold;
+}
+.c21-button:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+.label-menu-wellcome{
+    cursor: default;
+    font-weight: 500;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+
+#c21-options-menu {
+    width: auto;
+    height: auto;
+    min-height: 40px;
+    min-width: 100px;
+    max-width: 80%;
+    position: absolute;
+    z-index: 10;
+    top: 40px;
+    right: 15px;
+    border-radius: 3px;
+    font-size: 1.2em;
+    line-height: normal;
+    overflow: hidden;
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    padding: 20px 0px 10px 0px;
+}
+
+#c21-options-menu .c21-header-button {
+    padding: 6px 10px 6px 10px;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.label-menu-item {
+    line-height: 20px;
+    position: relative;
+    margin: 0 10px 0px 10px;
+}
+#c21-options-menu .label-menu-item {
+    line-height: 20px;
+    position: relative;
+    margin: 0 10px 0px 10px;
+}

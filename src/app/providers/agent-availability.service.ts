@@ -19,21 +19,13 @@ export class AgentAvailabilityService {
   private API_URL;
 
   constructor(private http: Http) {
-   this.API_URL = environment.apiUrl;
-
-   // console.log('AgentAvailabilityService:: this.API_URL',  this.API_URL );
-   if (!this.API_URL) {
-    throw new Error('apiUrl is not defined');
-   }
-
+    this.API_URL = environment.apiUrl;
+    if (!this.API_URL) {
+      throw new Error('apiUrl is not defined');
+    }
   }
 
   public getAvailableAgents(projectId): Observable<User[]> {
-
-    // console.log("getAvailableAgents::");
-    // console.log("projectId", projectId);
-
-    // return an exception if the projectid is undefined, null or not valid
     if (!projectId) {
       return Observable.throw('projectId is not valid');
     }
@@ -43,10 +35,29 @@ export class AgentAvailabilityService {
     if (projectId === undefined) {
       return Observable.throw('projectId is undefined');
     }
+    const url = this.API_URL + 'projects/' + projectId + '/users/availables';
+    // console.log(url);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http
+      .get(url, { headers })
+      .map((response) => response.json());
+      // .catch(this.handleError);
+  }
 
-    const url = this.API_URL + '/projects/' + projectId + '/users/availables';
-    // console.log('AgentAvailabilityService::getAvailableAgents::url', url);
-
+  public getAvailableAgentsForDepartment(projectId, idDepartmentSelected): Observable<User[]> {
+    if (!projectId) {
+      return Observable.throw('projectId is not valid');
+    }
+    if (projectId == null)  {
+      return Observable.throw('projectId is null');
+    }
+    if (projectId === undefined) {
+      return Observable.throw('projectId is undefined');
+    }
+    const url = this.API_URL + projectId + '/departments/' + idDepartmentSelected + '/operators/';
+    // https://api.tiledesk.com/v1/5ad4c101e774ac0014ae0d07/departments/5ad4c5abe774ac0014ae0d0e/operators/
+    console.log(url);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http

@@ -19,5 +19,3 @@ export const environment = {
   agentId: '-L4BtnkWGla_6w6QRZTj', // '9EBA3VLhNKMFIVa0IOco82TkIzk1'
   defaultLang : 'en'
 };
-
-

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tilechat Widget</title>
+  <base href="./">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <script type="application/javascript">
+      window.tiledeskSettings = 
+          {
+              projectid: "5b55e806c93dde00143163dd",
+              development: true,
+              calloutTimer: 10,
+              autoStart:false,
+              startFromHome: true,
+              isLogEnabled: true
+          };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id; //js.async=!0;
+        js.src = "./tiledesk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'tiledesk-jssdk'));
+    </script>
+
+
+
+    <script type="application/javascript">    
+
+      
+
+
+      window.tileDeskAsyncInit = function() {
+      window.tiledesk.on('loadParams', function(event_data) {
+        console.log("loadParams", event_data);
+        console.log("window.tiledesk", window.tiledesk);
+      
+        window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiQW5kcmVhIiwiY29nbm9tZSI6ImxlbyIsImlhdCI6MTU0MzQyNDU3MCwiZXhwIjoxNTQzNDI0NTczfQ.x1QtbKuVprZjgPv9DaeGa7cnzqtZRivgf5Dhv36qNG8");
+      }); 
+    }
+    </script>
+
+</body>
+</html>

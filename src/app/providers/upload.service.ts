@@ -4,10 +4,21 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+// import * as firebase from 'firebase/app';
 import * as firebase from 'firebase';
+import 'firebase/storage';
+
+
 import { UploadModel } from '../../models/upload';
 import { environment } from '../../environments/environment';
 
+import { Globals } from '../utils/globals';
+
+class ImageSnippet {
+  pending = false;
+  status = 'init';
+  constructor(public src: string, public file: File) {}
+}
 
 @Injectable()
 /**
@@ -17,9 +28,13 @@ export class UploadService {
   private tenant: string;
   private recipientId: string;
   private senderId: string;
+
+
+  arrayFilesLoad: Array<any>;
   observable: any;
 
   constructor(
+    public g: Globals
   ) {
     this.observable = new BehaviorSubject<string>('');
   }
@@ -38,10 +53,51 @@ export class UploadService {
     }
   }
 
+
+  processFile(imageInput: any) {
+    const that = this;
+    const file: File = imageInput.files[0];
+    const nameFile = file.name;
+    const typeFile = file.type;
+    const reader = new FileReader();
+     this.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
+    reader.addEventListener('load', function () {
+    // reader.addEventListener('load', (event: any) => {
+       that.g.wdLog(['addEventListener load', reader.result]);
+      // se inizia con image
+      if (typeFile.startsWith('image')) {
+        // const selectedFile = new ImageSnippet(event.target.result, file);
+        // selectedFile.pending = true;
+        const imageXLoad = new Image;
+        that.g.wdLog(['onload ', imageXLoad]);
+        imageXLoad.src = reader.result.toString();
+        imageXLoad.title = nameFile;
+        imageXLoad.onload = function () {
+          that.g.wdLog(['onload immagine']);
+          // that.arrayFilesLoad.push(imageXLoad);
+          const uid = that.createGuid();
+          that.arrayFilesLoad.push('{ uid: ' + uid + ', file: ' + imageXLoad + ', type: ' + typeFile + ' }');
+          that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+        };
+      }
+      // this.imageService.uploadImage(this.selectedFile.file).subscribe(
+      //   (res) => {
+      //     this.onSuccess();
+      //   },
+      //   (err) => {
+      //     this.onError();
+      //   })
+    });
+    reader.readAsDataURL(file);
+     this.g.wdLog(['reader-result: ', file]);
+  }
+
+
+
   pushUpload(upload: UploadModel): any {
     const uid = this.createGuid();
     const urlImagesNodeFirebase = '/public/images/' + uid + '/';
-    console.log('pushUpload::::::::::::: ', urlImagesNodeFirebase);
+     this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
 
     // Create a root reference
     const storageRef = firebase.storage().ref();
@@ -49,11 +105,11 @@ export class UploadService {
     // Create a reference to 'mountains.jpg'
     const mountainsRef = storageRef.child(urlImagesNodeFirebase);
 
-    // console.log("UploadService::pushUpload::mountainsRef", mountainsRef);
+    //  this.g.wdLog(["UploadService::pushUpload::mountainsRef", mountainsRef);
 
     return mountainsRef.put(upload.file);
     // .then(function(snapshot) {
-    //   console.log('Uploaded a blob or file! ', snapshot.downloadURL);
+    //    this.g.wdLog(['Uploaded a blob or file! ', snapshot.downloadURL);
     //   this.observable.next(snapshot.downloadURL);
     // });
   }
@@ -63,19 +119,19 @@ export class UploadService {
     // recupero current user id
     const uid = this.createGuid();
     const urlImagesNodeFirebase = '/public/images/' + uid;
-    console.log('pushUpload::::::::::::: ', urlImagesNodeFirebase);
+     this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
 
     const next = function(snapshot) {
       // upload in progress
       const snapshotRef = snapshot as firebase.storage.UploadTaskSnapshot;
       const percent = snapshotRef.bytesTransferred / snapshotRef.totalBytes * 100;
-      console.log('snapshot::::::::::::: ', percent);
+       this.g.wdLog(['snapshot::::::::::::: ', percent]);
       upload.progress = percent;
     };
     // tslint:disable-next-line:no-shadowed-variable
     const error = function( error: any ) {
       // upload failed
-      console.log(error);
+       this.g.wdLog([error]);
     };
     const complete = function() {
       // upload success

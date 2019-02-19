@@ -1,70 +1,83 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StarRatingWidgetService } from './star-rating-widget.service';
-import { TranslatorService } from '../../providers/translator.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Globals } from '../../utils/globals';
+
 
 
 @Component({
-  selector: 'app-star-rating-widget',
+  selector: 'tiledeskwidget-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
   styleUrls: ['./star-rating-widget.component.scss']
 })
 export class StarRatingWidgetComponent implements OnInit {
-  @Input() themeColor: string;
-  @Input() themeForegroundColor: string;
-  @Input() parentAllowTranscriptDownload: boolean;
+
+  // ========= begin:: Input/Output values ===========//
+  @Output() eventClosePage = new EventEmitter();
+  @Output() eventCloseRate = new EventEmitter();
+  // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  // ========= end:: Input/Output values ===========//
+
+  // ========= begin:: Input/Output values ===========/
+  // @Output() eventNewConv = new EventEmitter<string>();
+  // @Output() eventSelctedConv = new EventEmitter<string>();
+  // @Output() eventClose = new EventEmitter();
+  // @Output() eventSignOut = new EventEmitter();
+
+  // ========= end:: Input/Output values ===========/
+
+
+  // ========= begin:: component variables ======= //
+  themeColor;
+  themeForegroundColor;
+  isConversationClosed: boolean;
+  themeColor50: string;
+  colorGradient: string;
+  colorBck: string;
+  // ========= end:: component variables ======= //
 
   private rate: number;
+  mouseRate: number;
   step: number;
-  private displayDownloadTranscriptBtn: boolean;
+  message: string;
 
   // STRING (FOR TRANSLATION) PASSED IN THE TEMPLATE
-  CUSTOMER_SATISFACTION: string;
-  YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
-  DOWNLOAD_TRANSCRIPT: string;
-  BACK: string;
-  YOUR_RATING: string;
-  WRITE_YOUR_OPINION: string;
-  SUBMIT: string;
-  THANK_YOU_FOR_YOUR_EVALUATION: string;
-  YOUR_RATING_HAS_BEEN_RECEIVED: string;
+  // CUSTOMER_SATISFACTION: string;
+  // YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
+  // DOWNLOAD_TRANSCRIPT: string;
+  // BACK: string;
+  // YOUR_RATING: string;
+  // WRITE_YOUR_OPINION: string;
+  // SUBMIT: string;
+  // THANK_YOU_FOR_YOUR_EVALUATION: string;
+  // YOUR_RATING_HAS_BEEN_RECEIVED: string;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService,
-    public translatorService: TranslatorService
-  ) {  }
+    public g: Globals
+  ) {
+   }
 
   ngOnInit() {
-    console.log('START-RATING-WIDGET - PARENT THEME-COLOR: ', this.themeColor);
-    console.log('START-RATING-WIDGET - PARENT THEME-FOREGROUND-COLOR: ', this.themeForegroundColor);
-    console.log('START-RATING-WIDGET - PARENT ALLOW-TRANSCRIPT-DOWNLOAD: ', this.parentAllowTranscriptDownload);
-    this.displayDownloadTranscriptBtn = this.parentAllowTranscriptDownload;
-    this.translate();
     this.step = 0;
   }
 
-  private translate() {
-    this.CUSTOMER_SATISFACTION = this.translatorService.translate('CUSTOMER_SATISFACTION');
-    this.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = this.translatorService.translate('YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE');
-    this.DOWNLOAD_TRANSCRIPT = this.translatorService.translate('DOWNLOAD_TRANSCRIPT');
-    this.BACK = this.translatorService.translate('BACK');
-    this.YOUR_RATING = this.translatorService.translate('YOUR_RATING');
-    this.WRITE_YOUR_OPINION = this.translatorService.translate('WRITE_YOUR_OPINION');
-    this.SUBMIT = this.translatorService.translate('SUBMIT');
-    this.THANK_YOU_FOR_YOUR_EVALUATION = this.translatorService.translate('THANK_YOU_FOR_YOUR_EVALUATION');
-    this.YOUR_RATING_HAS_BEEN_RECEIVED = this.translatorService.translate('YOUR_RATING_HAS_BEEN_RECEIVED');
-  }
-
   dowloadTranscript() {
-    this.starRatingWidgetService._dowloadTranscript();
+    this.starRatingWidgetService._dowloadTranscript(this.g.recipientId);
   }
 
   openRate(e) {
     const that = this;
-    this.rate = parseInt(e.srcElement.value, 0);
+    this.rate = e; // parseInt(e.srcElement.value, 0);
     setTimeout(function () {
       that.step = 1;
-      // console.log('VOTA!!!::', that.step, that.rate);
+      // that.g.wdLog(['VOTA!!!::', that.step, that.rate] );
     }, 300);
+  }
+
+  mouseOverRate(number) {
+    const that = this;
+    this.mouseRate = number;
   }
 
   nextStep() {
@@ -72,29 +85,28 @@ export class StarRatingWidgetComponent implements OnInit {
   }
 
   prevStep() {
-    this.rate = null;
     this.step = this.step - 1;
   }
 
   sendRate() {
-    const message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-    console.log('sendRate!!!::', message);
+    this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
+     this.g.wdLog(['sendRate!!!::', this.message]);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate(this.rate, message)
+    this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
     .subscribe(
       response => {
-        console.log('OK sender ::::', response);
+         this.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
         that.nextStep();
       },
       errMsg => {
-        console.log('httpSendRate ERROR MESSAGE', errMsg);
+        // console.error('httpSendRate ERROR MESSAGE', errMsg);
         // window.alert('MSG_GENERIC_SERVICE_ERROR');
         that.nextStep();
       },
       () => {
-        // console.log('API ERROR NESSUNO');
+        //  this.g.wdLog(['API ERROR NESSUNO');
       }
     );
   }
@@ -102,11 +114,21 @@ export class StarRatingWidgetComponent implements OnInit {
   closeRate() {
     this.starRatingWidgetService.setOsservable(false);
     this.step = 0;
+    this.returnClosePage();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.step = 0;
   }
+
+  // ========= begin:: ACTIONS ============//
+  returnClosePage() {
+    this.g.wdLog([' closePage: ']);
+    this.step = 0;
+    this.starRatingWidgetService.setOsservable(false);
+    this.eventClosePage.emit();
+  }
+  // ========= end:: ACTIONS ============//
 
 }

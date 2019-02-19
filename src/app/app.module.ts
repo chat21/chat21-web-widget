@@ -4,24 +4,18 @@ import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
-// import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
 
-
-
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-// import {MdButtonModule, MdListModule, MdToolbarModule} from '@angular/material';
-// import { FlexLayoutModule } from '@angular/flex-layout';
-// import {MdInputModule} from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
-
 
 import { AuthService } from './core/auth.service';
 import { MessagingService } from './providers/messaging.service';
@@ -39,6 +33,20 @@ import { ListConversationsComponent } from './components/list-conversations/list
 import { HomeComponent } from './components/home/home.component';
 
 import { Globals } from './utils/globals';
+import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
+import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
+import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
+import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
+import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
+import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
+import { StorageService } from './providers/storage.service';
+
+
+// Import the library module
+import { AngularResizedEventModule } from 'angular-resize-event';
+import { WaitingService } from './providers/waiting.service';
 
 @NgModule({
   declarations: [
@@ -47,15 +55,22 @@ import { Globals } from './utils/globals';
     UserProfileComponent,
     StarRatingWidgetComponent,
     SelectionDepartmentComponent,
-    // NewConversationComponent,
     ListConversationsComponent,
-    HomeComponent
+    HomeComponent,
+    LauncherButtonComponent,
+    ConversationComponent,
+    PrechatFormComponent,
+    EyeeyeCatcherCardComponent,
+    PreviewLoadingFilesComponent,
+    MenuOptionsComponent,
+    ListAllConversationsComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
+    AngularFirestoreModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
@@ -69,17 +84,21 @@ import { Globals } from './utils/globals';
       storageType: 'localStorage'
      }),
     MomentModule,
+    AngularResizedEventModule
   ],
   providers: [
     AuthService,
     MessagingService,
+    Globals,
     ConversationsService,
     UploadService,
     ContactService,
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    Globals
+    ChatPresenceHandlerService,
+    StorageService,
+    WaitingService
   ],
   bootstrap: [AppComponent]
 })

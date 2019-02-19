@@ -21,7 +21,6 @@ export class TranslatorService {
   public getBrowserLanguage() {
     // tslint:disable-next-line:prefer-const
     let browserLanguage = window.navigator.language;
-    // console.log("TranslatorService::getBrowserLanguage::browserLanguage:", browserLanguage);
     return !browserLanguage ? undefined : browserLanguage;
   }
 
@@ -56,7 +55,6 @@ export class TranslatorService {
 
   // retrieve the language object
   private getLanguageObject(language) {
-    console.log('language ::: ', language);
     if (language === 'en') {
       this.translations = translations.en;
     } else if (language === 'it') {

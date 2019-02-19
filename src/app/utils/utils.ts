@@ -1,6 +1,7 @@
 import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
-import { ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
+import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
+
 
 /**
  * calcolo il tempo trascorso tra due date
@@ -11,34 +12,35 @@ import { ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } 
  * giorno della settimana (lunedì, martedì, ecc)
  */
 export function setHeaderDate(timestamp): string {
-    const date = new Date(timestamp);
-    const now: Date = new Date();
-    let labelDays = '';
-    // console.log('setHeaderDate **************', now, date);
-    if (now.getFullYear() !== date.getFullYear()) {
-      labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();
-    } else if (now.getMonth() !== date.getMonth()) {
-      labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();
-    } else if (now.getDay() === date.getDay()) {
-      labelDays = LABEL_TODAY;
-    } else if (now.getDay() - date.getDay() === 1) {
-      labelDays = LABEL_TOMORROW;
-    } else {
-      labelDays = convertDayToString(date.getDay());
-    }
-    // se le date sono diverse o la data di riferimento non è impostata
-    // ritorna la data calcolata
-    // altrimenti torna null
-    return labelDays;
+  const date = new Date(timestamp);
+  const now: Date = new Date();
+  let labelDays = '';
+  if (now.getFullYear() !== date.getFullYear()) {
+    labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();
+  } else if (now.getMonth() !== date.getMonth()) {
+    labelDays = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear();
+  } else if (now.getDay() === date.getDay()) {
+    labelDays = LABEL_TODAY;
+  } else if (now.getDay() - date.getDay() === 1) {
+    labelDays = LABEL_TOMORROW;
+  } else {
+    labelDays = convertDayToString(date.getDay());
+  }
+  // se le date sono diverse o la data di riferimento non è impostata
+  // ritorna la data calcolata
+  // altrimenti torna null
+  return labelDays;
 }
 
 export function convertDayToString(day) {
-    const arrayDays = ARRAY_DAYS;
-    return arrayDays[day];
+  const arrayDays = ARRAY_DAYS;
+  return arrayDays[day];
 }
 
 export function convertMessage(messageText) {
-  messageText = convert(messageText);
+  if (messageText) {
+    messageText = convert(messageText);
+  }
   return messageText;
 }
 
@@ -57,7 +59,7 @@ export function convertMessage(messageText) {
  * @param key
  */
 export function searchIndexInArrayForUid(items, key) {
-    return items.findIndex(i => i.uid === key);
+  return items.findIndex(i => i.uid === key);
 }
 
 /**
@@ -71,8 +73,7 @@ export function urlify(text) {
       url = 'http://' + url;
     }
     // url = convertUrlToTag(url);
-    // console.log('convertUrlToTag 2 **************', url);
-    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    return '<a class="c21-link" href="' + url + '" target="_blank">' + url + '</a>';
   });
 }
 
@@ -82,28 +83,21 @@ function convertUrlToTag(url) {
   if (TEMP) { popup = TEMP.split('&')[0]; }
   // tslint:disable-next-line:no-unused-expression
   (TEMP === 'true') ? popup = true : popup = false;
-  console.log('convertUrlToTag 1 **************', TEMP);
   // tslint:disable-next-line:curly
-  if (popup !== true) return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  if (popup !== true) return '<a class="c21-link" href="' + url + '" target="_blank">' + url + '</a>';
   // tslint:disable-next-line:curly
-  else return '<p (click)="openPopup2()">zzz</p>';
+  else return '<p (click)="openPopup2()">.</p>';
 
   //// '<a href="#" onclick="window.open("www.google.it", "_system");" >' + url + '</a>';
   //// <a href="#" onclick="openPopup(' + url + ')">' + url + '</a>';
 }
 
-export function openPopup2() {
-  // const myWindow = window.open(url, 'Video Chat', 'width=100%,height=300');
-  console.log('myWindow 1 **************');
-  // return myWindow;
-}
 
 export function isPopupUrl(url) {
   const TEMP = url.split('popup=')[1];
   // può essere seguito da & oppure "
   if (TEMP) {
     if (TEMP.startsWith('true')) {
-      // console.log('isPopupUrl::::: ', TEMP.startsWith('true'));
       return true;
     } else {
       return false;
@@ -117,8 +111,8 @@ export function popupUrl(html, title) {
   const url = this.strip_tags(html);
   const w = 600;
   const h = 600; // screen.height - 40;
-  const left = (screen.width / 2) - ( w / 2);
-  const top = (screen.height / 2) - ( h / 2);
+  const left = (screen.width / 2) - (w / 2);
+  const top = (screen.height / 2) - (h / 2);
 
   // tslint:disable-next-line:whitespace
   // tslint:disable-next-line:max-line-length
@@ -137,7 +131,7 @@ export function encodeHTML(str) {
 }
 
 export function decodeHTML(str) {
-  
+
   // return str.replace(/&#([0-9]{1,3});/gi, function(match, num) {
   //     // tslint:disable-next-line:radix
   //     return String.fromCharCode( parseInt(num) );
@@ -154,30 +148,33 @@ function convert(str) {
 }
 
 export function strip_tags(html) {
-  return (html.replace( /<.*?>/g, '' )).trim();
+  return (html.replace(/<.*?>/g, '')).trim();
 }
 
+export function replaceBr(text) {
+  const newText = text.replace(/[\n\r]/g, '<br>');
+  return newText;
+}
 
 export function avatarPlaceholder(conversation_with_fullname) {
   let initials = '';
   if (conversation_with_fullname) {
-      const arrayName = conversation_with_fullname.split(' ');
-      arrayName.forEach(member => {
-          if (member.trim().length > 1 && initials.length < 3) {
-              initials += member.substring(0, 1).toUpperCase();
-          }
-      });
+    const arrayName = conversation_with_fullname.split(' ');
+    arrayName.forEach(member => {
+      if (member.trim().length > 1 && initials.length < 3) {
+        initials += member.substring(0, 1).toUpperCase();
+      }
+    });
   }
   return initials;
 }
 
-export function getColorBck(str) {
+export function setColorFromString(str) {
   const arrayBckColor = ['#fba76f', '#80d066', '#73cdd0', '#ecd074', '#6fb1e4', '#f98bae'];
   let num = 0;
   if (str) {
-      const code = str.charCodeAt((str.length - 1));
-      num = Math.round(code % arrayBckColor.length);
-      console.log('************** code', str.length, code, arrayBckColor.length, num);
+    const code = str.charCodeAt((str.length - 1));
+    num = Math.round(code % arrayBckColor.length);
   }
   return arrayBckColor[num];
 }
@@ -186,4 +183,89 @@ export function getFromNow(timestamp) {
   moment.locale(window.navigator.language);
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;
+}
+
+export function detectIfIsMobile() {
+  const isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
+  return isMobile;
+}
+
+export function convertColorToRGBA(color, opacity) {
+  let result = color;
+  // console.log('convertColorToRGBA' + color, opacity);
+  if ( color.indexOf('#') > -1 ) {
+    color = color.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  } else if ( color.indexOf('rgba') > -1 ) {
+    const rgb = color.split(',');
+    const r = rgb[0].substring(5);
+    const g = rgb[1];
+    const b = rgb[2];
+    // const b = rgb[2].substring(1, rgb[2].length - 1);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  } else if ( color.indexOf('rgb(') > -1 ) {
+    const rgb = color.split(',');
+    // console.log(rgb);
+    const r = rgb[0].substring(4);
+    const g = rgb[1];
+    const b = rgb[2].substring(0, rgb[2].length - 1);
+    // console.log(b);
+    // console.log(rgb[2].length);
+    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  }
+  // console.log('convertColorToRGBA' + color + result);
+  return result;
+}
+
+
+export function setLanguage(translatorService) {
+  if (translatorService.getBrowserLanguage()) {
+    return translatorService.getBrowserLanguage();
+  }
+  return translatorService.getDefaultLanguage();
+}
+
+export function getParameterByName(name) {
+  // if (!url) url = window.location.href;
+  const url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
+  if (!results) { return null; }
+  if (!results[2]) { return ''; }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+/**
+ * function for dynamic sorting
+ */
+export function compareValues(key, order = 'asc') {
+  return function (a, b) {
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      return 0;
+    }
+    const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
+    const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
+    let comparison = 0;
+    if (varA > varB) {
+      comparison = 1;
+    } else if (varA < varB) {
+      comparison = -1;
+    }
+    return (
+      (order === 'desc') ? (comparison * -1) : comparison
+    );
+  };
+}
+
+/**
+ *
+ * @param uid
+ */
+export function getImageUrlThumb(uid: string) {
+  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
+  return imageurl;
 }

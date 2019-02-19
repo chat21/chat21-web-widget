@@ -2,106 +2,267 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase';
+import 'firebase/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../../environments/environment';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
-
+import { Globals } from '../utils/globals';
 
 @Injectable()
 export class AuthService {
   // public user: Observable<firebase.User>;
   // public user: firebase.User;
   public user: any;
-  public token: string;
+  private token: string;
   obsLoggedUser: BehaviorSubject<any>;
+  // obsCurrentUser: BehaviorSubject<any>;
+
+  unsubscribe: any;
+  API_URL: string;
 
   constructor(
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    public http: Http,
+    public g: Globals
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
+    // this.obsCurrentUser = new BehaviorSubject<any>(null);
+
+    this.API_URL = environment.apiUrl;
   }
 
 
-  getCurrentUser() {
+
+  onAuthStateChanged() {
     const that = this;
-    firebase.auth().onAuthStateChanged(user => {
+    // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
+    this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        console.log('PASSO OFFLINE AL CHAT MANAGER');
-        that.obsLoggedUser.next(null);
+        that.g.wdLog(['NO CURRENT USER PASSO NULL']);
+        that.obsLoggedUser.next(0);
       } else {
-        console.log('1 - user OK ***', that.obsLoggedUser);
+        that.g.wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;
-        that.obsLoggedUser.next(that.user);
-        that.getToken();
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+        // that.obsCurrentUser.next(that.user);
       }
     });
   }
 
-  getToken() {
-    // console.log('Notification permission granted.');
+  getCurrentUser() {
+    return firebase.auth().currentUser;
+  }
+
+
+  getIdToken() {
+    //  wdLog(['Notification permission granted.');
     const that = this;
-    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    firebase.auth().currentUser.getIdToken()/* true: forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
-        // console.log('idToken.', idToken);
+        that.g.wdLog(['******************** ---------------> idToken.', idToken]);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
     });
   }
 
+  getToken() {
+    return this.token;
+  }
+
 
   authenticateFirebaseAnonymously() {
+    // console.log('authenticateFirebaseAnonymously');
     const that = this;
-    firebase.auth().signInAnonymously()
-    .then(function(user) {
-      that.user = user;
-      that.obsLoggedUser.next(user);
-      that.getToken();
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+          firebase.auth().signInAnonymously()
+          .then(function(user) {
+            that.user = user;
+            if (that.unsubscribe) {
+              that.unsubscribe();
+            }
+            that.obsLoggedUser.next(firebase.auth().currentUser);
+            that.getIdToken();
+          })
+          .catch(function(error) {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              if (that.unsubscribe) {
+                that.unsubscribe();
+              }
+              that.obsLoggedUser.next(0);
+              that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
+          });
+        })
+    .catch(function(error) {
+      console.error('Error setting firebase auth persistence', error);
+    });
+  }
+
+  
+
+  authenticateFirebaseCustomToken(token) {
+    this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
+    const that = this;
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+      //  wdLog(['token: ', token);
+      // Sign-out successful.
+      firebase.auth().signInWithCustomToken(token)
+      .then(function(user) {
+        that.g.wdLog(['USER by signInWithCustomToken: ', user]);
+        that.user = user;
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.getToken();
+      })
+      .catch(function(error) {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          if (that.unsubscribe) {
+            that.unsubscribe();
+          }
+          that.obsLoggedUser.next(0);
+          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
+      });
     })
     .catch(function(error) {
+      console.error('Error setting firebase auth persistence', error);
+    });
+    // firebase.auth().currentUser.getIdToken()
+    // .then(function(idToken) {
+    //   // Send token to your backend via HTTPS
+    //    wdLog(['idToken: ', idToken);
+    //   // ...
+    // }).catch(function(error) {
+    //   // Handle error
+    // });
+
+  }
+
+
+
+  authenticateFirebaseWithEmailAndPassword(email, password) {
+    const that = this;
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function(user) {
+        that.user = user;
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.getIdToken();
+      })
+      .catch(function(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        that.obsLoggedUser.next(null);
-        console.log('signInAnonymously ERROR: ', errorCode, errorMessage);
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.obsLoggedUser.next(0);
+        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
+      });
+    })
+    .catch(function(error) {
+      console.error('Error setting firebase auth persistence', error);
     });
   }
 
 
-  logout() {
-    return this.firebaseAuth
-      .auth
-      .signOut();
+
+
+  // signOut() {
+  //   return firebase.auth().signOut();
+  //   // .then(function() {
+  //   //   // Sign-out successful.
+  //   // }).catch(function(error) {
+  //   //   // An error happened.
+  //   // });
+  // }
+
+
+
+
+  // signup(email: string, password: string) {
+  //   this.firebaseAuth
+  //     .auth
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(value => {
+  //        wdLog(['Success!', value);
+  //     })
+  //     .catch(err => {
+  //        wdLog(['Something went wrong:', err.message);
+  //     });
+  // }
+
+  // login(email: string, password: string) {
+  //   this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+  //     .then(value => {
+  //        wdLog(['Nice, it worked!');
+  //     })
+  //     .catch(err => {
+  //        wdLog(['Something went wrong:', err.message);
+  //     });
+  // }
+
+  signOut() {
+    const that = this;
+    // return this.firebaseAuth.auth.signOut()
+    return firebase.auth().signOut()
+    .then(value => {
+      that.g.wdLog(['Nice, signOut OK!', value]);
+      if (that.unsubscribe) {
+        that.unsubscribe();
+      }
+      that.obsLoggedUser.next(-1);
+    })
+    .catch(err => {
+      that.g.wdLog(['Something went wrong in signOut:', err.message]);
+      that.obsLoggedUser.next(firebase.auth().currentUser);
+    });
   }
 
-  signup(email: string, password: string) {
-    this.firebaseAuth
-      .auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('Success!', value);
-      })
-      .catch(err => {
-        console.log('Something went wrong:', err.message);
-      });
+
+  // /jwt/decode?project_id=123
+  public decode(token, projectId) {
+    const url = this.API_URL + projectId + '/jwt/decode';
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'JWT ' + token);
+    return this.http
+      .post(url, null, { headers })
+      .map((response) => response.json());
   }
 
-  login(email: string, password: string) {
-    this.firebaseAuth
-      .auth
-      .signInWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('Nice, it worked!');
-      })
-      .catch(err => {
-        console.log('Something went wrong:', err.message);
-      });
+  public createFirebaseToken(token, projectId) {
+    const url = this.API_URL + projectId + '/firebase/createtoken';
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'JWT ' + token);
+    return this.http
+      .post(url, null, { headers })
+      .map((response) => response.json());
   }
 
-  logout2() {
-    this.firebaseAuth
-      .auth
-      .signOut();
+  getFirebaseAuthPersistence() {
+    if (this.g.persistence === 'local') {
+      // console.log('getFirebaseAuthPersistence local');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    } else if (this.g.persistence === 'session') {
+      // console.log('getFirebaseAuthPersistence session');
+      return firebase.auth.Auth.Persistence.SESSION;
+    } else {
+      // console.log('getFirebaseAuthPersistence local as else');
+      return firebase.auth.Auth.Persistence.LOCAL;
+    }
   }
+
 
 }

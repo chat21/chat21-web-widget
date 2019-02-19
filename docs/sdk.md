@@ -1,4 +1,6 @@
-# Web SDK 
+# Web SDK version 2.0
+
+For the old versione of the widget see [here](./sdkv1.md). 
 
 This guide will show you how to get started as quickly as possible with the Web SDK from TileDesk. The Web SDK will give businesses and developers the flexibility to build and customize a chat experience that meet their specific design/brand requirements.
 
@@ -17,7 +19,7 @@ Copy the following script and insert it in the HTML source between the HEAD tags
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id; //js.async=!0;
-            js.src = "https://widget.tiledesk.com/tiledesk.js";
+            js.src = "https://widget.tiledesk.com/v2/tiledesk.js";
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'tiledesk-jssdk'));
     </script>
@@ -41,19 +43,44 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 * **calloutTimer**: Proactively open the chat windows to increase the customer engagement. Permitted values: -1 (Disabled), 0 (Immediatly) or a positive integer value. For exmaple: 5 (After 5 seconds),  10 (After 10 seconds).
 
+* **calloutTitle** : The title of the callout window.
+
+* **calloutMsg** :  The message of the callout window.
+
 * **userFullname**: Current user fullname. Set this parameter to specify the visitor fullname.
 
 * **userEmail**: Current user email address. Set this parameter to specify the visitor email address.
 
+* **wellcomeTitle**: The welcome title to show on the widget home page.
+
 * **wellcomeMsg**: Set the widget welcome message. Value type : string
 
-* **hideHeaderCloseButton**: Hide the close button in the widget header. Permitted values: true, false. The default value is false.
+* **widgetTitle**: Set the widget title label shown in the widget header. Value type : string. The default value is Tiledesk.
 
-* **projectname**. If you want to display the project name in the conversations, set the projectname field. It is advisable if you need to manage multiple projects. Find your TileDesk Project Name in the TileDesk Dashboard. Value type : string
+* **logoChat**: The url of the logo to show on the widget home page.
 
 * **lang** : With this configuration it is possible to force the widget lang. The widget will try to get the browser lang, if it is not possible it will use the default "en" lang
 
-* **isOpen**: if it is true, the chat window is automatically opened when the widget is loaded. Permitted values: true, false, Default value : false
+* **hideHeaderCloseButton**: Hide the close button in the widget header. Permitted values: true, false. The default value is false.
+
+* **isOpen**: if it is true, the chat window is automatically open when the widget is loaded. Permitted values: true, false. Default value : false
+
+* **fullscreenMode**: if it is true, the chat window is open in fullscreen mode. Permitted values: true, false. Default value : false
+
+* **themeColor**: allows you to change the main widget's color (color of the header, color of the launcher button, other minor elements). Permitted values: Hex color codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101)
+
+* **themeForegroundColor**: allows you to change text and icons' color. Permitted values: Hex color codes, e.g. #425635 and RGB color codes, e.g. rgb(66,86,53)
+
+* **showWidgetNameInConversation**. If you want to display the widget title in the conversations, set the showWidgetNameInConversation field to true. It is advisable if you need to manage multiple projects. Value type : boolean. The default value is false.
+
+* **allowTranscriptDownload**: allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permittet values: true, false. Default value: false
+
+* **marginX**: Set the side margin, left or right depending on the align property. Default value : 20px
+
+* **marginY**: Set the distance from the page bottom margin. Default value : 20px
+
+* **persistence**: You can specify how the Authentication state persists when using the Tiledesk JS SDK. This includes the ability to specify whether a signed in user should be indefinitely persisted until explicit sign out or cleared when the window is closed. Permittet values: local, session. Default value : local. Local value indicates that the state will be persisted even when the browser window is closed. An explicit sign out is needed to clear that state. Session value indicates that the state will only persist in the current session or tab, and will be cleared when the tab or window in which the user authenticated is closed. 
+
 
 ### Example 1. Widget with user fullname and email
 
@@ -263,3 +290,8 @@ Example:
 ```
 
 
+
+
+# Enabling authenticated visitors in the Chat widget
+You can configure your widget to authenticate visitors using the Javascript API and JWT token.
+More info [here](./auth.md)

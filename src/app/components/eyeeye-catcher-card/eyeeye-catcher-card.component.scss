@@ -1,0 +1,169 @@
+/**
+* *********************************************
+* EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
+* *********************************************  
+*/ 
+
+.eye-catcher_column {
+    float: left;
+    /* padding: 10px; */
+    /* height: 300px;  */
+    /* Should be removed. Only for demonstration */
+}
+
+.ec_left {
+    /* width: 90px; /* commented for new style */
+    width: 70px; /* added for new style */
+    padding-left: 20px;
+    /* padding-top: 24px; */ /* commented for new style */
+    /* padding-bottom: 24px; */ /* commented for new style */
+    padding-top: 16px; /* added for new style */
+    padding-bottom: 16px; /* added for new style */
+    /* background-color: #5d6c80; */
+    box-sizing: border-box;
+}
+
+.ec_right {
+/* width: calc(100% - 90px); */ /* commented for new style */
+width: calc(100% - 70px); /* added for new style */
+/* padding-top: 24px; */ /* commented for new style */
+padding-top: 16px; /* added for new style */
+/* background-color: #aaaaaa */
+}
+
+/* Clear floats after the columns */
+.eye-catcher_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* CLOSE BTN - BTN WRAPPER */
+.eye-catcher-card-close-btn-wrapper{
+    z-index: 999999000;
+    height: 30px;
+    width: 299px;
+    position: absolute;
+    top: -35px;
+    right: -2px;
+}
+/* CLOSE BTN */
+.eye-catcher-card-close-btn {
+    background-color: #5d6c80;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    position:relative;
+    left: 267px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
+}
+
+/* CLOSE BTN - CLOSE IMG */
+.eye-catcher-card-close-btn-img {
+    width: 40px;
+    position: relative;
+    bottom: 5px;
+    right: 5px;
+    max-width: none;
+}
+/* CLOSE BTN IS MOBILE - CLOSE IMG WRAPPER */
+.eye-catcher-card-close-btn-img-is-mobile-wrapper {
+    /* background-color: #5d6c80; */
+    z-index: 999999000;
+    position: absolute;
+    right: -1px;
+    top: -39px;
+    right: -14px;
+    cursor: pointer;
+}
+
+/* CLOSE BTN IS MOBILE - CLOSE IMG */
+.eye-catcher-card-close-btn-img-is-mobile {
+    width: 40px;
+    position:relative;
+    max-width: none;
+}
+
+/**
+* ********* CARD ********* */
+.eye-catcher-card{
+    position: fixed;
+    z-index: 999999000;
+    margin: 95px 0;
+    bottom: 0px;
+    // right: 20px;
+    /* bottom: 120px; */ /* commented for new style */
+    /* right: 36px; */ /* commented for new style */
+    cursor: pointer;
+    /* background-color: #f5f5f5; */ /* commented for new style */
+    background-color: #ffffff;  /* added for new style */
+    border: 1px solid #dedfde;
+    box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
+    /* width: 299px; */ /* commented for new style */
+    width: 270px; /* added for new style */
+    /* min-height: 125px; */ /* commented for new style */
+
+}
+
+.eye-catcher-card-text-wrapper {
+    /* padding-left: 79px; */
+    /* max-width: 220px; */
+    width: 200px;
+}
+
+.eye-catcher-card-title {
+    font-family: 'Google Sans', sans-serif; 
+    /* font-size: 24px; */  /* commented for new style */
+    font-size: 19px;
+    /* color:#286abf;  */ /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
+    padding-left: 5px; 
+    padding-right: 10px; 
+    font-weight:500;
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    margin-top: 0px;
+    line-height: normal;
+}
+
+
+.eye-catcher-card-msg {
+    font-family: 'Google Sans', sans-serif; 
+    /* color: #286abf; */  /* commented for new style */
+    color: rgb(68, 72, 74); /* added for new style */
+    padding-left: 5px; 
+    padding-right: 10px; 
+    margin-top: 6px;
+    /* margin-bottom: 24px; */ /* commented for new style */
+    margin-bottom: 16px; 
+    letter-spacing: 1px;
+    font-weight: 500;
+    word-wrap: break-word;
+    font-size:16px;
+    line-height: normal;
+}
+
+.eye-catcher-card-img-wrapper {
+    /* background-color: #286abf;  */ /* commented for new style */
+    border: 1px solid #dedfde; /* added for new style */
+    border-radius: 100px;
+    height: 65px;
+    width: 65px;
+    /* position: fixed; */
+    /* bottom: 152px; */
+    /* right: 252px; */
+}
+
+.eye-catcher-card .chat21-card-img {
+    position: relative;
+    bottom: 14px;
+    right: 15px;
+    width: 95px;
+    max-width: none;
+}
+
+.chat21-card-emoticons {
+    font-size: 30px;
+}
+/* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */

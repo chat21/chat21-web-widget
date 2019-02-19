@@ -1,0 +1,114 @@
+<div id='c21-app-list-all-conversations' >
+
+  <!-- HEADER -->
+  <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
+
+    <div class="c21-header-container">
+
+      <!-- CONTENT HEADER -->
+      <div class="c21-header-content">
+
+        <!-- ICON CLOSE CHAT -->
+        <div class="c21-header-button c21-right c21-close">
+          <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
+            width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            <title id="altIconTitle">{{g.BUTTON_CLOSE_TO_ICON}}</title>
+          </svg>
+        </div>
+
+        <!-- ICON VOLUME -->
+        <!-- <div class="c21-header-button c21-right" (click)="toggleSound()">
+          <svg *ngIf="!g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M4.34 2.93L2.93 4.34 7.29 8.7 7 9H3v6h4l5 5v-6.59l4.18 4.18c-.65.49-1.38.88-2.18 1.11v2.06c1.34-.3 2.57-.92 3.61-1.75l2.05 2.05 1.41-1.41L4.34 2.93zM10 15.17L7.83 13H5v-2h2.83l.88-.88L10 11.41v3.76zM19 12c0 .82-.15 1.61-.41 2.34l1.53 1.53c.56-1.17.88-2.48.88-3.87 0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zm-7-8l-1.88 1.88L12 7.76zm4.5 8c0-1.77-1.02-3.29-2.5-4.03v1.79l2.48 2.48c.01-.08.02-.16.02-.24z" />
+            <title id="altIconTitle">{{g.SOUND_OFF}}</title>
+          </svg>
+
+          <svg *ngIf="g.isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
+            <title id="altIconTitle">{{g.SOUND_ON}}</title>
+          </svg>
+
+        </div> -->
+
+        <!-- ICON TRANSCRIPT -->
+        <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1" (click)="dowloadTranscript()">
+          <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
+            width="24px" height="24px" viewBox="0 0 24 24">
+      
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z" />
+            <title id="altIconTitle">{{g.BUTTON_DOWNLOAD_TRANSCRIPT}}</title>
+          </svg>
+        </div> -->
+
+        <!-- ICON EDIT PROFILE -->
+        <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            <title id="altIconTitle">{{BUTTON_EDIT_PROFILE}}</title>
+                        </svg>
+                    </div> -->
+
+        <!-- ICON BACK -->
+        <div class="c21-header-button c21-left" (click)="returnClosePage()">
+          <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
+            width="24px" height="24px" viewBox="0 0 24 24">
+            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
+            <title id="altIconTitle">{{g.PREV_CONVERSATIONS}}</title>
+          </svg>
+        </div>
+
+        <!-- TITLE HEADER -->
+        <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
+          <span>{{g.widgetTitle}}</span>
+          <!-- <span id="agent-available-status">{{areAgentsAvailableText}}</span> -->
+        </div>
+        <!-- <p class="c21-header-writing">{{writingMessage}}</p> -->
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CONTENT -->
+
+  <div class="c21-body">
+    <div *ngFor="let conversation of allConversations">
+      <div class="c21-item-conversation" (click)="openConversationByID(conversation)">
+        <div class="c21-body-conv">
+          <div class="c21-left-conv">
+            <div class="c21-icon-avatar">
+              <div #avatarPlaceholder *ngIf="!conversation.image" [style.background-color]="conversation.color" class="c21-avatar-placeholder"
+                [innerHTML]="conversation.avatar"></div>
+              <div #avatarImage *ngIf="conversation.image" class="c21-avatar-image" [style.background-image]="'url(' + conversation.image + ')'"></div>
+            </div>
+          </div>
+          <div class="c21-right-conv">
+            <div class="c21-last-time">{{conversation.time_last_message}}</div>
+            <div class="truncate c21-name">{{conversation.sender_fullname }}</div>
+            <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
+          </div>
+          <div *ngIf="conversation.is_new" [ngStyle]="{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
+          <div *ngIf="conversation.archived" class="c21-lablel-close">CHIUSA</div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="c21-footer">
+  </div>
+
+
+</div>

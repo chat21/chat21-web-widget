@@ -1,0 +1,155 @@
+@import '../../../sass/variables';
+// @import '../../../sass/normalize.css';
+
+#chat21-prechat-form {
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%;
+        .c21-header {
+            overflow: hidden;
+            width: 100%;
+            height: 52px;
+            .c21-header-button {
+                .c21-close-button.c21-small {
+                    width: 31px;
+                    height: 31px;
+                    .c21-close-button-body{
+                        width: 31px;
+                        height: 31px;
+                    }
+                }
+            }
+            .c21-header-container {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                margin: 0 auto;
+                .c21-header-content {
+                    width: auto;
+                    height: auto;
+                    top: 6px;
+                    left: 40px;
+                    right: 40px;
+                    .c21-title {
+                        display: inline-block;
+                        width: 100%;
+                        height: auto;
+                        padding: 0;
+                        margin: 10px 0;
+                        text-align: center;
+                        font-size: 1.6em;
+                        line-height: normal;
+                    }
+                }
+            }
+        }
+        .c21-body {
+            padding: 0px;
+            margin: 20px auto;
+            .c21-body-header{
+                padding: 10px 30px;
+                position: relative;
+                left: 0;
+                right: 0;
+                .c21-form-message-field {
+                    padding: 0;
+                    margin: 0;
+                    line-height: 1.2em;
+                    color: #616161;
+                    font-size: 1.5em;
+                    text-align: center;
+                    word-wrap: break-word;
+                }
+            }
+            .c21-body-content  {
+                padding: 10px 30px;
+                position: relative;
+
+                .c21-label-button{
+                    font-size: 1.2em;
+                }
+                #chat21-form-container {
+                    padding: 0 0 30px 0;
+
+                    .c21-input-container {
+                        background-color: #fff;
+                        overflow: hidden;
+                        position: relative;
+                        height: 36px;
+                        margin: 10px 10px 0px 10px;
+                    }
+                    .text-danger {
+                        color: $danger;
+                        font-size: 1em;
+                        min-height: 20px;
+                        background-color: #ffffff;
+                        margin: 0px 10px 0px 10px;
+                    }
+                    .c21-input-container {
+                        border-bottom: 1px solid rgba(211, 212, 213, .4);
+                        -webkit-border-radius: 3px;
+                        -moz-border-radius: 3px;
+                        -ms-border-radius: 3px;
+                        -o-border-radius: 3px;
+                        border-radius: 3px;
+                        background-color: #ffffff;
+                        margin: 0 0 7px 0;
+                        position: relative;
+
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        display: inline-flex;
+                        input, 
+                        select {
+                            width: 100%;
+                            margin: 0;
+                            border: 0;
+                            padding: 12px 0;
+                            background-color: #ffffff;
+                            vertical-align: middle;
+                        }
+                        input {
+                            display: block;
+                            padding: 11px 10px 8px 10px;
+                            color: #616161;
+                            font-size: 1.3em;
+                            font-weight: 300;
+                            line-height: 1.2em;
+                            -webkit-box-shadow: none;
+                            box-shadow: none;
+                        }
+                        input::placeholder {
+                            color: rgb(179, 182, 184);
+                            font-weight: initial;
+                            opacity: 1; /* Firefox */
+                        }
+                        input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                            /* color: #cccccc; */
+                            color: rgb(179, 182, 184);
+                            font-weight: initial;
+                        }
+
+                        /* Remove input border colour */
+                        input:focus,
+                        input:active,
+                        input:hover,
+                        input:visited {
+                            box-shadow: none;
+                            background-color: #ffffff;
+                            outline: none;
+                        }
+                        
+                        /* Remove input background colour for Chrome autocomplete */
+                        input:-webkit-autofill,
+                        input:-webkit-autofill:hover,
+                        input:-webkit-autofill:focus,
+                        input:-webkit-autofill:active {
+                            transition: background-color 5000s ease-in-out 0s;
+                        }
+                    }
+                }
+            }
+        }
+}

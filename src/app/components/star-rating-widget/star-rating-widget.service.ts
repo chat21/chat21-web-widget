@@ -7,10 +7,12 @@ import { Response } from '@angular/http/src/static_response';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth.service';
 
+import { Globals } from '../../utils/globals';
+
 @Injectable()
 export class StarRatingWidgetService {
   // private BASE_URL_SEND_RATE: string;
-  observable: any;
+  public obsCloseConversation: any;
   private API_URL;
   public senderId: any;
   public requestid: any;
@@ -19,46 +21,48 @@ export class StarRatingWidgetService {
 
   constructor(
     public http: Http,
-    public auth: AuthService
+    public auth: AuthService,
+    public g: Globals
   ) {
 
     this.API_URL = environment.apiUrl;
-    // console.log('AgentAvailabilityService:: this.API_URL',  this.API_URL );
+    //  this.g.wdLog(['AgentAvailabilityService:: this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
     }
+    this.obsCloseConversation = new BehaviorSubject<boolean>(null);
 
-    this.observable = new BehaviorSubject<boolean>(null);
-    this.auth.obsLoggedUser.subscribe((current_user) => {
-      console.log('»»» START-RATING-WIDGET SERVICE - USER GET FROM AUTH SUBSCRIPTION ', current_user);
-      if (current_user) {
-        this.senderId = current_user.user.uid;
-        console.log('»»» START-RATING-WIDGET SERVICE - USER UID (alias SENDER ID) ', this.senderId);
-        setTimeout(() => {
-          this.requestid = sessionStorage.getItem(this.senderId);
-          this.requestid = localStorage.getItem(this.senderId);
-          console.log('»»» START-RATING-WIDGET SERVICE - REQUEST ID GET FRO STORAGE', this.requestid);
-        }, 100);
-      }
-    });
+    // this.observable = new BehaviorSubject<boolean>(null);
+    // this.auth.obsLoggedUser.subscribe((current_user) => {
+    //    this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - USER GET FROM AUTH SUBSCRIPTION ', current_user);
+    //   if (current_user) {
+    //     this.senderId = current_user.user.uid;
+    //      this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - USER UID (alias SENDER ID) ', this.senderId);
+    //     setTimeout(() => {
+    //       this.requestid = sessionStorage.getItem(this.senderId);
+    //       this.requestid = this.storageService.getItem(this.senderId);
+    //        this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - REQUEST ID GET FRO STORAGE', this.requestid);
+    //     }, 100);
+    //   }
+    // });
   }
 
-  httpSendRate(rate, message): Observable<string> {
+  httpSendRate(rate, message, recipientId): Observable<string> {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
     // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
     // tslint:disable-next-line:max-line-length
-    const url = this.API_URL + 'chat/support/tilechat/requests/' + this.requestid + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
-    console.log('url: ', url);
+    const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
+     this.g.wdLog(['url: ', url]);
     const body = {
       'rating': rate,
       'rating_message': message,
       // 'uid': uid
     };
-    console.log('------------------> options: ', options);
-    console.log('------------------> body: ', JSON.stringify(body));
+     this.g.wdLog(['------------------> options: ', options]);
+     this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
     return this.http
       .put(url, JSON.stringify(body), options)
       .map(res => (res.json()));
@@ -74,12 +78,12 @@ export class StarRatingWidgetService {
   // }
 
   setOsservable(bool) {
-    console.log('------------------> setOsservable: ', bool);
-    this.observable.next(bool);
+     this.g.wdLog(['------------------> setOsservable: ', bool]);
+    this.obsCloseConversation.next(bool);
   }
 
-  _dowloadTranscript() {
-    const url = 'https://api.tiledesk.com/v1/public/requests/' + this.requestid + '/messages.html';
+  _dowloadTranscript(recipientId) {
+    const url = 'https://api.tiledesk.com/v1/public/requests/' + recipientId + '/messages.html';
     window.open(url, '_blank');
   }
 
