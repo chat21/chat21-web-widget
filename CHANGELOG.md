@@ -1,5 +1,11 @@
 # chat21-web-widget ver 2.0
 
+### 1.023
+- Fixes bug on send image
+
+### 1.022
+- Fixes bug profile icons
+
 ### 1.021
 - Changes profile icons
 

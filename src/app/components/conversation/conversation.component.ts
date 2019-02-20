@@ -6,7 +6,7 @@ import { MessagingService } from '../../providers/messaging.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT
+  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -618,8 +618,10 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+      console.log('metadata: ', metadata);
       (metadata) ? metadata = metadata : metadata = '';
-        this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
+      console.log('metadata: ', metadata);
+      this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
           let recipientFullname = this.GUEST_LABEL;
           this.triggerBeforeSendMessageEvent(
@@ -749,13 +751,16 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * recupero url immagine profilo
      * @param uid
      */
-    getUrlImgProfile(uid): string {
+    getUrlImgProfile(uid?: string): string {
       if (!uid || uid === 'system' ) {
-        return IMG_PROFILE_BOT;
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if ( uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
       } else {
         return getImageUrlThumb(uid);
       }
     }
+
 
   /**
      * ridimensiona la textarea
@@ -945,7 +950,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             const fileXLoad = this.arrayFilesLoad[0].file;
             const uid = this.arrayFilesLoad[0].uid;
             const type = this.arrayFilesLoad[0].type;
-              this.g.wdLog(['that.fileXLoad: ', type]);
+            this.g.wdLog(['that.fileXLoad: ', type]);
             let metadata;
             if (type.startsWith('image')) {
                 metadata = {
@@ -964,7 +969,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
                     'uid': uid
                 };
             }
-              this.g.wdLog(['metadata -------> ', metadata]);
+            this.g.wdLog(['metadata -------> ', metadata]);
+            // console.log(metadata);
             this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
@@ -983,7 +989,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-          this.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
+        console.log('AppComponent::uploadSingle::', metadata, file);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
         const uploadTask = this.upSvc.pushUpload(currentUpload);

@@ -247,11 +247,13 @@ checkShowAllConversation() {
      * recupero url immagine profilo
      * @param uid
      */
-    getUrlImgProfile(uid): string {
+    getUrlImgProfile(uid?: string): string {
       if (!uid || uid === 'system' ) {
-        return IMG_PROFILE_BOT;
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if (uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
       } else {
-        return IMG_PROFILE_DEFAULT; // getImageUrlThumb(uid);
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
       }
     }
 
