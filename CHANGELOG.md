@@ -1,5 +1,11 @@
 # chat21-web-widget ver 2.0
 
+### 1.021
+- Changes profile icons
+
+### 1.020
+- Bug fix (merge v2 on master)
+
 ### 1.018
 - Adds user's icon in conversation
 - Fixes bug requester_id in setSttributes (app.component)

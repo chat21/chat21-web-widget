@@ -6,7 +6,7 @@ import { MessagingService } from '../../providers/messaging.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES
+  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -84,7 +84,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
   isPopupUrl = isPopupUrl;
-  IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   isNewConversation = true;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
@@ -746,16 +745,17 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     }
   }
 
-/**
+    /**
      * recupero url immagine profilo
      * @param uid
      */
     getUrlImgProfile(uid): string {
-      // if (!uid || uid === 'system' ) {
-      //   return this.IMG_PROFILE_SUPPORT;
-      // }
-      return getImageUrlThumb(uid);
-  }
+      if (!uid || uid === 'system' ) {
+        return IMG_PROFILE_BOT;
+      } else {
+        return getImageUrlThumb(uid);
+      }
+    }
 
   /**
      * ridimensiona la textarea
