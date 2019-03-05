@@ -6,7 +6,7 @@ import { MessagingService } from '../../providers/messaging.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES
+  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -18,7 +18,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+import { getImageUrlThumb, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -751,7 +751,14 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * @param uid
      */
     getUrlImgProfile(uid): string {
-      return this.IMG_PROFILE_SUPPORT;
+
+      if (!uid || uid === 'system' ) {
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if ( uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+      } else {
+          return getImageUrlThumb(uid);
+      }
       // if (!uid) {
       //   return this.IMG_PROFILE_SUPPORT;
       // }

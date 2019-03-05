@@ -13,9 +13,56 @@
     margin: 0px;
     padding: 0px;
 
+
+     /* SET ICON AVATAR */
+     .c21-icon-avatar {
+        position: relative;
+        padding: 0;
+        margin: 0;
+        height: 40px;
+        width: 40px;
+        min-height: 40px;
+        min-width: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #ffffff;
+        .c21-avatar-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 1.4em;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        .c21-avatar-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 50%;
+        }
+        .c21-avatar-image img{
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+            min-width: 25px;
+            min-height: 25px;
+            object-fit: cover;
+        }
+        
+    }
+
      /* SET SCROLLBAR */
-
-
     // ============= CSS c21-header ================= // 
     .c21-header {
         .c21-header-container{
@@ -174,7 +221,7 @@
     
                     /** recive message **/
                     .base_receive {
-                        padding: 4px 0px;
+                        padding: 0px 0px 6px 0px;
                         /* avatar */
                         .content-avatar {
                             position: relative;
@@ -194,6 +241,8 @@
                             }
                             .profile_image img{
                                 max-width: 100%;
+                                width: 100%;
+                                height: 100%;
                                 min-width: 25px;
                                 min-height: 25px;
                                 object-fit: cover;
@@ -206,6 +255,7 @@
                             max-width: calc(100% - 60px);
                             min-width: 14px;
                             margin: 0 20px 4px 10px;
+                            height: fit-content;
                         }
                         
                     }

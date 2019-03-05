@@ -3,7 +3,10 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import { getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import {
+  IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+} from '../../utils/constants';
 import { ContactService } from '../../providers/contact.service';
 import { WaitingService } from '../../providers/waiting.service';
 import { TranslatorService } from '../../providers/translator.service';
@@ -251,6 +254,18 @@ checkShowAllConversation() {
   returnOpenAllConversation() {
     this.eventOpenAllConv.emit();
   }
+
+  /** */
+  getUrlImgProfile(uid?: string): string {
+    if (!uid || uid === 'system' ) {
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if (uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+    } else {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+    }
+  }
+
 
   private openConversationByID(conversation) {
      this.g.wdLog(['openConversationByID: ', conversation]);
