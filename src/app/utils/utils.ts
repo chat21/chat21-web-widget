@@ -32,6 +32,22 @@ export function setHeaderDate(timestamp): string {
   return labelDays;
 }
 
+export function supports_html5_storage() {
+  try {
+      return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+      return false;
+  }
+}
+
+export function supports_html5_session() {
+  try {
+      return 'sessionStorage' in window && window['sessionStorage'] !== null;
+  } catch (e) {
+      return false;
+  }
+}
+
 export function convertDayToString(day) {
   const arrayDays = ARRAY_DAYS;
   return arrayDays[day];

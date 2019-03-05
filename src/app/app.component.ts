@@ -19,7 +19,7 @@ import { AgentAvailabilityService } from './providers/agent-availability.service
 
 
 // utils
-import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
+import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -138,8 +138,6 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.g.wdLog([' this.g.senderId', that.g.senderId]);
                     this.g.wdLog([' this.g.isLogged', that.g.isLogged]);
                     // that.openIfCallOutTimer();
-                    that.g.attributes = that.setAttributes();
-
                     that.startNwConversation();
                     that.startUI();
                     that.triggeisLoggedInEvent();
@@ -173,7 +171,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.isMobile = detectIfIsMobile();
 
         // Related to https://github.com/firebase/angularfire/issues/970
-        localStorage.removeItem('firebase:previous_websocket_failure');
+        if (supports_html5_storage()) {
+            localStorage.removeItem('firebase:previous_websocket_failure');
+        }
         this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
 
         this.g.initialize(this.el);
@@ -241,7 +241,7 @@ export class AppComponent implements OnInit, OnDestroy {
         attributes['requester_id'] = this.g.senderId;
     }
     this.storageService.setItem('attributes', JSON.stringify(attributes));
-    this.g.wdLog([' ---------------- setAttributes 111 ---------------- ', attributes]);
+    this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
     return attributes;
   }
 
@@ -402,12 +402,10 @@ export class AppComponent implements OnInit, OnDestroy {
             this.authService.authenticateFirebaseWithEmailAndPassword(this.g.userEmail, this.g.userPassword);
         } else if (this.g.userId) {
             // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
-            this.g.wdLog([' ---------------- 11 ---------------- ']);
-            this.g.wdLog(['this.userId:: ', this.g.userId]);
+             this.g.wdLog([' ---------------- 11 ---------------- ']);
+             this.g.wdLog(['this.userId:: ', this.g.userId]);
             this.g.senderId = this.g.userId;
             this.g.isLogged = true;
-            this.g.attributes = this.setAttributes();
-
             this.startNwConversation();
             this.startUI();
              this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
@@ -415,27 +413,26 @@ export class AppComponent implements OnInit, OnDestroy {
         } else if (this.g.userToken) {
             // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
             // !!! DA TESTARE NON FUNZIONA !!! //
-            this.g.wdLog([' ---------------- 12 ---------------- ']);
-            this.g.wdLog(['this.g.userToken:: ', this.g.userToken]);
+             this.g.wdLog([' ---------------- 12 ---------------- ']);
+             this.g.wdLog(['this.g.userToken:: ', this.g.userToken]);
             this.authService.authenticateFirebaseCustomToken(this.g.userToken);
+
         } else if (currentUser) {
             //  SONO GIA' AUTENTICATO
             this.g.wdLog([' ---------------- 13 ---------------- ']);
             this.g.senderId = currentUser.uid;
             this.g.isLogged = true;
-            this.g.wdLog([' this.g.senderId', this.g.senderId]);
-            this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
-            this.g.attributes = this.setAttributes();
-            
-            this.startNwConversation();
+             this.g.wdLog([' this.g.senderId', this.g.senderId]);
+             this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
+             this.startNwConversation();
             this.startUI();
-            this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
+             this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
 
         } else {
             //  AUTENTICAZIONE ANONIMA
-            this.g.wdLog([' ---------------- 14 ---------------- ']);
-            this.g.wdLog([' authenticateFirebaseAnonymously']);
+             this.g.wdLog([' ---------------- 14 ---------------- ']);
+             this.g.wdLog([' authenticateFirebaseAnonymously']);
             this.authService.authenticateFirebaseAnonymously();
         }
     }
@@ -581,17 +578,18 @@ export class AppComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 that.authService.decode(token, that.g.projectid)
                     .subscribe(resDec => {
-                        this.g.wdLog(['resDec', resDec.decoded]);
+                         this.g.wdLog(['resDec', resDec.decoded]);
                         that.g.signInWithCustomToken = true;
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
                         that.g.attributes.userEmail = resDec.decoded.email;
                         that.g.attributes.userFullname = resDec.decoded.name;
                         const firebaseToken = response.firebaseToken;
-                        this.g.wdLog(['firebaseToken', firebaseToken]);
+                         this.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        //that.setAttributes();
+                        that.setAttributes();
+
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // console.log('call signout');

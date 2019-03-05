@@ -386,7 +386,7 @@ export class Globals {
       this.userFullname = TEMP;
     }
     TEMP = el.nativeElement.getAttribute('preChatForm');
-    // console.log('preChatForm', TEMP);
+    console.log('preChatForm', TEMP);
     if (TEMP !== null) {
       this.preChatForm = (TEMP === true) ? true : false;
     }
@@ -513,11 +513,11 @@ export class Globals {
       this.userFullname = TEMP;
     }
     TEMP = window['tiledeskSettings']['preChatForm'];
-    // console.log('tiledeskSettings preChatForm', TEMP);
+    console.log('tiledeskSettings preChatForm', TEMP);
     if (TEMP !== undefined) {
       this.preChatForm = (TEMP === false) ? false : true;
     }
-    // console.log('tiledeskSettings preChatForm', this.preChatForm);
+    console.log('tiledeskSettings preChatForm', this.preChatForm);
 
     TEMP = window['tiledeskSettings']['isOpen'];
     if (TEMP !== undefined) {
@@ -828,7 +828,7 @@ export class Globals {
 
   public wdLog(message) {
     if ( this.isLogEnabled ) {
-       console.log(message.join(' '));
+       console.log(message.toString());
     }
   }
 

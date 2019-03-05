@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Globals } from '../utils/globals';
+import { supports_html5_storage, supports_html5_session } from '../utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -254,13 +255,28 @@ export class AuthService {
   getFirebaseAuthPersistence() {
     if (this.g.persistence === 'local') {
       // console.log('getFirebaseAuthPersistence local');
-      return firebase.auth.Auth.Persistence.LOCAL;
+      if (supports_html5_storage()) {
+        return firebase.auth.Auth.Persistence.LOCAL;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
     } else if (this.g.persistence === 'session') {
       // console.log('getFirebaseAuthPersistence session');
-      return firebase.auth.Auth.Persistence.SESSION;
+      if (supports_html5_session()) {
+        return firebase.auth.Auth.Persistence.SESSION;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
+    } else if (this.g.persistence === 'none') {
+      console.log('getFirebaseAuthPersistence none');
+      return firebase.auth.Auth.Persistence.NONE;
     } else {
       // console.log('getFirebaseAuthPersistence local as else');
-      return firebase.auth.Auth.Persistence.LOCAL;
+      if (supports_html5_storage()) {
+        return firebase.auth.Auth.Persistence.LOCAL;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
     }
   }
 

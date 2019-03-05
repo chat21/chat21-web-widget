@@ -142,7 +142,7 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
-        // console.log('message[timestamp]: ', message['timestamp']);
+        console.log('message[timestamp]: ', message['timestamp']);
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],
@@ -303,7 +303,6 @@ export class MessagingService {
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
      this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
      this.g.wdLog(['attributes:: ', attributes.toString()]);
-    console.log(metadata);
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';
@@ -315,7 +314,7 @@ export class MessagingService {
     // const now: Date = new Date();
     // const localTimestamp = now.valueOf();
     const timestamp =  firebase.database.ServerValue.TIMESTAMP;
-    // console.log('timestamp: ', timestamp);
+    console.log('timestamp: ', timestamp);
     const language = navigator.language;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(
@@ -335,11 +334,28 @@ export class MessagingService {
       channel_type,
       projectid
     );
+    //this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
+    this.g.wdLog([message.toString()]);
+
+    // firebaseMessagesCustomUid.push(message, function(error) {
+    //   if (error) {
+    //     // cambio lo stato in rosso: invio nn riuscito!!!
+    //     message.status = '-100';
+    //      this.g.wdLog(['ERRORE', message);
+    //   } else {
+    //     // that.checkWritingMessages();
+    //     message.status = '150';
+    //      this.g.wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+    //   }
+
+
     const messageRef = conversationRef.push();
     const key = messageRef.key;
     message.uid = key;
+     this.g.wdLog(['messageRef: ', messageRef]);
     const messageForFirebase = message.asFirebaseMessage();
+     this.g.wdLog(['messageForFirebase: ', messageForFirebase]);
     messageRef.set(messageForFirebase, function (error) {
       // Callback comes here
       if (error) {

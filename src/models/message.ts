@@ -31,12 +31,13 @@ export class MessageModel {
             metadata: this.metadata,
             text: this.text,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
-            headerDate: this.headerDate,
+            // headerDate: this.headerDate,
             type: this.type,
             attributes: this.attributes,
             channel_type: this.channel_type,
             projectid: this.projectid
         };
+
         return message;
      }
  }

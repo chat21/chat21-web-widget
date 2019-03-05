@@ -3,12 +3,11 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import { setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
 import { ContactService } from '../../providers/contact.service';
 import { WaitingService } from '../../providers/waiting.service';
 import { TranslatorService } from '../../providers/translator.service';
 
-import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT } from '../../utils/constants';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
@@ -243,19 +242,7 @@ checkShowAllConversation() {
   //   });
   // }
 
-    /**
-     * recupero url immagine profilo
-     * @param uid
-     */
-    getUrlImgProfile(uid?: string): string {
-      if (!uid || uid === 'system' ) {
-        return this.g.baseLocation + IMG_PROFILE_BOT;
-      } else if (uid === 'error') {
-        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
-      } else {
-        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
-      }
-    }
+
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
