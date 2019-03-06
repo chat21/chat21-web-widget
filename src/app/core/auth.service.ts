@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
+// import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import 'firebase/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -24,7 +22,7 @@ export class AuthService {
   API_URL: string;
 
   constructor(
-    private firebaseAuth: AngularFireAuth,
+    // private firebaseAuth: AngularFireAuth,
     public http: Http,
     public g: Globals
   ) {
@@ -103,7 +101,6 @@ export class AuthService {
     });
   }
 
-  
 
   authenticateFirebaseCustomToken(token) {
     this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);

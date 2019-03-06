@@ -16,6 +16,8 @@ import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
+import * as firebase from 'firebase';
+import { environment } from '../environments/environment';
 
 
 // utils
@@ -81,6 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
     ) {
+        firebase.initializeApp(environment.firebase);  // here shows the error
+
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
 

@@ -26,7 +26,9 @@ echo 'ver: ---->'$NEW_VER
 echo 'build: ---->'$NEW_BUILD
 
 sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
-ng build --prod --base-href --output-hashing none 
+
+# --build-optimizer=false if localstorage is disabled (webview) appears https://github.com/firebase/angularfire/issues/970
+ng build --prod --base-href --output-hashing none  --build-optimizer=false
 #ng build --base-href --output-hashing none
 cd dist
 aws  s3 sync . s3://tiledesk-widget/dev/$NEW_VER/$NEW_BUILD/
