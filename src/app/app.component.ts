@@ -23,6 +23,8 @@ import { environment } from '../environments/environment';
 // utils
 import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
+import { AppConfigService } from './providers/app-config.service';
+
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -84,8 +86,11 @@ export class AppComponent implements OnInit, OnDestroy {
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
+        public appConfigService: AppConfigService
     ) {
-        firebase.initializeApp(environment.firebase);  // here shows the error
+        // firebase.initializeApp(environment.firebase);  // here shows the error
+        // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
+        firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
 
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }

@@ -11,6 +11,7 @@ import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class Globals {
@@ -147,6 +148,7 @@ export class Globals {
 
   constructor(
     private translatorService: TranslatorService,
+    public appConfigService: AppConfigService
     // public storageService: StorageService
   ) {
   }
@@ -318,7 +320,7 @@ export class Globals {
 
 
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
-    this.tenant = environment.tenant;           /** name tenant ex: tilechat */
+    this.tenant = this.appConfigService.getConfig().tenant;           /** name tenant ex: tilechat */
     this.channelType = CHANNEL_TYPE_GROUP;      /** channelType: group/direct  */
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */

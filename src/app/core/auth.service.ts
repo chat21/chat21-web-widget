@@ -8,6 +8,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Globals } from '../utils/globals';
 import { supports_html5_storage, supports_html5_session } from '../utils/utils';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class AuthService {
@@ -24,13 +25,14 @@ export class AuthService {
   constructor(
     // private firebaseAuth: AngularFireAuth,
     public http: Http,
-    public g: Globals
+    public g: Globals,
+    public appConfigService: AppConfigService
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
     // this.obsCurrentUser = new BehaviorSubject<any>(null);
 
-    this.API_URL = environment.apiUrl;
+    this.API_URL = appConfigService.getConfig().apiUrl;
   }
 
 

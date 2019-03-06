@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 // import { AngularFireAuthModule } from '@angular/fire/auth';
 // import * as firebase from 'firebase';
 
-// import { environment } from '../environments/environment';
+import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -49,6 +49,16 @@ import { StorageService } from './providers/storage.service';
 // Import the library module
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { WaitingService } from './providers/waiting.service';
+import { AppConfigService } from './providers/app-config.service';
+
+const appInitializerFn = (appConfig: AppConfigService) => {
+  return () => {
+    if (environment.remoteConfig) {
+      return appConfig.loadAppConfig();
+    }
+  };
+};
+
 
 @NgModule({
   declarations: [
@@ -90,6 +100,13 @@ import { WaitingService } from './providers/waiting.service';
     AngularResizedEventModule
   ],
   providers: [
+    AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [AppConfigService]
+    },
     AuthService,
     MessagingService,
     Globals,
