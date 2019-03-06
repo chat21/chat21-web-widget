@@ -265,7 +265,6 @@ export class AuthService {
         return firebase.auth.Auth.Persistence.NONE;
       }
     } else if (this.g.persistence === 'none') {
-      console.log('getFirebaseAuthPersistence none');
       return firebase.auth.Auth.Persistence.NONE;
     } else {
       // console.log('getFirebaseAuthPersistence local as else');

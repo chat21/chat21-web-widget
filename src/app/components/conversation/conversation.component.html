@@ -122,7 +122,7 @@
                                         <div class="messages msg_sent primary-color" [ngStyle]=styleSecondColor >
 
                                             <!-- message type:: image -->
-                                            <img *ngIf="message.type == 'image'" class="message-contentX message-content-imageX"
+                                            <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" />
 
@@ -156,20 +156,25 @@
                                     <div *ngIf="message.sender != g.senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
                                     <div *ngIf="message.sender != g.senderId;" class="msg_container base_receive">
 
-                                        <div class="content-avatar">
-                                            <!-- <img src="https://icon-icons.com/icons2/587/PNG/512/support_icon-icons.com_55294.png" class="img_circle" width="25" height="25"> 
-                                                -->
+                                        <!-- <div class="content-avatar">
                                             <div class="profile_image">
                                                 <img src="{{getUrlImgProfile(message.sender)}}" />
                                             </div>
+                                        </div> -->
+
+                                        <div class="c21-icon-avatar">
+                                            <div class="c21-avatar-image profile_image">
+                                                <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" />
+                                            </div> 
                                         </div>
+
 
                                         <div class="messages msg_receive">
                                            
                                             <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
 
                                             <!-- message type:: image -->
-                                            <img *ngIf="message.type == 'image';" class="message-contentX message-content-imageX"
+                                            <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" />
 
@@ -211,9 +216,8 @@
                                     </div>
 
 
-                                    <div *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
-                                        <time >{{message.timestamp  | amTimeAgo}} </time>  
-
+                                    <div class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
+                                        <time *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
                                     </div>
 
                                 </div>

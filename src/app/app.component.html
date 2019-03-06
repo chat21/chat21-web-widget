@@ -34,6 +34,8 @@
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
+            [conversation]="conversationSelected"
+            [isOpen]="g.isOpen"
             [elRoot]="el"
             (eventClose)="returnCloseConversation()" 
             (eventCloseWidget)="returnCloseWidget()"
@@ -88,9 +90,9 @@
     *************************************************************    
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
+    (eventOpenEyeCatcher)="returneventOpenEyeCatcher()"
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
-    (eventOpenEyeCatcher)="returneventOpenEyeCatcher()"
     (eventOpenChat)="returnOpenChat()" 
     ></tiledeskwidget-eyeeye-catcher-card>     
     

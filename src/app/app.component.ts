@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 
 // utils
 import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
+import { ConversationModel } from '../models/conversation';
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // isModalLeaveChatActive = false;     /** ???? */
     departments = [];
     marginBottom: number;
+    conversationSelected: ConversationModel;
     // ========= end:: parametri di stato widget ======= //
 
 
@@ -858,6 +860,7 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private returnSelectedConversation($event) {
         if ($event) {
+            this.conversationSelected = $event;
             this.g.recipientId = $event.recipient;
             this.isOpenConversation = true;
              this.g.wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
