@@ -1,7 +1,9 @@
-import { NgZone, HostListener, ElementRef, Component, OnInit, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+// tslint:disable-next-line:max-line-length
+import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
+import { ConversationsService } from '../../providers/conversations.service';
 
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
@@ -14,6 +16,7 @@ import { AgentAvailabilityService } from '../../providers/agent-availability.ser
 import { StarRatingWidgetService } from '../../components/star-rating-widget/star-rating-widget.service';
 
 // models
+import { ConversationModel } from '../../../models/conversation';
 import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
@@ -36,7 +39,7 @@ import { StorageService } from '../../providers/storage.service';
   // tslint:disable-next-line:use-host-property-decorator
   host: {'(window:resize)': 'onResize($event)'}
 })
-export class ConversationComponent implements OnInit, AfterViewInit {
+export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
@@ -44,6 +47,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   @Output() eventCloseWidget = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   @Input() elRoot: ElementRef;
+  @Input() conversation: ConversationModel;
+  @Input() isOpen: boolean;
   // @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
@@ -122,7 +127,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
     public appComponent: AppComponent,
-    public storageService: StorageService
+    public storageService: StorageService,
+    public conversationsService: ConversationsService
   ) {
     this.initAll();
 
@@ -138,6 +144,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   // }
 
   ngOnInit() {
+    console.log('ngOnInit');
     // this.initAll();
       this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
       this.g.wdLog([' recipientId: ', this.g.recipientId]);
@@ -160,22 +167,31 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
-
     this.setFocusOnId('chat21-main-message-context');
-
     this.attributes = this.setAttributes();
+    this.updateConversationBadge();
   }
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    // if (this.scrollMe) {
-    //   const divScrollMe = this.scrollMe.nativeElement;
-    //   const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-    //   if (checkContentScrollPosition) {
-    //     this.scrollToBottom();
-    //   }
-    // }
   }
+
+  ngOnChanges() {
+    console.log('ngOnChanges');
+    if (this.isOpen === true) {
+      this.updateConversationBadge();
+      this.scrollToBottom();
+    }
+  }
+
+  updateConversationBadge() {
+    if (this.conversation) {
+      this.conversationsService.updateIsNew(this.conversation);
+      this.conversationsService.updateConversationBadge();
+    }
+  }
+
+
 
 
   /**
@@ -243,7 +259,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     .getAvailableAgentsForDepartment(this.g.projectid, this.g.departmentSelected._id)
     .subscribe( (availableAgents) => {
       const availableAgentsForDep = availableAgents['available_agents'];
-      console.log(availableAgents);
       if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
         that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
       } else {
@@ -350,7 +365,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
    */
   private setChannelType() {
     let channelTypeTEMP = CHANNEL_TYPE_GROUP;
-    if (this.recipientId.indexOf('group') !== -1) {
+    if (this.recipientId && this.recipientId.indexOf('group') !== -1) {
       channelTypeTEMP = CHANNEL_TYPE_GROUP;
     } else if (!this.g.projectid) {
       channelTypeTEMP = CHANNEL_TYPE_DIRECT;
@@ -1181,8 +1196,9 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
       this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-    this.unsubscribe();
+      this.unsubscribe();
   }
+
 
   /** */
   unsubscribe() {

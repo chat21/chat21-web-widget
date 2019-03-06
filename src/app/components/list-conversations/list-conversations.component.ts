@@ -270,9 +270,8 @@ checkShowAllConversation() {
   private openConversationByID(conversation) {
      this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
-      // this.conversationsService.updateBadge(conversation, 0);
-      this.conversationsService.updateIsNew(conversation);
-      this.conversationsService.updateConversationBadge();
+      // this.conversationsService.updateIsNew(conversation);
+      // this.conversationsService.updateConversationBadge();
       this.eventSelctedConv.emit(conversation);
     }
   }

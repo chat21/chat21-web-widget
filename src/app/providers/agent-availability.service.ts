@@ -57,7 +57,6 @@ export class AgentAvailabilityService {
     }
     const url = this.API_URL + projectId + '/departments/' + idDepartmentSelected + '/operators/';
     // https://api.tiledesk.com/v1/5ad4c101e774ac0014ae0d07/departments/5ad4c5abe774ac0014ae0d0e/operators/
-    console.log(url);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http

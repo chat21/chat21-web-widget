@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 1.018
+- Changes profile icons
+
 ### 1.017
 - changes css of rating component
 
