@@ -2,12 +2,13 @@
 
 ### 1.018
 - Changes profile icons
+- Fixes bug conversation badge
 
 ### 1.017
-- changes css of rating component
+- Changes css of rating component
 
 ### 1.016
-- renames all keys of elements in sessionStorage ("projectId_"+key)
+- Renames all keys of elements in sessionStorage ("projectId_"+key)
 - Fixes bug hideHeaderCloseButton in detail conversation
 
 ### 1.015
