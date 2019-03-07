@@ -1,40 +1,57 @@
-environment=$(< current_version.ts)
-start="CURR_VER_DEV = '"
-two="."
-end="'"
+npm version patch
+version=`node -e 'console.log(require("./package.json").version)'`
+echo "version $version"
 
-one=${environment#*$start}
-ver=${one%%$two*}
 
-one=${environment#*$two}
-build=${one%%$end*}
+# URL_VER=${version//[.]//}
+# echo 'URL_VER: ---->'$URL_VER
 
-#echo '---->'$ver
-#echo '---->'$build
-##two=${one%,*} -> %% prendo la prima istanza; % prendo la seconda
-#newbuild=$(($build+1))
-newbuild=$(echo "$build + 1" | bc)
-#echo '---->'$newbuild
-if (( $newbuild == 1000 )); then
-    NEW_VER=$(echo "$ver + 1" | bc)
-    NEW_BUILD=$(printf "%03d" 0)
-else
-    NEW_VER=$ver
-    NEW_BUILD=$(printf "%03d" $newbuild)
+if [ "$version" != "" ]; then
+    git tag -a "v$version-RC" -m "`git log -1 --format=%s`"
+    echo "Created a new tag, v$version"
+    git push --tags
+    npm publish --tag RC
 fi
-echo 'ver: ---->'$NEW_VER
-echo 'build: ---->'$NEW_BUILD
 
-sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
+
+
+# environment=$(< current_version.ts)
+# start="CURR_VER_DEV = '"
+# two="."
+# end="'"
+
+# one=${environment#*$start}
+# ver=${one%%$two*}
+
+# one=${environment#*$two}
+# build=${one%%$end*}
+
+# #echo '---->'$ver
+# #echo '---->'$build
+# ##two=${one%,*} -> %% prendo la prima istanza; % prendo la seconda
+# #newbuild=$(($build+1))
+# newbuild=$(echo "$build + 1" | bc)
+# #echo '---->'$newbuild
+# if (( $newbuild == 1000 )); then
+#     NEW_VER=$(echo "$ver + 1" | bc)
+#     NEW_BUILD=$(printf "%03d" 0)
+# else
+#     NEW_VER=$ver
+#     NEW_BUILD=$(printf "%03d" $newbuild)
+# fi
+# echo 'ver: ---->'$NEW_VER
+# echo 'build: ---->'$NEW_BUILD
+
+# sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
 
 # --build-optimizer=false if localstorage is disabled (webview) appears https://github.com/firebase/angularfire/issues/970
 ng build --prod --base-href --output-hashing none  --build-optimizer=false
-#ng build --base-href --output-hashing none
+
 cd dist
-aws  s3 sync . s3://tiledesk-widget/dev/$NEW_VER/$NEW_BUILD/
+aws  s3 sync . s3://tiledesk-widget/dev/$version/
 cd ..
-echo new version deployed on s3://tiledesk-widget/dev/$NEW_VER/$NEW_BUILD/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/$NEW_VER/$NEW_BUILD/index.html
+echo new version deployed on s3://tiledesk-widget/dev/$version
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/$version/index.html
 
 
 
