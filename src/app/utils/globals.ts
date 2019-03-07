@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
-import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
+// import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
 import { DepartmentModel } from '../../models/department';
 import { User } from '../../models/User';
 import { convertColorToRGBA, getParameterByName } from '../utils/utils';
@@ -326,7 +326,7 @@ export class Globals {
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
     // this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
-    this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
+    this.BUILD_VERSION = 'v.' + environment.version;
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
     // tslint:disable-next-line:max-line-length
