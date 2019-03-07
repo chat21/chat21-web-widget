@@ -10,7 +10,7 @@ if [ "$version" != "" ]; then
     git tag -a "v$version" -m "`git log -1 --format=%s`"
     echo "Created a new tag, v$version"
     git push --tags
-    npm publish --tag RC
+    npm publish
 fi
 
 
