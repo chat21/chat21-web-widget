@@ -55,6 +55,8 @@ Or With a different AWS Profile:
 
 Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
 
+If you use AWS Cloud Front enable gzip compression.
+
 # Docker
 docker image build -t tiledesk-web-widget .
  docker run -p 4200:80  tiledesk-web-widget
