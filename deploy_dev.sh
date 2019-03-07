@@ -1,4 +1,4 @@
-npm version patch
+npm version prerelease --preid=rc
 version=`node -e 'console.log(require("./package.json").version)'`
 echo "version $version"
 
