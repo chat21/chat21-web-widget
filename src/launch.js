@@ -18,12 +18,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
     var containerDiv = document.createElement('div');
     containerDiv.setAttribute('id','tiledesk-container');
     containerDiv.setAttribute('style', 'position: fixed; width:0px; height: 0px; bottom: 0px; right:0px; display: block; z-index: 2147483647');      
-
     document.body.appendChild(containerDiv);
     
-   
-
-
 
     var iDiv = document.createElement('div');
     containerDiv.setAttribute('id','tiledeskdiv');
@@ -36,7 +32,9 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     var ifrm = document.createElement("iframe");
     // ifrm.setAttribute('windowcontext', 'window.parent');
-    ifrm.setAttribute("src", "http://localhost:4200/index.html?windowcontext=window.parent");
+    
+    ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
+    // ifrm.setAttribute("src", "http://localhost:4200/index.html?windowcontext=window.parent");
     ifrm.setAttribute('style', 'width: 100%; height: 100%; position: absolute');           
 
     window.tiledesk.on('onInit', function(event_data) {

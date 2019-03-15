@@ -140,7 +140,6 @@ export class Globals {
   isLogEnabled;
   filterByRequester;
   persistence;
-
   windowContext;
 
   constructor(
@@ -153,39 +152,34 @@ export class Globals {
 
 
   initialize(el) {
-     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
+    this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
 
-     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
-     console.log('windowcontextFromWindow', windowcontextFromWindow);
-     if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
-       this.windowContext = window.parent;
-       console.log('this.windowContext force to window.parent');
-     }
-  
-     this.wdLog([' ---------------- 2: set lang ---------------- ']);
-
-     this.wdLog([' ---------------- 4: getVariablesFromAttributeHtml ---------------- ']);
+    const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
+    console.log('windowcontextFromWindow', windowcontextFromWindow);
+    if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
+      this.windowContext = window.parent;
+      console.log('this.windowContext force to window.parent');
+    }
+    this.wdLog([' ---------------- 2: set lang ---------------- ']);
+    this.wdLog([' ---------------- 4: getVariablesFromAttributeHtml ---------------- ']);
     this.getVariablesFromAttributeHtml(el);
 
-     this.wdLog([' ---------------- 5: getVariablesFromSettings ---------------- ']);
+    this.wdLog([' ---------------- 5: getVariablesFromSettings ---------------- ']);
     this.getVariablesFromSettings();
 
-     this.wdLog([' ---------------- 6: getVariableUrlParameters ---------------- ']);
+    this.wdLog([' ---------------- 6: getVariableUrlParameters ---------------- ']);
     this.getVariableUrlParameters(this.windowContext);
 
-     this.wdLog([' ---------------- 7: setDefaultSettings ---------------- ']);
+    this.wdLog([' ---------------- 7: setDefaultSettings ---------------- ']);
     this.createDefaultSettingsObject();
 
-     this.wdLog([' ---------------- 8: setAttributes ---------------- ']);
+    this.wdLog([' ---------------- 8: setAttributes ---------------- ']);
     //  this.attributes = this.setAttributes();
-
-     // this.lang = 'en';
+    // this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
     this.translatorService.setLanguage(this.windowContext, !this.lang ? 'en' : this.lang);
-
-     this.wdLog([' ---------------- 9: translate ---------------- ']);
+    this.wdLog([' ---------------- 9: translate ---------------- ']);
     this.translate();
-
   }
 
   /**
