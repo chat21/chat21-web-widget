@@ -271,6 +271,22 @@ tiledeskwidget-root {
             opacity: 0.8;
         }
 
+        button.c21-button-link {
+            font-weight: 400;
+            font-size: 14px;
+            color: $theme-color;;
+            text-decoration: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        button.c21-button-link:hover,
+        button.c21-button-link:focus,
+        button.c21-button-link:active {
+            text-decoration: underline;
+            outline: none;
+        }
+
         .c21-divBudge{
             position: absolute;
             top: 0;
@@ -279,7 +295,7 @@ tiledeskwidget-root {
             min-width: 12px;
             font-size: 1em;
             line-height: 1.2em;
-            border-radius: 20%;
+            border-radius: 50%;
             background-color: $red;
             color: white;
             padding: 2px 2px 2px 2px;
@@ -289,7 +305,7 @@ tiledeskwidget-root {
             box-sizing: initial;
         }
         .c21-button{
-            display: inline-flex;
+            display: flex;
             cursor: pointer;
         }
         /** header-buttons **/

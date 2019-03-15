@@ -3,7 +3,10 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import { getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import {
+  IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+} from '../../utils/constants';
 import { ContactService } from '../../providers/contact.service';
 import { WaitingService } from '../../providers/waiting.service';
 import { TranslatorService } from '../../providers/translator.service';
@@ -11,6 +14,7 @@ import { TranslatorService } from '../../providers/translator.service';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
+import { User } from '../../../models/User';
 // import * as moment from 'moment/moment';
 // import 'moment-duration-format';
 import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
@@ -52,6 +56,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   themeColor = '';
   themeForegroundColor = '';
   LABEL_START_NW_CONV: string;
+  availableAgents: Array<User> = [];
   // ========= end:: variabili del componente ======== //
 
   waitingTime: Number;
@@ -143,6 +148,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.archivedConversations = [];
     this.waitingTime = -1;
 
+    this.availableAgents = this.g.availableAgents.slice(0, 5);
+
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);
     this.g.wdLog(['themeColor: ', this.g.themeColor]);
@@ -181,8 +188,16 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
       //   that.waitingTimeMessage = 'waiting_time_not_found';
       //   // that.waitingTimeMessage = 'Will reply as soon as they can';
       //  }
-       
     });
+}
+
+checkShowAllConversation() {
+  if (this.archivedConversations && this.archivedConversations.length > 0) {
+    return true;
+  } else if (this.listConversations && this.listConversations.length > 0) {
+    return true;
+  }
+  return false;
 }
 // msToTime(duration) {
 //   let milliseconds = parseInt((duration % 1000) / 100),
@@ -240,12 +255,23 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     this.eventOpenAllConv.emit();
   }
 
+  /** */
+  getUrlImgProfile(uid?: string): string {
+    if (!uid || uid === 'system' ) {
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if (uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+    } else {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+    }
+  }
+
+
   private openConversationByID(conversation) {
      this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
-      // this.conversationsService.updateBadge(conversation, 0);
-      this.conversationsService.updateIsNew(conversation);
-      this.conversationsService.updateConversationBadge();
+      // this.conversationsService.updateIsNew(conversation);
+      // this.conversationsService.updateConversationBadge();
       this.eventSelctedConv.emit(conversation);
     }
   }

@@ -19,7 +19,7 @@ import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '
 import { searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
-
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class MessagingService {
@@ -51,9 +51,10 @@ export class MessagingService {
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
     public g: Globals,
-    public storageService: StorageService
+    public storageService: StorageService,
+    public appConfigService: AppConfigService
   ) {
-    this.API_URL = environment.apiUrl;
+    this.API_URL = appConfigService.getConfig().apiUrl;
     //  this.g.wdLog(['MessagingService::this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
@@ -142,7 +143,7 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
-        console.log('message[timestamp]: ', message['timestamp']);
+        // console.log('message[timestamp]: ', message['timestamp']);
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],
@@ -314,7 +315,6 @@ export class MessagingService {
     // const now: Date = new Date();
     // const localTimestamp = now.valueOf();
     const timestamp =  firebase.database.ServerValue.TIMESTAMP;
-    console.log('timestamp: ', timestamp);
     const language = navigator.language;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(

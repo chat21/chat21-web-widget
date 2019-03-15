@@ -20,7 +20,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
 
    // ========= begin:: Input/Output values ============//
    @Output()   eventOpenChat  = new EventEmitter();
-   @Output()   eventOpenEyeCatcher = new EventEmitter();
+  //  @Output()   eventOpenEyeCatcher = new EventEmitter();
    // ========= end:: Input/Output values ============//
 
   // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
@@ -68,14 +68,13 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       if (this.g.isOpen === false) {
-          this.eventOpenEyeCatcher.emit();
-          this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER AND DISPLAY THE CARD ', this.g.isOpen]);
+          // this.eventOpenEyeCatcher.emit();
           this.g.displayEyeCatcherCard = 'block';
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
       } else {
-           this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
+         // this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
       }
   }
 
@@ -115,7 +114,6 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   /**
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
-        this.g.wdLog(['HAS CLICKED CLOSE EYE-CATCHER CARD']);
         this.g.displayEyeCatcherCard = 'none';
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }

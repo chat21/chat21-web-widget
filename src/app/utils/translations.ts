@@ -101,7 +101,7 @@ export const it = {
     'SOUND_OFF': 'suono spento',
     'SOUND_ON': 'suono acceso',
     'LOGOUT': 'disconnetti',
-    'CLOSE': 'chiudi',
+    'CLOSE': 'Chiudi',
     'PREV_CONVERSATIONS': 'Le tue conversazioni',
     'YOU': 'Tu',
     'SHOW_ALL_CONV': 'vedi tutte',

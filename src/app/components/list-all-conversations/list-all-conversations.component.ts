@@ -10,6 +10,9 @@ import { convertMessage, compareValues } from '../../utils/utils';
 import { ConversationModel } from '../../../models/conversation';
 import { take } from 'rxjs/operators';
 
+import {
+  IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+} from '../../utils/constants';
 
 @Component({
   selector: 'tiledeskwidget-list-all-conversations',
@@ -120,8 +123,10 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     } else if ( this.archivedConversations && this.archivedConversations.length > 0 ) {
       TEMP = this.archivedConversations;
     }
+    if (!TEMP) { return; }
     const result = [];
     const map = new Map();
+
     for (const item of TEMP) {
       if (!map.has(item.uid)) {
         map.set(item.uid, true);    // set any value to Map
@@ -143,8 +148,19 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
   private openConversationByID(conversation) {
      this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
-      this.conversationsService.updateIsNew(conversation);
+      // this.conversationsService.updateIsNew(conversation);
       this.eventSelctedConv.emit(conversation);
+    }
+  }
+
+  /** */
+  getUrlImgProfile(uid?: string): string {
+    if (!uid || uid === 'system' ) {
+        return this.g.baseLocation + IMG_PROFILE_BOT;
+      } else if (uid === 'error') {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+    } else {
+        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
     }
   }
   // ========= end:: ACTIONS ============//

@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Globals } from '../utils/globals';
 import { Headers, Http } from '@angular/http';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class WaitingService {
@@ -11,9 +12,10 @@ export class WaitingService {
   constructor(
     public http: Http,
     public g: Globals,
+    public appConfigService: AppConfigService
     ) {
 
-    this.API_URL = environment.apiUrl;
+    this.API_URL = appConfigService.getConfig().apiUrl;
   }
 
   public getCurrent(projectId): Observable<any> {

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
+// import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import 'firebase/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -9,6 +7,8 @@ import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Globals } from '../utils/globals';
+import { supports_html5_storage, supports_html5_session } from '../utils/utils';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class AuthService {
@@ -23,15 +23,16 @@ export class AuthService {
   API_URL: string;
 
   constructor(
-    private firebaseAuth: AngularFireAuth,
+    // private firebaseAuth: AngularFireAuth,
     public http: Http,
-    public g: Globals
+    public g: Globals,
+    public appConfigService: AppConfigService
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
     // this.obsCurrentUser = new BehaviorSubject<any>(null);
 
-    this.API_URL = environment.apiUrl;
+    this.API_URL = appConfigService.getConfig().apiUrl;
   }
 
 
@@ -102,7 +103,6 @@ export class AuthService {
     });
   }
 
-  
 
   authenticateFirebaseCustomToken(token) {
     this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
@@ -254,13 +254,27 @@ export class AuthService {
   getFirebaseAuthPersistence() {
     if (this.g.persistence === 'local') {
       // console.log('getFirebaseAuthPersistence local');
-      return firebase.auth.Auth.Persistence.LOCAL;
+      if (supports_html5_storage()) {
+        return firebase.auth.Auth.Persistence.LOCAL;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
     } else if (this.g.persistence === 'session') {
       // console.log('getFirebaseAuthPersistence session');
-      return firebase.auth.Auth.Persistence.SESSION;
+      if (supports_html5_session()) {
+        return firebase.auth.Auth.Persistence.SESSION;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
+    } else if (this.g.persistence === 'none') {
+      return firebase.auth.Auth.Persistence.NONE;
     } else {
       // console.log('getFirebaseAuthPersistence local as else');
-      return firebase.auth.Auth.Persistence.LOCAL;
+      if (supports_html5_storage()) {
+        return firebase.auth.Auth.Persistence.LOCAL;
+      } else {
+        return firebase.auth.Auth.Persistence.NONE;
+      }
     }
   }
 

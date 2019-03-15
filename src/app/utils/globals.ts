@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
 import { TranslatorService } from '../providers/translator.service';
-import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
+// import { CURR_VER_DEV, CURR_VER_PROD } from '../../../current_version';
 import { DepartmentModel } from '../../models/department';
 import { User } from '../../models/User';
 import { convertColorToRGBA, getParameterByName } from '../utils/utils';
@@ -11,6 +11,7 @@ import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class Globals {
@@ -31,7 +32,7 @@ export class Globals {
   isMobile;
   isLogged;
   isSoundActive;
-  isLogoutEnabled;
+  // isLogoutEnabled;
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
@@ -140,46 +141,55 @@ export class Globals {
   isLogEnabled;
   filterByRequester;
   persistence;
-  windowContext;
+
+  showWaitTime;
+  showAvailableAgents;
+  showLogoutOption;
 
   constructor(
     private translatorService: TranslatorService,
+    public appConfigService: AppConfigService
     // public storageService: StorageService
   ) {
-    this.wdLog([' ---------------- 1: initDefafultParameters ---------------- ']);
-    this.initDefafultParameters();
   }
 
 
   initialize(el) {
-    this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
-
-    const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
-    console.log('windowcontextFromWindow', windowcontextFromWindow);
-    if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
-      this.windowContext = window.parent;
-      console.log('this.windowContext force to window.parent');
+     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
+    // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
+    // for retrocompatibility 0.9 (without tiledesk.js)
+     this.wdLog([' ---------------- 1: baseLocation ---------------- ']);
+    this.baseLocation = 'https://widget.tiledesk.com/v2';
+    if (window['tiledesk']) {
+      this.baseLocation = window['tiledesk'].getBaseLocation();
     }
-    this.wdLog([' ---------------- 2: set lang ---------------- ']);
-    this.wdLog([' ---------------- 4: getVariablesFromAttributeHtml ---------------- ']);
-    this.getVariablesFromAttributeHtml(el);
 
-    this.wdLog([' ---------------- 5: getVariablesFromSettings ---------------- ']);
-    this.getVariablesFromSettings();
-
-    this.wdLog([' ---------------- 6: getVariableUrlParameters ---------------- ']);
-    this.getVariableUrlParameters(this.windowContext);
-
-    this.wdLog([' ---------------- 7: setDefaultSettings ---------------- ']);
-    this.createDefaultSettingsObject();
-
-    this.wdLog([' ---------------- 8: setAttributes ---------------- ']);
-    //  this.attributes = this.setAttributes();
+     this.wdLog([' ---------------- 2: set lang ---------------- ']);
     // this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
-    this.translatorService.setLanguage(this.windowContext, !this.lang ? 'en' : this.lang);
-    this.wdLog([' ---------------- 9: translate ---------------- ']);
+    this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
+
+     this.wdLog([' ---------------- 3: translate ---------------- ']);
     this.translate();
+
+     this.wdLog([' ---------------- 4: initParameters ---------------- ']);
+    this.initParameters();
+
+     this.wdLog([' ---------------- 5: getVariablesFromAttributeHtml ---------------- ']);
+    this.getVariablesFromAttributeHtml(el);
+
+     this.wdLog([' ---------------- 6: getVariablesFromSettings ---------------- ']);
+    this.getVariablesFromSettings();
+
+     this.wdLog([' ---------------- 7: getVariableUrlParameters ---------------- ']);
+    this.getVariableUrlParameters();
+
+     this.wdLog([' ---------------- 8: setDefaultSettings ---------------- ']);
+    this.setDefaultSettings();
+
+     this.wdLog([' ---------------- 9: setAttributes ---------------- ']);
+    //  this.attributes = this.setAttributes();
+
   }
 
   /**
@@ -242,9 +252,8 @@ export class Globals {
   /**
    * 4: initParameters
    */
-  initDefafultParameters() {
+  initParameters() {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
-    this.baseLocation = 'https://widget.tiledesk.com/v2';
     this.autoStart = true;                              /** start Authentication and startUI */
     this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
@@ -304,17 +313,20 @@ export class Globals {
     this.isLogEnabled = false;
     this.filterByRequester = false;             /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
+    this.showWaitTime = true;
+    this.showAvailableAgents = true;
+    this.showLogoutOption = true;
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
-    this.tenant = environment.tenant;           /** name tenant ex: tilechat */
+    this.tenant = this.appConfigService.getConfig().tenant;           /** name tenant ex: tilechat */
     this.channelType = CHANNEL_TYPE_GROUP;      /** channelType: group/direct  */
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
-    this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
-    this.BUILD_VERSION = 'v.' + CURR_VER_PROD + ' b.' + CURR_VER_DEV; // 'b.0.5';
+    // this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
+    this.BUILD_VERSION = 'v.' + environment.version;
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
     // tslint:disable-next-line:max-line-length
@@ -328,7 +340,6 @@ export class Globals {
     this.displayEyeCatcherCard = 'none';
     // ============ END: SET INTERNAL PARAMETERS ==============//
 
-    this.windowContext = window;
   }
 
 
@@ -339,7 +350,6 @@ export class Globals {
   getVariablesFromAttributeHtml(el) {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
     let TEMP;
-
     TEMP = el.nativeElement.getAttribute('tenant');
      this.wdLog([' TEMP: tenant ', TEMP]);
     if (TEMP !== null) {
@@ -442,10 +452,10 @@ export class Globals {
       this.isShown = (TEMP === true) ? true : false;
     }
 
-    TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
-    if (TEMP !== null) {
-      this.isLogoutEnabled = (TEMP === true) ? true : false;
-    }
+    // TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
+    // if (TEMP !== null) {
+    //   this.isLogoutEnabled = (TEMP === true) ? true : false;
+    // }
     TEMP = el.nativeElement.getAttribute('isLogEnabled');
     if (TEMP !== null) {
       this.isLogEnabled = (TEMP === true) ? true : false;
@@ -462,165 +472,170 @@ export class Globals {
   */
   getVariablesFromSettings() {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-    if (!this.windowContext['tiledesk']) {
+    if (!window['tiledesk']) {
       return 0;
     }
     let TEMP;
-    TEMP = this.windowContext['tiledeskSettings']['tenant'];
+    TEMP = window['tiledeskSettings']['tenant'];
 
     if (TEMP !== undefined) {
       this.tenant = TEMP;
     }
-
-    TEMP =  this.windowContext['tiledesk'].getBaseLocation();
-    if (TEMP !== undefined) {
-      this.baseLocation = TEMP;
-    }
-
-    TEMP = this.windowContext['tiledeskSettings']['recipientId'];
+    TEMP = window['tiledeskSettings']['recipientId'];
     if (TEMP !== undefined) {
       this.recipientId = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['projectid'];
+    TEMP = window['tiledeskSettings']['projectid'];
     if (TEMP !== undefined) {
       this.projectid = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['widgetTitle'];
+    TEMP = window['tiledeskSettings']['widgetTitle'];
     if (TEMP !== undefined) {
       this.widgetTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['poweredBy'];
+    TEMP = window['tiledeskSettings']['poweredBy'];
     if (TEMP !== undefined) {
       this.poweredBy = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['userId'];
+    TEMP = window['tiledeskSettings']['userId'];
     if (TEMP !== undefined) {
       this.userId = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['userEmail'];
+    TEMP = window['tiledeskSettings']['userEmail'];
     if (TEMP !== undefined) {
       this.userEmail = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['userPassword'];
+    TEMP = window['tiledeskSettings']['userPassword'];
     if (TEMP !== undefined) {
       this.userPassword = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['userFullname'];
+    TEMP = window['tiledeskSettings']['userFullname'];
     if (TEMP !== undefined) {
       this.userFullname = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['preChatForm'];
-    // console.log('tiledeskSettings preChatForm', TEMP);
+    TEMP = window['tiledeskSettings']['preChatForm'];
     if (TEMP !== undefined) {
       this.preChatForm = (TEMP === false) ? false : true;
     }
-    // console.log('tiledeskSettings preChatForm', this.preChatForm);
 
-    TEMP = this.windowContext['tiledeskSettings']['isOpen'];
+    TEMP = window['tiledeskSettings']['isOpen'];
     if (TEMP !== undefined) {
       this.isOpen = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledeskSettings']['channelType'];
+    TEMP = window['tiledeskSettings']['channelType'];
     if (TEMP !== undefined) {
       this.channelType = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['lang'];
+    TEMP = window['tiledeskSettings']['lang'];
     if (TemplateBindingParseResult) {
       this.lang = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['align'];
+    TEMP = window['tiledeskSettings']['align'];
     if (TEMP !== undefined) {
       this.align = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['marginX'];
+    TEMP = window['tiledeskSettings']['marginX'];
     if (TEMP !== undefined) {
       this.marginX = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['marginY'];
+    TEMP = window['tiledeskSettings']['marginY'];
     if (TEMP !== undefined) {
       this.marginY = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['calloutTimer'];
+    TEMP = window['tiledeskSettings']['calloutTimer'];
     if (TEMP !== undefined) {
       this.calloutTimer = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['wellcomeMsg'];
+    TEMP = window['tiledeskSettings']['wellcomeMsg'];
     if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['calloutTitle'];
+    TEMP = window['tiledeskSettings']['calloutTitle'];
     if (TEMP !== undefined) {
       this.calloutTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['calloutMsg'];
+    TEMP = window['tiledeskSettings']['calloutMsg'];
     if (TEMP !== undefined) {
       this.calloutMsg = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['fullscreenMode'];
+    TEMP = window['tiledeskSettings']['fullscreenMode'];
     if (TEMP !== undefined) {
       this.fullscreenMode = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['hideHeaderCloseButton'];
+    TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
     if (TEMP !== undefined) {
       this.hideHeaderCloseButton = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['themeColor'];
+    TEMP = window['tiledeskSettings']['themeColor'];
     if (TEMP !== undefined) {
       this.themeColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = this.windowContext['tiledeskSettings']['themeForegroundColor'];
+    TEMP = window['tiledeskSettings']['themeForegroundColor'];
     if (TEMP !== undefined) {
       this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = this.windowContext['tiledeskSettings']['allowTranscriptDownload'];
+    TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
     if (TEMP !== undefined) {
       this.allowTranscriptDownload = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['userToken'];
+    TEMP = window['tiledeskSettings']['userToken'];
     if (TEMP !== undefined) {
       this.userToken = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['startFromHome'];
+    TEMP = window['tiledeskSettings']['startFromHome'];
     if (TEMP !== undefined) {
       this.startFromHome = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext[this.windowContext['tiledeskSettings']['logoChat']];
+    TEMP = window['tiledeskSettings']['logoChat'];
     if (TEMP !== undefined) {
       this.logoChat = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['wellcomeTitle'];
+    TEMP = window['tiledeskSettings']['wellcomeTitle'];
     if (TEMP !== undefined) {
       this.wellcomeTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['wellcomeMsg'];
+    TEMP = window['tiledeskSettings']['wellcomeMsg'];
     if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
     }
-    TEMP = this.windowContext['tiledeskSettings']['autoStart'];
+    TEMP = window['tiledeskSettings']['autoStart'];
      this.wdLog([' autoStart::: ', TEMP]);
     if (TEMP !== undefined) {
       this.autoStart = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledeskSettings']['isShown'];
+    TEMP = window['tiledeskSettings']['isShown'];
     if (TEMP !== undefined) {
       this.isShown = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledeskSettings']['isLogoutEnabled'];
-    if (TEMP !== undefined) {
-      this.isLogoutEnabled = (TEMP === false) ? false : true;
-    }
-    TEMP = this.windowContext['tiledeskSettings']['isLogEnabled'];
+    // TEMP = window['tiledeskSettings']['isLogoutEnabled'];
+    // if (TEMP !== undefined) {
+    //   this.isLogoutEnabled = (TEMP === false) ? false : true;
+    // }
+    TEMP = window['tiledeskSettings']['isLogEnabled'];
     if (TEMP !== undefined) {
       this.isLogEnabled = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledeskSettings']['filterByRequester'];
+    TEMP = window['tiledeskSettings']['filterByRequester'];
     if (TEMP !== undefined) {
       this.filterByRequester = (TEMP === false) ? false : true;
     }
 
-    TEMP = this.windowContext['tiledeskSettings']['persistence'];
+    TEMP = window['tiledeskSettings']['persistence'];
     if (TEMP !== undefined) {
       this.persistence = TEMP;
+    }
+
+    TEMP = window['tiledeskSettings']['showWaitTime'];
+    if (TEMP !== undefined) {
+      this.showWaitTime = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['showAvailableAgents'];
+    if (TEMP !== undefined) {
+      this.showAvailableAgents = (TEMP === false) ? false : true;
+    }
+    TEMP = window['tiledeskSettings']['showLogoutOption'];
+    if (TEMP !== undefined) {
+      this.showLogoutOption = (TEMP === false) ? false : true;
     }
 
   }
@@ -630,111 +645,124 @@ export class Globals {
   /**
    * 7: getVariableUrlParameters
    */
-  getVariableUrlParameters(windowContext) {
-    if (this.getParameterByName(windowContext, 'tiledesk_tenant')) {
-      this.tenant = this.getParameterByName(windowContext, 'tiledesk_tenant');
+  getVariableUrlParameters() {
+    if (this.getParameterByName('tiledesk_tenant')) {
+      this.tenant = this.getParameterByName('tiledesk_tenant');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_recipientid')) {
-      this.recipientId = this.getParameterByName(windowContext, 'tiledesk_recipientid');
+    if (this.getParameterByName('tiledesk_recipientid')) {
+      this.recipientId = this.getParameterByName('tiledesk_recipientid');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_projectid')) {
-      this.projectid = this.getParameterByName(windowContext, 'tiledesk_projectid');
+    if (this.getParameterByName('tiledesk_projectid')) {
+      this.projectid = this.getParameterByName('tiledesk_projectid');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_widgetTitle')) {
-      this.widgetTitle = this.getParameterByName(windowContext, 'tiledesk_widgetTitle');
+    if (this.getParameterByName('tiledesk_widgetTitle')) {
+      this.widgetTitle = this.getParameterByName('tiledesk_widgetTitle');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_poweredby')) {
-      this.poweredBy = this.getParameterByName(windowContext, 'tiledesk_poweredby');
+    if (this.getParameterByName('tiledesk_poweredby')) {
+      this.poweredBy = this.getParameterByName('tiledesk_poweredby');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_userid')) {
-      this.userId = this.getParameterByName(windowContext, 'tiledesk_userid');
+    if (this.getParameterByName('tiledesk_userid')) {
+      this.userId = this.getParameterByName('tiledesk_userid');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_useremail')) {
-      this.userEmail = this.getParameterByName(windowContext, 'tiledesk_useremail');
+    if (this.getParameterByName('tiledesk_useremail')) {
+      this.userEmail = this.getParameterByName('tiledesk_useremail');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_userpassword')) {
-      this.userPassword = this.getParameterByName(windowContext, 'tiledesk_userpassword');
+    if (this.getParameterByName('tiledesk_userpassword')) {
+      this.userPassword = this.getParameterByName('tiledesk_userpassword');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_userfullname')) {
-      this.userFullname = this.getParameterByName(windowContext, 'tiledesk_userfullname');
+    if (this.getParameterByName('tiledesk_userfullname')) {
+      this.userFullname = this.getParameterByName('tiledesk_userfullname');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_prechatform')) {
+    if (this.getParameterByName('tiledesk_prechatform')) {
       this.preChatForm = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_isopen')) {
+    if (this.getParameterByName('tiledesk_isopen')) {
       this.isOpen = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_channeltype')) {
-      this.channelType = this.getParameterByName(windowContext, 'tiledesk_channeltype');
+    if (this.getParameterByName('tiledesk_channeltype')) {
+      this.channelType = this.getParameterByName('tiledesk_channeltype');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_lang')) {
-      this.lang = this.getParameterByName(windowContext, 'tiledesk_lang');
+    if (this.getParameterByName('tiledesk_lang')) {
+      this.lang = this.getParameterByName('tiledesk_lang');
     }
-    const cotAsString = this.getParameterByName(windowContext, 'tiledesk_callouttimer');
+    const cotAsString = this.getParameterByName('tiledesk_callouttimer');
     if (cotAsString) {
       this.calloutTimer = Number(cotAsString);
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_align')) {
-      this.align = this.getParameterByName(windowContext, 'tiledesk_align');
+    if (this.getParameterByName('tiledesk_align')) {
+      this.align = this.getParameterByName('tiledesk_align');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_marginX')) {
-      this.marginX = this.getParameterByName(windowContext, 'tiledesk_marginX');
+    if (this.getParameterByName('tiledesk_marginX')) {
+      this.marginX = this.getParameterByName('tiledesk_marginX');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_marginY')) {
-      this.marginY = this.getParameterByName(windowContext, 'tiledesk_marginY');
+    if (this.getParameterByName('tiledesk_marginY')) {
+      this.marginY = this.getParameterByName('tiledesk_marginY');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_wellcomemsg')) {
-      this.wellcomeMsg = this.getParameterByName(windowContext, 'tiledesk_wellcomemsg');
+    if (this.getParameterByName('tiledesk_wellcomemsg')) {
+      this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_callouttitle')) {
-      this.calloutTitle = this.getParameterByName(windowContext, 'tiledesk_callouttitle');
+    if (this.getParameterByName('tiledesk_callouttitle')) {
+      this.calloutTitle = this.getParameterByName('tiledesk_callouttitle');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_calloutmsg')) {
-      this.calloutMsg = this.getParameterByName(windowContext, 'tiledesk_calloutmsg');
+    if (this.getParameterByName('tiledesk_calloutmsg')) {
+      this.calloutMsg = this.getParameterByName('tiledesk_calloutmsg');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_fullscreenMode')) {
+    if (this.getParameterByName('tiledesk_fullscreenMode')) {
       this.fullscreenMode = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton')) {
-      this.hideHeaderCloseButton = (this.getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton') === 'true');
+    if (this.getParameterByName('tiledesk_hideHeaderCloseButton')) {
+      this.hideHeaderCloseButton = (this.getParameterByName('tiledesk_hideHeaderCloseButton') === 'true');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_themecolor')) {
-      const TEMP = this.getParameterByName(windowContext, 'tiledesk_themecolor');
+    if (this.getParameterByName('tiledesk_themecolor')) {
+      const TEMP = this.getParameterByName('tiledesk_themecolor');
       this.themeColor = convertColorToRGBA(TEMP, 100);
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_themeforegroundcolor')) {
-      const TEMP = this.getParameterByName(windowContext, 'tiledesk_themeforegroundcolor');
+    if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
+      const TEMP = this.getParameterByName('tiledesk_themeforegroundcolor');
       this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_allowtranscriptdownload')) {
+    if (this.getParameterByName('tiledesk_allowtranscriptdownload')) {
       this.allowTranscriptDownload = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_showWidgetNameInConversation')) {
+    if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
       this.showWidgetNameInConversation = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_startFromHome')) {
+    if (this.getParameterByName('tiledesk_startFromHome')) {
       this.startFromHome = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_logoChat')) {
-      this.logoChat = this.getParameterByName(windowContext, 'tiledesk_logoChat');
+    if (this.getParameterByName('tiledesk_logoChat')) {
+      this.logoChat = this.getParameterByName('tiledesk_logoChat');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_wellcomeTitle')) {
-      this.wellcomeTitle = this.getParameterByName(windowContext, 'tiledesk_wellcomeTitle');
+    if (this.getParameterByName('tiledesk_wellcomeTitle')) {
+      this.wellcomeTitle = this.getParameterByName('tiledesk_wellcomeTitle');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_autoStart')) {
-      this.wellcomeTitle = this.getParameterByName(windowContext, 'tiledesk_autoStart');
+    if (this.getParameterByName('tiledesk_autoStart')) {
+      this.wellcomeTitle = this.getParameterByName('tiledesk_autoStart');
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_isShown')) {
+    if (this.getParameterByName('tiledesk_isShown')) {
       this.isShown = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_isLogoutEnabled')) {
-      this.isLogoutEnabled = true;
-    }
-    if (this.getParameterByName(windowContext, 'tiledesk_isLogEnabled')) {
+    // if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
+    //   this.isLogoutEnabled = true;
+    // }
+    if (this.getParameterByName('tiledesk_isLogEnabled')) {
       this.isLogEnabled = true;
     }
-    if (this.getParameterByName(windowContext, 'tiledesk_filterByRequester')) {
+    if (this.getParameterByName('tiledesk_filterByRequester')) {
       this.filterByRequester = true;
+    }
+
+    if (this.getParameterByName('tiledesk_showWaitTime')) {
+      const TEMP = this.getParameterByName('tiledesk_showWaitTime');
+      this.showWaitTime = (TEMP === 'false') ? false : true;
+    }
+    if (this.getParameterByName('tiledesk_showAvailableAgents')) {
+      const TEMP = this.getParameterByName('tiledesk_showAvailableAgents');
+      this.showAvailableAgents = (TEMP === 'false') ? false : true;
+    }
+    if (this.getParameterByName('tiledesk_showLogoutOption')) {
+      const TEMP = this.getParameterByName('tiledesk_showLogoutOption');
+      this.showLogoutOption = (TEMP === 'false') ? false : true;
     }
 
   }
@@ -743,7 +771,7 @@ export class Globals {
   /**
    * 8: setDefaultSettings
    */
-  createDefaultSettingsObject() {
+  setDefaultSettings() {
     this.default_settings = {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
@@ -759,10 +787,11 @@ export class Globals {
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle, 'isLogoutEnabled': this.isLogoutEnabled,
-      'marginX': this.marginX, 'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
-      'filterByRequester': this.filterByRequester,
-      'persistence': this.persistence
+      'wellcomeTitle': this.wellcomeTitle, 'marginX': this.marginX,
+      'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
+      'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
+      'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
+      'showLogoutOption': this.showLogoutOption
     };
   }
 

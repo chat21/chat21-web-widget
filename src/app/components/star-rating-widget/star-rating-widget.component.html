@@ -1,23 +1,32 @@
+<style>
+.star.active{
+    fill:#FFD700;
+}
+svg.star{
+    fill: #efefef;
+}
+svg.star:hover{
+    fill: #FFD700;
+}
+</style>
 <div id="chat21-star-rating-widget">
     <!-- HEADER -->
     <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
         <div class="c21-header-container">
-
             <!-- ICON CLOSE CHAT -->
-            <div class="c21-header-button">
+            <!-- <div class="c21-header-button">
                 <div class="c21-close-button c21-small" tabindex="-1" aria-label="Close" aria-hidden="true" role="button">
                     <div class="c21-close-button-body" (click)="returnClosePage()">
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
                             xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z" />
                             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                            <!-- <title id="altIconTitle">{{BUTTON_CLOSE_CHAT}}</title> -->
                         </svg>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- ICON BACK -->
-            <div *ngIf="step > 0" class="c21-header-button c21-left" (click)="prevStep()">
+            <div *ngIf="step > 0 && step != 2" class="c21-header-button c21-left" (click)="prevStep()">
                 <svg class="c21-button" role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
                     width="24px" height="24px" viewBox="0 0 24 24">
                     <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
@@ -50,37 +59,46 @@
                 ***************  STEP 0  ***************** 
                 -->
                 <div *ngIf="step==0" class="step-rate">
-
+                    <div class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
+                        <a href="#" class="c21-link" (click)="dowloadTranscript()" >
+                            <span [ngStyle]="{'color': g.themeColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                        </a>
+                    </div>
+                    <div class="clear"></div>
+                   
                     <!-- CONTENT -->
                     <div class="c21-modal-content">
                         <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
                         <fieldset class="chat21-rating" [attr.disabled]="!g.isOpenStartRating? '' : null">
-                            <input class="c21-input-star" type="radio" id="star5" name="rating" value="5" (click)="openRate($event)" />
-                            <label class="full c21-button" for="star5" title="eccellente - 5 stars">
-                                <svg class="star" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                            <input class="c21-input-star" type="radio" id="star1" name="rating" value="1" />
+                            <label (mouseover)="mouseOverRate(1)" (mouseleave)="mouseOverRate(0)" (click)="openRate(1)" class="full c21-button" for="star1" title="scarso - 1 star">
+                                <svg class="star" [class.active]="mouseRate>=1" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                             </label>
-                            <input class="c21-input-star" type="radio" id="star4" name="rating" value="4" (click)="openRate($event)" />
-                            <label class="full c21-button" for="star4" title="ottimo - 4 stars">
-                                <svg class="star" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                            <input class="c21-input-star" type="radio" id="star2" name="rating" value="2" />
+                            <label (mouseover)="mouseOverRate(2)" (mouseleave)="mouseOverRate(0)" (click)="openRate(2)" class="full c21-button" for="star2" title="sufficiente - 2 stars">
+                                <svg class="star" [class.active]="mouseRate>=2" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                             </label>
-                            <input class="c21-input-star" type="radio" id="star3" name="rating" value="3" (click)="openRate($event)" />
-                            <label class="full c21-button" for="star3" title="buono - 3 stars">
-                                <svg class="star" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                            <input class="c21-input-star" type="radio" id="star3" name="rating" value="3" />
+                            <label (mouseover)="mouseOverRate(3)" (mouseleave)="mouseOverRate(0)" (click)="openRate(3)" class="full c21-button" for="star3" title="buono - 3 stars">
+                                <svg class="star" [class.active]="mouseRate>=3" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                             </label>
-                            <input class="c21-input-star" type="radio" id="star2" name="rating" value="2" (click)="openRate($event)" />
-                            <label class="full c21-button" for="star2" title="sufficiente - 2 stars">
-                                <svg class="star" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                            <input class="c21-input-star" type="radio" id="star4" name="rating" value="4" />
+                            <label (mouseover)="mouseOverRate(4)" (mouseleave)="mouseOverRate(0)" (click)="openRate(4)" class="full c21-button" for="star4" title="ottimo - 4 stars">
+                                <svg class="star" [class.active]="mouseRate>=4" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                             </label>
-                            <input class="c21-input-star" type="radio" id="star1" name="rating" value="1" (click)="openRate($event)" />
-                            <label class="full c21-button" for="star1" title="scarso - 1 star">
-                                <svg class="star" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                            <input class="c21-input-star" type="radio" id="star5" name="rating" value="5" />
+                            <label (mouseover)="mouseOverRate(5)" (mouseleave)="mouseOverRate(0)" (click)="openRate(5)" class="full c21-button" for="star5" title="eccellente - 5 stars">
+                                <svg class="star" [class.active]="mouseRate>=5" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                             </label>
                         </fieldset>
                     </div>
                     <div class="clear"></div>
-                    <button [attr.disabled]="!g.isOpenStartRating? '' : null" *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
+                    <!-- <button [attr.disabled]="!g.isOpenStartRating? '' : null" *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                    </button> -->
+                    <button class="c21-button-link" (click)="returnClosePage()">
+                        <span>{{ g.CLOSE }}</span>
                     </button>
                 </div>
 
@@ -90,19 +108,23 @@
                 -->
                 <div *ngIf="step==1" class="step-rate">
                     <!-- CONTENT -->
-
+                    <div class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
+                        <a href="#" class="c21-link" (click)="dowloadTranscript()" >
+                            <span [ngStyle]="{'color': g.themeColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                        </a>
+                    </div>
+                    <div class="clear"></div>
                     <div class="c21-step-content">
                         <!-- il tuo voto: -->
                         
-                        <div class="chat21-stars">
+                        <!-- <div class="chat21-stars">
                             <span *ngIf="rate>0" class="fa fa-star checked"></span>
                             <span *ngIf="rate>1" class="fa fa-star checked"></span>
                             <span *ngIf="rate>2" class="fa fa-star checked"></span>
                             <span *ngIf="rate>3" class="fa fa-star checked"></span>
                             <span *ngIf="rate>4" class="fa fa-star checked"></span>
-                        </div>
-                        
-                        <div class="default-text">{{ g.YOUR_RATING }}</div>
+                        </div> -->
+                        <!-- <div class="default-text">{{ g.YOUR_RATING }}</div> -->
                         
 
                         <!-- Scrivi la tua opinione...(opzionale) -->
@@ -110,13 +132,13 @@
                             placeholder="{{ g.WRITE_YOUR_OPINION }}">{{message}}</textarea>
                         <div class="clear"></div>
 
-                        <button class="c21-button-primary" [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
-                            (click)="sendRate()">{{ g.SUBMIT }}</button>
-
-                        <button *ngIf="g.allowTranscriptDownload !== true" class="c21-button-primary" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
-                            (click)="dowloadTranscript()">
-                            <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                        <button class="c21-button-link" (click)="returnClosePage()">
+                            <span>{{ g.CLOSE }}</span>
                         </button>
+                        <button class="c21-button-link" (click)="sendRate()">
+                            <span>{{ g.SUBMIT }}</span>
+                        </button>
+
                     </div>
 
                     
@@ -127,26 +149,22 @@
                 ***************  STEP 2  ***************** 
                 -->
                 <div *ngIf="step==2" class="step-rate">
+                    <div class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
+                        <a href="#" class="c21-link" (click)="dowloadTranscript()" >
+                            <span [ngStyle]="{'color': g.themeColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
+                        </a>
+                    </div>
+                    <div class="clear"></div>
                 
                     <!-- CONTENT -->
                     <div class="c21-step-content">
                         <div class="default-title">{{ g.THANK_YOU_FOR_YOUR_EVALUATION }}</div>
                         <div class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</div>
                     </div>
-                    
-                    <button class="c21-button-primary" 
-                    [ngStyle]="{'background-color': g.themeForegroundColor, 'border-color': g.themeColor, 'color': g.themeColor}"
-                    (click)="returnClosePage()">
+
+                    <button class="c21-button-link" (click)="returnClosePage()">
                         <span>{{ g.CLOSE }}</span>
                     </button>
-
-                    <button *ngIf="g.allowTranscriptDownload !== true" 
-                    class="c21-button-primary" 
-                    [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor}"
-                    (click)="dowloadTranscript()">
-                        <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
-                    </button>
-
                 </div>
 
 
