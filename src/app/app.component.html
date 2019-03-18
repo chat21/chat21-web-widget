@@ -90,10 +90,11 @@
     *************************************************************    
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
-    (eventOpenEyeCatcher)="returneventOpenEyeCatcher()"
+    
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
     (eventOpenChat)="returnOpenChat()" 
+    (eventOpenEyeCatcher)="returneventOpenEyeCatcher($event)"
     ></tiledeskwidget-eyeeye-catcher-card>     
     
     

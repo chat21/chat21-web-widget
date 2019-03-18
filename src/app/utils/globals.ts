@@ -32,7 +32,7 @@ export class Globals {
   isMobile;
   isLogged;
   isSoundActive;
-  // isLogoutEnabled;
+  isLogoutEnabled;
   BUILD_VERSION;
   filterSystemMsg = true; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
@@ -141,6 +141,7 @@ export class Globals {
   isLogEnabled;
   filterByRequester;
   persistence;
+  windowContext;
 
   showWaitTime;
   showAvailableAgents;
@@ -151,41 +152,61 @@ export class Globals {
     public appConfigService: AppConfigService
     // public storageService: StorageService
   ) {
+    this.wdLog([' ---------------- 1: initDefafultParameters ---------------- ']);
+    this.initDefafultParameters();
   }
 
 
   initialize(el) {
-     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
+    this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
+    const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
+    console.log('windowcontextFromWindow', windowcontextFromWindow);
+    if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
+      this.windowContext = window.parent;
+      console.log('this.windowContext force to window.parent');
+    }
+
+    // this.lang = 'en';
+    // if the lang is passed as parameter use it, otherwise use a default language ("en")
+    this.translatorService.setLanguage(this.windowContext, !this.lang ? 'en' : this.lang);
+    this.wdLog([' ---------------- 9: translate ---------------- ']);
+    this.translate();
+    this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
+    this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
+
+
+
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
     // for retrocompatibility 0.9 (without tiledesk.js)
-     this.wdLog([' ---------------- 1: baseLocation ---------------- ']);
-    this.baseLocation = 'https://widget.tiledesk.com/v2';
-    if (window['tiledesk']) {
-      this.baseLocation = window['tiledesk'].getBaseLocation();
-    }
+    //  this.wdLog([' ---------------- 1: baseLocation ---------------- ']);
+    // this.baseLocation = 'https://widget.tiledesk.com/v2';
+    // if (window['tiledesk']) {
+    //   this.baseLocation = window['tiledesk'].getBaseLocation();
+    // }
 
      this.wdLog([' ---------------- 2: set lang ---------------- ']);
     // this.lang = 'en';
     // if the lang is passed as parameter use it, otherwise use a default language ("en")
-    this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
+    // this.translatorService.setLanguage(!this.lang ? 'en' : this.lang);
+
 
      this.wdLog([' ---------------- 3: translate ---------------- ']);
-    this.translate();
+    // this.translate();
 
-     this.wdLog([' ---------------- 4: initParameters ---------------- ']);
-    this.initParameters();
-
-     this.wdLog([' ---------------- 5: getVariablesFromAttributeHtml ---------------- ']);
+    this.wdLog([' ---------------- 4: getVariablesFromAttributeHtml ---------------- ']);
     this.getVariablesFromAttributeHtml(el);
 
-     this.wdLog([' ---------------- 6: getVariablesFromSettings ---------------- ']);
+     this.wdLog([' ---------------- 5: getVariablesFromSettings ---------------- ']);
     this.getVariablesFromSettings();
 
-     this.wdLog([' ---------------- 7: getVariableUrlParameters ---------------- ']);
-    this.getVariableUrlParameters();
+     this.wdLog([' ---------------- 6: getVariableUrlParameters ---------------- ']);
+    this.getVariableUrlParameters(this.windowContext);
+
+     this.wdLog([' ---------------- 7: createDefaultSettingsObject ---------------- ']);
+     this.createDefaultSettingsObject();
 
      this.wdLog([' ---------------- 8: setDefaultSettings ---------------- ']);
-    this.setDefaultSettings();
+    // this.setDefaultSettings();
 
      this.wdLog([' ---------------- 9: setAttributes ---------------- ']);
     //  this.attributes = this.setAttributes();
@@ -252,8 +273,10 @@ export class Globals {
   /**
    * 4: initParameters
    */
-  initParameters() {
+  initDefafultParameters() {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
+    this.baseLocation = 'https://widget.tiledesk.com/v2';
+
     this.autoStart = true;                              /** start Authentication and startUI */
     this.isShown = true;                                /** show/hide all widget -> js call: showAllWidget */
     this.isOpen = false;                                /** show/hide window widget -> js call: hideAllWidget */
@@ -305,8 +328,8 @@ export class Globals {
     this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>'; // da aggiungere!!!! /** link nel footer widget */
 
     this.logoChat = this.baseLocation + '/assets/images/tiledesk_logo_white_small.png'; /** url img logo */
-    this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
-    this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
+    // this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
+    // this.wellcomeMsg = this.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
 
     this.marginX = '20px';                      /** set margin left or rigth widget  */
     this.marginY = '20px';                      /** set margin bottom widget */
@@ -320,12 +343,14 @@ export class Globals {
 
 
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
-    this.tenant = this.appConfigService.getConfig().tenant;           /** name tenant ex: tilechat */
+    this.tenant = environment.tenant;           /** name tenant ex: tilechat */
+    // this.tenant = this.appConfigService.getConfig().tenant;           /** name tenant ex: tilechat */
     this.channelType = CHANNEL_TYPE_GROUP;      /** channelType: group/direct  */
     this.default_settings = {};                 /** settings for pass variables to js */
     this.isMobile = false;                      /** detect is mobile : detectIfIsMobile() */
     this.isLogged = false;                      /** detect is logged */
     // this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
+    this.isLogoutEnabled = true;                /** enable/disable button logout in menu options */
     this.BUILD_VERSION = 'v.' + environment.version;
     this.filterSystemMsg = true; /** ???? scolpito in MessagingService. se è true i messaggi inviati da system non vengono visualizzati */
     this.isSoundActive = true;
@@ -339,7 +364,7 @@ export class Globals {
     this.signInWithCustomToken = false;
     this.displayEyeCatcherCard = 'none';
     // ============ END: SET INTERNAL PARAMETERS ==============//
-
+    this.windowContext = window;
   }
 
 
@@ -419,10 +444,7 @@ export class Globals {
     if (TEMP !== null) {
       this.calloutTimer = TEMP;
     }
-    TEMP = el.nativeElement.getAttribute('wellcomeMsg');
-    if (TEMP !== null) {
-      this.wellcomeMsg = TEMP;
-    }
+
     TEMP = el.nativeElement.getAttribute('calloutTitle');
     if (TEMP !== null) {
       this.calloutTitle = TEMP;
@@ -443,6 +465,10 @@ export class Globals {
     if (TEMP !== null) {
       this.wellcomeTitle = TEMP;
     }
+    TEMP = el.nativeElement.getAttribute('wellcomeMsg');
+    if (TEMP !== null) {
+      this.wellcomeMsg = TEMP;
+    }
     TEMP = el.nativeElement.getAttribute('autoStart');
     if (TEMP !== null) {
       this.autoStart = (TEMP === true) ? true : false;
@@ -452,10 +478,10 @@ export class Globals {
       this.isShown = (TEMP === true) ? true : false;
     }
 
-    // TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
-    // if (TEMP !== null) {
-    //   this.isLogoutEnabled = (TEMP === true) ? true : false;
-    // }
+    TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
+    if (TEMP !== null) {
+      this.isLogoutEnabled = (TEMP === true) ? true : false;
+    }
     TEMP = el.nativeElement.getAttribute('isLogEnabled');
     if (TEMP !== null) {
       this.isLogEnabled = (TEMP === true) ? true : false;
@@ -472,168 +498,174 @@ export class Globals {
   */
   getVariablesFromSettings() {
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-    if (!window['tiledesk']) {
+    if (!this.windowContext['tiledesk']) {
+    // if (!window['tiledesk']) {
       return 0;
     }
     let TEMP;
-    TEMP = window['tiledeskSettings']['tenant'];
+    // TEMP = this.windowContext['tiledesk']['tenant'];
+    TEMP = this.windowContext['tiledeskSettings']['tenant'];
 
     if (TEMP !== undefined) {
       this.tenant = TEMP;
     }
-    TEMP = window['tiledeskSettings']['recipientId'];
+
+    TEMP =  this.windowContext['tiledesk'].getBaseLocation();
+    if (TEMP !== undefined) {
+      this.baseLocation = TEMP;
+    }
+
+
+    TEMP = this.windowContext['tiledesk']['recipientId'];
     if (TEMP !== undefined) {
       this.recipientId = TEMP;
     }
-    TEMP = window['tiledeskSettings']['projectid'];
+    TEMP = this.windowContext['tiledesk']['projectid'];
     if (TEMP !== undefined) {
       this.projectid = TEMP;
     }
-    TEMP = window['tiledeskSettings']['widgetTitle'];
+    TEMP = this.windowContext['tiledesk']['widgetTitle'];
     if (TEMP !== undefined) {
       this.widgetTitle = TEMP;
     }
-    TEMP = window['tiledeskSettings']['poweredBy'];
+    TEMP = this.windowContext['tiledesk']['poweredBy'];
     if (TEMP !== undefined) {
       this.poweredBy = TEMP;
     }
-    TEMP = window['tiledeskSettings']['userId'];
+    TEMP = this.windowContext['tiledesk']['userId'];
     if (TEMP !== undefined) {
       this.userId = TEMP;
     }
-    TEMP = window['tiledeskSettings']['userEmail'];
+    TEMP = this.windowContext['tiledesk']['userEmail'];
     if (TEMP !== undefined) {
       this.userEmail = TEMP;
     }
-    TEMP = window['tiledeskSettings']['userPassword'];
+    TEMP = this.windowContext['tiledesk']['userPassword'];
     if (TEMP !== undefined) {
       this.userPassword = TEMP;
     }
-    TEMP = window['tiledeskSettings']['userFullname'];
+    TEMP = this.windowContext['tiledesk']['userFullname'];
     if (TEMP !== undefined) {
       this.userFullname = TEMP;
     }
-    TEMP = window['tiledeskSettings']['preChatForm'];
+    TEMP = this.windowContext['tiledesk']['preChatForm'];
     if (TEMP !== undefined) {
       this.preChatForm = (TEMP === false) ? false : true;
     }
 
-    TEMP = window['tiledeskSettings']['isOpen'];
+    TEMP = this.windowContext['tiledesk']['isOpen'];
     if (TEMP !== undefined) {
       this.isOpen = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['channelType'];
+    TEMP = this.windowContext['tiledesk']['channelType'];
     if (TEMP !== undefined) {
       this.channelType = TEMP;
     }
-    TEMP = window['tiledeskSettings']['lang'];
+    TEMP = this.windowContext['tiledesk']['lang'];
     if (TemplateBindingParseResult) {
       this.lang = TEMP;
     }
-    TEMP = window['tiledeskSettings']['align'];
+    TEMP = this.windowContext['tiledesk']['align'];
     if (TEMP !== undefined) {
       this.align = TEMP;
     }
-    TEMP = window['tiledeskSettings']['marginX'];
+    TEMP = this.windowContext['tiledesk']['marginX'];
     if (TEMP !== undefined) {
       this.marginX = TEMP;
     }
-    TEMP = window['tiledeskSettings']['marginY'];
+    TEMP = this.windowContext['tiledesk']['marginY'];
     if (TEMP !== undefined) {
       this.marginY = TEMP;
     }
-    TEMP = window['tiledeskSettings']['calloutTimer'];
+    TEMP = this.windowContext['tiledesk']['calloutTimer'];
     if (TEMP !== undefined) {
       this.calloutTimer = TEMP;
     }
-    TEMP = window['tiledeskSettings']['wellcomeMsg'];
-    if (TEMP !== undefined) {
-      this.wellcomeMsg = TEMP;
-    }
-    TEMP = window['tiledeskSettings']['calloutTitle'];
+
+    TEMP = this.windowContext['tiledesk']['calloutTitle'];
     if (TEMP !== undefined) {
       this.calloutTitle = TEMP;
     }
-    TEMP = window['tiledeskSettings']['calloutMsg'];
+    TEMP = this.windowContext['tiledesk']['calloutMsg'];
     if (TEMP !== undefined) {
       this.calloutMsg = TEMP;
     }
-    TEMP = window['tiledeskSettings']['fullscreenMode'];
+    TEMP = this.windowContext['tiledesk']['fullscreenMode'];
     if (TEMP !== undefined) {
       this.fullscreenMode = TEMP;
     }
-    TEMP = window['tiledeskSettings']['hideHeaderCloseButton'];
+    TEMP = this.windowContext['tiledesk']['hideHeaderCloseButton'];
     if (TEMP !== undefined) {
       this.hideHeaderCloseButton = TEMP;
     }
-    TEMP = window['tiledeskSettings']['themeColor'];
+    TEMP = this.windowContext['tiledesk']['themeColor'];
     if (TEMP !== undefined) {
       this.themeColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = window['tiledeskSettings']['themeForegroundColor'];
+    TEMP = this.windowContext['tiledesk']['themeForegroundColor'];
     if (TEMP !== undefined) {
       this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = window['tiledeskSettings']['allowTranscriptDownload'];
+    TEMP = this.windowContext['tiledesk']['allowTranscriptDownload'];
     if (TEMP !== undefined) {
       this.allowTranscriptDownload = TEMP;
     }
-    TEMP = window['tiledeskSettings']['userToken'];
+    TEMP = this.windowContext['tiledesk']['userToken'];
     if (TEMP !== undefined) {
       this.userToken = TEMP;
     }
-    TEMP = window['tiledeskSettings']['startFromHome'];
+    TEMP = this.windowContext['tiledesk']['startFromHome'];
     if (TEMP !== undefined) {
       this.startFromHome = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['logoChat'];
+    TEMP = this.windowContext['tiledesk']['logoChat'];
     if (TEMP !== undefined) {
       this.logoChat = TEMP;
     }
-    TEMP = window['tiledeskSettings']['wellcomeTitle'];
+    TEMP = this.windowContext['tiledesk']['wellcomeTitle'];
     if (TEMP !== undefined) {
       this.wellcomeTitle = TEMP;
     }
-    TEMP = window['tiledeskSettings']['wellcomeMsg'];
+    TEMP = this.windowContext['tiledesk']['wellcomeMsg'];
     if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
     }
-    TEMP = window['tiledeskSettings']['autoStart'];
+    TEMP = this.windowContext['tiledesk']['autoStart'];
      this.wdLog([' autoStart::: ', TEMP]);
     if (TEMP !== undefined) {
       this.autoStart = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['isShown'];
+    TEMP = this.windowContext['tiledesk']['isShown'];
     if (TEMP !== undefined) {
       this.isShown = (TEMP === false) ? false : true;
     }
-    // TEMP = window['tiledeskSettings']['isLogoutEnabled'];
+    // TEMP = this.windowContext['tiledesk']['isLogoutEnabled'];
     // if (TEMP !== undefined) {
     //   this.isLogoutEnabled = (TEMP === false) ? false : true;
     // }
-    TEMP = window['tiledeskSettings']['isLogEnabled'];
+    TEMP = this.windowContext['tiledesk']['isLogEnabled'];
     if (TEMP !== undefined) {
       this.isLogEnabled = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['filterByRequester'];
+    TEMP = this.windowContext['tiledesk']['filterByRequester'];
     if (TEMP !== undefined) {
       this.filterByRequester = (TEMP === false) ? false : true;
     }
 
-    TEMP = window['tiledeskSettings']['persistence'];
+    TEMP = this.windowContext['tiledesk']['persistence'];
     if (TEMP !== undefined) {
       this.persistence = TEMP;
     }
 
-    TEMP = window['tiledeskSettings']['showWaitTime'];
+    TEMP = this.windowContext['tiledesk']['showWaitTime'];
     if (TEMP !== undefined) {
       this.showWaitTime = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['showAvailableAgents'];
+    TEMP = this.windowContext['tiledesk']['showAvailableAgents'];
     if (TEMP !== undefined) {
       this.showAvailableAgents = (TEMP === false) ? false : true;
     }
-    TEMP = window['tiledeskSettings']['showLogoutOption'];
+    TEMP = this.windowContext['tiledesk']['showLogoutOption'];
     if (TEMP !== undefined) {
       this.showLogoutOption = (TEMP === false) ? false : true;
     }
@@ -645,123 +677,227 @@ export class Globals {
   /**
    * 7: getVariableUrlParameters
    */
-  getVariableUrlParameters() {
-    if (this.getParameterByName('tiledesk_tenant')) {
-      this.tenant = this.getParameterByName('tiledesk_tenant');
+  getVariableUrlParameters(windowContext) {
+
+    // if (this.getParameterByName('tiledesk_tenant')) {
+    //   this.tenant = this.getParameterByName('tiledesk_tenant');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_tenant')) {
+      this.tenant = this.getParameterByName(windowContext, 'tiledesk_tenant');
     }
-    if (this.getParameterByName('tiledesk_recipientid')) {
-      this.recipientId = this.getParameterByName('tiledesk_recipientid');
+    // if (this.getParameterByName('tiledesk_recipientid')) {
+    //   this.recipientId = this.getParameterByName('tiledesk_recipientid');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_recipientid')) {
+      this.recipientId = this.getParameterByName(windowContext, 'tiledesk_recipientid');
     }
-    if (this.getParameterByName('tiledesk_projectid')) {
-      this.projectid = this.getParameterByName('tiledesk_projectid');
+    // if (this.getParameterByName('tiledesk_projectid')) {
+    //   this.projectid = this.getParameterByName('tiledesk_projectid');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_projectid')) {
+      this.projectid = this.getParameterByName(windowContext, 'tiledesk_projectid');
     }
-    if (this.getParameterByName('tiledesk_widgetTitle')) {
-      this.widgetTitle = this.getParameterByName('tiledesk_widgetTitle');
+    // if (this.getParameterByName('tiledesk_widgetTitle')) {
+    //   this.widgetTitle = this.getParameterByName('tiledesk_widgetTitle');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_widgetTitle')) {
+      this.widgetTitle = this.getParameterByName(windowContext, 'tiledesk_widgetTitle');
     }
-    if (this.getParameterByName('tiledesk_poweredby')) {
-      this.poweredBy = this.getParameterByName('tiledesk_poweredby');
+    // if (this.getParameterByName('tiledesk_poweredby')) {
+    //   this.poweredBy = this.getParameterByName('tiledesk_poweredby');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_poweredby')) {
+      this.poweredBy = this.getParameterByName(windowContext, 'tiledesk_poweredby');
     }
-    if (this.getParameterByName('tiledesk_userid')) {
-      this.userId = this.getParameterByName('tiledesk_userid');
+    // if (this.getParameterByName('tiledesk_userid')) {
+    //   this.userId = this.getParameterByName('tiledesk_userid');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_userid')) {
+      this.userId = this.getParameterByName(windowContext, 'tiledesk_userid');
     }
-    if (this.getParameterByName('tiledesk_useremail')) {
-      this.userEmail = this.getParameterByName('tiledesk_useremail');
+    // if (this.getParameterByName('tiledesk_useremail')) {
+    //   this.userEmail = this.getParameterByName('tiledesk_useremail');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_useremail')) {
+      this.userEmail = this.getParameterByName(windowContext, 'tiledesk_useremail');
     }
-    if (this.getParameterByName('tiledesk_userpassword')) {
-      this.userPassword = this.getParameterByName('tiledesk_userpassword');
+    // if (this.getParameterByName('tiledesk_userpassword')) {
+    //   this.userPassword = this.getParameterByName('tiledesk_userpassword');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_userpassword')) {
+      this.userPassword = this.getParameterByName(windowContext, 'tiledesk_userpassword');
     }
-    if (this.getParameterByName('tiledesk_userfullname')) {
-      this.userFullname = this.getParameterByName('tiledesk_userfullname');
+    // if (this.getParameterByName('tiledesk_userfullname')) {
+    //   this.userFullname = this.getParameterByName('tiledesk_userfullname');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_userfullname')) {
+      this.userFullname = this.getParameterByName(windowContext, 'tiledesk_userfullname');
     }
-    if (this.getParameterByName('tiledesk_prechatform')) {
+    // if (this.getParameterByName('tiledesk_prechatform')) {
+    //   this.preChatForm = true;
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_prechatform')) {
       this.preChatForm = true;
     }
-    if (this.getParameterByName('tiledesk_isopen')) {
+    // if (this.getParameterByName('tiledesk_isopen')) {
+    //   this.isOpen = true;
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_isopen')) {
       this.isOpen = true;
     }
-    if (this.getParameterByName('tiledesk_channeltype')) {
-      this.channelType = this.getParameterByName('tiledesk_channeltype');
+    // if (this.getParameterByName('tiledesk_channeltype')) {
+    //   this.channelType = this.getParameterByName('tiledesk_channeltype');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_channeltype')) {
+      this.channelType = this.getParameterByName(windowContext, 'tiledesk_channeltype');
     }
-    if (this.getParameterByName('tiledesk_lang')) {
-      this.lang = this.getParameterByName('tiledesk_lang');
+    // if (this.getParameterByName('tiledesk_lang')) {
+    //   this.lang = this.getParameterByName('tiledesk_lang');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_lang')) {
+      this.lang = this.getParameterByName(windowContext, 'tiledesk_lang');
     }
-    const cotAsString = this.getParameterByName('tiledesk_callouttimer');
+
+    const cotAsString = this.getParameterByName(windowContext, 'tiledesk_callouttimer');
+    // const cotAsString = this.getParameterByName('tiledesk_callouttimer');
     if (cotAsString) {
       this.calloutTimer = Number(cotAsString);
     }
-    if (this.getParameterByName('tiledesk_align')) {
-      this.align = this.getParameterByName('tiledesk_align');
+    // if (this.getParameterByName('tiledesk_align')) {
+    //   this.align = this.getParameterByName('tiledesk_align');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_align')) {
+      this.align = this.getParameterByName(windowContext, 'tiledesk_align');
     }
-    if (this.getParameterByName('tiledesk_marginX')) {
-      this.marginX = this.getParameterByName('tiledesk_marginX');
+    // if (this.getParameterByName('tiledesk_marginX')) {
+    //   this.marginX = this.getParameterByName('tiledesk_marginX');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_marginX')) {
+      this.marginX = this.getParameterByName(windowContext, 'tiledesk_marginX');
     }
-    if (this.getParameterByName('tiledesk_marginY')) {
-      this.marginY = this.getParameterByName('tiledesk_marginY');
+    // if (this.getParameterByName('tiledesk_marginY')) {
+    //   this.marginY = this.getParameterByName('tiledesk_marginY');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_marginY')) {
+      this.marginY = this.getParameterByName(windowContext, 'tiledesk_marginY');
     }
-    if (this.getParameterByName('tiledesk_wellcomemsg')) {
-      this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
+    // if (this.getParameterByName('tiledesk_wellcomemsg')) {
+    //   this.wellcomeMsg = this.getParameterByName('tiledesk_wellcomemsg');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_wellcomemsg')) {
+      this.wellcomeMsg = this.getParameterByName(windowContext, 'tiledesk_wellcomemsg');
     }
-    if (this.getParameterByName('tiledesk_callouttitle')) {
-      this.calloutTitle = this.getParameterByName('tiledesk_callouttitle');
+    // if (this.getParameterByName('tiledesk_callouttitle')) {
+    //   this.calloutTitle = this.getParameterByName('tiledesk_callouttitle');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_callouttitle')) {
+      this.calloutTitle = this.getParameterByName(windowContext, 'tiledesk_callouttitle');
     }
-    if (this.getParameterByName('tiledesk_calloutmsg')) {
-      this.calloutMsg = this.getParameterByName('tiledesk_calloutmsg');
+    // if (this.getParameterByName('tiledesk_calloutmsg')) {
+    //   this.calloutMsg = this.getParameterByName('tiledesk_calloutmsg');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_calloutmsg')) {
+      this.calloutMsg = this.getParameterByName(windowContext, 'tiledesk_calloutmsg');
     }
-    if (this.getParameterByName('tiledesk_fullscreenMode')) {
+    // if (this.getParameterByName('tiledesk_fullscreenMode')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_fullscreenMode')) {
       this.fullscreenMode = true;
     }
-    if (this.getParameterByName('tiledesk_hideHeaderCloseButton')) {
-      this.hideHeaderCloseButton = (this.getParameterByName('tiledesk_hideHeaderCloseButton') === 'true');
+    // if (this.getParameterByName('tiledesk_hideHeaderCloseButton')) {
+    //   this.hideHeaderCloseButton = (this.getParameterByName('tiledesk_hideHeaderCloseButton') === 'true');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton')) {
+      this.hideHeaderCloseButton = this.getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton');
     }
-    if (this.getParameterByName('tiledesk_themecolor')) {
-      const TEMP = this.getParameterByName('tiledesk_themecolor');
+    // if (this.getParameterByName('tiledesk_themecolor')) {
+    //   const TEMP = this.getParameterByName('tiledesk_themecolor');
+    //   this.themeColor = convertColorToRGBA(TEMP, 100);
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_themecolor')) {
+      const TEMP = this.getParameterByName(windowContext, 'tiledesk_themecolor');
       this.themeColor = convertColorToRGBA(TEMP, 100);
     }
-    if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
-      const TEMP = this.getParameterByName('tiledesk_themeforegroundcolor');
+    // if (this.getParameterByName('tiledesk_themeforegroundcolor')) {
+    //   const TEMP = this.getParameterByName('tiledesk_themeforegroundcolor');
+    //   this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_themeforegroundcolor')) {
+      const TEMP = this.getParameterByName(windowContext, 'tiledesk_themeforegroundcolor');
       this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
-    if (this.getParameterByName('tiledesk_allowtranscriptdownload')) {
+
+    // if (this.getParameterByName('tiledesk_allowtranscriptdownload')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_allowtranscriptdownload')) {
       this.allowTranscriptDownload = true;
     }
-    if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
+    // if (this.getParameterByName('tiledesk_showWidgetNameInConversation')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_showWidgetNameInConversation')) {
       this.showWidgetNameInConversation = true;
     }
-    if (this.getParameterByName('tiledesk_startFromHome')) {
+    // if (this.getParameterByName('tiledesk_startFromHome')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_startFromHome')) {
       this.startFromHome = true;
     }
-    if (this.getParameterByName('tiledesk_logoChat')) {
-      this.logoChat = this.getParameterByName('tiledesk_logoChat');
+
+    // if (this.getParameterByName('tiledesk_logoChat')) {
+    //   this.logoChat = this.getParameterByName('tiledesk_logoChat');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_logoChat')) {
+      this.logoChat = this.getParameterByName(windowContext, 'tiledesk_logoChat');
     }
-    if (this.getParameterByName('tiledesk_wellcomeTitle')) {
-      this.wellcomeTitle = this.getParameterByName('tiledesk_wellcomeTitle');
+    // if (this.getParameterByName('tiledesk_wellcomeTitle')) {
+    //   this.wellcomeTitle = this.getParameterByName('tiledesk_wellcomeTitle');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_wellcomeTitle')) {
+      this.wellcomeTitle = this.getParameterByName(windowContext, 'tiledesk_wellcomeTitle');
     }
-    if (this.getParameterByName('tiledesk_autoStart')) {
-      this.wellcomeTitle = this.getParameterByName('tiledesk_autoStart');
+    if (this.getParameterByName(windowContext, 'tiledesk_wellcomeMsg')) {
+      this.wellcomeMsg = this.getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
     }
-    if (this.getParameterByName('tiledesk_isShown')) {
+    // if (this.getParameterByName('tiledesk_autoStart')) {
+    //   this.autoStart = this.getParameterByName('tiledesk_autoStart');
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_autoStart')) {
+      this.autoStart = this.getParameterByName(windowContext, 'tiledesk_autoStart');
+    }
+    // if (this.getParameterByName('tiledesk_isShown')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_isShown')) {
       this.isShown = true;
     }
     // if (this.getParameterByName('tiledesk_isLogoutEnabled')) {
     //   this.isLogoutEnabled = true;
     // }
-    if (this.getParameterByName('tiledesk_isLogEnabled')) {
+    // if (this.getParameterByName('tiledesk_isLogEnabled')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_isLogEnabled')) {
       this.isLogEnabled = true;
     }
-    if (this.getParameterByName('tiledesk_filterByRequester')) {
+    // if (this.getParameterByName('tiledesk_filterByRequester')) {
+    if (this.getParameterByName(windowContext, 'tiledesk_filterByRequester')) {
       this.filterByRequester = true;
     }
 
-    if (this.getParameterByName('tiledesk_showWaitTime')) {
-      const TEMP = this.getParameterByName('tiledesk_showWaitTime');
+    // if (this.getParameterByName('tiledesk_showWaitTime')) {
+    //   const TEMP = this.getParameterByName('tiledesk_showWaitTime');
+    //   this.showWaitTime = (TEMP === 'false') ? false : true;
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_showWaitTime')) {
+      const TEMP = this.getParameterByName(windowContext, 'tiledesk_showWaitTime');
       this.showWaitTime = (TEMP === 'false') ? false : true;
     }
-    if (this.getParameterByName('tiledesk_showAvailableAgents')) {
-      const TEMP = this.getParameterByName('tiledesk_showAvailableAgents');
+    // if (this.getParameterByName('tiledesk_showAvailableAgents')) {
+    //   const TEMP = this.getParameterByName('tiledesk_showAvailableAgents');
+    //   this.showAvailableAgents = (TEMP === 'false') ? false : true;
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_showAvailableAgents')) {
+      const TEMP = this.getParameterByName(windowContext, 'tiledesk_showAvailableAgents');
       this.showAvailableAgents = (TEMP === 'false') ? false : true;
     }
-    if (this.getParameterByName('tiledesk_showLogoutOption')) {
-      const TEMP = this.getParameterByName('tiledesk_showLogoutOption');
+    // if (this.getParameterByName('tiledesk_showLogoutOption')) {
+    //   const TEMP = this.getParameterByName('tiledesk_showLogoutOption');
+    //   this.showLogoutOption = (TEMP === 'false') ? false : true;
+    // }
+    if (this.getParameterByName(windowContext, 'tiledesk_showLogoutOption')) {
+      const TEMP = this.getParameterByName(windowContext, 'tiledesk_showLogoutOption');
       this.showLogoutOption = (TEMP === 'false') ? false : true;
     }
 
@@ -771,7 +907,7 @@ export class Globals {
   /**
    * 8: setDefaultSettings
    */
-  setDefaultSettings() {
+  createDefaultSettingsObject() {
     this.default_settings = {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,

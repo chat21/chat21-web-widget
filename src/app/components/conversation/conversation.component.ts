@@ -202,13 +202,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
     this.messages = [];
 
-      this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
+    this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
 
-      this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
+    this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
     this.connectConversation();
 
-      this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
+    this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     this.initializeChatManager();
 
 
@@ -619,7 +619,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (textArea) {
         textArea.value = '';  // clear the textarea
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
-            this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
+        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
           console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }

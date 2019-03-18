@@ -44,8 +44,10 @@ padding-top: 16px; /* added for new style */
     height: 30px;
     width: 299px;
     position: absolute;
-    top: -35px;
-    right: -2px;
+    // top: -35px;
+    // right: -2px;
+    top: 5px;
+    right: 3px;
 }
 /* CLOSE BTN */
 .eye-catcher-card-close-btn {
@@ -90,7 +92,8 @@ padding-top: 16px; /* added for new style */
 .eye-catcher-card{
     position: fixed;
     z-index: 999999000;
-    margin: 95px 0;
+    // margin: 95px 0;
+    margin: 10px 68px 10px 0px;
     bottom: 0px;
     // right: 20px;
     /* bottom: 120px; */ /* commented for new style */
