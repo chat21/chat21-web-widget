@@ -159,6 +159,13 @@ export class Globals {
 
   initialize(el) {
     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
+
+    // console.log("window.frameElement.getAttribute('tiledesk_context')", window.frameElement.getAttribute('tiledesk_context'));
+    if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
+      this.windowContext = window.parent;
+      console.log('this.windowContext force to window.parent');
+    }
+
     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
     console.log('windowcontextFromWindow', windowcontextFromWindow);
     if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {

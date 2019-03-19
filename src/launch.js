@@ -23,8 +23,32 @@ function loadIframe(tiledeskScriptBaseLocation) {
     containerDiv.appendChild(iDiv);
 
     var ifrm = document.createElement("iframe");
-    ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
+    //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
+    var srcTileDesk =  `
+        <html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <title>Tilechat Widget</title>
+        <base href="./">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        </head>
+        <body>
+            <tiledeskwidget-root projectid= '5b55e806c93dde00143163dd'></tiledeskwidget-root>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/inline.bundle.js"></script>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/polyfills.bundle.js"></script>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/styles.bundle.js"></script>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/vendor.bundle.js"></script>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/main.bundle.js"></script>
+        </body>
+        </html>
+        `;
+        //ifrm.setAttribute("srcdoc", srcTileDesk);
+        //ifrm.document.write(srcTileDesk);
+
+
     ifrm.setAttribute('id','tiledeskiframe');
+    ifrm.setAttribute('tiledesk_context','parent');
     // ifrm.style.display = 'none';
 
     /** */
@@ -67,6 +91,12 @@ function loadIframe(tiledeskScriptBaseLocation) {
     });
 
     iDiv.appendChild(ifrm);  
+
+
+    ifrm.contentWindow.document.open();
+    ifrm.contentWindow.document.write(srcTileDesk);
+    ifrm.contentWindow.document.close();
+
 }
 
 /**
