@@ -13,12 +13,12 @@
 
 .ec_left {
     /* width: 90px; /* commented for new style */
-    width: 70px; /* added for new style */
-    padding-left: 20px;
+    width: 45px; /* added for new style */
+    padding-left: 10px;
     /* padding-top: 24px; */ /* commented for new style */
     /* padding-bottom: 24px; */ /* commented for new style */
-    padding-top: 16px; /* added for new style */
-    padding-bottom: 16px; /* added for new style */
+    padding-top: 4px; /* added for new style */
+    padding-bottom: 4px; /* added for new style */
     /* background-color: #5d6c80; */
     box-sizing: border-box;
 }
@@ -27,7 +27,7 @@
 /* width: calc(100% - 90px); */ /* commented for new style */
 width: calc(100% - 70px); /* added for new style */
 /* padding-top: 24px; */ /* commented for new style */
-padding-top: 16px; /* added for new style */
+padding-top: 4px; /* added for new style */
 /* background-color: #aaaaaa */
 }
 
@@ -93,7 +93,7 @@ padding-top: 16px; /* added for new style */
     position: fixed;
     z-index: 999999000;
     // margin: 95px 0;
-    margin: 10px 68px 10px 0px;
+    margin: 0px 68px 10px 0px;
     bottom: 0px;
     // right: 20px;
     /* bottom: 120px; */ /* commented for new style */
@@ -105,6 +105,7 @@ padding-top: 16px; /* added for new style */
     box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
     /* width: 299px; */ /* commented for new style */
     width: 270px; /* added for new style */
+    height: 68px;
     /* min-height: 125px; */ /* commented for new style */
 
 }
@@ -118,7 +119,7 @@ padding-top: 16px; /* added for new style */
 .eye-catcher-card-title {
     font-family: 'Google Sans', sans-serif; 
     /* font-size: 24px; */  /* commented for new style */
-    font-size: 19px;
+    font-size: 15px;
     /* color:#286abf;  */ /* commented for new style */
     color: rgb(68, 72, 74); /* added for new style */
     padding-left: 5px; 
@@ -143,7 +144,7 @@ padding-top: 16px; /* added for new style */
     letter-spacing: 1px;
     font-weight: 500;
     word-wrap: break-word;
-    font-size:16px;
+    font-size: 12px;
     line-height: normal;
 }
 

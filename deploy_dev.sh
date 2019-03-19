@@ -13,7 +13,7 @@ fi
 ng build --prod --base-href --output-hashing none  --build-optimizer=false
 
 cd dist
-aws s3 sync --profile f21 . s3://tiledesk-widget/dev/$version/
+aws s3 sync . s3://tiledesk-widget/dev/$version/
 cd ..
 
 echo new version deployed on s3://tiledesk-widget/dev/$version

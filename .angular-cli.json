@@ -17,7 +17,7 @@
         "test-auth-remote.html",
         "testi.html",
         "launch.js",
-        "launcht.js"
+        "iframe-style.css"
       ],
       "index": "index.html",
       "main": "main.ts",

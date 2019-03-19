@@ -703,6 +703,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
     }
 
+    private triggerOnClosedEyeCatcherEvent() {
+        this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
+        const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
+        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+    }
+
 
 
     /** close popup conversation */
@@ -1030,7 +1036,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if ($e === true) {
             this.triggerOnOpenEyeCatcherEvent();
         } else {
-            this.triggerOnCloseEvent();
+            this.triggerOnClosedEyeCatcherEvent();
         }
     }
     // ========= end:: CALLBACK FUNCTIONS ============//

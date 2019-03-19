@@ -12,83 +12,60 @@ function ready(callbackFunction){
       document.addEventListener("DOMContentLoaded", callbackFunction)
 }
                                      
-
 /** */
 function loadIframe(tiledeskScriptBaseLocation) {
     var containerDiv = document.createElement('div');
-    containerDiv.setAttribute('id','tiledeskdiv');
-    containerDiv.setAttribute('class','tiledesk-messenger-frame');
     containerDiv.setAttribute('id','tiledesk-container');
-    containerDiv.style.width = '0px';
-    containerDiv.style.height = '0px';
-    containerDiv.style.right = '0px';
-    containerDiv.style.bottom = '0px';
-    containerDiv.style.display = 'block';
-    containerDiv.style.position = 'fixed';
-    // containerDiv.setAttribute('style', 'position: fixed; width:0px; height: 0px; bottom: 0px; right:0px; display: block; z-index: 2147483647');      
     document.body.appendChild(containerDiv);
     
-
     var iDiv = document.createElement('div');
-    iDiv.style.width = '100%';
-    iDiv.style.height = 'calc(100% - 20px)';
-    iDiv.style.maxHeight = '600px';
-    iDiv.style.right = '20px';
-    iDiv.style.bottom = '0px';
-    iDiv.style.display = 'block';
-    iDiv.style.position = 'fixed';
-    // iDiv.setAttribute('style', 'width: 100px!important; height: 100px; right: 20px; bottom: 0px; display: block; position: fixed!important; z-index: 2147483000!important');
+    iDiv.setAttribute('id','tiledeskdiv');
     containerDiv.appendChild(iDiv);
 
     var ifrm = document.createElement("iframe");
     ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
-    // ifrm.setAttribute('style', 'width: calc(100% - 10px); height: 100%; position: absolute; border-width: 0px; left: 5px;');           
-    ifrm.style.width = 'calc(100% - 10px)';
-    ifrm.style.height = 'calc(100% - 20px)';
-    ifrm.style.borderWidth = '0px';
-    ifrm.style.right = '5px';
-    ifrm.style.left = '5px';
-    ifrm.style.bottom = '20px';
-    ifrm.style.display = 'block';
-    ifrm.style.position = 'absolute';
+    ifrm.setAttribute('id','tiledeskiframe');
+    // ifrm.style.display = 'none';
 
     /** */
     window.tiledesk.on('onInit', function(event_data) {
         console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
         if (window.tiledesk.angularcomponent.component.g.isOpen) {
-            iDiv.style.width = "376px";
-            iDiv.style.height = 'calc(100% - 20px)';
-            ifrm.style.boxShadow = "rgba(0, 0, 0, 0.2) 0 0 10px";
+            containerDiv.classList.add("open");
+            containerDiv.classList.remove("closed");
+            iDiv.classList.remove("callout");
         } else {
-            iDiv.style.width = "100px";
-            iDiv.style.height = "100px";
-            ifrm.style.boxShadow = "none";
+            containerDiv.classList.add("closed");
+            containerDiv.classList.remove("open");
         }         
     });
 
     /** */
     window.tiledesk.on('onOpen', function(event_data) {
         console.log("launch onOpen");
-        iDiv.style.width = "376px";
-        iDiv.style.height = 'calc(100% - 20px)';
-        ifrm.style.boxShadow = "rgba(0, 0, 0, 0.2) 0 0 10px";
+        containerDiv.classList.add("open");
+        containerDiv.classList.remove("closed");
+        iDiv.classList.remove("callout");
     });
 
     /** */
     window.tiledesk.on('onClose', function(event_data) {
         console.log("launch onClose");
-        iDiv.style.width = "100px";
-        iDiv.style.height = "100px";
-        ifrm.style.boxShadow = "none";
+        containerDiv.classList.add("closed");
+        containerDiv.classList.remove("open");
     });
 
     /** */
     window.tiledesk.on('onOpenEyeCatcher', function(event_data) {
-        console.log("launch onOpenEyeCatcher");
-        iDiv.style.width = "370px";
-        iDiv.style.height = "120px";
-        ifrm.style.boxShadow = "none";
+        console.log("launch onOpenEyeCatcher", event_data);
+        iDiv.classList.add("callout");
     });
+     /** */
+     window.tiledesk.on('onClosedEyeCatcher', function(event_data) {
+        console.log("launch onClosedEyeCatcher", event_data);
+        iDiv.classList.remove("callout");
+    });
+
     iDiv.appendChild(ifrm);  
 }
 
@@ -96,6 +73,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
  * 
  */
 function initWidget() {
+    
     var tiledeskroot = document.createElement('tiledeskwidget-root');
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
@@ -119,5 +97,22 @@ function initWidget() {
         console.log("tileDeskAsyncInit() doesn't exists",er);
     }
     document.body.appendChild(tiledeskroot);
+
+    initCSSWidget(tiledeskScriptBaseLocation);
     loadIframe(tiledeskScriptBaseLocation);
+}
+
+function initCSSWidget(tiledeskScriptBaseLocation) {
+    var cssId = 'iframeCss';  // you could encode the css path itself to generate id..
+    // if (!document.getElementById(cssId))
+    // {
+        var head  = document.getElementsByTagName('head')[0];
+        var link  = document.createElement('link');
+        link.id   = cssId;
+        link.rel  = 'stylesheet';
+        link.type = 'text/css';
+        link.href = tiledeskScriptBaseLocation+'/iframe-style.css';
+        link.media = 'all';
+        head.appendChild(link);
+    // }
 }
