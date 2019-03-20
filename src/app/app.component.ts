@@ -102,7 +102,10 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this.initAll();
-        this.getMongDbDepartments();
+        if (this.g.supportMode) {
+            this.getMongDbDepartments();
+        }
+        this.setLoginSubscription();
         this.triggerOnInit();
         this.g.wdLog(' ---------------- A4 ---------------- ');
     }
@@ -111,7 +114,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        } else {
+            this.el.nativeElement.dispatchEvent(onInit);
+        }
+
     }
 
 
@@ -227,7 +236,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
-        this.setAvailableAgentsStatus();
+        
+        if (this.g.supportMode) {
+            this.setAvailableAgentsStatus();
+        }
 
         // da spostare!!
         const TEMP = this.storageService.getItem('preChatForm');
@@ -686,14 +698,26 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
-        // this.el.nativeElement.dispatchEvent(onOpen);
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpen);
+        }
+        
     }
     private triggerOnCloseEvent() {
         this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClose);
+        }
+
+        
     }
 
     private triggerOnOpenEyeCatcherEvent() {
@@ -706,7 +730,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private triggerOnClosedEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
+        }
+
+        
     }
 
 
@@ -937,6 +968,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * home - stack 0
      */
     private returnNewConversation() {
+
+
          this.g.wdLog(['returnNewConversation in APP COMPONENT', this.g.preChatForm]);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti

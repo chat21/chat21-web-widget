@@ -146,6 +146,7 @@ export class Globals {
   showWaitTime;
   showAvailableAgents;
   showLogoutOption;
+  supportMode: boolean;
 
   constructor(
     private translatorService: TranslatorService,
@@ -371,6 +372,8 @@ export class Globals {
     this.displayEyeCatcherCard = 'none';
     // ============ END: SET INTERNAL PARAMETERS ==============//
     this.windowContext = window;
+
+    this.supportMode = true;
   }
 
 
@@ -672,6 +675,11 @@ export class Globals {
     TEMP = tiledeskSettings['showLogoutOption'];
     if (TEMP !== undefined) {
       this.showLogoutOption = (TEMP === false) ? false : true;
+    }
+
+    TEMP = this.windowContext['tiledesk']['mode'];
+    if (TEMP !== undefined) {
+      this.supportMode = (TEMP === false) ? false : true;
     }
 
   }
