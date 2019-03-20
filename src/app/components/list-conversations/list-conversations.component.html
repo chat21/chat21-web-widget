@@ -70,7 +70,7 @@
   </div>
 
   
-  <div class="c21-footer"> 
+  <div class="c21-footer" *ngIf="this.g.supportMode"> 
 
     <button class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
         <span class="v-align-center">

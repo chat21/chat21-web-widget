@@ -102,7 +102,10 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this.initAll();
-        this.getMongDbDepartments();
+        if (this.g.supportMode) {
+            this.getMongDbDepartments();
+        }
+        this.setLoginSubscription();
         this.triggerOnInit();
         this.g.wdLog(' ---------------- A4 ---------------- ');
     }
@@ -227,7 +230,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
-        this.setAvailableAgentsStatus();
+        
+        if (this.g.supportMode) {
+            this.setAvailableAgentsStatus();
+        }
 
         // da spostare!!
         const TEMP = this.storageService.getItem('preChatForm');
@@ -937,6 +943,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * home - stack 0
      */
     private returnNewConversation() {
+
+
          this.g.wdLog(['returnNewConversation in APP COMPONENT', this.g.preChatForm]);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
