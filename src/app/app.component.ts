@@ -114,8 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
-        
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
         } else {
             this.el.nativeElement.dispatchEvent(onInit);
@@ -699,45 +698,48 @@ export class AppComponent implements OnInit, OnDestroy {
         const default_settings = this.g.default_settings;
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
-        
+
     }
     private triggerOnCloseEvent() {
         this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
         }
 
-        
     }
 
     private triggerOnOpenEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
+        }
     }
 
     private triggerOnClosedEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
         } else {
             this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
         }
 
-        
     }
 
 
