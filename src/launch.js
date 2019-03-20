@@ -24,6 +24,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     var ifrm = document.createElement("iframe");
     //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
+    // projectid= '5b55e806c93dde00143163dd'
     var srcTileDesk =  `
         <html lang="en">
         <head>
@@ -34,7 +35,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         <link rel="icon" type="image/x-icon" href="favicon.ico">
         </head>
         <body>
-            <tiledeskwidget-root projectid= '5b55e806c93dde00143163dd'></tiledeskwidget-root>
+            <tiledeskwidget-root></tiledeskwidget-root>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/inline.bundle.js"></script>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/polyfills.bundle.js"></script>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/styles.bundle.js"></script>
