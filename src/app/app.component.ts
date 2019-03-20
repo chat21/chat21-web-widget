@@ -114,7 +114,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        } else {
+            this.el.nativeElement.dispatchEvent(onInit);
+        }
+
     }
 
 
@@ -692,14 +698,26 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
-        // this.el.nativeElement.dispatchEvent(onOpen);
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpen);
+        }
+        
     }
     private triggerOnCloseEvent() {
         this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClose);
+        }
+
+        
     }
 
     private triggerOnOpenEyeCatcherEvent() {
@@ -712,7 +730,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private triggerOnClosedEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+
+        if (this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
+        }
+
+        
     }
 
 
