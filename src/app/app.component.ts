@@ -187,15 +187,16 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private initAll() {
 
-        this.g.initialize(this.el);
-
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
-        // this.g.lang = setLanguage(this.translatorService);
+        console.log('lang: ', this.g.windowContext, this.translatorService);
         this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
-
+        console.log('lang: ', this.g.lang);
         moment.locale(this.g.lang);
         this.g.wdLog([' lang: ', this.g.lang]);
+
+
+        this.g.initialize(this.el);
 
         // detect is mobile
         this.g.isMobile = detectIfIsMobile(this.g.windowContext);
@@ -235,7 +236,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
-        
+
         if (this.g.supportMode) {
             this.setAvailableAgentsStatus();
         }
