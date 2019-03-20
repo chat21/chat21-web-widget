@@ -2,7 +2,8 @@
     right: 0px;
     bottom: 0px;
     display: block;
-    position: fixed;
+    position: fixed;    
+    z-index: 999999;
 }
 #tiledeskdiv {
     width: 100%;

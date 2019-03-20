@@ -38,7 +38,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
             <tiledeskwidget-root></tiledeskwidget-root>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/inline.bundle.js"></script>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/polyfills.bundle.js"></script>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/styles.bundle.js"></script>
+            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/styles.bundle.css"></script>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/vendor.bundle.js"></script>
             <script type="text/javascript" src="${tiledeskScriptBaseLocation}/main.bundle.js"></script>
         </body>
