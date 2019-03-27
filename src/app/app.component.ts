@@ -114,8 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
-        
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
         } else {
             this.el.nativeElement.dispatchEvent(onInit);
@@ -188,15 +187,16 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private initAll() {
 
-        this.g.initialize(this.el);
-
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
-        // this.g.lang = setLanguage(this.translatorService);
+        console.log('lang: ', this.g.windowContext, this.translatorService);
         this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
-
+        console.log('lang: ', this.g.lang);
         moment.locale(this.g.lang);
         this.g.wdLog([' lang: ', this.g.lang]);
+
+
+        this.g.initialize(this.el);
 
         // detect is mobile
         this.g.isMobile = detectIfIsMobile(this.g.windowContext);
@@ -236,7 +236,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
-        
+
         if (this.g.supportMode) {
             this.setAvailableAgentsStatus();
         }
@@ -699,45 +699,48 @@ export class AppComponent implements OnInit, OnDestroy {
         const default_settings = this.g.default_settings;
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
-        
+
     }
     private triggerOnCloseEvent() {
         this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
         }
 
-        
     }
 
     private triggerOnOpenEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
-        this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
+        }
     }
 
     private triggerOnClosedEyeCatcherEvent() {
         this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
 
-        if (this.g.windowContext.tiledesk.tiledeskroot) {
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
             this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
         } else {
             this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
         }
 
-        
     }
 
 

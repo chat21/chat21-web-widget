@@ -160,11 +160,10 @@ export class Globals {
 
   initialize(el) {
     this.wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
-
     // console.log("window.frameElement.getAttribute('tiledesk_context')", window.frameElement.getAttribute('tiledesk_context'));
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
       this.windowContext = window.parent;
-      console.log('this.windowContext force to window.parent');
+      console.log('this.windowContext force to window.parent', this.windowContext);
     }
 
     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
@@ -383,6 +382,7 @@ export class Globals {
    *
    */
   getVariablesFromAttributeHtml(el) {
+    console.log('getVariablesFromAttributeHtml');
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
     let TEMP;
     TEMP = el.nativeElement.getAttribute('tenant');
@@ -398,6 +398,7 @@ export class Globals {
     if (TEMP !== null) {
       this.projectid = TEMP;
     }
+    console.log('projectid::: ', TEMP, this.projectid);
     TEMP = el.nativeElement.getAttribute('widgetTitle');
     if (TEMP !== null) {
       this.widgetTitle = TEMP;
@@ -507,175 +508,171 @@ export class Globals {
    * 6: getVariablesFromSettings
   */
   getVariablesFromSettings() {
+    console.log('getVariablesFromSettings');
     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
     if (!this.windowContext['tiledesk']) {
-    // if (!window['tiledesk']) {
       return 0;
     }
+    console.log('this.windowContext[tiledeskSettings]', this.windowContext['tiledeskSettings']);
+    const tiledeskSettings = this.windowContext['tiledeskSettings'];
+
     let TEMP;
-    // TEMP = this.windowContext['tiledesk']['tenant'];
-    TEMP = this.windowContext['tiledeskSettings']['tenant'];
-
-    if (TEMP !== undefined) {
-      this.tenant = TEMP;
-    }
-
     TEMP =  this.windowContext['tiledesk'].getBaseLocation();
     if (TEMP !== undefined) {
       this.baseLocation = TEMP;
     }
-
-
-    TEMP = this.windowContext['tiledesk']['recipientId'];
+    TEMP = tiledeskSettings['tenant'];
+    if (TEMP !== undefined) {
+      this.tenant = TEMP;
+    }
+    TEMP = tiledeskSettings['recipientId'];
     if (TEMP !== undefined) {
       this.recipientId = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['projectid'];
+    TEMP = tiledeskSettings['projectid'];
     if (TEMP !== undefined) {
       this.projectid = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['widgetTitle'];
+    TEMP = tiledeskSettings['widgetTitle'];
     if (TEMP !== undefined) {
       this.widgetTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['poweredBy'];
+    TEMP = tiledeskSettings['poweredBy'];
     if (TEMP !== undefined) {
       this.poweredBy = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['userId'];
+    TEMP = tiledeskSettings['userId'];
     if (TEMP !== undefined) {
       this.userId = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['userEmail'];
+    TEMP = tiledeskSettings['userEmail'];
     if (TEMP !== undefined) {
       this.userEmail = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['userPassword'];
+    TEMP = tiledeskSettings['userPassword'];
     if (TEMP !== undefined) {
       this.userPassword = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['userFullname'];
+    TEMP = tiledeskSettings['userFullname'];
     if (TEMP !== undefined) {
       this.userFullname = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['preChatForm'];
+    TEMP = tiledeskSettings['preChatForm'];
     if (TEMP !== undefined) {
       this.preChatForm = (TEMP === false) ? false : true;
     }
-
-    TEMP = this.windowContext['tiledesk']['isOpen'];
+    TEMP = tiledeskSettings['isOpen'];
     if (TEMP !== undefined) {
       this.isOpen = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['channelType'];
+    TEMP = tiledeskSettings['channelType'];
     if (TEMP !== undefined) {
       this.channelType = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['lang'];
+    TEMP = tiledeskSettings['lang'];
     if (TemplateBindingParseResult) {
       this.lang = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['align'];
+    TEMP = tiledeskSettings['align'];
     if (TEMP !== undefined) {
       this.align = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['marginX'];
+    TEMP = tiledeskSettings['marginX'];
     if (TEMP !== undefined) {
       this.marginX = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['marginY'];
+    TEMP = tiledeskSettings['marginY'];
     if (TEMP !== undefined) {
       this.marginY = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['calloutTimer'];
+    TEMP = tiledeskSettings['calloutTimer'];
     if (TEMP !== undefined) {
       this.calloutTimer = TEMP;
     }
-
-    TEMP = this.windowContext['tiledesk']['calloutTitle'];
+    TEMP = tiledeskSettings['calloutTitle'];
     if (TEMP !== undefined) {
       this.calloutTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['calloutMsg'];
+    TEMP = tiledeskSettings['calloutMsg'];
     if (TEMP !== undefined) {
       this.calloutMsg = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['fullscreenMode'];
+    TEMP = tiledeskSettings['fullscreenMode'];
     if (TEMP !== undefined) {
       this.fullscreenMode = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['hideHeaderCloseButton'];
+    TEMP = tiledeskSettings['hideHeaderCloseButton'];
     if (TEMP !== undefined) {
       this.hideHeaderCloseButton = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['themeColor'];
+    TEMP = tiledeskSettings['themeColor'];
     if (TEMP !== undefined) {
       this.themeColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = this.windowContext['tiledesk']['themeForegroundColor'];
+    TEMP = tiledeskSettings['themeForegroundColor'];
     if (TEMP !== undefined) {
       this.themeForegroundColor = convertColorToRGBA(TEMP, 100);
     }
-    TEMP = this.windowContext['tiledesk']['allowTranscriptDownload'];
+    TEMP = tiledeskSettings['allowTranscriptDownload'];
     if (TEMP !== undefined) {
       this.allowTranscriptDownload = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['userToken'];
+    TEMP = tiledeskSettings['userToken'];
     if (TEMP !== undefined) {
       this.userToken = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['startFromHome'];
+    TEMP = tiledeskSettings['startFromHome'];
     if (TEMP !== undefined) {
       this.startFromHome = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['logoChat'];
+    TEMP = tiledeskSettings['logoChat'];
     if (TEMP !== undefined) {
       this.logoChat = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['wellcomeTitle'];
+    TEMP = tiledeskSettings['wellcomeTitle'];
     if (TEMP !== undefined) {
       this.wellcomeTitle = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['wellcomeMsg'];
+    TEMP = tiledeskSettings['wellcomeMsg'];
     if (TEMP !== undefined) {
       this.wellcomeMsg = TEMP;
     }
-    TEMP = this.windowContext['tiledesk']['autoStart'];
+    TEMP = tiledeskSettings['autoStart'];
      this.wdLog([' autoStart::: ', TEMP]);
     if (TEMP !== undefined) {
       this.autoStart = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['isShown'];
+    TEMP = tiledeskSettings['isShown'];
     if (TEMP !== undefined) {
       this.isShown = (TEMP === false) ? false : true;
     }
-    // TEMP = this.windowContext['tiledesk']['isLogoutEnabled'];
+    // TEMP = tiledeskSettings['isLogoutEnabled'];
     // if (TEMP !== undefined) {
     //   this.isLogoutEnabled = (TEMP === false) ? false : true;
     // }
-    TEMP = this.windowContext['tiledesk']['isLogEnabled'];
+    TEMP = tiledeskSettings['isLogEnabled'];
     if (TEMP !== undefined) {
       this.isLogEnabled = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['filterByRequester'];
+    TEMP = tiledeskSettings['filterByRequester'];
     if (TEMP !== undefined) {
       this.filterByRequester = (TEMP === false) ? false : true;
     }
 
-    TEMP = this.windowContext['tiledesk']['persistence'];
+    TEMP = tiledeskSettings['persistence'];
     if (TEMP !== undefined) {
       this.persistence = TEMP;
     }
 
-    TEMP = this.windowContext['tiledesk']['showWaitTime'];
+    TEMP = tiledeskSettings['showWaitTime'];
     if (TEMP !== undefined) {
       this.showWaitTime = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['showAvailableAgents'];
+    TEMP = tiledeskSettings['showAvailableAgents'];
     if (TEMP !== undefined) {
       this.showAvailableAgents = (TEMP === false) ? false : true;
     }
-    TEMP = this.windowContext['tiledesk']['showLogoutOption'];
+    TEMP = tiledeskSettings['showLogoutOption'];
     if (TEMP !== undefined) {
       this.showLogoutOption = (TEMP === false) ? false : true;
     }

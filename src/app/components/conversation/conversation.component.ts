@@ -265,7 +265,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
     }, (error) => {
-      console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+      console.error('2 setOnlineStatus::setAvailableAgentsStatus', error);
     }, () => {
     });
   }

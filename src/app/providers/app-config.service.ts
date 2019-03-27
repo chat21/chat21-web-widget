@@ -16,7 +16,7 @@ export class AppConfigService {
       .then(data => {
         this.appConfig = data;
       }).catch(err => {
-        console.error('error loadAppConfig');
+        console.log('error loadAppConfig');
       });
   }
 
