@@ -19,7 +19,7 @@ import { MomentModule } from 'angular2-moment';
 import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
-import { AuthService } from './core/auth.service';
+import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ConversationsService } from './providers/conversations.service';
 import { UploadService } from './providers/upload.service';

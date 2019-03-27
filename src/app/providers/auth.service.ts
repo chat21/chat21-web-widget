@@ -8,7 +8,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Globals } from '../utils/globals';
 import { supports_html5_storage, supports_html5_session } from '../utils/utils';
-import { AppConfigService } from '../providers/app-config.service';
+import { AppConfigService } from './app-config.service';
 
 @Injectable()
 export class AuthService {

@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 // services
 import { Globals } from './utils/globals';
-import { AuthService } from './core/auth.service';
+import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { StorageService } from './providers/storage.service';
