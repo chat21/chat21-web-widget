@@ -52,7 +52,7 @@
     "@angular/compiler-cli": "^5.0.2",
     "typescript": "~2.4.2"
   },
-  "devDependencies": {   
+  "devDependencies": {
     "@angular/language-service": "^5.0.2",
     "@types/jasmine": "2.8.2",
     "@types/jasminewd2": "~2.0.2",
