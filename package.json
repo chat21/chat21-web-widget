@@ -51,12 +51,13 @@
     "@angular/cli": "^1.7.1",
     "@angular/compiler-cli": "^5.0.2",
     "typescript": "~2.4.2",
-    "@types/node": "^8.0.58"
+    "@types/node": "^8.0.58",
+    "@types/jasmine": "2.8.2",
+    "@types/jasminewd2": "~2.0.2"
   },
   "devDependencies": {
     "@angular/language-service": "^5.0.2",
-    "@types/jasmine": "2.8.2",
-    "@types/jasminewd2": "~2.0.2",
+
     "codelyzer": "~4.0.1",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
