@@ -19,6 +19,9 @@
     "e2e": "ng e2e",
     "postinstall": "ng build --aot --prod"
   },
+  "bin": {
+    "chat21-web-widget": "./bin/chat21-web-widget"
+  },
   "dependencies": {
     "@angular/animations": "^5.0.2",
     "@angular/common": "^5.0.2",
