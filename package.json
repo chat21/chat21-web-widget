@@ -1,7 +1,7 @@
 {
   "name": "@chat21/chat21-web-widget",
   "author": "Dario De Pascalis - Frontiere21 SRL",
-  "version": "2.0.4-beta.14",
+  "version": "2.0.4-beta.13",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiledesk.com",
   "repository": {
@@ -16,7 +16,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --aot --prod"
   },
   "bin": {
     "chat21-web-widget": "./bin/chat21-web-widget"
@@ -52,7 +53,8 @@
     "typescript": "~2.4.2",
     "@types/node": "^8.0.58",
     "@types/jasmine": "2.8.2",
-    "@types/jasminewd2": "~2.0.2"
+    "@types/jasminewd2": "~2.0.2",
+    "ts-node": "~3.3.0"
   },
   "devDependencies": {
     "@angular/language-service": "^5.0.2",
@@ -66,7 +68,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.2.0",
-    "ts-node": "~3.3.0",
+   
     "tslint": "~5.8.0"
   }
 }
