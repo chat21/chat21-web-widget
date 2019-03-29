@@ -1,16 +1,27 @@
 {
-  "name": "chat21-web-widget",
-  "version": "0.0.30",
-  "license": "MIT",
+  "name": "@chat21/chat21-web-widget",
+  "author": "Dario De Pascalis - Frontiere21 SRL",
+  "version": "2.0.4-beta.25",
+  "license": "AGPL-3.0",
+  "homepage": "https://www.tiledesk.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chat21/chat21-web-widget"
+  },
+  "private": false,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "serve": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --prod --base-href --output-hashing none  --build-optimizer=false"
   },
-  "private": false,
+  "bin": {
+    "chat21-web-widget": "./bin/chat21-web-widget"
+  },
   "dependencies": {
     "@angular/animations": "^5.0.2",
     "@angular/common": "^5.0.2",
@@ -26,26 +37,27 @@
     "angular-resize-event": "^0.4.4",
     "angular2-moment": "^1.8.0",
     "angular2-uuid": "^1.1.1",
-    "angularfire2": "^5.0.0-rc.9",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.1",
     "custom-event-polyfill": "^1.0.6",
-    "firebase": "^5.0.4",
+    "firebase": "^5.8.5",
     "humanize-duration-ts": "^2.0.0",
     "intl": "^1.2.5",
     "ionicons": "^3.0.0",
     "less": "^2.7.3",
     "material-design-icons": "^3.0.1",
     "rxjs": "^5.4.2",
-    "zone.js": "^0.8.14"
-  },
-  "devDependencies": {
+    "zone.js": "^0.8.14",
     "@angular/cli": "^1.7.1",
     "@angular/compiler-cli": "^5.0.2",
-    "@angular/language-service": "^5.0.2",
+    "typescript": "~2.4.2",
+    "@types/node": "^8.0.58",
     "@types/jasmine": "2.8.2",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "~8.0.53",
+    "ts-node": "~3.3.0"
+  },
+  "devDependencies": {
+    "@angular/language-service": "^5.0.2",
     "codelyzer": "~4.0.1",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -56,8 +68,6 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.2.0",
-    "ts-node": "~3.3.0",
-    "tslint": "~5.8.0",
-    "typescript": "~2.4.2"
+    "tslint": "~5.8.0"
   }
 }

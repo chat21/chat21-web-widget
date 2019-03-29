@@ -22,7 +22,7 @@ echo 'ver: ---->'$NEW_VER
 echo 'build: ---->'$NEW_BUILD
 
 sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
-ng build --prod --base-href --output-hashing none 
+ng build --prod --base-href --output-hashing none --build-optimizer=false
 
 cd dist
 aws s3 sync . s3://tiledesk-widget-pre/v2/

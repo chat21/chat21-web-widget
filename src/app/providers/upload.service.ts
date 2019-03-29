@@ -13,6 +13,7 @@ import { UploadModel } from '../../models/upload';
 import { environment } from '../../environments/environment';
 
 import { Globals } from '../utils/globals';
+import { AppConfigService } from '../providers/app-config.service';
 
 class ImageSnippet {
   pending = false;
@@ -34,7 +35,8 @@ export class UploadService {
   observable: any;
 
   constructor(
-    public g: Globals
+    public g: Globals,
+    public appConfigService: AppConfigService
   ) {
     this.observable = new BehaviorSubject<string>('');
   }
@@ -42,15 +44,11 @@ export class UploadService {
   public initialize(senderId, tenant, recipientId) {
     this.senderId = senderId;
     if (!tenant) {
-      this.tenant = environment.tenant;
+      this.tenant = this.appConfigService.getConfig().tenant;
     } else {
       this.tenant = tenant;
     }
-    if (!recipientId) {
-      this.recipientId = environment.agentId;
-    } else {
       this.recipientId = recipientId;
-    }
   }
 
 

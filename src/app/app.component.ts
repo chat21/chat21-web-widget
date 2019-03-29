@@ -9,18 +9,23 @@ import { Subscription } from 'rxjs/Subscription';
 
 // services
 import { Globals } from './utils/globals';
-import { AuthService } from './core/auth.service';
+// import { AuthService } from './core/auth.service';
+import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
+import * as firebase from 'firebase';
+import { environment } from '../environments/environment';
 
 
 // utils
 import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
+import { AppConfigService } from './providers/app-config.service';
+
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -82,7 +87,11 @@ export class AppComponent implements OnInit, OnDestroy {
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
+        public appConfigService: AppConfigService
     ) {
+        // firebase.initializeApp(environment.firebase);  // here shows the error
+        // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
+        firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
 
@@ -94,8 +103,24 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this.initAll();
-        this.getMongDbDepartments();
+        if (this.g.supportMode) {
+            this.getMongDbDepartments();
+        }
+        this.setLoginSubscription();
+        this.triggerOnInit();
         this.g.wdLog(' ---------------- A4 ---------------- ');
+    }
+
+    private triggerOnInit() {
+        this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        } else {
+            this.el.nativeElement.dispatchEvent(onInit);
+        }
+
     }
 
 
@@ -122,30 +147,28 @@ export class AppComponent implements OnInit, OnDestroy {
                     /** ho effettuato il logout: nascondo il widget */
                     that.g.isLogged = false;
                     that.g.isShown = false;
-                    that.g.wdLog(['LOGOUT : ', user, that.g.autoStart]);
+                    this.g.wdLog(['LOGOUT : ', user, that.g.autoStart]);
                     that.triggeisLoggedInEvent();
                 } else if (user === 0) {
                     /** non sono loggato */
                     that.g.isLogged = false;
-                    that.g.wdLog(['NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart]);
+                    this.g.wdLog(['NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart]);
                     if (that.g.autoStart === true) {
                         that.setAuthentication();
                     }
                     that.triggeisLoggedInEvent();
                 } else if (user) {
                     /** sono loggato */
-                    that.g.wdLog(['USER AUTENTICATE: ', user.uid]);
+                    this.g.wdLog(['USER AUTENTICATE: ', user.uid]);
                     that.g.senderId = user.uid;
-                    that.g.attributes = that.setAttributes();
-
                     that.g.isLogged = true;
-                    that.g.wdLog([' this.g.senderId', that.g.senderId]);
-                    that.g.wdLog([' this.g.isLogged', that.g.isLogged]);
+                    this.g.wdLog([' this.g.senderId', that.g.senderId]);
+                    this.g.wdLog([' this.g.isLogged', that.g.isLogged]);
                     // that.openIfCallOutTimer();
                     that.startNwConversation();
                     that.startUI();
                     that.triggeisLoggedInEvent();
-                    that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
+                    this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(that.g.senderId);
                 }
             });
@@ -167,12 +190,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // set lang and in global variables
         this.g.wdLog([' ---------------- SET LANG ---------------- ']);
-        this.g.lang = setLanguage(this.translatorService);
+        console.log('lang: ', this.g.windowContext, this.translatorService);
+        this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
+        console.log('lang: ', this.g.lang);
         moment.locale(this.g.lang);
         this.g.wdLog([' lang: ', this.g.lang]);
 
+
+        this.g.initialize(this.el);
+
         // detect is mobile
-        this.g.isMobile = detectIfIsMobile();
+        this.g.isMobile = detectIfIsMobile(this.g.windowContext);
+        // this.g.isMobile = detectIfIsMobile();
 
         // Related to https://github.com/firebase/angularfire/issues/970
         if (supports_html5_storage()) {
@@ -180,17 +209,22 @@ export class AppComponent implements OnInit, OnDestroy {
         }
         this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
 
-        this.g.initialize(this.el);
-        this.g.attributes = this.setAttributes();
+        // this.g.initialize(this.el);
+        this.g.attributes = this.setAttributesFromStorageService();
         this.setSound();
 
-         this.g.wdLog([' ---------------- A0 ---------------- ']);
+        this.g.wdLog([' ---------------- A3 ---------------- ']);
+        this.setIsWidgetOpenOrActive();
+
+        this.triggerLoadParamsEvent();
+        this.g.wdLog([' ---------------- A2 ---------------- ']);
+
+
+        this.g.wdLog([' ---------------- A0 ---------------- ']);
 
         this.addComponentToWindow(this.ngZone);
-         this.g.wdLog([' ---------------- A1 ---------------- ']);
+        this.g.wdLog([' ---------------- A1 ---------------- ']);
 
-        this.triggetLoadParamsEvent();
-         this.g.wdLog([' ---------------- A2 ---------------- ']);
 
         // this.startNwConversation();
 
@@ -203,7 +237,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
-        this.setAvailableAgentsStatus();
+
+        if (this.g.supportMode) {
+            this.setAvailableAgentsStatus();
+        }
 
         // da spostare!!
         const TEMP = this.storageService.getItem('preChatForm');
@@ -225,7 +262,7 @@ export class AppComponent implements OnInit, OnDestroy {
 /**
    * 9: setAttributes
    */
-  private setAttributes(): any {
+  private setAttributesFromStorageService(): any {
     const CLIENT_BROWSER = navigator.userAgent;
     let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
     if (!attributes || attributes === 'undefined') {
@@ -355,7 +392,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         /********** LOGIN  ***********/
-        this.setLoginSubscription();
+        // vedi init -> this.setLoginSubscription();
     }
 
     /**
@@ -426,9 +463,9 @@ export class AppComponent implements OnInit, OnDestroy {
             this.g.wdLog([' ---------------- 13 ---------------- ']);
             this.g.senderId = currentUser.uid;
             this.g.isLogged = true;
-             this.g.wdLog([' this.g.senderId', this.g.senderId]);
-             this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
-             this.startNwConversation();
+            this.g.wdLog([' this.g.senderId', this.g.senderId]);
+            this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
+            this.startNwConversation();
             this.startUI();
              this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
@@ -448,8 +485,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
-         this.g.wdLog([' ---------------- A3 ---------------- ']);
-        this.setIsWidgetOpenOrActive();
+        //  this.g.wdLog([' ---------------- A3 ---------------- ']);
+        // this.setIsWidgetOpenOrActive();
 
          this.g.wdLog([' ============ startUI ===============', this.g.departmentSelected, this.g.isLogged]);
 
@@ -489,24 +526,25 @@ export class AppComponent implements OnInit, OnDestroy {
      * http://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
      */
     private addComponentToWindow(ngZone) {
-        if (window['tiledesk']) {
-            window['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
-            /** */
-            window['tiledesk'].setUserInfo = function (userInfo) {
+        const that = this;
+        if (this.g.windowContext['tiledesk']) {
+            this.g.windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
+           /** */
+            this.g.windowContext['tiledesk'].setUserInfo = function (userInfo) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
                 });
             };
             /** loggin with token */
-            window['tiledesk'].signInWithCustomToken = function (token) {
+            this.g.windowContext['tiledesk'].signInWithCustomToken = function (token) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
                 });
             };
             /** loggin anonymous */
-            window['tiledesk'].signInAnonymous = function () {
+            this.g.windowContext['tiledesk'].signInAnonymous = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.signInAnonymous();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
             // window['tiledesk'].on = function (event_name, handler) {
@@ -514,45 +552,46 @@ export class AppComponent implements OnInit, OnDestroy {
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
             /** show all widget */
-            window['tiledesk'].show = function () {
+            this.g.windowContext['tiledesk'].show = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.showAllWidget();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.showAllWidget();
                 });
             };
             /** hidden all widget */
-            window['tiledesk'].hide = function () {
+            this.g.windowContext['tiledesk'].hide = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.hideAllWidget();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.hideAllWidget();
                 });
             };
             /** close window chat */
-            window['tiledesk'].close = function () {
+            this.g.windowContext['tiledesk'].close = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.f21_close();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_close();
                 });
             };
             /** open window chat */
-            window['tiledesk'].open = function () {
+            this.g.windowContext['tiledesk'].open = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.f21_open();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
             /** set state PreChatForm close/open */
-            window['tiledesk'].setPreChatForm = function (state) {
+            this.g.windowContext['tiledesk'].setPreChatForm = function (state) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.setPreChatForm(state);
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
-            window['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+            // tslint:disable-next-line:max-line-length
+            this.g.windowContext['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component
+                    that.g.windowContext['tiledesk']['angularcomponent'].component
                         .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
                 });
             };
             /** set state PreChatForm close/open */
-            window['tiledesk'].endMessageRender = function () {
+            this.g.windowContext['tiledesk'].endMessageRender = function () {
                 ngZone.run(() => {
-                    window['tiledesk']['angularcomponent'].component.endMessageRender();
+                    that.g.windowContext['tiledesk']['angularcomponent'].component.endMessageRender();
                 });
             };
 
@@ -582,17 +621,17 @@ export class AppComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 that.authService.decode(token, that.g.projectid)
                     .subscribe(resDec => {
-                        that.g.wdLog(['resDec', resDec.decoded]);
+                         this.g.wdLog(['resDec', resDec.decoded]);
                         that.g.signInWithCustomToken = true;
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
                         that.g.attributes.userEmail = resDec.decoded.email;
                         that.g.attributes.userFullname = resDec.decoded.name;
                         const firebaseToken = response.firebaseToken;
-                        that.g.wdLog(['firebaseToken', firebaseToken]);
+                         this.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        that.g.attributes = that.setAttributes();
+                        that.setAttributesFromStorageService();
 
                     }, error => {
                         console.error('Error decoding token: ', error);
@@ -650,10 +689,62 @@ export class AppComponent implements OnInit, OnDestroy {
             this.g.setIsOpen(true);
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
-            this.g.displayEyeCatcherCard = 'none';
+            // this.g.displayEyeCatcherCard = 'none';
+            this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
     }
+
+    private triggerOnOpenEvent() {
+        this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpen);
+        }
+
+    }
+    private triggerOnCloseEvent() {
+        this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClose);
+        }
+
+    }
+
+    private triggerOnOpenEyeCatcherEvent() {
+        this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', this.g.default_settings]);
+        const default_settings = this.g.default_settings;
+        const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
+        }
+    }
+
+    private triggerOnClosedEyeCatcherEvent() {
+        this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
+        const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
+
+        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
+            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+        } else {
+            this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
+        }
+
+    }
+
+
 
     /** close popup conversation */
     private f21_close() {
@@ -661,6 +752,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // this.g.isOpen = false;
         this.g.setIsOpen(false);
         this.storageService.setItem('isOpen', 'false');
+        this.triggerOnCloseEvent();
     }
 
     // ========= end:: COMPONENT TO WINDOW ============//
@@ -686,16 +778,16 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     /** */
-    private triggetLoadParamsEvent() {
-        this.g.wdLog([' ---------------- triggetLoadParamsEvent ---------------- ', this.g.default_settings]);
+    private triggerLoadParamsEvent() {
+        this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
         this.el.nativeElement.dispatchEvent(loadParams);
     }
 
     /** */
-    // private triggetBeforeMessageRender(text) {
-    //     this.g.wdLog([' ---------------- triggetBeforeMessageRender ---------------- ', this.g.default_settings]);
+    // private triggerBeforeMessageRender(text) {
+    //     this.g.wdLog([' ---------------- triggerBeforeMessageRender ---------------- ', this.g.default_settings]);
     //     const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: '{json}' });
     //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
     // }
@@ -706,8 +798,8 @@ export class AppComponent implements OnInit, OnDestroy {
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
          this.g.wdLog(['this.subscriptions', this.subscriptions]);
-        if (window['tiledesk']) {
-            window['tiledesk']['angularcomponent'] = null;
+        if (this.g.windowContext['tiledesk']) {
+            this.g.windowContext['tiledesk']['angularcomponent'] = null;
         }
         this.unsubscribe();
     }
@@ -798,6 +890,11 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     openCloseWidget($event) {
         this.g.displayEyeCatcherCard = 'none';
+        if ( this.g.isOpen === true ) {
+            this.triggerOnOpenEvent();
+        } else {
+            this.triggerOnCloseEvent();
+        }
         this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
     }
 
@@ -875,6 +972,8 @@ export class AppComponent implements OnInit, OnDestroy {
      * home - stack 0
      */
     private returnNewConversation() {
+
+
          this.g.wdLog(['returnNewConversation in APP COMPONENT', this.g.preChatForm]);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
@@ -970,5 +1069,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.startNwConversation();
     }
 
+    returneventOpenEyeCatcher($e) {
+        if ($e === true) {
+            this.triggerOnOpenEyeCatcherEvent();
+        } else {
+            this.triggerOnClosedEyeCatcherEvent();
+        }
+    }
     // ========= end:: CALLBACK FUNCTIONS ============//
 }

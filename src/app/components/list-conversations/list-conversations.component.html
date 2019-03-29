@@ -38,7 +38,8 @@
           <div class="c21-left-conv">
               <div class="c21-icon-avatar">
                   <div class="profile_image">
-                    <img src="{{getUrlImgProfile(conversation.sender)}}"  onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" />
+                    <!-- <img src="{{getUrlImgProfile(conversation.sender)}}"  onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" /> -->
+                    <img src="{{getUrlImgProfile(conversation.sender)}}"  onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_male_tiledesk.svg'" />
                   </div> 
    
                   <!-- <div #avatarPlaceholder *ngIf="!conversation.image" [style.background-color]="conversation.color" class="c21-avatar-placeholder"
@@ -70,7 +71,7 @@
   </div>
 
   
-  <div class="c21-footer"> 
+  <div class="c21-footer" *ngIf="this.g.supportMode"> 
 
     <button class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
         <span class="v-align-center">

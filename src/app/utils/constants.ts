@@ -57,6 +57,6 @@ export const BCK_COLOR_CONVERSATION_UNSELECTED = '#FFFFFF';
 
 // links
 export const FIREBASESTORAGE_BASE_URL_IMAGE = 'https://firebasestorage.googleapis.com/v0/b/chat-v2-dev.appspot.com/o/';
-export const IMG_PROFILE_BOT = '/assets/images/line_avatar_bot_tiledesk.svg';
-export const IMG_PROFILE_DEFAULT = '/assets/images/line_avatar_male_tiledesk.svg';
+export const IMG_PROFILE_BOT = '/assets/images/avatar_bot_tiledesk.svg';
+export const IMG_PROFILE_DEFAULT = '/assets/images/avatar_male_tiledesk.svg';
 

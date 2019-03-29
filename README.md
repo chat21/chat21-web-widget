@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/%40chat21%2Fchat21-web-widget.svg)](https://badge.fury.io/js/%40chat21%2Fchat21-web-widget)
+
 # chat21-web-widget
 
 Chat21-web-widget is a Free Live Chat Widget built on Firebase with Angular5 that lets you support and chat with visitors and customers on your website. 
@@ -54,6 +56,8 @@ Run : `aws s3 sync . s3://tiledesk-widget`
 Or With a different AWS Profile: 
 
 Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
+
+If you use AWS Cloud Front enable gzip compression.
 
 # Docker
 docker image build -t tiledesk-web-widget .

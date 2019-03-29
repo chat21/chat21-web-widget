@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.g.wdLog(['ngOnInit app-home']);
+    this.g.wdLog(['ngOnInit app-home']);
     // get global variables
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;

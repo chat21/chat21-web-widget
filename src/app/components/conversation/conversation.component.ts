@@ -202,13 +202,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
     this.messages = [];
 
-      this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
+    this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
 
-      this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
+    this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
     this.connectConversation();
 
-      this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
+    this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     this.initializeChatManager();
 
 
@@ -265,7 +265,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
     }, (error) => {
-      console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+      console.error('2 setOnlineStatus::setAvailableAgentsStatus', error);
     }, () => {
     });
   }
@@ -619,7 +619,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (textArea) {
         textArea.value = '';  // clear the textarea
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
-            this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
+        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
           console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
@@ -729,8 +729,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private triggerAfterSendMessageEvent(message) {
     try {
         // tslint:disable-next-line:max-line-length
-        const loadEvent = new CustomEvent('afterMessageSend', { detail: { message: message } });
-        this.el.nativeElement.dispatchEvent(loadEvent);
+        const afterMessageSend = new CustomEvent('afterMessageSend', { detail: { message: message } });
+        this.el.nativeElement.dispatchEvent(afterMessageSend);
     } catch (e) {
         console.error('Error triggering triggerAfterSendMessageEvent', e);
     }
@@ -1170,7 +1170,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   dowloadTranscript() {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
-    window.open(url, '_blank');
+    this.g.windowContext.open(url, '_blank');
   }
 
   toggleSound() {

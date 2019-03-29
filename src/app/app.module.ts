@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+// import { AngularFireModule } from '@angular/fire';
+// import { AngularFirestoreModule } from '@angular/fire/firestore';
+// import { AngularFireDatabaseModule } from '@angular/fire/database';
+// import { AngularFireAuthModule } from '@angular/fire/auth';
+// import * as firebase from 'firebase';
+
 import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
 
@@ -17,7 +19,7 @@ import { MomentModule } from 'angular2-moment';
 import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
-import { AuthService } from './core/auth.service';
+import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ConversationsService } from './providers/conversations.service';
 import { UploadService } from './providers/upload.service';
@@ -47,6 +49,16 @@ import { StorageService } from './providers/storage.service';
 // Import the library module
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { WaitingService } from './providers/waiting.service';
+import { AppConfigService } from './providers/app-config.service';
+
+const appInitializerFn = (appConfig: AppConfigService) => {
+  return () => {
+    if (environment.remoteConfig) {
+      return appConfig.loadAppConfig();
+    }
+  };
+};
+
 
 @NgModule({
   declarations: [
@@ -67,10 +79,11 @@ import { WaitingService } from './providers/waiting.service';
   ],
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule, // imports firebase/auth, only needed for auth features
-    AngularFireDatabaseModule, // imports firebase/database, only needed for database features
-    AngularFirestoreModule,
+    // firebase.initializeApp(environment.firebase),
+    // AngularFireModule.initializeApp(environment.firebase),
+    // AngularFireAuthModule, // imports firebase/auth, only needed for auth features
+    // AngularFireDatabaseModule, // imports firebase/database, only needed for database features
+    // AngularFirestoreModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
@@ -87,6 +100,13 @@ import { WaitingService } from './providers/waiting.service';
     AngularResizedEventModule
   ],
   providers: [
+    AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [AppConfigService]
+    },
     AuthService,
     MessagingService,
     Globals,

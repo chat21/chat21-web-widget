@@ -11,6 +11,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Http, Headers } from '@angular/http';
 import { environment } from '../../environments/environment';
+import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class AgentAvailabilityService {
@@ -18,11 +19,13 @@ export class AgentAvailabilityService {
   // private API_URL = "https://api.tiledesk.com/v1";
   private API_URL;
 
-  constructor(private http: Http) {
-    this.API_URL = environment.apiUrl;
-    if (!this.API_URL) {
-      throw new Error('apiUrl is not defined');
-    }
+  constructor(
+    private http: Http,
+    public appConfigService: AppConfigService) {
+      this.API_URL = appConfigService.getConfig().apiUrl;
+      if (!this.API_URL) {
+        throw new Error('apiUrl is not defined');
+      }
   }
 
   public getAvailableAgents(projectId): Observable<User[]> {

@@ -132,7 +132,7 @@
                                                     is ignored</div>
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
                                                     <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
@@ -164,7 +164,8 @@
 
                                         <div class="c21-icon-avatar">
                                             <div class="c21-avatar-image profile_image">
-                                                <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" />
+                                                <!-- <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" /> -->
+                                                <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" />
                                             </div> 
                                         </div>
 
@@ -187,7 +188,7 @@
 
                                                 <ng-template #contentPopup>
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(message.text,'windowName')">{{strip_tags(message.text)}}
+                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
                                                     </p>
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
@@ -243,11 +244,9 @@
                 <path fill="none" d="M0 0h24v24H0V0z" />
                 <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
                 <title id="altIconTitle">{{g.SOUND_ON}}</title>
-
             </svg>
             <span *ngIf="g.isSoundActive" class="label-menu-item"> {{g.SOUND_OFF}}</span>
             <span *ngIf="!g.isSoundActive" class="label-menu-item"> {{g.SOUND_ON}}</span>
-
         </div>
 
         <!-- ICON TRANSCRIPT -->

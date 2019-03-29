@@ -102,7 +102,7 @@ export class StarRatingWidgetComponent implements OnInit {
       },
       errMsg => {
         // console.error('httpSendRate ERROR MESSAGE', errMsg);
-        // window.alert('MSG_GENERIC_SERVICE_ERROR');
+        // windowContext.alert('MSG_GENERIC_SERVICE_ERROR');
         that.nextStep();
       },
       () => {

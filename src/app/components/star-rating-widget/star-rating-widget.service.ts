@@ -5,9 +5,11 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // services
 import { Response } from '@angular/http/src/static_response';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../core/auth.service';
+import { AuthService } from '../../providers/auth.service';
 
 import { Globals } from '../../utils/globals';
+import { AppConfigService } from '../../providers/app-config.service';
+
 
 @Injectable()
 export class StarRatingWidgetService {
@@ -22,10 +24,11 @@ export class StarRatingWidgetService {
   constructor(
     public http: Http,
     public auth: AuthService,
-    public g: Globals
+    public g: Globals,
+    public appConfigService: AppConfigService
   ) {
 
-    this.API_URL = environment.apiUrl;
+    this.API_URL = this.appConfigService.getConfig().apiUrl;
     //  this.g.wdLog(['AgentAvailabilityService:: this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
@@ -84,7 +87,7 @@ export class StarRatingWidgetService {
 
   _dowloadTranscript(recipientId) {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + recipientId + '/messages.html';
-    window.open(url, '_blank');
+    this.g.windowContext.open(url, '_blank');
   }
 
 }

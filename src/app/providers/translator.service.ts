@@ -18,9 +18,9 @@ export class TranslatorService {
    *
    * @returns the browser language
    */
-  public getBrowserLanguage() {
+  public getBrowserLanguage(windowContext) {
     // tslint:disable-next-line:prefer-const
-    let browserLanguage = window.navigator.language;
+    let browserLanguage = windowContext.navigator.language;
     return !browserLanguage ? undefined : browserLanguage;
   }
 
@@ -31,15 +31,15 @@ export class TranslatorService {
    *
    * @param language the language
    */
-  public setLanguage(language) {
+  public setLanguage(windowContext, language) {
     // set the user languge if it is valid.
     // if the user language is not valid, try to get the browser language.
     // if the browser language is not valid, it use the default language (en)
     if (!language) {
       // user language not valid
-      if (this.getBrowserLanguage() !== undefined) {
+      if (this.getBrowserLanguage(windowContext) !== undefined) {
         // browser language valid
-        this.language = this.getBrowserLanguage();
+        this.language = this.getBrowserLanguage(windowContext);
       } else {
         // browser language not valid
         this.language = this.defaultLanguage;
