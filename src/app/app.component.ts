@@ -122,28 +122,30 @@ export class AppComponent implements OnInit, OnDestroy {
                     /** ho effettuato il logout: nascondo il widget */
                     that.g.isLogged = false;
                     that.g.isShown = false;
-                    this.g.wdLog(['LOGOUT : ', user, that.g.autoStart]);
+                    that.g.wdLog(['LOGOUT : ', user, that.g.autoStart]);
                     that.triggeisLoggedInEvent();
                 } else if (user === 0) {
                     /** non sono loggato */
                     that.g.isLogged = false;
-                    this.g.wdLog(['NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart]);
+                    that.g.wdLog(['NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart]);
                     if (that.g.autoStart === true) {
                         that.setAuthentication();
                     }
                     that.triggeisLoggedInEvent();
                 } else if (user) {
                     /** sono loggato */
-                    this.g.wdLog(['USER AUTENTICATE: ', user.uid]);
+                    that.g.wdLog(['USER AUTENTICATE: ', user.uid]);
                     that.g.senderId = user.uid;
+                    that.g.attributes = that.setAttributes();
+
                     that.g.isLogged = true;
-                    this.g.wdLog([' this.g.senderId', that.g.senderId]);
-                    this.g.wdLog([' this.g.isLogged', that.g.isLogged]);
+                    that.g.wdLog([' this.g.senderId', that.g.senderId]);
+                    that.g.wdLog([' this.g.isLogged', that.g.isLogged]);
                     // that.openIfCallOutTimer();
                     that.startNwConversation();
                     that.startUI();
                     that.triggeisLoggedInEvent();
-                    this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
+                    that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(that.g.senderId);
                 }
             });
@@ -580,17 +582,17 @@ export class AppComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 that.authService.decode(token, that.g.projectid)
                     .subscribe(resDec => {
-                         this.g.wdLog(['resDec', resDec.decoded]);
+                        that.g.wdLog(['resDec', resDec.decoded]);
                         that.g.signInWithCustomToken = true;
                         that.g.userEmail = resDec.decoded.email;
                         that.g.userFullname = resDec.decoded.name;
                         that.g.attributes.userEmail = resDec.decoded.email;
                         that.g.attributes.userFullname = resDec.decoded.name;
                         const firebaseToken = response.firebaseToken;
-                         this.g.wdLog(['firebaseToken', firebaseToken]);
+                        that.g.wdLog(['firebaseToken', firebaseToken]);
                         that.g.userToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        that.setAttributes();
+                        that.g.attributes = that.setAttributes();
 
                     }, error => {
                         console.error('Error decoding token: ', error);
