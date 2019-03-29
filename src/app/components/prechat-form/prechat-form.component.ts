@@ -18,7 +18,6 @@ export class PrechatFormComponent implements OnInit {
 
   // ========= begin:: component variables ======= //
   preChatFormGroup: FormGroup;
-  attributes: any;
   userFullname: string;
   userEmail: string;
   // ========= end:: component variables ======= //
@@ -36,7 +35,6 @@ export class PrechatFormComponent implements OnInit {
   }
 
   initialize() {
-    this.attributes = this.g.attributes;
     this.preChatFormGroup = this.createForm(this.formBuilder);
     if (this.preChatFormGroup) {
       this.subcribeToFormChanges();
@@ -72,11 +70,11 @@ export class PrechatFormComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
-     this.g.wdLog([' openNewConversation: ']);
-    this.attributes['userFullname'] = this.userFullname;
-    this.attributes['userEmail'] = this.userEmail;
+    this.g.wdLog([' openNewConversation: ']);
+    this.g.attributes['userFullname'] = this.userFullname;
+    this.g.attributes['userEmail'] = this.userEmail;
     if (this.g.attributes) {
-        this.storageService.setItem('attributes', JSON.stringify(this.attributes));
+        this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
         // this.g.attributes = this.attributes;
         this.eventCloseForm.emit();
     } else {

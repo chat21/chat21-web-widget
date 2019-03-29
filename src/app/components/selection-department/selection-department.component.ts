@@ -72,7 +72,7 @@ export class SelectionDepartmentComponent implements OnInit {
         if (this.g.attributes) {
             this.g.attributes.departmentId = department._id;
             this.g.attributes.departmentName = department.name;
-             this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
+            this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
             this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
         }
         this.closePage();

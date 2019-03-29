@@ -94,7 +94,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
 
-  attributes: any;
+  // attributes: any;
   GUEST_LABEL = '';
 
   CLIENT_BROWSER: string = navigator.userAgent;
@@ -168,7 +168,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
     this.setFocusOnId('chat21-main-message-context');
-    this.attributes = this.setAttributes();
+    // this.attributes = this.setAttributes();
     this.updateConversationBadge();
   }
 
@@ -403,31 +403,31 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    *
    */
-  setAttributes(): any {
-    if (!this.g.attributes || this.g.attributes === 'undefined') {
-      let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
-      if (!attributes || attributes === 'undefined') {
-        attributes = {
-          client: this.CLIENT_BROWSER,
-          sourcePage: location.href,
-          projectId: this.g.projectid
-        };
-      }
-      if (this.g.userEmail) {
-        attributes['userEmail'] = this.g.userEmail;
-      }
-      if (this.g.userFullname) {
-        attributes['userFullname'] = this.g.userFullname;
-      }
-      if (this.g.senderId) {
-        attributes['requester_id'] = this.g.senderId;
-      }
-      this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
-      this.storageService.setItem('attributes', JSON.stringify(attributes));
-      return attributes;
-    }
-    return this.g.attributes;
-  }
+  // setAttributes(): any {
+  //   if (!this.g.attributes || this.g.attributes === 'undefined') {
+  //     let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
+  //     if (!attributes || attributes === 'undefined') {
+  //       attributes = {
+  //         client: this.CLIENT_BROWSER,
+  //         sourcePage: location.href,
+  //         projectId: this.g.projectid
+  //       };
+  //     }
+  //     if (this.g.userEmail) {
+  //       attributes['userEmail'] = this.g.userEmail;
+  //     }
+  //     if (this.g.userFullname) {
+  //       attributes['userFullname'] = this.g.userFullname;
+  //     }
+  //     if (this.g.senderId) {
+  //       attributes['requester_id'] = this.g.senderId;
+  //     }
+  //     this.g.wdLog(['>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes)]);
+  //     this.storageService.setItem('attributes', JSON.stringify(attributes));
+  //     return attributes;
+  //   }
+  //   return this.g.attributes;
+  // }
 
   /**
    * imposto le sottoscrizioni
@@ -645,7 +645,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             metadata,
             this.conversationWith,
             recipientFullname,
-            this.attributes,
+            this.g.attributes,
             this.g.projectid,
             this.g.channelType
           );
@@ -653,8 +653,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             recipientFullname = this.g.userFullname;
           } else if (this.g.userEmail) {
             recipientFullname = this.g.userEmail;
-          } else if (this.attributes && this.attributes.userFullname) {
-            recipientFullname = this.attributes.userFullname;
+          } else if (this.g.attributes && this.g.attributes.userFullname) {
+            recipientFullname = this.g.attributes.userFullname;
           } else {
             recipientFullname = this.GUEST_LABEL;
           }
@@ -664,7 +664,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             this.g.wdLog(['this.g.userFullname:', this.g.userFullname]);
             this.g.wdLog(['recipientFullname:', recipientFullname]);
           // tslint:disable-next-line:max-line-length
-          const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.attributes, this.g.projectid, this.g.channelType);
+          const messageSent = this.messagingService.sendMessage(recipientFullname, msg, type, metadata, this.conversationWith, recipientFullname, this.g.attributes, this.g.projectid, this.g.channelType);
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
       }

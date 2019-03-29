@@ -36,6 +36,7 @@ export class StorageService {
   }
 
   public setItem (key, value) {
+    this.removeItem(key);
     const newKey = this.g.projectid + '_' + key;
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
