@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 // services
 import { Globals } from './utils/globals';
+
+
 // import { AuthService } from './core/auth.service';
 import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
@@ -22,9 +24,16 @@ import { environment } from '../environments/environment';
 
 
 // utils
-import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
+// tslint:disable-next-line:max-line-length
+import { wdLog, getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
 import { AppConfigService } from './providers/app-config.service';
+
+
+import { LocalSettingsService } from './providers/local-settings.service';
+import { SettingsSaverService } from './providers/settings-saver.service';
+
+// import { TranslationLoader } from './translation-loader';
 
 
 @Component({
@@ -35,7 +44,7 @@ import { AppConfigService } from './providers/app-config.service';
     // providers: [AgentAvailabilityService, TranslatorService]
 })
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     obsEndRenderMessage: any;
 
     // ========= begin:: parametri di stato widget ======= //
@@ -46,7 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
     isOpenSelectionDepartment = false;  /** check open/close modal select department */
     // isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
-
     // isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
     // isModalLeaveChatActive = false;     /** ???? */
     departments = [];
@@ -87,7 +95,9 @@ export class AppComponent implements OnInit, OnDestroy {
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
-        public appConfigService: AppConfigService
+        public appConfigService: AppConfigService,
+        public localSettingsService: LocalSettingsService,
+        public settingsSaverService: SettingsSaverService
     ) {
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
@@ -103,24 +113,25 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this.initAll();
-        if (this.g.supportMode) {
+        const supportMode = this.g.supportMode;
+        if (supportMode) {
             this.getMongDbDepartments();
         }
         this.setLoginSubscription();
-        this.triggerOnInit();
-        this.g.wdLog(' ---------------- A4 ---------------- ');
+        // this.triggerOnInit();
+        wdLog(' ---------------- A4 ---------------- ');
     }
 
-    private triggerOnInit() {
-        this.g.wdLog([' ---------------- triggerOnInit ---------------- ', this.g.default_settings]);
+    private triggerOnViewInit() {
         const default_settings = this.g.default_settings;
+        const windowContext = this.g.windowContext;
+        wdLog([' ---------------- triggerOnInit ---------------- ', default_settings]);
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
-        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
-            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
         } else {
             this.el.nativeElement.dispatchEvent(onInit);
         }
-
     }
 
 
@@ -136,41 +147,42 @@ export class AppComponent implements OnInit, OnDestroy {
          * https://forum.ionicframework.com/t/firebase-auth-currentuser-shows-me-null-but-it-logged-in/68411/4
         */
         this.authService.onAuthStateChanged();
-
         /**
          * SUBSCRIBE TO ASINC LOGIN FUNCTION
          */
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
-                this.g.wdLog([' currentUser:::: ' + user]);
+                const autoStart = that.g.autoStart;
                 if (user === -1) {
                     /** ho effettuato il logout: nascondo il widget */
-                    that.g.isLogged = false;
-                    that.g.isShown = false;
-                    that.g.wdLog(['LOGOUT : ', user, that.g.autoStart]);
+                    that.g.setParameters('isLogged', false);
+                    that.g.setParameters('isShown', false);
+                    wdLog(['LOGOUT : ', user]);
                     that.triggeisLoggedInEvent();
                 } else if (user === 0) {
                     /** non sono loggato */
-                    that.g.isLogged = false;
-                    that.g.wdLog(['NO CURRENT USER AUTENTICATE: ', user, that.g.autoStart]);
-                    if (that.g.autoStart === true) {
+                    // that.g.isLogged = false;
+                    that.g.setParameters('isLogged', false);
+                    // that.settingsSaverService.setVariable('isLogged', false);
+                    wdLog(['NO CURRENT USER AUTENTICATE: ', user]);
+                    if (autoStart === true) {
                         that.setAuthentication();
                     }
                     that.triggeisLoggedInEvent();
                 } else if (user) {
                     /** sono loggato */
-                    that.g.wdLog(['USER AUTENTICATE: ', user.uid]);
-                    that.g.senderId = user.uid;
-                    that.g.isLogged = true;
-                    that.g.attributes = that.setAttributesFromStorageService();
-                    that.g.wdLog([' this.g.senderId', that.g.senderId]);
-                    that.g.wdLog([' this.g.isLogged', that.g.isLogged]);
+                    wdLog(['USER AUTENTICATE: ', user.uid]);
+                    that.g.setParameters('senderId', user.uid);
+                    that.g.setParameters('isLogged', true);
+                    that.g.setParameters('attributes', that.setAttributesFromStorageService());
+
+                    wdLog([' this.g.senderId', user.uid]);
                     // that.openIfCallOutTimer();
                     that.startNwConversation();
                     that.startUI();
                     that.triggeisLoggedInEvent();
-                    that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
-                    that.chatPresenceHandlerService.setupMyPresence(that.g.senderId);
+                    wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
+                    that.chatPresenceHandlerService.setupMyPresence(user.uid);
                 }
             });
         });
@@ -188,56 +200,85 @@ export class AppComponent implements OnInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
+        // ------------------------------- //
+        /**
+        * SETTING LOCAL DEFAULT:
+        */
+        this.g.initDefafultParameters();
+        // ------------------------------- //
 
-        // set lang and in global variables
-        this.g.wdLog([' ---------------- SET LANG ---------------- ']);
-        console.log('lang: ', this.g.windowContext, this.translatorService);
-        this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
-        console.log('lang: ', this.g.lang);
-        moment.locale(this.g.lang);
-        this.g.wdLog([' lang: ', this.g.lang]);
+
+        // ------------------------------- //
+        /**
+         * LOCAL SETTINGS:
+         * 1 - setVariablesFromSettings
+         * 2 - setVariableFromUrlParameters
+         * 3 - setVariableFromlocalstorage
+        */
+        this.localSettingsService.load(this.g, this.el);
+        // ------------------------------- //
+
+        // ------------------------------- //
+        /**
+         * TRANSLATION LOADER:
+        */
+       this.translatorService.translate(this.g);
+       // ------------------------------- //
+
+        // ------------------------------- //
+        /**
+         * SUBSCRIPTION :
+         *
+        */
+       this.settingsSaverService.initialize();
+        // ------------------------------- //
+
+
+        // // ------------------------------- //
+        // // set lang and in global variables
+        // wdLog([' ---------------- SET LANG ---------------- ']);
+        // console.log('lang: ', this.g.windowContext, this.translatorService);
+        // this.g.lang = setLanguage(this.g.windowContext, this.translatorService);
+        // console.log('lang: ', this.g.lang);
+        // moment.locale(this.g.lang);
+        // wdLog([' lang: ', this.g.lang]);
 
 
         this.g.initialize(this.el);
 
-        // detect is mobile
-        this.g.isMobile = detectIfIsMobile(this.g.windowContext);
-        // this.g.isMobile = detectIfIsMobile();
+        const windowContext = this.g.windowContext;
+        this.g.setParameters('isMobile', detectIfIsMobile(windowContext));
+        // this.settingsSaverService.setVariable('isMobile', detectIfIsMobile(windowContext));
 
         // Related to https://github.com/firebase/angularfire/issues/970
         if (supports_html5_storage()) {
             localStorage.removeItem('firebase:previous_websocket_failure');
         }
-        this.g.wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
+        wdLog([' ---------------- CONSTRUCTOR ---------------- ']);
+        this.g.setParameters('attributes', this.setAttributesFromStorageService());
+        // this.settingsSaverService.setVariable('attributes', this.setAttributesFromStorageService());
+        // this.setSound();
 
-        // this.g.initialize(this.el);
-        this.g.attributes = this.setAttributesFromStorageService();
-        this.setSound();
-
-        this.g.wdLog([' ---------------- A3 ---------------- ']);
+        wdLog([' ---------------- A3 ---------------- ']);
         this.setIsWidgetOpenOrActive();
 
         this.triggerLoadParamsEvent();
-        this.g.wdLog([' ---------------- A2 ---------------- ']);
+        wdLog([' ---------------- A2 ---------------- ']);
 
 
-        this.g.wdLog([' ---------------- A0 ---------------- ']);
+        wdLog([' ---------------- A0 ---------------- ']);
 
         this.addComponentToWindow(this.ngZone);
-        this.g.wdLog([' ---------------- A1 ---------------- ']);
+        wdLog([' ---------------- A1 ---------------- ']);
 
 
         // this.startNwConversation();
 
         /** mostro il pulsante principale dopo l'init */
         this.isInitialized = true;
-
         this.marginBottom = +this.g.marginY + 70;
-
         this.chatPresenceHandlerService.initialize();
-
-
-        this.g.wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
+        wdLog([' ---------------- B1: setAvailableAgentsStatus ---------------- ']);
 
         if (this.g.supportMode) {
             this.setAvailableAgentsStatus();
@@ -245,19 +286,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // da spostare!!
         const TEMP = this.storageService.getItem('preChatForm');
-        this.g.wdLog([' ---------------- TEMP:', TEMP, this.g.preChatForm]);
+        wdLog([' ---------------- TEMP:', TEMP]);
         if (TEMP !== undefined && TEMP !== null) {
-            this.g.preChatForm = TEMP;
+            this.g.setParameters('preChatForm', TEMP);
+            // this.settingsSaverService.setVariable('preChatForm', TEMP);
         }
-        this.g.wdLog([' ---------------- this.g.preChatForm:', this.g.preChatForm]);
+        wdLog([' ---------------- this.g.preChatForm:', this.g.preChatForm]);
 
     }
 
-    setSound() {
-        if (this.storageService.getItem('isSoundActive')) {
-            this.g.isSoundActive = this.storageService.getItem('isSoundActive');
-          }
-    }
+    // setSound() {
+    //     if (this.storageService.getItem('isSoundActive')) {
+    //         this.g.setParameters('isSoundActive', this.storageService.getItem('isSoundActive'));
+    //         // this.settingsSaverService.setVariable('isSoundActive', this.storageService.getItem('isSoundActive'));
+    //       }
+    // }
 
 
 /**
@@ -265,25 +308,29 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   private setAttributesFromStorageService(): any {
     const CLIENT_BROWSER = navigator.userAgent;
+    const projectid = this.g.projectid;
+    const userEmail = this.g.userEmail;
+    const userFullname = this.g.userFullname;
+    const senderId = this.g.senderId;
     let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
     if (!attributes || attributes === 'undefined') {
       attributes = {
         client: CLIENT_BROWSER,
         sourcePage: location.href,
-        projectId: this.g.projectid
+        projectId: projectid
       };
     }
-    if (this.g.userEmail) {
-        attributes['userEmail'] = this.g.userEmail;
+    if (userEmail) {
+        attributes['userEmail'] = userEmail;
     }
-    if (this.g.userFullname) {
-        attributes['userFullname'] = this.g.userFullname;
+    if (userFullname) {
+        attributes['userFullname'] = userFullname;
     }
-    if (this.g.senderId) {
-        attributes['requester_id'] = this.g.senderId;
+    if (senderId) {
+        attributes['requester_id'] = senderId;
     }
     this.storageService.setItem('attributes', JSON.stringify(attributes));
-    // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
+    // wdLog([' ---------------- setAttributes ---------------- ', attributes]);
     console.log(' ---------------- setAttributes ---------------- ', attributes);
     return attributes;
   }
@@ -294,27 +341,32 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   private setAvailableAgentsStatus() {
     const that = this;
+    const projectid = this.g.projectid;
     this.agentAvailabilityService
-    .getAvailableAgents(this.g.projectid)
+    .getAvailableAgents(projectid)
     .subscribe( (availableAgents) => {
-      this.g.wdLog(['availableAgents->', availableAgents]);
+      wdLog(['availableAgents->', availableAgents]);
       if (availableAgents.length <= 0) {
-        that.g.areAgentsAvailable = false;
-        that.g.areAgentsAvailableText = that.g.AGENT_NOT_AVAILABLE;
-        // that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+        that.g.setParameters('areAgentsAvailable', false);
+        that.g.setParameters('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
+        // that.settingsSaverService.setVariable('areAgentsAvailable', false);
+        // that.settingsSaverService.setVariable('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
       } else {
-        that.g.areAgentsAvailable = true;
-        that.g.areAgentsAvailableText = that.g.AGENT_AVAILABLE;
+        that.g.setParameters('areAgentsAvailable', true);
+        that.g.setParameters('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
+        // that.settingsSaverService.setVariable('areAgentsAvailable', true);
+        // that.settingsSaverService.setVariable('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
         // add first message
-        that.g.availableAgents = availableAgents;
+        that.g.setParameters('availableAgents', availableAgents);
+        // that.settingsSaverService.setVariable('availableAgents', availableAgents);
         availableAgents.forEach(element => {
             // that.setProfileImage(element);
             element.imageurl = getImageUrlThumb(element.id);
         });
         // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
       }
-      that.g.availableAgentsStatus = true;
-      that.g.wdLog(['AppComponent::setAvailableAgentsStatus::areAgentsAvailable:', that.g.areAgentsAvailableText]);
+        that.g.setParameters('availableAgentsStatus', true);
+        // that.settingsSaverService.setVariable('availableAgentsStatus', true);
     }, (error) => {
       console.error('setOnlineStatus::setAvailableAgentsStatus', error);
     }, () => {
@@ -345,18 +397,19 @@ export class AppComponent implements OnInit, OnDestroy {
     */
     getMongDbDepartments() {
         const that = this;
-         this.g.wdLog(['getMongDbDepartments ::::', this.g.projectid]);
-        this.messagingService.getMongDbDepartments(this.g.projectid)
+        const projectid = this.g.projectid;
+        wdLog(['getMongDbDepartments ::::', projectid]);
+        this.messagingService.getMongDbDepartments(projectid)
         .subscribe(response => {
-            that.g.wdLog(['response DEP ::::', response]);
-            that.g.departments = response;
+            wdLog(['response DEP ::::', response]);
+            that.g.setParameters('departments', response);
             that.initDepartments();
         },
         errMsg => {
-             this.g.wdLog(['http ERROR MESSAGE', errMsg]);
+             wdLog(['http ERROR MESSAGE', errMsg]);
         },
         () => {
-             this.g.wdLog(['API ERROR NESSUNO']);
+             wdLog(['API ERROR NESSUNO']);
         });
     }
 
@@ -367,30 +420,31 @@ export class AppComponent implements OnInit, OnDestroy {
      * CALL AUTHENTICATION
     */
     initDepartments() {
-        this.g.departmentSelected = null;
-        this.g.departmentDefault = null;
-        this.g.wdLog(['SET DEPARTMENT DEFAULT ::::', this.g.departments[0]]);
-        this.setDepartment(this.g.departments[0]);
+        const departments = this.g.departments;
+        this.g.setParameters('departmentSelected', null);
+        this.g.setParameters('departmentDefault', null);
+        wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
+        this.setDepartment(departments[0]);
         let i = 0;
-        this.g.departments.forEach(department => {
+        departments.forEach(department => {
             if (department['default'] === true) {
-                this.g.departmentDefault = department;
-                this.g.departments.splice(i, 1);
+                this.g.setParameters('departmentDefault', department);
+                departments.splice(i, 1);
                 return;
             }
             i++;
         });
-        if (this.g.departments.length === 1) {
+        if (departments.length === 1) {
             // UN SOLO DEPARTMENT
-            this.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[0]]);
-            this.setDepartment(this.g.departments[0]);
+            wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
+            this.setDepartment(departments[0]);
             // return false;
-        } else if (this.g.departments.length > 1) {
+        } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
-            this.g.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', this.g.departments[0]]);
+            wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
-            this.g.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', this.g.departments[0]]);
+            wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
         }
 
         /********** LOGIN  ***********/
@@ -404,12 +458,15 @@ export class AppComponent implements OnInit, OnDestroy {
      * save attributes in this.storageService
     */
     setDepartment(department) {
-        this.g.departmentSelected = department;
-        if (department && this.g.attributes) {
-            this.g.attributes.departmentId = department._id;
-            this.g.attributes.departmentName = department.name;
-             this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(this.g.attributes)]);
-             this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
+        this.g.setParameters('departmentSelected', department);
+        const attributes = this.g.attributes;
+        if (department && attributes) {
+            attributes.departmentId = department._id;
+            attributes.departmentName = department.name;
+            this.g.setParameters('attributes', attributes);
+            this.g.setParameters('departmentSelected', department);
+            wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
+            this.storageService.setItem('attributes', JSON.stringify(attributes));
         }
     }
     // ========= end:: GET DEPARTEMENTS ============//
@@ -421,6 +478,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * authenticate in chat
      */
     private setAuthentication() {
+        wdLog([' ---------------- setAuthentication ---------------- ']);
         /**
          * 0 - controllo se è stato passato email e psw
          *  SI - mi autentico con email e psw
@@ -438,45 +496,49 @@ export class AppComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line:max-line-length
         // this.g.userToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdhMWViNTE2YWU0MTY4NTdiM2YwNzRlZDQxODkyZTY0M2MwMGYyZTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTM5OTQ4MDczLCJ1c2VyX2lkIjoid0RScm54SG0xQ01MMVhJd29MbzJqdm9lc040MiIsInN1YiI6IndEUnJueEhtMUNNTDFYSXdvTG8yanZvZXNONDIiLCJpYXQiOjE1Mzk5NDgwNzMsImV4cCI6MTUzOTk1MTY3MywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.gNtsfv1b5LFxxqwnmJI4jnGFq7760Eu_rR2Neargs6Q3tcNge1oTf7CPjd9pJxrOAeErEX6Un_E7tjIGqKidASZH7RJwKzfWT3-GZdr7j-LR6FgBVl8FgufDGo0DcVhw9Zajik0vuFM9b2PULmSAeDeNMLAhsvPOWPJMFMGIrewTk7Im-6ncm75QH241O4KyGKPWsC5slN9lckQP4j432xVUj1ss0TYVqBpkDP9zzgekuLIvL-qFpuqGI0yLjb-SzPev2eTO-xO48wlYK_s_GYOZRwWi4SZvSA8Sw54X7HUyDvw5iXLboEJEFMU6gJJWR6YPQMa69cjQlFS8mjPG6w";
         const currentUser = this.authService.getCurrentUser();
+        const userEmail = this.g.userEmail;
+        const userPassword = this.g.userPassword;
+        const userId = this.g.userId;
+        const userToken = this.g.userToken;
 
-        if (this.g.userEmail && this.g.userPassword) {
-             this.g.wdLog([' ---------------- 10 ---------------- ']);
+        if (userEmail && userPassword) {
+             wdLog([' ---------------- 10 ---------------- ']);
             // se esistono email e psw faccio un'autenticazione firebase con email
-            this.authService.authenticateFirebaseWithEmailAndPassword(this.g.userEmail, this.g.userPassword);
-        } else if (this.g.userId) {
+            this.authService.authenticateFirebaseWithEmailAndPassword(userEmail, userPassword);
+        } else if (userId) {
             // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
-            this.g.wdLog([' ---------------- 11 ---------------- ']);
-            this.g.wdLog(['this.userId:: ', this.g.userId]);
-            this.g.senderId = this.g.userId;
-            this.g.isLogged = true;
-            this.g.attributes = this.setAttributesFromStorageService();
+            wdLog([' ---------------- 11 ---------------- ']);
+            wdLog(['this.userId:: ', userId]);
+            this.g.senderId = userId;
+            this.g.setParameters('senderId', userId);
+            this.g.setParameters('isLogged', true);
+            this.g.setParameters('attributes', this.setAttributesFromStorageService());
+
             this.startNwConversation();
             this.startUI();
-            this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
-            this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
-        } else if (this.g.userToken) {
+            wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
+            this.chatPresenceHandlerService.setupMyPresence(userId);
+        } else if (userToken) {
             // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
             // !!! DA TESTARE NON FUNZIONA !!! //
-            this.g.wdLog([' ---------------- 12 ---------------- ']);
-            this.g.wdLog(['this.g.userToken:: ', this.g.userToken]);
-            this.authService.authenticateFirebaseCustomToken(this.g.userToken);
+            wdLog([' ---------------- 12 ---------------- ']);
+            wdLog(['this.g.userToken:: ', userToken]);
+            this.authService.authenticateFirebaseCustomToken(userToken);
         } else if (currentUser) {
             //  SONO GIA' AUTENTICATO
-            this.g.wdLog([' ---------------- 13 ---------------- ']);
+            wdLog([' ---------------- 13 ---------------- ']);
             this.g.senderId = currentUser.uid;
-            this.g.isLogged = true;
-            this.g.attributes = this.setAttributesFromStorageService();
-            this.g.wdLog([' this.g.senderId', this.g.senderId]);
-            this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
+            this.g.setParameters('senderId', currentUser.uid);
+            this.g.setParameters('isLogged', this.setAttributesFromStorageService());
+            this.g.setParameters('attributes', userId);
             this.startNwConversation();
             this.startUI();
-             this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
-            this.chatPresenceHandlerService.setupMyPresence(this.g.senderId);
-
+             wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
+            this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
         } else {
             //  AUTENTICAZIONE ANONIMA
-            this.g.wdLog([' ---------------- 14 ---------------- ']);
-            this.g.wdLog([' authenticateFirebaseAnonymously']);
+            wdLog([' ---------------- 14 ---------------- ']);
+            wdLog([' authenticateFirebaseAnonymously']);
             this.authService.authenticateFirebaseAnonymously();
         }
     }
@@ -488,38 +550,39 @@ export class AppComponent implements OnInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
-        //  this.g.wdLog([' ---------------- A3 ---------------- ']);
-        // this.setIsWidgetOpenOrActive();
-
-         this.g.wdLog([' ============ startUI ===============', this.g.departmentSelected, this.g.isLogged]);
-
+        wdLog([' ============ startUI ===============']);
+        const departments = this.g.departments;
+        const attributes = this.g.attributes;
+        const preChatForm = this.g.preChatForm;
         this.isOpenHome = true;
         this.isOpenConversation = false;
-        this.g.isOpenPrechatForm = false;
+        this.g.setParameters('isOpenPrechatForm', false);
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
         if (this.g.startFromHome) {
             this.isOpenConversation = false;
-            this.g.isOpenPrechatForm = false;
+            this.g.setParameters('isOpenPrechatForm', false);
             this.isOpenSelectionDepartment = false;
-        } else if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
-            this.g.isOpenPrechatForm = true;
+        } else if (preChatForm && !attributes.userFullname && !attributes.email) {
+            this.g.setParameters('isOpenPrechatForm', true);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (this.g.departments.length > 1) {
+            if (departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            this.g.isOpenPrechatForm = false;
+            this.g.setParameters('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (this.g.departments.length > 1) {
+            if (departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             } else {
                 this.isOpenConversation = true;
             }
         }
 
+        // visualizzo l'iframe!!!
+        this.triggerOnViewInit();
     }
     // ========= end:: START UI ============//
 
@@ -530,71 +593,72 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private addComponentToWindow(ngZone) {
         const that = this;
-        if (this.g.windowContext['tiledesk']) {
-            this.g.windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
+        const windowContext = this.g.windowContext;
+        if (windowContext['tiledesk']) {
+            windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
            /** */
-            this.g.windowContext['tiledesk'].setUserInfo = function (userInfo) {
+            windowContext['tiledesk'].setUserInfo = function (userInfo) {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
+                    windowContext['tiledesk']['angularcomponent'].component.setUserInfo(userInfo);
                 });
             };
             /** loggin with token */
-            this.g.windowContext['tiledesk'].signInWithCustomToken = function (token) {
+            windowContext['tiledesk'].signInWithCustomToken = function (token) {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
+                    windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
                 });
             };
             /** loggin anonymous */
-            this.g.windowContext['tiledesk'].signInAnonymous = function () {
+            windowContext['tiledesk'].signInAnonymous = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
+                    windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
             // window['tiledesk'].on = function (event_name, handler) {
-            //      this.g.wdLog(["addEventListener for "+ event_name);
+            //      wdLog(["addEventListener for "+ event_name);
             //     this.el.nativeElement.addEventListener(event_name, e =>  handler());
             // };
             /** show all widget */
-            this.g.windowContext['tiledesk'].show = function () {
+            windowContext['tiledesk'].show = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.showAllWidget();
+                    windowContext['tiledesk']['angularcomponent'].component.showAllWidget();
                 });
             };
             /** hidden all widget */
-            this.g.windowContext['tiledesk'].hide = function () {
+            windowContext['tiledesk'].hide = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.hideAllWidget();
+                    windowContext['tiledesk']['angularcomponent'].component.hideAllWidget();
                 });
             };
             /** close window chat */
-            this.g.windowContext['tiledesk'].close = function () {
+            windowContext['tiledesk'].close = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_close();
+                    windowContext['tiledesk']['angularcomponent'].component.f21_close();
                 });
             };
             /** open window chat */
-            this.g.windowContext['tiledesk'].open = function () {
+            windowContext['tiledesk'].open = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.f21_open();
+                    windowContext['tiledesk']['angularcomponent'].component.f21_open();
                 });
             };
             /** set state PreChatForm close/open */
-            this.g.windowContext['tiledesk'].setPreChatForm = function (state) {
+            windowContext['tiledesk'].setPreChatForm = function (state) {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
+                    windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
             // tslint:disable-next-line:max-line-length
-            this.g.windowContext['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+            windowContext['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component
+                    windowContext['tiledesk']['angularcomponent'].component
                         .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
                 });
             };
             /** set state PreChatForm close/open */
-            this.g.windowContext['tiledesk'].endMessageRender = function () {
+            windowContext['tiledesk'].endMessageRender = function () {
                 ngZone.run(() => {
-                    that.g.windowContext['tiledesk']['angularcomponent'].component.endMessageRender();
+                    windowContext['tiledesk']['angularcomponent'].component.endMessageRender();
                 });
             };
 
@@ -608,33 +672,41 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     private sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
-
         // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
-
         const messageSent = this.messagingService
             .sendMessage(senderFullname, text, type, '', recipient, recipientFullname, attributes, null, channel_type);
-            this.g.wdLog([messageSent]);
+            wdLog([messageSent]);
     }
     /** */
 
     private signInWithCustomToken(token) {
-         this.g.wdLog(['signInWithCustomToken token ', token]);
+        wdLog(['signInWithCustomToken token ', token]);
         const that = this;
-        this.authService.createFirebaseToken(token, this.g.projectid)
+        const projectid = this.g.projectid;
+        this.authService.createFirebaseToken(token, projectid)
             .subscribe(response => {
-                that.authService.decode(token, that.g.projectid)
+                that.authService.decode(token, projectid)
                     .subscribe(resDec => {
-                        that.g.wdLog(['resDec', resDec.decoded]);
-                        that.g.signInWithCustomToken = true;
-                        that.g.userEmail = resDec.decoded.email;
-                        that.g.userFullname = resDec.decoded.name;
-                        that.g.attributes.userEmail = resDec.decoded.email;
-                        that.g.attributes.userFullname = resDec.decoded.name;
+                        const attributes = that.g.attributes;
                         const firebaseToken = response.firebaseToken;
-                        that.g.wdLog(['firebaseToken', firebaseToken]);
-                        that.g.userToken = firebaseToken;
+                        wdLog(['firebaseToken', firebaseToken]);
+                        wdLog(['resDec', resDec.decoded]);
+                        that.g.setParameters('signInWithCustomToken', true);
+                        that.g.setParameters('userEmail', resDec.decoded.email);
+                        that.g.setParameters('userFullname', resDec.decoded.name);
+                        that.g.setParameters('userToken', firebaseToken);
+
+                        that.g.setParameters('signInWithCustomToken', true);
+                        that.g.setParameters('signInWithCustomToken', true);
+                        that.g.setParameters('signInWithCustomToken', true);
+
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        that.g.attributes = that.setAttributesFromStorageService();
+
+                        attributes.userEmail = resDec.decoded.email;
+                        attributes.userFullname = resDec.decoded.name;
+                        that.g.setParameters('attributes', attributes);
+                        // attributes = that.setAttributesFromStorageService(); ?????????????+
+                        // ????????????????????
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // console.log('call signout');
@@ -655,38 +727,37 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** */
     private signInAnonymous() {
-         this.g.wdLog(['signInAnonymous ']);
+         wdLog(['signInAnonymous ']);
         this.authService.authenticateFirebaseAnonymously();
     }
 
     /** */
-    private setPreChatForm(state) {
+    private setPreChatForm(state: boolean) {
         if (state != null) {
-            this.g.preChatForm = state;
-            // this.g.isOpenPrechatForm = state;
+            this.g.setParameters('preChatForm', state);
             if ( state === true ) {
                 this.storageService.setItem('preChatForm', state);
             } else {
                 this.storageService.removeItem('preChatForm');
             }
         }
-        //  this.g.wdLog(['this.isOpenPrechatForm ', this.isOpenPrechatForm);
     }
 
     /** show all widget */
     private showAllWidget() {
-        this.g.isShown = true;
+        this.g.setParameters('isShown', true);
     }
 
     /** hide all widget */
     private hideAllWidget() {
-        this.g.isShown = false;
+        this.g.setParameters('isShown', false);
     }
 
     /** open popup conversation */
     private f21_open() {
-        this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
-        if (this.g.senderId) {
+        const senderId = this.g.senderId;
+        wdLog(['f21_open senderId: ', senderId]);
+        if (senderId) {
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
@@ -698,24 +769,26 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     private triggerOnOpenEvent() {
-        this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
+        wdLog([' ---------------- triggerOnOpenEvent ---------------- ', default_settings]);
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
-
-        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
-            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+            this.g.setParameters('windowContext', windowContext);
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
 
     }
     private triggerOnCloseEvent() {
-        this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
+        wdLog([' ---------------- triggerOnCloseEvent ---------------- ', default_settings]);
         const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
-
-        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
-            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+            this.g.setParameters('windowContext', windowContext);
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
         }
@@ -723,23 +796,25 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     private triggerOnOpenEyeCatcherEvent() {
-        this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
+        wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', default_settings]);
         const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
-
-        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
-            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+            this.g.setParameters('windowContext', windowContext);
         } else {
             this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
         }
     }
 
     private triggerOnClosedEyeCatcherEvent() {
-        this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
+        wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
-
-        if (this.g.windowContext.tiledesk && this.g.windowContext.tiledesk.tiledeskroot) {
-            this.g.windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+            this.g.setParameters('windowContext', windowContext);
         } else {
             this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
         }
@@ -750,8 +825,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** close popup conversation */
     private f21_close() {
-         this.g.wdLog(['isOpen::', this.g.isOpen]);
-        // this.g.isOpen = false;
         this.g.setIsOpen(false);
         this.storageService.setItem('isOpen', 'false');
         this.triggerOnCloseEvent();
@@ -774,14 +847,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** */
     private triggeisLoggedInEvent() {
-         this.g.wdLog([' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged]);
+        wdLog([' ---------------- triggeisLoggedInEvent ---------------- ', this.g.isLogged]);
         const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
         this.el.nativeElement.dispatchEvent(isLoggedIn);
     }
 
     /** */
     private triggerLoadParamsEvent() {
-        this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
+        wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
         this.el.nativeElement.dispatchEvent(loadParams);
@@ -789,7 +862,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     /** */
     // private triggerBeforeMessageRender(text) {
-    //     this.g.wdLog([' ---------------- triggerBeforeMessageRender ---------------- ', this.g.default_settings]);
+    //     wdLog([' ---------------- triggerBeforeMessageRender ---------------- ', this.g.default_settings]);
     //     const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: '{json}' });
     //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
     // }
@@ -799,9 +872,11 @@ export class AppComponent implements OnInit, OnDestroy {
     // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
-         this.g.wdLog(['this.subscriptions', this.subscriptions]);
-        if (this.g.windowContext['tiledesk']) {
-            this.g.windowContext['tiledesk']['angularcomponent'] = null;
+        wdLog(['this.subscriptions', this.subscriptions]);
+        const windowContext = this.g.windowContext;
+        if (windowContext['tiledesk']) {
+            windowContext['tiledesk']['angularcomponent'] = null;
+            this.g.setParameters('windowContext', windowContext);
         }
         this.unsubscribe();
     }
@@ -812,7 +887,7 @@ export class AppComponent implements OnInit, OnDestroy {
             subscription.unsubscribe();
         });
         this.subscriptions.length = 0;
-         this.g.wdLog(['this.subscriptions', this.subscriptions]);
+         wdLog(['this.subscriptions', this.subscriptions]);
     }
     // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
@@ -824,7 +899,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * 2 - remove user in firebase
     */
     signOut() {
-         this.g.wdLog([' SIGNOUT ']);
+         wdLog([' SIGNOUT ']);
         // this.storageService.removeItem('attributes');
         this.storageService.clear();
         this.chatPresenceHandlerService.goOffline();
@@ -852,8 +927,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * al login o all'apertura di una nuova conversazione
      */
     generateNewUidConversation() {
-         this.g.wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
-         // console.log("99");
+        wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
         return this.messagingService.generateUidConversation(this.g.senderId);
     }
 
@@ -862,13 +936,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * attivo una nuova conversazione
      */
     startNwConversation() {
-         this.g.wdLog(['AppComponent::startNwConversation']);
-        // this.ngOnDestroy();
-        this.g.recipientId = this.generateNewUidConversation();
-         this.g.wdLog([' recipientId: ', this.g.recipientId]);
-         this.g.wdLog([' senderId: ', this.g.senderId]);
-         this.g.wdLog([' projectid: ', this.g.projectid]);
-         this.g.wdLog([' channelType: ', this.g.channelType]);
+        wdLog(['AppComponent::startNwConversation']);
+        this.g.setParameters('recipientId', this.generateNewUidConversation());
+        wdLog([' recipientId: ', this.g.recipientId]);
     }
     // ========= end:: FUNCTIONS ============//
 
@@ -891,13 +961,12 @@ export class AppComponent implements OnInit, OnDestroy {
      * onClick button open/close widget
      */
     openCloseWidget($event) {
-        this.g.displayEyeCatcherCard = 'none';
+        this.g.setParameters('displayEyeCatcherCard', 'none');
         if ( this.g.isOpen === true ) {
             this.triggerOnOpenEvent();
         } else {
             this.triggerOnCloseEvent();
         }
-        this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
     }
 
     /**
@@ -906,8 +975,9 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     public returnDepartmentSelected($event) {
         if ($event) {
-            this.g.wdLog(['onSelectDepartment: ', $event]);
-            this.g.departmentSelected = $event;
+            wdLog(['onSelectDepartment: ', $event]);
+            this.g.setParameters('departmentSelected', $event);
+            // this.settingsSaverService.setVariable('departmentSelected', $event);
             this.startNwConversation();
             this.isOpenHome = true;
             this.isOpenConversation = true;
@@ -920,7 +990,7 @@ export class AppComponent implements OnInit, OnDestroy {
      * close modal
      */
     public returnCloseModalDepartment() {
-         this.g.wdLog(['returnCloseModalDepartment', this.g.senderId]);
+        wdLog(['returnCloseModalDepartment']);
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
@@ -932,10 +1002,11 @@ export class AppComponent implements OnInit, OnDestroy {
      * completed prechatform
      */
     public returnPrechatFormComplete() {
-         this.g.wdLog(['returnPrechatFormComplete']);
+         wdLog(['returnPrechatFormComplete']);
         this.isOpenHome = true;
         this.isOpenConversation = true;
-        this.g.isOpenPrechatForm = false;
+        this.g.setParameters('isOpenPrechatForm', false);
+        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
 
     /**
@@ -943,11 +1014,12 @@ export class AppComponent implements OnInit, OnDestroy {
      * close modal
      */
     public returnCloseModalPrechatForm() {
-         this.g.wdLog(['returnCloseModalPrechatForm']);
+         wdLog(['returnCloseModalPrechatForm']);
         this.isOpenHome = true;
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
-        this.g.isOpenPrechatForm = false;
+        this.g.setParameters('isOpenPrechatForm', false);
+        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
 
     /**
@@ -958,9 +1030,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private returnSelectedConversation($event) {
         if ($event) {
             this.conversationSelected = $event;
-            this.g.recipientId = $event.recipient;
+            // this.g.recipientId = $event.recipient;
+            // this.g.setVariable('recipientId', $event.recipient);
+            this.g.setParameters('recipientId', $event.recipient);
+            // this.settingsSaverService.setVariable('recipientId', $event.recipient);
+
             this.isOpenConversation = true;
-             this.g.wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
+             wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
             // this.messages = this.messagingService.messages;
         }
@@ -975,22 +1051,28 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     private returnNewConversation() {
 
-
-         this.g.wdLog(['returnNewConversation in APP COMPONENT', this.g.preChatForm]);
+         wdLog(['returnNewConversation in APP COMPONENT']);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
-        if (this.g.preChatForm && !this.g.attributes.userFullname && !this.g.attributes.email) {
+        const preChatForm = this.g.preChatForm;
+        const attributes = this.g.attributes;
+        const departments = this.g.departments;
+
+        if (preChatForm && !attributes.userFullname && !attributes.email) {
             this.isOpenConversation = false;
-            this.g.isOpenPrechatForm = true;
+            this.g.setParameters('isOpenPrechatForm', true);
+            // this.settingsSaverService.setVariable('isOpenPrechatForm', true);
             this.isOpenSelectionDepartment = false;
-            if (this.g.departments.length > 1) {
+            if (departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            this.g.isOpenPrechatForm = false;
+            // this.g.isOpenPrechatForm = false;
+            this.g.setParameters('isOpenPrechatForm', false);
+            // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (this.g.departments.length > 1) {
+            if (departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             } else {
                 this.isOpenConversation = true;
@@ -1051,10 +1133,12 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnCloseModalRateChat() {
         this.isOpenHome = true;
-        this.g.isOpenPrechatForm = false;
+        this.g.setParameters('isOpenPrechatForm', false);
+        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
-        this.g.isOpenStartRating = false;
+        this.g.setParameters('isOpenStartRating', false);
+        // this.settingsSaverService.setVariable('isOpenStartRating', false);
         this.startNwConversation();
     }
 
@@ -1064,10 +1148,12 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     returnRateChatComplete() {
         this.isOpenHome = true;
-        this.g.isOpenPrechatForm = false;
+        this.g.setParameters('isOpenPrechatForm', false);
+        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
         this.isOpenConversation = false;
         this.isOpenSelectionDepartment = false;
-        this.g.isOpenStartRating = false;
+        this.g.setParameters('isOpenStartRating', false);
+        // this.settingsSaverService.setVariable('isOpenStartRating', false);
         this.startNwConversation();
     }
 

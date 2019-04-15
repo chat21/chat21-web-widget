@@ -35,6 +35,9 @@ import { ListConversationsComponent } from './components/list-conversations/list
 import { HomeComponent } from './components/home/home.component';
 
 import { Globals } from './utils/globals';
+import { LocalSettingsService } from './providers/local-settings.service';
+import { SettingsSaverService } from './providers/settings-saver.service';
+
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
@@ -50,6 +53,8 @@ import { StorageService } from './providers/storage.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { WaitingService } from './providers/waiting.service';
 import { AppConfigService } from './providers/app-config.service';
+
+
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -110,6 +115,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AuthService,
     MessagingService,
     Globals,
+    LocalSettingsService,
+    SettingsSaverService,
     ConversationsService,
     UploadService,
     ContactService,

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Globals } from '../utils/globals';
-import { supports_html5_storage, supports_html5_session } from '../utils/utils';
+import { wdLog, supports_html5_storage, supports_html5_session } from '../utils/utils';
 import { AppConfigService } from './app-config.service';
 
 @Injectable()
@@ -42,10 +42,10 @@ export class AuthService {
     // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        that.g.wdLog(['NO CURRENT USER PASSO NULL']);
+        wdLog(['NO CURRENT USER PASSO NULL']);
         that.obsLoggedUser.next(0);
       } else {
-        that.g.wdLog(['PASSO CURRENT USER']);
+        wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;
         that.obsLoggedUser.next(firebase.auth().currentUser);
         // that.obsCurrentUser.next(that.user);
@@ -64,7 +64,7 @@ export class AuthService {
     firebase.auth().currentUser.getIdToken()/* true: forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
-        that.g.wdLog(['******************** ---------------> idToken.', idToken]);
+        wdLog(['******************** ---------------> idToken.', idToken]);
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
     });
@@ -95,7 +95,7 @@ export class AuthService {
                 that.unsubscribe();
               }
               that.obsLoggedUser.next(0);
-              that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
+              wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
           });
         })
     .catch(function(error) {
@@ -105,14 +105,14 @@ export class AuthService {
 
 
   authenticateFirebaseCustomToken(token) {
-    this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
+    wdLog(['authService.authenticateFirebaseCustomToken', token]);
     const that = this;
     firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
       //  wdLog(['token: ', token);
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
       .then(function(user) {
-        that.g.wdLog(['USER by signInWithCustomToken: ', user]);
+        wdLog(['USER by signInWithCustomToken: ', user]);
         that.user = user;
         if (that.unsubscribe) {
           that.unsubscribe();
@@ -127,7 +127,7 @@ export class AuthService {
             that.unsubscribe();
           }
           that.obsLoggedUser.next(0);
-          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
+          wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
       });
     })
     .catch(function(error) {
@@ -165,7 +165,7 @@ export class AuthService {
           that.unsubscribe();
         }
         that.obsLoggedUser.next(0);
-        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
+        wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
       });
     })
     .catch(function(error) {
@@ -215,14 +215,14 @@ export class AuthService {
     // return this.firebaseAuth.auth.signOut()
     return firebase.auth().signOut()
     .then(value => {
-      that.g.wdLog(['Nice, signOut OK!', value]);
+      wdLog(['Nice, signOut OK!', value]);
       if (that.unsubscribe) {
         that.unsubscribe();
       }
       that.obsLoggedUser.next(-1);
     })
     .catch(err => {
-      that.g.wdLog(['Something went wrong in signOut:', err.message]);
+      wdLog(['Something went wrong in signOut:', err.message]);
       that.obsLoggedUser.next(firebase.auth().currentUser);
     });
   }

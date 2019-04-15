@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../providers/auth.service';
 
 import { Globals } from '../../utils/globals';
+import { wdLog } from '../../utils/utils';
 import { AppConfigService } from '../../providers/app-config.service';
 
 
@@ -29,7 +30,7 @@ export class StarRatingWidgetService {
   ) {
 
     this.API_URL = this.appConfigService.getConfig().apiUrl;
-    //  this.g.wdLog(['AgentAvailabilityService:: this.API_URL',  this.API_URL );
+    //  wdLog(['AgentAvailabilityService:: this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
     }
@@ -37,14 +38,14 @@ export class StarRatingWidgetService {
 
     // this.observable = new BehaviorSubject<boolean>(null);
     // this.auth.obsLoggedUser.subscribe((current_user) => {
-    //    this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - USER GET FROM AUTH SUBSCRIPTION ', current_user);
+    //    wdLog(['»»» START-RATING-WIDGET SERVICE - USER GET FROM AUTH SUBSCRIPTION ', current_user);
     //   if (current_user) {
     //     this.senderId = current_user.user.uid;
-    //      this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - USER UID (alias SENDER ID) ', this.senderId);
+    //      wdLog(['»»» START-RATING-WIDGET SERVICE - USER UID (alias SENDER ID) ', this.senderId);
     //     setTimeout(() => {
     //       this.requestid = sessionStorage.getItem(this.senderId);
     //       this.requestid = this.storageService.getItem(this.senderId);
-    //        this.g.wdLog(['»»» START-RATING-WIDGET SERVICE - REQUEST ID GET FRO STORAGE', this.requestid);
+    //        wdLog(['»»» START-RATING-WIDGET SERVICE - REQUEST ID GET FRO STORAGE', this.requestid);
     //     }, 100);
     //   }
     // });
@@ -58,14 +59,14 @@ export class StarRatingWidgetService {
     // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
     // tslint:disable-next-line:max-line-length
     const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
-     this.g.wdLog(['url: ', url]);
+     wdLog(['url: ', url]);
     const body = {
       'rating': rate,
       'rating_message': message,
       // 'uid': uid
     };
-     this.g.wdLog(['------------------> options: ', options]);
-     this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
+     wdLog(['------------------> options: ', options]);
+     wdLog(['------------------> body: ', JSON.stringify(body)]);
     return this.http
       .put(url, JSON.stringify(body), options)
       .map(res => (res.json()));
@@ -81,13 +82,14 @@ export class StarRatingWidgetService {
   // }
 
   setOsservable(bool) {
-     this.g.wdLog(['------------------> setOsservable: ', bool]);
+     wdLog(['------------------> setOsservable: ', bool]);
     this.obsCloseConversation.next(bool);
   }
 
   _dowloadTranscript(recipientId) {
     const url = 'https://api.tiledesk.com/v1/public/requests/' + recipientId + '/messages.html';
-    this.g.windowContext.open(url, '_blank');
+    const windowContext = this.g.windowContext;
+    windowContext.open(url, '_blank');
   }
 
 }

@@ -244,13 +244,17 @@ export function setLanguage(windowContext, translatorService) {
   return translatorService.getDefaultLanguage(windowContext);
 }
 
-export function getParameterByName(windowContext, name) {
-  // if (!url) url = windowContext.location.href;
+export function getParameterByName(windowContext: any, name: String) {
   const url = windowContext.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
+  // console.log('results----> ', results);
   if (!results) { return null; }
-  if (!results[2]) { return ''; }
+  if (!results[2]) {
+    return 'true';
+  } else if (results[2] === 'false' || results[2] === '0') {
+    return 'false';
+  }
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
@@ -285,3 +289,23 @@ export function getImageUrlThumb(uid: string) {
   const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }
+
+
+/**
+ *
+ * @param message
+ */
+export function wdLog(message) {
+  if ( this.isLogEnabled ) {
+      console.log(message.toString());
+  }
+}
+
+export function stringToBoolean(string: any) {
+  switch (string.toLowerCase().trim()) {
+      case 'true': case 'yes': case '1': return true;
+      case 'false': case 'no': case '0': case null: return false;
+      default: return string;
+  }
+}
+

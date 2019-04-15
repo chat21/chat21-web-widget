@@ -41,7 +41,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   ngOnInit() {
       // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
   this.state = 'default';
-  this.g.displayEyeCatcherCard = 'none';
+  this.g.setParameters('displayEyeCatcherCard', 'none');
   this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
   this.displayEyeCatcherCardCloseBtn = 'none';
@@ -56,8 +56,9 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    */
   private openIfCallOutTimer() {
     const that = this;
-    if (this.g.calloutTimer >= 0) {
-        const waitingTime = this.g.calloutTimer * 1000;
+    const calloutTimer = this.g.calloutTimer;
+    if (calloutTimer >= 0) {
+        const waitingTime = calloutTimer * 1000;
         setTimeout(function () {
             that.openEyeCatcher();
         }, waitingTime);
@@ -67,14 +68,16 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   /**
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
-      if (this.g.isOpen === false) {
+      const isOpen = this.g.isOpen;
+      if (isOpen === false) {
           this.eventOpenEyeCatcher.emit(true);
-          this.g.displayEyeCatcherCard = 'block';
+          // this.g.displayEyeCatcherCard = 'block';
+          this.g.setParameters('displayEyeCatcherCard', 'block');
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
       } else {
-         // this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
+         // wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
       }
   }
 
@@ -89,7 +92,8 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * *** EYE-CATCHER CARD ***
    * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
   openChatFromEyeCatcherCard() {
-      this.g.displayEyeCatcherCard = 'none';
+      // this.g.displayEyeCatcherCard = 'none';
+      this.g.setParameters('displayEyeCatcherCard', 'none');
       this.eventOpenChat.emit();
   }
 
@@ -98,7 +102,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * DISPLAY EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE IS OVER EYE-CATCHER CARD OR
    * OVER THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseEnter() {
-      //  this.g.wdLog(['MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
+      //  wdLog(['MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
       this.displayEyeCatcherCardCloseBtn = 'block';
   }
 
@@ -107,7 +111,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * HIDE THE EYE-CATCHER CARD CLOSE BTN THE WHEN THE MOUSE LEAVE THE EYE-CATCHER CARD OR
    * LEAVE THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseLeave() {
-      //  this.g.wdLog(['MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
+      //  wdLog(['MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
       this.displayEyeCatcherCardCloseBtn = 'none';
   }
 
@@ -115,14 +119,15 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
       this.eventOpenEyeCatcher.emit(false);
-        this.g.displayEyeCatcherCard = 'none';
+        // this.g.displayEyeCatcherCard = 'none';
+        this.g.setParameters('displayEyeCatcherCard', 'none');
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 
   // /**
   //  * EYE-CATCHER CARD CLOSE BTN ON MOBILE DEVICE */
   // closeEyeCatcherCardWhenMobile() {
-  //      this.g.wdLog(['HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
+  //      wdLog(['HAS CLICKED CLOSE EYE CATCHER CARD WHEN MOBILE ');
   //     this.displayEyeCatcherCard = 'none';
   //     this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
   // }

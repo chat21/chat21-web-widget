@@ -16,6 +16,7 @@ function ready(callbackFunction){
 function loadIframe(tiledeskScriptBaseLocation) {
     var containerDiv = document.createElement('div');
     containerDiv.setAttribute('id','tiledesk-container');
+    containerDiv.classList.add("closed");
     document.body.appendChild(containerDiv);
     
     var iDiv = document.createElement('div');

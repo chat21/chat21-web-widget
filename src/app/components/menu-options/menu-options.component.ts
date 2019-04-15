@@ -21,25 +21,27 @@ export class MenuOptionsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
+    const themeColor = this.g.themeColor;
+    this.themeColor50 = convertColorToRGBA(themeColor, 50);
     // this.themeColor50 = this.g.themeColor + '7F';
   }
 
   f21_toggle_options() {
-     this.g.wdLog(['f21_toggle_options', this.g.isOpenMenuOptions]);
-    this.g.isOpenMenuOptions = !this.g.isOpenMenuOptions;
+    this.g.setParameters('isOpenMenuOptions', !this.g.isOpenMenuOptions);
   }
+
   toggleSound() {
-    this.g.isSoundActive = !this.g.isSoundActive;
-    if ( this.g.isSoundActive === true ) {
-      this.storageService.setItem('isSoundActive', 'true');
-    } else {
-      this.storageService.setItem('isSoundActive', 'false');
-    }
+    this.g.setParameters('isSoundActive', !this.g.isSoundActive);
+    // this.g.isSoundActive = !this.g.isSoundActive;
+    // if ( this.g.isSoundActive === false ) {
+    //   this.storageService.setItem('isSoundActive', false);
+    // } else {
+    //   this.storageService.setItem('isSoundActive', true);
+    // }
   }
 
   signOut() {
-    this.g.isOpenMenuOptions = false;
+    this.g.setParameters('isOpenMenuOptions', false);
     this.eventSignOut.emit();
   }
 

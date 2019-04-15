@@ -64,26 +64,24 @@ export class PrechatFormComponent implements OnInit {
     preChatFormValueChanges$.subscribe(x => {
       that.userFullname = x.name;
       that.userEmail = x.email;
-       this.g.wdLog([' openNewConversation: ', that.userFullname, that.userEmail]);
     });
   }
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
-    this.g.wdLog([' openNewConversation: ']);
-    this.g.attributes['userFullname'] = this.userFullname;
-    this.g.attributes['userEmail'] = this.userEmail;
     if (this.g.attributes) {
-        this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
-        // this.g.attributes = this.attributes;
-        this.eventCloseForm.emit();
+      const attributes = this.g.attributes;
+      attributes['userFullname'] = this.userFullname;
+      attributes['userEmail'] = this.userEmail;
+      this.g.setParameters('attributes', attributes);
+      this.storageService.setItem('attributes', JSON.stringify(attributes));
+      this.eventCloseForm.emit();
     } else {
       // mostro messaggio di errore
     }
   }
 
   returnClosePage() {
-     this.g.wdLog([' closePage: ']);
     this.eventClosePage.emit();
   }
   // ========= end:: ACTIONS ============//

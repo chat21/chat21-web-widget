@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { convertMessage, compareValues } from '../../utils/utils';
+import { wdLog, convertMessage, compareValues } from '../../utils/utils';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
@@ -64,7 +64,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
-    this.g.wdLog(['initialize: ListConversationsComponent']);
+    wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
@@ -74,10 +74,8 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     this.allConversations = [];
 
 
-     this.g.wdLog(['senderId: ', this.senderId]);
-     this.g.wdLog(['tenant: ', this.tenant]);
-     this.g.wdLog(['themeColor: ', this.g.themeColor]);
-     this.g.wdLog(['themeForegroundColor: ', this.g.themeForegroundColor]);
+     wdLog(['senderId: ', this.senderId]);
+     wdLog(['tenant: ', this.tenant]);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversations = this.conversationsService.allConversations;
@@ -90,7 +88,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
       that.ngZone.run(() => {
         that.listConversations = conversations;
         that.concatAndOrderArray();
-        that.g.wdLog([' ListAllConversationsComponent conversations:::: ', that.listConversations]);
+        wdLog([' ListAllConversationsComponent conversations:::: ', that.listConversations]);
       });
     });
     this.subscriptions.push(subListConversations);
@@ -100,7 +98,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
       that.ngZone.run(() => {
         that.archivedConversations = conversations;
         that.concatAndOrderArray();
-        that.g.wdLog([' ListAllConversationsComponent archivedConversations:::: ', that.allConversations]);
+        wdLog([' ListAllConversationsComponent archivedConversations:::: ', that.allConversations]);
       });
     });
     this.subscriptions.push(subArchivedConversations);
@@ -135,7 +133,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
     }
     this.allConversations = result;
     this.allConversations.sort(compareValues('timestamp', 'desc'));
-    this.g.wdLog([' concatAndOrderArray:::: ', this.allConversations]);
+    wdLog([' concatAndOrderArray:::: ', this.allConversations]);
     // this.obsAllConversations.next(this.allConversations);
   }
 
@@ -146,7 +144,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
   }
 
   private openConversationByID(conversation) {
-     this.g.wdLog(['openConversationByID: ', conversation]);
+     wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       this.eventSelctedConv.emit(conversation);
@@ -155,12 +153,13 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
 
   /** */
   getUrlImgProfile(uid?: string): string {
+    const baseLocation = this.g.baseLocation;
     if (!uid || uid === 'system' ) {
-        return this.g.baseLocation + IMG_PROFILE_BOT;
+        return baseLocation + IMG_PROFILE_BOT;
       } else if (uid === 'error') {
-        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+        return baseLocation + IMG_PROFILE_DEFAULT;
     } else {
-        return this.g.baseLocation + IMG_PROFILE_DEFAULT;
+        return baseLocation + IMG_PROFILE_DEFAULT;
     }
   }
   // ========= end:: ACTIONS ============//
@@ -169,7 +168,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
-      this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+      wdLog(['list conv destroy subscriptions', this.subscriptions]);
       this.unsubscribe();
     }
 
@@ -180,7 +179,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
        });
        this.subscriptions = [];
        this.allConversations = [];
-       this.g.wdLog(['this.subscriptions', this.subscriptions]);
+       wdLog(['this.subscriptions', this.subscriptions]);
    }
    // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

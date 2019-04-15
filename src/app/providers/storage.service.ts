@@ -7,8 +7,13 @@ export class StorageService {
 
   constructor(public g: Globals) { }
 
+  // globals.setParameters(key, globalVar.key.value);
+  // globals.getParameters('windowContext');
+
   public getItem (key): any {
+    // const newKey = this.g.projectid + '_' + key;
     const newKey = this.g.projectid + '_' + key;
+    // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
         return localStorage.getItem(newKey);
@@ -16,6 +21,7 @@ export class StorageService {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
         return sessionStorage.getItem(newKey);
@@ -23,6 +29,7 @@ export class StorageService {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'none') {
     } else if (this.g.persistence === 'none') {
       return null;
     } else {
@@ -37,7 +44,9 @@ export class StorageService {
 
   public setItem (key, value) {
     this.removeItem(key);
+    // const newKey = this.g.projectid + '_' + key;
     const newKey = this.g.projectid + '_' + key;
+    // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
         return localStorage.setItem(newKey, value);
@@ -45,6 +54,7 @@ export class StorageService {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
         return sessionStorage.setItem(newKey, value);
@@ -52,6 +62,7 @@ export class StorageService {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'none') {
     } else if (this.g.persistence === 'none') {
       return null;
     } else {
@@ -65,7 +76,9 @@ export class StorageService {
   }
 
   public removeItem(key: string) {
+    // const newKey = this.g.projectid + '_' + key;
     const newKey = this.g.projectid + '_' + key;
+    // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
         return localStorage.removeItem(newKey);
@@ -73,6 +86,7 @@ export class StorageService {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
         return sessionStorage.removeItem(newKey);
@@ -80,6 +94,7 @@ export class StorageService {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'none') {
     } else if (this.g.persistence === 'none') {
       return null;
     } else {
@@ -93,6 +108,7 @@ export class StorageService {
   }
 
   public clear () {
+    // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
         return localStorage.clear();
@@ -100,6 +116,7 @@ export class StorageService {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
         return sessionStorage.clear();
@@ -107,6 +124,7 @@ export class StorageService {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
       }
+    // } else if (this.g.persistence === 'none') {
     } else if (this.g.persistence === 'none') {
       return null;
     } else {

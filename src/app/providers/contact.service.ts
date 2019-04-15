@@ -29,7 +29,6 @@ export class ContactService {
     this.userId = userId;
     // recupero elenco partecipanti alla chat
     this.urlNodeFirebaseGroup = '/apps/' + this.tenant + '/users/' + this.userId + '/groups/' + this.conversationId + '/members';
-    this.g.wdLog(['urlNodeFirebaseGroup *****', this.urlNodeFirebaseGroup]);
     const firebaseGroup = firebase.database().ref(this.urlNodeFirebaseGroup)
     .once('value').then(function(snapshot) {
       //  wdLog('snapshot.val() *****', snapshot);
@@ -67,7 +66,6 @@ export class ContactService {
   //   const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   //   agent.image = IMG_PROFILE_SUPPORT;
   //   const urlNodeConcacts = '/apps/' + this.tenant + '/contacts/' + agent.id + '/imageurl/';
-  //   this.g.wdLog(['setImageConversation *****', urlNodeConcacts]);
   //   return firebase.database().ref(urlNodeConcacts).once('value');
   // }
 

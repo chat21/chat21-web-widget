@@ -64,7 +64,7 @@
         *********** MODALE PRECHAT FORM ***********
         *******************************************
         -->
-        <div class="modal-page" [class.active]="g.isOpenPrechatForm">
+        <div class="modal-page" [class.active]="g.isOpenPrechatForm === true">
             <tiledeskwidget-prechat-form
             (eventClosePage)="returnCloseModalPrechatForm()" 
             (eventCloseForm)="returnPrechatFormComplete()"
@@ -77,7 +77,7 @@
         *********** MODALE RATE CHAT ***********
         ****************************************
         -->
-        <div class="modal-page" [class.active]="g.isOpenStartRating">
+        <div class="modal-page" [class.active]="g.isOpenStartRating === true">
             <tiledeskwidget-star-rating-widget 
             (eventClosePage)="returnCloseModalRateChat()" 
             (eventCloseRate)="returnRateChatComplete()"

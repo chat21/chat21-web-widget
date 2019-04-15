@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 import 'firebase/database';
 
 import { Globals } from '../utils/globals';
+import { wdLog } from '../utils/utils';
 
 @Injectable()
 export class ChatPresenceHandlerService {
@@ -87,7 +88,7 @@ export class ChatPresenceHandlerService {
    */
   onlineRefForUser(userid) {
     const myConnectionsRefURL = this.urlNodeFirebase + '/presence/' + userid + '/connections';
-    this.g.wdLog(['onlineRefForUser *****', myConnectionsRefURL]);
+    wdLog(['onlineRefForUser *****', myConnectionsRefURL]);
     const connectionsRef = firebase.database().ref().child(myConnectionsRefURL);
     return connectionsRef;
   }
@@ -105,7 +106,7 @@ export class ChatPresenceHandlerService {
    */
   setupMyPresence(userid) {
     const that = this;
-    this.g.wdLog(['setupMyPresence: ', userid]);
+    wdLog(['setupMyPresence: ', userid]);
     this.myConnectionsRef = this.onlineRefForUser(userid);
     this.lastOnlineRef = this.lastOnlineRefForUser(userid);
     const connectedRefURL = '/.info/connected';
@@ -126,7 +127,7 @@ export class ChatPresenceHandlerService {
           const timestamp = now.valueOf();
           that.lastOnlineRef.onDisconnect().set(timestamp);
         } else {
-          this.g.wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
+          wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
         }
       }
     });
@@ -137,7 +138,7 @@ export class ChatPresenceHandlerService {
    * rimuovo la references su connection
    */
   goOffline() {
-    this.g.wdLog(['goOffline.', this.myConnectionsRef]);
+    wdLog(['goOffline.', this.myConnectionsRef]);
     // this.removeConnectionReference();
     this.removeLastOnlineReference();
   }
@@ -145,9 +146,9 @@ export class ChatPresenceHandlerService {
   // removeConnectionReference() {
   //   if (this.myConnectionsRef) {
   //     this.myConnectionsRef.off();
-  //     this.g.wdLog(['goOffline 1', this.myConnectionsRef]);
+  //     wdLog(['goOffline 1', this.myConnectionsRef]);
   //     this.myConnectionsRef.remove();
-  //     this.g.wdLog(['goOffline 2', this.myConnectionsRef]);
+  //     wdLog(['goOffline 2', this.myConnectionsRef]);
   //     this.myConnectionsRef = null;
   //   }
   // }

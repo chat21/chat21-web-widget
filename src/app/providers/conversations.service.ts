@@ -10,9 +10,9 @@ import { Globals } from '../utils/globals';
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+import { wdLog, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
 // import { ConsoleReporter } from 'jasmine';
-
+import { SettingsSaverService } from '../providers/settings-saver.service';
 
 
 
@@ -42,7 +42,8 @@ export class ConversationsService {
   getFromNow = getFromNow;
 
   constructor(
-    public g: Globals
+    public g: Globals,
+    public settingsSaverService: SettingsSaverService
   ) {
     // this.allConversations = new Array<ConversationModel>();
     // this.openConversations = new Array<ConversationModel>();
@@ -75,6 +76,7 @@ export class ConversationsService {
     this.g.obsIsOpen.subscribe((valIsOpen) => {
       if ( valIsOpen === true ) {
         that.listConversations.forEach(element => {
+          // if ( that.g.activeConversation === element.uid ) {
           if ( that.g.activeConversation === element.uid ) {
             that.updateIsNew(element);
             that.updateConversationBadge();
@@ -91,11 +93,11 @@ export class ConversationsService {
   //   const that = this;
   //   const firebaseConversations = firebase.database().ref(this.urlConversation);
   //   const refListConvLimit = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-  //   this.g.wdLog(['checkListConversationsLimit *****', this.urlConversation]);
+  //   wdLog(['checkListConversationsLimit *****', this.urlConversation]);
 
   //   //// SUBSCRIBE ADDED ////
   //   refListConvLimit.on('child_added', function (childSnapshot) {
-  //     that.g.wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
+  //     wdLog(['111 childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
   //     const conversation = that.setConversation(childSnapshot, false);
   //     // tslint:disable-next-line:max-line-length
   // tslint:disable-next-line:max-line-length
@@ -104,12 +106,12 @@ export class ConversationsService {
   //       that.checkIsSound(conversation);
 
   //       that.listConversations.unshift(conversation); // insert item to top array
-  //       that.g.wdLog(['222 listConversations *****', that.listConversations.length, limit]);
+  //       wdLog(['222 listConversations *****', that.listConversations.length, limit]);
   //       if (that.listConversations && that.listConversations.length > limit) {
   //         that.listConversations.slice(0, (limit - 1));
   //       }
   //       that.listConversations.sort(compareValues('timestamp', 'desc'));
-  //       that.g.wdLog(['333 listConversations *****']);
+  //       wdLog(['333 listConversations *****']);
   //       console.log(that.listConversations);
 
   //       that.updateConversationBadge();
@@ -129,7 +131,7 @@ export class ConversationsService {
   //       that.listConversations.sort(compareValues('timestamp', 'desc'));
   //       that.checkIsNew(conversation);
   //       that.checkIsSound(conversation);
-  //       that.g.wdLog(['checkListConversationsLimit child_changed *****', that.listConversations.length, index]);
+  //       wdLog(['checkListConversationsLimit child_changed *****', that.listConversations.length, index]);
   //       that.updateConversationBadge();
   //       that.obsListConversations.next(that.listConversations);
   //     //}
@@ -154,13 +156,13 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-     this.g.wdLog(['checkListConversations *****', this.urlConversation]);
+     wdLog(['checkListConversations *****', this.urlConversation]);
 
     //// SUBSCRIBE ADDED ////
     this.conversationRef.on('child_added', function (childSnapshot) {
-      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val(), that.g.filterByRequester]);
+      wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
-      // tslint:disable-next-line:max-line-length
+
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
         that.listConversations.unshift(conversation); // insert item top array
@@ -168,7 +170,7 @@ export class ConversationsService {
         that.checkIsSound(conversation);
         that.updateConversationBadge();
         that.listConversations.sort(compareValues('timestamp', 'desc'));
-        that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
+        wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
         that.obsListConversations.next(that.listConversations);
       }
     });
@@ -186,7 +188,7 @@ export class ConversationsService {
           that.updateConversationBadge();
           that.listConversations.sort(compareValues('timestamp', 'desc'));
           that.obsListConversations.next(that.listConversations);
-          that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
+          wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
         }
       }
     });
@@ -212,11 +214,11 @@ export class ConversationsService {
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlArchivedConversation);
     const ref = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
-     this.g.wdLog(['checkListArchivedConversations *****', this.urlArchivedConversation]);
+     wdLog(['checkListArchivedConversations *****', this.urlArchivedConversation]);
 
     //// SUBSCRIBE ADDED ////
     ref.on('child_added', function (childSnapshot) {
-      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
+      wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
@@ -244,7 +246,7 @@ export class ConversationsService {
           // that.updateConversationBadge();
           that.archivedConversations.sort(compareValues('timestamp', 'desc'));
           that.obsArchivedConversations.next(that.archivedConversations);
-          that.g.wdLog([' checkListArchivedConversations child_changed *****', that.archivedConversations, index]);
+          wdLog([' checkListArchivedConversations child_changed *****', that.archivedConversations, index]);
         }
       }
     });
@@ -281,7 +283,7 @@ export class ConversationsService {
   //   this.allConversations = result;
   //   // this.allConversations.map(item => item.uid).filter((value, index, self) => self.indexOf(value) === index);
   //   this.allConversations.sort(compareValues('timestamp', 'desc'));
-  //   this.g.wdLog([' updateConversations:::: ', this.allConversations.length]);
+  //   wdLog([' updateConversations:::: ', this.allConversations.length]);
   //   this.obsAllConversations.next(this.allConversations);
   // }
 
@@ -290,7 +292,8 @@ export class ConversationsService {
    */
   public checkIsSound(conversation) {
     // console.log('conversation', conversation);
-    if (this.g.activeConversation !== conversation.recipient && conversation.sender !== this.senderId && conversation.is_new === true) {
+    if (this.g.activeConversation !== conversation.recipient
+    && conversation.sender !== this.senderId && conversation.is_new === true) {
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
       this.soundMessage();
@@ -305,7 +308,8 @@ export class ConversationsService {
    * check if new or modify conversation is on active conversation
    */
   public checkIsNew(conversation) {
-    if ( this.g.activeConversation === conversation.uid && this.g.isOpen === true ) {
+    if ( this.g.activeConversation === conversation.uid
+      && this.g.isOpen === true ) {
       this.updateIsNew(conversation);
     }
   }
@@ -321,7 +325,7 @@ export class ConversationsService {
     }
     const update = {};
     update['/is_new'] = false;
-     this.g.wdLog(['**** updateIsNew::' + urlUpdate]);
+     wdLog(['**** updateIsNew::' + urlUpdate]);
     return firebase.database().ref(urlUpdate).update(update);
   }
   // ========= end:: isNew value in conversation ============//
@@ -340,9 +344,10 @@ export class ConversationsService {
         conversationsBadge++;
       }
     });
-    this.g.wdLog(['updateConversationBadge', conversationsBadge]);
-     // console.log("updateConversationBadge", conversationsBadge);
-    this.g.conversationsBadge = conversationsBadge;
+    wdLog(['updateConversationBadge', conversationsBadge]);
+    // console.log("updateConversationBadge", conversationsBadge);
+    this.g.setParameters('conversationsBadge', conversationsBadge);
+    // this.settingsSaverService.setVariable('conversationsBadge', conversationsBadge);
   }
 
 
@@ -350,14 +355,14 @@ export class ConversationsService {
   //   const urlUpdate = this.urlConversation + conversation.recipient + '/badge/';
   //   const update = {};
   //   update [urlUpdate] = badge;
-  //    this.g.wdLog(['**** updateBadge::' + urlUpdate);
+  //    wdLog(['**** updateBadge::' + urlUpdate);
   //   return firebase.database().ref().update(update);
   // }
 
 
   private setConversation(childSnapshot, archived) {
     const that = this;
-     this.g.wdLog(['snapshot.val() *****', that.senderId, childSnapshot.val()]);
+     wdLog(['snapshot.val() *****', that.senderId, childSnapshot.val()]);
     if (childSnapshot.val()) {
       const conversation: ConversationModel = childSnapshot.val();
       conversation.uid = childSnapshot.key;
@@ -392,7 +397,7 @@ export class ConversationsService {
     conv.image = IMG_PROFILE_SUPPORT;
     // if (conv.channel_type === TYPE_DIRECT) {
         const urlNodeConcacts = '/apps/' + this.tenant + '/contacts/' + conv.sender + '/imageurl/';
-        this.g.wdLog(['setImageConversation *****', urlNodeConcacts]);
+        wdLog(['setImageConversation *****', urlNodeConcacts]);
         firebase.database().ref(urlNodeConcacts).once('value')
         .then(function (snapshot) {
             if (snapshot.val().trim()) {
@@ -413,8 +418,8 @@ export class ConversationsService {
    * altrimenti -> SOUND
    */
   soundMessage() {
-    if (this.g.isSoundActive) {
-       this.g.wdLog(['****** soundMessage *****']);
+    if (this.g.isSoundActive === true)  {
+       wdLog(['****** soundMessage *****']);
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();

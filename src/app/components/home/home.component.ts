@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Globals } from '../../utils/globals';
-import { convertColorToRGBA } from '../../utils/utils';
+import { wdLog, convertColorToRGBA } from '../../utils/utils';
 
 
 
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.g.wdLog(['ngOnInit app-home']);
+    wdLog(['ngOnInit app-home']);
     // get global variables
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
@@ -52,11 +52,9 @@ export class HomeComponent implements OnInit {
     this.wellcomeMsg = this.g.wellcomeMsg;
     this.wellcomeTitle = this.g.wellcomeTitle;
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
-    this.themeColor50 = convertColorToRGBA(this.g.themeColor, 30); // this.g.themeColor + 'CC';
-
-    this.colorGradient = 'linear-gradient(' + this.g.themeColor + ', ' + this.themeColor50 + ')';
+    this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
+    this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorBck = '#000000';
-
   }
 
 
@@ -80,8 +78,9 @@ export class HomeComponent implements OnInit {
   }
 
   hideMenuOptions() {
-     this.g.wdLog(['hideMenuOptions']);
-    this.g.isOpenMenuOptions = false;
+    wdLog(['hideMenuOptions']);
+    // this.g.isOpenMenuOptions = false;
+    this.g.setParameters('isOpenMenuOptions', false);
   }
 
 
