@@ -2,7 +2,6 @@ import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
 import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
 
-
 /**
  * calcolo il tempo trascorso tra due date
  * e lo formatto come segue:
@@ -293,14 +292,8 @@ export function getImageUrlThumb(uid: string) {
 
 /**
  *
- * @param message
+ * @param string
  */
-export function wdLog(message) {
-  if ( this.isLogEnabled ) {
-      console.log(message.toString());
-  }
-}
-
 export function stringToBoolean(string: any) {
   switch (string.toLowerCase().trim()) {
       case 'true': case 'yes': case '1': return true;

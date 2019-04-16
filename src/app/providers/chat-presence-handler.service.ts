@@ -3,7 +3,6 @@ import * as firebase from 'firebase';
 import 'firebase/database';
 
 import { Globals } from '../utils/globals';
-import { wdLog } from '../utils/utils';
 
 @Injectable()
 export class ChatPresenceHandlerService {
@@ -88,7 +87,7 @@ export class ChatPresenceHandlerService {
    */
   onlineRefForUser(userid) {
     const myConnectionsRefURL = this.urlNodeFirebase + '/presence/' + userid + '/connections';
-    wdLog(['onlineRefForUser *****', myConnectionsRefURL]);
+    this.g.wdLog(['onlineRefForUser *****', myConnectionsRefURL]);
     const connectionsRef = firebase.database().ref().child(myConnectionsRefURL);
     return connectionsRef;
   }
@@ -106,13 +105,13 @@ export class ChatPresenceHandlerService {
    */
   setupMyPresence(userid) {
     const that = this;
-    wdLog(['setupMyPresence: ', userid]);
+    that.g.wdLog(['setupMyPresence: ', userid]);
     this.myConnectionsRef = this.onlineRefForUser(userid);
     this.lastOnlineRef = this.lastOnlineRefForUser(userid);
     const connectedRefURL = '/.info/connected';
     const conn = firebase.database().ref(connectedRefURL);
     conn.on('value', function(dataSnapshot) {
-      //  wdLog(["KEY: ",dataSnapshot,that.deviceConnectionRef);
+      //  that.g.wdLog(["KEY: ",dataSnapshot,that.deviceConnectionRef);
       if (dataSnapshot.val()) {
         // if (!that.myConnectionsRef || that.myConnectionsRef==='undefined') {
         if (that.myConnectionsRef) {
@@ -127,7 +126,7 @@ export class ChatPresenceHandlerService {
           const timestamp = now.valueOf();
           that.lastOnlineRef.onDisconnect().set(timestamp);
         } else {
-          wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
+          that.g.wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
         }
       }
     });
@@ -138,7 +137,7 @@ export class ChatPresenceHandlerService {
    * rimuovo la references su connection
    */
   goOffline() {
-    wdLog(['goOffline.', this.myConnectionsRef]);
+    this.g.wdLog(['goOffline.', this.myConnectionsRef]);
     // this.removeConnectionReference();
     this.removeLastOnlineReference();
   }
@@ -146,9 +145,9 @@ export class ChatPresenceHandlerService {
   // removeConnectionReference() {
   //   if (this.myConnectionsRef) {
   //     this.myConnectionsRef.off();
-  //     wdLog(['goOffline 1', this.myConnectionsRef]);
+  //     that.g.wdLog(['goOffline 1', this.myConnectionsRef]);
   //     this.myConnectionsRef.remove();
-  //     wdLog(['goOffline 2', this.myConnectionsRef]);
+  //     that.g.wdLog(['goOffline 2', this.myConnectionsRef]);
   //     this.myConnectionsRef = null;
   //   }
   // }

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { wdLog, getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import { getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
 import {
   IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
@@ -105,24 +105,24 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    wdLog([' ngOnInit:::: ', this.listConversations]);
+    this.g.wdLog([' ngOnInit:::: ', this.listConversations]);
   }
 
 
   showConversations() {
 
-    wdLog([' showConversations:::: ', this.listConversations.length]);
+    this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
     const that = this;
     if (!this.subListConversations) {
       this.subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
           that.ngZone.run(() => {
             if (conversations && conversations.length > 3) {
               that.listConversations = conversations.slice(0, 3);
-              wdLog([' >3 :::: ', that.listConversations.length]);
+              that.g.wdLog([' >3 :::: ', that.listConversations.length]);
             } else if (conversations && conversations.length > 0) {
               that.listConversations = conversations;
             }
-            wdLog([' conversations = 0 :::: ', that.listConversations]);
+            that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
           });
       });
       this.subscriptions.push(this.subListConversations);
@@ -132,7 +132,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
       this.subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
         that.ngZone.run(() => {
           that.archivedConversations = conversations;
-          wdLog([' archivedConversations:::: ', that.archivedConversations]);
+          that.g.wdLog([' archivedConversations:::: ', that.archivedConversations]);
         });
       });
       this.subscriptions.push(this.subArchivedConversations);
@@ -140,7 +140,7 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
-    wdLog(['initialize: ListConversationsComponent']);
+    this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
@@ -150,15 +150,15 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     const availableAgents = this.g.availableAgents;
     this.availableAgents = availableAgents.slice(0, 5);
 
-    wdLog(['senderId: ', this.senderId]);
-    wdLog(['tenant: ', this.tenant]);
+    this.g.wdLog(['senderId: ', this.senderId]);
+    this.g.wdLog(['tenant: ', this.tenant]);
 
     this.conversationsService.initialize(this.senderId, this.tenant);
     this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
     this.listConversations = this.conversationsService.listConversations;
-    wdLog(['this.listConversations.length', this.listConversations.length]);
-    wdLog(['this.listConversations', this.listConversations]);
+    this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
+    this.g.wdLog(['this.listConversations', this.listConversations]);
 
     if (this.g.supportMode) {
       this.showWaitingTime();
@@ -171,13 +171,13 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     const projectid = this.g.projectid;
     this.waitingService.getCurrent(projectid)
     .subscribe(response => {
-        wdLog(['response waiting', response]);
+        that.g.wdLog(['response waiting', response]);
         // console.log('response waiting ::::', response);
        if (response && response.length > 0 && response[0].waiting_time_avg) {
         const wt = response[0].waiting_time_avg;
 
         that.waitingTime = wt;
-        wdLog([' that.waitingTime',  that.waitingTime]);
+        that.g.wdLog([' that.waitingTime',  that.waitingTime]);
         // console.log('that.waitingTime', that.waitingTime);
 
         const lang = that.translatorService.getLanguage();
@@ -271,7 +271,7 @@ checkShowAllConversation() {
 
 
   private openConversationByID(conversation) {
-     wdLog(['openConversationByID: ', conversation]);
+    this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
@@ -284,7 +284,7 @@ checkShowAllConversation() {
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
   ngOnDestroy() {
-    wdLog(['list conv destroy subscriptions', this.subscriptions]);
+    this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
     this.unsubscribe();
   }
 
@@ -297,7 +297,7 @@ checkShowAllConversation() {
      // this.subOpenConversations = null;
      this.subListConversations = null;
      this.subArchivedConversations = null;
-     wdLog(['this.subscriptions', this.subscriptions]);
+     this.g.wdLog(['this.subscriptions', this.subscriptions]);
  }
  // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

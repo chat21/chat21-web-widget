@@ -16,7 +16,7 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '../utils/constants';
 // utils
-import { wdLog, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
+import { searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -55,7 +55,7 @@ export class MessagingService {
     public appConfigService: AppConfigService
   ) {
     this.API_URL = appConfigService.getConfig().apiUrl;
-    //  wdLog(['MessagingService::this.API_URL',  this.API_URL );
+    //  that.g.wdLog(['MessagingService::this.API_URL',  this.API_URL );
     if (!this.API_URL) {
       throw new Error('apiUrl is not defined');
     }
@@ -71,11 +71,11 @@ export class MessagingService {
    */
   public getMongDbDepartments(projectId): Observable<DepartmentModel[]> {
     const url = this.API_URL + projectId + '/departments/';
-    wdLog(['***** getMongDbDepartments *****', url]);
+    this.g.wdLog(['***** getMongDbDepartments *****', url]);
     // const url = `http://api.chat21.org/app1/departments`;
     // tslint:disable-next-line:max-line-length
     // const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnsiZW1haWwiOjEsImZpcnN0bmFtZSI6MSwibGFzdG5hbWUiOjEsInBhc3N3b3JkIjoxLCJpZCI6MX0sImdldHRlcnMiOnt9LCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJsYXN0bmFtZSI6ImluaXQiLCJmaXJzdG5hbWUiOiJpbml0IiwiX2lkIjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsibGFzdG5hbWUiOnRydWUsImZpcnN0bmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImVtYWlsIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJsYXN0bmFtZSI6IlNwb256aWVsbG8iLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJwYXNzd29yZCI6IiQyYSQxMCRkMHBTV3lTQkp5ejFQLmE0Y0QuamwubnpvbW9xMGlXZUlHRmZqRGNQZVhUeENpRUVJOTdNVyIsImVtYWlsIjoic3BvbnppZWxsb0BnbWFpbC5jb20iLCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUifSwiJGluaXQiOnRydWUsImlhdCI6MTUyMTY1MjE3Mn0.-iBbE2gCDrcUF1uh9HdK1kVsIRyRCBi_Pvm7LJEKhbs';
-    //  wdLog(['MONGO DB DEPARTMENTS URL', url, TOKEN);
+    //  that.g.wdLog(['MONGO DB DEPARTMENTS URL', url, TOKEN);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     // headers.append('Authorization', TOKEN);
@@ -89,7 +89,7 @@ export class MessagingService {
    *
    */
   public initialize(userUid, tenant, channel_type) {
-     wdLog(['***** initialize MessagingService *****']);
+    this.g.wdLog(['***** initialize MessagingService *****']);
     this.messages = [];
     this.channel_type = channel_type;
     this.senderId = userUid;
@@ -102,7 +102,7 @@ export class MessagingService {
    *
    */
   connect(conversationWith) {
-     wdLog(['***** connect MessagingService *****']);
+    this.g.wdLog(['***** connect MessagingService *****']);
     this.checkRemoveConversation(conversationWith);
     this.checkMessages(conversationWith);
   }
@@ -136,7 +136,7 @@ export class MessagingService {
     //// SUBSCRIBE ADDED ////
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
-       wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
+      that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const text = replaceBr(message['text']);
 
       if (that.checkMessage(message)) {
@@ -164,17 +164,17 @@ export class MessagingService {
         // azzero sto scrivendo
         // that.deleteWritingMessages(message['sender']);
         // notifico arrivo nuovo messaggio
-        //  wdLog(['NOTIFICO NW MSG *****', that.obsAdded);
-        //that.obsAdded.next(msg);
+        //  that.g.wdLog(['NOTIFICO NW MSG *****', that.obsAdded);
+        // that.obsAdded.next(msg);
         if (message && message.sender === that.senderId) {
           // && message.type !== TYPE_MSG_TEXT) {
           // sto aggiungendo un'immagine inviata da me!!!
           // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
           // that.messages.splice(index, 1, msg);
           const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          //  wdLog(['index *****', index, childSnapshot.key);
+          //  that.g.wdLog(['index *****', index, childSnapshot.key);
           if (index < 0) {
-            wdLog(['--------> ADD MSG IMG', index, msg]);
+            that.g.wdLog(['--------> ADD MSG IMG', index, msg]);
             msg.status = '150';
             that.messages.push(msg);
           }
@@ -182,7 +182,7 @@ export class MessagingService {
           // se msg è inviato da me cambio status
           // that.obsAddedMsg.next(text);
           msg.status = '150';
-          wdLog(['--------> ADD MSG', msg.status]);
+          that.g.wdLog(['--------> ADD MSG', msg.status]);
           that.messages.push(msg);
         }
         that.messages.sort(that.compareValues('timestamp', 'asc'));
@@ -251,7 +251,7 @@ export class MessagingService {
     if (msg.sender !== this.senderId && msg.status < MSG_STATUS_RECEIVED) {
       // tslint:disable-next-line:max-line-length
       const urlNodeMessagesUpdate = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + conversationWith + '/' + item.key;
-       wdLog(['AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate]);
+      this.g.wdLog(['AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate]);
       firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
     }
   }
@@ -263,7 +263,7 @@ export class MessagingService {
   public checkWritingMessages(tenant, conversationWith): any {
     this.conversationWith = conversationWith;
     const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
-     wdLog(['checkWritingMessages *****', urlNodeFirebase]);
+    this.g.wdLog(['checkWritingMessages *****', urlNodeFirebase]);
     const firebaseMessages = firebase.database().ref(urlNodeFirebase);
     const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
     return messagesRef;
@@ -276,7 +276,7 @@ export class MessagingService {
    * verifico se sta rispondendo un bot, func chiamata da checkWritingMessages
    */
   checkIsBot(snapshot) {
-     wdLog(['snapshot.numChildren() *****', snapshot.numChildren()]);
+    this.g.wdLog(['snapshot.numChildren() *****', snapshot.numChildren()]);
     const that = this;
     let RESP = null;
     if (snapshot.numChildren() === 0) {
@@ -285,14 +285,14 @@ export class MessagingService {
     snapshot.forEach(
       function (childSnapshot) {
         const uid = childSnapshot.key;
-         wdLog(['childSnapshot *****', uid]);
+         that.g.wdLog(['childSnapshot *****', uid]);
         if (uid.startsWith('bot_')) {
           RESP = uid;
           return;
         }
       }
     );
-     wdLog(['RESP:', RESP]);
+     that.g.wdLog(['RESP:', RESP]);
     return RESP;
   }
 
@@ -302,8 +302,8 @@ export class MessagingService {
    *
    */
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
-     wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
-     wdLog(['attributes:: ', attributes.toString()]);
+    this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
+    this.g.wdLog(['attributes:: ', attributes.toString()]);
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';
@@ -336,38 +336,38 @@ export class MessagingService {
     );
     //this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
-    wdLog([message.toString()]);
+    that.g.wdLog([message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
     //     // cambio lo stato in rosso: invio nn riuscito!!!
     //     message.status = '-100';
-    //      wdLog(['ERRORE', message);
+    //      that.g.wdLog(['ERRORE', message);
     //   } else {
     //     // that.checkWritingMessages();
     //     message.status = '150';
-    //      wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+    //      that.g.wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message);
     //   }
 
 
     const messageRef = conversationRef.push();
     const key = messageRef.key;
     message.uid = key;
-     wdLog(['messageRef: ', messageRef]);
+     that.g.wdLog(['messageRef: ', messageRef]);
     const messageForFirebase = message.asFirebaseMessage();
-     wdLog(['messageForFirebase: ', messageForFirebase]);
+     that.g.wdLog(['messageForFirebase: ', messageForFirebase]);
     messageRef.set(messageForFirebase, function (error) {
       // Callback comes here
       if (error) {
         // cambio lo stato in rosso: invio nn riuscito!!!
         message.status = '-100';
-         wdLog(['ERRORE', error]);
+         that.g.wdLog(['ERRORE', error]);
       } else {
         // that.checkWritingMessages();
         message.status = '150';
-        wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message]);
+        that.g.wdLog(['OK MSG INVIATO CON SUCCESSO AL SERVER', message]);
       }
-      //   wdLog(['****** changed *****', that.messages);
+      //   that.g.wdLog(['****** changed *****', that.messages);
     });
 
 
@@ -396,7 +396,7 @@ export class MessagingService {
     const that = this;
     this.conversationsRef = firebase.database().ref(this.urlConversation);
     this.conversationsRef.on('child_removed', function (snap) {
-       wdLog(['child_removed ***********************', snap.key, snap.val()]);
+       that.g.wdLog(['child_removed ***********************', snap.key, snap.val()]);
       if (snap.key === conversationWith) {
         that.closeConversation();
       }
@@ -408,7 +408,7 @@ export class MessagingService {
    * for open rating chat modal
    */
   closeConversation() {
-     wdLog(['MessagingService::closeConversation', 'conversation closed']);
+    this.g.wdLog(['MessagingService::closeConversation', 'conversation closed']);
     this.starRatingWidgetService.setOsservable(true);
   }
 
@@ -432,7 +432,7 @@ export class MessagingService {
    */
   private controlOfMessage(messageString): string {
     // let messageString = document.getElementById('textarea')[0].value;
-     wdLog(['controlOfMessage **************', messageString]);
+    this.g.wdLog(['controlOfMessage **************', messageString]);
     messageString = messageString.replace(/(\r\n|\n|\r)/gm, '');
     if (messageString.trim() !== '') {
       return messageString;
@@ -443,7 +443,7 @@ export class MessagingService {
 
   /** */
   // setRating(rate) {
-  //    wdLog(['setRating **************', rate);
+  //    that.g.wdLog(['setRating **************', rate);
   //   this.observableWidgetActive.next(false);
   // }
 
@@ -465,7 +465,7 @@ export class MessagingService {
    * detach all callbacks firebase on messagesRef
    */
   unsubscribeAllReferences() {
-     wdLog(['--------> messagesRef.off']);
+    this.g.wdLog(['--------> messagesRef.off']);
     this.messagesRef.off();
     // this.conversationsRef.off('child_removed');
   }

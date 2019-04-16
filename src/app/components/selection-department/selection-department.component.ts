@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
-import { wdLog } from '../../utils/utils';
 
 import { DepartmentModel } from '../../../models/department';
 import { MessagingService } from '../../providers/messaging.service';
@@ -35,20 +34,20 @@ export class SelectionDepartmentComponent implements OnInit {
     }
 
     ngOnInit() {
-         wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
+        this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
         // this.initDepartments();
     }
 
 
     // initDepartments() {
-    //      wdLog(['initDepartments ::::', this.g.departments);
+    //      that.g.wdLog(['initDepartments ::::', this.g.departments);
     //     if (this.g.departments.length === 1) {
     //         // DEPARTMENT DEFAULT SEMPRE PRESENTE
-    //          wdLog(['DEPARTMENT DEFAULT ::::', this.g.departments[0]);
+    //          that.g.wdLog(['DEPARTMENT DEFAULT ::::', this.g.departments[0]);
     //         this.setDepartment(this.g.departments[0]);
     //     } else if (this.g.departments.length === 2) {
     //         // UN SOLO DEPARTMENT
-    //          wdLog(['DEPARTMENT FIRST ::::', this.g.departments[1]);
+    //          that.g.wdLog(['DEPARTMENT FIRST ::::', this.g.departments[1]);
     //         this.setDepartment(this.g.departments[1]);
     //     } else if (this.g.departments.length > 2) {
     //         let i = 0;
@@ -76,7 +75,7 @@ export class SelectionDepartmentComponent implements OnInit {
             attributes.departmentName = department.name;
             this.g.setParameters('attributes', attributes);
             this.storageService.setItem('attributes', JSON.stringify(attributes));
-            wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
+            this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
         }
         this.closePage();
     }
@@ -91,7 +90,7 @@ export class SelectionDepartmentComponent implements OnInit {
     // */
     // getMongDbDepartments() {
     //     const that = this;
-    //      wdLog(['getMongDbDepartments ::::', this.g.projectid);
+    //      that.g.wdLog(['getMongDbDepartments ::::', this.g.projectid);
     //     this.messagingService.getMongDbDepartments( this.g.projectid )
     //     .subscribe(response => {
     //         that.departments = response;
@@ -116,11 +115,11 @@ export class SelectionDepartmentComponent implements OnInit {
     //         // that.isLogged = true;
     //     },
     //     errMsg => {
-    //          wdLog(['http ERROR MESSAGE', errMsg);
+    //          that.g.wdLog(['http ERROR MESSAGE', errMsg);
     //         // that.isLogged = false;
     //     },
     //     () => {
-    //             //  wdLog(['API ERROR NESSUNO');
+    //             //  that.g.wdLog(['API ERROR NESSUNO');
     //             // attivo pulsante aprichat!!!!!
     //     });
     // }
@@ -130,18 +129,18 @@ export class SelectionDepartmentComponent implements OnInit {
 
     // ========= begin:: ACTIONS ============//
     private onSelectDepartment(department) {
-         wdLog([' onSelectDepartment: ', department]);
+        this.g.wdLog([' onSelectDepartment: ', department]);
         this.setDepartment(department);
         this.eventDepartmentSelected.emit(department);
     }
 
     openPage() {
-         wdLog([' openPage: ']);
+        this.g.wdLog([' openPage: ']);
         this.eventOpenPage.emit();
     }
 
     closePage() {
-         wdLog([' closePage:  SelectDepartment']);
+        this.g.wdLog([' closePage:  SelectDepartment']);
         this.eventClosePage.emit();
     }
     // ========= end:: ACTIONS ============//

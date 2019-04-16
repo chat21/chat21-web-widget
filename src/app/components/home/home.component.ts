@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Globals } from '../../utils/globals';
-import { wdLog, convertColorToRGBA } from '../../utils/utils';
+import { convertColorToRGBA } from '../../utils/utils';
 
 
 
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    wdLog(['ngOnInit app-home']);
+    this.g.wdLog(['ngOnInit app-home']);
     // get global variables
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
   }
 
   hideMenuOptions() {
-    wdLog(['hideMenuOptions']);
+    this.g.wdLog(['hideMenuOptions']);
     // this.g.isOpenMenuOptions = false;
     this.g.setParameters('isOpenMenuOptions', false);
   }

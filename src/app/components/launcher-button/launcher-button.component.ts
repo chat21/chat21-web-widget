@@ -1,8 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { StorageService } from '../../providers/storage.service';
-// utils
-import { wdLog } from '../../utils/utils';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
 // vedi: https://angular.io/guide/animations
@@ -49,7 +47,7 @@ export class LauncherButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-     wdLog(['open_close_handler BUTTON 1: ', this.g.isOpen]);
+    this.g.wdLog(['open_close_handler BUTTON 1: ', this.g.isOpen]);
   }
 
   openCloseWidget() {

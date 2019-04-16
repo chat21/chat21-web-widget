@@ -29,7 +29,6 @@ export class SettingsSaverService {
   public setGlobalsSubscription() {
     const that = this;
     this.g.obsObjChanged.subscribe((obj) => {
-      console.log('SET Globals Subscription ---------->', obj);
       if (obj) {
         that.setVariable(obj.key, obj.val);
       }
@@ -44,12 +43,9 @@ export class SettingsSaverService {
   * @param value
   */
   public setVariable(key: string, value: any) {
-    console.log('SET VARIABLE ---------->', key);
     const val =  JSON.stringify(value);
-    console.log('SET VAL1 ---------->', val);
-    console.log('SET VAL2 ---------->', stringToBoolean(val));
     this.storageService.setItem(key, stringToBoolean(val));
-    console.log('SET globals ---------->', this.g);
+    // console.log('SET globals ---------->', this.g);
   }
 
 }

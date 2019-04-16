@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 // import { TranslatorService } from '../providers/translator.service';
 import { DepartmentModel } from '../../models/department';
 import { User } from '../../models/User';
-import { wdLog, convertColorToRGBA, getParameterByName } from '../utils/utils';
+import { detectIfIsMobile, convertColorToRGBA, getParameterByName } from '../utils/utils';
 
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 // import { TemplateBindingParseResult } from '@angular/compiler';
@@ -340,13 +340,17 @@ export class Globals {
   }
 
 
-  // da spostare in envrSettings
-  initialize(el) {
-    wdLog([' ---------------- START INIZIALIZE  ---------------- ']);
-    this.createDefaultSettingsObject();
-  }
   /**
-   * 8: setDefaultSettings
+   * @param attributes
+   */
+  initialize(attributes: any) {
+    this.createDefaultSettingsObject();
+    this.setParameters('isMobile', detectIfIsMobile(this.windowContext));
+    this.setParameters('attributes', attributes);
+  }
+
+  /**
+   * 1: setDefaultSettings
    */
   createDefaultSettingsObject() {
     this.default_settings = {
@@ -396,11 +400,12 @@ export class Globals {
 
   /**
    *
-   * @param key
-   * @param val
+   * @param message
    */
-  // public getParameters(key: string) {
-  //   return this.parameters[key];
-  // }
+  public wdLog(message: any) {
+    if ( this.isLogEnabled ) {
+        console.log(message.toString());
+    }
+  }
 
 }

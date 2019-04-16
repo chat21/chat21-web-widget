@@ -302,158 +302,195 @@ export class LocalSettingsService {
     */
     setVariableFromUrlParameters(globals: Globals) {
         const windowContext = globals.windowContext;
-        // let TEMP: any;
-        // const windowContext = globals.windowContext;
-        if (getParameterByName(windowContext, 'tiledesk_tenant')) {
-            globals.tenant = getParameterByName(windowContext, 'tiledesk_tenant');
-            // globals.setParameters('tenant', TEMP);
+        let TEMP: any;
+        TEMP = getParameterByName(windowContext, 'tiledesk_tenant');
+        if (TEMP) {
+            globals.tenant = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_recipientid')) {
-            globals.recipientId = getParameterByName(windowContext, 'tiledesk_recipientid');
-            // globals.setParameters('recipientId', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_recipientid');
+        if (TEMP) {
+            globals.recipientId = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_projectid')) {
-            globals.projectid = getParameterByName(windowContext, 'tiledesk_projectid');
-            // globals.setParameters('projectid', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_projectid');
+        if (TEMP) {
+            globals.projectid = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_widgetTitle')) {
-            globals.widgetTitle = getParameterByName(windowContext, 'tiledesk_widgetTitle');
-            // globals.setParameters('widgetTitle', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_widgetTitle');
+        if (TEMP) {
+            globals.widgetTitle = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_poweredby')) {
-            globals.poweredBy = getParameterByName(windowContext, 'tiledesk_poweredby');
-            // globals.setParameters('poweredBy', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_poweredby');
+        if (TEMP) {
+            globals.poweredBy = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_userid')) {
-            globals.userId = getParameterByName(windowContext, 'tiledesk_userid');
-            // globals.setParameters('userId', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_userid');
+        if (TEMP) {
+            globals.userId = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_useremail')) {
-            globals.userEmail = getParameterByName(windowContext, 'tiledesk_useremail');
-            // globals.setParameters('userEmail', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_useremail');
+        if (TEMP) {
+            globals.userEmail = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_userpassword')) {
-            globals.userPassword = getParameterByName(windowContext, 'tiledesk_userpassword');
-            // globals.setParameters('userPassword', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_userpassword');
+        if (TEMP) {
+            globals.userPassword = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_userfullname')) {
-            globals.userFullname = getParameterByName(windowContext, 'tiledesk_userfullname');
-            // globals.setParameters('userFullname', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_userfullname');
+        if (TEMP) {
+            globals.userFullname = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_channeltype')) {
-            globals.channelType = getParameterByName(windowContext, 'tiledesk_channeltype');
-            // globals.setParameters('channelType', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_channeltype');
+        if (TEMP) {
+            globals.channelType = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_lang')) {
-            // globals. = getParameterByName(windowContext, 'tiledesk_lang');
-            // globals.setParameters('lang', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_lang');
+        if (TEMP) {
+            // globals.lang = stringToBoolean(TEMP);
         }
-        const cotAsString = getParameterByName(windowContext, 'tiledesk_callouttimer');
-        if (cotAsString) {
-            globals.calloutTimer = Number(cotAsString);
-            // globals.setParameters('calloutTimer', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_callouttimer');
+        if (TEMP) {
+            globals.calloutTimer = Number(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_align')) {
-            globals.align = getParameterByName(windowContext, 'tiledesk_align');
-            // globals.setParameters('align', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_align');
+        if (TEMP) {
+            globals.align = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_marginX')) {
-            globals.marginX = getParameterByName(windowContext, 'tiledesk_marginX');
-            // globals.setParameters('marginX', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_marginX');
+        if (TEMP) {
+            globals.marginX = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_marginY')) {
-            globals.marginY = getParameterByName(windowContext, 'tiledesk_marginY');
-            // globals.setParameters('marginY', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_marginY');
+        if (TEMP) {
+            globals.marginY = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_wellcomemsg')) {
-            globals.wellcomeMsg = getParameterByName(windowContext, 'tiledesk_wellcomemsg');
-            // globals.setParameters('wellcomeMsg', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomemsg');
+        if (TEMP) {
+            globals.wellcomeMsg = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_callouttitle')) {
-            globals.calloutTitle = getParameterByName(windowContext, 'tiledesk_callouttitle');
-            // globals.setParameters('calloutTitle', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_callouttitle');
+        if (TEMP) {
+            globals.calloutTitle = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_calloutmsg')) {
-            globals.calloutMsg = getParameterByName(windowContext, 'tiledesk_calloutmsg');
-            // globals.setParameters('calloutMsg', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_calloutmsg');
+        if (TEMP) {
+            globals.calloutMsg = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton')) {
-            globals.hideHeaderCloseButton = stringToBoolean(getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton'));
-            // globals.setParameters('hideHeaderCloseButton', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideHeaderCloseButton');
+        if (TEMP) {
+            globals.hideHeaderCloseButton = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_themecolor')) {
-            const themecolor = getParameterByName(windowContext, 'tiledesk_themecolor');
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_themecolor');
+        if (TEMP) {
+            const themecolor = stringToBoolean(TEMP);
             globals.themeColor = convertColorToRGBA(themecolor, 100);
-            // globals.setParameters('themeColor', TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_themeforegroundcolor')) {
-            const themeforegroundcolor = getParameterByName(windowContext, 'tiledesk_themeforegroundcolor');
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_themeforegroundcolor');
+        if (TEMP) {
+            const themeforegroundcolor = stringToBoolean(TEMP);
             globals.themeForegroundColor = convertColorToRGBA(themeforegroundcolor, 100);
-            // globals.setParameters('themeForegroundColor', TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_logoChat')) {
-            globals.logoChat = getParameterByName(windowContext, 'tiledesk_logoChat');
-            // globals.setParameters('logoChat', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_logoChat');
+        if (TEMP) {
+            globals.logoChat = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_wellcomeTitle')) {
-            globals.wellcomeTitle = getParameterByName(windowContext, 'tiledesk_wellcomeTitle');
-            // globals.setParameters('wellcomeTitle', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeTitle');
+        if (TEMP) {
+            globals.wellcomeTitle = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_wellcomeMsg')) {
-            globals.wellcomeMsg = getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
-            // globals.setParameters('wellcomeMsg', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
+        if (TEMP) {
+            globals.wellcomeMsg = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_autoStart')) {
-            globals.autoStart = stringToBoolean(getParameterByName(windowContext, 'tiledesk_autoStart'));
-            // globals.setParameters('autoStart', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_autoStart');
+        if (TEMP) {
+            globals.autoStart = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_isShown')) {
-            globals.isShown = true;
-            // globals.setParameters('isShown', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_isShown');
+        if (TEMP) {
+            globals.isShown = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_isLogEnabled')) {
-            globals.isLogEnabled = true;
-            // globals.setParameters('isLogEnabled', TEMP);
+
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_isLogEnabled');
+        if (TEMP) {
+            globals.isLogEnabled = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_filterByRequester')) {
-            globals.filterByRequester = true;
-            // globals.setParameters('filterByRequester', TEMP);
+        globals.wdLog(['isLogEnabled: ', globals.isLogEnabled]);
+
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_filterByRequester');
+        if (TEMP) {
+            globals.filterByRequester = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_showWaitTime')) {
-            globals.showWaitTime = true;
-            // globals.setParameters('showWaitTime', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showWaitTime');
+        if (TEMP) {
+            globals.showWaitTime = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_showAvailableAgents')) {
-            globals.showAvailableAgents = true;
-            // globals.setParameters('showAvailableAgents', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showAvailableAgents');
+        if (TEMP) {
+            globals.showAvailableAgents = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_showLogoutOption')) {
-            globals.showLogoutOption = true;
-            // globals.setParameters('showLogoutOption', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showLogoutOption');
+        if (TEMP) {
+            globals.showLogoutOption = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_prechatform')) {
-            globals.preChatForm = true;
-            // globals.setParameters('preChatForm', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_prechatform');
+        if (TEMP) {
+            globals.preChatForm = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_isopen')) {
-            globals.isOpen = true;
-            // globals.setParameters('isOpen', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_isopen');
+        if (TEMP) {
+            globals.isOpen = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_allowtranscriptdownload')) {
-            globals.allowTranscriptDownload = true;
-            // globals.setParameters('allowTranscriptDownload', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_allowtranscriptdownload');
+        if (TEMP) {
+            globals.allowTranscriptDownload = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_showWidgetNameInConversation')) {
-            globals.showWidgetNameInConversation = true;
-            // globals.setParameters('showWidgetNameInConversation', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showWidgetNameInConversation');
+        if (TEMP) {
+            globals.showWidgetNameInConversation = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_startFromHome')) {
-            globals.startFromHome = true;
-            // globals.setParameters('startFromHome', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_startFromHome');
+        if (TEMP) {
+            globals.startFromHome = stringToBoolean(TEMP);
         }
-        if (getParameterByName(windowContext, 'tiledesk_fullscreenMode')) {
-            globals.fullscreenMode = true;
-            // globals.setParameters('fullscreenMode', TEMP);
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_fullscreenMode');
+        if (TEMP) {
+            globals.fullscreenMode = stringToBoolean(TEMP);
         }
     }
 

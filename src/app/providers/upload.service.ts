@@ -14,8 +14,6 @@ import { environment } from '../../environments/environment';
 
 import { Globals } from '../utils/globals';
 import { AppConfigService } from '../providers/app-config.service';
-// utils
-import { wdLog } from '../utils/utils';
 
 class ImageSnippet {
   pending = false;
@@ -60,24 +58,24 @@ export class UploadService {
     const nameFile = file.name;
     const typeFile = file.type;
     const reader = new FileReader();
-     wdLog(['OK preload: ', nameFile, typeFile, reader]);
+    this.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
     reader.addEventListener('load', function () {
     // reader.addEventListener('load', (event: any) => {
-       wdLog(['addEventListener load', reader.result]);
+      that.g.wdLog(['addEventListener load', reader.result]);
       // se inizia con image
       if (typeFile.startsWith('image')) {
         // const selectedFile = new ImageSnippet(event.target.result, file);
         // selectedFile.pending = true;
         const imageXLoad = new Image;
-        wdLog(['onload ', imageXLoad]);
+        that.g.wdLog(['onload ', imageXLoad]);
         imageXLoad.src = reader.result.toString();
         imageXLoad.title = nameFile;
         imageXLoad.onload = function () {
-          wdLog(['onload immagine']);
+          that.g.wdLog(['onload immagine']);
           // that.arrayFilesLoad.push(imageXLoad);
           const uid = that.createGuid();
           that.arrayFilesLoad.push('{ uid: ' + uid + ', file: ' + imageXLoad + ', type: ' + typeFile + ' }');
-          wdLog(['OK: ', that.arrayFilesLoad[0]]);
+          that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
         };
       }
       // this.imageService.uploadImage(this.selectedFile.file).subscribe(
@@ -89,7 +87,7 @@ export class UploadService {
       //   })
     });
     reader.readAsDataURL(file);
-     wdLog(['reader-result: ', file]);
+     this.g.wdLog(['reader-result: ', file]);
   }
 
 
@@ -97,7 +95,7 @@ export class UploadService {
   pushUpload(upload: UploadModel): any {
     const uid = this.createGuid();
     const urlImagesNodeFirebase = '/public/images/' + uid + '/';
-     wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
+     this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
 
     // Create a root reference
     const storageRef = firebase.storage().ref();
@@ -105,11 +103,11 @@ export class UploadService {
     // Create a reference to 'mountains.jpg'
     const mountainsRef = storageRef.child(urlImagesNodeFirebase);
 
-    //  wdLog(["UploadService::pushUpload::mountainsRef", mountainsRef);
+    //  this.g.wdLog(["UploadService::pushUpload::mountainsRef", mountainsRef);
 
     return mountainsRef.put(upload.file);
     // .then(function(snapshot) {
-    //    wdLog(['Uploaded a blob or file! ', snapshot.downloadURL);
+    //    this.g.wdLog(['Uploaded a blob or file! ', snapshot.downloadURL);
     //   this.observable.next(snapshot.downloadURL);
     // });
   }
@@ -119,19 +117,19 @@ export class UploadService {
     // recupero current user id
     const uid = this.createGuid();
     const urlImagesNodeFirebase = '/public/images/' + uid;
-     wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
+     this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
 
     const next = function(snapshot) {
       // upload in progress
       const snapshotRef = snapshot as firebase.storage.UploadTaskSnapshot;
       const percent = snapshotRef.bytesTransferred / snapshotRef.totalBytes * 100;
-       wdLog(['snapshot::::::::::::: ', percent]);
+       this.g.wdLog(['snapshot::::::::::::: ', percent]);
       upload.progress = percent;
     };
     // tslint:disable-next-line:no-shadowed-variable
     const error = function( error: any ) {
       // upload failed
-       wdLog([error]);
+       this.g.wdLog([error]);
     };
     const complete = function() {
       // upload success

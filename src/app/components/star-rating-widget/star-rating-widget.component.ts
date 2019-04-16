@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StarRatingWidgetService } from './star-rating-widget.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
-import { wdLog } from '../../utils/utils';
 
 
 @Component({
@@ -89,13 +88,13 @@ export class StarRatingWidgetComponent implements OnInit {
 
   sendRate() {
     this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-     wdLog(['sendRate!!!::', this.message]);
+    this.g.wdLog(['sendRate!!!::', this.message]);
     const that = this;
     // chiamo servizio invio segnalazione
     this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
     .subscribe(
       response => {
-         wdLog(['OK sender ::::', response]);
+         that.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
         that.nextStep();
       },
@@ -105,7 +104,7 @@ export class StarRatingWidgetComponent implements OnInit {
         that.nextStep();
       },
       () => {
-        //  wdLog(['API ERROR NESSUNO');
+        //  that.g.wdLog(['API ERROR NESSUNO');
       }
     );
   }
@@ -123,7 +122,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-    wdLog([' closePage: ']);
+    this.g.wdLog([' closePage: ']);
     this.step = 0;
     this.starRatingWidgetService.setOsservable(false);
     this.eventClosePage.emit();
