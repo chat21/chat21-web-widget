@@ -325,6 +325,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private setAvailableAgentsStatus() {
         const that = this;
         const projectid = this.g.projectid;
+        this.g.wdLog(['projectId->', projectid]);
         this.agentAvailabilityService
         .getAvailableAgents(projectid)
         .subscribe( (availableAgents) => {
@@ -539,6 +540,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         // visualizzo l'iframe!!!
+        console.log('triggerOnViewInit');
         this.triggerOnViewInit();
     }
     // ========= end:: START UI ============//

@@ -47,6 +47,7 @@ import { MenuOptionsComponent } from './components/menu-options/menu-options.com
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 import { StorageService } from './providers/storage.service';
+import { SettingsService } from './providers/settings.service';
 
 
 // Import the library module
@@ -125,6 +126,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TranslatorService,
     ChatPresenceHandlerService,
     StorageService,
+    SettingsService,
     WaitingService
   ],
   bootstrap: [AppComponent]

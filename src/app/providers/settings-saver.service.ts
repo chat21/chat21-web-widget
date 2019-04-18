@@ -43,9 +43,9 @@ export class SettingsSaverService {
   * @param value
   */
   public setVariable(key: string, value: any) {
-    const val =  JSON.stringify(value);
-    this.storageService.setItem(key, stringToBoolean(val));
-    // console.log('SET globals ---------->', this.g);
+    // const val =  JSON.stringify(value);
+    this.storageService.setItem(key, stringToBoolean(value));
+    console.log('SET val:', stringToBoolean(value), ' ---------->', JSON.stringify(value) );
   }
 
 }

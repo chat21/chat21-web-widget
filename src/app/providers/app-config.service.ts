@@ -11,6 +11,7 @@ export class AppConfigService {
   }
 
   loadAppConfig() {
+    console.log('error loadAppConfig', this.appConfig.apiUrl + 'settings');
     return this.http.get(this.appConfig.apiUrl + 'settings')
       .toPromise()
       .then(data => {

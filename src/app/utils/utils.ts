@@ -294,11 +294,15 @@ export function getImageUrlThumb(uid: string) {
  *
  * @param string
  */
-export function stringToBoolean(string: any) {
-  switch (string.toLowerCase().trim()) {
+export function stringToBoolean(string: any): any {
+  let val = string;
+  if (typeof string !== 'string') {
+    val = JSON.stringify(string);
+  }
+  switch (val.toLowerCase().trim()) {
       case 'true': case 'yes': case '1': return true;
       case 'false': case 'no': case '0': case null: return false;
-      default: return string;
+      default: return val;
   }
 }
 

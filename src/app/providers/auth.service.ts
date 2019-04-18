@@ -47,6 +47,7 @@ export class AuthService {
       } else {
         that.g.wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;
+        that.getIdToken();
         that.obsLoggedUser.next(firebase.auth().currentUser);
         // that.obsCurrentUser.next(that.user);
       }
@@ -59,14 +60,17 @@ export class AuthService {
 
 
   getIdToken() {
+    this.g.wdLog(['getIdToken CURRENT USER']);
     //  that.g.wdLog(['Notification permission granted.');
     const that = this;
     firebase.auth().currentUser.getIdToken()/* true: forceRefresh */
     .then(function(idToken) {
         that.token = idToken;
         that.g.wdLog(['******************** ---------------> idToken.', idToken]);
+        return idToken;
     }).catch(function(error) {
         console.error('idToken ERROR: ', error);
+        return;
     });
   }
 
@@ -85,8 +89,8 @@ export class AuthService {
             if (that.unsubscribe) {
               that.unsubscribe();
             }
-            that.obsLoggedUser.next(firebase.auth().currentUser);
             that.getIdToken();
+            that.obsLoggedUser.next(firebase.auth().currentUser);
           })
           .catch(function(error) {
               const errorCode = error.code;

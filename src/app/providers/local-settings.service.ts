@@ -4,21 +4,45 @@ import { Globals } from '../utils/globals';
 import { stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { StorageService } from './storage.service';
+import { SettingsService } from './settings.service';
 
 @Injectable()
 export class LocalSettingsService {
+    serverUrl = 'https://api.tiledesk.com/v1/';
 
     constructor(
-        private storageService: StorageService
+        private storageService: StorageService,
+        private settingsService: SettingsService
     ) {}
 
     load(globals: Globals, el: ElementRef) {
         console.log('LocalSettingsService load ------------> ', globals);
         this.setVariablesFromAttributeHtml(globals, el);
+        this.getProjectById(globals);
         this.setVariablesFromSettings(globals);
         this.setVariableFromUrlParameters(globals);
         this.setVariableFromStorage(globals);
     }
+
+
+    getProjectById(globals: Globals) {
+        const that = this;
+        console.log('getProjectById  ------------> ', globals.projectid);
+        const id = globals.projectid;
+        this.settingsService.getProjectById(id)
+        .subscribe(response => {
+            globals.wdLog(['response getProjectById ::::']);
+            console.log(response);
+            that.setVariablesFromService(globals, response);
+        },
+        errMsg => {
+            globals.wdLog(['http ERROR MESSAGE', errMsg]);
+        },
+        () => {
+            globals.wdLog(['API ERROR NESSUNO']);
+        });
+    }
+
 
     /**
      * 0: getVariablesFromAttributeHtml
@@ -35,7 +59,28 @@ export class LocalSettingsService {
     }
 
     /**
-    * 1: getVariablesFromSettings
+     * 1: setVariablesFromService
+     *
+     */
+    setVariablesFromService(globals: Globals, response: any) {
+        console.log('setVariablesFromService');
+        if (response.widget !== null) {
+            const variables = response.widget;
+            for (const key of Object.keys(variables)) {
+                console.log('SET globals KEY ---------->', key);
+                console.log('SET globals VAL ---------->', variables[key]);
+                if (variables[key] && variables[key] !== null) {
+                    // globals.setParameters(key, val);
+                    globals[key] = stringToBoolean(variables[key]);
+                }
+            }
+            console.log('SET globals == ---------->', globals);
+        }
+        console.log('response.widget: ', response.widget);
+    }
+
+    /**
+    * 2: getVariablesFromSettings
     */
     setVariablesFromSettings(globals: Globals) {
         console.log('setVariablesFromSettings');
@@ -298,7 +343,7 @@ export class LocalSettingsService {
 
 
     /**
-    * 2: setVariableFromUrlParameters
+    * 3: setVariableFromUrlParameters
     */
     setVariableFromUrlParameters(globals: Globals) {
         const windowContext = globals.windowContext;
@@ -495,7 +540,7 @@ export class LocalSettingsService {
     }
 
     /**
-     * 3: setVariableFromStorage
+     * 4: setVariableFromStorage
      * recupero il dictionary global dal local storage
      * aggiorno tutti i valori di globals
      * @param globals
@@ -504,7 +549,6 @@ export class LocalSettingsService {
         // console.log('setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals));
         for (const key of Object.keys(globals)) {
             const val = this.storageService.getItem(key);
-
             console.log('SET globals KEY ---------->', key);
             console.log('SET globals VAL ---------->', val);
             if (val && val !== null) {
