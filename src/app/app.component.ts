@@ -742,8 +742,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     private reInit() {
         this.storageService.clear();
-        this.chatPresenceHandlerService.goOffline();
-        this.authService.signOut(-2);
+        //this.chatPresenceHandlerService.goOffline();
+        //this.authService.signOut(-2);
+        this.initAll();
     }
 
     // ========= end:: COMPONENT TO WINDOW ============//
@@ -783,6 +784,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     signOut() {
          this.g.wdLog(['SIGNOUT']);
         // this.storageService.removeItem('attributes');
+
         this.storageService.clear();
         this.chatPresenceHandlerService.goOffline();
         this.authService.signOut(null);
