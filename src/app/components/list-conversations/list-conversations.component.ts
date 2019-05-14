@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -25,7 +25,7 @@ import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
   styleUrls: ['./list-conversations.component.scss']
 })
 
-export class ListConversationsComponent implements OnInit, OnDestroy {
+export class ListConversationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // ========= begin:: Input/Output values ============//
   @Output() eventNewConv = new EventEmitter<string>();
@@ -101,16 +101,18 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     // };
     this.humanizer.setOptions({round: true});
     this.initialize();
-    this.showConversations();
   }
 
   ngOnInit() {
     this.g.wdLog([' ngOnInit:::: ', this.listConversations]);
   }
 
+  ngAfterViewInit() {
+    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+  }
+
 
   showConversations() {
-
     this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
     const that = this;
     if (!this.subListConversations) {
@@ -163,6 +165,8 @@ export class ListConversationsComponent implements OnInit, OnDestroy {
     if (this.g.supportMode) {
       this.showWaitingTime();
     }
+
+    this.showConversations();
 
   }
 

@@ -131,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
                 const autoStart = that.g.autoStart;
+
                 if (user === -2) {
                     /** ho fatto un reinit */
                     that.setAuthentication();
@@ -487,8 +488,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog([' ---------------- 13 ---------------- ']);
             this.g.senderId = currentUser.uid;
             this.g.setParameters('senderId', currentUser.uid);
-            this.g.setParameters('isLogged', this.setAttributesFromStorageService());
-            this.g.setParameters('attributes', userId);
+            this.g.setParameters('isLogged', true);
+            this.g.setParameters('attributes', this.setAttributesFromStorageService());
             this.startNwConversation();
             this.startUI();
              this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
@@ -628,6 +629,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
+            /** set logout */
+            windowContext['tiledesk'].logout = function () {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.logout();
+                });
+            };
+
         }
     }
 
@@ -741,11 +749,43 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     private reInit() {
+
         this.storageService.clear();
-        //this.chatPresenceHandlerService.goOffline();
-        //this.authService.signOut(-2);
-        this.initAll();
+        let currentUser = this.authService.getCurrentUser();
+        this.authService.reloadCurrentUser()
+        .then(() => {
+            // location.reload();
+            currentUser = this.authService.getCurrentUser();
+            // alert(currentUser.uid);
+            this.initAll();
+            /** sono loggato */
+            this.g.wdLog(['USER AUTENTICATE: ', currentUser.uid]);
+            this.g.setParameters('senderId', currentUser.uid);
+            this.g.setParameters('isLogged', true);
+            this.g.setParameters('attributes', this.setAttributesFromStorageService());
+            this.g.wdLog([' this.g.senderId', currentUser.uid]);
+            this.startNwConversation();
+            this.startUI();
+            // this.triggerIsLoggedInEvent();
+            this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
+            this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
+
+            //this.g.setParameters('isOpen', true);
+
+            
+            //window.location.reload();
+
+            //this.setAuthentication();
+            //this.chatPresenceHandlerService.goOffline();
+            // this.authService.signOut(-2);
+        });
+
     }
+
+    private logout() {
+        this.signOut();
+    }
+
 
     // ========= end:: COMPONENT TO WINDOW ============//
 

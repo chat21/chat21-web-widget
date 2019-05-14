@@ -20,7 +20,7 @@ export class LocalSettingsService {
         this.setVariablesFromAttributeHtml(globals, el);
         this.getProjectById(globals);
         this.setVariablesFromSettings(globals);
-        this.setVariableFromUrlParameters(globals);
+        this.setVariablesFromUrlParameters(globals);
         this.setVariableFromStorage(globals);
     }
 
@@ -63,9 +63,12 @@ export class LocalSettingsService {
      *
      */
     setVariablesFromService(globals: Globals, response: any) {
-        console.log('setVariablesFromService');
+        console.log('setVariablesFromService', response);
         if (response.widget !== null) {
             const variables = response.widget;
+            if (!variables || variables === undefined) {
+                return;
+            }
             for (const key of Object.keys(variables)) {
                 console.log('SET globals KEY ---------->', key);
                 console.log('SET globals VAL ---------->', variables[key]);
@@ -345,7 +348,7 @@ export class LocalSettingsService {
     /**
     * 3: setVariableFromUrlParameters
     */
-    setVariableFromUrlParameters(globals: Globals) {
+    setVariablesFromUrlParameters(globals: Globals) {
         const windowContext = globals.windowContext;
         let TEMP: any;
         TEMP = getParameterByName(windowContext, 'tiledesk_tenant');

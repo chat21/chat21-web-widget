@@ -1,5 +1,9 @@
 # chat21-web-widget ver 2.0
 
+### 1.019
+- Load variables from server by projectId
+- Fixes bug clear localstorage
+
 ### 1.018
 - Changes profile icons
 - Fixes bug conversation badge

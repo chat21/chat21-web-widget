@@ -58,6 +58,13 @@ export class AuthService {
     return firebase.auth().currentUser;
   }
 
+  reloadCurrentUser() {
+    return firebase.auth().currentUser.reload();
+    // .then(() => {
+    //   // console.log(firebase.auth().currentUser);
+    //   return firebase.auth().currentUser;
+    // });
+  }
 
   getIdToken() {
     this.g.wdLog(['getIdToken CURRENT USER']);

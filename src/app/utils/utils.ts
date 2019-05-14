@@ -299,6 +299,9 @@ export function stringToBoolean(string: any): any {
   if (typeof string !== 'string') {
     val = JSON.stringify(string);
   }
+  if (!string) {
+    return;
+  }
   switch (val.toLowerCase().trim()) {
       case 'true': case 'yes': case '1': return true;
       case 'false': case 'no': case '0': case null: return false;
