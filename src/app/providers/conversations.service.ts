@@ -160,11 +160,13 @@ export class ConversationsService {
 
     //// SUBSCRIBE ADDED ////
     this.conversationRef.on('child_added', function (childSnapshot) {
-      that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
+      that.g.wdLog(['child_added val *****', childSnapshot.val()]);
 
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
+      if ( that.g.filterByRequester === false ||
+        (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ||
+        (that.g.filterByRequester === true && !conversation.attributes )
+        ) {
         that.listConversations.unshift(conversation); // insert item top array
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);
@@ -177,7 +179,12 @@ export class ConversationsService {
 
     // SUBSCRIBE CHANGED ////
     this.conversationRef.on('child_changed', function (childSnapshot) {
+      that.g.wdLog(['child_changed val *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
+      // console.log('that.g.filterByRequester: ', that.g.filterByRequester);
+      // console.log('conversation.attributes: ', conversation.attributes);
+      // console.log('requester_id: ', conversation.attributes.requester_id);
+      // console.log(conversation);
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
         const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
@@ -187,14 +194,15 @@ export class ConversationsService {
           that.checkIsSound(conversation);
           that.updateConversationBadge();
           that.listConversations.sort(compareValues('timestamp', 'desc'));
-          that.obsListConversations.next(that.listConversations);
           that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
+          that.obsListConversations.next(that.listConversations);
         }
       }
     });
 
     //// SUBSCRIBE REMOVED ////
     this.conversationRef.on('child_removed', function (childSnapshot) {
+      that.g.wdLog(['child_removed val *****', childSnapshot.val()]);
       const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
       if (index > -1) {
         that.listConversations.splice(index, 1);

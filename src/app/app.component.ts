@@ -131,7 +131,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
                 const autoStart = that.g.autoStart;
-
                 if (user === -2) {
                     /** ho fatto un reinit */
                     that.setAuthentication();
@@ -166,7 +165,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         });
         this.subscriptions.push(obsLoggedUser);
-
         this.authService.onAuthStateChanged();
     }
     // ========= end:: SUBSCRIPTIONS ============//

@@ -298,6 +298,7 @@ export function stringToBoolean(string: any): any {
   let val = string;
   if (typeof string !== 'string') {
     val = JSON.stringify(string);
+    return val;
   }
   if (!string) {
     return;
