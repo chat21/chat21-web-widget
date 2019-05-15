@@ -747,9 +747,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    /** */
+    /**
+     * 1 - cleare local storage
+     * 2 - remove div iframe widget
+     * 3 - reinit widget
+    */
     private reInit() {
+        this.storageService.clear();
+        const divWidgetRoot = this.g.windowContext.document.getElementsByTagName('tiledeskwidget-root')[0];
+        const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+        divWidgetContainer.remove();
+        divWidgetRoot.remove();
+        this.g.windowContext.initWidget();
+    }
 
+
+    private reInit_old() {
+        // this.isOpenHome = false;
         this.storageService.clear();
         let currentUser = this.authService.getCurrentUser();
         this.authService.reloadCurrentUser()
@@ -769,15 +783,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.triggerIsLoggedInEvent();
             this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
-
-            //this.g.setParameters('isOpen', true);
-
-            
-            //window.location.reload();
-
-            //this.setAuthentication();
-            //this.chatPresenceHandlerService.goOffline();
-            // this.authService.signOut(-2);
         });
 
     }
