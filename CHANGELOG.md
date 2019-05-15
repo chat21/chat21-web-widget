@@ -1,4 +1,6 @@
 # chat21-web-widget ver 2.0
+### 1.020
+- Add function reInit() widget
 
 ### 1.019
 - Load variables from server by projectId
