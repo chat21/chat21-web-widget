@@ -9,52 +9,54 @@ import { AppComponent } from './app.component';
 // import { AngularFireAuthModule } from '@angular/fire/auth';
 // import * as firebase from 'firebase';
 
+// Import the library module
 import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
+import { LinkyModule } from 'angular-linky';
+import { AngularResizedEventModule } from 'angular-resize-event';
+
+// utils
+import { Globals } from './utils/globals';
+
+// users
 import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
+// providers
+import { LocalSettingsService } from './providers/local-settings.service';
+import { SettingsSaverService } from './providers/settings-saver.service';
+import { StorageService } from './providers/storage.service';
+import { SettingsService } from './providers/settings.service';
+import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ConversationsService } from './providers/conversations.service';
 import { UploadService } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
-import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
-import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 import { TranslatorService } from './providers/translator.service';
-import { LinkyModule } from 'angular-linky';
+import { WaitingService } from './providers/waiting.service';
+import { AppConfigService } from './providers/app-config.service';
+
+
+// components
 import { SelectionDepartmentComponent } from './components/selection-department/selection-department.component';
-// import { NewConversationComponent } from './components/new-conversation/new-conversation.component';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
 import { HomeComponent } from './components/home/home.component';
-
-import { Globals } from './utils/globals';
-import { LocalSettingsService } from './providers/local-settings.service';
-import { SettingsSaverService } from './providers/settings-saver.service';
-
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
+import { MessageAttachmentComponent } from './components/message-attachment/message-attachment.component';
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
-import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
-import { StorageService } from './providers/storage.service';
-import { SettingsService } from './providers/settings.service';
-
-
-// Import the library module
-import { AngularResizedEventModule } from 'angular-resize-event';
-import { WaitingService } from './providers/waiting.service';
-import { AppConfigService } from './providers/app-config.service';
-
+import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
+import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 
 
 const appInitializerFn = (appConfig: AppConfigService) => {
@@ -81,7 +83,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     EyeeyeCatcherCardComponent,
     PreviewLoadingFilesComponent,
     MenuOptionsComponent,
-    ListAllConversationsComponent
+    ListAllConversationsComponent,
+    MessageAttachmentComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,83 @@
+<style>
+  .button {
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+    color: #333333;
+    border: 2px solid rgb(42, 106, 193);
+    border-radius: 6px;
+  }
+
+  .button-success{
+    background-color: white; 
+    color: #333333;
+    border: 2px solid rgb(28, 184, 65);
+  }
+  .button-error {
+    background-color: white; 
+    color: #333333;
+    border: 2px solid rgb(202, 60, 60);
+  }
+  .button-warning {
+    background-color: white; 
+    color: #333333;
+    border: 2px solid rgb(223, 117, 20);
+  }
+  .button-secondary {
+    background-color: white; 
+    color: #333333;
+    border: 2px solid rgb(66, 184, 221);
+  }
+
+
+  .button:hover {
+    color: white;
+    background: rgb(42, 106, 193);
+  }
+  .button-success:hover {
+    color: white;
+    background: rgb(28, 184, 65);
+  }
+  .button-error:hover {
+    color: white;
+    background: rgb(202, 60, 60);
+  }
+  .button-warning:hover {
+    color: white;
+    background: rgb(223, 117, 20);
+  }
+  .button-secondary:hover {
+    color: white;
+    background: rgb(66, 184, 221);
+  } 
+
+  .div-buttons{
+    display: block; 
+    float: right; 
+    margin-bottom: 20px;
+  }
+  .div-button{
+    float: right;
+  }
+</style>
+
+
+<div class="div-buttons">
+  <div *ngFor="let button of buttons" class="div-button">
+      <span *ngIf="button.type === 'text'">
+        <div class="button {{button.class}}" (click)="actionButton(button.value)">{{button.value}}</div> 
+      </span>
+      <!-- <div *ngIf="button.type == 'web_url'">
+        <a href="button.url" target="_blank">{{button.title}}</a>
+      </div> -->
+  </div>
+</div>
+
+

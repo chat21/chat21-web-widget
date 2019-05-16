@@ -162,11 +162,12 @@ export class ConversationsService {
     this.conversationRef.on('child_added', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, false);
       that.g.wdLog(['child_added val *****', childSnapshot.val()]);
-
+      console.log('***** child_added *****');
       if ( that.g.filterByRequester === false ||
         (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ||
         (that.g.filterByRequester === true && !conversation.attributes )
         ) {
+        // console.log('***** NEXT *****');
         that.listConversations.unshift(conversation); // insert item top array
         that.checkIsNew(conversation);
         that.checkIsSound(conversation);

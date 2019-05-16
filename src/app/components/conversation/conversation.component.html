@@ -152,6 +152,7 @@
 
                                     </div>
 
+
                                     <!-- message recipient:: -->
                                     <div *ngIf="message.sender != g.senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
                                     <div *ngIf="message.sender != g.senderId;" class="msg_container base_receive">
@@ -219,6 +220,16 @@
 
                                     <div class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
                                         <time *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
+                                    </div>
+
+
+                                    <!-- message type:: button -->
+                                    <div *ngIf="message.attributes.attachment && isLastMessage(message.uid)"> 
+                                        <tiledeskwidget-message-attachment 
+                                        [message]="message"
+                                        (eventOpenAttachment)="returnOpenAttachment($event)"
+                                        >
+                                        </tiledeskwidget-message-attachment>
                                     </div>
 
                                 </div>

@@ -161,6 +161,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    console.log('attributes: ', this.g.attributes);
   }
 
   ngOnChanges() {
@@ -1251,5 +1252,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog(['hideMenuOptions']);
     this.isMenuShow  = false;
  }
+
+  isLastMessage(idMessage: string) {
+    // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
+    if (idMessage === this.messages[this.messages.length - 1].uid) {
+      return true;
+    }
+    return false;
+  }
+
+  /** */
+  returnOpenAttachment($event: String) {
+    if ($event) {
+      this.sendMessage($event, TYPE_MSG_TEXT);
+    }
+  }
 
 }
