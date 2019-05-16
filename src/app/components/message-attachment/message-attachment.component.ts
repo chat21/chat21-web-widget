@@ -14,8 +14,8 @@ export class MessageAttachmentComponent implements OnInit {
   @Input() message: MessageModel;
   // ========= end:: Input/Output values ============//
 
-  private type: string;
-  private buttons: [any];
+  public type: string;
+  public buttons: [any];
 
   constructor() { }
 
@@ -45,7 +45,7 @@ export class MessageAttachmentComponent implements OnInit {
 
   /** */
   actionButton($event) {
-    alert($event);
+    // alert($event);
     if ( $event ) {
       this.eventOpenAttachment.emit($event);
     }
