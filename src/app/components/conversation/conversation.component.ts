@@ -203,7 +203,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     this.setAvailableAgentsStatus();
 
-    this.g.setParameters('activeConversation', this.conversationWith);
+    this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
   }
 
@@ -333,8 +333,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const recipientId = this.g.recipientId;
     const channelType = this.g.channelType;
     this.g.wdLog(['setConversation recipientId: ', recipientId, channelType]);
-    if ( !recipientId ) { this.g.setParameters('recipientId', this.setRecipientId()); }
-    if ( !channelType ) { this.g.setParameters('channelType', this.setChannelType()); }
+    if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
+    if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
   }
 
@@ -439,7 +439,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
     const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
     .subscribe(isOpenStartRating => {
-      that.g.setParameters('isOpenStartRating', isOpenStartRating);
+      that.g.setParameter('isOpenStartRating', isOpenStartRating);
       if (isOpenStartRating === false) {
           that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
       } else if (isOpenStartRating === true) {
@@ -630,6 +630,40 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+      // this.g.attributes.attachment = {
+      //   "type":"template",
+      //   "buttons":[
+      //     {
+      //       "type":"text",
+      //       "value":"Azione 0"
+      //     },
+      //     {
+      //       "type":"text",
+      //       "class": "button-success",
+      //       "value":"Azione 1"
+      //     },
+      //     {
+      //       "type":"text",
+      //       "class": "button-error",
+      //       "value":"Azione 2"
+      //     },
+      //     {
+      //       "type":"text",
+      //       "class": "button-secondary",
+      //       "value":"Azione 3"
+      //     },
+      //     {
+      //       "type":"web_url",
+      //       "class": "button-warning",
+      //       "value":"Azione 4"
+      //     },
+      //     {
+      //       "type":"web_url",
+      //       "url":"https://www.messenger.com",
+      //       "title":"Visit Messenger"
+      //     }
+      //   ]
+      // };
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
@@ -1169,12 +1203,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
-    this.g.setParameters('activeConversation', null);
+    this.g.setParameter('activeConversation', null);
     this.eventClose.emit();
   }
 
   returnCloseWidget() {
-    this.g.setParameters('activeConversation', null);
+    this.g.setParameter('activeConversation', null);
     this.eventCloseWidget.emit();
   }
 
@@ -1185,7 +1219,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   toggleSound() {
-    this.g.setParameters('isSoundActive', !this.g.isSoundActive);
+    this.g.setParameter('isSoundActive', !this.g.isSoundActive);
     // this.g.isSoundActive = !this.g.isSoundActive;
     // if ( this.g.isSoundActive === false ) {
     //   this.storageService.setItem('isSoundActive', false);

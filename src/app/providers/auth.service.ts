@@ -227,6 +227,7 @@ export class AuthService {
     return firebase.auth().signOut()
     .then(value => {
       that.g.wdLog(['Nice, signOut OK!', value]);
+      that.hideIFrame();
       if (that.unsubscribe) {
         that.unsubscribe();
       }
@@ -242,6 +243,13 @@ export class AuthService {
     });
   }
 
+  hideIFrame() {
+    const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+    if (divWidgetContainer) {
+      divWidgetContainer.classList.add('closed');
+      divWidgetContainer.classList.remove('open');
+    }
+  }
 
   // /jwt/decode?project_id=123
   public decode(token, projectId) {

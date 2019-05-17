@@ -73,7 +73,7 @@ export class PrechatFormComponent implements OnInit {
       const attributes = this.g.attributes;
       attributes['userFullname'] = this.userFullname;
       attributes['userEmail'] = this.userEmail;
-      this.g.setParameters('attributes', attributes);
+      this.g.setParameter('attributes', attributes);
       this.storageService.setItem('attributes', JSON.stringify(attributes));
       this.eventCloseForm.emit();
     } else {

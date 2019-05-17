@@ -41,7 +41,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   ngOnInit() {
       // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
   this.state = 'default';
-  this.g.setParameters('displayEyeCatcherCard', 'none');
+  this.g.setParameter('displayEyeCatcherCard', 'none');
   this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'none';
   this.displayEyeCatcherCardCloseBtn = 'none';
@@ -72,7 +72,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
       if (isOpen === false) {
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
-          this.g.setParameters('displayEyeCatcherCard', 'block');
+          this.g.setParameter('displayEyeCatcherCard', 'block');
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           this.rotateCalloutEmoticon();
@@ -93,7 +93,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
   openChatFromEyeCatcherCard() {
       // this.g.displayEyeCatcherCard = 'none';
-      this.g.setParameters('displayEyeCatcherCard', 'none');
+      this.g.setParameter('displayEyeCatcherCard', 'none');
       this.eventOpenChat.emit();
   }
 
@@ -120,7 +120,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   closeEyeCatcherCard() {
       this.eventOpenEyeCatcher.emit(false);
         // this.g.displayEyeCatcherCard = 'none';
-        this.g.setParameters('displayEyeCatcherCard', 'none');
+        this.g.setParameter('displayEyeCatcherCard', 'none');
         this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 

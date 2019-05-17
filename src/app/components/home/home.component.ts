@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
   hideMenuOptions() {
     this.g.wdLog(['hideMenuOptions']);
     // this.g.isOpenMenuOptions = false;
-    this.g.setParameters('isOpenMenuOptions', false);
+    this.g.setParameter('isOpenMenuOptions', false);
   }
 
 

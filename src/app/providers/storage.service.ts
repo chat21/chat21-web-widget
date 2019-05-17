@@ -9,7 +9,7 @@ export class StorageService {
 
   constructor(public g: Globals) { }
 
-  // globals.setParameters(key, globalVar.key.value);
+  // globals.setParameter(key, globalVar.key.value);
   // globals.getParameters('windowContext');
 
   public getItem (key): any {

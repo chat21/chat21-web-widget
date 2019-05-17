@@ -345,8 +345,8 @@ export class Globals {
    */
   initialize(attributes: any) {
     this.createDefaultSettingsObject();
-    this.setParameters('isMobile', detectIfIsMobile(this.windowContext));
-    this.setParameters('attributes', attributes);
+    this.setParameter('isMobile', detectIfIsMobile(this.windowContext));
+    this.setParameter('attributes', attributes);
   }
 
   /**
@@ -392,10 +392,20 @@ export class Globals {
    * @param key
    * @param val
    */
-  public setParameters(key: string, val: any) {
+  public setParameter(key: string, val: any) {
     this[key] = val;
     const obj = {'key': key, 'val': val};
     this.obsObjChanged.next(obj);
+  }
+
+  /**
+   *
+   * @param key
+   * @param val
+   */
+  public setAttributeParameter(key: string, val: any) {
+    this.attributes[key] = val;
+    this.setParameter('attributes', this.attributes);
   }
 
   /**
