@@ -512,6 +512,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const departments = this.g.departments;
         const attributes = this.g.attributes;
         const preChatForm = this.g.preChatForm;
+        console.log('preChatForm: ' +  this.g.preChatForm);
+        console.log(attributes);
         this.isOpenHome = true;
         this.isOpenConversation = false;
         this.g.setParameter('isOpenPrechatForm', false);
@@ -521,7 +523,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenConversation = false;
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenSelectionDepartment = false;
-        } else if (preChatForm && !attributes.userFullname && !attributes.email) {
+        } else if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
             this.g.setParameter('isOpenPrechatForm', true);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
@@ -987,8 +989,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const preChatForm = this.g.preChatForm;
         const attributes = this.g.attributes;
         const departments = this.g.departments;
-
-        if (preChatForm && !attributes.userFullname && !attributes.email) {
+        console.log('isOpenPrechatForm: TRUE' );
+        if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
+            // if (preChatForm && (!attributes.userFullname || !attributes.userEmail)) {
             this.isOpenConversation = false;
             this.g.setParameter('isOpenPrechatForm', true);
             // this.settingsSaverService.setVariable('isOpenPrechatForm', true);

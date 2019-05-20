@@ -515,6 +515,7 @@ export class LocalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_prechatform');
         if (TEMP) {
             globals.preChatForm = stringToBoolean(TEMP);
+            console.log('globals.preChatForm: ' + globals.preChatForm);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_isopen');
