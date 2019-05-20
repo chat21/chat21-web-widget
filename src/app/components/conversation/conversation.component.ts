@@ -999,7 +999,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 // INVIO MESSAGGIO
                 that.loadFile();
               }
-
             }, false);
 
             if (event.target.files[0]) {
@@ -1056,9 +1055,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-          that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
+        that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
+        console.log(currentUpload.file);
+
         const uploadTask = this.upSvc.pushUpload(currentUpload);
         uploadTask.then(snapshot => {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link

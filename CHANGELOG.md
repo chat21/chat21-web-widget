@@ -4,6 +4,7 @@
 - Fixes bug 'undefined' on localstorage
 - Fixes bug refresh list conversations
 - Add Attachment in Attribute msg (buttons)
+- Add setAttributeParameter
 
 ### 1.019
 - Load variables from server by projectId

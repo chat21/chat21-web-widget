@@ -26,7 +26,10 @@
             <!-- CONTENT HEADER -->
             <div class="c21-header-content">
                 <!-- LOGO HEADER -->
-                <div *ngIf="g.logoChat != 'nologo'" class="c21-logo">
+                <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo">
+                    <img src="{{g.BASE_LOCATION + g.DEFAULT_LOGO_CHAT}}" alt="logo">
+                </div>
+                <div *ngIf="g.logoChat != 'nologo' && g.logoChat != 'tiledesklogo'" class="c21-logo">
                     <img src="{{g.logoChat}}" alt="logo">
                 </div>
                 <!-- MESSAGE HEADER -->

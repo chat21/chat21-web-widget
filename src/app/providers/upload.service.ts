@@ -93,9 +93,12 @@ export class UploadService {
 
 
   pushUpload(upload: UploadModel): any {
-    const uid = this.createGuid();
+    let uid = this.createGuid();
+    uid =  uid + '_' + upload.file.name;
+
+
     const urlImagesNodeFirebase = '/public/images/' + uid + '/';
-     this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
+    this.g.wdLog(['pushUpload::::::::::::: ', urlImagesNodeFirebase]);
 
     // Create a root reference
     const storageRef = firebase.storage().ref();

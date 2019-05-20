@@ -149,8 +149,17 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.listConversations = [];
     this.archivedConversations = [];
     this.waitingTime = -1;
-    const availableAgents = this.g.availableAgents;
-    this.availableAgents = availableAgents.slice(0, 5);
+    // const availableAgents = this.g.availableAgents;
+    if (this.g.availableAgents) {
+      let limit = this.g.availableAgents.length;
+      console.log('this.availableAgents: ');
+      console.log(this.g.availableAgents, limit);
+      if (this.g.availableAgents.length > 5) {
+        limit = 5;
+      }
+      this.availableAgents = this.g.availableAgents.slice(0, limit);
+    }
+
 
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);

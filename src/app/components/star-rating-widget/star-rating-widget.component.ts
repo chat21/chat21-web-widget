@@ -94,7 +94,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
     .subscribe(
       response => {
-         that.g.wdLog(['OK sender ::::', response]);
+        that.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
         that.nextStep();
       },

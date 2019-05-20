@@ -59,8 +59,8 @@
       
     </div>
 
-    <div *ngIf="(!listConversations || listConversations.length == 0) && g.showAvailableAgents === true" style="margin-left: 30px;">
-        <div *ngFor="let agent of availableAgents" class="c21-pallozzo">
+    <div *ngIf="(!listConversations || listConversations.length == 0) && g.showAvailableAgents === true" style="margin-left: 30px;"> 
+      <div *ngFor="let agent of availableAgents" class="c21-pallozzo">
           <div class="c21-ball" [ngStyle] = "{ 'background-color':setColorFromString(agent.firstname) }" >
             <span class="c21-ball-label">{{avatarPlaceholder(agent.firstname)}}</span>
             <div *ngIf="agent.imageurl" #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + agent.imageurl + ')'"></div>

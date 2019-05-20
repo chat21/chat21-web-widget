@@ -220,7 +220,7 @@
 
 
                                     <!-- message type:: button -->
-                                    <div *ngIf="message.attributes.attachment && isLastMessage(message.uid)"> 
+                                    <div *ngIf="message.attributes && message.attributes.attachment && isLastMessage(message.uid)"> 
                                         <tiledeskwidget-message-attachment 
                                         [message]="message"
                                         (eventOpenAttachment)="returnOpenAttachment($event)"
@@ -311,11 +311,10 @@
         </span>
     </div>
 
-    <input type="file" accept="image/x-png,image/gif,image/jpeg,application/pdf" name="chat21-file"
+    <input type="file" accept="image/*,.pdf,.zip" name="chat21-file"
         id="chat21-file" class="inputfile" 
         [ngStyle]="{ 'display': 'none' }"
         (change)="detectFiles($event)" 
-        
     />
     <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
         <span>{{nameFile}}</span>

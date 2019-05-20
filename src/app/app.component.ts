@@ -77,7 +77,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     // ========= begin:: DA SPOSTARE ======= //
-    // ????????//
     IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
     // private aliveSubLoggedUser = true; /** ????? */
     // THERE ARE TWO 'CARD CLOSE BUTTONS' THAT ARE DISPLAYED ON THE BASIS OF PLATFORM
@@ -333,6 +332,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (availableAgents.length <= 0) {
                 that.g.setParameter('areAgentsAvailable', false);
                 that.g.setParameter('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
+                that.g.setParameter('availableAgents', null);
+                that.storageService.removeItem('availableAgents');
             } else {
                 that.g.setParameter('areAgentsAvailable', true);
                 that.g.setParameter('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
@@ -471,7 +472,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('senderId', userId);
             this.g.setParameter('isLogged', true);
             this.g.setParameter('attributes', this.setAttributesFromStorageService());
-
             this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
@@ -672,9 +672,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.g.setParameter('signInWithCustomToken', true);
                         that.g.setParameter('signInWithCustomToken', true);
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-                        attributes.userEmail = resDec.decoded.email;
-                        attributes.userFullname = resDec.decoded.name;
-                        that.g.setParameter('attributes', attributes);
+
+                        that.g.setAttributeParameter('userEmail', resDec.decoded.email);
+                        that.g.setAttributeParameter('userFullname', resDec.decoded.name);
+                        // attributes.userEmail = resDec.decoded.email;
+                        // attributes.userFullname = resDec.decoded.name;
+                        // that.g.setParameter('attributes', attributes);
                         // attributes = that.setAttributesFromStorageService(); ?????????????+
                         // ????????????????????
                     }, error => {
