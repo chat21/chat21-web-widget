@@ -5,6 +5,8 @@
 - Fixes bug refresh list conversations
 - Add Attachment in Attribute msg (buttons)
 - Add setAttributeParameter
+- Change url loading service variables from the server (without Auth)
+- Fixes bug scroll to bottom messages with attachment
 
 ### 1.019
 - Load variables from server by projectId
