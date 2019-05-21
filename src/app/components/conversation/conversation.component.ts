@@ -463,7 +463,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.g.wdLog(['1-------']);
         setTimeout(function () {
           that.scrollToBottom();
-        }, 100);
+        }, 200);
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
@@ -472,7 +472,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 100);
+          }, 200);
         } else {
           that.g.wdLog(['3-------']);
           that.NUM_BADGES++;
@@ -647,21 +647,21 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       //       "class": "button-error",
       //       "value":"Azione 2"
       //     },
-      //     {
-      //       "type":"text",
-      //       "class": "button-secondary",
-      //       "value":"Azione 3"
-      //     },
-      //     {
-      //       "type":"web_url",
-      //       "class": "button-warning",
-      //       "value":"Azione 4"
-      //     },
-      //     {
-      //       "type":"web_url",
-      //       "url":"https://www.messenger.com",
-      //       "title":"Visit Messenger"
-      //     }
+          // {
+          //   "type":"text",
+          //   "class": "button-secondary",
+          //   "value":"Azione 3"
+          // },
+          // {
+          //   "type":"web_url",
+          //   "class": "button-warning",
+          //   "value":"Azione 4"
+          // },
+          // {
+          //   "type":"web_url",
+          //   "url":"https://www.messenger.com",
+          //   "title":"Visit Messenger"
+          // }
       //   ]
       // };
       (metadata) ? metadata = metadata : metadata = '';

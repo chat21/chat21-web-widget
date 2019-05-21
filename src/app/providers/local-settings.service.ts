@@ -64,9 +64,9 @@ export class LocalSettingsService {
      *
      */
     setVariablesFromService(globals: Globals, response: any) {
-        console.log('setVariablesFromService', response.widget);
-        if (response.widget !== null) {
-            const variables = response.widget;
+        console.log('setVariablesFromService', response.project.widget);
+        if (response.project.widget !== null) {
+            const variables = response.project.widget;
             if (!variables || variables === undefined) {
                 return;
             }
