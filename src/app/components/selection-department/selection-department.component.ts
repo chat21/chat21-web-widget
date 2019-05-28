@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
@@ -11,7 +11,9 @@ import { StorageService } from '../../providers/storage.service';
     styleUrls: ['./selection-department.component.scss']
 })
 
-export class SelectionDepartmentComponent implements OnInit {
+export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
+    @ViewChild('afdepartment') private afdepartment: ElementRef;
+
     // ========= begin:: Input/Output values ===========//
     @Output() eventDepartmentSelected = new EventEmitter<any>();
     @Output() eventClosePage = new EventEmitter();
@@ -28,16 +30,19 @@ export class SelectionDepartmentComponent implements OnInit {
     constructor(
         public g: Globals,
         public messagingService: MessagingService,
-        public storageService: StorageService
+        public storageService: StorageService,
     ) {
-
     }
 
     ngOnInit() {
         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
-        // this.initDepartments();
     }
 
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.afdepartment.nativeElement.focus();
+        }, 10);
+    }
 
     // initDepartments() {
     //      that.g.wdLog(['initDepartments ::::', this.g.departments);

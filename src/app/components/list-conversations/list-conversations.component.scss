@@ -54,13 +54,15 @@
             margin: auto;
             padding: 0px 0px;
             cursor: pointer;
+            -webkit-appearance: initial;
+            border: none;
 
             .c21-body-conv{
                 position: relative;
                 border-top: 1px solid #eee;
                 // width: calc(100% - 48px);
                 width: auto;
-                // margin: 0 24px;
+                text-align: left;
                 margin: 0px 20px;
                 position: relative;
                 display: flex;
@@ -153,7 +155,7 @@
         .c21-item-conversation:hover,
         .c21-item-conversation:focus,
         .c21-item-conversation:active {
-            outline-width: 0px;
+            // outline-width: 0px;
             background-color: #fafafa;
         }
 

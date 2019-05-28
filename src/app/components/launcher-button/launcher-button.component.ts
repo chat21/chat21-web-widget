@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { StorageService } from '../../providers/storage.service';
 
@@ -36,7 +36,9 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     )
   ]
 })
-export class LauncherButtonComponent implements OnInit {
+export class LauncherButtonComponent implements OnInit, AfterViewInit {
+  @ViewChild('aflauncherbutton') private aflauncherbutton: ElementRef;
+
   @Output() eventOpenCloseWidget = new EventEmitter<boolean>();
 
   isOpen: boolean;
@@ -48,6 +50,12 @@ export class LauncherButtonComponent implements OnInit {
 
   ngOnInit() {
     this.g.wdLog(['open_close_handler BUTTON 1: ', this.g.isOpen]);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+        this.aflauncherbutton.nativeElement.focus();
+    }, 10);
   }
 
   openCloseWidget() {

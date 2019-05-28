@@ -41,6 +41,7 @@ import { StorageService } from '../../providers/storage.service';
 })
 export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
+  @ViewChild('textbox') private textbox: ElementRef;
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
@@ -131,17 +132,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public conversationsService: ConversationsService
   ) {
     this.initAll();
-
     // this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
   }
-
-  // onResized(event: ResizedEvent): void {
-  //   const that = this;
-  //   this.ngZone.run(() => {
-  //     that.g.wdLog([' ResizedEvent  ', event]);
-  //     //that.scrollToBottom();
-  //   });
-  // }
 
   ngOnInit() {
     console.log('ngOnInit');
@@ -162,7 +154,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     console.log('attributes: ', this.g.attributes);
+    setTimeout(() => {
+      this.textbox.nativeElement.focus();
+    }, 10);
   }
+
 
   ngOnChanges() {
     console.log('ngOnChanges');

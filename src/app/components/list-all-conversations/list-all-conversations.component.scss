@@ -111,6 +111,8 @@
             margin: auto;
             padding: 0px 0px;
             cursor: pointer;
+            -webkit-appearance: initial;
+            border: none;
             border-bottom: 1px solid $light-gray;
 
             .c21-body-conv{
@@ -123,6 +125,7 @@
                 display: flex;
                 align-items: center;
                 max-height: 80px;
+                text-align: left;
   
                 .c21-left-conv {
                     width: auto;
@@ -208,7 +211,7 @@
         .c21-item-conversation:hover,
         .c21-item-conversation:focus,
         .c21-item-conversation:active {
-            outline-width: 0px;
+            // outline-width: 0px;
             background-color: #fafafa;
         }
         

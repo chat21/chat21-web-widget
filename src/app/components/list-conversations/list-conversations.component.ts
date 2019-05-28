@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -26,7 +26,7 @@ import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
 })
 
 export class ListConversationsComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ============//
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
@@ -72,33 +72,10 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     public waitingService: WaitingService,
     public translatorService: TranslatorService
   ) {
-
     // console.log(this.langService);
     // https://www.npmjs.com/package/humanize-duration-ts
     // https://github.com/Nightapes/HumanizeDuration.ts/blob/master/src/humanize-duration.ts
     this.humanizer = new HumanizeDuration(this.langService);
-    //   const defaultOptions: IHumanizeDurationOptions = {
-    //     language: 'en',
-    //     delimiter: ', ',
-    //     spacer: ' ',
-    //     conjunction: '',
-    //     serialComma: true,
-    //     units: ['y', 'mo', 'w', 'd', 'h', 'm', 's'],
-    //     languages: {},
-    //     largest: 10,
-    //     decimal: '.',
-    //     round: true,
-    //     unitMeasures: {
-    //         y: 31557600000,
-    //         mo: 2629800000,
-    //         w: 604800000,
-    //         d: 86400000,
-    //         h: 3600000,
-    //         m: 60000,
-    //         s: 1000,
-    //         ms: 1
-    //     }
-    // };
     this.humanizer.setOptions({round: true});
     this.initialize();
   }
@@ -109,8 +86,10 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    setTimeout(() => {
+      this.aflistconv.nativeElement.focus();
+    }, 10);
   }
-
 
   showConversations() {
     this.g.wdLog([' showConversations:::: ', this.listConversations.length]);

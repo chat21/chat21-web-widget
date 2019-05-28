@@ -1037,8 +1037,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
-        this.isOpenHome = true;
-        this.isOpenConversation = false;
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenAllConversationTEMP = this.isOpenAllConversation;
+        this.isOpenHome = false;
+        this.isOpenAllConversation = false;
+        setTimeout(() => {
+            this.isOpenAllConversation = isOpenAllConversationTEMP;
+            this.isOpenHome = isOpenHomeTEMP;
+            this.isOpenConversation = false;
+        }, 200);
         this.startNwConversation();
     }
 
@@ -1047,9 +1054,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close all-conversation
      */
     private returnCloseAllConversation() {
-        this.isOpenHome = true;
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenConversationTEMP = this.isOpenConversation;
+        this.isOpenHome = false;
         this.isOpenConversation = false;
-        this.isOpenAllConversation = false;
+        setTimeout(() => {
+            this.isOpenHome = isOpenHomeTEMP;
+            this.isOpenConversation = isOpenConversationTEMP;
+            this.isOpenAllConversation = false;
+        }, 200);
     }
 
     /**

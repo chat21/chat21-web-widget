@@ -1,12 +1,9 @@
-<div id="c21-launcher-button" *ngIf="g.isLogged == true" 
+<!-- tabindex="000"-->
+<button #aflauncherbutton *ngIf="g.isLogged == true"  id="c21-launcher-button" class="c21-button-clean"
     [ngClass]="{'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'background-color': g.themeColor, 'bottom': g.marginY+'px!important', 'left':(g.align==='left')?g.marginX+'px!important':'', 'right':(g.align==='right')?g.marginX+'px!important':'' }"
-
-    (click)="openCloseWidget()">
-    <!-- 
-            [ngStyle]="ngAttrStyleColor()"
-    [ngStyle]="{ 'background-color': g.themeColor, 'bottom': g.marginY }"
-    [ngStyle]="{ 'background-color': g.themeColor, 'bottom': g.marginY, 'left' : (g.align === 'left')? g.marginX : 'auto', 'left' : (g.align === 'right')? g.marginX : 'auto' }" -->
+    (click)="openCloseWidget()"
+    tabindex="10">
 
     <div *ngIf="g.conversationsBadge>0" class="c21-divBudge">{{g.conversationsBadge}}</div>
 
@@ -28,4 +25,4 @@
         </svg>
     </div>
 
-</div>
+</button>

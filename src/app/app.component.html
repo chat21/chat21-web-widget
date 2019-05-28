@@ -1,6 +1,5 @@
 
-
-<div id="chat21-container" [class.active]="g.isShown"> 
+<div id="chat21-container" [class.active]="g.isShown" tabindex="9999" onFocus="document.querySelector('.btn-new-conversation').focus()"> 
     <!-- [class.active]="isLogged" -->
 
     <!-- 
@@ -13,7 +12,8 @@
     [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'display': (g.isOpen == true)?'block':'none', 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
-        <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
+            <!-- [class.active]="true" -->
             <tiledeskwidget-home 
             [senderId]="senderId"
             (eventClose)="returnCloseWidget()" 
@@ -24,7 +24,8 @@
             ></tiledeskwidget-home>
         </div>
 
-        <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page active">
+            <!-- [class.active]="true" -->
             <tiledeskwidget-list-all-conversations 
             [senderId]="recipientId"
             (eventClosePage)="returnCloseAllConversation()" 
@@ -32,7 +33,8 @@
             ></tiledeskwidget-list-all-conversations>
         </div>
         
-        <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenConversation && g.senderId" class="modal-page active">
+            <!-- [class.active]="true" -->
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
             [conversation]="conversationSelected"
@@ -44,14 +46,13 @@
         </div>
 
         
-    
-    
         <!-- 
         ****************************************
         ******* MODALE SELECT DEPARTMENT *******
         ****************************************
+        [class.active]="isOpenSelectionDepartment"
         -->
-        <div class="modal-page" [class.active]="isOpenSelectionDepartment">
+        <div *ngIf="isOpenSelectionDepartment" class="modal-page selection-department active">
             <tiledeskwidget-selection-department 
             (eventClosePage)="returnCloseModalDepartment()"
             (eventDepartmentSelected)="returnDepartmentSelected($event)" 
@@ -63,8 +64,9 @@
         *******************************************
         *********** MODALE PRECHAT FORM ***********
         *******************************************
+        [class.active]="g.isOpenPrechatForm === true"
         -->
-        <div class="modal-page" [class.active]="g.isOpenPrechatForm === true">
+        <div *ngIf="g.isOpenPrechatForm" class="modal-page prechat-form active">
             <tiledeskwidget-prechat-form
             (eventClosePage)="returnCloseModalPrechatForm()" 
             (eventCloseForm)="returnPrechatFormComplete()"
@@ -76,14 +78,14 @@
         ****************************************
         *********** MODALE RATE CHAT ***********
         ****************************************
+        [class.active]="g.isOpenStartRating === true"
         -->
-        <div class="modal-page" [class.active]="g.isOpenStartRating === true">
+        <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
             <tiledeskwidget-star-rating-widget 
             (eventClosePage)="returnCloseModalRateChat()" 
             (eventCloseRate)="returnRateChatComplete()"
             ></tiledeskwidget-star-rating-widget>
         </div>
-
 
     </div>
 
@@ -91,7 +93,7 @@
     *************************************************************    
     **************  NK EYE-CATCHER (aka CALLOUT) ****************
     ************************************************************* 
-    
+    tabindex -> 20
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
     (eventOpenChat)="returnOpenChat()" 
@@ -99,11 +101,12 @@
     ></tiledeskwidget-eyeeye-catcher-card>     
     
     
-     <!-- 
+    <!-- 
     ****** LAUNCHER BUTTON ******
+    tabindex -> 10
     -->
     <tiledeskwidget-launcher-button *ngIf="isInitialized" 
-    (eventOpenCloseWidget)="openCloseWidget($event)"
+    (eventOpenCloseWidget)="openCloseWidget($event)" 
     ></tiledeskwidget-launcher-button>
     
 </div>
