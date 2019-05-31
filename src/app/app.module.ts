@@ -48,6 +48,7 @@ import { StorageService } from './providers/storage.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { WaitingService } from './providers/waiting.service';
 
+
 @NgModule({
   declarations: [
     AppComponent,

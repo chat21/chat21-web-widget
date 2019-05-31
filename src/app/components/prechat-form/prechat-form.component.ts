@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Globals } from '../../utils/globals';
 import { StorageService } from '../../providers/storage.service';
@@ -8,8 +8,8 @@ import { StorageService } from '../../providers/storage.service';
   templateUrl: './prechat-form.component.html',
   styleUrls: ['./prechat-form.component.scss']
 })
-export class PrechatFormComponent implements OnInit {
-
+export class PrechatFormComponent implements OnInit, AfterViewInit {
+  @ViewChild('afPrechatFormComponent') private afPrechatFormComponent: ElementRef;
   // ========= begin:: Input/Output values ===========//
   @Output() eventClosePage = new EventEmitter();
   @Output() eventCloseForm = new EventEmitter();
@@ -34,6 +34,14 @@ export class PrechatFormComponent implements OnInit {
   ngOnInit() {
     this.initialize();
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.afPrechatFormComponent) {
+        this.afPrechatFormComponent.nativeElement.focus();
+      }
+    }, 1000);
+}
 
   initialize() {
     this.attributes = this.g.attributes;

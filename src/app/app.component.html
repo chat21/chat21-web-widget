@@ -12,7 +12,7 @@
     [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'display': (g.isOpen == true)?'block':'none', 'background-color':g.themeColor, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
-        <div *ngIf="isOpenHome && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
             <tiledeskwidget-home 
             [senderId]="senderId"
             (eventClose)="returnCloseWidget()" 
@@ -23,7 +23,7 @@
             ></tiledeskwidget-home>
         </div>
 
-        <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page active">
             <tiledeskwidget-list-all-conversations 
             [senderId]="recipientId"
             (eventClosePage)="returnCloseAllConversation()" 
@@ -31,7 +31,7 @@
             ></tiledeskwidget-list-all-conversations>
         </div>
         
-        <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.active]="true">
+        <div *ngIf="isOpenConversation && g.senderId" class="modal-page active">
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
             [elRoot]="el"
@@ -48,7 +48,7 @@
         ******* MODALE SELECT DEPARTMENT *******
         ****************************************
         -->
-        <div class="modal-page" [class.active]="isOpenSelectionDepartment">
+        <div *ngIf="isOpenSelectionDepartment" class="modal-page active">
             <tiledeskwidget-selection-department 
             (eventClosePage)="returnCloseModalDepartment()"
             (eventDepartmentSelected)="returnDepartmentSelected($event)" 
@@ -61,7 +61,7 @@
         *********** MODALE PRECHAT FORM ***********
         *******************************************
         -->
-        <div class="modal-page" [class.active]="g.isOpenPrechatForm">
+        <div *ngIf="g.isOpenPrechatForm" class="modal-page active">
             <tiledeskwidget-prechat-form
             (eventClosePage)="returnCloseModalPrechatForm()" 
             (eventCloseForm)="returnPrechatFormComplete()"
@@ -74,7 +74,7 @@
         *********** MODALE RATE CHAT ***********
         ****************************************
         -->
-        <div class="modal-page" [class.active]="g.isOpenStartRating">
+        <div *ngIf="g.isOpenStartRating" class="modal-page active">
             <tiledeskwidget-star-rating-widget 
             (eventClosePage)="returnCloseModalRateChat()" 
             (eventCloseRate)="returnRateChatComplete()"

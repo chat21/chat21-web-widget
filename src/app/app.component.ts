@@ -1,4 +1,4 @@
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -20,6 +20,7 @@ import { AgentAvailabilityService } from './providers/agent-availability.service
 
 // utils
 import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, setLanguage } from './utils/utils';
+// import { FocusTrapFactory, FocusMonitor, ListKeyManager} from '@angular/cdk/a11y';
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -30,8 +31,10 @@ import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, s
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-    obsEndRenderMessage: any;
+    @ViewChild('aflauncherbutton') aflauncherbutton: ElementRef;
+    // @ViewChild('aflistconv') aflistconv: ElementRef;
 
+    obsEndRenderMessage: any;
     // ========= begin:: parametri di stato widget ======= //
     isInitialized = false;              /** if true show button */
     isOpenHome = true;                  /** check open/close component home ( sempre visibile xchè il primo dello stack ) */
@@ -79,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
-        private storageService: StorageService,
+        private storageService: StorageService
     ) {
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
@@ -426,7 +429,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.g.wdLog([' this.g.senderId', this.g.senderId]);
             this.g.wdLog([' this.g.isLogged', this.g.isLogged]);
             this.g.attributes = this.setAttributes();
-            
+
             this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
@@ -447,7 +450,9 @@ export class AppComponent implements OnInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
-         this.g.wdLog([' ---------------- A3 ---------------- ']);
+
+
+        this.g.wdLog([' ---------------- A3 ---------------- ']);
         this.setIsWidgetOpenOrActive();
 
          this.g.wdLog([' ============ startUI ===============', this.g.departmentSelected, this.g.isLogged]);
@@ -644,12 +649,19 @@ export class AppComponent implements OnInit, OnDestroy {
     private f21_open() {
         this.g.wdLog(['f21_open senderId: ', this.g.senderId]);
         if (this.g.senderId) {
-            // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
             this.g.displayEyeCatcherCard = 'none';
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+
+            setTimeout(() => {
+                const isOpenHomeTEMP = this.isOpenHome;
+                this.isOpenHome = false;
+                setTimeout(() => {
+                    this.isOpenHome = isOpenHomeTEMP;
+                }, 0);
+            }, 200);
         }
     }
 
@@ -659,6 +671,10 @@ export class AppComponent implements OnInit, OnDestroy {
         // this.g.isOpen = false;
         this.g.setIsOpen(false);
         this.storageService.setItem('isOpen', 'false');
+        if (!this.g.isOpen && this.aflauncherbutton) {
+            this.aflauncherbutton.nativeElement.focus();
+        }
+        // document.querySelector('[aflistconv]').nativeElement.focus();
     }
 
     // ========= end:: COMPONENT TO WINDOW ============//
@@ -797,6 +813,17 @@ export class AppComponent implements OnInit, OnDestroy {
     openCloseWidget($event) {
         this.g.displayEyeCatcherCard = 'none';
         this.g.wdLog(['openCloseWidget: ', this.g.isOpen, this.isOpenHome, this.g.senderId]);
+        setTimeout(() => {
+            if (!this.g.isOpen && this.aflauncherbutton) {
+                this.aflauncherbutton.nativeElement.focus();
+            } else if (this.g.isOpen) {
+                const isOpenHomeTEMP = this.isOpenHome;
+                this.isOpenHome = false;
+                setTimeout(() => {
+                    this.isOpenHome = isOpenHomeTEMP;
+                }, 0);
+            }
+        }, 200);
     }
 
     /**
@@ -820,9 +847,13 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     public returnCloseModalDepartment() {
          this.g.wdLog(['returnCloseModalDepartment', this.g.senderId]);
-        this.isOpenHome = true;
+        const isOpenHomeTEMP = this.isOpenHome;
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
+        // this.isOpenHome = false;
+        setTimeout(() => {
+            this.isOpenHome = true;
+        }, 0);
     }
 
 
@@ -831,10 +862,17 @@ export class AppComponent implements OnInit, OnDestroy {
      * completed prechatform
      */
     public returnPrechatFormComplete() {
-         this.g.wdLog(['returnPrechatFormComplete']);
-        this.isOpenHome = true;
-        this.isOpenConversation = true;
-        this.g.isOpenPrechatForm = false;
+        this.g.wdLog(['returnPrechatFormComplete']);
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenSelectionDepartmentTEMP = this.isOpenSelectionDepartment;
+        //this.isOpenHome = false;
+        //this.isOpenSelectionDepartment = false;
+        setTimeout(() => {
+            this.isOpenHome = isOpenHomeTEMP;
+            this.isOpenSelectionDepartment = isOpenSelectionDepartmentTEMP;
+            this.isOpenConversation = false;
+            this.g.isOpenPrechatForm = false;
+        }, 0);
     }
 
     /**
@@ -842,11 +880,21 @@ export class AppComponent implements OnInit, OnDestroy {
      * close modal
      */
     public returnCloseModalPrechatForm() {
-         this.g.wdLog(['returnCloseModalPrechatForm']);
-        this.isOpenHome = true;
-        this.isOpenSelectionDepartment = false;
-        this.isOpenConversation = false;
-        this.g.isOpenPrechatForm = false;
+        this.g.wdLog(['returnCloseModalPrechatForm']);
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenSelectionDepartmentTEMP = this.isOpenSelectionDepartment;
+        const isOpenConversationTEMP = this.isOpenConversation;
+        const isOpenPrechatFormTEMP = this.g.isOpenPrechatForm;
+        setTimeout(() => {
+            this.isOpenHome = true;
+            this.isOpenSelectionDepartment = false;
+            this.isOpenConversation = false;
+            this.g.isOpenPrechatForm = false;
+            if (!this.g.isOpen && this.aflauncherbutton) {
+                this.aflauncherbutton.nativeElement.focus();
+            }
+        }, 0);
+
     }
 
     /**
@@ -912,14 +960,27 @@ export class AppComponent implements OnInit, OnDestroy {
     private returnOpenChat() {
         this.f21_open();
     }
-
+    private returneventOpenEyeCatcher() {
+        // returneventOpenEyeCatcher
+    }
     /**
      * MODAL CONVERSATION:
      * close conversation
      */
     private returnCloseConversation() {
-        this.isOpenHome = true;
-        this.isOpenConversation = false;
+        // this.isOpenHome = true;
+        // this.isOpenConversation = false;
+        // this.startNwConversation();
+
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenAllConversationTEMP = this.isOpenAllConversation;
+        //this.isOpenHome = false;
+        //this.isOpenAllConversation = false;
+        setTimeout(() => {
+            this.isOpenAllConversation = isOpenAllConversationTEMP;
+            this.isOpenHome = true;
+            this.isOpenConversation = false;
+        }, 200);
         this.startNwConversation();
     }
 
@@ -928,9 +989,18 @@ export class AppComponent implements OnInit, OnDestroy {
      * close all-conversation
      */
     private returnCloseAllConversation() {
-        this.isOpenHome = true;
-        this.isOpenConversation = false;
-        this.isOpenAllConversation = false;
+        // this.isOpenHome = true;
+        // this.isOpenConversation = false;
+        // this.isOpenAllConversation = false;
+        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenConversationTEMP = this.isOpenConversation;
+        //this.isOpenHome = false;
+        //this.isOpenConversation = false;
+        setTimeout(() => {
+            this.isOpenHome = true;
+            this.isOpenConversation = false;
+            this.isOpenAllConversation = false;
+        }, 200);
     }
 
     /**

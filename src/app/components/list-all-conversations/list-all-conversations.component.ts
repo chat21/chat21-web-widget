@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 // services
@@ -17,8 +17,8 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./list-all-conversations.component.scss']
 })
 
-export class ListAllConversationsComponent implements OnInit, OnDestroy {
-
+export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('afallconv') private afallconv: ElementRef;
   // ========= begin:: Input/Output values ============//
   @Output() eventSelctedConv = new EventEmitter<string>();
   @Output() eventClosePage = new EventEmitter();
@@ -58,6 +58,14 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initialize();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.afallconv) {
+        this.afallconv.nativeElement.focus();
+      }
+    }, 1000);
   }
 
   initialize() {

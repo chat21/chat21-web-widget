@@ -38,6 +38,7 @@ import { StorageService } from '../../providers/storage.service';
 })
 export class ConversationComponent implements OnInit, AfterViewInit {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
+  @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
@@ -110,6 +111,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
   // ========== end:: icon status message
 
+  lastMsg = false;
+
 
   constructor(
     public el: ElementRef,
@@ -161,13 +164,18 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
 
-    this.setFocusOnId('chat21-main-message-context');
+    // this.setFocusOnId('chat21-main-message-context');
 
     this.attributes = this.setAttributes();
   }
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    setTimeout(() => {
+      if (this.afConversationComponent) {
+        this.afConversationComponent.nativeElement.focus();
+      }
+    }, 1000);
     // if (this.scrollMe) {
     //   const divScrollMe = this.scrollMe.nativeElement;
     //   const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
@@ -243,7 +251,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     .getAvailableAgentsForDepartment(this.g.projectid, this.g.departmentSelected._id)
     .subscribe( (availableAgents) => {
       const availableAgentsForDep = availableAgents['available_agents'];
-      console.log(availableAgents);
+      // console.log(availableAgents);
       if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
         that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
       } else {
@@ -446,9 +454,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
       that.g.wdLog(['Subscription NEW MSG', newMessage]);
-      // if ( newMessage ) {
-      //   that.triggetBeforeMessageRender(newMessage.text);
-      // }
+
       if ( that.startScroll || newMessage.sender === that.g.senderId) {
         that.g.wdLog(['1-------']);
         setTimeout(function () {
@@ -459,7 +465,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
           that.g.wdLog(['2-------']);
-          // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
           }, 100);
@@ -469,6 +474,26 @@ export class ConversationComponent implements OnInit, AfterViewInit {
           that.soundMessage();
         }
       }
+
+
+      if (newMessage && newMessage.text && that.lastMsg) {
+
+        setTimeout(function () {
+          let messaggio = '';
+          const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
+          const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
+          if (altTextArea && testFocus) {
+            setTimeout(function () {
+              if (newMessage.sender !== that.g.senderId) {
+                messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
+                altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
+                testFocus.focus();
+              }
+            }, 1000);
+          }
+        }, 1000);
+      }
+
     });
 
     this.subscriptions.push(obsAddedMessage);
@@ -546,7 +571,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     setTimeout(function () {
         const textarea = document.getElementById(id);
         if (textarea) {
-            //   this.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
             textarea.setAttribute('value', ' ');
             textarea.focus();
         }
@@ -569,7 +593,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-        this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
+        // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
       } else if (keyCode === 9) {
@@ -619,6 +643,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+      this.lastMsg = true;
       (metadata) ? metadata = metadata : metadata = '';
         this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
@@ -653,6 +678,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
       }
+
+
   }
 
   printMessage(message, messageEl, component) {
@@ -744,6 +771,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         // this.restoreTextArea();
       }
     }
+
   }
 
 /**
@@ -964,7 +992,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
                     'uid': uid
                 };
             }
-              this.g.wdLog(['metadata -------> ', metadata]);
+            this.g.wdLog(['metadata -------> ', metadata]);
             this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
@@ -983,7 +1011,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-          this.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
+        this.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
         const uploadTask = this.upSvc.pushUpload(currentUpload);
@@ -1208,5 +1236,13 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     this.g.wdLog(['hideMenuOptions']);
     this.isMenuShow  = false;
  }
+
+ openInputFiles() {
+   alert('ok');
+   if (document.getElementById('chat21-file')) {
+    const docInput = document.getElementById('chat21-file');
+    docInput.style.display = 'block';
+   }
+}
 
 }

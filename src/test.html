@@ -15,16 +15,16 @@
 </style>
 <body>
 
-        <button id="idShow">
+        <button tabindex="510" id="idShow">
           SHOW
         </button>
-        <button id="idHide">
+        <button tabindex="511" id="idHide">
           HIDE
         </button>
-        <button id="idOpen">
+        <button tabindex="512" id="idOpen">
           OPEN
         </button>
-        <button id="idClose">
+        <button tabindex="513" id="idClose">
           CLOSE
         </button>
         <button id="idAuth">
@@ -72,7 +72,7 @@
             if (d.getElementById(id)) return;
             js = d.createElement(s); 
             js.id = id; //js.async=!0;
-            js.src = "./tiledesk.js";
+            js.src = "./tiledesk.js"; //"https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/1/151/tiledesk.js";
             fjs.parentNode.insertBefore(js, fjs);
           }(document, 'script', 'tiledesk-jssdk'));
   
@@ -118,7 +118,7 @@
               var component = event_data.detail.component;
               // console.log("component",component);              
 
-               console.info("afterMessageRender message", message, " and messageEl", messageEl);              
+               //console.info("afterMessageRender message", message, " and messageEl", messageEl);              
               //  console.info(message.uid);
               
              

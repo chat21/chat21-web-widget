@@ -54,6 +54,8 @@
             margin: auto;
             padding: 0px 0px;
             cursor: pointer;
+            -webkit-appearance: initial;
+            border: none;
 
             .c21-body-conv{
                 position: relative;
@@ -118,6 +120,7 @@
                     height: auto;
                     float: left;
                     padding: 17px 0;
+                    text-align: left;
                     .c21-last-time {
                         font-size: 0.8em;
                         color: $gray;

@@ -300,7 +300,7 @@ export class Globals {
     this.allowTranscriptDownload = false;       /** allows the user to download the chat transcript. The download button appears when the chat is closed by the operator. Permitter values: true, false. Default value: false */
 
     // tslint:disable-next-line:max-line-length
-    this.poweredBy = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>'; // da aggiungere!!!! /** link nel footer widget */
+    this.poweredBy = '<a tabindex="-1" target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>'; // da aggiungere!!!! /** link nel footer widget */
 
     this.logoChat = this.baseLocation + '/assets/images/tiledesk_logo_white_small.png'; /** url img logo */
     this.wellcomeTitle = this.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */

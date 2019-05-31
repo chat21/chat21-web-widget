@@ -269,3 +269,15 @@ export function getImageUrlThumb(uid: string) {
   const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }
+
+
+export function getUnique(arr, comp) {
+  const unique = arr
+    .map(e => e[comp])
+     // store the keys of the unique objects
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    // eliminate the dead keys & store unique objects
+    .filter(e => arr[e]).map(e => arr[e]);
+
+   return unique;
+}
