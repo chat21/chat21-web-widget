@@ -308,11 +308,13 @@ tiledeskwidget-root {
             border-radius: 50%;
             background-color: $red;
             color: white;
-            padding: 2px 2px 2px 2px;
             text-align: center;
             margin-top: -10px;
             display: inline-block;
             box-sizing: initial;
+
+            padding: 5px;
+            left: 0px;
         }
         .c21-button{
             display: flex;

@@ -167,14 +167,17 @@ export class ConversationsService {
         (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ||
         (that.g.filterByRequester === true && !conversation.attributes )
         ) {
-        // console.log('***** NEXT *****');
-        that.listConversations.unshift(conversation); // insert item top array
-        that.checkIsNew(conversation);
-        that.checkIsSound(conversation);
-        that.updateConversationBadge();
-        that.listConversations.sort(compareValues('timestamp', 'desc'));
-        that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
-        that.obsListConversations.next(that.listConversations);
+          const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+          if (index === -1) {
+            // console.log('***** NEXT *****');
+            that.listConversations.unshift(conversation); // insert item top array
+            that.checkIsNew(conversation);
+            that.checkIsSound(conversation);
+            that.updateConversationBadge();
+            that.listConversations.sort(compareValues('timestamp', 'desc'));
+            that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
+            that.obsListConversations.next(that.listConversations);
+          }
       }
     });
 
