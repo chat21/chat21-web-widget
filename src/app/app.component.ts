@@ -508,6 +508,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * set opening priority widget
      */
     private startUI() {
+
+        const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+        divWidgetContainer.style.display = 'block';
+
         this.g.wdLog([' ============ startUI ===============']);
         const departments = this.g.departments;
         const attributes = this.g.attributes;

@@ -93,7 +93,7 @@ padding-top: 4px; /* added for new style */
     position: fixed;
     z-index: 999999000;
     // margin: 95px 0;
-    margin: 0px 68px 10px 0px;
+    margin: 0px 0px 10px 0px;
     bottom: 0px;
     // right: 20px;
     /* bottom: 120px; */ /* commented for new style */
@@ -107,7 +107,14 @@ padding-top: 4px; /* added for new style */
     width: 270px; /* added for new style */
     height: 68px;
     /* min-height: 125px; */ /* commented for new style */
-
+    &.c21-align-left{
+        margin-right: 0px;
+        margin-left: 68px;
+    }
+    &.c21-align-right{
+        margin-right: 68px;
+        margin-left: 0px;
+    }
 }
 
 .eye-catcher-card-text-wrapper {

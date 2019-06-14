@@ -47,8 +47,6 @@ function loadIframe(tiledeskScriptBaseLocation) {
         `;
         //ifrm.setAttribute("srcdoc", srcTileDesk);
         //ifrm.document.write(srcTileDesk);
-
-
     ifrm.setAttribute('id','tiledeskiframe');
     ifrm.setAttribute('tiledesk_context','parent');
     // ifrm.style.display = 'none';
@@ -65,7 +63,6 @@ function loadIframe(tiledeskScriptBaseLocation) {
             containerDiv.classList.remove("open");
         }         
     });
-
     /** */
     window.tiledesk.on('onOpen', function(event_data) {
         console.log("launch onOpen");
@@ -73,14 +70,12 @@ function loadIframe(tiledeskScriptBaseLocation) {
         containerDiv.classList.remove("closed");
         iDiv.classList.remove("callout");
     });
-
     /** */
     window.tiledesk.on('onClose', function(event_data) {
         console.log("launch onClose");
         containerDiv.classList.add("closed");
         containerDiv.classList.remove("open");
     });
-
     /** */
     window.tiledesk.on('onOpenEyeCatcher', function(event_data) {
         console.log("launch onOpenEyeCatcher", event_data);
@@ -91,14 +86,10 @@ function loadIframe(tiledeskScriptBaseLocation) {
         console.log("launch onClosedEyeCatcher", event_data);
         iDiv.classList.remove("callout");
     });
-
     iDiv.appendChild(ifrm);  
-
-
     ifrm.contentWindow.document.open();
     ifrm.contentWindow.document.write(srcTileDesk);
     ifrm.contentWindow.document.close();
-
 }
 
 /**

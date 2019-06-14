@@ -73,6 +73,11 @@ export class LocalSettingsService {
             for (const key of Object.keys(variables)) {
                 console.log('SET globals from service KEY ---------->', key);
                 console.log('SET globals from service VAL ---------->', variables[key]);
+
+                if (key === 'align' && variables[key] === 'left') {
+                    const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
+                    divWidgetContainer.style.left = '0';
+                }
                 if (variables[key] && variables[key] !== null) {
                     // globals.setParameter(key, val);
                     globals[key] = stringToBoolean(variables[key]);
@@ -188,6 +193,11 @@ export class LocalSettingsService {
         console.log('15 - align:: ', TEMP);
         if (TEMP !== undefined) {
             globals.align = TEMP;
+            console.log('15 - globals.align:: ', globals.align);
+            if (globals.align === 'left') {
+                const divWidgetContainer = windowContext.document.getElementById('tiledeskiframe');
+                divWidgetContainer.style.left = '0';
+            }
             // globals.setParameter('align', TEMP);
         }
         TEMP = tiledeskSettings['marginX'];
@@ -306,6 +316,7 @@ export class LocalSettingsService {
         console.log('34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
             globals.filterByRequester = (TEMP === false) ? false : true;
+            console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['persistence'];
@@ -415,6 +426,10 @@ export class LocalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_align');
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
+            if (globals.align === 'left') {
+                const divWidgetContainer = windowContext.document.getElementById('tiledeskiframe');
+                divWidgetContainer.style.left = '0';
+            }
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_marginX');
@@ -495,6 +510,7 @@ export class LocalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_filterByRequester');
         if (TEMP) {
             globals.filterByRequester = stringToBoolean(TEMP);
+            console.log('tiledesk_filterByRequester:: ', globals.filterByRequester);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showWaitTime');

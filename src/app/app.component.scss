@@ -157,6 +157,10 @@ tiledeskwidget-root {
     // background-color: #ffffff;
 
     // ========= BEGIN: RESET CSS TAG ========= //
+    *:focus {
+        outline: none;
+    }
+
     p, a, ul, li, h1, h2, h3, textarea, title, time, svg, small, link, label, input, img,
     form, font, code, button, br, b{
         // all: unset;
@@ -273,7 +277,7 @@ tiledeskwidget-root {
         button.c21-button-primary:hover,
         button.c21-button-primary:focus,
         button.c21-button-primary:active {
-            // outline-width: 0px;
+            //outline-width: 0px;
             opacity: 0.8;
         }
 
