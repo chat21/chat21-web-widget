@@ -537,6 +537,9 @@ tiledeskwidget-root {
     }
 
     // =================== C21-BODY ===============//
+    .c21-body::-webkit-scrollbar {
+        display: none;
+    }
     .c21-body {
         position: absolute;
         top: 53px;
@@ -546,7 +549,7 @@ tiledeskwidget-root {
         padding: 0px;
         margin: 0px auto;
         overflow: scroll;
-
+        
         .c21-body-container {
             position: absolute;
             top: 0;
