@@ -509,9 +509,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private startUI() {
 
-        const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
-        divWidgetContainer.style.display = 'block';
-
         this.g.wdLog([' ============ startUI ===============']);
         const departments = this.g.departments;
         const attributes = this.g.attributes;
@@ -548,6 +545,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // visualizzo l'iframe!!!
         console.log('triggerOnViewInit');
         this.triggerOnViewInit();
+
+        // mostro il widget
+        setTimeout(() => {
+            const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+            divWidgetContainer.style.display = 'block';
+        }, 500);
     }
     // ========= end:: START UI ============//
 
