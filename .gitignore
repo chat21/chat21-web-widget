@@ -4,7 +4,6 @@
 /dist
 /tmp
 /out-tsc
-/environments
 
 
 # dependencies
@@ -42,6 +41,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-src/environments copia
 test_widget.php
-src/environments
+firebase-config.ts
