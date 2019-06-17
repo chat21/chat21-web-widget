@@ -20,6 +20,7 @@ import {
   styleUrls: ['./list-all-conversations.component.scss']
 })
 
+
 export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('afallconv') private afallconv: ElementRef;
   // ========= begin:: Input/Output values ============//
@@ -65,9 +66,12 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
 
   ngAfterViewInit() {
     setTimeout(() => {
+      if (this.afallconv) {
         this.afallconv.nativeElement.focus();
-    }, 10);
+      }
+    }, 1000);
   }
+
 
   initialize() {
     this.g.wdLog(['initialize: ListConversationsComponent']);

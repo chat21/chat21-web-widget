@@ -21,7 +21,8 @@ export class Globals {
   obsIsOpen = new BehaviorSubject<boolean>(null);
   // obsGlobalsParameters =  new BehaviorSubject<any>(null);
   BASE_LOCATION = 'https://widget.tiledesk.com/v2';
-  POWERED_BY = '<a target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+  POWERED_BY = '<a tabindex="-1" target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
+
   DEFAULT_LOGO_CHAT = '/assets/images/tiledesk_logo_white_small.png';
   WIDGET_TITLE = 'TileDesk';
 

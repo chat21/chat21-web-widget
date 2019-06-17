@@ -36,6 +36,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     )
   ]
 })
+
 export class LauncherButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('aflauncherbutton') private aflauncherbutton: ElementRef;
 
@@ -54,9 +55,12 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-        this.aflauncherbutton.nativeElement.focus();
-    }, 10);
+        if (!this.g.isOpen && this.aflauncherbutton) {
+          this.aflauncherbutton.nativeElement.focus();
+        }
+    }, 2000);
   }
+
 
   openCloseWidget() {
     const isLogged = this.g.isLogged;

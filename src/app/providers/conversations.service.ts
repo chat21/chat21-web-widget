@@ -10,9 +10,11 @@ import { Globals } from '../utils/globals';
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+import { getUnique, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+
 // import { ConsoleReporter } from 'jasmine';
 import { SettingsSaverService } from '../providers/settings-saver.service';
+
 
 
 
@@ -175,6 +177,7 @@ export class ConversationsService {
             that.checkIsSound(conversation);
             that.updateConversationBadge();
             that.listConversations.sort(compareValues('timestamp', 'desc'));
+            that.listConversations = getUnique(that.listConversations, 'uid');
             that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
             that.obsListConversations.next(that.listConversations);
           }
@@ -198,6 +201,7 @@ export class ConversationsService {
           that.checkIsSound(conversation);
           that.updateConversationBadge();
           that.listConversations.sort(compareValues('timestamp', 'desc'));
+          that.listConversations = getUnique(that.listConversations, 'uid');
           that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
           that.obsListConversations.next(that.listConversations);
         }
@@ -211,6 +215,7 @@ export class ConversationsService {
       if (index > -1) {
         that.listConversations.splice(index, 1);
         that.listConversations.sort(compareValues('timestamp', 'desc'));
+        that.listConversations = getUnique(that.listConversations, 'uid');
         that.obsListConversations.next(that.listConversations);
       }
       that.updateConversationBadge();
@@ -240,6 +245,7 @@ export class ConversationsService {
         // that.checkIsSound(conversation);
         // that.updateConversationBadge();
         that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+        that.archivedConversations = getUnique(that.archivedConversations, 'uid');
         that.obsArchivedConversations.next(that.archivedConversations);
       }
     });
@@ -257,6 +263,7 @@ export class ConversationsService {
           // that.checkIsSound(conversation);
           // that.updateConversationBadge();
           that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+          that.archivedConversations = getUnique(that.archivedConversations, 'uid');
           that.obsArchivedConversations.next(that.archivedConversations);
           that.g.wdLog([' checkListArchivedConversations child_changed *****', that.archivedConversations, index]);
         }
@@ -269,6 +276,7 @@ export class ConversationsService {
       if (index > -1) {
         that.archivedConversations.splice(index, 1);
         that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+        that.archivedConversations = getUnique(that.archivedConversations, 'uid');
         that.obsArchivedConversations.next(that.archivedConversations);
         // that.updateConversations();
       }

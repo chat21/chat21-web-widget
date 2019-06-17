@@ -12,7 +12,7 @@ import { StorageService } from '../../providers/storage.service';
 })
 
 export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
-    @ViewChild('afdepartment') private afdepartment: ElementRef;
+    @ViewChild('afSelectionDepartment') private afSelectionDepartment: ElementRef;
 
     // ========= begin:: Input/Output values ===========//
     @Output() eventDepartmentSelected = new EventEmitter<any>();
@@ -40,9 +40,12 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         setTimeout(() => {
-            this.afdepartment.nativeElement.focus();
-        }, 10);
+            if (this.afSelectionDepartment) {
+                this.afSelectionDepartment.nativeElement.focus();
+            }
+        }, 1000);
     }
+
 
     // initDepartments() {
     //      that.g.wdLog(['initDepartments ::::', this.g.departments);

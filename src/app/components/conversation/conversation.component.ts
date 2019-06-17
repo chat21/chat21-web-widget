@@ -41,7 +41,7 @@ import { StorageService } from '../../providers/storage.service';
 })
 export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
-  @ViewChild('textbox') private textbox: ElementRef;
+  @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
@@ -116,6 +116,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
   // ========== end:: icon status message
 
+  lastMsg = false;
+
 
   constructor(
     public el: ElementRef,
@@ -155,8 +157,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     console.log('attributes: ', this.g.attributes);
     setTimeout(() => {
-      this.textbox.nativeElement.focus();
-    }, 10);
+      if (this.afConversationComponent) {
+        this.afConversationComponent.nativeElement.focus();
+      }
+    }, 1000);
+
   }
 
 
@@ -475,6 +480,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.soundMessage();
         }
       }
+
+      if (newMessage && newMessage.text && that.lastMsg) {
+        setTimeout(function () {
+          let messaggio = '';
+          const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
+          const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
+          if (altTextArea && testFocus) {
+            setTimeout(function () {
+              if (newMessage.sender !== that.g.senderId) {
+                messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
+                altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
+                testFocus.focus();
+              }
+            }, 1000);
+          }
+        }, 1000);
+      }
+
     });
 
     this.subscriptions.push(obsAddedMessage);
@@ -1229,6 +1252,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.isMenuShow = !this.isMenuShow;
   }
 
+  openInputFiles() {
+    alert('ok');
+    if (document.getElementById('chat21-file')) {
+     const docInput = document.getElementById('chat21-file');
+     docInput.style.display = 'block';
+    }
+  }
 
 
 

@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
@@ -24,6 +25,7 @@ import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
   templateUrl: './list-conversations.component.html',
   styleUrls: ['./list-conversations.component.scss']
 })
+
 
 export class ListConversationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('aflistconv') private aflistconv: ElementRef;
@@ -87,15 +89,19 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     setTimeout(() => {
-      this.aflistconv.nativeElement.focus();
-    }, 10);
+      if (this.aflistconv) {
+        this.aflistconv.nativeElement.focus();
+      }
+    }, 1000);
   }
+
 
   showConversations() {
     this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
     const that = this;
-    if (!this.subListConversations) {
-      this.subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
+    let subListConversations;
+    if (!subListConversations) {
+      subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
           that.ngZone.run(() => {
             if (conversations && conversations.length > 3) {
               that.listConversations = conversations.slice(0, 3);
@@ -106,7 +112,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
             that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
           });
       });
-      this.subscriptions.push(this.subListConversations);
+      this.subscriptions.push(subListConversations);
     }
 
     if (!this.subArchivedConversations) {

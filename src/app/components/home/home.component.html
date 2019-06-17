@@ -1,5 +1,6 @@
 
-<div id='chat21-home-component'>
+<!-- tabindex="2000"-->
+<div id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
 
     <!-- HEADER -->
     <div class="c21-header" 
@@ -12,8 +13,9 @@
             <div class="c21-header-button" 
             [ngStyle]="{'display': (g.hideHeaderCloseButton)?'none':'block'}"
             >
-                <div class="c21-close-button" aria-label="Close" aria-hidden="true" role="button">
-                    <button tabindex="1001" class="c21-close-button-body" (click)="f21_close()">
+                <div class="c21-close-button">
+                    <button tabindex="2001" aria-label="chiudi" 
+                    class="c21-close-button-body" (click)="f21_close()">
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>

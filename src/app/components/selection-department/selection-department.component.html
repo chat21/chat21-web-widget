@@ -1,14 +1,22 @@
 <!-- <div id="chat21-modal-content modal-body"></div> -->
-<!-- tabindex="200"-->
-<div id="chat21-selection-department">
+<!-- tabindex="1200"-->
+
+<div id="chat21-selection-department" 
+#afSelectionDepartment
+tabindex="1200"
+aria-modal="true"
+onFocus="document.querySelector('[start-focus-chat21-selection-department]').focus()">
+
         <!-- HEADER -->
         <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}" >
             <div class="c21-header-container">
 
                 <!-- ICON CLOSE CHAT -->
+                
+
                 <div class="c21-header-button">
-                    <div class="c21-close-button c21-small" aria-label="Close" aria-hidden="true" role="button">
-                        <button tabindex="210" class="c21-close-button-body" (click)="closePage()">
+                    <div class="c21-close-button c21-small" role="button">
+                        <button tabindex="1210" aria-label=" chiudi pannello" class="c21-close-button-body" (click)="closePage()">
                             <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z"/>
                                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
@@ -34,14 +42,16 @@
             <div class="c21-body-container">
     
                 <div class="c21-body-header">
-                    <div class="c21-message-field">{{g.LABEL_SELECT_TOPIC}}</div>
+                    <div start-focus-chat21-selection-department tabindex="1201" class="c21-message-field">{{g.LABEL_SELECT_TOPIC}}</div>
                 </div>
 
                 <div class="c21-body-content" tabindex="211" onFocus="document.querySelector('[start-focus]').focus()">
                     <ul class="chat21-content-modal-select">
-                        <li start-focus #afdepartment tabindex="200" *ngFor="let department of g.departments; let i = index" (click)="onSelectDepartment(department)">
-                            <span [ngStyle]="{'background-color': g.themeColor, 'color': g.themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
-                            <span class="chat21-name-list" >{{department?.name}}</span>
+                        <li *ngFor="let department of g.departments; let i = index">
+                            <button tabindex="1202" class="c21-button-clean" (click)="onSelectDepartment(department)">
+                                <span [ngStyle]="{'background-color': g.themeColor, 'color': g.themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
+                                <span class="chat21-name-list" >{{department?.name}}</span>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -49,4 +59,6 @@
             </div>
         </div>
     
-</div>     
+        <span style="height:0px" tabindex="1299" onFocus="document.querySelector('[start-focus-chat21-selection-department]').focus()"></span> 
+</div> 
+   

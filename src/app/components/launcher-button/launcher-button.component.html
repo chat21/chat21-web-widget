@@ -1,9 +1,10 @@
 <!-- tabindex="000"-->
-<button #aflauncherbutton *ngIf="g.isLogged == true"  id="c21-launcher-button" class="c21-button-clean"
+<button aflauncherbutton #aflauncherbutton id="c21-launcher-button" class="c21-button-clean" *ngIf="g.isLogged == true" 
     [ngClass]="{'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'background-color': g.themeColor, 'bottom': g.marginY+'px!important', 'left':(g.align==='left')?g.marginX+'px!important':'', 'right':(g.align==='right')?g.marginX+'px!important':'' }"
     (click)="openCloseWidget()"
-    tabindex="10">
+    tabindex="1000" aria-label="apri chiudi chat"
+    >
 
     <div *ngIf="g.conversationsBadge>0" class="c21-divBudge">{{g.conversationsBadge}}</div>
 
