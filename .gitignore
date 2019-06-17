@@ -44,3 +44,4 @@ testem.log
 Thumbs.db
 src/environments copia
 test_widget.php
+src/environments
