@@ -14,7 +14,7 @@
             [ngStyle]="{'display': (g.hideHeaderCloseButton)?'none':'block'}"
             >
                 <div class="c21-close-button">
-                    <button tabindex="2001" aria-label="chiudi" 
+                    <button tabindex="2001" aria-label="    chiudi chat" 
                     class="c21-close-button-body" (click)="f21_close()">
                         <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
@@ -78,7 +78,7 @@
         (eventSignOut)="returnSignOut()" 
         ></tiledeskwidget-menu-options>
         <div id="c21-powered-by">
-            <div tabindex="1000" class="c21-powered-by" [innerHTML]="g.poweredBy"></div>
+            <div tabindex="-1" class="c21-powered-by" [innerHTML]="g.poweredBy"></div>
             <div class="build_version">{{g.BUILD_VERSION}}</div>
         </div>
     </div>

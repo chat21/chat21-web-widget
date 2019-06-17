@@ -906,6 +906,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.triggerOnCloseEvent();
         }
+
     }
 
     /**
