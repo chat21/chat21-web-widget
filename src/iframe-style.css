@@ -34,20 +34,15 @@
     width: inherit;
     height: inherit;
     border-width: 0px;
-    /* left: 0px;
-    right: 0px;
-    top: auto; */
     bottom: 0px;
     max-height: 600px;
+    margin: 0 20px;
     display: none;
     background-color: transparent;
 }
 #tiledesk-container.open #tiledeskiframe {
     display: block;
     box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px;
-    /* margin-right: 20px;
-    margin-bottom: 20px; */
-    margin: 0 20px;
     width: 376px;
 }
 #tiledesk-container.closed #tiledeskiframe {
@@ -61,6 +56,10 @@
     ***************/
 
     @media (max-width: 451px) {
+        #tiledeskiframe {
+            max-height: inherit;
+            margin: 0;
+        }
         #tiledesk-container {
             width: 100%;
             height: 100%;

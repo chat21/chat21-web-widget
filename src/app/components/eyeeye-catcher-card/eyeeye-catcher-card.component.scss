@@ -28,7 +28,8 @@
 width: calc(100% - 70px); /* added for new style */
 /* padding-top: 24px; */ /* commented for new style */
 padding-top: 4px; /* added for new style */
-/* background-color: #aaaaaa */
+max-height: calc(100% - 10px);
+overflow-y: auto;
 }
 
 /* Clear floats after the columns */
@@ -40,24 +41,28 @@ padding-top: 4px; /* added for new style */
 
 /* CLOSE BTN - BTN WRAPPER */
 .eye-catcher-card-close-btn-wrapper{
-    z-index: 999999000;
-    height: 30px;
-    width: 299px;
+    z-index: 1;
+    height: 40px;
+    width: 40px;
     position: absolute;
     // top: -35px;
     // right: -2px;
-    top: 5px;
-    right: 3px;
+    top: 0px;
+    right: 0px;
 }
 /* CLOSE BTN */
 .eye-catcher-card-close-btn {
+    z-index: 2;
     background-color: #5d6c80;
     width: 30px;
     height: 30px;
     border-radius: 50px;
     position:relative;
-    left: 267px;
+    left: 0px;
+    right: 0px;
     cursor: pointer;
+    float: right;
+    margin: 4px;
     box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
 }
 
@@ -72,7 +77,7 @@ padding-top: 4px; /* added for new style */
 /* CLOSE BTN IS MOBILE - CLOSE IMG WRAPPER */
 .eye-catcher-card-close-btn-img-is-mobile-wrapper {
     /* background-color: #5d6c80; */
-    z-index: 999999000;
+    z-index: 1;
     position: absolute;
     right: -1px;
     top: -39px;
@@ -91,7 +96,7 @@ padding-top: 4px; /* added for new style */
 * ********* CARD ********* */
 .eye-catcher-card{
     position: fixed;
-    z-index: 999999000;
+    z-index: 1;
     // margin: 95px 0;
     margin: 0px 0px 10px 0px;
     bottom: 0px;
@@ -147,7 +152,7 @@ padding-top: 4px; /* added for new style */
     padding-right: 10px; 
     margin-top: 6px;
     /* margin-bottom: 24px; */ /* commented for new style */
-    margin-bottom: 16px; 
+    margin-bottom: 6px; 
     letter-spacing: 1px;
     font-weight: 500;
     word-wrap: break-word;
