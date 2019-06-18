@@ -29,7 +29,8 @@ width: calc(100% - 70px); /* added for new style */
 /* padding-top: 24px; */ /* commented for new style */
 padding-top: 4px; /* added for new style */
 max-height: calc(100% - 10px);
-overflow-y: auto;
+overflow-y: scroll;
+overflow-x: hidden;
 }
 
 /* Clear floats after the columns */
