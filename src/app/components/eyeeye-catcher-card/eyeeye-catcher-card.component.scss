@@ -24,13 +24,16 @@
 }
 
 .ec_right {
-/* width: calc(100% - 90px); */ /* commented for new style */
-width: calc(100% - 70px); /* added for new style */
-/* padding-top: 24px; */ /* commented for new style */
-padding-top: 4px; /* added for new style */
-max-height: calc(100% - 10px);
-overflow-y: scroll;
-overflow-x: hidden;
+    /* width: calc(100% - 90px); */ /* commented for new style */
+    width: calc(100% - 70px); /* added for new style */
+    height: 60px;
+    padding: 4px;
+    max-height: calc(100% - 10px);
+    overflow: scroll;
+}
+    
+.ec_right::-webkit-scrollbar {
+    display: none;
 }
 
 /* Clear floats after the columns */

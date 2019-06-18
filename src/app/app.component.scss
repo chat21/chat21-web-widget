@@ -408,8 +408,8 @@ tiledeskwidget-root {
             position: fixed;
             width: 376px;
             height: calc(100% - 120px);
-            top: 20px;
-            bottom: 90px; 
+            top: inherit;
+            bottom: 0px;
             right: 20px;
             overflow: hidden;
             background-color: #ffffff;

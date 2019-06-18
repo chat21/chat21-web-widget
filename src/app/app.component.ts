@@ -548,8 +548,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // mostro il widget
         setTimeout(() => {
+            console.log('111');
             const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
-            divWidgetContainer.style.display = 'block';
+            if (divWidgetContainer) {
+                divWidgetContainer.style.display = 'block';
+            }
         }, 500);
     }
     // ========= end:: START UI ============//
