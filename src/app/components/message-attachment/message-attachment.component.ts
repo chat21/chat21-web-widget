@@ -28,16 +28,16 @@ export class MessageAttachmentComponent implements OnInit {
     if (this.message && this.message.attributes && this.message.attributes.attachment) {
       try {
         this.type = this.message.attributes.attachment.type;
-        console.log(this.type);
+        // console.log(this.type);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         return;
       }
       try {
         this.buttons = this.message.attributes.attachment.buttons;
-        console.log(this.buttons);
+        // console.log(this.buttons);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         return;
       }
     }

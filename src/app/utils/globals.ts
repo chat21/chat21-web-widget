@@ -165,7 +165,7 @@ export class Globals {
 
   constructor(
   ) {
-    console.log(' ---------------- 1: initDefafultParameters ---------------- ');
+    // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
   }
 
 
@@ -173,7 +173,7 @@ export class Globals {
    * 1: initParameters
    */
   initDefafultParameters() {
-    console.log('initDefafultParameters, ', window, window.frameElement);
+    // console.log('initDefafultParameters, ', window, window.frameElement);
     this.globalsParameters = {};
     this.filterSystemMsg = true;
 
@@ -383,7 +383,7 @@ export class Globals {
    * @param val
    */
   public setIsOpen(val: boolean) {
-    console.log('setIsOpen', val);
+    // console.log('setIsOpen', val);
     this.isOpen = val;
     this.obsIsOpen.next(val);
   }

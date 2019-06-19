@@ -164,15 +164,14 @@ export class ConversationsService {
     this.conversationRef.on('child_added', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, false);
       that.g.wdLog(['child_added val *****', childSnapshot.val()]);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
 
       if ( that.g.filterByRequester === false ||
         (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ||
         (that.g.filterByRequester === true && !conversation.attributes )
         ) {
-          console.log('***** filterByRequester *****', that.g.filterByRequester);
-          console.log('***** conversation.attributes.requester_id *****', conversation.attributes.requester_id);
-          console.log('***** that.g.senderId *****', that.g.senderId);
+          // console.log('***** filterByRequester *****', that.g.filterByRequester);
+          // console.log('***** that.g.senderId *****', that.g.senderId);
           const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
           if (index === -1) {
             // console.log('***** NEXT *****');
@@ -192,13 +191,12 @@ export class ConversationsService {
     this.conversationRef.on('child_changed', function (childSnapshot) {
       that.g.wdLog(['child_changed val *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
 
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          console.log('***** filterByRequester *****', that.g.filterByRequester);
-          console.log('***** conversation.attributes.requester_id *****', conversation.attributes.requester_id);
-          console.log('***** that.g.senderId *****', that.g.senderId);
+          // console.log('***** filterByRequester *****', that.g.filterByRequester);
+          // console.log('***** that.g.senderId *****', that.g.senderId);
           const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
         if (index > -1) {
           that.listConversations.splice(index, 1, conversation);
@@ -242,12 +240,11 @@ export class ConversationsService {
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          console.log('***** filterByRequester *****', that.g.filterByRequester);
-          console.log('***** conversation.attributes.requester_id *****', conversation.attributes.requester_id);
-          console.log('***** that.g.senderId *****', that.g.senderId);
+          // console.log('***** filterByRequester *****', that.g.filterByRequester);
+          // console.log('***** that.g.senderId *****', that.g.senderId);
           that.archivedConversations.unshift(conversation); // insert item top array
         // that.updateConversations();
         that.checkIsNew(conversation);
@@ -262,12 +259,11 @@ export class ConversationsService {
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          console.log('***** filterByRequester *****', that.g.filterByRequester);
-          console.log('***** conversation.attributes.requester_id *****', conversation.attributes.requester_id);
-          console.log('***** that.g.senderId *****', that.g.senderId);
+          // console.log('***** filterByRequester *****', that.g.filterByRequester);
+          // console.log('***** that.g.senderId *****', that.g.senderId);
           const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index > -1) {
           that.archivedConversations.splice(index, 1, conversation);

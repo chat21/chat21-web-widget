@@ -92,7 +92,6 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * *** EYE-CATCHER CARD ***
    * THE CLICK OVER THE EYE-CATCHER CARD OPENS THE CHAT AND CLOSE THE EYE-CATCHER CARD */
   openChatFromEyeCatcherCard() {
-    console.log("OPEN CHAT");
       // this.g.displayEyeCatcherCard = 'none';
       this.g.setParameter('displayEyeCatcherCard', 'none');
       this.eventOpenChat.emit();

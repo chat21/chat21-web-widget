@@ -31,6 +31,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 import { AppComponent } from '../../app.component';
 import { StorageService } from '../../providers/storage.service';
+import { DepartmentModel } from '../../../models/department';
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -138,7 +139,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log('ngOnInit');
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
@@ -155,7 +155,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    console.log('attributes: ', this.g.attributes);
+    // console.log('attributes: ', this.g.attributes);
     setTimeout(() => {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
@@ -166,7 +166,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   ngOnChanges() {
-    console.log('ngOnChanges');
+    // console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
       this.scrollToBottom();
@@ -243,10 +243,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private getAvailableAgentsForDepartment() {
     const that = this;
     const projectid = this.g.projectid;
-    const departmentSelected = this.g.departmentSelected;
-
+    const departmentSelectedId = this.g.attributes.departmentId;
     this.agentAvailabilityService
-    .getAvailableAgentsForDepartment(projectid, departmentSelected._id)
+    .getAvailableAgentsForDepartment(projectid, departmentSelectedId)
     .subscribe( (availableAgents) => {
       const availableAgentsForDep = availableAgents['available_agents'];
       if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
@@ -1077,7 +1076,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
-        console.log(currentUpload.file);
+        // console.log(currentUpload.file);
 
         const uploadTask = this.upSvc.pushUpload(currentUpload);
         uploadTask.then(snapshot => {

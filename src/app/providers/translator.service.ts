@@ -81,7 +81,7 @@ export class TranslatorService {
    * @returns the browser language
    */
   public getBrowserLanguage(windowContext) {
-    console.log('windowContext', windowContext);
+    // console.log('windowContext', windowContext);
     const browserLanguage = windowContext.navigator.language;
     return !browserLanguage ? undefined : browserLanguage;
   }
@@ -92,7 +92,7 @@ export class TranslatorService {
    * @param language the language
    */
   public setLanguage(windowContext, language) {
-    console.log('windowContext-language', windowContext, language);
+    // console.log('windowContext-language', windowContext, language);
     // set the user languge if it is valid.
     // if the user language is not valid, try to get the browser language.
     // if the browser language is not valid, it use the default language (en)

@@ -35,14 +35,14 @@ function appendJs(url) {
             return tiledeskScriptBaseLocation;
         }
     }
-    console.log("window.tiledesk created");
+    // console.log("window.tiledesk created");
     
     
     try {
         window.tileDeskAsyncInit();
-        console.log("tileDeskAsyncInit() called");
+        // console.log("tileDeskAsyncInit() called");
     }catch(er) {
-        console.log("tileDeskAsyncInit() doesn't exists",er);
+        // console.log("tileDeskAsyncInit() doesn't exists",er);
     }
     
     //aTag.setAttribute('href',"yourlink.htm");

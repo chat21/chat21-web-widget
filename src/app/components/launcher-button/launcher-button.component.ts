@@ -64,13 +64,10 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
 
   openCloseWidget() {
     const isLogged = this.g.isLogged;
-    console.log('1 isLogged BUTTON: ', isLogged);
     if (isLogged === true) {
       this.g.isOpen = !this.g.isOpen;
-      console.log('2 isOpen BUTTON: ', this.g.isOpen);
       // this.g.setIsOpen(!isOpen);
       this.storageService.setItem('isOpen', this.g.isOpen);
-      console.log('3 open_close_handler BUTTON: ', this.g.isOpen);
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }
   }

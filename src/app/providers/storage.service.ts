@@ -80,7 +80,7 @@ export class StorageService {
   public removeItem(key: string) {
     // const newKey = this.g.projectid + '_' + key;
     const newKey = STORAGE_PREFIX + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
-    console.log('removeItem:: ', newKey);
+    // console.log('removeItem:: ', newKey);
     // if (this.g.persistence === 'local') {
     return this.removeItemForKey(newKey);
   }
@@ -125,7 +125,7 @@ export class StorageService {
     }
 
     for (let i = 0; i < arrayKey.length; i++) {
-      console.log('CLAER KEY: ', arrayKey[i]);
+      // console.log('CLAER KEY: ', arrayKey[i]);
       // localStorage.removeItem(arrayKey[i]);
       this.removeItemForKey(arrayKey[i]);
     }

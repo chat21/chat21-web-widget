@@ -203,7 +203,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          * 3 - setVariableFromUrlParameters
          * 4 - setVariableFromStorage
         */
+        // this.localSettingsService.load(this.g, this.el);
         this.localSettingsService.load(this.g, this.el);
+
         // ------------------------------- //
 
         // ------------------------------- //
@@ -269,8 +271,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     initChatSupportMode() {
         this.g.wdLog([' ---------------- B1: supportMode ---------------- ', this.g.supportMode]);
         if (this.g.supportMode) {
-            this.getMongDbDepartments();
-            this.setAvailableAgentsStatus();
+            //this.getMongDbDepartments();
+            //this.setAvailableAgentsStatus();
         }
     }
 
@@ -313,7 +315,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         // this.storageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
-        console.log(' ---------------- setAttributes ---------------- ', attributes);
+        // console.log(' ---------------- setAttributes ---------------- ', attributes);
         return attributes;
     }
 
@@ -321,34 +323,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
      * per verificare se c'è un agent disponibile
      */
-    private setAvailableAgentsStatus() {
-        const that = this;
-        const projectid = this.g.projectid;
-        this.g.wdLog(['projectId->', projectid]);
-        this.agentAvailabilityService
-        .getAvailableAgents(projectid)
-        .subscribe( (availableAgents) => {
-            that.g.wdLog(['availableAgents->', availableAgents]);
-            if (availableAgents.length <= 0) {
-                that.g.setParameter('areAgentsAvailable', false);
-                that.g.setParameter('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
-                that.g.setParameter('availableAgents', null);
-                that.storageService.removeItem('availableAgents');
-            } else {
-                that.g.setParameter('areAgentsAvailable', true);
-                that.g.setParameter('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
-                that.g.setParameter('availableAgents', availableAgents);
-                availableAgents.forEach(element => {
-                    element.imageurl = getImageUrlThumb(element.id);
-                });
-                // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
-            }
-            that.g.setParameter('availableAgentsStatus', true);
-        }, (error) => {
-            console.error('setOnlineStatus::setAvailableAgentsStatus', error);
-        }, () => {
-        });
-    }
+    // private setAvailableAgentsStatus() {
+    //     const that = this;
+    //     const projectid = this.g.projectid;
+    //     this.g.wdLog(['projectId->', projectid]);
+    //     this.agentAvailabilityService
+    //     .getAvailableAgents(projectid)
+    //     .subscribe( (availableAgents) => {
+    //         that.g.wdLog(['availableAgents->', availableAgents]);
+    //         if (availableAgents.length <= 0) {
+    //             that.g.setParameter('areAgentsAvailable', false);
+    //             that.g.setParameter('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
+    //             that.g.setParameter('availableAgents', null);
+    //             that.storageService.removeItem('availableAgents');
+    //         } else {
+    //             that.g.setParameter('areAgentsAvailable', true);
+    //             that.g.setParameter('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
+    //             that.g.setParameter('availableAgents', availableAgents);
+    //             availableAgents.forEach(element => {
+    //                 element.imageurl = getImageUrlThumb(element.id);
+    //             });
+    //             // that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+    //         }
+    //         that.g.setParameter('availableAgentsStatus', true);
+    //     }, (error) => {
+    //         console.error('setOnlineStatus::setAvailableAgentsStatus', error);
+    //     }, () => {
+    //     });
+    // }
 
     // ========= begin:: DEPARTEMENTS ============//
     /** GET DEPARTEMENTS
@@ -357,23 +359,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * - se c'è un solo dipartimento la setto di default
      * - altrimenti visualizzo la schermata di selezione del dipartimento
     */
-    getMongDbDepartments() {
-        const that = this;
-        const projectid = this.g.projectid;
-        this.g.wdLog(['getMongDbDepartments ::::', projectid]);
-        this.messagingService.getMongDbDepartments(projectid)
-        .subscribe(response => {
-            that.g.wdLog(['response DEP ::::', response]);
-            that.g.setParameter('departments', response);
-            that.initDepartments();
-        },
-        errMsg => {
-             this.g.wdLog(['http ERROR MESSAGE', errMsg]);
-        },
-        () => {
-             this.g.wdLog(['API ERROR NESSUNO']);
-        });
-    }
+    // getMongDbDepartments() {
+    //     const that = this;
+    //     const projectid = this.g.projectid;
+    //     this.g.wdLog(['getMongDbDepartments ::::', projectid]);
+    //     this.messagingService.getMongDbDepartments(projectid)
+    //     .subscribe(response => {
+    //         that.g.wdLog(['response DEP ::::', response]);
+    //         that.g.setParameter('departments', response);
+    //         that.initDepartments();
+    //     },
+    //     errMsg => {
+    //          this.g.wdLog(['http ERROR MESSAGE', errMsg]);
+    //     },
+    //     () => {
+    //          this.g.wdLog(['API ERROR NESSUNO']);
+    //     });
+    // }
 
     /**
      * INIT DEPARTMENT:
@@ -381,34 +383,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * set department default
      * CALL AUTHENTICATION
     */
-    initDepartments() {
-        const departments = this.g.departments;
-        this.g.setParameter('departmentSelected', null);
-        this.g.setParameter('departmentDefault', null);
-        this.g.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
-        this.setDepartment(departments[0]);
-        let i = 0;
-        departments.forEach(department => {
-            if (department['default'] === true) {
-                this.g.setParameter('departmentDefault', department);
-                departments.splice(i, 1);
-                return;
-            }
-            i++;
-        });
-        if (departments.length === 1) {
-            // UN SOLO DEPARTMENT
-            this.g.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
-            this.setDepartment(departments[0]);
-            // return false;
-        } else if (departments.length > 1) {
-            // CI SONO + DI 2 DIPARTIMENTI
-            this.g.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
-        } else {
-            // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
-            this.g.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
-        }
-    }
+    // initDepartments() {
+    //     const departments = this.g.departments;
+    //     this.g.setParameter('departmentSelected', null);
+    //     this.g.setParameter('departmentDefault', null);
+    //     this.g.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
+    //     this.setDepartment(departments[0]);
+    //     let i = 0;
+    //     departments.forEach(department => {
+    //         if (department['default'] === true) {
+    //             this.g.setParameter('departmentDefault', department);
+    //             departments.splice(i, 1);
+    //             return;
+    //         }
+    //         i++;
+    //     });
+    //     if (departments.length === 1) {
+    //         // UN SOLO DEPARTMENT
+    //         this.g.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
+    //         this.setDepartment(departments[0]);
+    //         // return false;
+    //     } else if (departments.length > 1) {
+    //         // CI SONO + DI 2 DIPARTIMENTI
+    //         this.g.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
+    //     } else {
+    //         // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
+    //         this.g.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
+    //     }
+    // }
 
     /**
      * SET DEPARTMENT:
@@ -416,18 +418,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * save department selected in attributes
      * save attributes in this.storageService
     */
-    setDepartment(department) {
-        this.g.setParameter('departmentSelected', department);
-        const attributes = this.g.attributes;
-        if (department && attributes) {
-            attributes.departmentId = department._id;
-            attributes.departmentName = department.name;
-            this.g.setParameter('attributes', attributes);
-            this.g.setParameter('departmentSelected', department);
-            this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
-            this.storageService.setItem('attributes', JSON.stringify(attributes));
-        }
-    }
+    // setDepartment(department) {
+    //     this.g.setParameter('departmentSelected', department);
+    //     const attributes = this.g.attributes;
+    //     if (department && attributes) {
+    //         attributes.departmentId = department._id;
+    //         attributes.departmentName = department.name;
+    //         this.g.setParameter('attributes', attributes);
+    //         this.g.setParameter('departmentSelected', department);
+    //         this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
+    //         this.storageService.setItem('attributes', JSON.stringify(attributes));
+    //     }
+    // }
     // ========= end:: GET DEPARTEMENTS ============//
 
 
@@ -513,8 +515,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const departments = this.g.departments;
         const attributes = this.g.attributes;
         const preChatForm = this.g.preChatForm;
-        console.log('preChatForm: ' +  this.g.preChatForm);
-        console.log(attributes);
         this.isOpenHome = true;
         this.isOpenConversation = false;
         this.g.setParameter('isOpenPrechatForm', false);
@@ -543,12 +543,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         // visualizzo l'iframe!!!
-        console.log('triggerOnViewInit');
         this.triggerOnViewInit();
 
         // mostro il widget
         setTimeout(() => {
-            console.log('111');
             const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
             if (divWidgetContainer) {
                 divWidgetContainer.style.display = 'block';
@@ -993,14 +991,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * home - stack 0
      */
     private returnNewConversation() {
-
          this.g.wdLog(['returnNewConversation in APP COMPONENT']);
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
         const preChatForm = this.g.preChatForm;
         const attributes = this.g.attributes;
         const departments = this.g.departments;
-        console.log('isOpenPrechatForm: TRUE' );
+
+        // console.log('departments: ', departments, departments.length);
         if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
             // if (preChatForm && (!attributes.userFullname || !attributes.userEmail)) {
             this.isOpenConversation = false;
