@@ -47,6 +47,7 @@ export class AuthService {
       } else {
         that.g.wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;
+        that.g.wdLog(['onAuthStateChanged']);
         that.getIdToken();
         that.obsLoggedUser.next(firebase.auth().currentUser);
         // that.obsCurrentUser.next(that.user);
@@ -55,6 +56,7 @@ export class AuthService {
   }
 
   getCurrentUser() {
+    this.g.wdLog([' ---------------- getCurrentUser ---------------- ']);
     return firebase.auth().currentUser;
   }
 
@@ -96,6 +98,7 @@ export class AuthService {
             if (that.unsubscribe) {
               that.unsubscribe();
             }
+            that.g.wdLog(['authenticateFirebaseAnonymously']);
             that.getIdToken();
             that.obsLoggedUser.next(firebase.auth().currentUser);
           })
@@ -167,6 +170,7 @@ export class AuthService {
           that.unsubscribe();
         }
         that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword']);
         that.getIdToken();
       })
       .catch(function(error) {

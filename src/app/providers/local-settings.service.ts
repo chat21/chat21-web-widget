@@ -27,8 +27,8 @@ export class LocalSettingsService {
      */
     load(globals: Globals, el: ElementRef) {
         // recupero projectId
-        this.setProjectIdFromSettings(globals);
-        // console.log('LocalSettingsService load ------------> ', globals);
+        this.setProjectIdAndPrimaryParametersFromSettings(globals);
+        console.log('LocalSettingsService load ------------> ', globals);
         this.globals = globals;
         this.el = el;
         const that = this;
@@ -88,7 +88,7 @@ export class LocalSettingsService {
     /**
      * 1: get Project Id From Settings
      */
-    setProjectIdFromSettings(globals: Globals) {
+    setProjectIdAndPrimaryParametersFromSettings(globals: Globals) {
         // console.log('setProjectIdFromSettings');
         const windowContext = globals.windowContext;
         if (!windowContext['tiledesk']) {
@@ -105,6 +105,24 @@ export class LocalSettingsService {
         // console.log('projectid:: ', TEMP);
         if (TEMP !== undefined) {
             globals.projectid = TEMP;
+        }
+        TEMP = tiledeskSettings['persistence'];
+        // console.log('35 - persistence:: ', TEMP);
+        if (TEMP !== undefined) {
+            // globals.persistence = TEMP;
+            globals.setParameter('persistence', TEMP);
+        }
+        TEMP = tiledeskSettings['userToken'];
+        // console.log('26 - userToken:: ', TEMP);
+        if (TEMP !== undefined) {
+            //globals.userToken = TEMP;
+            globals.setParameter('userToken', TEMP);
+        }
+        TEMP = tiledeskSettings['userId'];
+        // console.log('7 - userId:: ', TEMP);
+        if (TEMP !== undefined) {
+            //globals.userId = TEMP;
+            globals.setParameter('userId', TEMP);
         }
     }
 
@@ -308,12 +326,6 @@ export class LocalSettingsService {
             globals.poweredBy = TEMP;
             // globals.setParameter('poweredBy', TEMP);
         }
-        TEMP = tiledeskSettings['userId'];
-        // console.log('7 - userId:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.userId = TEMP;
-            // globals.setParameter('userId', TEMP);
-        }
         TEMP = tiledeskSettings['userEmail'];
         // console.log('8 - userEmail:: ', TEMP);
         if (TEMP !== undefined) {
@@ -427,12 +439,7 @@ export class LocalSettingsService {
             globals.allowTranscriptDownload = TEMP;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
-        TEMP = tiledeskSettings['userToken'];
-        // console.log('26 - userToken:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.userToken = TEMP;
-            // globals.setParameter('userToken', TEMP);
-        }
+        
         TEMP = tiledeskSettings['startFromHome'];
         // console.log('27 - startFromHome:: ', TEMP);
         if (TEMP !== undefined) {
@@ -486,12 +493,12 @@ export class LocalSettingsService {
             // console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
-        TEMP = tiledeskSettings['persistence'];
-        // console.log('35 - persistence:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.persistence = TEMP;
-            // globals.setParameter('persistence', TEMP);
-        }
+        // TEMP = tiledeskSettings['persistence'];
+        // // console.log('35 - persistence:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.persistence = TEMP;
+        //     // globals.setParameter('persistence', TEMP);
+        // }
         TEMP = tiledeskSettings['showWaitTime'];
         // console.log('36 - showWaitTime:: ', TEMP);
         if (TEMP !== undefined) {
