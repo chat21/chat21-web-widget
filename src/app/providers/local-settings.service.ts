@@ -1,4 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // services
 import { Globals } from '../utils/globals';
 import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
@@ -13,12 +14,15 @@ export class LocalSettingsService {
     API_URL = this.appConfigService.getConfig().apiUrl;
     globals: Globals;
     el: ElementRef;
+    obsSettingsService: BehaviorSubject<boolean>;
 
     constructor(
         private storageService: StorageService,
         private settingsService: SettingsService,
         public appConfigService: AppConfigService
-    ) {}
+    ) {
+        this.obsSettingsService = new BehaviorSubject<boolean>(null);
+    }
 
     /**
      * load paramiters
@@ -56,6 +60,7 @@ export class LocalSettingsService {
         this.setVariablesFromAttributeHtml(this.globals, this.el);
         this.setVariablesFromUrlParameters(this.globals);
         this.setVariableFromStorage(this.globals);
+        this.obsSettingsService.next(true);
     }
 
 
@@ -181,13 +186,14 @@ export class LocalSettingsService {
     initDepartments(departments) {
         this.globals.departments = departments;
         this.globals.setParameter('departmentSelected', null);
-        this.globals.setParameter('departmentDefault', null);
+        // this.globals.setParameter('departmentDefault', null);
         this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
         this.setDepartment(departments[0]);
         let i = 0;
         departments.forEach(department => {
             if (department['default'] === true) {
                 this.globals.setParameter('departmentDefault', department);
+                // this.globals.departmentDefault = department;
                 departments.splice(i, 1);
                 return;
             }

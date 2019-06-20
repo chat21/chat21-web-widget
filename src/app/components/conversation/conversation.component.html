@@ -318,7 +318,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
         </span>
         <input tabindex="1503" type="file" aria-label="seleziona allegato" accept="image/*,.pdf,.zip" name="chat21-file"
         id="chat21-file" class="inputfile" 
-        [ngStyle]="{ 'display': 'block', height:'1px', width:'1px' }"
+        [ngStyle]="{ 'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
         (change)="detectFiles($event)" 
         />
     </label>

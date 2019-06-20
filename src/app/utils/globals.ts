@@ -60,7 +60,7 @@ export class Globals {
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
   departmentSelected: DepartmentModel;
-  departmentDefault: DepartmentModel;
+  departmentDefault: any;
   isOpenMenuOptions: boolean;
   isOpenPrechatForm: boolean;
 

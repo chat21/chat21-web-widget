@@ -107,8 +107,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     ngOnInit() {
         this.g.wdLog(' ---------------- ngOnInit ---------------- ');
-        this.initAll();
-        this.setLoginSubscription();
+        // this.initAll();
+        // this.setLoginSubscription();
+        this.initWidgetParamiters();
     }
 
     /** */
@@ -170,6 +171,44 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // ========= end:: SUBSCRIPTIONS ============//
 
+
+    private initWidgetParamiters() {
+        const that = this;
+        // ------------------------------- //
+        /**
+        * SETTING LOCAL DEFAULT:
+        * set default globals parameters
+        */
+        this.g.initDefafultParameters();
+        // ------------------------------- //
+
+        // ------------------------------- //
+        /**
+         * TRANSLATION LOADER:
+         *
+        */
+        this.translatorService.translate(this.g);
+        // ------------------------------- //
+
+       // ------------------------------- //
+       /**
+        * LOCAL SETTINGS:
+        * 1 - setVariablesFromAttributeHtml
+        * 2 - setVariablesFromSettings
+        * 3 - setVariableFromUrlParameters
+        * 4 - setVariableFromStorage
+       */
+       // this.localSettingsService.load(this.g, this.el);
+       this.localSettingsService.load(this.g, this.el);
+       const obsSettingsService = this.localSettingsService.obsSettingsService.subscribe((resp) => {
+            this.ngZone.run(() => {
+                that.initAll();
+                that.setLoginSubscription();
+            });
+        });
+        this.subscriptions.push(obsSettingsService);
+       // ------------------------------- //
+    }
     /**
      * INITIALIZE:
      * 1 - set default parameters globals
@@ -188,34 +227,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
-        // ------------------------------- //
-        /**
-        * SETTING LOCAL DEFAULT:
-        * set default globals parameters
-        */
-        this.g.initDefafultParameters();
-        // ------------------------------- //
 
-        // ------------------------------- //
-        /**
-         * LOCAL SETTINGS:
-         * 1 - setVariablesFromAttributeHtml
-         * 2 - setVariablesFromSettings
-         * 3 - setVariableFromUrlParameters
-         * 4 - setVariableFromStorage
-        */
-        // this.localSettingsService.load(this.g, this.el);
-        this.localSettingsService.load(this.g, this.el);
-
-        // ------------------------------- //
-
-        // ------------------------------- //
-        /**
-         * TRANSLATION LOADER:
-         *
-        */
-        this.translatorService.translate(this.g);
-        // ------------------------------- //
+       
 
         // ------------------------------- //
         /**
@@ -745,11 +758,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const senderId = this.g.senderId;
         this.g.wdLog(['f21_open senderId: ', senderId]);
         if (senderId) {
+            // chiudo callout
+            this.g.setParameter('displayEyeCatcherCard', 'none');
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
             // this.g.displayEyeCatcherCard = 'none';
+
             this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }

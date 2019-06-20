@@ -219,14 +219,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private setAvailableAgentsStatus() {
     // set first message customized for department
-    const departmentDefault = this.g.departmentDefault;
-
+    // let jsonObject = response.json() as Object;
+    const departmentDefault: DepartmentModel =  JSON.parse(this.g.departmentDefault);
+    // console.log('setAvailableAgentsStatus: ', departmentDefault, departmentDefault.online_msg);
     if (departmentDefault && departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = departmentDefault.online_msg;
     }
     if (departmentDefault && departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
     }
+    console.log('setAvailableAgentsStatus: ', this.g.LABEL_FIRST_MSG);
     // if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
     //   this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
     // } else {

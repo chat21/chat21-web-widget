@@ -62,7 +62,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
     if (environment.remoteConfig) {
-      return appConfig.loadAppConfig();
+      // return appConfig.loadAppConfig();
     }
   };
 };
