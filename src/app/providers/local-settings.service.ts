@@ -30,7 +30,7 @@ export class LocalSettingsService {
      */
     load(globals: Globals, el: ElementRef) {
         this.setProjectIdAndPrimaryParametersFromSettings(globals);
-        console.log('LocalSettingsService load ------------> ', globals);
+        // console.log('LocalSettingsService load ------------> ', globals);
         this.globals = globals;
         this.el = el;
         const that = this;
@@ -381,10 +381,10 @@ export class LocalSettingsService {
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['filterByRequester'];
-        console.log('34 - filterByRequester:: ', TEMP);
+        // console.log('34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
             globals.filterByRequester = (TEMP === false) ? false : true;
-            console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
+            // console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWaitTime'];

@@ -166,7 +166,7 @@ export class ConversationsService {
     this.conversationRef.on('child_added', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, false);
       that.g.wdLog(['child_added val *****', childSnapshot.val()]);
-      if (this.ifCanAddConversation(conversation)) {
+      if (that.ifCanAddConversation(conversation)) {
           const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
           if (index === -1) {
             // console.log('***** NEXT *****');
@@ -186,7 +186,7 @@ export class ConversationsService {
     this.conversationRef.on('child_changed', function (childSnapshot) {
       that.g.wdLog(['child_changed val *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
-      if (this.ifCanAddConversation(conversation)) {
+      if (that.ifCanAddConversation(conversation)) {
         const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
         if (index > -1) {
           that.listConversations.splice(index, 1, conversation);
@@ -230,7 +230,7 @@ export class ConversationsService {
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      if (this.ifCanAddConversation(conversation)) {
+      if (that.ifCanAddConversation(conversation)) {
         const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index === -1) {
           that.archivedConversations.unshift(conversation); // insert item top array
@@ -245,7 +245,7 @@ export class ConversationsService {
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
-      if (this.ifCanAddConversation(conversation)) {
+      if (that.ifCanAddConversation(conversation)) {
         const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index > -1) {
           that.archivedConversations.splice(index, 1, conversation);

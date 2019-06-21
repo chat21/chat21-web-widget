@@ -228,7 +228,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (departmentDefault && departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
     }
-    console.log('setAvailableAgentsStatus: ', this.g.LABEL_FIRST_MSG);
+    // console.log('setAvailableAgentsStatus: ', this.g.LABEL_FIRST_MSG);
     // if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
     //   this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
     // } else {
