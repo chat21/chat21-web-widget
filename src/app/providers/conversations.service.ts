@@ -240,12 +240,17 @@ export class ConversationsService {
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      console.log('***** filterByRequester *****', that.g.filterByRequester);
+      console.log('***** requester_id *****', conversation.attributes.requester_id);
+      console.log('***** that.g.senderId *****', that.g.senderId);
+      // tslint:disable-next-line:max-line-length
+      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
+        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          // console.log('***** filterByRequester *****', that.g.filterByRequester);
-          // console.log('***** that.g.senderId *****', that.g.senderId);
-          that.archivedConversations.unshift(conversation); // insert item top array
+
+        that.archivedConversations.unshift(conversation); // insert item top array
         // that.updateConversations();
         that.checkIsNew(conversation);
         // that.checkIsSound(conversation);
@@ -259,7 +264,13 @@ export class ConversationsService {
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
-      // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+      console.log('***** filterByRequester *****', that.g.filterByRequester);
+      console.log('***** requester_id *****', conversation.attributes.requester_id);
+      console.log('***** that.g.senderId *****', that.g.senderId);
+      // tslint:disable-next-line:max-line-length
+      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
+        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
       if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
         conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
           // console.log('***** filterByRequester *****', that.g.filterByRequester);
