@@ -280,7 +280,7 @@ export class ConversationsService {
   private ifCanAddConversation(conversation: ConversationModel) {
     console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
     this.g.wdLog(['***** filterByRequester *****', this.g.filterByRequester]);
-    this.g.wdLog(['***** requester_id *****', conversation.attributes.requester_id]);
+    // this.g.wdLog(['***** requester_id *****', conversation.attributes.requester_id]);
     this.g.wdLog(['***** that.g.senderId *****', this.g.senderId]);
     if (this.g.filterByRequester === false ||
       (this.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === this.g.senderId)
