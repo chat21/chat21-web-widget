@@ -129,6 +129,13 @@ export class LocalSettingsService {
             //globals.userId = TEMP;
             globals.setParameter('userId', TEMP);
         }
+        TEMP = tiledeskSettings['filterByRequester'];
+        // console.log('7 - userId:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.filterByRequester = (TEMP === false) ? false : true;
+            globals.setParameter('filterByRequester', globals.filterByRequester);
+        }
+
     }
 
 
@@ -492,13 +499,13 @@ export class LocalSettingsService {
             globals.isLogEnabled = (TEMP === false) ? false : true;
             // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
         }
-        TEMP = tiledeskSettings['filterByRequester'];
-        // console.log('34 - filterByRequester:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.filterByRequester = (TEMP === false) ? false : true;
-            // console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
-            // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
-        }
+        // TEMP = tiledeskSettings['filterByRequester'];
+        // // console.log('34 - filterByRequester:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.filterByRequester = (TEMP === false) ? false : true;
+        //     // console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
+        //     // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
+        // }
         // TEMP = tiledeskSettings['persistence'];
         // // console.log('35 - persistence:: ', TEMP);
         // if (TEMP !== undefined) {
