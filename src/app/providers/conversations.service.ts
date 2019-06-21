@@ -152,6 +152,8 @@ export class ConversationsService {
   // }
   // // ============== end:: subscribe to conversations ================//
 
+
+
   // ============== begin:: subscribe to conversations ================//
   public checkListConversations() {
     const limit = 100;
@@ -164,18 +166,7 @@ export class ConversationsService {
     this.conversationRef.on('child_added', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, false);
       that.g.wdLog(['child_added val *****', childSnapshot.val()]);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
-      console.log('***** filterByRequester *****', that.g.filterByRequester);
-      console.log('***** requester_id *****', conversation.attributes.requester_id);
-      console.log('***** that.g.senderId *****', that.g.senderId);
-      // tslint:disable-next-line:max-line-length
-      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
-
-      if ( that.g.filterByRequester === false ||
-        (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ||
-        (that.g.filterByRequester === true && !conversation.attributes )
-        ) {
+      if (this.ifCanAddConversation(conversation)) {
           const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
           if (index === -1) {
             // console.log('***** NEXT *****');
@@ -195,16 +186,8 @@ export class ConversationsService {
     this.conversationRef.on('child_changed', function (childSnapshot) {
       that.g.wdLog(['child_changed val *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, false);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
-      console.log('***** filterByRequester *****', that.g.filterByRequester);
-      console.log('***** requester_id *****', conversation.attributes.requester_id);
-      console.log('***** that.g.senderId *****', that.g.senderId);
-      // tslint:disable-next-line:max-line-length
-      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
+      if (this.ifCanAddConversation(conversation)) {
+        const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
         if (index > -1) {
           that.listConversations.splice(index, 1, conversation);
           that.checkIsNew(conversation);
@@ -247,48 +230,26 @@ export class ConversationsService {
     ref.on('child_added', function (childSnapshot) {
       that.g.wdLog(['childSnapshot.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
-      console.log('***** filterByRequester *****', that.g.filterByRequester);
-      console.log('***** requester_id *****', conversation.attributes.requester_id);
-      console.log('***** that.g.senderId *****', that.g.senderId);
-      // tslint:disable-next-line:max-line-length
-      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-
-        that.archivedConversations.unshift(conversation); // insert item top array
-        // that.updateConversations();
-        that.checkIsNew(conversation);
-        // that.checkIsSound(conversation);
-        // that.updateConversationBadge();
-        that.archivedConversations.sort(compareValues('timestamp', 'desc'));
-        that.archivedConversations = getUnique(that.archivedConversations, 'uid');
-        that.obsArchivedConversations.next(that.archivedConversations);
+      if (this.ifCanAddConversation(conversation)) {
+        const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
+        if (index === -1) {
+          that.archivedConversations.unshift(conversation); // insert item top array
+          that.checkIsNew(conversation);
+          that.archivedConversations.sort(compareValues('timestamp', 'desc'));
+          that.archivedConversations = getUnique(that.archivedConversations, 'uid');
+          that.obsArchivedConversations.next(that.archivedConversations);
+        }
       }
     });
 
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
       const conversation = that.setConversation(childSnapshot, true);
-      console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
-      console.log('***** filterByRequester *****', that.g.filterByRequester);
-      console.log('***** requester_id *****', conversation.attributes.requester_id);
-      console.log('***** that.g.senderId *****', that.g.senderId);
-      // tslint:disable-next-line:max-line-length
-      console.log('***** (that.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) *****', (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId));
-      if ( that.g.filterByRequester === false || (that.g.filterByRequester === true &&
-        conversation.attributes && conversation.attributes.requester_id === that.g.senderId ) ) {
-          // console.log('***** filterByRequester *****', that.g.filterByRequester);
-          // console.log('***** that.g.senderId *****', that.g.senderId);
-          const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
+      if (this.ifCanAddConversation(conversation)) {
+        const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
         if (index > -1) {
           that.archivedConversations.splice(index, 1, conversation);
-          // that.updateConversations();
           that.checkIsNew(conversation);
-          // that.checkIsSound(conversation);
-          // that.updateConversationBadge();
           that.archivedConversations.sort(compareValues('timestamp', 'desc'));
           that.archivedConversations = getUnique(that.archivedConversations, 'uid');
           that.obsArchivedConversations.next(that.archivedConversations);
@@ -311,6 +272,24 @@ export class ConversationsService {
     });
   }
   // ========= end:: subscribe to archived conversations ============//
+
+  /**
+   * Verifica se aggiungere o meno una conversazione
+   * @param conversation
+   */
+  private ifCanAddConversation(conversation: ConversationModel) {
+    console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+    this.g.wdLog(['***** filterByRequester *****', this.g.filterByRequester]);
+    this.g.wdLog(['***** requester_id *****', conversation.attributes.requester_id]);
+    this.g.wdLog(['***** that.g.senderId *****', this.g.senderId]);
+    if (this.g.filterByRequester === false ||
+      (this.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === this.g.senderId)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+  }
 
   /**
    * 1 - concat array conversations

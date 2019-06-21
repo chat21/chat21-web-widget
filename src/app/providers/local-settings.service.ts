@@ -10,8 +10,6 @@ import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class LocalSettingsService {
-    // serverUrl = 'https://api.tiledesk.com/v1/';
-    API_URL = this.appConfigService.getConfig().apiUrl;
     globals: Globals;
     el: ElementRef;
     obsSettingsService: BehaviorSubject<boolean>;
@@ -26,11 +24,11 @@ export class LocalSettingsService {
 
     /**
      * load paramiters
-     * @param globals
-     * @param el
+     * 1 - recupero i parametri principali dal settings: projectid, persistence, userToken, userId, filterByRequester
+     * 2 - recupero i parametri dal server
+     * 3 - attendo la risposta del server e richiamo setParameters per il settaggio dei parametri
      */
     load(globals: Globals, el: ElementRef) {
-        // recupero projectId
         this.setProjectIdAndPrimaryParametersFromSettings(globals);
         console.log('LocalSettingsService load ------------> ', globals);
         this.globals = globals;
@@ -48,53 +46,17 @@ export class LocalSettingsService {
         });
     }
 
-
-    /**
-     *
-    */
-    setParameters(response: any ) {
-        if (response !== null) {
-            this.setVariablesFromService(this.globals, response);
-        }
-        this.setVariablesFromSettings(this.globals);
-        this.setVariablesFromAttributeHtml(this.globals, this.el);
-        this.setVariablesFromUrlParameters(this.globals);
-        this.setVariableFromStorage(this.globals);
-        this.obsSettingsService.next(true);
-    }
-
-
-
-    /**
-     * 0: getProjectParametersByIdFromServer
-    */
-    getProjectParametersById(globals: Globals, el: ElementRef) {
-        const that = this;
-        return new Promise((res, rej) => {
-            const id = globals.projectid;
-            // console.log('getProjectById  ------------> ', id);
-            this.settingsService.getProjectParametersById(id)
-            .subscribe(response => {
-                // console.log('*** response ***');
-                // console.log(response);
-                res(response);
-            },
-            errMsg => {
-                globals.wdLog(['http ERROR MESSAGE', errMsg]);
-                rej(errMsg);
-            },
-            () => {
-                globals.wdLog(['API ERROR NESSUNO']);
-                rej('NULL');
-            });
-        });
-    }
-
     /**
      * 1: get Project Id From Settings
+     * recupero i parametri principali dal settings:
+     * projectid
+     * persistence
+     * filterByRequester
+     * userToken
+     * userId
+     * ...
      */
     setProjectIdAndPrimaryParametersFromSettings(globals: Globals) {
-        // console.log('setProjectIdFromSettings');
         const windowContext = globals.windowContext;
         if (!windowContext['tiledesk']) {
             return;
@@ -114,36 +76,82 @@ export class LocalSettingsService {
         TEMP = tiledeskSettings['persistence'];
         // console.log('35 - persistence:: ', TEMP);
         if (TEMP !== undefined) {
-            // globals.persistence = TEMP;
-            globals.setParameter('persistence', TEMP);
+            globals.persistence = TEMP;
+            // globals.setParameter('persistence', TEMP);
         }
         TEMP = tiledeskSettings['userToken'];
         // console.log('26 - userToken:: ', TEMP);
         if (TEMP !== undefined) {
-            //globals.userToken = TEMP;
-            globals.setParameter('userToken', TEMP);
+            globals.userToken = TEMP;
+            // globals.setParameter('userToken', TEMP);
         }
         TEMP = tiledeskSettings['userId'];
         // console.log('7 - userId:: ', TEMP);
         if (TEMP !== undefined) {
-            //globals.userId = TEMP;
-            globals.setParameter('userId', TEMP);
+            globals.userId = TEMP;
+            // globals.setParameter('userId', TEMP);
         }
-        // TEMP = tiledeskSettings['filterByRequester'];
-        // // console.log('7 - userId:: ', TEMP);
-        // if (TEMP !== undefined) {
-        //     globals.filterByRequester = (TEMP === false) ? false : true;
-        //     globals.setParameter('filterByRequester', globals.filterByRequester);
-        // }
-
+        TEMP = tiledeskSettings['filterByRequester'];
+        // console.log('8 - filterByRequester:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.filterByRequester = (TEMP === false) ? false : true;
+            // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
+        }
+        TEMP = tiledeskSettings['isLogEnabled'];
+        // console.log('33 - isLogEnabled:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.isLogEnabled = (TEMP === false) ? false : true;
+            // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
+        }
     }
 
+    /**
+     * 2: getProjectParametersByIdFromServer
+     * recupero i parametri dal server
+    */
+    getProjectParametersById(globals: Globals, el: ElementRef) {
+        const that = this;
+        return new Promise((res, rej) => {
+            const id = globals.projectid;
+            this.settingsService.getProjectParametersById(id)
+            .subscribe(response => {
+                res(response);
+            },
+            errMsg => {
+                globals.wdLog(['http ERROR MESSAGE', errMsg]);
+                rej(errMsg);
+            },
+            () => {
+                globals.wdLog(['API ERROR NESSUNO']);
+                rej('NULL');
+            });
+        });
+    }
 
     /**
-     * 1: setVariablesFromService
+     * 3: setParameters
+     * imposto i parametri secondo il seguente ordine:
+     * A: se il server ha restituito dei parametri imposto i parametri in global
+     * B: imposto i parametri recuperati da settings in global
+     * C: imposto i parametri recuperati da attributes html in global
+     * D: imposto i parametri recuperati da url parameters in global
+     * E: imposto i parametri recuperati dallo storage in global
+    */
+    setParameters(response: any ) {
+        if (response !== null) {
+            this.setVariablesFromService(this.globals, response);
+        }
+        this.setVariablesFromSettings(this.globals);
+        this.setVariablesFromAttributeHtml(this.globals, this.el);
+        this.setVariablesFromUrlParameters(this.globals);
+        this.setVariableFromStorage(this.globals);
+        this.obsSettingsService.next(true);
+    }
+
+    /**
+     * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-
         // console.log('setVariablesFromService', response);
         // DEPARTMENTS
         if (response && response.departments !== null) {
@@ -152,13 +160,11 @@ export class LocalSettingsService {
             // globals.setParameter('departments', response.departments);
             this.initDepartments(response.departments);
         }
-
         // AVAILABLE AGENTS
         if (response && response.user_available !== null) {
             // console.log('user_available ::::', response.user_available);
             this.setAvailableAgentsStatus(response.user_available);
         }
-
         // WIDGET
         if (response && response.project && response.project.widget !== null) {
             // console.log('response.widget: ', response.widget);
@@ -174,7 +180,6 @@ export class LocalSettingsService {
                     const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
                     divWidgetContainer.style.left = '0';
                 }
-                // salvo tutti i parametri nello storage
                 if (variables[key] && variables[key] !== null) {
                     globals[key] = stringToBoolean(variables[key]);
                 }
@@ -183,111 +188,8 @@ export class LocalSettingsService {
         }
     }
 
-    // ========= begin:: GET DEPARTEMENTS ============//
     /**
-     * INIT DEPARTMENT:
-     * get departments list
-     * set department default
-     * CALL AUTHENTICATION
-    */
-    initDepartments(departments) {
-        this.globals.departments = departments;
-        this.globals.setParameter('departmentSelected', null);
-        // this.globals.setParameter('departmentDefault', null);
-        this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
-        this.setDepartment(departments[0]);
-        let i = 0;
-        departments.forEach(department => {
-            if (department['default'] === true) {
-                this.globals.setParameter('departmentDefault', department);
-                // this.globals.departmentDefault = department;
-                departments.splice(i, 1);
-                return;
-            }
-            i++;
-        });
-        if (departments.length === 1) {
-            // UN SOLO DEPARTMENT
-            this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
-            this.setDepartment(departments[0]);
-            // return false;
-        } else if (departments.length > 1) {
-            // CI SONO + DI 2 DIPARTIMENTI
-            this.globals.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
-        } else {
-            // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
-            this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
-        }
-    }
-
-    /**
-     * SET DEPARTMENT:
-     * set department selected
-     * save department selected in attributes
-     * save attributes in this.storageService
-    */
-    setDepartment(department) {
-        this.globals.setParameter('departmentSelected', department);
-        const attributes = this.globals.attributes;
-        if (department && attributes) {
-            attributes.departmentId = department._id;
-            attributes.departmentName = department.name;
-            this.globals.setParameter('attributes', attributes);
-            this.globals.setParameter('departmentSelected', department);
-            this.globals.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
-            this.storageService.setItem('attributes', JSON.stringify(attributes));
-        }
-    }
-    // ========= end:: GET DEPARTEMENTS ============//
-
-
-    // ========= begin:: GET AVAILABLE AGENTS STATUS ============//
-    /** setAvailableAgentsStatus
-     * verifica se c'è un agent disponibile
-     */
-    private setAvailableAgentsStatus(availableAgents) {
-        // console.log('availableAgents->', availableAgents);
-        if (availableAgents.length <= 0) {
-            this.globals.setParameter('areAgentsAvailable', false);
-            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
-            this.globals.setParameter('availableAgents', null);
-            this.storageService.removeItem('availableAgents');
-        } else {
-            this.globals.setParameter('areAgentsAvailable', true);
-            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
-            const arrayAgents = [];
-            availableAgents.forEach(element => {
-                element.imageurl = getImageUrlThumb(element.id);
-                arrayAgents.push(element);
-            });
-            let limit = arrayAgents.length;
-            if (arrayAgents.length > 5) {
-                limit = 5;
-            }
-            this.globals.availableAgents = arrayAgents.slice(0, limit);
-            // this.globals.setParameter('availableAgents', availableAgents);
-            // console.log('element->', this.globals.availableAgents[0]);
-        }
-        this.globals.setParameter('availableAgentsStatus', true);
-    }
-    // ========= end:: GET AVAILABLE AGENTS STATUS ============//
-
-    /**
-     * 2: getVariablesFromAttributeHtml
-     *
-     */
-    setVariablesFromAttributeHtml(globals: Globals, el: ElementRef) {
-        // console.log('getVariablesFromAttributeHtml', el);
-        const projectid = el.nativeElement.getAttribute('projectid');
-        if (projectid !== null) {
-            // globals.projectid = projectid;
-            globals.setParameter('projectid', projectid);
-        }
-        // console.log('projectid: ', projectid);
-    }
-
-    /**
-    * 3: getVariablesFromSettings
+    * B: getVariablesFromSettings
     */
     setVariablesFromSettings(globals: Globals) {
         // console.log('setVariablesFromSettings');
@@ -305,11 +207,7 @@ export class LocalSettingsService {
         let TEMP: any;
         const tiledeskSettings = windowContext['tiledeskSettings'];
         // console.log('tiledeskSettings: ', tiledeskSettings);
-
         TEMP = tiledeskSettings['tenant'];
-
-        // globals[key] = val;
-
         // console.log('2 - tenant:: ', TEMP);
         if (TEMP !== undefined) {
             globals.tenant = TEMP;
@@ -320,12 +218,6 @@ export class LocalSettingsService {
         if (TEMP !== undefined) {
             globals.recipientId = TEMP;
             // globals.setParameter('recipientId', TEMP);
-        }
-        TEMP = tiledeskSettings['projectid'];
-        // console.log('4 - projectid:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.projectid = TEMP;
-            // globals.setParameter('projectid', TEMP);
         }
         TEMP = tiledeskSettings['widgetTitle'];
         // console.log('5 - widgetTitle:: ', TEMP);
@@ -488,16 +380,6 @@ export class LocalSettingsService {
             globals.isShown = (TEMP === false) ? false : true;
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
-        // TEMP = tiledeskSettings['isLogoutEnabled'];
-        // if (TEMP !== undefined) {
-        //   this.isLogoutEnabled = (TEMP === false) ? false : true;
-        // }
-        TEMP = tiledeskSettings['isLogEnabled'];
-        // console.log('33 - isLogEnabled:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.isLogEnabled = (TEMP === false) ? false : true;
-            // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
-        }
         TEMP = tiledeskSettings['filterByRequester'];
         console.log('34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
@@ -505,12 +387,6 @@ export class LocalSettingsService {
             console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
-        // TEMP = tiledeskSettings['persistence'];
-        // // console.log('35 - persistence:: ', TEMP);
-        // if (TEMP !== undefined) {
-        //     globals.persistence = TEMP;
-        //     // globals.setParameter('persistence', TEMP);
-        // }
         TEMP = tiledeskSettings['showWaitTime'];
         // console.log('36 - showWaitTime:: ', TEMP);
         if (TEMP !== undefined) {
@@ -529,19 +405,140 @@ export class LocalSettingsService {
             globals.showLogoutOption = (TEMP === false) ? false : true;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
-
         TEMP = tiledeskSettings['showWidgetNameInConversation'];
         // console.log('39 - showWidgetNameInConversation:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showWidgetNameInConversation = (TEMP === false) ? false : true;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
+    }
+
+    /**
+     * C: getVariablesFromAttributeHtml
+     * desueto, potrebbe essere commentato.
+     */
+    setVariablesFromAttributeHtml(globals: Globals, el: ElementRef) {
+        // console.log('getVariablesFromAttributeHtml', el);
+        const projectid = el.nativeElement.getAttribute('projectid');
+        if (projectid !== null) {
+            globals.setParameter('projectid', projectid);
+        }
+        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+        let TEMP: any;
+        TEMP = el.nativeElement.getAttribute('tenant');
+        if (TEMP !== null) {
+            this.globals.tenant = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('recipientId');
+        if (TEMP !== null) {
+            this.globals.recipientId = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('widgetTitle');
+        if (TEMP !== null) {
+            this.globals.widgetTitle = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('poweredBy');
+        if (TEMP !== null) {
+            this.globals.poweredBy = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('userId');
+        if (TEMP !== null) {
+            this.globals.userId = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('userEmail');
+        if (TEMP !== null) {
+            this.globals.userEmail = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('userPassword');
+        if (TEMP !== null) {
+            this.globals.userPassword = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('userFullname');
+        if (TEMP !== null) {
+            this.globals.userFullname = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('preChatForm');
+        if (TEMP !== null) {
+            this.globals.preChatForm = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('isOpen');
+        if (TEMP !== null) {
+            this.globals.isOpen = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('channelType');
+        if (TEMP !== null) {
+            this.globals.channelType = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('lang');
+        if (TEMP !== null) {
+            this.globals.lang = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('align');
+        if (TEMP !== null) {
+            this.globals.align = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('marginX');
+        if (TEMP !== null) {
+            this.globals.marginX = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('marginY');
+        if (TEMP !== null) {
+            this.globals.marginY = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('calloutTimer');
+        if (TEMP !== null) {
+            this.globals.calloutTimer = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('wellcomeMsg');
+        if (TEMP !== null) {
+            this.globals.wellcomeMsg = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('calloutTitle');
+        if (TEMP !== null) {
+            this.globals.calloutTitle = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('calloutMsg');
+        if (TEMP !== null) {
+            this.globals.calloutMsg = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('startFromHome');
+        if (TEMP !== null) {
+            this.globals.startFromHome = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('logoChat');
+        if (TEMP !== null) {
+            this.globals.logoChat = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('wellcomeTitle');
+        if (TEMP !== null) {
+            this.globals.wellcomeTitle = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('autoStart');
+        if (TEMP !== null) {
+            this.globals.autoStart = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('isShown');
+        if (TEMP !== null) {
+            this.globals.isShown = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
+        if (TEMP !== null) {
+          this.globals.isLogoutEnabled = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('isLogEnabled');
+        if (TEMP !== null) {
+            this.globals.isLogEnabled = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('filterByRequester');
+        if (TEMP !== null) {
+            this.globals.filterByRequester = (TEMP === true) ? true : false;
+        }
 
     }
 
 
     /**
-    * 4: setVariableFromUrlParameters
+    * D: setVariableFromUrlParameters
     */
     setVariablesFromUrlParameters(globals: Globals) {
         const windowContext = globals.windowContext;
@@ -667,11 +664,6 @@ export class LocalSettingsService {
             globals.wellcomeTitle = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
-        if (TEMP) {
-            globals.wellcomeMsg = stringToBoolean(TEMP);
-        }
-
         TEMP = getParameterByName(windowContext, 'tiledesk_autoStart');
         if (TEMP) {
             globals.autoStart = stringToBoolean(TEMP);
@@ -744,7 +736,7 @@ export class LocalSettingsService {
     }
 
     /**
-     * 5: setVariableFromStorage
+     * E: setVariableFromStorage
      * recupero il dictionary global dal local storage
      * aggiorno tutti i valori di globals
      * @param globals
@@ -762,6 +754,95 @@ export class LocalSettingsService {
             // console.log('SET globals == ---------->', globals);
         }
     }
+
+     // ========= begin:: GET DEPARTEMENTS ============//
+    /**
+     * INIT DEPARTMENT:
+     * get departments list
+     * set department default
+     * CALL AUTHENTICATION
+    */
+    initDepartments(departments) {
+        this.globals.departments = departments;
+        this.globals.setParameter('departmentSelected', null);
+        // this.globals.setParameter('departmentDefault', null);
+        this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
+        this.setDepartment(departments[0]);
+        let i = 0;
+        departments.forEach(department => {
+            if (department['default'] === true) {
+                this.globals.setParameter('departmentDefault', department);
+                // this.globals.departmentDefault = department;
+                departments.splice(i, 1);
+                return;
+            }
+            i++;
+        });
+        if (departments.length === 1) {
+            // UN SOLO DEPARTMENT
+            this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
+            this.setDepartment(departments[0]);
+            // return false;
+        } else if (departments.length > 1) {
+            // CI SONO + DI 2 DIPARTIMENTI
+            this.globals.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
+        } else {
+            // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
+            this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
+        }
+    }
+
+    /**
+     * SET DEPARTMENT:
+     * set department selected
+     * save department selected in attributes
+     * save attributes in this.storageService
+    */
+    setDepartment(department) {
+        this.globals.setParameter('departmentSelected', department);
+        const attributes = this.globals.attributes;
+        if (department && attributes) {
+            attributes.departmentId = department._id;
+            attributes.departmentName = department.name;
+            this.globals.setParameter('attributes', attributes);
+            this.globals.setParameter('departmentSelected', department);
+            this.globals.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
+            this.storageService.setItem('attributes', JSON.stringify(attributes));
+        }
+    }
+    // ========= end:: GET DEPARTEMENTS ============//
+
+
+    // ========= begin:: GET AVAILABLE AGENTS STATUS ============//
+    /** setAvailableAgentsStatus
+     * verifica se c'è un agent disponibile
+     */
+    private setAvailableAgentsStatus(availableAgents) {
+        // console.log('availableAgents->', availableAgents);
+        if (availableAgents.length <= 0) {
+            this.globals.setParameter('areAgentsAvailable', false);
+            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
+            this.globals.setParameter('availableAgents', null);
+            this.storageService.removeItem('availableAgents');
+        } else {
+            this.globals.setParameter('areAgentsAvailable', true);
+            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
+            const arrayAgents = [];
+            availableAgents.forEach(element => {
+                element.imageurl = getImageUrlThumb(element.id);
+                arrayAgents.push(element);
+            });
+            let limit = arrayAgents.length;
+            if (arrayAgents.length > 5) {
+                limit = 5;
+            }
+            this.globals.availableAgents = arrayAgents.slice(0, limit);
+            // this.globals.setParameter('availableAgents', availableAgents);
+            // console.log('element->', this.globals.availableAgents[0]);
+        }
+        this.globals.setParameter('availableAgentsStatus', true);
+    }
+    // ========= end:: GET AVAILABLE AGENTS STATUS ============//
 
 
 }
