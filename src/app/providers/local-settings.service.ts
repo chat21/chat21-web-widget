@@ -622,7 +622,7 @@ export class LocalSettingsService {
             globals.marginY = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomemsg');
+        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
         if (TEMP) {
             globals.wellcomeMsg = stringToBoolean(TEMP);
         }
@@ -822,8 +822,8 @@ export class LocalSettingsService {
         if (availableAgents.length <= 0) {
             this.globals.setParameter('areAgentsAvailable', false);
             this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
-            this.globals.setParameter('availableAgents', null);
-            this.storageService.removeItem('availableAgents');
+            // this.globals.setParameter('availableAgents', null);
+            // this.storageService.removeItem('availableAgents');
         } else {
             this.globals.setParameter('areAgentsAvailable', true);
             this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);

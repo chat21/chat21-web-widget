@@ -54,11 +54,11 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-        if (!this.g.isOpen && this.aflauncherbutton) {
-          this.aflauncherbutton.nativeElement.focus();
-        }
-    }, 2000);
+    // setTimeout(() => {
+    //     if (!this.g.isOpen && this.aflauncherbutton) {
+    //       this.aflauncherbutton.nativeElement.focus();
+    //     }
+    // }, 2000);
   }
 
 

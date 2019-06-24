@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
 import { ConversationsService } from '../../providers/conversations.service';
+import { AppConfigService } from '../../providers/app-config.service';
 
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
@@ -82,6 +83,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // text used within the html
   private LABEL_PLACEHOLDER: string;
+  private API_URL: string;
 
   userEmail: string;
   userFullname: string;
@@ -119,7 +121,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   lastMsg = false;
 
-
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -132,8 +133,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public sanitizer: DomSanitizer,
     public appComponent: AppComponent,
     public storageService: StorageService,
-    public conversationsService: ConversationsService
+    public conversationsService: ConversationsService,
+    public appConfigService: AppConfigService
   ) {
+    this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
     // this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
   }
@@ -437,8 +440,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     this.starRatingWidgetService.setOsservable(false);
     // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-     // tslint:disable-next-line:max-line-length
-      that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
+    // tslint:disable-next-line:max-line-length
+    that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
     const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
     .subscribe(isOpenStartRating => {
       that.g.setParameter('isOpenStartRating', isOpenStartRating);
@@ -1234,7 +1237,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   dowloadTranscript() {
-    const url = 'https://api.tiledesk.com/v1/public/requests/' + this.conversationWith + '/messages.html';
+    const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
     const windowContext = this.g.windowContext;
     windowContext.open(url, '_blank');
   }

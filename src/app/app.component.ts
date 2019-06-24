@@ -228,8 +228,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private initAll() {
 
-       
-
         // ------------------------------- //
         /**
          * SUBSCRIPTION :

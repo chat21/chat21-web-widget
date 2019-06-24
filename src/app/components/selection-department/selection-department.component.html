@@ -13,7 +13,6 @@ onFocus="document.querySelector('[start-focus-chat21-selection-department]').foc
 
                 <!-- ICON CLOSE CHAT -->
                 
-
                 <div class="c21-header-button">
                     <div class="c21-close-button c21-small" role="button">
                         <button tabindex="1210" aria-label=" chiudi pannello" class="c21-close-button-body" (click)="closePage()">
@@ -48,7 +47,7 @@ onFocus="document.querySelector('[start-focus-chat21-selection-department]').foc
                 <div class="c21-body-content" tabindex="211" onFocus="document.querySelector('[start-focus]').focus()">
                     <ul class="chat21-content-modal-select">
                         <li *ngFor="let department of g.departments; let i = index">
-                            <button tabindex="1202" class="c21-button-clean" (click)="onSelectDepartment(department)">
+                            <button tabindex="1202" class="c21-button-department c21-button-clean" (click)="onSelectDepartment(department)">
                                 <span [ngStyle]="{'background-color': g.themeColor, 'color': g.themeForegroundColor }" class="chat21-badge">{{i+1}}</span>
                                 <span class="chat21-name-list" >{{department?.name}}</span>
                             </button>
