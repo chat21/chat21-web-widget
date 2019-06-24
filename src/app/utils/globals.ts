@@ -141,6 +141,8 @@ export class Globals {
    hideHeaderCloseButton: boolean;
    themeColor: string;
    themeForegroundColor: string;
+   themeColor50: string;
+   colorGradient: string;
    showWidgetNameInConversation: boolean;
    allowTranscriptDownload: boolean;
    poweredBy: string;
@@ -377,6 +379,11 @@ export class Globals {
     };
   }
 
+
+  setColor() {
+    this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
+    this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
+}
 
   /**
    *

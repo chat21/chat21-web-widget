@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   themeColor50: string;
   colorGradient: string;
   colorBck: string;
-  isShow = false;
   // ========= end:: component variables ======= //
 
 
@@ -48,16 +47,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.g.wdLog(['ngOnInit app-home']);
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
-    this.colorBck = this.themeColor;
     this.themeForegroundColor = this.g.themeForegroundColor;
     this.widgetTitle = this.g.widgetTitle;
     this.wellcomeMsg = this.g.wellcomeMsg;
     this.wellcomeTitle = this.g.wellcomeTitle;
-    // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
-    this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
-    this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorBck = '#000000';
-    this.isShow = true;
+    // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
+    // this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
+    // this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
   }
 
   ngAfterViewInit() {

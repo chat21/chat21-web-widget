@@ -267,7 +267,7 @@ tiledeskwidget-root {
             text-align: center;
             font-size: 1em;
             border-radius: 40px;
-            background-color: $theme-color;
+            background-color: $blue;
             color: #ffffff;
             border: 0px;
 
@@ -287,7 +287,7 @@ tiledeskwidget-root {
         button.c21-button-link {
             font-weight: 400;
             font-size: 14px;
-            color: $theme-color;;
+            color: $blue;
             text-decoration: none;
             background-color: transparent;
             border: 1px solid transparent;
@@ -366,7 +366,7 @@ tiledeskwidget-root {
         #chat21-spinner > div {
             width: 12px;
             height: 12px;
-            background-color: $theme-color;
+            background-color: $blue;
             border-radius: 100%;
             display: inline-block;
             -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -383,7 +383,7 @@ tiledeskwidget-root {
         #chat21-spinner span {
             display: block;
             margin: 0.5em 0 0 0;
-            color: $theme-color;
+            color: $blue;
             /* text-transform: uppercase; */
             font-family: 'Roboto', sans-serif;
             -webkit-animation: pulse 2000ms linear infinite;

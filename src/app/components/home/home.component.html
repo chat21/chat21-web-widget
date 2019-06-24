@@ -1,10 +1,10 @@
 
 <!-- tabindex="2000"-->
-<div *ngIf="isShow" id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
+<div id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
 
     <!-- HEADER -->
     <div class="c21-header" 
-    [ngStyle]="{'background-color': colorBck, 'color': g.themeForegroundColor, 'background-image': colorGradient }"
+    [ngStyle]="{'background-color': colorBck, 'color': g.themeForegroundColor, 'background-image': g.colorGradient }"
     (click)="hideMenuOptions()"
     >
 

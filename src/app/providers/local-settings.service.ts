@@ -145,10 +145,11 @@ export class LocalSettingsService {
         this.setVariablesFromAttributeHtml(this.globals, this.el);
         this.setVariablesFromUrlParameters(this.globals);
         this.setVariableFromStorage(this.globals);
+
+        this.globals.setColor();
         this.obsSettingsService.next(true);
     }
-
-    /**
+        /**
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
