@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { convertColorToRGBA } from '../../utils/utils';
 
@@ -10,7 +10,7 @@ import { convertColorToRGBA } from '../../utils/utils';
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   // ========= begin:: Input/Output values ===========/
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
   themeColor50: string;
   colorGradient: string;
   colorBck: string;
+  isShow = false;
   // ========= end:: component variables ======= //
 
 
@@ -43,10 +44,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.g.wdLog(['ngOnInit app-home']);
     // get global variables
+    this.g.wdLog(['ngOnInit app-home']);
     this.tenant = this.g.tenant;
     this.themeColor = this.g.themeColor;
+    this.colorBck = this.themeColor;
     this.themeForegroundColor = this.g.themeForegroundColor;
     this.widgetTitle = this.g.widgetTitle;
     this.wellcomeMsg = this.g.wellcomeMsg;
@@ -55,8 +57,11 @@ export class HomeComponent implements OnInit {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorBck = '#000000';
+    this.isShow = true;
   }
 
+  ngAfterViewInit() {
+  }
 
   // ========= begin:: ACTIONS ============//
   returnNewConversation() {
