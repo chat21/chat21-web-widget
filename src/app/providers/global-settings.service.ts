@@ -233,7 +233,7 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        // console.log('setVariablesFromService', response);
+        console.log('setVariablesFromService', response);
         // DEPARTMENTS
         if (response && response.departments !== null) {
             // console.log('response.departments->', response.departments);
@@ -846,9 +846,7 @@ export class GlobalSettingsService {
     initDepartments(departments) {
         this.globals.departments = departments;
         this.globals.setParameter('departmentSelected', null);
-        // this.globals.setParameter('departmentDefault', null);
-        this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
-        this.setDepartment(departments[0]);
+        this.globals.setParameter('departmentDefault', null);
         let i = 0;
         departments.forEach(department => {
             if (department['default'] === true) {
@@ -880,16 +878,23 @@ export class GlobalSettingsService {
      * save attributes in this.storageService
     */
     setDepartment(department) {
+        this.globals.wdLog(['setDepartment: ', JSON.stringify(department)]);
         this.globals.setParameter('departmentSelected', department);
-        const attributes = this.globals.attributes;
-        if (department && attributes) {
+        let attributes = this.globals.attributes;
+        if (!attributes) {
+            attributes = {
+                departmentId: department._id,
+                departmentName: department.name
+            };
+        } else {
             attributes.departmentId = department._id;
             attributes.departmentName = department.name;
-            this.globals.setParameter('attributes', attributes);
-            this.globals.setParameter('departmentSelected', department);
-            this.globals.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
-            this.storageService.setItem('attributes', JSON.stringify(attributes));
         }
+        this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
+        this.globals.setParameter('departmentSelected', department);
+        this.globals.setParameter('attributes', attributes);
+        this.storageService.setItem('attributes', JSON.stringify(attributes));
+
     }
     // ========= end:: GET DEPARTEMENTS ============//
 

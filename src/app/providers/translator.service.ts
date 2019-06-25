@@ -71,8 +71,8 @@ export class TranslatorService {
     globals.WAITING_TIME_FOUND = this.translateForKey('WAITING_TIME_FOUND');
     globals.WAITING_TIME_NOT_FOUND = this.translateForKey('WAITING_TIME_NOT_FOUND');
 
-    globals.wellcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
-    globals.wellcomeMsg = globals.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
+    // globals.wellcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
+    // globals.wellcomeMsg = globals.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
 
 }
 

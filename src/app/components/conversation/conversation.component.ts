@@ -222,8 +222,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private setAvailableAgentsStatus() {
     // set first message customized for department
-    // let jsonObject = response.json() as Object;
-    const departmentDefault: DepartmentModel =  JSON.parse(this.g.departmentDefault);
+    const departmentDefault: DepartmentModel =  this.g.departmentDefault;
+    this.g.wdLog(['departmentDefault', departmentDefault]);
     // console.log('setAvailableAgentsStatus: ', departmentDefault, departmentDefault.online_msg);
     if (departmentDefault && departmentDefault.online_msg) {
       this.g.LABEL_FIRST_MSG = departmentDefault.online_msg;
@@ -231,6 +231,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (departmentDefault && departmentDefault.offline_msg) {
       this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
     }
+    this.g.wdLog(['messages: ', this.g.LABEL_FIRST_MSG, this.g.LABEL_FIRST_MSG_NO_AGENTS]);
     // console.log('setAvailableAgentsStatus: ', this.g.LABEL_FIRST_MSG);
     // if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
     //   this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
@@ -249,6 +250,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     const projectid = this.g.projectid;
     const departmentSelectedId = this.g.attributes.departmentId;
+    this.g.wdLog(['departmentSelectedId: ', departmentSelectedId, 'projectid: ', projectid]);
+
     this.agentAvailabilityService
     .getAvailableAgentsForDepartment(projectid, departmentSelectedId)
     .subscribe( (availableAgents) => {
