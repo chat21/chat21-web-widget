@@ -31,6 +31,10 @@ export class LocalSettingsService {
     load(globals: Globals, el: ElementRef) {
         this.setProjectIdAndPrimaryParametersFromSettings(globals);
         // console.log('LocalSettingsService load ------------> ', globals);
+        if (!globals.projectid) {
+            // non c'è iframe!
+            this.setProjectIdAndPrimaryParametersFromEl(el, globals);
+        }
         this.globals = globals;
         this.el = el;
         const that = this;
@@ -59,8 +63,10 @@ export class LocalSettingsService {
     setProjectIdAndPrimaryParametersFromSettings(globals: Globals) {
         const windowContext = globals.windowContext;
         if (!windowContext['tiledesk']) {
+            // mi trovo in una pg index senza iframe
             return;
         } else {
+            // mi trovo in una pg con iframe
             const baseLocation =  windowContext['tiledesk'].getBaseLocation();
             if (baseLocation !== undefined) {
                 globals.baseLocation = baseLocation;
@@ -69,7 +75,6 @@ export class LocalSettingsService {
         let TEMP: any;
         const tiledeskSettings = windowContext['tiledeskSettings'];
         TEMP = tiledeskSettings['projectid'];
-        // console.log('projectid:: ', TEMP);
         if (TEMP !== undefined) {
             globals.projectid = TEMP;
         }
@@ -103,6 +108,21 @@ export class LocalSettingsService {
             globals.isLogEnabled = (TEMP === false) ? false : true;
             // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
         }
+    }
+
+    /**
+     *
+     * @param el
+     * @param globals
+     */
+    setProjectIdAndPrimaryParametersFromEl(el: ElementRef, globals: Globals) {
+        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+        let TEMP: any;
+        TEMP = el.nativeElement.getAttribute('projectid');
+        if (TEMP !== null) {
+            globals.projectid = TEMP;
+        }
+        console.log('projectid:: ', TEMP);
     }
 
     /**
