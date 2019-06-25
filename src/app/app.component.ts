@@ -130,7 +130,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          */
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
             this.ngZone.run(() => {
-                //console.log('obsLoggedUser ------------> ', user);
+                // console.log('obsLoggedUser ------------> ', user);
                 const autoStart = that.g.autoStart;
                 if (user === -2) {
                     /** ho fatto un reinit */
@@ -146,6 +146,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     /** non sono loggato */
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
+                    // console.log('autoStart --------->', autoStart);
                     if (autoStart === true) {
                         that.setAuthentication();
                     }
@@ -182,13 +183,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.initDefafultParameters();
         // ------------------------------- //
 
-        // ------------------------------- //
-        /**
-         * TRANSLATION LOADER:
-         *
-        */
-        this.translatorService.translate(this.g);
-        // ------------------------------- //
 
        // ------------------------------- //
        /**
@@ -202,8 +196,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
        this.localSettingsService.load(this.g, this.el);
        const obsSettingsService = this.localSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
-                that.initAll();
-                that.setLoginSubscription();
+                if (resp) {
+                    // console.log('***************** END CONFIG *****************', resp);
+                    // ------------------------------- //
+                    /** TRANSLATION LOADER: */
+                    that.translatorService.translate(that.g);
+                    // ------------------------------- //
+                    that.initAll();
+                    that.setLoginSubscription();
+                }
             });
         });
         this.subscriptions.push(obsSettingsService);
@@ -451,7 +452,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * authenticate in chat
      */
     private setAuthentication() {
-        console.log('---------------- setAuthentication ----------------');
+        // console.log('---------------- setAuthentication ----------------');
         // this.g.wdLog([' ---------------- setAuthentication ---------------- ']);
         /**
          * 0 - controllo se è stato passato email e psw

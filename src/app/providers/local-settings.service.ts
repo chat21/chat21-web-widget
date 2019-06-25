@@ -122,7 +122,7 @@ export class LocalSettingsService {
         if (TEMP !== null) {
             globals.projectid = TEMP;
         }
-        console.log('projectid:: ', TEMP);
+        // console.log('projectid:: ', TEMP);
     }
 
     /**
@@ -166,10 +166,42 @@ export class LocalSettingsService {
         this.setVariablesFromUrlParameters(this.globals);
         this.setVariableFromStorage(this.globals);
 
-        this.globals.setColor();
+        this.globals.setColorWithGradient();
+        this.setCssIframe();
+        // console.log('***************** END SET PARAMETERS *****************');
         this.obsSettingsService.next(true);
     }
-        /**
+
+    /**
+     *
+     */
+    setCssIframe() {
+        const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskiframe');
+        if (!divTiledeskiframe) {
+            return;
+        }
+
+
+        if (this.globals.align === 'left') {
+            divTiledeskiframe.style.left =  this.globals.marginX;
+        } else if (this.globals.align === 'right') {
+            divTiledeskiframe.style.right =  this.globals.marginX;
+        }
+        divTiledeskiframe.style.bottom =  this.globals.marginY;
+
+        if (this.globals.fullscreenMode === true) {
+            divTiledeskiframe.style.left = 0;
+            divTiledeskiframe.style.right = 0;
+            divTiledeskiframe.style.top = 0;
+            divTiledeskiframe.style.bottom = 0;
+            divTiledeskiframe.style.width = '100%';
+            divTiledeskiframe.style.height = '100%';
+            divTiledeskiframe.style.maxHeight = 'none';
+            divTiledeskiframe.style.maxWidth = 'none';
+            // divTiledeskiframe.className += ' full-screen-mode';
+        }
+    }
+    /**
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
@@ -362,7 +394,8 @@ export class LocalSettingsService {
         TEMP = tiledeskSettings['allowTranscriptDownload'];
         // console.log('25 - allowTranscriptDownload:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.allowTranscriptDownload = TEMP;
+            //globals.allowTranscriptDownload = TEMP;
+            globals.allowTranscriptDownload = (TEMP === false) ? false : true;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
         TEMP = tiledeskSettings['startFromHome'];

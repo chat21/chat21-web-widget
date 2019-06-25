@@ -57,6 +57,7 @@ export class Globals {
   lang: string;
   conversationsBadge: number;
   activeConversation: string;
+
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
   departmentSelected: DepartmentModel;
@@ -380,7 +381,7 @@ export class Globals {
   }
 
 
-  setColor() {
+  setColorWithGradient() {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
 }

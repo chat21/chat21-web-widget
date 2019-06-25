@@ -111,6 +111,7 @@ export class TranslatorService {
     }
     this.language = this.language.substring(0, 2);
     // retrieve the translation
+    // console.log('LINGUA IMPOSTATA: ', this.language);
     this.getLanguageObject(this.language);
   }
 
