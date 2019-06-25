@@ -1,4 +1,5 @@
-import * as firebase from 'firebase';
+// firebase
+import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 export class MessageModel {

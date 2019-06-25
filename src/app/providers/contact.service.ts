@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase';
+
+// firebase
+import * as firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/storage';
+
 // models
 import { ContactModel } from '../../models/contact';
 import { Globals } from '../utils/globals';

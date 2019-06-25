@@ -1,22 +1,24 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 // services
 import { Globals } from '../utils/globals';
 import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { StorageService } from './storage.service';
-import { SettingsService } from './settings.service';
-import { AppConfigService } from '../providers/app-config.service';
+import { AppConfigService } from './app-config.service';
 
 @Injectable()
-export class LocalSettingsService {
+export class GlobalSettingsService {
     globals: Globals;
     el: ElementRef;
     obsSettingsService: BehaviorSubject<boolean>;
 
     constructor(
+        public http: Http,
         private storageService: StorageService,
-        private settingsService: SettingsService,
+        // private settingsService: SettingsService,
         public appConfigService: AppConfigService
     ) {
         this.obsSettingsService = new BehaviorSubject<boolean>(null);
@@ -24,31 +26,58 @@ export class LocalSettingsService {
 
     /**
      * load paramiters
+     * 0 - imposto globals con i valori di default
      * 1 - recupero i parametri principali dal settings: projectid, persistence, userToken, userId, filterByRequester
      * 2 - recupero i parametri dal server
      * 3 - attendo la risposta del server e richiamo setParameters per il settaggio dei parametri
      */
     load(globals: Globals, el: ElementRef) {
-        this.setProjectIdAndPrimaryParametersFromSettings(globals);
-        // console.log('LocalSettingsService load ------------> ', globals);
-        if (!globals.projectid) {
-            // non c'è iframe!
-            this.setProjectIdAndPrimaryParametersFromEl(el, globals);
-        }
+        const that = this;
         this.globals = globals;
         this.el = el;
-        const that = this;
-        this.getProjectParametersById(globals, el)
-        .then(response => {
+        // ------------------------------- //
+        /**
+        * SETTING LOCAL DEFAULT:
+        * set the default globals parameters
+        */
+        this.globals.initDefafultParameters();
+        // ------------------------------- //
+        /** SET PROJECT ID */
+        this.setProjectIdAndPrimaryParametersFromSettings(globals);
+        if (!globals.projectid) {
+            // is not iframe!
+            this.setProjectIdAndPrimaryParametersFromEl(el, globals);
+        }
+        if (!globals.projectid) {
+            that.setParameters(null);
+            return;
+        }
+        // ------------------------------- //
+        /** LOAD PARAMETERS FROM SERVER */
+        const projectid = globals.projectid;
+        this.getProjectParametersById(projectid)
+        .subscribe( response => {
             // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
             that.setParameters(response);
-        })
-        .catch(error => {
+        }, (error) => {
+            console.error('::getProjectParametersById', error);
             that.setParameters(null);
-            // console.log('ERRORE°°°°°°°°°°°°°°°°°°°° ');
-            console.error(error);
+        }, () => {
+            that.setParameters(null);
         });
+        // ------------------------------- //
+        // this.getProjectParametersById(globals, el)
+        // .then(response => {
+        //     // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+        //     that.setParameters(response);
+        // })
+        // .catch(error => {
+        //     that.setParameters(null);
+        //     console.log('ERRORE°°°°°°°°°°°°°°°°°°°° ', error);
+        //     console.error(error);
+        // });
     }
+
 
     /**
      * 1: get Project Id From Settings
@@ -122,31 +151,30 @@ export class LocalSettingsService {
         if (TEMP !== null) {
             globals.projectid = TEMP;
         }
-        // console.log('projectid:: ', TEMP);
     }
 
     /**
      * 2: getProjectParametersByIdFromServer
      * recupero i parametri dal server
     */
-    getProjectParametersById(globals: Globals, el: ElementRef) {
-        const that = this;
-        return new Promise((res, rej) => {
-            const id = globals.projectid;
-            this.settingsService.getProjectParametersById(id)
-            .subscribe(response => {
-                res(response);
-            },
-            errMsg => {
-                globals.wdLog(['http ERROR MESSAGE', errMsg]);
-                rej(errMsg);
-            },
-            () => {
-                globals.wdLog(['API ERROR NESSUNO']);
-                rej('NULL');
-            });
-        });
-    }
+    // getProjectParametersById(globals: Globals, el: ElementRef) {
+    //     const that = this;
+    //     return new Promise((res, rej) => {
+    //         const id = globals.projectid;
+    //         this.settingsService.getProjectParametersById(id)
+    //         .subscribe(response => {
+    //             res(response);
+    //         },
+    //         errMsg => {
+    //             globals.wdLog(['http ERROR MESSAGE', errMsg]);
+    //             rej(errMsg);
+    //         },
+    //         () => {
+    //             globals.wdLog(['API ERROR NESSUNO']);
+    //             rej('NULL');
+    //         });
+    //     });
+    // }
 
     /**
      * 3: setParameters
@@ -166,8 +194,11 @@ export class LocalSettingsService {
         this.setVariablesFromUrlParameters(this.globals);
         this.setVariableFromStorage(this.globals);
 
+        /** set color with gradient from theme's colors */
         this.globals.setColorWithGradient();
+        /** set css iframe from parameters */
         this.setCssIframe();
+
         // console.log('***************** END SET PARAMETERS *****************');
         this.obsSettingsService.next(true);
     }
@@ -180,8 +211,6 @@ export class LocalSettingsService {
         if (!divTiledeskiframe) {
             return;
         }
-
-
         if (this.globals.align === 'left') {
             divTiledeskiframe.style.left =  this.globals.marginX;
         } else if (this.globals.align === 'right') {
@@ -198,7 +227,6 @@ export class LocalSettingsService {
             divTiledeskiframe.style.height = '100%';
             divTiledeskiframe.style.maxHeight = 'none';
             divTiledeskiframe.style.maxWidth = 'none';
-            // divTiledeskiframe.className += ' full-screen-mode';
         }
     }
     /**
@@ -394,7 +422,6 @@ export class LocalSettingsService {
         TEMP = tiledeskSettings['allowTranscriptDownload'];
         // console.log('25 - allowTranscriptDownload:: ', TEMP);
         if (TEMP !== undefined) {
-            //globals.allowTranscriptDownload = TEMP;
             globals.allowTranscriptDownload = (TEMP === false) ? false : true;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
@@ -898,5 +925,15 @@ export class LocalSettingsService {
     }
     // ========= end:: GET AVAILABLE AGENTS STATUS ============//
 
+
+    getProjectParametersById(id: string): Observable<any[]> {
+        const API_URL = this.appConfigService.getConfig().apiUrl;
+        const url = API_URL + id + '/widgets';
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http
+          .get(url, { headers })
+          .map((response) => response.json());
+    }
 
 }

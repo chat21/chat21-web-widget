@@ -19,9 +19,12 @@ import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
-import * as firebase from 'firebase';
-import { environment } from '../environments/environment';
 
+// firebase
+import * as firebase from 'firebase/app';
+import 'firebase/app';
+
+import { environment } from '../environments/environment';
 
 // utils
 import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile,
@@ -30,7 +33,7 @@ import { ConversationModel } from '../models/conversation';
 import { AppConfigService } from './providers/app-config.service';
 
 
-import { LocalSettingsService } from './providers/local-settings.service';
+import { GlobalSettingsService } from './providers/global-settings.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
 
 // import { TranslationLoader } from './translation-loader';
@@ -95,7 +98,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
         public appConfigService: AppConfigService,
-        public localSettingsService: LocalSettingsService,
+        public globalSettingsService: GlobalSettingsService,
         public settingsSaverService: SettingsSaverService
     ) {
         // firebase.initializeApp(environment.firebase);  // here shows the error
@@ -107,8 +110,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     ngOnInit() {
         this.g.wdLog(' ---------------- ngOnInit ---------------- ');
-        // this.initAll();
-        // this.setLoginSubscription();
         this.initWidgetParamiters();
     }
 
@@ -175,34 +176,31 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private initWidgetParamiters() {
         const that = this;
-        // ------------------------------- //
-        /**
-        * SETTING LOCAL DEFAULT:
-        * set default globals parameters
-        */
-        this.g.initDefafultParameters();
-        // ------------------------------- //
-
-
        // ------------------------------- //
        /**
-        * LOCAL SETTINGS:
-        * 1 - setVariablesFromAttributeHtml
-        * 2 - setVariablesFromSettings
-        * 3 - setVariableFromUrlParameters
-        * 4 - setVariableFromStorage
+        * SET WIDGET PARAMETERS
+        * 1 - set default parameters globals
+        * 2 - set globals parameters from:
+        *   - AttributeHtml;
+            - Settings;
+            - UrlParameters;
+            - Storage;
+        * 3 - translate
+        * 4 - init widget
+        * 5 - setLoginSubscription
        */
-       // this.localSettingsService.load(this.g, this.el);
-       this.localSettingsService.load(this.g, this.el);
-       const obsSettingsService = this.localSettingsService.obsSettingsService.subscribe((resp) => {
+       this.globalSettingsService.load(this.g, this.el);
+       const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
-                    // console.log('***************** END CONFIG *****************', resp);
+                    // console.log('***************** END CONFIG PARAMETERS *****************', resp);
                     // ------------------------------- //
                     /** TRANSLATION LOADER: */
                     that.translatorService.translate(that.g);
                     // ------------------------------- //
+                    /** INIT  */
                     that.initAll();
+                    /** AUTH */
                     that.setLoginSubscription();
                 }
             });
@@ -212,13 +210,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     /**
      * INITIALIZE:
-     * 1 - set default parameters globals
-     * 2 - set globals parameters from:
-     *      - AttributeHtml;
-            - Settings;
-            - UrlParameters;
-            - Storage;
-     * 3 - translate
      * 4 - triggerLoadParamsEvent
      * 4 - subscription to runtime changes in globals
      add Component to Window
@@ -228,7 +219,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
-
         // ------------------------------- //
         /**
          * SUBSCRIPTION :
@@ -248,16 +238,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.initialize(this.setAttributesFromStorageService());
         // ------------------------------- //
 
-        // this.g.setParameter('isMobile', detectIfIsMobile(windowContext));
-        // this.g.setParameter('attributes', this.setAttributesFromStorageService());
-        // this.setSound();
-        // this.setIsWidgetOpenOrActive();
-        // const TEMP = this.storageService.getItem('preChatForm');
-        // this.g.wdLog([' ---------------- TEMP:', TEMP]);
-        // if (TEMP !== undefined && TEMP !== null) {
-        //     this.g.preChatForm = TEMP;
-        // }
-
         this.g.wdLog([' ---------------- A1 ---------------- ']);
         this.removeFirebasewebsocketFromLocalStorage();
         this.triggerLoadParamsEvent();
@@ -265,7 +245,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.initLauncherButton();
         this.chatPresenceHandlerService.initialize();
-        this.initChatSupportMode();
+        // this.initChatSupportMode();
     }
 
     /** initLauncherButton
@@ -281,13 +261,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * carico i dipartimenti
      * carico gli agenti disponibili
      */
-    initChatSupportMode() {
-        this.g.wdLog([' ---------------- B1: supportMode ---------------- ', this.g.supportMode]);
-        if (this.g.supportMode) {
-            //this.getMongDbDepartments();
-            //this.setAvailableAgentsStatus();
-        }
-    }
+    // initChatSupportMode() {
+    //     this.g.wdLog([' ---------------- B1: supportMode ---------------- ', this.g.supportMode]);
+    //     if (this.g.supportMode) {
+    //         // this.getMongDbDepartments();
+    //         // this.setAvailableAgentsStatus();
+    //     }
+    // }
 
     /**
      *
@@ -491,7 +471,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
-            //this.chatPresenceHandlerService.setupMyPresence(userId);
+            // this.chatPresenceHandlerService.setupMyPresence(userId);
         } else if (userToken) {
             // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
             // !!! DA TESTARE NON FUNZIONA !!! //

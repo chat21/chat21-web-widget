@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
-// import { AngularFireDatabase } from 'angularfire2/database';
-// import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase';
+// firebase
+import * as firebase from 'firebase/app';
 import 'firebase/database';
+
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -314,7 +314,7 @@ export class MessagingService {
     const that = this;
     // const now: Date = new Date();
     // const localTimestamp = now.valueOf();
-    const timestamp =  firebase.database.ServerValue.TIMESTAMP;
+    const timestamp = firebase.database.ServerValue.TIMESTAMP;
     const language = navigator.language;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(
@@ -334,7 +334,7 @@ export class MessagingService {
       channel_type,
       projectid
     );
-    //this.messages.push(message);
+    // this.messages.push(message);
     const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
     that.g.wdLog([message.toString()]);
 

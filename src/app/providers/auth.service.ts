@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 // import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase';
+
+// firebase
+import * as firebase from 'firebase/app';
 import 'firebase/auth';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';

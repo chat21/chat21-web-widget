@@ -4,10 +4,9 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-// import * as firebase from 'firebase/app';
-import * as firebase from 'firebase';
+// firebase
+import * as firebase from 'firebase/app';
 import 'firebase/storage';
-
 
 import { UploadModel } from '../../models/upload';
 import { environment } from '../../environments/environment';

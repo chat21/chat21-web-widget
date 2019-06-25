@@ -27,10 +27,9 @@ import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
 // providers
-import { LocalSettingsService } from './providers/local-settings.service';
+import { GlobalSettingsService } from './providers/global-settings.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
 import { StorageService } from './providers/storage.service';
-import { SettingsService } from './providers/settings.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
@@ -119,7 +118,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AuthService,
     MessagingService,
     Globals,
-    LocalSettingsService,
+    GlobalSettingsService,
     SettingsSaverService,
     ConversationsService,
     UploadService,
@@ -129,7 +128,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TranslatorService,
     ChatPresenceHandlerService,
     StorageService,
-    SettingsService,
     WaitingService
   ],
   bootstrap: [AppComponent]
