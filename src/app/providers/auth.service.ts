@@ -46,7 +46,9 @@ export class AuthService {
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         that.g.wdLog(['NO CURRENT USER PASSO NULL']);
-        that.obsLoggedUser.next(0);
+        if (that.g.isLogout === false ) {
+          that.obsLoggedUser.next(0);
+        }
       } else {
         that.g.wdLog(['PASSO CURRENT USER']);
         that.user = firebase.auth().currentUser;

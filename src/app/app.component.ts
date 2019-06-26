@@ -139,8 +139,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.initAll();
                 } else if (user === -1) {
                     /** ho effettuato il logout: nascondo il widget */
+                    console.log('obsLoggedUser', obsLoggedUser);
+                    console.log('this.subscriptions', that.subscriptions);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
+                    that.g.isLogout = true;
                     that.g.wdLog(['LOGOUT : ', user]);
                     that.triggerIsLoggedInEvent();
                 } else if (user === 0) {
@@ -825,8 +828,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscriptions.forEach(function (subscription) {
             subscription.unsubscribe();
         });
-        this.subscriptions.length = 0;
-         this.g.wdLog(['this.subscriptions', this.subscriptions]);
+        this.subscriptions = [];
+        this.g.wdLog(['this.subscriptions', this.subscriptions]);
     }
     // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

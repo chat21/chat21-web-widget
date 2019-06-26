@@ -51,6 +51,7 @@ export class Globals {
   filterSystemMsg: boolean; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
   availableAgents: Array<User> = [];
+  isLogout = false; /** indica se ho appena fotto il logout */
 
   attributes: any;
   token: string;

@@ -882,7 +882,8 @@ export class GlobalSettingsService {
     setDepartment(department) {
         this.globals.wdLog(['setDepartment: ', JSON.stringify(department)]);
         this.globals.setParameter('departmentSelected', department);
-        let attributes = this.globals.attributes;
+        // let attributes = this.globals.attributes;
+        let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
         if (!attributes) {
             attributes = {
                 departmentId: department._id,

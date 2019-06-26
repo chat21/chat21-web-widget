@@ -99,7 +99,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   messages: Array<MessageModel>;
 
   // attributes: any;
-  GUEST_LABEL = '';
+  //GUEST_LABEL = '';
 
   CLIENT_BROWSER: string = navigator.userAgent;
 
@@ -217,30 +217,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
-   * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
-   * per verificare se c'è un agent disponibile
+   * OLD: mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
+   * i dipartimenti e gli agenti disponibili sono già stati impostati nello step precedente
+   * recuperati dal server (/widget) e settati in global
+   * imposto il messaggio online/offline a seconda degli agenti disponibili
+   * aggiungo il primo messaggio alla conversazione
    */
   private setAvailableAgentsStatus() {
-    // set first message customized for department
+
     const departmentDefault: DepartmentModel =  this.g.departmentDefault;
     this.g.wdLog(['departmentDefault', departmentDefault]);
-    // console.log('setAvailableAgentsStatus: ', departmentDefault, departmentDefault.online_msg);
     if (departmentDefault && departmentDefault.online_msg && departmentDefault.online_msg !== '') {
       this.g.LABEL_FIRST_MSG = departmentDefault.online_msg;
-      console.log('SET department.online_msg: ');
     }
     if (departmentDefault && departmentDefault.offline_msg && departmentDefault.offline_msg !== '') {
         this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
-        console.log('SET department.offline_msg: ');
     }
-    console.log('department.offline_msg: ', this.g);
-
-    // if (departmentDefault && departmentDefault.online_msg) {
-    //   this.g.LABEL_FIRST_MSG = departmentDefault.online_msg;
-    // }
-    // if (departmentDefault && departmentDefault.offline_msg) {
-    //   this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
-    // }
 
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
@@ -248,15 +240,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG);
     }
-
     this.g.wdLog(['messages: ', this.g.LABEL_FIRST_MSG, this.g.LABEL_FIRST_MSG_NO_AGENTS]);
 
-    // console.log('setAvailableAgentsStatus: ', this.g.LABEL_FIRST_MSG);
-    // if (this.g.availableAgents && this.g.availableAgents.length <= 0) {
-    //   this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
-    // } else {
-    //   this.addFirstMessage(this.g.LABEL_FIRST_MSG);
-    // }
     // this.getAvailableAgentsForDepartment();
 
   }
@@ -265,26 +250,26 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * mi sottoscrivo al nodo /departments/' + idDepartmentSelected + '/operators/';
    * per verificare se c'è un agent disponibile
    */
-  private getAvailableAgentsForDepartment() {
-    const that = this;
-    const projectid = this.g.projectid;
-    const departmentSelectedId = this.g.attributes.departmentId;
-    this.g.wdLog(['departmentSelectedId: ', departmentSelectedId, 'projectid: ', projectid]);
+  // private getAvailableAgentsForDepartment() {
+  //   const that = this;
+  //   const projectid = this.g.projectid;
+  //   const departmentSelectedId = this.g.attributes.departmentId;
+  //   this.g.wdLog(['departmentSelectedId: ', departmentSelectedId, 'projectid: ', projectid]);
 
-    this.agentAvailabilityService
-    .getAvailableAgentsForDepartment(projectid, departmentSelectedId)
-    .subscribe( (availableAgents) => {
-      const availableAgentsForDep = availableAgents['available_agents'];
-      if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
-        that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
-      } else {
-        that.addFirstMessage(that.g.LABEL_FIRST_MSG);
-      }
-    }, (error) => {
-      console.error('2 setOnlineStatus::setAvailableAgentsStatus', error);
-    }, () => {
-    });
-  }
+  //   this.agentAvailabilityService
+  //   .getAvailableAgentsForDepartment(projectid, departmentSelectedId)
+  //   .subscribe( (availableAgents) => {
+  //     const availableAgentsForDep = availableAgents['available_agents'];
+  //     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
+  //       that.addFirstMessage(that.g.LABEL_FIRST_MSG_NO_AGENTS);
+  //     } else {
+  //       that.addFirstMessage(that.g.LABEL_FIRST_MSG);
+  //     }
+  //   }, (error) => {
+  //     console.error('2 setOnlineStatus::setAvailableAgentsStatus', error);
+  //   }, () => {
+  //   });
+  // }
 
   /**
    * mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
@@ -712,7 +697,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
-          let recipientFullname = this.GUEST_LABEL;
+          let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
@@ -738,7 +723,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           } else if (attributes && attributes.userFullname) {
             recipientFullname = attributes.userFullname;
           } else {
-            recipientFullname = this.GUEST_LABEL;
+            recipientFullname = this.g.GUEST_LABEL;
           }
           if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
             recipientFullname += ' - ' + widgetTitle;
