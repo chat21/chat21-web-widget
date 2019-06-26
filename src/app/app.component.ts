@@ -1004,7 +1004,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('isOpenPrechatForm', true);
             // this.settingsSaverService.setVariable('isOpenPrechatForm', true);
             this.isOpenSelectionDepartment = false;
-            if (departments.length > 1) {
+            if (departments && departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
@@ -1013,7 +1013,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (departments.length > 1) {
+            if (departments && departments.length > 1) {
                 this.isOpenSelectionDepartment = true;
             } else {
                 this.isOpenConversation = true;

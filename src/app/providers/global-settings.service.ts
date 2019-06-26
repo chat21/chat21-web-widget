@@ -236,7 +236,7 @@ export class GlobalSettingsService {
         console.log('setVariablesFromService', response);
         // DEPARTMENTS
         if (response && response.departments !== null) {
-            // console.log('response.departments->', response.departments);
+            console.log('response.departments->', response.departments);
             globals.wdLog(['response DEP ::::', response.departments]);
             // globals.setParameter('departments', response.departments);
             this.initDepartments(response.departments);
@@ -847,6 +847,8 @@ export class GlobalSettingsService {
         this.globals.departments = departments;
         this.globals.setParameter('departmentSelected', null);
         this.globals.setParameter('departmentDefault', null);
+        this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
+        this.setDepartment(departments[0]);
         let i = 0;
         departments.forEach(department => {
             if (department['default'] === true) {
@@ -890,6 +892,10 @@ export class GlobalSettingsService {
             attributes.departmentId = department._id;
             attributes.departmentName = department.name;
         }
+
+        this.globals.wdLog(['department.online_msg: ', department.online_msg]);
+        this.globals.wdLog(['department.offline_msg: ', department.offline_msg]);
+
         this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
         this.globals.setParameter('departmentSelected', department);
         this.globals.setParameter('attributes', attributes);
