@@ -348,10 +348,10 @@ export class Globals {
   /**
    * @param attributes
    */
-  initialize(attributes: any) {
+  initialize() {
     this.createDefaultSettingsObject();
     this.setParameter('isMobile', detectIfIsMobile(this.windowContext));
-    this.setParameter('attributes', attributes);
+    this.setParameter('attributes', this.attributes);
   }
 
   /**

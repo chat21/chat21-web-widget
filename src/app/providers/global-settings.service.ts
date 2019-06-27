@@ -31,7 +31,7 @@ export class GlobalSettingsService {
      * 2 - recupero i parametri dal server
      * 3 - attendo la risposta del server e richiamo setParameters per il settaggio dei parametri
      */
-    load(globals: Globals, el: ElementRef) {
+    initWidgetParamiters(globals: Globals, el: ElementRef) {
         const that = this;
         this.globals = globals;
         this.el = el;
@@ -49,7 +49,7 @@ export class GlobalSettingsService {
             this.setProjectIdAndPrimaryParametersFromEl(el, globals);
         }
         if (!globals.projectid) {
-            that.setParameters(null);
+            // that.setParameters(null);
             return;
         }
         // ------------------------------- //

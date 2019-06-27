@@ -192,15 +192,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         * 4 - init widget
         * 5 - setLoginSubscription
        */
-       this.globalSettingsService.load(this.g, this.el);
        const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
                     // console.log('***************** END CONFIG PARAMETERS *****************', resp);
                     // ------------------------------- //
-                    /** TRANSLATION LOADER: */
-                    that.translatorService.translate(that.g);
-                    // ------------------------------- //
+
                     /** INIT  */
                     that.initAll();
                     /** AUTH */
@@ -209,6 +206,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         });
         this.subscriptions.push(obsSettingsService);
+
+        this.globalSettingsService.initWidgetParamiters(this.g, this.el);
        // ------------------------------- //
     }
     /**
@@ -222,6 +221,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
+
+         /** TRANSLATION LOADER: */
+         this.translatorService.translate(this.g);
+         // ------------------------------- //
+
+         /** SET ATTRIBUTES */
+         const attributes = this.setAttributesFromStorageService();
+         if (attributes) {
+            this.g.attributes = attributes;
+         }
         // ------------------------------- //
         /**
          * SUBSCRIPTION :
@@ -238,7 +247,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          * set isMobile
          * set attributes
         */
-        this.g.initialize(this.setAttributesFromStorageService());
+        this.g.initialize();
         // ------------------------------- //
 
         this.g.wdLog([' ---------------- A1 ---------------- ']);
@@ -292,12 +301,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
+
         let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
         if (!attributes || attributes === 'undefined') {
             attributes = {};
-                // client: CLIENT_BROWSER,
-                // sourcePage: location.href,
-                // projectId: projectid
         }
         if (CLIENT_BROWSER) {
             attributes['client'] = CLIENT_BROWSER;
