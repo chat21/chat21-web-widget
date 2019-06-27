@@ -233,10 +233,10 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        console.log('setVariablesFromService', response);
+        // console.log('setVariablesFromService', response);
         // DEPARTMENTS
         if (response && response.departments !== null) {
-            console.log('response.departments->', response.departments);
+            // console.log('response.departments->', response.departments);
             globals.wdLog(['response DEP ::::', response.departments]);
             // globals.setParameter('departments', response.departments);
             this.initDepartments(response.departments);
@@ -911,15 +911,18 @@ export class GlobalSettingsService {
      * verifica se c'è un agent disponibile
      */
     private setAvailableAgentsStatus(availableAgents) {
-        // console.log('availableAgents->', availableAgents);
+        console.log('availableAgents->', availableAgents.length);
         if (availableAgents.length <= 0) {
-            this.globals.setParameter('areAgentsAvailable', false);
-            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
+            //this.globals.areAgentsAvailable = false;
+            //this.globals.setParameter('areAgentsAvailable', false);
+            //this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
             // this.globals.setParameter('availableAgents', null);
             // this.storageService.removeItem('availableAgents');
+            this.globals.setParameter('availableAgentsStatus', false);
         } else {
-            this.globals.setParameter('areAgentsAvailable', true);
-            this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
+            //this.globals.areAgentsAvailable = true;
+            //this.globals.setParameter('areAgentsAvailable', true);
+            //this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
             const arrayAgents = [];
             availableAgents.forEach(element => {
                 element.imageurl = getImageUrlThumb(element.id);
@@ -930,10 +933,14 @@ export class GlobalSettingsService {
                 limit = 5;
             }
             this.globals.availableAgents = arrayAgents.slice(0, limit);
+
+            this.globals.setParameter('availableAgentsStatus', true);
             // this.globals.setParameter('availableAgents', availableAgents);
-            // console.log('element->', this.globals.availableAgents[0]);
+            // console.log('element->', this.globals.availableAgents);
+            // console.log('areAgentsAvailable->', this.globals.areAgentsAvailable);
+            // console.log('areAgentsAvailableText->', this.globals.areAgentsAvailableText);
         }
-        this.globals.setParameter('availableAgentsStatus', true);
+
     }
     // ========= end:: GET AVAILABLE AGENTS STATUS ============//
 

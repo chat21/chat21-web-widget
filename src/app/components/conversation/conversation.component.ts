@@ -237,8 +237,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
+      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
     } else {
       this.addFirstMessage(this.g.LABEL_FIRST_MSG);
+      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
     }
     this.g.wdLog(['messages: ', this.g.LABEL_FIRST_MSG, this.g.LABEL_FIRST_MSG_NO_AGENTS]);
 

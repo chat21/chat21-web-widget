@@ -139,8 +139,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.initAll();
                 } else if (user === -1) {
                     /** ho effettuato il logout: nascondo il widget */
-                    console.log('obsLoggedUser', obsLoggedUser);
-                    console.log('this.subscriptions', that.subscriptions);
+                    // console.log('obsLoggedUser', obsLoggedUser);
+                    // console.log('this.subscriptions', that.subscriptions);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
                     that.g.isLogout = true;
@@ -294,11 +294,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const senderId = this.g.senderId;
         let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
         if (!attributes || attributes === 'undefined') {
-            attributes = {
-                client: CLIENT_BROWSER,
-                sourcePage: location.href,
-                projectId: projectid
-            };
+            attributes = {};
+                // client: CLIENT_BROWSER,
+                // sourcePage: location.href,
+                // projectId: projectid
+        }
+        if (CLIENT_BROWSER) {
+            attributes['client'] = CLIENT_BROWSER;
+        }
+        if (location.href) {
+            attributes['sourcePage'] = location.href;
+        }
+        if (projectid) {
+            attributes['projectId'] = projectid;
         }
         if (userEmail) {
             attributes['userEmail'] = userEmail;

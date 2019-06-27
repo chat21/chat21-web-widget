@@ -66,7 +66,7 @@ export class Globals {
   isOpenMenuOptions: boolean;
   isOpenPrechatForm: boolean;
 
-  areAgentsAvailable = false;
+  // areAgentsAvailable = false;
   areAgentsAvailableText: string;
   availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   signInWithCustomToken: boolean;
