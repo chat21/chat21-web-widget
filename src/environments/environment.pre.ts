@@ -20,5 +20,6 @@ export const environment = {
   // apiUrl: 'https://api.tiledesk.com/v1/',
   apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   tenant: 'tilechat',
-  defaultLang : 'en'
+  defaultLang : 'en',
+  shemaVersion : '1'
 };

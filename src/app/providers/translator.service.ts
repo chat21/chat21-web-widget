@@ -19,7 +19,7 @@ export class TranslatorService {
   public translate(globals) {
     // set language
     this.setLanguage(globals.windowContext,  globals.lang);
-    //globals.setParameter('lang', this.language);
+    // globals.setParameter('lang', this.language);
 
     // translate
     globals.LABEL_PLACEHOLDER = this.translateForKey('LABEL_PLACEHOLDER');

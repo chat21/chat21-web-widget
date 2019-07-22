@@ -8,6 +8,7 @@ import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByNa
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { StorageService } from './storage.service';
 import { AppConfigService } from './app-config.service';
+import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 
 @Injectable()
 export class GlobalSettingsService {
@@ -27,9 +28,10 @@ export class GlobalSettingsService {
     /**
      * load paramiters
      * 0 - imposto globals con i valori di default
-     * 1 - recupero i parametri principali dal settings: projectid, persistence, userToken, userId, filterByRequester
-     * 2 - recupero i parametri dal server
-     * 3 - attendo la risposta del server e richiamo setParameters per il settaggio dei parametri
+     * 1 - imposto il projectId
+     * 2 - recupero i parametri principali dal settings: projectid, persistence, userToken, userId, filterByRequester
+     * 3 - recupero i parametri dal server
+     * 4 - attendo la risposta del server e richiamo setParameters per il settaggio dei parametri
      */
     initWidgetParamiters(globals: Globals, el: ElementRef) {
         const that = this;
@@ -41,20 +43,25 @@ export class GlobalSettingsService {
         * set the default globals parameters
         */
         this.globals.initDefafultParameters();
-        // ------------------------------- //
+
         /** SET PROJECT ID */
-        this.setProjectIdAndPrimaryParametersFromSettings(globals);
-        if (!globals.projectid) {
-            // is not iframe!
-            this.setProjectIdAndPrimaryParametersFromEl(el, globals);
-        }
-        if (!globals.projectid) {
-            // that.setParameters(null);
+        let projectid: string;
+        try {
+            projectid = this.setProjectId();
+        } catch (error) {
+            console.log('error projectid: ', error.name);
             return;
         }
+
+        /** SET main Paramiters */
+        this.setMainParametersFromSettings(globals);
+
         // ------------------------------- //
-        /** LOAD PARAMETERS FROM SERVER */
-        const projectid = globals.projectid;
+        /** LOAD PARAMETERS FROM SERVER
+         * load parameters from server
+         * set parameters in globals
+        */
+        // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
         .subscribe( response => {
             // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
@@ -78,6 +85,43 @@ export class GlobalSettingsService {
         // });
     }
 
+    /** SET PROGECTID **
+     * set projectId with the following order:
+     * 1 - get projectId from settings
+     * 2 - get projectId from attributeHtml
+     * 3 - get projectId from UrlParameters
+    */
+    setProjectId() {
+        // get projectid for settings//
+        try {
+            const projectid = this.globals.windowContext['tiledeskSettings']['projectid'];
+            if (projectid) { this.globals.projectid = projectid; }
+            // this.globals.setParameter('projectid', projectid);
+        } catch (error) {
+            console.log('1 > Error is handled: ', error.name);
+        }
+
+        // get projectid for attributeHtml//
+        try {
+            const projectid = this.el.nativeElement.getAttribute('projectid');
+            if (projectid) { this.globals.projectid = projectid; }
+            // this.globals.setParameter('projectid', projectid);
+        } catch (error) {
+            console.log('2 > Error is handled: ', error.name);
+        }
+
+        // get projectid for UrlParameters//
+        try {
+            const projectid = getParameterByName(this.globals.windowContext, 'tiledesk_projectid');
+            if (projectid) { this.globals.projectid = projectid; }
+            // this.globals.setParameter('projectid', projectid);
+        } catch (error) {
+            console.log('3 > Error is handled: ', error.name);
+        }
+
+        console.log('projectid: ', this.globals.projectid);
+        return this.globals.projectid;
+    }
 
     /**
      * 1: get Project Id From Settings
@@ -89,69 +133,115 @@ export class GlobalSettingsService {
      * userId
      * ...
      */
-    setProjectIdAndPrimaryParametersFromSettings(globals: Globals) {
-        const windowContext = globals.windowContext;
-        if (!windowContext['tiledesk']) {
-            // mi trovo in una pg index senza iframe
-            return;
-        } else {
-            // mi trovo in una pg con iframe
-            const baseLocation =  windowContext['tiledesk'].getBaseLocation();
-            if (baseLocation !== undefined) {
-                globals.baseLocation = baseLocation;
-            }
+    // https://www.davidbcalhoun.com/2011/checking-for-undefined-null-and-empty-variables-in-javascript/
+    setMainParametersFromSettings(globals: Globals) {
+        let tiledeskSettings: any;
+        try {
+            const baseLocation = this.globals.windowContext['tiledesk'].getBaseLocation();
+            console.log('1 > baseLocation: ', baseLocation);
+            if (typeof baseLocation !== 'undefined') { this.globals.baseLocation = baseLocation; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        let TEMP: any;
-        const tiledeskSettings = windowContext['tiledeskSettings'];
-        TEMP = tiledeskSettings['projectid'];
-        if (TEMP !== undefined) {
-            globals.projectid = TEMP;
+        try {
+            tiledeskSettings = this.globals.windowContext['tiledeskSettings'];
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        TEMP = tiledeskSettings['persistence'];
-        // console.log('35 - persistence:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.persistence = TEMP;
-            // globals.setParameter('persistence', TEMP);
+        try {
+            const persistence = tiledeskSettings['persistence'];
+            if (typeof persistence !== 'undefined') { this.globals.persistence = persistence; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        TEMP = tiledeskSettings['userToken'];
-        // console.log('26 - userToken:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.userToken = TEMP;
-            // globals.setParameter('userToken', TEMP);
+        try {
+            const userToken = tiledeskSettings['userToken'];
+            if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        TEMP = tiledeskSettings['userId'];
-        // console.log('7 - userId:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.userId = TEMP;
-            // globals.setParameter('userId', TEMP);
+        try {
+            const userId = tiledeskSettings['userId'];
+            if (typeof userId !== 'undefined') { this.globals.userId = userId; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        TEMP = tiledeskSettings['filterByRequester'];
-        // console.log('8 - filterByRequester:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.filterByRequester = (TEMP === false) ? false : true;
-            // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
+        try {
+            const filterByRequester = tiledeskSettings['filterByRequester'];
+            console.log('1 > filterByRequester: ', filterByRequester);
+            if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === false) ? false : true; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
-        TEMP = tiledeskSettings['isLogEnabled'];
-        // console.log('33 - isLogEnabled:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.isLogEnabled = (TEMP === false) ? false : true;
-            // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
+        try {
+            const isLogEnabled = tiledeskSettings['isLogEnabled'];
+            if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === false) ? false : true; }
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
+
+        // -------------------------------------- //
+        // const windowContext = globals.windowContext;
+        // if (!windowContext['tiledesk']) {
+        //     // mi trovo in una pg index senza iframe
+        //     return;
+        // } else {
+        //     // mi trovo in una pg con iframe
+        //     const baseLocation =  windowContext['tiledesk'].getBaseLocation();
+        //     if (baseLocation !== undefined) {
+        //         globals.baseLocation = baseLocation;
+        //     }
+        // }
+
+        // let TEMP: any;
+        // const tiledeskSettings = windowContext['tiledeskSettings'];
+        // TEMP = tiledeskSettings['projectid'];
+        // if (TEMP !== undefined) {
+        //     globals.projectid = TEMP;
+        // }
+        // TEMP = tiledeskSettings['persistence'];
+        // // console.log('35 - persistence:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.persistence = TEMP;
+        //     // globals.setParameter('persistence', TEMP);
+        // }
+        // TEMP = tiledeskSettings['userToken'];
+        // // console.log('26 - userToken:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.userToken = TEMP;
+        //     // globals.setParameter('userToken', TEMP);
+        // }
+        // TEMP = tiledeskSettings['userId'];
+        // // console.log('7 - userId:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.userId = TEMP;
+        //     // globals.setParameter('userId', TEMP);
+        // }
+        // TEMP = tiledeskSettings['filterByRequester'];
+        // // console.log('8 - filterByRequester:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.filterByRequester = (TEMP === false) ? false : true;
+        //     // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
+        // }
+        // TEMP = tiledeskSettings['isLogEnabled'];
+        // // console.log('33 - isLogEnabled:: ', TEMP);
+        // if (TEMP !== undefined) {
+        //     globals.isLogEnabled = (TEMP === false) ? false : true;
+        //     // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
+        // }
     }
 
     /**
      *
-     * @param el
-     * @param globals
      */
-    setProjectIdAndPrimaryParametersFromEl(el: ElementRef, globals: Globals) {
-        // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
-        let TEMP: any;
-        TEMP = el.nativeElement.getAttribute('projectid');
-        if (TEMP !== null) {
-            globals.projectid = TEMP;
-        }
-    }
+    // setProjectIdAndPrimaryParametersFromEl(el: ElementRef, globals: Globals) {
+    //     // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
+    //     let TEMP: any;
+    //     TEMP = el.nativeElement.getAttribute('projectid');
+    //     if (TEMP !== null) {
+    //         globals.projectid = TEMP;
+    //     }
+    // }
 
     /**
      * 2: getProjectParametersByIdFromServer
@@ -235,38 +325,81 @@ export class GlobalSettingsService {
     setVariablesFromService(globals: Globals, response: any) {
         // console.log('setVariablesFromService', response);
         // DEPARTMENTS
-        if (response && response.departments !== null) {
-            // console.log('response.departments->', response.departments);
-            globals.wdLog(['response DEP ::::', response.departments]);
-            // globals.setParameter('departments', response.departments);
-            this.initDepartments(response.departments);
+        try {
+            const departments = response.departments;
+            if (typeof departments !== 'undefined') {
+                globals.wdLog(['response DEP ::::', response.departments]);
+                // globals.setParameter('departments', response.departments);
+                this.initDepartments(departments);
+            }
+        } catch (error) {
+            this.initDepartments(null);
+            console.log('> Error is departments: ', error);
         }
+
+        // DEPARTMENTS
+        // if (response && response.departments !== null) {
+        //     globals.wdLog(['response DEP ::::', response.departments]);
+        //     // globals.setParameter('departments', response.departments);
+        //     this.initDepartments(response.departments);
+        // }
+
         // AVAILABLE AGENTS
-        if (response && response.user_available !== null) {
-            // console.log('user_available ::::', response.user_available);
-            this.setAvailableAgentsStatus(response.user_available);
+        try {
+            const user_available = response.user_available;
+            if (typeof user_available !== 'undefined') {
+                globals.wdLog(['user_available ::::', user_available]);
+                this.setAvailableAgentsStatus(user_available);
+            }
+        } catch (error) {
+            this.setAvailableAgentsStatus(null);
+            console.log('> Error is departments: ', error);
         }
+
+        // AVAILABLE AGENTS
+        // if (response && response.user_available !== null) {
+        //     //console.log('user_available ::::', response.user_available);
+        //     this.setAvailableAgentsStatus(response.user_available);
+        // }
+
         // WIDGET
-        if (response && response.project && response.project.widget !== null) {
-            // console.log('response.widget: ', response.widget);
+        try {
             const variables = response.project.widget;
-            if (!variables || variables === undefined) {
-                return;
-            }
-            for (const key of Object.keys(variables)) {
-                // console.log('SET globals from service KEY ---------->', key);
-                // console.log('SET globals from service VAL ---------->', variables[key]);
-                // sposto l'intero frame a sx se align è = left
-                if (key === 'align' && variables[key] === 'left') {
-                    const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
-                    divWidgetContainer.style.left = '0';
-                }
-                if (variables[key] && variables[key] !== null) {
-                    globals[key] = stringToBoolean(variables[key]);
+            if (typeof variables !== 'undefined') {
+                for (const key of Object.keys(variables)) {
+                    if (key === 'align' && variables[key] === 'left') {
+                        const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
+                        divWidgetContainer.style.left = '0';
+                    }
+                    if (variables[key] && variables[key] !== null) {
+                        globals[key] = stringToBoolean(variables[key]);
+                    }
                 }
             }
-            // console.log('SET globals == ---------->', globals);
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
         }
+
+        // if (response && response.project && response.project.widget !== null) {
+        //     console.log('response.widget: ', response.project.widget);
+        //     const variables = response.project.widget;
+        //     if (!variables || variables === undefined) {
+        //         return;
+        //     }
+        //     for (const key of Object.keys(variables)) {
+        //         // console.log('SET globals from service KEY ---------->', key);
+        //         // console.log('SET globals from service VAL ---------->', variables[key]);
+        //         // sposto l'intero frame a sx se align è = left
+        //         if (key === 'align' && variables[key] === 'left') {
+        //             const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
+        //             divWidgetContainer.style.left = '0';
+        //         }
+        //         if (variables[key] && variables[key] !== null) {
+        //             globals[key] = stringToBoolean(variables[key]);
+        //         }
+        //     }
+        //     // console.log('SET globals == ---------->', globals);
+        // }
     }
 
     /**
@@ -500,10 +633,10 @@ export class GlobalSettingsService {
      */
     setVariablesFromAttributeHtml(globals: Globals, el: ElementRef) {
         // console.log('getVariablesFromAttributeHtml', el);
-        const projectid = el.nativeElement.getAttribute('projectid');
-        if (projectid !== null) {
-            globals.setParameter('projectid', projectid);
-        }
+        // const projectid = el.nativeElement.getAttribute('projectid');
+        // if (projectid !== null) {
+        //     globals.setParameter('projectid', projectid);
+        // }
         // https://stackoverflow.com/questions/45732346/externally-pass-values-to-an-angular-application
         let TEMP: any;
         TEMP = el.nativeElement.getAttribute('tenant');
@@ -634,10 +767,10 @@ export class GlobalSettingsService {
             globals.recipientId = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_projectid');
-        if (TEMP) {
-            globals.projectid = stringToBoolean(TEMP);
-        }
+        // TEMP = getParameterByName(windowContext, 'tiledesk_projectid');
+        // if (TEMP) {
+        //     globals.projectid = stringToBoolean(TEMP);
+        // }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_widgetTitle');
         if (TEMP) {
@@ -843,22 +976,11 @@ export class GlobalSettingsService {
      * set department default
      * CALL AUTHENTICATION
     */
-    initDepartments(departments) {
-        this.globals.departments = departments;
+    initDepartments(departments: any) {
         this.globals.setParameter('departmentSelected', null);
         this.globals.setParameter('departmentDefault', null);
-        this.globals.wdLog(['SET DEPARTMENT DEFAULT ::::', departments[0]]);
-        this.setDepartment(departments[0]);
-        let i = 0;
-        departments.forEach(department => {
-            if (department['default'] === true) {
-                this.globals.setParameter('departmentDefault', department);
-                // this.globals.departmentDefault = department;
-                departments.splice(i, 1);
-                return;
-            }
-            i++;
-        });
+        if (departments === null ) { return; }
+        this.globals.departments = departments;
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
             this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
@@ -867,9 +989,20 @@ export class GlobalSettingsService {
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
             this.globals.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
+            let i = 0;
+            departments.forEach(department => {
+                if (department['default'] === true) {
+                    this.globals.setParameter('departmentDefault', department);
+                    // this.globals.departmentDefault = department;
+                    departments.splice(i, 1);
+                    return;
+                }
+                i++;
+            });
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
-            this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::', departments[0]]);
+            this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::']);
+            return;
         }
     }
 
@@ -896,7 +1029,6 @@ export class GlobalSettingsService {
 
         this.globals.wdLog(['department.online_msg: ', department.online_msg]);
         this.globals.wdLog(['department.offline_msg: ', department.offline_msg]);
-
         this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
         this.globals.setParameter('departmentSelected', department);
         this.globals.setParameter('attributes', attributes);
@@ -908,32 +1040,32 @@ export class GlobalSettingsService {
 
     // ========= begin:: GET AVAILABLE AGENTS STATUS ============//
     /** setAvailableAgentsStatus
-     * verifica se c'è un agent disponibile
+     * verifica se c'è un'agent disponibile
      */
     private setAvailableAgentsStatus(availableAgents) {
-        console.log('availableAgents->', availableAgents.length);
-        if (availableAgents.length <= 0) {
-            //this.globals.areAgentsAvailable = false;
-            //this.globals.setParameter('areAgentsAvailable', false);
-            //this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_NOT_AVAILABLE);
-            // this.globals.setParameter('availableAgents', null);
-            // this.storageService.removeItem('availableAgents');
-            this.globals.setParameter('availableAgentsStatus', false);
-        } else {
+        this.globals.setParameter('availableAgentsStatus', false);
+        if ( availableAgents === null ) { return; }
+        if (availableAgents.length > 0) {
             //this.globals.areAgentsAvailable = true;
             //this.globals.setParameter('areAgentsAvailable', true);
             //this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
             const arrayAgents = [];
-            availableAgents.forEach(element => {
+            availableAgents.forEach((element, index: number) => {
                 element.imageurl = getImageUrlThumb(element.id);
                 arrayAgents.push(element);
+                if (index >= 4) { return; }
+                // console.log(index, ' - element->', element);
             });
-            let limit = arrayAgents.length;
-            if (arrayAgents.length > 5) {
-                limit = 5;
-            }
-            this.globals.availableAgents = arrayAgents.slice(0, limit);
 
+            // availableAgents.forEach(element => {
+            //     element.imageurl = getImageUrlThumb(element.id);
+            //     arrayAgents.push(element);
+            // });
+            // let limit = arrayAgents.length;
+            // if (arrayAgents.length > 5) {
+            //     limit = 5;
+            // }
+            this.globals.availableAgents = arrayAgents;
             this.globals.setParameter('availableAgentsStatus', true);
             // this.globals.setParameter('availableAgents', availableAgents);
             // console.log('element->', this.globals.availableAgents);

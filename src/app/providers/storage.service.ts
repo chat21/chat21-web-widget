@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Globals } from '../utils/globals';
 import { supports_html5_storage, supports_html5_session } from '../utils/utils';
 import { STORAGE_PREFIX } from '../utils/constants';
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
@@ -13,8 +14,15 @@ export class StorageService {
   // globals.getParameters('windowContext');
 
   public getItem (key): any {
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+        console.error('Error environment.shemaVersion', e);
+    }
     // const newKey = this.g.projectid + '_' + key;
-    const newKey = STORAGE_PREFIX + this.g.projectid + '_' + key; // this.g.projectid + '_' + key;
+    const newKey = prefix + this.g.projectid + '_' + key; // this.g.projectid + '_' + key;
     // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
@@ -46,8 +54,15 @@ export class StorageService {
 
   public setItem (key, value) {
     this.removeItem(key);
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+        console.error('Error environment.shemaVersion', e);
+    }
     // const newKey = this.g.projectid + '_' + key;
-    const newKey = STORAGE_PREFIX + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
+    const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
     // if (this.g.persistence === 'local') {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
@@ -78,8 +93,15 @@ export class StorageService {
   }
 
   public removeItem(key: string) {
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+        console.error('Error environment.shemaVersion', e);
+    }
     // const newKey = this.g.projectid + '_' + key;
-    const newKey = STORAGE_PREFIX + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
+    const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
     // console.log('removeItem:: ', newKey);
     // if (this.g.persistence === 'local') {
     return this.removeItemForKey(newKey);
@@ -114,8 +136,15 @@ export class StorageService {
   }
 
   public clear () {
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+        console.error('Error environment.shemaVersion', e);
+    }
     // if (this.g.persistence === 'local') {
-    const prefixKey = STORAGE_PREFIX + this.g.projectid;
+    const prefixKey = prefix + this.g.projectid;
     const arrayKey: Array<string>  = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);

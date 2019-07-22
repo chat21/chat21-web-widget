@@ -182,22 +182,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
        // ------------------------------- //
        /**
         * SET WIDGET PARAMETERS
-        * 1 - set default parameters globals
-        * 2 - set globals parameters from:
-        *   - AttributeHtml;
-            - Settings;
-            - UrlParameters;
-            - Storage;
-        * 3 - translate
-        * 4 - init widget
-        * 5 - setLoginSubscription
+        * when globals is setting (loaded paramiters from server):
+        * 1 - init widget
+        * 2 - setLoginSubscription
        */
        const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
-                    // console.log('***************** END CONFIG PARAMETERS *****************', resp);
                     // ------------------------------- //
-
                     /** INIT  */
                     that.initAll();
                     /** AUTH */
@@ -212,9 +204,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     /**
      * INITIALIZE:
+     * 1 - set traslations
+     * 2 - set attributes
      * 4 - triggerLoadParamsEvent
      * 4 - subscription to runtime changes in globals
-     add Component to Window
+     * add Component to Window
      * 4 - trigget Load Params Event
      * 5 - set Is Widget Open Or Active
      * 6 - get MongDb Departments
@@ -224,14 +218,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
          /** TRANSLATION LOADER: */
          this.translatorService.translate(this.g);
-         // ------------------------------- //
 
          /** SET ATTRIBUTES */
          const attributes = this.setAttributesFromStorageService();
          if (attributes) {
             this.g.attributes = attributes;
          }
-        // ------------------------------- //
+
         /**
          * SUBSCRIPTION :
          * Subscription to runtime changes in globals
@@ -301,11 +294,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
-
-        let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
-        if (!attributes || attributes === 'undefined') {
+        let attributes: any;
+        try {
+            attributes = JSON.parse(this.storageService.getItem('attributes'));
+        } catch (error) {
+            console.log('> Error is handled: ', error.name);
             attributes = {};
         }
+        // let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
+        // if (!attributes || attributes === 'undefined') {
+        //     attributes = {};
+        // }
         if (CLIENT_BROWSER) {
             attributes['client'] = CLIENT_BROWSER;
         }
