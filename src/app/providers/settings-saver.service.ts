@@ -43,13 +43,13 @@ export class SettingsSaverService {
   * @param value
   */
   public setVariable(key: string, value: any) {
-    // const val =  JSON.stringify(value);
+    const val =  JSON.stringify(value);
     // console.log('========================================');
     // console.log('key: ', key);
-    // console.log('val: ', value);
+    // console.log('val: ', val);
     // console.log('========================================');
     this.storageService.setItem(key, stringToBoolean(value));
-    console.log('SET key:', key, ' - VAL: ', stringToBoolean(value), ' ---------->', JSON.stringify(value) );
+    this.g.wdLog(['SET key: ', key, ' - VAL: ', stringToBoolean(value), ' ---------->', JSON.stringify(value) ]);
   }
 
 }

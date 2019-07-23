@@ -421,7 +421,8 @@ export class MessagingService {
     const newMessageRef = this.firebaseMessagesKey.push();
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
     // sessionStorage.setItem(uid, key);
-    this.storageService.setItem(uid, key);
+    this.g.wdLog(['setItem ************** UID:', uid, ' KWY: ', key]);
+    //this.storageService.setItem(uid, key);
     this.conversationWith = key;
     return key;
   }

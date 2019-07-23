@@ -49,7 +49,7 @@ export class GlobalSettingsService {
         try {
             projectid = this.setProjectId();
         } catch (error) {
-            console.log('error projectid: ', error.name);
+            this.globals.wdLog(['error projectid: ', error.name]);
             return;
         }
 
@@ -64,10 +64,10 @@ export class GlobalSettingsService {
         // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
         .subscribe( response => {
-            // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+            // this.globals.wdLog(['RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
             that.setParameters(response);
         }, (error) => {
-            console.error('::getProjectParametersById', error);
+            // console.error('::getProjectParametersById', error);
             that.setParameters(null);
         }, () => {
             that.setParameters(null);
@@ -75,12 +75,12 @@ export class GlobalSettingsService {
         // ------------------------------- //
         // this.getProjectParametersById(globals, el)
         // .then(response => {
-        //     // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+        //     // this.globals.wdLog(['RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
         //     that.setParameters(response);
         // })
         // .catch(error => {
         //     that.setParameters(null);
-        //     console.log('ERRORE°°°°°°°°°°°°°°°°°°°° ', error);
+        //     this.globals.wdLog(['ERRORE°°°°°°°°°°°°°°°°°°°° ', error);
         //     console.error(error);
         // });
     }
@@ -98,7 +98,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            console.log('1 > Error is handled: ', error.name);
+            // this.globals.wdLog(['1 > Error is handled: ', error.name]);
         }
 
         // get projectid for attributeHtml//
@@ -107,7 +107,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            console.log('2 > Error is handled: ', error.name);
+            this.globals.wdLog(['2 > Error is handled: ', error.name]);
         }
 
         // get projectid for UrlParameters//
@@ -116,10 +116,10 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            console.log('3 > Error is handled: ', error.name);
+            this.globals.wdLog(['3 > Error is handled: ', error.name]);
         }
 
-        console.log('projectid: ', this.globals.projectid);
+        // this.globals.wdLog(['projectid: ', this.globals.projectid);
         return this.globals.projectid;
     }
 
@@ -138,46 +138,46 @@ export class GlobalSettingsService {
         let tiledeskSettings: any;
         try {
             const baseLocation = this.globals.windowContext['tiledesk'].getBaseLocation();
-            console.log('1 > baseLocation: ', baseLocation);
+            this.globals.wdLog(['1 > baseLocation: ', baseLocation]);
             if (typeof baseLocation !== 'undefined') { this.globals.baseLocation = baseLocation; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             tiledeskSettings = this.globals.windowContext['tiledeskSettings'];
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const persistence = tiledeskSettings['persistence'];
             if (typeof persistence !== 'undefined') { this.globals.persistence = persistence; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const userToken = tiledeskSettings['userToken'];
             if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const userId = tiledeskSettings['userId'];
             if (typeof userId !== 'undefined') { this.globals.userId = userId; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const filterByRequester = tiledeskSettings['filterByRequester'];
-            console.log('1 > filterByRequester: ', filterByRequester);
+            this.globals.wdLog(['1 > filterByRequester: ', filterByRequester]);
             if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === false) ? false : true; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const isLogEnabled = tiledeskSettings['isLogEnabled'];
             if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === false) ? false : true; }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            // this.globals.wdLog(['> Error is handled: ', error);
         }
 
         // -------------------------------------- //
@@ -200,31 +200,31 @@ export class GlobalSettingsService {
         //     globals.projectid = TEMP;
         // }
         // TEMP = tiledeskSettings['persistence'];
-        // // console.log('35 - persistence:: ', TEMP);
+        // // this.globals.wdLog(['35 - persistence:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.persistence = TEMP;
         //     // globals.setParameter('persistence', TEMP);
         // }
         // TEMP = tiledeskSettings['userToken'];
-        // // console.log('26 - userToken:: ', TEMP);
+        // // this.globals.wdLog(['26 - userToken:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.userToken = TEMP;
         //     // globals.setParameter('userToken', TEMP);
         // }
         // TEMP = tiledeskSettings['userId'];
-        // // console.log('7 - userId:: ', TEMP);
+        // // this.globals.wdLog(['7 - userId:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.userId = TEMP;
         //     // globals.setParameter('userId', TEMP);
         // }
         // TEMP = tiledeskSettings['filterByRequester'];
-        // // console.log('8 - filterByRequester:: ', TEMP);
+        // // this.globals.wdLog(['8 - filterByRequester:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.filterByRequester = (TEMP === false) ? false : true;
         //     // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         // }
         // TEMP = tiledeskSettings['isLogEnabled'];
-        // // console.log('33 - isLogEnabled:: ', TEMP);
+        // // this.globals.wdLog(['33 - isLogEnabled:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.isLogEnabled = (TEMP === false) ? false : true;
         //     // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
@@ -289,7 +289,7 @@ export class GlobalSettingsService {
         /** set css iframe from parameters */
         this.setCssIframe();
 
-        // console.log('***************** END SET PARAMETERS *****************');
+        // this.globals.wdLog(['***************** END SET PARAMETERS *****************');
         this.obsSettingsService.next(true);
     }
 
@@ -323,7 +323,7 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        // console.log('setVariablesFromService', response);
+        // this.globals.wdLog(['setVariablesFromService', response);
         // DEPARTMENTS
         try {
             const departments = response.departments;
@@ -334,7 +334,7 @@ export class GlobalSettingsService {
             }
         } catch (error) {
             this.initDepartments(null);
-            console.log('> Error is departments: ', error);
+            this.globals.wdLog(['> Error is departments: ', error]);
         }
 
         // DEPARTMENTS
@@ -353,12 +353,12 @@ export class GlobalSettingsService {
             }
         } catch (error) {
             this.setAvailableAgentsStatus(null);
-            console.log('> Error is departments: ', error);
+            this.globals.wdLog(['> Error is departments: ', error]);
         }
 
         // AVAILABLE AGENTS
         // if (response && response.user_available !== null) {
-        //     //console.log('user_available ::::', response.user_available);
+        //     //this.globals.wdLog(['user_available ::::', response.user_available);
         //     this.setAvailableAgentsStatus(response.user_available);
         // }
 
@@ -377,18 +377,18 @@ export class GlobalSettingsService {
                 }
             }
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            this.globals.wdLog(['> Error is handled: ', error.name]);
         }
 
         // if (response && response.project && response.project.widget !== null) {
-        //     console.log('response.widget: ', response.project.widget);
+        //     this.globals.wdLog(['response.widget: ', response.project.widget);
         //     const variables = response.project.widget;
         //     if (!variables || variables === undefined) {
         //         return;
         //     }
         //     for (const key of Object.keys(variables)) {
-        //         // console.log('SET globals from service KEY ---------->', key);
-        //         // console.log('SET globals from service VAL ---------->', variables[key]);
+        //         // this.globals.wdLog(['SET globals from service KEY ---------->', key);
+        //         // this.globals.wdLog(['SET globals from service VAL ---------->', variables[key]);
         //         // sposto l'intero frame a sx se align è = left
         //         if (key === 'align' && variables[key] === 'left') {
         //             const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
@@ -398,7 +398,7 @@ export class GlobalSettingsService {
         //             globals[key] = stringToBoolean(variables[key]);
         //         }
         //     }
-        //     // console.log('SET globals == ---------->', globals);
+        //     // this.globals.wdLog(['SET globals == ---------->', globals);
         // }
     }
 
@@ -406,9 +406,9 @@ export class GlobalSettingsService {
     * B: getVariablesFromSettings
     */
     setVariablesFromSettings(globals: Globals) {
-        // console.log('setVariablesFromSettings');
+        // this.globals.wdLog(['setVariablesFromSettings');
         const windowContext = globals.windowContext;
-        // console.log('windowContext', globals.windowContext);
+        // this.globals.wdLog(['windowContext', globals.windowContext);
         if (!windowContext['tiledesk']) {
             return;
         } else {
@@ -420,78 +420,78 @@ export class GlobalSettingsService {
         }
         let TEMP: any;
         const tiledeskSettings = windowContext['tiledeskSettings'];
-        // console.log('tiledeskSettings: ', tiledeskSettings);
+        // this.globals.wdLog(['tiledeskSettings: ', tiledeskSettings);
         TEMP = tiledeskSettings['tenant'];
-        // console.log('2 - tenant:: ', TEMP);
+        // this.globals.wdLog(['2 - tenant:: ', TEMP);
         if (TEMP !== undefined) {
             globals.tenant = TEMP;
             // globals.setParameter('tenant', TEMP);
         }
         TEMP = tiledeskSettings['recipientId'];
-        // console.log('3 - recipientId:: ', TEMP);
+        // this.globals.wdLog(['3 - recipientId:: ', TEMP);
         if (TEMP !== undefined) {
             globals.recipientId = TEMP;
             // globals.setParameter('recipientId', TEMP);
         }
         TEMP = tiledeskSettings['widgetTitle'];
-        // console.log('5 - widgetTitle:: ', TEMP);
+        // this.globals.wdLog(['5 - widgetTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.widgetTitle = TEMP;
             // globals.setParameter('widgetTitle', TEMP);
         }
         TEMP = tiledeskSettings['poweredBy'];
-        // console.log('6 - poweredBy:: ', TEMP);
+        // this.globals.wdLog(['6 - poweredBy:: ', TEMP);
         if (TEMP !== undefined) {
             globals.poweredBy = TEMP;
             // globals.setParameter('poweredBy', TEMP);
         }
         TEMP = tiledeskSettings['userEmail'];
-        // console.log('8 - userEmail:: ', TEMP);
+        // this.globals.wdLog(['8 - userEmail:: ', TEMP);
         if (TEMP !== undefined) {
             globals.userEmail = TEMP;
             // globals.setParameter('userEmail', TEMP);
         }
         TEMP = tiledeskSettings['userPassword'];
-        // console.log('9 - userPassword:: ', TEMP);
+        // this.globals.wdLog(['9 - userPassword:: ', TEMP);
         if (TEMP !== undefined) {
             globals.userPassword = TEMP;
             // globals.setParameter('userPassword', TEMP);
         }
         TEMP = tiledeskSettings['userFullname'];
-        // console.log('10 - userFullname:: ', TEMP);
+        // this.globals.wdLog(['10 - userFullname:: ', TEMP);
         if (TEMP !== undefined) {
             globals.userFullname = TEMP;
             // globals.setParameter('userFullname', TEMP);
         }
         TEMP = tiledeskSettings['preChatForm'];
-        // console.log('11 - preChatForm:: ', TEMP);
+        // this.globals.wdLog(['11 - preChatForm:: ', TEMP);
         if (TEMP !== undefined) {
             globals.preChatForm = (TEMP === false) ? false : true;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['isOpen'];
-        // console.log('12 - isOpen:: ', TEMP);
+        // this.globals.wdLog(['12 - isOpen:: ', TEMP);
         if (TEMP !== undefined) {
             globals.isOpen = (TEMP === false) ? false : true;
             // globals.setParameter('isOpen', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['channelType'];
-        // console.log('13 - channelType:: ', TEMP);
+        // this.globals.wdLog(['13 - channelType:: ', TEMP);
         if (TEMP !== undefined) {
             globals.channelType = TEMP;
             // globals.setParameter('channelType', TEMP);
         }
         TEMP = tiledeskSettings['lang'];
-        // console.log('14 - lang:: ', TEMP);
+        // this.globals.wdLog(['14 - lang:: ', TEMP);
         if (TemplateBindingParseResult) {
             globals.lang = TEMP;
             // globals.setParameter('lang', TEMP);
         }
         TEMP = tiledeskSettings['align'];
-        // console.log('15 - align:: ', TEMP);
+        // this.globals.wdLog(['15 - align:: ', TEMP);
         if (TEMP !== undefined) {
             globals.align = TEMP;
-            // console.log('15 - globals.align:: ', globals.align);
+            // this.globals.wdLog(['15 - globals.align:: ', globals.align);
             if (globals.align === 'left') {
                 const divWidgetContainer = windowContext.document.getElementById('tiledeskiframe');
                 divWidgetContainer.style.left = '0';
@@ -499,128 +499,128 @@ export class GlobalSettingsService {
             // globals.setParameter('align', TEMP);
         }
         TEMP = tiledeskSettings['marginX'];
-        // console.log('16 - marginX:: ', TEMP);
+        // this.globals.wdLog(['16 - marginX:: ', TEMP);
         if (TEMP !== undefined) {
             globals.marginX = TEMP;
             // globals.setParameter('marginX', TEMP);
         }
         TEMP = tiledeskSettings['marginY'];
-        // console.log('17 - marginY:: ', TEMP);
+        // this.globals.wdLog(['17 - marginY:: ', TEMP);
         if (TEMP !== undefined) {
             globals.marginY = TEMP;
             // globals.setParameter('marginY', TEMP);
         }
         TEMP = tiledeskSettings['calloutTimer'];
-        // console.log('18 - calloutTimer:: ', TEMP);
+        // this.globals.wdLog(['18 - calloutTimer:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutTimer = TEMP;
             // globals.setParameter('calloutTimer', TEMP);
         }
         TEMP = tiledeskSettings['calloutTitle'];
-        // console.log('19 - calloutTitle:: ', TEMP);
+        // this.globals.wdLog(['19 - calloutTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutTitle = TEMP;
             // globals.setParameter('calloutTitle', TEMP);
         }
         TEMP = tiledeskSettings['calloutMsg'];
-        // console.log('20 - calloutMsg:: ', TEMP);
+        // this.globals.wdLog(['20 - calloutMsg:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutMsg = TEMP;
             // globals.setParameter('calloutMsg', TEMP);
         }
         TEMP = tiledeskSettings['fullscreenMode'];
-        // console.log('21 - fullscreenMode:: ', TEMP);
+        // this.globals.wdLog(['21 - fullscreenMode:: ', TEMP);
         if (TEMP !== undefined) {
             globals.fullscreenMode = TEMP;
             // globals.setParameter('fullscreenMode', TEMP);
         }
         TEMP = tiledeskSettings['hideHeaderCloseButton'];
-        // console.log('22 - hideHeaderCloseButton:: ', TEMP);
+        // this.globals.wdLog(['22 - hideHeaderCloseButton:: ', TEMP);
         if (TEMP !== undefined) {
             globals.hideHeaderCloseButton = TEMP;
             // globals.setParameter('hideHeaderCloseButton', TEMP);
         }
         TEMP = tiledeskSettings['themeColor'];
-        // console.log('23 - themeColor:: ', TEMP);
+        // this.globals.wdLog(['23 - themeColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeColor = convertColorToRGBA(TEMP, 100);
             // globals.setParameter('themeColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['themeForegroundColor'];
-        // console.log('24 - themeForegroundColor:: ', TEMP);
+        // this.globals.wdLog(['24 - themeForegroundColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeForegroundColor = convertColorToRGBA(TEMP, 100);
             // globals.setParameter('themeForegroundColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['allowTranscriptDownload'];
-        // console.log('25 - allowTranscriptDownload:: ', TEMP);
+        // this.globals.wdLog(['25 - allowTranscriptDownload:: ', TEMP);
         if (TEMP !== undefined) {
             globals.allowTranscriptDownload = (TEMP === false) ? false : true;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
         TEMP = tiledeskSettings['startFromHome'];
-        // console.log('27 - startFromHome:: ', TEMP);
+        // this.globals.wdLog(['27 - startFromHome:: ', TEMP);
         if (TEMP !== undefined) {
             globals.startFromHome = (TEMP === false) ? false : true;
             // globals.setParameter('startFromHome', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['logoChat'];
-        // console.log('28 - logoChat:: ', TEMP);
+        // this.globals.wdLog(['28 - logoChat:: ', TEMP);
         if (TEMP !== undefined) {
             globals.logoChat = TEMP;
             // globals.setParameter('logoChat', TEMP);
         }
         TEMP = tiledeskSettings['wellcomeTitle'];
-        // console.log('29 - wellcomeTitle:: ', TEMP);
+        // this.globals.wdLog(['29 - wellcomeTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.wellcomeTitle = TEMP;
             // globals.setParameter('wellcomeTitle', TEMP);
         }
         TEMP = tiledeskSettings['wellcomeMsg'];
-        // console.log('30 - wellcomeMsg:: ', TEMP);
+        // this.globals.wdLog(['30 - wellcomeMsg:: ', TEMP);
         if (TEMP !== undefined) {
             globals.wellcomeMsg = TEMP;
             // globals.setParameter('wellcomeMsg', TEMP);
         }
         TEMP = tiledeskSettings['autoStart'];
-        // console.log('31 - autoStart:: ', TEMP);
+        // this.globals.wdLog(['31 - autoStart:: ', TEMP);
         if (TEMP !== undefined) {
             globals.autoStart = (TEMP === false) ? false : true;
             // globals.setParameter('autoStart', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['isShown'];
-        // console.log('32 - isShown:: ', TEMP);
+        // this.globals.wdLog(['32 - isShown:: ', TEMP);
         if (TEMP !== undefined) {
             globals.isShown = (TEMP === false) ? false : true;
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['filterByRequester'];
-        // console.log('34 - filterByRequester:: ', TEMP);
+        // this.globals.wdLog(['34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
             globals.filterByRequester = (TEMP === false) ? false : true;
-            // console.log('34 - globals.filterByRequester:: ', globals.filterByRequester);
+            // this.globals.wdLog(['34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWaitTime'];
-        // console.log('36 - showWaitTime:: ', TEMP);
+        // this.globals.wdLog(['36 - showWaitTime:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showWaitTime = (TEMP === false) ? false : true;
             // globals.setParameter('showWaitTime', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showAvailableAgents'];
-        // console.log('37 - showAvailableAgents:: ', TEMP);
+        // this.globals.wdLog(['37 - showAvailableAgents:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showAvailableAgents = (TEMP === false) ? false : true;
             // globals.setParameter('showAvailableAgents', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showLogoutOption'];
-        // console.log('38 - showLogoutOption:: ', TEMP);
+        // this.globals.wdLog(['38 - showLogoutOption:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showLogoutOption = (TEMP === false) ? false : true;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWidgetNameInConversation'];
-        // console.log('39 - showWidgetNameInConversation:: ', TEMP);
+        // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showWidgetNameInConversation = (TEMP === false) ? false : true;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
@@ -632,7 +632,7 @@ export class GlobalSettingsService {
      * desueto, potrebbe essere commentato.
      */
     setVariablesFromAttributeHtml(globals: Globals, el: ElementRef) {
-        // console.log('getVariablesFromAttributeHtml', el);
+        // this.globals.wdLog(['getVariablesFromAttributeHtml', el);
         // const projectid = el.nativeElement.getAttribute('projectid');
         // if (projectid !== null) {
         //     globals.setParameter('projectid', projectid);
@@ -899,7 +899,7 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_filterByRequester');
         if (TEMP) {
             globals.filterByRequester = stringToBoolean(TEMP);
-            // console.log('tiledesk_filterByRequester:: ', globals.filterByRequester);
+            // this.globals.wdLog(['tiledesk_filterByRequester:: ', globals.filterByRequester);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showWaitTime');
@@ -920,7 +920,7 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_prechatform');
         if (TEMP) {
             globals.preChatForm = stringToBoolean(TEMP);
-            // console.log('globals.preChatForm: ' + globals.preChatForm);
+            // this.globals.wdLog(['globals.preChatForm: ' + globals.preChatForm);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_isopen');
@@ -956,16 +956,16 @@ export class GlobalSettingsService {
      * @param globals
      */
     setVariableFromStorage(globals: Globals) {
-        // console.log('setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals));
+        // this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals));
         for (const key of Object.keys(globals)) {
             const val = this.storageService.getItem(key);
-            // console.log('SET globals KEY ---------->', key);
-            // console.log('SET globals VAL ---------->', val);
+            // this.globals.wdLog(['SET globals KEY ---------->', key);
+            // this.globals.wdLog(['SET globals VAL ---------->', val);
             if (val && val !== null) {
                 // globals.setParameter(key, val);
                 globals[key] = stringToBoolean(val);
             }
-            // console.log('SET globals == ---------->', globals);
+            // this.globals.wdLog(['SET globals == ---------->', globals);
         }
     }
 
@@ -1046,15 +1046,15 @@ export class GlobalSettingsService {
         this.globals.setParameter('availableAgentsStatus', false);
         if ( availableAgents === null ) { return; }
         if (availableAgents.length > 0) {
-            //this.globals.areAgentsAvailable = true;
-            //this.globals.setParameter('areAgentsAvailable', true);
-            //this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
+            // this.globals.areAgentsAvailable = true;
+            // this.globals.setParameter('areAgentsAvailable', true);
+            // this.globals.setParameter('areAgentsAvailableText', this.globals.AGENT_AVAILABLE);
             const arrayAgents = [];
             availableAgents.forEach((element, index: number) => {
                 element.imageurl = getImageUrlThumb(element.id);
                 arrayAgents.push(element);
                 if (index >= 4) { return; }
-                // console.log(index, ' - element->', element);
+                // this.globals.wdLog([index, ' - element->', element);
             });
 
             // availableAgents.forEach(element => {
@@ -1068,9 +1068,9 @@ export class GlobalSettingsService {
             this.globals.availableAgents = arrayAgents;
             this.globals.setParameter('availableAgentsStatus', true);
             // this.globals.setParameter('availableAgents', availableAgents);
-            // console.log('element->', this.globals.availableAgents);
-            // console.log('areAgentsAvailable->', this.globals.areAgentsAvailable);
-            // console.log('areAgentsAvailableText->', this.globals.areAgentsAvailableText);
+            // this.globals.wdLog(['element->', this.globals.availableAgents);
+            // this.globals.wdLog(['areAgentsAvailable->', this.globals.areAgentsAvailable);
+            // this.globals.wdLog(['areAgentsAvailableText->', this.globals.areAgentsAvailableText);
         }
 
     }

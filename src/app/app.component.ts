@@ -294,17 +294,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
-        let attributes: any;
+        let attributes: any = {};
         try {
             attributes = JSON.parse(this.storageService.getItem('attributes'));
+            // console.log('> attributes: ', attributes);
         } catch (error) {
-            console.log('> Error is handled: ', error.name);
+            console.log('> Error is handled attributes: ', error);
+        }
+        if (!attributes && attributes === null ) {
             attributes = {};
         }
-        // let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
-        // if (!attributes || attributes === 'undefined') {
-        //     attributes = {};
-        // }
+        // console.log('attributes: ', attributes);
+        // console.log('CLIENT_BROWSER: ', CLIENT_BROWSER);
         if (CLIENT_BROWSER) {
             attributes['client'] = CLIENT_BROWSER;
         }
