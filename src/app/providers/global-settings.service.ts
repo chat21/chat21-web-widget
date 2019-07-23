@@ -169,13 +169,13 @@ export class GlobalSettingsService {
         try {
             const filterByRequester = tiledeskSettings['filterByRequester'];
             this.globals.wdLog(['1 > filterByRequester: ', filterByRequester]);
-            if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === false) ? false : true; }
+            if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === true) ? true : false; }
         } catch (error) {
             // this.globals.wdLog(['> Error is handled: ', error);
         }
         try {
             const isLogEnabled = tiledeskSettings['isLogEnabled'];
-            if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === false) ? false : true; }
+            if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === true) ? true : false; }
         } catch (error) {
             // this.globals.wdLog(['> Error is handled: ', error);
         }
@@ -466,13 +466,13 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['preChatForm'];
         // this.globals.wdLog(['11 - preChatForm:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.preChatForm = (TEMP === false) ? false : true;
+            globals.preChatForm = (TEMP === true) ? true : false;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['isOpen'];
         // this.globals.wdLog(['12 - isOpen:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.isOpen = (TEMP === false) ? false : true;
+            globals.isOpen = (TEMP === true) ? true : false;
             // globals.setParameter('isOpen', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['channelType'];
@@ -555,13 +555,13 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['allowTranscriptDownload'];
         // this.globals.wdLog(['25 - allowTranscriptDownload:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.allowTranscriptDownload = (TEMP === false) ? false : true;
+            globals.allowTranscriptDownload = (TEMP === true) ? true : false;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
         TEMP = tiledeskSettings['startFromHome'];
         // this.globals.wdLog(['27 - startFromHome:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.startFromHome = (TEMP === false) ? false : true;
+            globals.startFromHome = (TEMP === true) ? true : false;
             // globals.setParameter('startFromHome', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['logoChat'];
@@ -585,44 +585,44 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['autoStart'];
         // this.globals.wdLog(['31 - autoStart:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.autoStart = (TEMP === false) ? false : true;
+            globals.autoStart = (TEMP === true) ? true : false;
             // globals.setParameter('autoStart', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['isShown'];
         // this.globals.wdLog(['32 - isShown:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.isShown = (TEMP === false) ? false : true;
+            globals.isShown = (TEMP === true) ? true : false;
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['filterByRequester'];
         // this.globals.wdLog(['34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.filterByRequester = (TEMP === false) ? false : true;
+            globals.filterByRequester = (TEMP === true) ? true : false;
             // this.globals.wdLog(['34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWaitTime'];
         // this.globals.wdLog(['36 - showWaitTime:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.showWaitTime = (TEMP === false) ? false : true;
+            globals.showWaitTime = (TEMP === true) ? true : false;
             // globals.setParameter('showWaitTime', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showAvailableAgents'];
         // this.globals.wdLog(['37 - showAvailableAgents:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.showAvailableAgents = (TEMP === false) ? false : true;
+            globals.showAvailableAgents = (TEMP === true) ? true : false;
             // globals.setParameter('showAvailableAgents', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showLogoutOption'];
         // this.globals.wdLog(['38 - showLogoutOption:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.showLogoutOption = (TEMP === false) ? false : true;
+            globals.showLogoutOption = (TEMP === true) ? true : false;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWidgetNameInConversation'];
         // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.showWidgetNameInConversation = (TEMP === false) ? false : true;
+            globals.showWidgetNameInConversation = (TEMP === true) ? true : false;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
     }
