@@ -13,7 +13,8 @@ fi
 ng build --prod --base-href --output-hashing none --build-optimizer=false
 
 cd dist
-aws s3 sync . s3://tiledesk-widget/v3/ --cache-control max-age=604800
+aws s3 sync . s3://tiledesk-widget/v3/
+# --cache-control max-age=604800
 cd ..
 
 aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"

@@ -956,11 +956,11 @@ export class GlobalSettingsService {
      * @param globals
      */
     setVariableFromStorage(globals: Globals) {
-        // this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals));
+        this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals)]);
         for (const key of Object.keys(globals)) {
             const val = this.storageService.getItem(key);
-            // this.globals.wdLog(['SET globals KEY ---------->', key);
-            // this.globals.wdLog(['SET globals VAL ---------->', val);
+            this.globals.wdLog(['SET globals KEY ---------->', key]);
+            this.globals.wdLog(['SET globals VAL ---------->', val]);
             if (val && val !== null) {
                 // globals.setParameter(key, val);
                 globals[key] = stringToBoolean(val);
