@@ -64,7 +64,7 @@ export class GlobalSettingsService {
         // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
         .subscribe( response => {
-            // this.globals.wdLog(['RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+            // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
             that.setParameters(response);
         }, (error) => {
             // console.error('::getProjectParametersById', error);
@@ -277,6 +277,7 @@ export class GlobalSettingsService {
     */
     setParameters(response: any ) {
         if (response !== null) {
+            this.globals.wdLog(['----> setParameters', response]);
             this.setVariablesFromService(this.globals, response);
         }
         this.setVariablesFromSettings(this.globals);
@@ -323,12 +324,12 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        // this.globals.wdLog(['setVariablesFromService', response);
         // DEPARTMENTS
         try {
             const departments = response.departments;
+            console.log('---->departments', response.departments);
             if (typeof departments !== 'undefined') {
-                globals.wdLog(['response DEP ::::', response.departments]);
+                console.log('response DEP ::::', response.departments);
                 // globals.setParameter('departments', response.departments);
                 this.initDepartments(departments);
             }
@@ -981,6 +982,7 @@ export class GlobalSettingsService {
         this.globals.setParameter('departmentDefault', null);
         if (departments === null ) { return; }
         this.globals.departments = departments;
+        console.log('departments.length', departments.length);
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
             this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
@@ -992,13 +994,14 @@ export class GlobalSettingsService {
             let i = 0;
             departments.forEach(department => {
                 if (department['default'] === true) {
-                    this.globals.setParameter('departmentDefault', department);
                     // this.globals.departmentDefault = department;
                     departments.splice(i, 1);
                     return;
                 }
                 i++;
             });
+            this.globals.setParameter('departmentDefault', departments[0]);
+            this.setDepartment(departments[0]);
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
             this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::']);
@@ -1080,6 +1083,7 @@ export class GlobalSettingsService {
     getProjectParametersById(id: string): Observable<any[]> {
         const API_URL = this.appConfigService.getConfig().apiUrl;
         const url = API_URL + id + '/widgets';
+        // console.log('getProjectParametersById: ', url);
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         return this.http
