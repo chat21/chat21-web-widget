@@ -299,7 +299,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             attributes = JSON.parse(this.storageService.getItem('attributes'));
             // console.log('> attributes: ', attributes);
         } catch (error) {
-            console.log('> Error is handled attributes: ', error);
+            // console.log('> Error is handled attributes: ', error);
         }
         if (!attributes && attributes === null ) {
             attributes = {};

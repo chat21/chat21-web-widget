@@ -74,7 +74,7 @@
           if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
               // alert(httpRequest.responseText);
-              console.log("httpRequest.responseText", httpRequest.responseText);
+              // console.log("httpRequest.responseText", httpRequest.responseText);
               window.tiledesk.signInWithCustomToken(httpRequest.responseText);
               return true;
             } else {

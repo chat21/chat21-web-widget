@@ -327,9 +327,9 @@ export class GlobalSettingsService {
         // DEPARTMENTS
         try {
             const departments = response.departments;
-            console.log('---->departments', response.departments);
+            // console.log('---->departments', response.departments);
             if (typeof departments !== 'undefined') {
-                console.log('response DEP ::::', response.departments);
+                // console.log('response DEP ::::', response.departments);
                 // globals.setParameter('departments', response.departments);
                 this.initDepartments(departments);
             }
@@ -982,10 +982,11 @@ export class GlobalSettingsService {
         this.globals.setParameter('departmentDefault', null);
         if (departments === null ) { return; }
         this.globals.departments = departments;
-        console.log('departments.length', departments.length);
+        // console.log('departments.length', departments.length);
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
             this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
+            this.globals.setParameter('departmentDefault', departments[0]);
             this.setDepartment(departments[0]);
             // return false;
         } else if (departments.length > 1) {
