@@ -324,12 +324,12 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
+        this.globals = globals;
         // DEPARTMENTS
         try {
             const departments = response.departments;
             // console.log('---->departments', response.departments);
             if (typeof departments !== 'undefined') {
-                // console.log('response DEP ::::', response.departments);
                 // globals.setParameter('departments', response.departments);
                 this.initDepartments(departments);
             }
@@ -372,7 +372,7 @@ export class GlobalSettingsService {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
                         divWidgetContainer.style.left = '0';
                     }
-                    if (variables[key] && variables[key] !== null) {
+                    if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
                         globals[key] = stringToBoolean(variables[key]);
                     }
                 }
@@ -980,14 +980,26 @@ export class GlobalSettingsService {
     initDepartments(departments: any) {
         this.globals.setParameter('departmentSelected', null);
         this.globals.setParameter('departmentDefault', null);
+        this.globals.wdLog(['departments ::::', departments]);
         if (departments === null ) { return; }
         this.globals.departments = departments;
+        this.globals.offline_msg = this.globals.LABEL_FIRST_MSG_NO_AGENTS;
+        this.globals.online_msg = this.globals.LABEL_FIRST_MSG;
         // console.log('departments.length', departments.length);
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
+            const department = departments[0];
             this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
             this.globals.setParameter('departmentDefault', departments[0]);
+            if (department['offline_msg']) {
+                this.globals.offline_msg = department['offline_msg'];
+            }
+            if (department['online_msg']) {
+                this.globals.online_msg = department['online_msg'];
+            }
             this.setDepartment(departments[0]);
+            // console.log('this.globals.offline_msg ::::', department['offline_msg']);
+            // console.log('this.globals.online_msg ::::', department['online_msg']);
             // return false;
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
@@ -996,6 +1008,14 @@ export class GlobalSettingsService {
             departments.forEach(department => {
                 if (department['default'] === true) {
                     // this.globals.departmentDefault = department;
+                    if (department['offline_msg']) {
+                        this.globals.offline_msg = department['offline_msg'];
+                    }
+                    if (department['online_msg']) {
+                        this.globals.online_msg = department['online_msg'];
+                    }
+                    // console.log('this.globals.offline_msg ::::', department['offline_msg']);
+                    // console.log('this.globals.online_msg ::::', department['online_msg']);
                     departments.splice(i, 1);
                     return;
                 }
@@ -1031,8 +1051,8 @@ export class GlobalSettingsService {
             attributes.departmentName = department.name;
         }
 
-        this.globals.wdLog(['department.online_msg: ', department.online_msg]);
-        this.globals.wdLog(['department.offline_msg: ', department.offline_msg]);
+        // this.globals.wdLog(['department.online_msg: ', department.online_msg]);
+        // this.globals.wdLog(['department.offline_msg: ', department.offline_msg]);
         this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
         this.globals.setParameter('departmentSelected', department);
         this.globals.setParameter('attributes', attributes);

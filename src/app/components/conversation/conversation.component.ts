@@ -99,7 +99,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   messages: Array<MessageModel>;
 
   // attributes: any;
-  //GUEST_LABEL = '';
+  // GUEST_LABEL = '';
 
   CLIENT_BROWSER: string = navigator.userAgent;
 
@@ -227,22 +227,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     const departmentDefault: DepartmentModel =  this.g.departmentDefault;
     this.g.wdLog(['departmentDefault', departmentDefault]);
-    if (departmentDefault && departmentDefault.online_msg && departmentDefault.online_msg !== '') {
-      this.g.LABEL_FIRST_MSG = departmentDefault.online_msg;
-    }
-    if (departmentDefault && departmentDefault.offline_msg && departmentDefault.offline_msg !== '') {
-        this.g.LABEL_FIRST_MSG_NO_AGENTS = departmentDefault.offline_msg;
-    }
-
+    // if (departmentDefault && departmentDefault.online_msg && departmentDefault.online_msg !== '') {
+    //   this.g.online_msg = departmentDefault.online_msg;
+    // }
+    // if (departmentDefault && departmentDefault.offline_msg && departmentDefault.offline_msg !== '') {
+    //     this.g.offline_msg = departmentDefault.offline_msg;
+    // }
+    this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
-      this.addFirstMessage(this.g.LABEL_FIRST_MSG_NO_AGENTS);
+      this.addFirstMessage(this.g.offline_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
     } else {
-      this.addFirstMessage(this.g.LABEL_FIRST_MSG);
+      this.addFirstMessage(this.g.online_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
     }
-    this.g.wdLog(['messages: ', this.g.LABEL_FIRST_MSG, this.g.LABEL_FIRST_MSG_NO_AGENTS]);
+    this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
 
     // this.getAvailableAgentsForDepartment();
 

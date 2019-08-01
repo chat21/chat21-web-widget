@@ -167,6 +167,9 @@ export class Globals {
    showLogoutOption: boolean;
    supportMode: boolean;
 
+   online_msg: string;
+   offline_msg: string;
+
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -278,6 +281,10 @@ export class Globals {
     // this.parameters['availableAgents'] = [];
 
     this.showLogoutOption = true;
+
+    this.offline_msg = this.LABEL_FIRST_MSG_NO_AGENTS;
+    this.online_msg = this.LABEL_FIRST_MSG;
+
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
