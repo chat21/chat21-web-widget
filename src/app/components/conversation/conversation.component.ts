@@ -227,13 +227,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     const departmentDefault: DepartmentModel =  this.g.departmentDefault;
     this.g.wdLog(['departmentDefault', departmentDefault]);
-    // if (departmentDefault && departmentDefault.online_msg && departmentDefault.online_msg !== '') {
-    //   this.g.online_msg = departmentDefault.online_msg;
-    // }
-    // if (departmentDefault && departmentDefault.offline_msg && departmentDefault.offline_msg !== '') {
-    //     this.g.offline_msg = departmentDefault.offline_msg;
-    // }
-    this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
+    this.g.wdLog(['messages1: ', this.g.online_msg, this.g.offline_msg]);
+    if (!this.g.online_msg || this.g.online_msg === 'undefined' || this.g.online_msg === '') {
+      this.g.online_msg = this.g.LABEL_FIRST_MSG;
+    }
+    if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
+      this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
+    }
+
+    this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.offline_msg);
@@ -306,6 +308,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const lang = this.g.lang;
     const channelType = this.g.channelType;
     const projectid = this.g.projectid;
+
 
     text = replaceBr(text);
     const timestampSendingMessage = new Date('01/01/2000').getTime();

@@ -167,8 +167,10 @@ export function strip_tags(html) {
 }
 
 export function replaceBr(text) {
-  const newText = text.replace(/[\n\r]/g, '<br>');
-  return newText;
+  if (text) { const newText = text.replace(/[\n\r]/g, '<br>');
+    return newText;
+  }
+  return text;
 }
 
 export function avatarPlaceholder(conversation_with_fullname) {

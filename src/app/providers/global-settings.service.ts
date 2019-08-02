@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 // services
 import { Globals } from '../utils/globals';
 import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
+
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { StorageService } from './storage.service';
 import { AppConfigService } from './app-config.service';
@@ -983,23 +984,27 @@ export class GlobalSettingsService {
         this.globals.wdLog(['departments ::::', departments]);
         if (departments === null ) { return; }
         this.globals.departments = departments;
-        this.globals.offline_msg = this.globals.LABEL_FIRST_MSG_NO_AGENTS;
-        this.globals.online_msg = this.globals.LABEL_FIRST_MSG;
         // console.log('departments.length', departments.length);
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
             const department = departments[0];
             this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
             this.globals.setParameter('departmentDefault', departments[0]);
-            if (department['offline_msg']) {
-                this.globals.offline_msg = department['offline_msg'];
+            if (department && department.online_msg && department.online_msg !== '') {
+                this.globals.online_msg = department.online_msg;
             }
-            if (department['online_msg']) {
-                this.globals.online_msg = department['online_msg'];
+            if (department && department.offline_msg && department.offline_msg !== '') {
+                this.globals.offline_msg = department.offline_msg;
             }
+            // if (department['offline_msg']) {
+            //     this.globals.offline_msg = department['offline_msg'];
+            // }
+            // if (department['online_msg']) {
+            //     this.globals.online_msg = department['online_msg'];
+            // }
             this.setDepartment(departments[0]);
-            // console.log('this.globals.offline_msg ::::', department['offline_msg']);
-            // console.log('this.globals.online_msg ::::', department['online_msg']);
+             console.log('this.globals.offline_msg ::::', this.globals.LABEL_FIRST_MSG_NO_AGENTS);
+             console.log('this.globals.online_msg ::::', this.globals.LABEL_FIRST_MSG);
             // return false;
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
@@ -1008,12 +1013,18 @@ export class GlobalSettingsService {
             departments.forEach(department => {
                 if (department['default'] === true) {
                     // this.globals.departmentDefault = department;
-                    if (department['offline_msg']) {
-                        this.globals.offline_msg = department['offline_msg'];
+                    if (department && department.online_msg && department.online_msg !== '') {
+                        this.globals.online_msg = department.online_msg;
                     }
-                    if (department['online_msg']) {
-                        this.globals.online_msg = department['online_msg'];
+                    if (department && department.offline_msg && department.offline_msg !== '') {
+                        this.globals.offline_msg = department.offline_msg;
                     }
+                    // if (department['offline_msg']) {
+                    //     this.globals.offline_msg = department['offline_msg'];
+                    // }
+                    // if (department['online_msg']) {
+                    //     this.globals.online_msg = department['online_msg'];
+                    // }
                     // console.log('this.globals.offline_msg ::::', department['offline_msg']);
                     // console.log('this.globals.online_msg ::::', department['online_msg']);
                     departments.splice(i, 1);
