@@ -103,6 +103,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
+
+        if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
+            throw new Error('firebase config is not defined. Please create your firebase-config.json. See the Chat21-Web_widget Installation Page');
+        }
+
         firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
