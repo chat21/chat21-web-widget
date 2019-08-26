@@ -15,7 +15,7 @@ COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
 
-RUN npm run ng build -- --prod --output-path=dist
+RUN npm run ng build -- --output-path=dist
 
 
 ### STAGE 2: Setup ###
@@ -31,5 +31,8 @@ RUN rm -rf /usr/share/nginx/html/*
 
 ## From ‘builder’ stage copy over the artifacts in dist folder to default nginx public folder
 COPY --from=builder /ng-app/dist /usr/share/nginx/html
+
+RUN echo "Chat21 Web Widget Started!!"
+
 
 CMD ["nginx", "-g", "daemon off;"]
