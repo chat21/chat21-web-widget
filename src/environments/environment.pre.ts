@@ -3,19 +3,19 @@
 // `ng build2 --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 // tslint:disable-next-line:max-line-length
-import { firebasePreConfig } from '../environments/firebase-config'; // please comment on this line when changing the values ​​of firebase {}
+// import { firebasePreConfig } from '../environments/firebase-config'; // please comment on this line when changing the values ​​of firebase {}
 
 export const environment = {
   production: true,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: false,
   firebase: {
-    apiKey: firebasePreConfig.apiKey,
-    authDomain: firebasePreConfig.authDomain,
-    databaseURL: firebasePreConfig.databaseURL,
-    projectId: firebasePreConfig.projectId,
-    storageBucket: firebasePreConfig.storageBucket,
-    messagingSenderId: firebasePreConfig.messagingSenderId
+    apiKey: 'CHANGEIT',
+    authDomain: 'CHANGEIT',
+    databaseURL: 'CHANGEIT',
+    projectId: 'CHANGEIT',
+    storageBucket: 'CHANGEIT',
+    messagingSenderId: 'CHANGEIT'
   },
   // apiUrl: 'https://api.tiledesk.com/v1/',
   apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',

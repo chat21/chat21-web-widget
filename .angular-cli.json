@@ -17,7 +17,8 @@
         "test-auth-remote.html",
         "testi.html",
         "launch.js",
-        "iframe-style.css"
+        "iframe-style.css",
+        "firebase-config.json"
       ],
       "index": "index.html",
       "main": "main.ts",
