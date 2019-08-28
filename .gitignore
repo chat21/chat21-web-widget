@@ -42,4 +42,5 @@ testem.log
 .DS_Store
 Thumbs.db
 test_widget.php
-firebase-config.ts
+
+src/environments
