@@ -34,7 +34,8 @@
       "environments": {
         "dev": "environments/environment.ts",
         "pre": "environments/environment.pre.ts",
-        "prod": "environments/environment.prod.ts"
+        "prod": "environments/environment.prod.ts",
+        "remoteconf": "environments/environment.remoteconf.ts"
       }
     }
   ],
