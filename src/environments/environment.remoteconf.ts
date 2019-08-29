@@ -12,7 +12,8 @@ export const environment = {
   remoteConfig: true,
   // remoteConfigUrl: 'http://localhost/api/chat21/config',
   // remoteConfigUrl: window.location.hostname + '/api/chat21/config',
-  remoteConfigUrl: `${ window.location.protocol }//${ window.location.hostname}` + '/api/chat21/config',
+  // remoteConfigUrl: `${ window.location.protocol }//${ window.location.hostname}` + '/api/chat21/config',
+  remoteConfigUrl: '/firebase-config.json',
   firebase: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
