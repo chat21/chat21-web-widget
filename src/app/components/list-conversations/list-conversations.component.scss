@@ -11,11 +11,13 @@
     .c21-header{
         color: $gray;
         height: auto;
-        // height: 50px;
-        min-height: auto;
+        position: relative;
+        min-height: 50px;
+        display: block;
+        font-weight: 300;
+
         .c21-title{
-            font-size: 1.3em;
-            font-weight: 400;
+            font-size: 1.4em;
             max-width: 230px;
             line-height: normal;
             padding: 16px 0px 10px 24px;
@@ -25,14 +27,23 @@
             font-size: 1.2em;
             margin: 0px;
             line-height: normal;
-            padding: 17px 24px 11px 5px;
+            // padding: 17px 24px 11px 5px;
+            padding: 5px;
             float: right;
             fill: $blue;
+            button {
+                width: 40px;
+                height: 40px;
+            }
+            button:hover {
+                background: rgba(220, 220, 220, 0.4) !important;
+            }
         }
     }
     .c21-waiting-time {
-        font-size: 1.2em;
-        padding: 0px 24px 16px 24px;
+        font-size: 1.3em;
+        font-weight: 200;
+        padding: 0px 24px 10px 24px;
     }
     .c21-body {
         position: relative;
@@ -118,7 +129,7 @@
                 }
 
                 .c21-right-conv {
-                    width: calc( 100% - 50px);
+                    width: calc( 100% - 70px);
                     margin-left: 15px;
                     height: auto;
                     float: left;
@@ -137,14 +148,14 @@
                     .c21-name {
                         font-weight: 700;
                         color: #3a3c4c;
-                        font-size: 1.2em;
+                        font-size: 1.3em;
                         line-height: 1.7;
                         min-height: 20px;
                     }
                     .c21-msg {
                         font-weight: 200;
                         color: #3a3c4c;
-                        font-size: 1.2em;
+                        font-size: 1.3em;
                         line-height: 1.7;
                     }
                     .not-read.c21-msg {

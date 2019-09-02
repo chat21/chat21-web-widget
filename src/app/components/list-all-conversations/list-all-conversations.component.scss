@@ -37,40 +37,40 @@
                 width: 100%;
                 height: 100%;
 
-                .c21-header-button{
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    margin: 0 10px 0 10px;
-                    cursor: pointer;
+                // .c21-header-button{
+                //     height: 100%;
+                //     display: flex;
+                //     align-items: center;
+                //     margin: 0 10px 0 10px;
+                //     cursor: pointer;
 
-                    &.c21-right{
-                        float: right;
-                    }
-                    &.c21-left{
-                        float: left;
-                    }
-                    &.c21-close{
-                        display: none;
-                    }
-                }
+                //     &.c21-right{
+                //         float: right;
+                //     }
+                //     &.c21-left{
+                //         float: left;
+                //     }
+                //     &.c21-close{
+                //         display: none;
+                //     }
+                // }
 
-                .c21-title {
-                    position: absolute;
-                    left: 0;
-                    display: inline-block;
-                    width: calc(100% - 190px);
-                    height: 1.6em;
-                    line-height: 1.6em;
-                    padding: 0px;
-                    margin: 10px 75px;
-                    text-align: center;
-                    font-size: 1.6em;
-                    font-weight: 500;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;             
-                }
+                // .c21-title {
+                //     position: absolute;
+                //     left: 0;
+                //     display: inline-block;
+                //     width: calc(100% - 190px);
+                //     height: 1.6em;
+                //     line-height: 1.6em;
+                //     padding: 0px;
+                //     margin: 10px 75px;
+                //     text-align: center;
+                //     font-size: 1.6em;
+                //     font-weight: 500;
+                //     white-space: nowrap;
+                //     overflow: hidden;
+                //     text-overflow: ellipsis;             
+                // }
 
                 .c21-header-writing{
                     position: absolute;
@@ -175,7 +175,7 @@
                 }
 
                 .c21-right-conv {
-                    width: calc( 100% - 50px);
+                    width: calc( 100% - 70px);
                     margin-left: 15px;
                     height: auto;
                     float: left;
@@ -193,14 +193,14 @@
                     .c21-name {
                         font-weight: 700;
                         color: #3a3c4c;
-                        font-size: 12px;
+                        font-size: 1.3em;
                         line-height: 1.7;
                         min-height: 20px;
                     }
                     .c21-msg {
                         font-weight: 200;
                         color: #3a3c4c;
-                        font-size: 12px;
+                        font-size: 1.3em;
                         line-height: 1.7;
                     }
                     .not-read.c21-msg {

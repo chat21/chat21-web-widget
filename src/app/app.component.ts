@@ -570,6 +570,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (divWidgetContainer) {
                 divWidgetContainer.style.display = 'block';
             }
+
         }, 500);
     }
     // ========= end:: START UI ============//
@@ -767,7 +768,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
             // this.g.displayEyeCatcherCard = 'none';
-
             this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
@@ -913,6 +913,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * onClick button close widget
      */
     returnCloseWidget() {
+        this.isOpenConversation = false;
         // this.g.isOpen = false;
         // this.g.setIsOpen(false);
         this.f21_close();

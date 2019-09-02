@@ -1,13 +1,15 @@
 #tiledesk-container {
+    position: fixed; 
     right: 0px;
     bottom: 0px;
+    width: auto;   
+    height: auto;
     display: none;
-    position: fixed;    
     z-index: 999999;
 }
 #tiledeskdiv {
     width: 100%;
-    height: calc(100% - 0px);
+    height: calc(100% - 40px);
     max-width: 420px;
     min-width: 416px;
     max-height: 600px;
@@ -18,14 +20,14 @@
 }
 #tiledesk-container.closed #tiledeskdiv {
     width: 100px;
-    height: 100px;
+    height: 110px;
     min-width: auto;
     min-height: auto;
 }
 #tiledesk-container.closed #tiledeskdiv.callout {
-    width: 370px;
-    min-width: 370px;
-    height: 100px;
+    width: 380px;
+    height: 110px;
+    min-width: 380px;
 }
 
 
@@ -35,16 +37,33 @@
     height: inherit;
     border-width: 0px;
     bottom: 0px;
-    max-height: 600px;
+    max-height: 620px;
     margin: 0px;
     display: none;
     background-color: transparent;
+
+    
 }
+
 #tiledesk-container.open #tiledeskiframe {
     display: block;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px;
     width: 376px;
+    -webkit-animation: fade-in-shadow 1.0s ease-in 0.5s both;
+    animation: fade-in-shadow 1.0s ease-in 0.5s both;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px; */
+    /* margin: 10px; */
 }
+
+@-webkit-keyframes fade-in-shadow {
+    0% { box-shadow: rgba(0, 0, 0, 0.0) 0 0 0px; }
+    100% { box-shadow: rgba(0, 0, 0, 0.1) 0 0 6px; }
+}
+@keyframes sk-bouncedelay {
+    0% { box-shadow: rgba(0, 0, 0, 0.0) 0 0 0px; }
+    100% { box-shadow: rgba(0, 0, 0, 0.1) 0 0 6px; }
+}
+
 #tiledesk-container.closed #tiledeskiframe {
     display: block;
     box-shadow: none;

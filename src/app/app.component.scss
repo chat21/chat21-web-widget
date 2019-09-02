@@ -2,175 +2,90 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons');
 @import '../sass/normalize.scss';
 @import '../sass/variables';
+@import '../sass/animations.scss';
 @import url("../sass/hover.css");
 
-tiledeskwidget-root {
-    position: fixed;
-    z-index: 999999;
-    width: auto;
-    height: auto;
-    bottom: 0px;
-    right: 0px;
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size-adjust: none;
-    font-size: 100%;
-    font-style: normal;
-    letter-spacing: normal;
-    font-stretch: normal;
-    font-variant: normal;
-    font-weight: normal;
-    font: normal normal 100% "Helvetica Neue",Helvetica,Arial,sans-serif;
-    text-align: left;
-    -moz-text-align-last: initial;
-    text-align-last: initial;
-    text-decoration: none;
-    -webkit-text-emphasis: none;
-    text-indent: 0;
-    text-justify: auto;
-    text-shadow: none;
-    text-transform: none;
-    -webkit-animation: none 0 ease 0 1 normal;
-    animation: none 0 ease 0 1 normal;
-    -webkit-animation-play-state: running;
-    animation-play-state: running;
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
-    background: none 0 0 auto repeat scroll padding-box transparent;
-    background-color: transparent;
-    background-image: none;
-    border: 0 none transparent;
-    border-radius: 0;
-    bottom: auto;
-    -webkit-box-decoration-break: slice;
-    box-decoration-break: slice;
-    box-shadow: none;
-    box-sizing: content-box;
-    -webkit-break-after: auto;
-    -moz-break-after: auto;
-    break-after: auto;
-    -webkit-break-before: auto;
-    -moz-break-before: auto;
-    break-before: auto;
-    -webkit-column-break-inside: auto;
-    page-break-inside: auto;
-    break-inside: auto;
-    caption-side: top;
-    clear: none;
-    clip: auto;
-    color: inherit;
-    -webkit-column-count: auto;
-    -moz-column-count: auto;
-    column-count: auto;
-    -webkit-column-fill: balance;
-    -moz-column-fill: balance;
-    column-fill: balance;
-    -webkit-column-gap: normal;
-    -moz-column-gap: normal;
-    column-gap: normal;
-    -webkit-column-rule: medium medium #1f1f1f;
-    -moz-column-rule: medium medium #1f1f1f;
-    column-rule: medium medium #1f1f1f;
-    -webkit-column-span: 1;
-    -moz-column-span: 1;
-    column-span: 1;
-    -webkit-column-width: auto;
-    -moz-column-width: auto;
-    column-width: auto;
-    -webkit-columns: auto auto;
-    -moz-columns: auto auto;
-    columns: auto auto;
-    content: normal;
-    counter-increment: none;
-    counter-reset: none;
-    cursor: auto;
-    direction: ltr;
-    display: inline;
-    empty-cells: show;
-    -webkit-hyphens: manual;
-    -moz-hyphens: manual;
-    -ms-hyphens: manual;
-    hyphens: manual;
-    image-orientation: auto;
-    image-rendering: auto;
-    left: auto;
-    line-height: initial;
-    list-style: disc outside none;
-    margin: 0;
-    max-height: none;
-    max-width: none;
-    min-height: 0;
-    min-width: 0;
-    nav-down: auto;
-    nav-index: auto;
-    nav-left: auto;
-    nav-right: auto;
-    nav-up: auto;
+body {
+    margin:0px;
+}
+
+
+
+.btn-new-conversation:hover{
+    -webkit-animation: jello-horizontal 0.8s 0.1s both;
+	        animation: jello-horizontal 0.8s 0.1s both;
+}
+
+
+.scale-in-center {
+    display: block;
     opacity: 1;
-    orphans: 2;
-    outline: invert none medium;
-    outline-offset: 0;
-    overflow: visible;
-    padding: 0;
-    page-break-after: auto;
-    page-break-before: auto;
-    page-break-inside: auto;
-    -webkit-perspective: none;
-    perspective: none;
-    -webkit-perspective-origin: 50% 50%;
-    perspective-origin: 50% 50%;
-    // position: static;
-    quotes: none;
-    resize: none;
-    right: auto;
-    ruby-align: auto;
-    ruby-overhang: none;
-    ruby-position: before;
-    ruby-span: none;
-    size: auto;
-    table-layout: auto;
-    top: auto;
-    -webkit-transform: none;
-    -ms-transform: none;
-    transform: none;
-    -webkit-transform-origin: 50% 50% 0;
-    -ms-transform-origin: 50% 50% 0;
-    transform-origin: 50% 50% 0;
-    -webkit-transform-style: flat;
-    transform-style: flat;
-    transition: all 0 ease 0;
-    unicode-bidi: normal;
-    vertical-align: baseline;
-    white-space: normal;
-    widows: 2;
-    word-break: normal;
-    word-spacing: normal;
-    word-wrap: normal;
-    text-align: start;
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    // display: none;
-    // background-color: #ffffff;
+	-webkit-animation: scale-in-center 0.5s both;
+            animation: scale-in-center 0.5s both;
+}
 
+.jello-horizontal {
+	-webkit-animation: jello-horizontal 0.9s 3s both;
+	        animation: jello-horizontal 0.9s 3s both;
+}
+
+.swirl-in-bck {
+	-webkit-animation: swirl-in-bck 0.65s ease-in 0.5s both;
+	        animation: swirl-in-bck 0.65s ease-in 0.5s both;
+}
+.rotate-scale-up {
+	-webkit-animation: rotate-scale-up 0.65s linear both;
+	        animation: rotate-scale-up 0.65s linear both;
+}
+
+.rotate-center:hover {
+	-webkit-animation: rotate-center 0.6s ease-in-out both;
+	        animation: rotate-center 0.6s ease-in-out both;
+}
+
+.swing-in-bottom-fwd {
+	-webkit-animation: swing-in-bottom-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+	        animation: swing-in-bottom-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+}
+
+.heartbeat:hover {
+	-webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+	        animation: heartbeat 1.5s ease-in-out infinite both;
+}
+
+.fade-in-top {
+	-webkit-animation: fade-in-top 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.8s both;
+	        animation: fade-in-top 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.8s both;
+}
+
+.fade-in-bottom {
+	-webkit-animation: fade-in-bottom 0.8s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+	        animation: fade-in-bottom 0.8s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+}
+.fade-in-bottom-footer {
+	-webkit-animation: fade-in-dw-up 1.6s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+	        animation: fade-in-dw-up 1.6s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+}
+
+textarea::placeholder {
+    color: $gray;  
+    font-weight: 300;
+  }
+
+tiledeskwidget-root {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
     // ========= BEGIN: RESET CSS TAG ========= //
     *:focus {
         outline: none;
     }
-
     button{
         cursor: pointer;
     }
 
-    
-
-    p, a, ul, li, h1, h2, h3, textarea, title, time, svg, small, link, label, input, img,
-    form, font, code, button, br, b{
-        // all: unset;
-    }
     textarea,
     textarea:visited,
     textarea:focus,
@@ -188,14 +103,21 @@ tiledeskwidget-root {
         -webkit-appearance: initial;
         border: none;
         background-color: unset;
+        padding: 0px;
+        margin: 0px;
     }
     
     #chat21-container {
-        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
         font-family: 'Roboto','Google Sans', Helvetica, Arial, sans-serif;
         font-size: 10px;
         text-align: left;
-        background-color: #ffffff;
+        background-color: transparent;
+        display: none;
+        overflow: hidden;
+
         &.active{
             display: block;
         }
@@ -232,10 +154,10 @@ tiledeskwidget-root {
             float: left;
         }
         .c21-align-left {
-            left: 20px;
+            left: 0px;
         }
         .c21-align-right {
-            right: 20px;
+            right: 0px;
         }
         /* TIME */
         .time {
@@ -303,7 +225,7 @@ tiledeskwidget-root {
             outline: none;
         }
 
-        .c21-divBudge{
+        .c21-divBudge {
             position: absolute;
             top: 0;
             width: auto;
@@ -322,24 +244,26 @@ tiledeskwidget-root {
             padding: 5px;
             left: 0px;
         }
-        .c21-button{
+        .c21-button {
             display: flex;
             cursor: pointer;
         }
         /** header-buttons **/
         .c21-close-button {
             position: absolute;
-            width: 51px;
-            height: 51px;
+            width: 50px;
+            height: 50px;
             top: 0;
             right: 0;
-            margin: 12px 8px 12px 2px;
+            margin: 10px;
             z-index: 10;
             .c21-close-button-body {
                 cursor: pointer;
                 width: 51px;
                 height: 51px;
                 border-radius: 8px;
+                padding: 0px;
+                margin: 0px;
                 display: flex;
                 align-items: center;
                 -webkit-appearance: initial;
@@ -411,19 +335,15 @@ tiledeskwidget-root {
    
         /* CSS BOX CONTAINER */
         #chat21-conversations {
-            position: fixed;
-            width: 376px;
-            height: calc(100% - 120px);
-            top: inherit;
-            bottom: 0px;
-            right: 20px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
             overflow: hidden;
-            background-color: #ffffff;
-            z-index: 1;
-            border-radius: 0px;
-            box-shadow: $trasp-light-black 0 0 38px;
-            display: none;
-            overflow-y: hidden;
+            background-color: transparent;
+            border: 1px solid #eeeeee;
+            margin: 0px;
+            padding: 0px;
 
             &.full-screen-mode {
                 width: 100%;
@@ -436,11 +356,7 @@ tiledeskwidget-root {
                 max-height: none;
             }
         }
-   
 
-        .chat21-window {
-            display: none;
-        }
         .chat21-fullscreen {
             width: 100%;
             height: 100%;
@@ -450,11 +366,12 @@ tiledeskwidget-root {
             border-radius: 0px;
             max-height: none;
         }
-        
+
 
         /***************************
         ******** PAGE MODAL ********
         ****************************/
+
         .modal-page {
             position: absolute;
             height: 100%;
@@ -462,22 +379,42 @@ tiledeskwidget-root {
             z-index: 1;
             background-color: transparent;
             opacity: 0;
-            transition: all 0.2s;
-            bottom: -100%;
+            display: none;
+        
             &.active {
-                background-color: $trasp-black;
+                display: inline-block;
                 opacity: 1;
-                transition: all 0.3s;
-                bottom: 0px;
             }
-            .c21-modal-content {
-                background-color: #ffffff;
-                border: 0px solid $trasp-light-black;
-                border-radius: 0.3rem;
-                padding: 0px;
-                margin: 20px auto;
+
+            // .c21-modal-content {
+            //     background-color: #ffffff;
+            //     border: 0px solid $trasp-light-black;
+            //     border-radius: 0.3rem;
+            //     padding: 0px;
+            //     margin: 20px auto;
+            // }
+
+            &.modal-slide-in-right {
+                position: absolute;
+                left: 0px;
+                opacity: 1;
+                display: inline-block;
+                -webkit-animation-name: modal-active-in; /* Safari 4.0 - 8.0 */
+                -webkit-animation-duration: 0.3s; /* Safari 4.0 - 8.0 */
+                animation-name: modal-active-in;
+                animation-duration: 0.3s;
             }
+            &.modal-slide-out-right {
+                position: absolute;
+                opacity: 1;
+                display: inline-block;
+                -webkit-animation: slide-out-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+                animation: slide-out-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            }
+
         }
+
+    
     }
 
 
@@ -491,6 +428,17 @@ tiledeskwidget-root {
         margin: 0;
         padding: 0;
         color: #fff;
+
+        button:hover {
+            background: rgba(240,240,240,0.2)!important;
+            opacity: 1!important;
+            transition: all .45s ease-in-out!important;
+            -moz-transition: all .45s ease-in-out!important;
+            -webkit-transition: all .45s ease-in-out!important;
+            padding: 0px;
+            margin: 0px;
+            border-radius: 10%;
+        }
 
         .c21-header-container{
             position: relative;
@@ -507,9 +455,15 @@ tiledeskwidget-root {
 
                 .c21-header-button{
                     height: 100%;
-                    display: flex;
+                    display: block;
                     align-items: center;
-                    margin: 0 10px 0 10px;
+                    text-align: center;
+                    // margin: 0 10px 0 10px;
+                    width: 40px;
+                    height: 40px;
+                    margin: 6px;
+                    padding: 0px;
+
                     cursor: pointer;
                     &.c21-right{
                         float: right;
@@ -520,17 +474,25 @@ tiledeskwidget-root {
                     &.c21-close{
                         display: none;
                     }
+
+                    svg {
+                        height: 20px;
+                        width: 20px;
+                        margin: 10px;
+                    }
+
+                    
                 }
 
                 .c21-title {
                     position: absolute;
                     left: 0;
                     display: inline-block;
-                    width: calc(100% - 190px);
+                    width: calc(100% - 200px);
                     height: 1.6em;
                     line-height: 1.6em;
                     padding: 0px;
-                    margin: 10px 75px;
+                    margin: 10px 100px;
                     text-align: center;
                     font-size: 1.6em;
                     font-weight: 500;
@@ -548,7 +510,7 @@ tiledeskwidget-root {
     }
     .c21-body {
         position: absolute;
-        top: 53px;
+        top: 52px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -615,16 +577,6 @@ tiledeskwidget-root {
         #chat21-container {
             .header-button.close{
                 display: flex;
-            }
-            #chat21-conversations {
-                width: 100%;
-                height: 100%;
-                right: 0px;
-                top: 0px;
-                left: 0px;
-                bottom: 0px;
-                border-radius: 0px;
-                max-height: none;
             }
         }
     }

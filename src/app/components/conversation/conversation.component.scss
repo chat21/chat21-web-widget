@@ -6,12 +6,22 @@
 
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
+    // background-color: #ffffff;
+    // width: 100%;
+    // height: 100%;
+    // position: relative;
+    // margin: 0px;
+    // padding: 0px;
+
+    position: absolute;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
-    position: relative;
-    margin: 0px;
-    padding: 0px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 0.1px solid lightgray;
 
 
      /* SET ICON AVATAR */
@@ -92,6 +102,9 @@
     
     // ============= CSS c21-body ================= //
     .c21-body {
+        -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        -moz-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
         .c21-body-container {
             .c21-body-header {
                 .chat21-header-modal-select {
@@ -136,6 +149,9 @@
                     }
 
                     #c21-contentScroll{
+                        position: absolute;
+                        left: 0px;
+                        right: 0px;
                         padding: 10px;
                     }
                     .chat21-conversation-parts-container::-webkit-scrollbar {
@@ -167,17 +183,21 @@
                     /* ====== SET MESSAGES ====== */
                     .messages {
                         border-radius: 14px;
-                        padding: 6px 6px 6px 6px;
-                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                        padding: 14px;
+                        // padding: 6px 6px 6px 6px;
+                        // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                        // -webkit-animation: heartbeat 1.5s ease-in-out both;
+                        // animation: heartbeat 1.5s ease-in-out both;
+
                         p {
-                            font-size: 1.3em;
+                            font-size: 1.4em;
                             margin: 0 0 0 0;
                             padding: 0 0 0 0;
                             font-style: normal;
                             letter-spacing: normal;
                             font-stretch: normal;
                             font-variant: normal;
-                            font-weight: normal;
+                            font-weight: 300;
                             overflow: hidden;
                         }
                         img {
@@ -283,10 +303,10 @@
 /* ================== CSS chat21-footer ==================== */ 
 #chat21-footer {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: 0px;
     padding: 0;
     box-shadow: 0 -1px 10px 1px $trasp-light-gray;
     background: white;
@@ -362,11 +382,11 @@
         min-width: 100%;
         outline: 0;
         resize: none;
-        font-size: 1.3em;
-        line-height: 1.3em;
+        font-size: 1.4em;
+        line-height: 1.4em;
+        font-weight: 300;
         max-height: 110px;
         min-height: auto;
-    
         height: 20px;
         padding: 0px 40px;
         margin: 10px 0px 10px;

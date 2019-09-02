@@ -8,8 +8,8 @@
     'background-color':g.themeColor,
     -->
 
-    <div id="chat21-conversations" class="chat21-window"
-    [ngClass]="{ 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
+    <div id="chat21-conversations"
+    [ngClass]="{ 'swing-in-bottom-fwd' : g.isOpen === true, 'full-screen-mode' : g.fullscreenMode === true, 'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'display': (g.isOpen == true)?'block':'none', 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
@@ -33,8 +33,8 @@
             ></tiledeskwidget-list-all-conversations>
         </div>
         
-        <div *ngIf="isOpenConversation && g.senderId" class="modal-page active">
-            <!-- [class.active]="true" -->
+        <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.modal-slide-in-right]="isOpenConversation" >
+            <!-- [class.active]="true" isOpenConversation &&  [class.modal-slide-out-right]="!isOpenConversation"-->
             <tiledeskwidget-conversation 
             [recipientId]="recipientId"
             [conversation]="conversationSelected"

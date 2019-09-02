@@ -949,9 +949,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           const objDiv = document.getElementById(that.idDivScroll);
           //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
           setTimeout(function () {
-            objDiv.scrollIntoView(false);
-          }, 100);
-          that.isScrolling = false;
+            objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+            that.isScrolling = false;
+          }, 500);
           //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
           //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
           //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
@@ -961,8 +961,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // // that.badgeNewMessages = 0;
           // console.log(objDiv);
         } catch (err) {
-            that.g.wdLog(['RIPROVO ::']);
-            that.isScrolling = false;
+            that.g.wdLog(['RIPROVO dopo 1 sec::']);
+            setTimeout(function () {
+              that.isScrolling = false;
+            }, 0);
           // that.scrollToBottom();
         }
       }, 0);
