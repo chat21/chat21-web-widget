@@ -1,6 +1,6 @@
 
 <!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
-<div *ngIf="!g.isMobile" class="eye-catcher-card"
+<div *ngIf="!g.isMobile" class="eye-catcher-card scale-in-center"
 [ngClass]="{'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
 [ngStyle]="{ 'display':g.displayEyeCatcherCard,  'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
 (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">

@@ -2,14 +2,15 @@
 import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
-import { MessagingService } from '../../providers/messaging.service';
+// import { MessagingService } from '../../providers/messaging.service';
+import { GenericMessagingService } from '../../providers/generic-messaging.service';
 import { ConversationsService } from '../../providers/conversations.service';
 import { AppConfigService } from '../../providers/app-config.service';
 
 import {
-  CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
+  CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT, TYPE_MSG_BUTTON,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, PROXY_MSG_START, TYPE_MSG_FILE
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -125,7 +126,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public el: ElementRef,
     public g: Globals,
     private ngZone: NgZone,
-    public messagingService: MessagingService,
+    public messagingService: GenericMessagingService,
     public upSvc: UploadService,
     public contactService: ContactService,
     private agentAvailabilityService: AgentAvailabilityService,
@@ -305,32 +306,34 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   addFirstMessage(text) {
-    const lang = this.g.lang;
-    const channelType = this.g.channelType;
-    const projectid = this.g.projectid;
-
-
-    text = replaceBr(text);
-    const timestampSendingMessage = new Date('01/01/2000').getTime();
-    const msg = new MessageModel(
-      '000000',
-      lang,
-      this.conversationWith,
-      'Bot',
-      '', // sender
-      'Bot', // sender fullname
-      '200', // status
-      '', // metadata
-      text,
-      timestampSendingMessage,
-      '',
-      TYPE_MSG_TEXT,
-      '', // attributes
-      channelType,
-      projectid
-    );
-    this.g.wdLog(['addFirstMessage ----------> ' + text]);
-    this.messages.unshift(msg);
+    if (1 === 1) {
+      this.sendMessage(PROXY_MSG_START, TYPE_MSG_TEXT);
+    } else {
+      const lang = this.g.lang;
+      const channelType = this.g.channelType;
+      const projectid = this.g.projectid;
+      text = replaceBr(text);
+      const timestampSendingMessage = new Date('01/01/2000').getTime();
+      const msg = new MessageModel(
+        '000000',
+        lang,
+        this.conversationWith,
+        'Bot',
+        '', // sender
+        'Bot', // sender fullname
+        '200', // status
+        '', // metadata
+        text,
+        timestampSendingMessage,
+        '',
+        TYPE_MSG_TEXT,
+        '', // attributes
+        channelType,
+        projectid
+      );
+      this.g.wdLog(['addFirstMessage ----------> ' + text]);
+      this.messages.unshift(msg);
+    }
   }
 
   /**
@@ -395,7 +398,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.messagingService.initialize( senderId, tenant, channelType );
       this.upSvc.initialize(senderId, tenant, this.conversationWith);
-      this.contactService.initialize(senderId, tenant, this.conversationWith);
+      //this.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
       // this.messages.concat(this.messagingService.messages);
@@ -665,43 +668,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
-      // this.g.attributes.attachment = {
-      //   "type":"template",
-      //   "buttons":[
-      //     {
-      //       "type":"text",
-      //       "value":"Azione 0"
-      //     },
-      //     {
-      //       "type":"text",
-      //       "class": "button-success",
-      //       "value":"Azione 1"
-      //     },
-      //     {
-      //       "type":"text",
-      //       "class": "button-error",
-      //       "value":"Azione 2"
-      //     },
-          // {
-          //   "type":"text",
-          //   "class": "button-secondary",
-          //   "value":"Azione 3"
-          // },
-          // {
-          //   "type":"web_url",
-          //   "class": "button-warning",
-          //   "value":"Azione 4"
-          // },
-          // {
-          //   "type":"web_url",
-          //   "url":"https://www.messenger.com",
-          //   "title":"Visit Messenger"
-          // }
-      //   ]
-      // };
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
-      if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
+      if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
           const projectid = this.g.projectid;
@@ -1343,7 +1312,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** */
   returnOpenAttachment($event: String) {
     if ($event) {
-      this.sendMessage($event, TYPE_MSG_TEXT);
+      const metadata = {
+        'button': true
+      };
+      this.sendMessage($event, TYPE_MSG_TEXT, metadata);
     }
   }
 

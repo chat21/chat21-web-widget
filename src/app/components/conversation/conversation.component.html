@@ -119,12 +119,12 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                                <div *ngFor="let message of messages" tabindex="1521" >
+                                <div *ngFor="let message of messages" tabindex="1521"  >
     
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent" >
 
-                                        <div [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color" [ngStyle]=styleSecondColor >
+                                        <div [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
@@ -136,8 +136,12 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                     is ignored</div>
                                                 <ng-template #contentPopup>
+
                                                     <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">
+                                                        {{strip_tags(message.text)}}
+                                                    </p>
+
                                                 </ng-template>
                                                 <ng-template #contentNewTab>
                                                     <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>

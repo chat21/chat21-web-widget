@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
-import { MessagingService } from '../../providers/messaging.service';
+// import { MessagingService } from '../../providers/messaging.service';
+import { GenericMessagingService } from '../../providers/generic-messaging.service';
 import { StorageService } from '../../providers/storage.service';
 
 @Component({
@@ -29,7 +30,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     constructor(
         public g: Globals,
-        public messagingService: MessagingService,
+        public messagingService: GenericMessagingService,
         public storageService: StorageService,
     ) {
     }

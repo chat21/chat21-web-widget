@@ -62,28 +62,18 @@ export class GlobalSettingsService {
          * load parameters from server
          * set parameters in globals
         */
-        // const projectid = globals.projectid;
-        this.getProjectParametersById(projectid)
-        .subscribe( response => {
-            // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
-            that.setParameters(response);
-        }, (error) => {
-            // console.error('::getProjectParametersById', error);
-            that.setParameters(null);
-        }, () => {
-            that.setParameters(null);
-        });
-        // ------------------------------- //
-        // this.getProjectParametersById(globals, el)
-        // .then(response => {
-        //     // this.globals.wdLog(['RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+        // this.getProjectParametersById(projectid)
+        // .subscribe( response => {
+        //     console.log('getProjectParametersById ', response);
         //     that.setParameters(response);
-        // })
-        // .catch(error => {
+        // }, (error) => {
+        //     console.error('::getProjectParametersById', error);
         //     that.setParameters(null);
-        //     this.globals.wdLog(['ERRORE°°°°°°°°°°°°°°°°°°°° ', error);
-        //     console.error(error);
+        // }, () => {
+        //     that.setParameters(null);
         // });
+
+        this.setParameters(null);
     }
 
     /** SET PROGECTID **
@@ -627,6 +617,14 @@ export class GlobalSettingsService {
             globals.showWidgetNameInConversation = (TEMP === true) ? true : false;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
+
+        TEMP = tiledeskSettings['customAttributes'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['40 - customAttributes:: ', TEMP]);
+            globals.customAttributes = TEMP;
+            // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
+        }
+
     }
 
     /**
@@ -948,6 +946,12 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_fullscreenMode');
         if (TEMP) {
             globals.fullscreenMode = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
+        if (TEMP) {
+            globals.customAttributes = stringToBoolean(TEMP);
+            this.globals.wdLog(['globals.customAttributes: ' + globals.customAttributes]);
         }
     }
 

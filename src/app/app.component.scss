@@ -12,10 +12,10 @@ body {
 
 
 
-.btn-new-conversation:hover{
-    -webkit-animation: jello-horizontal 0.8s 0.1s both;
-	        animation: jello-horizontal 0.8s 0.1s both;
-}
+// .btn-new-conversation:hover{
+//     -webkit-animation: jello-horizontal 0.8s 0.1s both;
+// 	        animation: jello-horizontal 0.8s 0.1s both;
+// }
 
 
 .scale-in-center {
@@ -71,6 +71,37 @@ body {
 textarea::placeholder {
     color: $gray;  
     font-weight: 300;
+  }
+
+  .msg_container{
+    .button-in-msg {
+        color: white!important;
+        background:  rgb(42, 106, 193)!important;
+
+        position: relative;
+        max-width: 300px;
+        min-width: inherit;
+        padding: 8px 16px!important;;
+        cursor: auto;
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 20px!important;;
+        margin: 3px;
+        overflow: hidden;
+        font-family: 'Muli', sans-serif;
+        font-size: 15px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: normal;
+        letter-spacing: -0.24px;
+        -webkit-font-smoothing: antialiased;
+    
+        p{
+            font-size: 15px!important;
+            font-family: 'Muli', sans-serif!important;
+            font-weight: normal!important;
+        }
+    }
+    
   }
 
 tiledeskwidget-root {

@@ -67,7 +67,7 @@ export class StarRatingWidgetService {
     this.g.wdLog(['------------------> options: ', options]);
     this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
     return this.http
-      .put(url, JSON.stringify(body), options)
+      .post(url, JSON.stringify(body), options)
       .map(res => (res.json()));
     // .timeout(10000) // in milli sec
   }

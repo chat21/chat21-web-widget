@@ -53,7 +53,7 @@
         <!-- <div class="c21-body-container"> -->
             <div class="c21-body-content">
                 <div class="c21-cards">
-                    <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
+                    <!-- <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <tiledeskwidget-list-conversations 
                         [senderId]="senderId"
                         (eventNewConv)="returnNewConversation()" 
@@ -61,6 +61,28 @@
                         (eventOpenAllConv)="returnOpenAllConversation()"
                         >
                         </tiledeskwidget-list-conversations>
+                    </div> -->
+                    <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
+                        <img src="https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png" width="50%" style="float:left;
+    padding: 10px;
+    width: calc(40% - 20px);" />
+                        <span style="display: inline-block;
+                        padding: 10px 20px 10px 0px;
+                        font-size: 15px;
+                        font-weight: 300;
+                        width: calc(60% - 20px);">Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito del Comune di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"
+                            <button  tabindex="1040" aflistconv #aflistconv class="c21-button-primary" (click)="returnNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
+                                <span class="v-align-center">
+                                    <svg [ngStyle]="{'fill': 'yellow' }" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': g.themeForegroundColor}"/>
+                                    </svg>
+                                </span>
+                                <span class="v-align-center c21-label-button">
+                                Chiedi a Ernesto
+                                </span>  
+                            </button>
+                        </span>
+                        <div class="clear"></div>
                     </div>
                 </div>
             </div>

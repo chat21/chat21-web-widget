@@ -170,6 +170,8 @@ export class Globals {
    online_msg: string;
    offline_msg: string;
 
+   customAttributes: string;
+
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');

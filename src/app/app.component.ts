@@ -13,7 +13,8 @@ import { Globals } from './utils/globals';
 
 // import { AuthService } from './core/auth.service';
 import { AuthService } from './providers/auth.service';
-import { MessagingService } from './providers/messaging.service';
+// import { MessagingService } from './providers/messaging.service';
+import { GenericMessagingService } from './providers/generic-messaging.service';
 import { ContactService } from './providers/contact.service';
 import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
@@ -92,7 +93,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public g: Globals,
         public translatorService: TranslatorService,
         public authService: AuthService,
-        public messagingService: MessagingService,
+        public messagingService: GenericMessagingService,
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
@@ -105,6 +106,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
 
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
+            // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your firebase-config.json. See the Chat21-Web_widget Installation Page');
         }
 
