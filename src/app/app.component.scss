@@ -17,6 +17,15 @@ body {
 // 	        animation: jello-horizontal 0.8s 0.1s both;
 // }
 
+.slide-in-right {
+	-webkit-animation: slide-in-right 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s both;
+	        animation: slide-in-right 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s both;
+}
+
+.slide-in-left {
+	-webkit-animation: slide-in-left 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.2s both;
+	        animation: slide-in-left 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.2s both;
+}
 
 .scale-in-center {
     display: block;

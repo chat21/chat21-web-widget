@@ -175,11 +175,11 @@ export class GenericMessagingService {
     this.messages.sort(this.compareValues('timestamp', 'asc'));
     this.obsAdded.next(message);
 
-    // try {
-    //   this.storageService.setItem('messages', JSON.stringify(this.messages));
-    // } catch (error) {
-    //   // console.log('> Error is handled attributes: ', error);
-    // }
+    try {
+      this.storageService.setItem('messages', JSON.stringify(this.messages));
+    } catch (error) {
+      // console.log('> Error is handled attributes: ', error);
+    }
 
   }
 
@@ -210,7 +210,6 @@ export class GenericMessagingService {
       console.log('> sessionUid: ', this.sessionUid);
     }
     this.g.wdLog(['***** connect MessagingService *****']);
-
 
     try {
       if (this.storageService.getItem('messages')) {
@@ -491,7 +490,7 @@ export class GenericMessagingService {
     }
 
     try {
-      if (this.messages.length > 0) {
+      if (message.text === PROXY_MSG_START && this.messages.length > 0) {
         return;
       }
     } catch (error) {

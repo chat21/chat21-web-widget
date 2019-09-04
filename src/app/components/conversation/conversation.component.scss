@@ -102,9 +102,9 @@
     
     // ============= CSS c21-body ================= //
     .c21-body {
-        -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
-        -moz-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
-        box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        // -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        // -moz-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        // box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
         .c21-body-container {
             .c21-body-header {
                 .chat21-header-modal-select {
@@ -153,6 +153,11 @@
                         left: 0px;
                         right: 0px;
                         padding: 10px;
+                        // display: none;
+                        opacity: 0;
+                        -webkit-transition: opacity 0.5s; /* Safari */
+                        transition: opacity 0.5s;
+                        transition-timing-function: ease-in;
                     }
                     .chat21-conversation-parts-container::-webkit-scrollbar {
                         width: 8px;
@@ -178,7 +183,7 @@
                     .msg_container {
                         overflow: hidden;
                         display: flex;
-                        
+                        opacity: 0px;
                     }
                     /* ====== SET MESSAGES ====== */
                     .messages {
@@ -308,7 +313,7 @@
     right: 0px;
     margin: 0px;
     padding: 0;
-    box-shadow: 0 -1px 10px 1px $trasp-light-gray;
+    box-shadow: 0 -1px 0px 0px $trasp-light-gray;
     background: white;
 
 
@@ -360,8 +365,8 @@
         cursor: pointer;
         background-color: #ffffff;
         border: 1px solid $trasp-light-gray;
-        -webkit-box-shadow: 0 3px 2px $trasp-light-black;
-        box-shadow: 0 3px 2px $trasp-light-black;
+        // -webkit-box-shadow: 0 3px 2px $trasp-light-black;
+        // box-shadow: 0 3px 2px $trasp-light-black;
         text-align: center;
         svg {
             margin: auto;
@@ -369,7 +374,15 @@
         }
     }
     #chat21-buttonToBottom:hover {
-        background-color: $light-gray;
+        background-color: $blue;
+        opacity: 1!important;
+        transition: all .45s ease-in-out!important;
+        -moz-transition: all .45s ease-in-out!important;
+        -webkit-transition: all .45s ease-in-out!important;
+        border: 1px solid #ffffff;
+        svg {
+            fill: #ffffff;
+        }
     }
 
     #chat21-main-message-context {

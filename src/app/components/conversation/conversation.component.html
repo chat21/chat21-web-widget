@@ -119,11 +119,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                                <div *ngFor="let message of messages" tabindex="1521"  >
+                                <div *ngFor="let message of messages" tabindex="1521" class="rowMsg">
     
                                     <!-- message sender:: -->
-                                    <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent" >
-
+                                    <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
+                                            
                                         <div [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
 
                                             <!-- message type:: image -->
@@ -163,8 +163,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
 
                                     <!-- message recipient:: -->
-                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="message_sender_fullname">{{message.sender_fullname}}</div>
-                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="msg_container base_receive">
+                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
+                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="msg_container base_receive slide-in-left">
         
                                         <!-- <div class="content-avatar">
                                             <div class="profile_image">
@@ -172,7 +172,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                             </div>
                                         </div> -->
 
-                                        <div class="c21-icon-avatar">
+                                        <div class="c21-icon-avatar slide-in-left">
                                             <div class="c21-avatar-image profile_image">
                                                 <!-- <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" /> -->
                                                 <img src="{{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" />
@@ -190,7 +190,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 [height]="getSizeImg(message).height" />
 
                                             <!-- message type:: text -->
-                                            <div *ngIf="message.type == 'text';">
+                                            <div *ngIf="message.type == 'text'">
                                                
                                                 <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                     is ignored</div>
@@ -223,15 +223,15 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                     </div>
 
 
-                                    <div class="time" [ngClass]="{'sender' : message.sender == g.senderId}">
+                                    <div class="time slide-in-left" [ngClass]="{'sender' : message.sender == g.senderId}">
                                         <time *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
                                     </div>
 
 
                                     <!-- message type:: button -->
-                                    <div *ngIf="message.attributes && message.attributes.attachment && isLastMessage(message.uid)"> 
+                                    <div *ngIf="message.attributes && message.attributes.attachment && isLastMessage(message.uid)" class="slide-in-left" > 
                                         <tiledeskwidget-message-attachment 
-                                        style="height: 50px; display: block"
+                                        style="min-height: 50px; display: table-cell;"
                                         [message]="message"
                                         (eventOpenAttachment)="returnOpenAttachment($event)"
                                         >

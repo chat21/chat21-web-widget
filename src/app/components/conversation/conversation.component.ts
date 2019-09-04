@@ -65,7 +65,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
-  idDivScroll = 'c21-contentScroll'; // id div da scrollare
+  idDivScroll = 'c21-contentScroll'; // id div da scrollare #c21-contentScroll
   showButtonToBottom = false;
   NUM_BADGES = 0;
   audio: any;
@@ -146,10 +146,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
+
+    this.ngZone.run(() => {
+      //const objDiv = document.getElementById(that.idDivScroll);
+      //objDiv.style.display = 'none';
+      //that.scrollToBottom();
+    });
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
-      this.ngZone.run(() => {
-        that.scrollToBottom();
-      });
+    // this.ngZone.run(() => {
+    //   that.scrollToBottom();
+    // });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
     this.setFocusOnId('chat21-main-message-context');
@@ -173,7 +179,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      this.scrollToBottom();
+      //this.scrollToBottom();
     }
   }
 
@@ -398,9 +404,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.messagingService.initialize( senderId, tenant, channelType );
       this.upSvc.initialize(senderId, tenant, this.conversationWith);
-      //this.contactService.initialize(senderId, tenant, this.conversationWith);
+      // this.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
+      this.scrollToBottomStart();
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
@@ -492,7 +499,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 200);
+          }, 0);
         } else {
           that.g.wdLog(['3-------']);
           that.NUM_BADGES++;
@@ -636,9 +643,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // this.setDepartment();
           msg = replaceBr(msg);
           this.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.scrollToBottom();
           this.restoreTextArea();
-          this.scrollToBottom();
+          //this.scrollToBottom();
       }
       // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
       // this.textInputTextArea = '';
@@ -874,7 +880,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
+    console.log('onScroll: ', event);
     this.startScroll = false;
+
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
       const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
@@ -907,20 +915,62 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * scrollo la lista messaggi all'ultimo
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
+
+  scrollToBottomStart() {
+    const that = this;
+    if ( this.isScrolling === false ) {
+      setTimeout(function () {
+        try {
+          that.isScrolling = true;
+          const objDiv = document.getElementById(that.idDivScroll);
+          setTimeout(function () {
+            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+            objDiv.scrollIntoView(false);
+            objDiv.style.opacity = '1';
+          }, 200);
+          that.isScrolling = false;
+        } catch (err) {
+          that.g.wdLog(['RIPROVO dopo 1 sec::']);
+        }
+      }, 0);
+    }
+  }
+
+
   scrollToBottom() {
     this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
     const that = this;
+    // const divScrollMe = this.scrollMe.nativeElement;
+
     if ( this.isScrolling === false ) {
       // const divScrollMe = this.scrollMe.nativeElement;
       setTimeout(function () {
         try {
           that.isScrolling = true;
           const objDiv = document.getElementById(that.idDivScroll);
-          //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
           setTimeout(function () {
             objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-            that.isScrolling = false;
-          }, 500);
+            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+            // objDiv.scrollIntoView(false);
+          }, 0);
+          that.isScrolling = false;
+
+          //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+          // setTimeout(function () {
+          //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+          // }, 500);
+
+          // let checkContentScrollPosition = false;
+          // do {
+          //   setTimeout(function () {
+          //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
+          //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+          //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+          //   }, 1000);
+          // }
+          // while (checkContentScrollPosition === false);
+          // that.isScrolling = false;
+
           //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
           //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
           //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
@@ -934,7 +984,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             setTimeout(function () {
               that.isScrolling = false;
             }, 0);
-          // that.scrollToBottom();
+          //that.scrollToBottom();
         }
       }, 0);
     }
@@ -1043,7 +1093,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 };
             }
             this.g.wdLog(['metadata -------> ', metadata]);
-            this.scrollToBottom();
+            //this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
@@ -1082,7 +1132,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                     message = 'Image: ' + metadata.src;
                 }
                 that.sendMessage(message, type_message, metadata);
-                that.scrollToBottom();
+                //that.scrollToBottom();
                 that.isFilePendingToUpload = false;
                 // return downloadURL;
             })
@@ -1256,7 +1306,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-      this.unsubscribe();
+      //this.unsubscribe();
   }
 
 
