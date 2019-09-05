@@ -79,7 +79,7 @@ export class GenericMessagingService {
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     // const options = new RequestOptions({ headers: headers });
-    const url = this.URL_PROXY;
+    let url = this.URL_PROXY;
     this.g.wdLog(['url: ', url]);
 
     message['session'] = this.sessionUid;
@@ -91,6 +91,9 @@ export class GenericMessagingService {
       JSON.parse(this.g.customAttributes, (key, value) => {
         this.g.wdLog(['keyX: ', key]);
         this.g.wdLog(['valueX: ', value]);
+        if (key === 'url_proxy') {
+          url = value;
+        }
         if (key === 'agent') {
           message['agent'] = value;
         }

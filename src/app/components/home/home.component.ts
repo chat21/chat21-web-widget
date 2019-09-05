@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   wellcomeMsg;
   wellcomeTitle;
   colorBck: string;
+  messaggio_benvenuto: string;
   // ========= end:: component variables ======= //
 
 
@@ -43,12 +44,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.g.wdLog(['ngOnInit app-home']);
     this.tenant = this.g.tenant;
     this.colorBck = '#000000';
+    // tslint:disable-next-line:max-line-length
+    this.messaggio_benvenuto = 'Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito del Comune di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"';
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
     // this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     // this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
   }
 
   ngAfterViewInit() {
+    try {
+      JSON.parse(this.g.customAttributes, (key, value) => {
+        if (key === 'messaggio_benvenuto') {
+          this.messaggio_benvenuto = value;
+        }
+      });
+      // console.log('> attributes: ', attributes);
+    } catch (error) {
+        // console.log('> Error is handled attributes: ', error);
+    }
   }
 
   // ========= begin:: ACTIONS ============//

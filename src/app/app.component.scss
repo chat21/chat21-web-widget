@@ -118,6 +118,7 @@ tiledeskwidget-root {
     display: block;
     width: 100%;
     height: 100%;
+    
     // ========= BEGIN: RESET CSS TAG ========= //
     *:focus {
         outline: none;
@@ -240,6 +241,7 @@ tiledeskwidget-root {
             .c21-label-button {
                 margin-left: 8px; 
                 font-weight: 400;
+                font-size: 0.9em;
             }
         }
         button.c21-button-primary:hover,
@@ -378,10 +380,10 @@ tiledeskwidget-root {
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 10px;
+            // border-radius: 10px;
             overflow: hidden;
             background-color: transparent;
-            border: 1px solid #eeeeee;
+            border: 0px solid #eeeeee;
             margin: 0px;
             padding: 0px;
 
@@ -608,17 +610,16 @@ tiledeskwidget-root {
     }
     // ========= END: CSS STANDARD PAGE ========= //
 
-
     /**************
     // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX 
     ***************/
-
     @media (max-width: 451px) {
         #chat21-container {
-            .header-button.close{
+            .header-button.close {
                 display: flex;
             }
         }
     }
+
 
 }
