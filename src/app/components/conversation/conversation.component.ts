@@ -241,7 +241,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
       this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
     }
-
     this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
@@ -535,14 +534,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private checkWritingMessages() {
     const that = this;
     const tenant = this.g.tenant;
-    const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
-    messagesRef.on('value', function (writing) {
-        if (writing.exists()) {
-            that.writingMessage = that.g.LABEL_WRITING;
-        } else {
-            that.writingMessage = '';
-        }
-    });
+    try {
+      const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
+      if (messagesRef) {
+        messagesRef.on('value', function (writing) {
+          if (writing.exists()) {
+              that.writingMessage = that.g.LABEL_WRITING;
+          } else {
+              that.writingMessage = '';
+          }
+        });
+      }
+    } catch (e) {
+      console.error('Error checkWritingMessages ', e);
+    }
   }
 
 
@@ -815,7 +820,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-/**
+    /**
      * recupero url immagine profilo
      * @param uid
      */
@@ -828,17 +833,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       } else {
           return getImageUrlThumb(uid);
       }
-      // if (!uid) {
-      //   return this.IMG_PROFILE_SUPPORT;
-      // }
-      // const profile = this.contactService.getContactProfile(uid);
-      // if (profile && profile.imageurl) {
-      //       that.g.wdLog(['profile::', profile, ' - profile.imageurl', profile.imageurl);
-      //     return profile.imageurl;
-      // } else {
-      //     return this.IMG_PROFILE_SUPPORT;
-      // }
-  }
+    }
 
   /**
      * ridimensiona la textarea

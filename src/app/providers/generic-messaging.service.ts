@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 // firebase
-import * as firebase from 'firebase/app';
-import 'firebase/database';
+// import * as firebase from 'firebase/app';
+// import 'firebase/database';
 
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -14,9 +14,9 @@ import { DepartmentModel } from '../../models/department';
 import { MessageModel } from '../../models/message';
 import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
 // tslint:disable-next-line:max-line-length
-import { MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, PROXY_MSG_START, TYPE_MSG_IMAGE } from '../utils/constants';
+import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, PROXY_MSG_START, TYPE_MSG_IMAGE } from '../utils/constants';
 // utils
-import { searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
+import { getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -55,6 +55,7 @@ export class GenericMessagingService {
   URL_PROXY = 'https://bariapp.herokuapp.com/proxy';
 
   constructor(
+    //public el: ElementRef,
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
     public g: Globals,
@@ -140,7 +141,8 @@ export class GenericMessagingService {
         message['channel_type'],
         message['progectId']
       );
-
+      msg.sender_urlImage = this.getUrlImgProfile(message['sender']);
+      this.triggerGetImageUrlThumb(msg);
       this.addMessage(msg);
     //   if (message && message.sender === this.senderId) {
     //     const index = searchIndexInArrayForUid(this.messages, childSnapshot.key);
@@ -156,6 +158,35 @@ export class GenericMessagingService {
     //   }
     //   this.messages.sort(this.compareValues('timestamp', 'asc'));
     //   this.obsAdded.next(msg);
+    }
+  }
+
+
+  /**
+   * recupero url immagine profilo
+   * @param uid
+   */
+  getUrlImgProfile(uid: string): string {
+    const baseLocation = this.g.baseLocation;
+    if (!uid || uid === 'system' ) {
+      return baseLocation + IMG_PROFILE_BOT;
+    } else if ( uid === 'error') {
+      return baseLocation + IMG_PROFILE_DEFAULT;
+    } else {
+      return getImageUrlThumb(uid);
+    }
+  }
+
+
+  private triggerGetImageUrlThumb(message: MessageModel) {
+    try {
+        const windowContext = this.g.windowContext;
+        const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerGetImageUrlThumb);
+        }
+    } catch (e) {
+        console.error('Error triggering triggerAfterSendMessageEvent', e);
     }
   }
 
@@ -178,7 +209,7 @@ export class GenericMessagingService {
     try {
       this.storageService.setItem('messages', JSON.stringify(this.messages));
     } catch (error) {
-      // console.log('> Error is handled attributes: ', error);
+      console.log('> Error is handled attributes: ', error);
     }
 
   }
@@ -218,8 +249,6 @@ export class GenericMessagingService {
     } catch (error) {
       // console.log('> Error is handled attributes: ', error);
     }
-
-
     // this.checkRemoveConversation(conversationWith);
     // this.checkMessages(conversationWith);
   }
@@ -237,10 +266,10 @@ export class GenericMessagingService {
    * and update array messages
    */
   checkMessages(conversationWith) {
-    const urlMessages = this.urlMessages + conversationWith;
-    const firebaseMessages = firebase.database().ref(urlMessages);
-    this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
-    this.subscriptionsToMessages();
+    // const urlMessages = this.urlMessages + conversationWith;
+    // const firebaseMessages = firebase.database().ref(urlMessages);
+    // this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+    // this.subscriptionsToMessages();
   }
 
 
@@ -250,71 +279,71 @@ export class GenericMessagingService {
    * valutare utilizzo di .map!!!!
    */
   subscriptionsToMessages() {
-    const that = this;
-    //// SUBSCRIBE REMOVED ////
-    this.messagesRef.on('child_removed', function (childSnapshot) {
-      const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-      if (index > -1) {
-        that.messages.splice(index, 1);
-      }
-    });
-    //// SUBSCRIBE ADDED ////
-    // this.onMessageArrived = function(child...) {}
-    this.messagesRef.on('child_added', function (childSnapshot) {
-      const message = childSnapshot.val();
-      that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
-      const text = replaceBr(message['text']);
+    // const that = this;
+    // //// SUBSCRIBE REMOVED ////
+    // this.messagesRef.on('child_removed', function (childSnapshot) {
+    //   const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+    //   if (index > -1) {
+    //     that.messages.splice(index, 1);
+    //   }
+    // });
+    // //// SUBSCRIBE ADDED ////
+    // // this.onMessageArrived = function(child...) {}
+    // this.messagesRef.on('child_added', function (childSnapshot) {
+    //   const message = childSnapshot.val();
+    //   that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
+    //   const text = replaceBr(message['text']);
 
-      if (that.checkMessage(message)) {
-        // imposto il giorno del messaggio
-        // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
-        const dateSendingMessage = setHeaderDate(message['timestamp']);
-        // console.log('message[timestamp]: ', message['timestamp']);
-        const msg = new MessageModel(
-          childSnapshot.key,
-          message['language'],
-          message['recipient'],
-          message['recipient_fullname'],
-          message['sender'],
-          message['sender_fullname'],
-          message['status'],
-          message['metadata'],
-          text,
-          message['timestamp'],
-          dateSendingMessage,
-          message['type'],
-          message['attributes'],
-          message['channel_type'],
-          message['progectId']
-        );
-        // azzero sto scrivendo
-        // that.deleteWritingMessages(message['sender']);
-        // notifico arrivo nuovo messaggio
-        //  that.g.wdLog(['NOTIFICO NW MSG *****', that.obsAdded);
-        // that.obsAdded.next(msg);
-        if (message && message.sender === that.senderId) {
-          // && message.type !== TYPE_MSG_TEXT) {
-          // sto aggiungendo un'immagine inviata da me!!!
-          // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          // that.messages.splice(index, 1, msg);
-          const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
-          //  that.g.wdLog(['index *****', index, childSnapshot.key);
-          if (index < 0) {
-            that.g.wdLog(['--------> ADD MSG IMG', index, msg]);
-            msg.status = MSG_STATUS_SENT_SERVER.toString();
-            that.messages.push(msg);
-          }
-        } else {
-          // se msg è inviato da me cambio status
-          // that.obsAddedMsg.next(text);
-          msg.status = MSG_STATUS_SENT_SERVER.toString();
-          that.g.wdLog(['--------> ADD MSG', msg.status]);
-          that.messages.push(msg);
-        }
-        that.messages.sort(that.compareValues('timestamp', 'asc'));
-        that.obsAdded.next(msg);
-      }
-    });
+    //   if (that.checkMessage(message)) {
+    //     // imposto il giorno del messaggio
+    //     // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
+    //     const dateSendingMessage = setHeaderDate(message['timestamp']);
+    //     // console.log('message[timestamp]: ', message['timestamp']);
+    //     const msg = new MessageModel(
+    //       childSnapshot.key,
+    //       message['language'],
+    //       message['recipient'],
+    //       message['recipient_fullname'],
+    //       message['sender'],
+    //       message['sender_fullname'],
+    //       message['status'],
+    //       message['metadata'],
+    //       text,
+    //       message['timestamp'],
+    //       dateSendingMessage,
+    //       message['type'],
+    //       message['attributes'],
+    //       message['channel_type'],
+    //       message['progectId']
+    //     );
+    //     // azzero sto scrivendo
+    //     // that.deleteWritingMessages(message['sender']);
+    //     // notifico arrivo nuovo messaggio
+    //     //  that.g.wdLog(['NOTIFICO NW MSG *****', that.obsAdded);
+    //     // that.obsAdded.next(msg);
+    //     if (message && message.sender === that.senderId) {
+    //       // && message.type !== TYPE_MSG_TEXT) {
+    //       // sto aggiungendo un'immagine inviata da me!!!
+    //       // const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+    //       // that.messages.splice(index, 1, msg);
+    //       const index = searchIndexInArrayForUid(that.messages, childSnapshot.key);
+    //       //  that.g.wdLog(['index *****', index, childSnapshot.key);
+    //       if (index < 0) {
+    //         that.g.wdLog(['--------> ADD MSG IMG', index, msg]);
+    //         msg.status = MSG_STATUS_SENT_SERVER.toString();
+    //         that.messages.push(msg);
+    //       }
+    //     } else {
+    //       // se msg è inviato da me cambio status
+    //       // that.obsAddedMsg.next(text);
+    //       msg.status = MSG_STATUS_SENT_SERVER.toString();
+    //       that.g.wdLog(['--------> ADD MSG', msg.status]);
+    //       that.messages.push(msg);
+    //     }
+    //     that.messages.sort(that.compareValues('timestamp', 'asc'));
+    //     that.obsAdded.next(msg);
+    //   }
+    // });
   }
 
   /**
@@ -378,7 +407,7 @@ export class GenericMessagingService {
       // tslint:disable-next-line:max-line-length
       const urlNodeMessagesUpdate = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/' + conversationWith + '/' + item.key;
       this.g.wdLog(['AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate]);
-      firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
+      //firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
     }
   }
 }
@@ -387,12 +416,13 @@ export class GenericMessagingService {
    * check if agent writing
    */
   public checkWritingMessages(tenant, conversationWith): any {
-    this.conversationWith = conversationWith;
-    const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
-    this.g.wdLog(['checkWritingMessages *****', urlNodeFirebase]);
-    const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-    const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
-    return messagesRef;
+    // this.conversationWith = conversationWith;
+    // const urlNodeFirebase = '/apps/' + tenant + '/typings/' + conversationWith;
+    // this.g.wdLog(['checkWritingMessages *****', urlNodeFirebase]);
+    // const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+    // const messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1);
+    // return messagesRef;
+    return;
   }
 
   /**
@@ -521,7 +551,7 @@ export class GenericMessagingService {
    */
   private checkRemoveConversation(conversationWith) {
     const that = this;
-    this.conversationsRef = firebase.database().ref(this.urlConversation);
+    //this.conversationsRef = firebase.database().ref(this.urlConversation);
     this.conversationsRef.on('child_removed', function (snap) {
        that.g.wdLog(['child_removed ***********************', snap.key, snap.val()]);
       if (snap.key === conversationWith) {
@@ -583,8 +613,8 @@ export class GenericMessagingService {
     const message = {
       metadata: metadata
     };
-    const firebaseMessages = firebase.database().ref(this.urlMessages + uid);
-    firebaseMessages.set(message);
+    //const firebaseMessages = firebase.database().ref(this.urlMessages + uid);
+    //firebaseMessages.set(message);
   }
 
 

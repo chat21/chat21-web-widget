@@ -572,7 +572,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (divWidgetContainer) {
                 divWidgetContainer.style.display = 'block';
             }
-
         }, 500);
     }
     // ========= end:: START UI ============//
@@ -1149,6 +1148,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     // ========= START:: TRIGGER FUNCTIONS ============//
+
     private triggerOnViewInit() {
         const default_settings = this.g.default_settings;
         const windowContext = this.g.windowContext;

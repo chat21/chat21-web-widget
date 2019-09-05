@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 export class MessageModel {
+    public sender_urlImage: string;
     constructor(
         public uid: string,
         public language: string,
@@ -18,7 +19,8 @@ export class MessageModel {
         public type: string,
         public attributes: any,
         public channel_type: string,
-        public projectid: string
+        public projectid: string,
+
     ) { }
 
     asFirebaseMessage(): Object {
