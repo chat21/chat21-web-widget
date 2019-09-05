@@ -43,4 +43,8 @@ testem.log
 Thumbs.db
 test_widget.php
 
-src/environments
+/src/environments
+environment.pre.ts
+environment.prod.ts
+environment.ts
+firebase-config.ts
