@@ -15,6 +15,8 @@ export class MenuOptionsComponent implements OnInit {
    @Output() eventSignOut = new EventEmitter();
    // ========= end:: Input/Output values ============//
   themeColor50: string;
+  hover: boolean;
+
   constructor(
     public g: Globals,
     public storageService: StorageService

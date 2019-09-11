@@ -96,7 +96,6 @@ function loadIframe(tiledeskScriptBaseLocation) {
  * 
  */
 function initWidget() {
-    
     var tiledeskroot = document.createElement('tiledeskwidget-root');
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
