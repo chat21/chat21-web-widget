@@ -12,7 +12,7 @@
     height: calc(100% - 40px);
     max-width: 420px;
     min-width: 416px;
-    max-height: 600px;
+    max-height: 640px;
     right: 0px;
     bottom: 0px;
     display: block;
@@ -48,8 +48,8 @@
 #tiledesk-container.open #tiledeskiframe {
     display: block;
     width: 376px;
-    -webkit-animation: fade-in-shadow 1.0s ease-in 0.5s both;
-    animation: fade-in-shadow 1.0s ease-in 0.5s both;
+    -webkit-animation: fade-in-shadow 0.4s ease-in 0.0s both;
+    animation: fade-in-shadow 0.4s ease-in 0.0s both;
     border-radius: 10px;
     /* box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px; */
     /* margin: 10px; */

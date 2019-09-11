@@ -52,7 +52,7 @@
                         line-height: 1.2em;
                         max-height: 2.4em;
                         font-weight: 400;
-                        font-size: 3em; 
+                        font-size: 2.6em; 
                         margin-bottom: 10px;
                     }
                     .c21-text-intro {
@@ -74,7 +74,7 @@
         height: calc(100% - 30px); //100%;
         padding: 0px;
         margin: 0px;
-        overflow: scroll;
+        overflow: hidden;
         background-color: transparent;
         top: 0;
         box-shadow: none;
@@ -98,6 +98,7 @@
                         overflow: hidden;
                         -webkit-box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
                         box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
+                        z-index: 20;
                     }
                 } 
             } 
@@ -113,7 +114,7 @@
         left: 0px;
         right: 0px;
         background-color: white;
-        box-shadow: 0 -10px 10px 1px $trasp-light-gray;
+        box-shadow: 0 0px 10px 0px $trasp-light-gray;
 
         .c21-powered-by {
             height: 25px;

@@ -1,9 +1,8 @@
 /** */
-ready(event => {
+ready(function() {
     console.log('DOM is ready, call initWidget');
     initWidget();
 });
-
 /** */
 function ready(callbackFunction){
     if(document.readyState != 'loading')
@@ -26,25 +25,26 @@ function loadIframe(tiledeskScriptBaseLocation) {
     var ifrm = document.createElement("iframe");
     //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
     // projectid= '5b55e806c93dde00143163dd'
-    var srcTileDesk =  `
-        <html lang="en">
-        <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-        <title>Tilechat Widget</title>
-        <base href="./">
-        <link rel="icon" type="image/x-icon" href="favicon.ico">
-        </head>
-        <body>
-            <tiledeskwidget-root></tiledeskwidget-root>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/inline.bundle.js"></script>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/polyfills.bundle.js"></script>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/styles.bundle.css"></script>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/vendor.bundle.js"></script>
-            <script type="text/javascript" src="${tiledeskScriptBaseLocation}/main.bundle.js"></script>
-        </body>
-        </html>
-        `;
+    //var srcTileDesk =  `
+    
+    var srcTileDesk = '<html lang="en">';
+    srcTileDesk += '<head>';
+    srcTileDesk += '<meta charset="utf-8">';
+    srcTileDesk += '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />';
+    srcTileDesk += '<title>Tilechat Widget</title>';
+    srcTileDesk += '<base href="./">';
+    srcTileDesk += '<link rel="icon" type="image/x-icon" href="favicon.ico">';
+    srcTileDesk += '</head>';
+    srcTileDesk += '<body>';
+    srcTileDesk += '<tiledeskwidget-root></tiledeskwidget-root>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/inline.bundle.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/polyfills.bundle.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/vendor.bundle.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.bundle.js"></script>';
+    srcTileDesk += '</body>';
+    srcTileDesk += '</html>';
+    
         //ifrm.setAttribute("srcdoc", srcTileDesk);
         //ifrm.document.write(srcTileDesk);
     ifrm.setAttribute('id','tiledeskiframe');

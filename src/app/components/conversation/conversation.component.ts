@@ -1028,10 +1028,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 that.g.wdLog(['onload ', imageXLoad]);
                 imageXLoad.src = reader.result.toString();
                 imageXLoad.title = nameFile;
+                that.g.wdLog(['imageXLoad.src ', imageXLoad.src]);
                 imageXLoad.onload = function () {
                   that.g.wdLog(['onload immagine']);
                   // that.arrayFilesLoad.push(imageXLoad);
-                  const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
+                  const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
                   that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
                   that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                   // INVIO MESSAGGIO
@@ -1043,8 +1044,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                   src: reader.result.toString(),
                   title: nameFile
                 };
+                that.g.wdLog(['fileXLoad.src ', fileXLoad.src]);
                 // that.arrayFilesLoad.push(imageXLoad);
-                const uid = fileXLoad.src.substring(fileXLoad.src.length - 16);
+                const uid = (new Date().getTime()).toString(36); // fileXLoad.src.substring(fileXLoad.src.length - 16);
                 that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
                 that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                 // INVIO MESSAGGIO
@@ -1076,15 +1078,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                     'src': fileXLoad.src,
                     'width': fileXLoad.width,
                     'height': fileXLoad.height,
-                    'type': type,
-                    'uid': uid
+                    'type': type
+                    // 'uid': uid
                 };
             } else {
                 metadata = {
                     'name': fileXLoad.title,
                     'src': fileXLoad.src,
-                    'type': type,
-                    'uid': uid
+                    'type': type
+                    // 'uid': uid
                 };
             }
             this.g.wdLog(['metadata -------> ', metadata]);

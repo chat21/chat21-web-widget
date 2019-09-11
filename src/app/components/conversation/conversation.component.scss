@@ -138,7 +138,6 @@
                     left: 0;
                     bottom: 43px;
                     overflow: hidden;
-
                     .time{
                         margin-bottom: 20px;
                     }
@@ -151,7 +150,7 @@
                     #c21-contentScroll{
                         position: absolute;
                         left: 0px;
-                        right: 0px;
+                        right: 10px;
                         padding: 10px;
                         // display: none;
                         opacity: 0;
@@ -175,10 +174,16 @@
                     #scroll-me {
                         height: 100%;
                         width: 100%;
-                        overflow-y: scroll;
+                        overflow-y: auto;
+                        overflow-x: hidden;
                         position: absolute;
                         top: 0;
                         right: 0;
+                    }
+                    #scroll-me:hover {
+                        &::-webkit-scrollbar-thumb {
+                            background: #777777; 
+                        }
                     }
                     .msg_container {
                         overflow: hidden;
@@ -285,7 +290,7 @@
                         .msg_receive {
                             background-color: $light-white;
                             color: $black;
-                            max-width: calc(100% - 60px);
+                            max-width: 260px;
                             min-width: 14px;
                             margin: 0 20px 4px 10px;
                             height: fit-content;
@@ -321,20 +326,20 @@
         // display: block;
         // height: 100%;
         // background-color: red;
-        pointer-events: none;
+        pointer-events: auto;
     }
     .visible-text-area.active {
         // display: hidden;
         // height: 100%;
-        pointer-events: initial;
+        pointer-events: auto;
         // background-color: green;
     }
     .chat21-textarea-button.active{
-        pointer-events: initial;
+        pointer-events: auto;
     }
     .chat21-textarea-button{
         fill: $blue;
-        pointer-events: none;
+        pointer-events: auto;
     }
 
     
@@ -386,10 +391,10 @@
     }
 
     #chat21-main-message-context {
-        overflow: hidden auto;
+        overflow: hidden;
         word-wrap: break-word;
         resize: horizontal;
-        overflow-y: visible;
+        overflow-y: auto;
         box-sizing: border-box;
         color: $black;
         min-width: 100%;

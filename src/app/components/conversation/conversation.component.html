@@ -116,7 +116,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                 <div id="chat21-sheet-content" class="chat21-sheet-content">
                     <div class="chat21-conversation-parts-container">
-                        <div #scrollMe id="scroll-me" style="height:100%; overflow-y:auto;" (scroll)="onScroll($event)">
+                        <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
                                 <div *ngFor="let message of messages" tabindex="1521" class="rowMsg">
