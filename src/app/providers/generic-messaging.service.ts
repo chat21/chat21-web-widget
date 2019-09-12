@@ -533,13 +533,13 @@ export class GenericMessagingService {
 
     this.sendMessageService(message)
     .subscribe( response => {
-        console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+        //console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
         that.onMessageReceived(response);
     }, (error) => {
-        console.error('::onMessageReceivement', error);
+        //console.error('::onMessageReceivement', error);
         // that.setParameters(null);
     }, () => {
-        console.log('onMessageReceivement null');
+        //console.log('onMessageReceivement null');
         // that.setParameters(null);
     });
     return message;

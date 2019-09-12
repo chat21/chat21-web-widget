@@ -14,7 +14,7 @@
     >
         <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
             <!-- [class.active]="true" -->
-            <tiledeskwidget-home 
+            <tiledeskwidget-home
             [senderId]="senderId"
             (eventClose)="returnCloseWidget()" 
             (eventNewConv)="returnNewConversation()" 

@@ -1,10 +1,28 @@
 @import '../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
+
+
 #chat21-home-component {
     position: absolute;
     width: 100%;
     height: 100%;
+
+    /*********  Animations **********/
+    &.start-animation .fade-in-top {
+        -webkit-animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.3s both;
+        animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.3s both;
+    }
+    &.start-animation .fade-in-bottom {
+        -webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+        animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+    }
+    &.start-animation .fade-in-bottom-footer {
+        -webkit-animation: fade-in-dw-up 1.0s ease-in 0.0s;
+        animation: fade-in-dw-up 1.0s ease-in 0.0s;
+    }
+
+
     /*********  c21-header **********/
     .c21-header {
         position: absolute;

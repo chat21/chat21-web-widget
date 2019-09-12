@@ -467,28 +467,45 @@
  * animation fade
  * ----------------------------------------
  */
+
  @-webkit-keyframes fade-in-dw-up {
   0% {
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
+    display: none;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+    opacity: 0;
   }
-  99% {
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
+  1% {
+    display: block;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+    opacity: 0;
   }
   100% {
-    -webkit-transform: translateY(30px);
-    transform: translateY(30px);
+    display: block;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    opacity: 1;
   }
 }
 @keyframes fade-in-dw-up {
   0% {
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
+    display: none;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+    opacity:0;
+  }
+  1% {
+    display: block;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+    opacity: 0;
   }
   100% {
-    -webkit-transform: translateY(30);
-    transform: translateY(30);
+    display: block;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    opacity: 1;
   }
 }
 

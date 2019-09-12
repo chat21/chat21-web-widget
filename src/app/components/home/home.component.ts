@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { convertColorToRGBA } from '../../utils/utils';
 
@@ -10,7 +10,8 @@ import { convertColorToRGBA } from '../../utils/utils';
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
+  @ViewChild('homeComponent') private element: ElementRef;
   // ========= begin:: Input/Output values ===========/
   @Output() eventNewConv = new EventEmitter<string>();
   @Output() eventSelctedConv = new EventEmitter<string>();
@@ -30,9 +31,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:max-line-length
   messaggio_benvenuto = 'Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"';
   // ========= end:: component variables ======= //
-
-
-
 
   constructor(
     public g: Globals
@@ -55,31 +53,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } catch (error) {
         console.log('> Error is handled attributes: ', error);
     }
+
+    if (this.g.firstOpen === true) {
+      this.addAnimation();
+      this.g.firstOpen = false;
+    }
     // tslint:disable-next-line:max-line-length
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
     // this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     // this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
   }
 
-  ngAfterViewInit() {
-  }
-
   // ========= begin:: ACTIONS ============//
   returnNewConversation() {
+    // rimuovo classe animazione
+    this.removeAnimation();
     this.eventNewConv.emit();
   }
 
   returnOpenAllConversation() {
+    // rimuovo classe animazione
+    this.removeAnimation();
     this.eventOpenAllConv.emit();
   }
 
   returnSelectedConversation($event) {
     if ( $event ) {
+      // rimuovo classe animazione
+      this.removeAnimation();
       this.eventSelctedConv.emit($event);
     }
   }
 
   f21_close() {
+    // aggiungo classe animazione
+    this.addAnimation();
     this.eventClose.emit();
   }
 
@@ -100,4 +108,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // ========= end:: ACTIONS ============//
 
+  addAnimation() {
+    try {
+      const mainDiv = this.element.nativeElement;
+      if (mainDiv) {
+        mainDiv.classList.add('start-animation');
+      }
+    } catch (error) {
+        console.log('> Error: ', error);
+    }
+  }
+  removeAnimation() {
+    try {
+      const mainDiv = this.element.nativeElement;
+      if (mainDiv) {
+        mainDiv.classList.remove('start-animation');
+      }
+    } catch (error) {
+        console.log('> Error: ', error);
+    }
+  }
 }

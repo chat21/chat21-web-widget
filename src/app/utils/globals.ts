@@ -72,6 +72,8 @@ export class Globals {
   signInWithCustomToken: boolean;
   displayEyeCatcherCard: string;
 
+  firstOpen = true;
+
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
   LABEL_START_NW_CONV: string;

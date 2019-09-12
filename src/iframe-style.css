@@ -48,21 +48,21 @@
 #tiledesk-container.open #tiledeskiframe {
     display: block;
     width: 376px;
-    -webkit-animation: fade-in-shadow 0.4s ease-in 0.0s both;
-    animation: fade-in-shadow 0.4s ease-in 0.0s both;
-    border-radius: 10px;
+    /* -webkit-animation: fade-in-shadow 0.4s ease-in 0.0s both;
+    animation: fade-in-shadow 0.4s ease-in 0.0s both; */
+    /* border-radius: 10px; */
     /* box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px; */
     /* margin: 10px; */
 }
 
-@-webkit-keyframes fade-in-shadow {
+/* @-webkit-keyframes fade-in-shadow {
     0% { box-shadow: rgba(0, 0, 0, 0.0) 0 0 0px; }
     100% { box-shadow: rgba(0, 0, 0, 0.1) 0 0 6px; }
 }
 @keyframes sk-bouncedelay {
     0% { box-shadow: rgba(0, 0, 0, 0.0) 0 0 0px; }
     100% { box-shadow: rgba(0, 0, 0, 0.1) 0 0 6px; }
-}
+} */
 
 #tiledesk-container.closed #tiledeskiframe {
     display: block;
@@ -82,7 +82,7 @@
 }
 
 
-/**************
+    /**************
     // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX 
     ***************/
 

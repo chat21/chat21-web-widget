@@ -877,7 +877,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   onScroll(event: any): void {
     console.log('onScroll: ', event);
     this.startScroll = false;
-
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
       const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);

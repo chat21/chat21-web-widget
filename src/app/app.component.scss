@@ -95,19 +95,19 @@ body {
 	        animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
-.fade-in-top {
-	-webkit-animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.1s both;
-	        animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.1s both;
-}
+// .fade-in-top {
+// 	-webkit-animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.1s both;
+// 	        animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.1s both;
+// }
 
-.fade-in-bottom {
-	-webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
-	        animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
-}
-.fade-in-bottom-footer {
-	// -webkit-animation: fade-in-dw-up 0.7s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.8s;
-	//         animation: fade-in-dw-up 0.7s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.8s;
-}
+// .fade-in-bottom {
+// 	-webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+// 	        animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+// }
+// .fade-in-bottom-footer {
+// 	// -webkit-animation: fade-in-dw-up 0.7s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.8s;
+// 	//         animation: fade-in-dw-up 0.7s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.8s;
+// }
 
 textarea::placeholder {
     color: $gray;  
@@ -410,12 +410,14 @@ tiledeskwidget-root {
         /* CSS BOX CONTAINER */
         #chat21-conversations {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
+            left: 1px;
+            right: 1px;
+            top: 1px;
+            bottom: 1px;
+            border-radius: 0px;
             overflow: hidden;
             background-color: transparent;
-            border: 0px solid #eeeeee;
+            border: 1px solid #00000020;
             margin: 0px;
             padding: 0px;
 
@@ -646,11 +648,14 @@ tiledeskwidget-root {
     /**************
     // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX 
     ***************/
-    @media screen and (min-width: 370px) {
-    //@media (max-width: 451px) {
+
+    @media (width: 376px){
         #chat21-conversations {
-            border-radius: 0px!important;
+            border-radius: 10px!important;
         }
+    }
+
+    @media (max-width: 451px) {
         #chat21-container {
             .header-button.close {
                 display: flex;
