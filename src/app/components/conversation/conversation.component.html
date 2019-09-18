@@ -326,11 +326,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
     </div>
 
-    <ng-container
-    *ngIf="g.hideAttachedButton; then div_mic; else div_attached">
-    </ng-container>
 
-        <ng-template #div_attached>
+    <div #div_attached *ngIf="g.hideAttachedButton == false">
         <label tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload" id="chat21-start-upload-doc">
             <span class="v-align-center">
                 <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
@@ -352,18 +349,18 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                 </svg>
             </span>
         </div>
-        </ng-template>
+    </div>
 
-        <ng-template #div_mic>
-            <label tabindex="1502" aria-label="allegati" for="chat21-file" [class.active]="true" class="chat21-textarea-button" id="chat21-start-mic">
-                <span class="v-align-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
-                        <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z"/>
-                        <path d="M17,11c0,2.76-2.24,5-5,5s-5-2.24-5-5H5c0,3.53,2.61,6.43,6,6.92V21h2v-3.08c3.39-0.49,6-3.39,6-6.92H17z"/>    
-                    </svg>
-                </span>
-            </label>
-        </ng-template>
+    <div #div_mic *ngIf="g.showMicButton">
+        <label tabindex="1502" aria-label="allegati" for="chat21-file" [class.active]="true" class="chat21-textarea-button" id="chat21-start-mic">
+            <span class="v-align-center">
+                <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
+                    <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z"/>
+                    <path d="M17,11c0,2.76-2.24,5-5,5s-5-2.24-5-5H5c0,3.53,2.61,6.43,6,6.92V21h2v-3.08c3.39-0.49,6-3.39,6-6.92H17z"/>    
+                </svg>
+            </span>
+        </label>
+    </div>
     
     
     <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">

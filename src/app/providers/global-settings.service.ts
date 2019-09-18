@@ -632,6 +632,13 @@ export class GlobalSettingsService {
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
 
+        TEMP = tiledeskSettings['showMicButton'];
+        // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.showMicButton = (TEMP === true) ? true : false;
+            // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
+        }
+
     }
 
     /**
@@ -759,6 +766,12 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.hideAttachedButton = (TEMP === true) ? true : false;
         }
+
+        TEMP = el.nativeElement.getAttribute('showMicButton');
+        if (TEMP !== null) {
+            this.globals.showMicButton = (TEMP === true) ? true : false;
+        }
+
 
 
     }
@@ -970,6 +983,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_hideAttachedButton');
         if (TEMP) {
             globals.hideAttachedButton = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showMicButton');
+        if (TEMP) {
+            globals.showMicButton = stringToBoolean(TEMP);
         }
 
     }

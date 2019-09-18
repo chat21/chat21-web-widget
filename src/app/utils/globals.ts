@@ -177,6 +177,7 @@ export class Globals {
 
    customAttributes: string;
    hideAttachedButton: boolean;
+   showMicButton: boolean;
 
   constructor(
   ) {
@@ -294,6 +295,7 @@ export class Globals {
     this.online_msg = this.LABEL_FIRST_MSG;
 
     this.hideAttachedButton = false;
+    this.showMicButton = false;
 
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
@@ -395,7 +397,7 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption, 'hideAttachedButton': this.hideAttachedButton
+      'showLogoutOption': this.showLogoutOption, 'hideAttachedButton': this.hideAttachedButton, 'showMicButton': this.showMicButton
     };
   }
 
