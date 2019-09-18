@@ -625,6 +625,13 @@ export class GlobalSettingsService {
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
 
+        TEMP = tiledeskSettings['hideAttachedButton'];
+        // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.hideAttachedButton = (TEMP === true) ? true : false;
+            // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
+        }
+
     }
 
     /**
@@ -747,6 +754,12 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.filterByRequester = (TEMP === true) ? true : false;
         }
+
+        TEMP = el.nativeElement.getAttribute('hideAttachedButton');
+        if (TEMP !== null) {
+            this.globals.hideAttachedButton = (TEMP === true) ? true : false;
+        }
+
 
     }
 
@@ -953,6 +966,12 @@ export class GlobalSettingsService {
             globals.customAttributes = stringToBoolean(TEMP);
             this.globals.wdLog(['globals.customAttributes: ' + globals.customAttributes]);
         }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideAttachedButton');
+        if (TEMP) {
+            globals.hideAttachedButton = stringToBoolean(TEMP);
+        }
+
     }
 
     /**

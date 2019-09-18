@@ -99,10 +99,13 @@ export class GenericMessagingService {
         }
         if (key === 'recipient') {
           message['recipient'] = value;
+          this.g.recipientId = value;
         }
         if (key === 'recipient_fullname') {
           message['recipient_fullname'] = value;
+          this.g.recipientFullname = value;
         }
+
       });
       // console.log('> attributes: ', attributes);
     } catch (error) {

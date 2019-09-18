@@ -45,6 +45,7 @@ export class TranslatorService {
     globals.BUTTON_CLOSE_TO_ICON = this.translateForKey('BUTTON_CLOSE_TO_ICON');
     globals.BUTTON_EDIT_PROFILE = this.translateForKey('BUTTON_EDIT_PROFILE');
     globals.BUTTON_DOWNLOAD_TRANSCRIPT = this.translateForKey('BUTTON_DOWNLOAD_TRANSCRIPT');
+    globals.BUTTON_RESET_CONVERSATION = this.translateForKey('BUTTON_RESET_CONVERSATION');
     globals.RATE_CHAT = this.translateForKey('RATE_CHAT');
     globals.WELLCOME_TITLE = this.translateForKey('WELLCOME_TITLE');
     globals.WELLCOME_MSG = this.translateForKey('WELLCOME_MSG');

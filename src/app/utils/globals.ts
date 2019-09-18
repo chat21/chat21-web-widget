@@ -74,6 +74,7 @@ export class Globals {
 
   firstOpen = true;
 
+
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
   LABEL_START_NW_CONV: string;
@@ -98,6 +99,7 @@ export class Globals {
   BUTTON_CLOSE_TO_ICON: string;
   BUTTON_EDIT_PROFILE: string;
   BUTTON_DOWNLOAD_TRANSCRIPT: string;
+  BUTTON_RESET_CONVERSATION: string;
   RATE_CHAT: string;
   WELLCOME_TITLE: string;
   WELLCOME_MSG: string;
@@ -154,6 +156,7 @@ export class Globals {
    wellcomeTitle: string;
    wellcomeMsg: string;
    recipientId: String;
+   recipientFullname: String;
    userId: string;
    userPassword: string;
    userToken: string;
@@ -173,6 +176,7 @@ export class Globals {
    offline_msg: string;
 
    customAttributes: string;
+   hideAttachedButton: boolean;
 
   constructor(
   ) {
@@ -289,6 +293,9 @@ export class Globals {
     this.offline_msg = this.LABEL_FIRST_MSG_NO_AGENTS;
     this.online_msg = this.LABEL_FIRST_MSG;
 
+    this.hideAttachedButton = false;
+
+
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
 
@@ -388,7 +395,7 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption
+      'showLogoutOption': this.showLogoutOption, 'hideAttachedButton': this.hideAttachedButton
     };
   }
 

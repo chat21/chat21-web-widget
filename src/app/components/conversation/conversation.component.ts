@@ -98,6 +98,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isNewConversation = true;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
+  recipient_fullname: String;
 
   // attributes: any;
   // GUEST_LABEL = '';
@@ -216,6 +217,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
+
+
+    try {
+      JSON.parse(this.g.customAttributes, (key, value) => {
+        if (key === 'recipient_fullname') {
+          this.g.recipientFullname = value;
+        }
+      });
+    } catch (error) {
+        console.log('> Error is handled attributes: ', error);
+    }
   }
 
   onResize(event) {
@@ -249,6 +261,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       this.addFirstMessage(this.g.online_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+    }
+
+    if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
+      this.g.areAgentsAvailableText = '';
     }
     this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
 
@@ -648,7 +664,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // this.setDepartment();
           msg = replaceBr(msg);
           this.sendMessage(msg, TYPE_MSG_TEXT);
-          this.restoreTextArea();
+          //this.restoreTextArea();
           //this.scrollToBottom();
       }
       // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
@@ -666,7 +682,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
         this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
-          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+        console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -690,12 +706,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           const userEmail = this.g.userEmail;
           const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
           const widgetTitle = this.g.widgetTitle;
+          const conversationWith = this.conversationWith;
           this.triggerBeforeSendMessageEvent(
             recipientFullname,
             msg,
             type,
             metadata,
-            this.conversationWith,
+            conversationWith,
             recipientFullname,
             attributes,
             projectid,
@@ -718,7 +735,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             msg,
             type,
             metadata,
-            this.conversationWith,
+            conversationWith,
             recipientFullname,
             attributes,
             projectid,
@@ -726,6 +743,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             );
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
+          this.restoreTextArea();
       }
   }
 
@@ -1269,10 +1287,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
     const windowContext = this.g.windowContext;
     windowContext.open(url, '_blank');
+    this.isMenuShow  = false;
   }
 
   toggleSound() {
     this.g.setParameter('isSoundActive', !this.g.isSoundActive);
+    this.isMenuShow  = false;
     // this.g.isSoundActive = !this.g.isSoundActive;
     // if ( this.g.isSoundActive === false ) {
     //   this.storageService.setItem('isSoundActive', false);
@@ -1345,7 +1365,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   hideMenuOptions() {
     this.g.wdLog(['hideMenuOptions']);
     this.isMenuShow  = false;
- }
+  }
+
+  resetConversation() {
+    this.g.wdLog(['resetConversation']);
+    this.sendMessage('reset', TYPE_MSG_TEXT, null);
+    this.isMenuShow  = false;
+  }
 
   isLastMessage(idMessage: string) {
     // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);

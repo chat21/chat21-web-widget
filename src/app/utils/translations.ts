@@ -35,6 +35,7 @@ export const en = {
     'BUTTON_CLOSE_TO_ICON': 'Minimize chat',
     'BUTTON_EDIT_PROFILE': 'Update profile',
     'BUTTON_DOWNLOAD_TRANSCRIPT': 'Download transcript',
+    'BUTTON_RESET_CONVERSATION': 'Reset conversation',
     'RATE_CHAT': 'Rate chat',
     'WELLCOME_TITLE': 'Hi, wellcome to Tiledesk',
     'WELLCOME_MSG': 'How can we help?',
@@ -52,7 +53,7 @@ export const en = {
     'NO_CONVERSATION': 'No conversation',
     'SEE_PREVIOUS': 'see previous',
     'WAITING_TIME_FOUND': 'The team typically replies in ',
-    'WAITING_TIME_NOT_FOUND': 'Will reply as soon as they can'
+    'WAITING_TIME_NOT_FOUND': 'Will reply as soon as they can',
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -92,6 +93,7 @@ export const it = {
     'BUTTON_CLOSE_TO_ICON': 'Riduci a icona la chat',
     'BUTTON_EDIT_PROFILE': 'Modifica profilo',
     'BUTTON_DOWNLOAD_TRANSCRIPT': 'Scarica transcript',
+    'BUTTON_RESET_CONVERSATION': 'Azzera conversazione',
     'RATE_CHAT': 'Valuta chat',
     'WELLCOME_TITLE': 'Ciao, benvenuto su Tiledesk',
     'WELLCOME_MSG': 'Come possiamo aiutarti?',
