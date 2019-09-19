@@ -466,6 +466,11 @@ export class GenericMessagingService {
   sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
     this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
     this.g.wdLog(['metadata:: ', metadata.button]);
+
+    // aggiungo un uid univoco ad ogni msg
+    const uid = (new Date().getTime()).toString(36);
+    attributes.uid = uid;
+
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';

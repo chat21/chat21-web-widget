@@ -700,6 +700,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
+
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
           const userFullname = this.g.userFullname;
