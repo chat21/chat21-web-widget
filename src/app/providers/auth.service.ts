@@ -119,25 +119,28 @@ export class AuthService {
         })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
+      // that.obsLoggedUser.next(0);
     });
   }
 
 
   authenticateFirebaseCustomToken(token) {
-    this.g.wdLog(['authService.authenticateFirebaseCustomToken', token]);
+    this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken']);
     const that = this;
     firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
-      //  that.g.wdLog(['token: ', token);
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
-      .then(function(user) {
-        that.g.wdLog(['USER by signInWithCustomToken: ', user]);
-        that.user = user;
+      .then(function(response) {
+        // that.g.wdLog(['USER by signInWithCustomToken: ' + response.user.getIdToken()]);
+        // console.log('USER by signInWithCustomToken: ', response);
+        that.g.setParameter('firebaseToken', token);
+        that.g.setParameter('signInWithCustomToken', true);
+        that.user = response.user;
         if (that.unsubscribe) {
           that.unsubscribe();
         }
         that.obsLoggedUser.next(firebase.auth().currentUser);
-        that.getToken();
+        // that.getToken();????
       })
       .catch(function(error) {
           const errorCode = error.code;
@@ -263,7 +266,6 @@ export class AuthService {
   // /jwt/decode?project_id=123
   public decode(token, projectId) {
     const url = this.API_URL + projectId + '/jwt/decode';
-
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'JWT ' + token);
@@ -273,14 +275,15 @@ export class AuthService {
   }
 
   public createFirebaseToken(token, projectId) {
-    const url = this.API_URL + projectId + '/firebase/createtoken';
-
+    // const url = this.API_URL + projectId + '/firebase/createtoken';
+    const url = this.API_URL + 'chat21/firebase/auth/createCustomToken';
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'JWT ' + token);
+    // headers.append('Authorization', 'JWT ' + token);
+    headers.append('Authorization', token);
     return this.http
       .post(url, null, { headers })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   getFirebaseAuthPersistence() {

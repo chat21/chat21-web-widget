@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <base href="./">
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+      /* body{
+        background-color: darkgray;
+      } */
+      </style>
+        <script type="application/javascript">
+              
+              // Handler for .ready() called.
+              window.tiledeskSettings = 
+              {
+                  projectid: "5b55e806c93dde00143163dd",//'5d022a9b8fb8450017c67a37', //
+                  persistence:"local",                /** local/session/none **/
+                  // userEmail: "czone555@gmail.com",
+                  // userPassword:"123456",
+                  // userToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk4MGVkMGQ3ODY2ODk1Y2E0M2MyMGRhZmM4NTlmMThjNjcwMWU3OTYiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jaGF0LXYyLWRldiIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTYxMDIwNTg2LCJ1c2VyX2lkIjoicllXQmgwd2c2TE05U1drT2lMY0tySmdWVldkMiIsInN1YiI6InJZV0JoMHdnNkxNOVNXa09pTGNLckpnVlZXZDIiLCJpYXQiOjE1NjEwMjA1ODYsImV4cCI6MTU2MTAyNDE4NiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.SID7kHLV0v5t0fd18WtlX_HfZ2nU2Qg6GU3HB2nNx9J7yaQQdZv1zkvXMmtJGIMCXw1Z_HMVDkbjqPOGOS-Wz8AF_Vdrxj2ePX6K6amE_DfZz2ECG-VrOghOPjggYwMCykmJu6k2IOHc3Z1jq9rTqCanHqmElUXTwDwUIub4OQ_fn6Ak1krotdNNUbdoFFDiPKt_39UC92Z3jbUf-2FQgxOWSJg7h8pjShe6anEFtdmjX50hl0dtbKhMNNacWtczAtRBrr1u7QCL0D8K-dzzxuduQUEMlnGPzYyQtaYfAxjWRQ8PP1BUBPeTNLiYtj4oprcCUS61qr3lBdw6tumtMw',
+                  // userId: "5b55e806c93dde00143163df", 
+                  isLogEnabled: true,                     /** true/false **/
+
+                  // preChatForm: true,
+                  // calloutTimer:"1",
+                  // calloutTitle:"calloutTitle",
+                  // calloutMsg:"calloutMsg",
+                  // themeColor:"#cccccc",
+                  // themeForegroundColor:"#000000",
+                  // logoChat:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png",                  /** none/tiledesklogo/absolute url **/
+                  // wellcomeTitle:"wellcomeTitle",            /** string **/
+                  // wellcomeMsg:"wellcomeMsg",                /** string **/
+                  // align: "left",                             /** left/right **/
+                  
+                  // development: true, // da verificare in tiledesk.js
+                  // tenant: "tilechat2",
+                  // recipientId: "support-group-Lhug32g57j5xyB7IgT4",
+                  
+                  // widgetTitle: "widget Title Test",
+                  // poweredBy: "poweredBy",
+                  // userEmail: "czone555@gmail.com",
+                  // userPassword: "123456",
+                  // userFullname: "Dario",
+                  // isOpen: true,                             /** true/false **/
+                  // channelType: "group",                     /** group/direct **/
+                  // lang: "en",                               /** it/en **/
+                  // marginX: "100px",
+                  // marginY: "100px",
+                  // fullscreenMode: true,
+                  // hideHeaderCloseButton: true,
+                  allowTranscriptDownload: true,
+                  // startFromHome: false,                       /** true/false **/
+                  autoStart: false                          /** true/false **/
+                  // isShown: false,                             /** true/false **/
+                  // isLogoutEnabled: false,
+                  // filterByRequester: true,                  /** true/false **/
+                  // showWaitTime: false,                        /** true/false **/
+                  // showAvailableAgents: false,                 /** true/false **/
+                  // showLogoutOption: false,                    /** true/false **/
+                  // showWidgetNameInConversation: true              
+              };
+        
+              (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); 
+                js.id = id; //js.async=!0;
+                js.src = "./launch.js"; //https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.1/
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'tiledesk-jssdk'));
+              
+
+              // window.tileDeskAsyncInit = function() {
+
+//                 window.tiledesk.on('loadParams', function(event_data) {
+//                   let json = JSON.stringify({
+//                     "id_project": "5b55e806c93dde00143163dd"
+//                   });
+//                   alert(json);
+//                   var httpRequest = createCORSRequest('POST', 'https://tiledesk-server-pre.herokuapp.com/auth/signinAnonymously',true); //set async to false because loadParams must return when the get is complete
+//                   if (!httpRequest) {
+//                     throw new Error('CORS not supported');
+//                   }
+//                   httpRequest.setRequestHeader('Content-type', 'application/json');
+//                   httpRequest.send(json);
+
+//                   httpRequest.onload = function() {
+//                     if (httpRequest.readyState === XMLHttpRequest.DONE) {
+//                       if (httpRequest.status === 200) {
+//                         try {
+//                           var response = JSON.parse(httpRequest.responseText);
+//                           alert(response.token);
+//                           window.tiledesk.signInWithCustomToken(response);
+//                         }
+//                         catch(err) {
+//                           console.error(err.message);
+//                         }
+//                         return true;
+//                       } else {
+//                         alert('There was a problem with the request.');
+//                       }
+//                     }         
+//                   };
+//                   httpRequest.onerror = function() {
+//                     console.error('There was an error!');
+//                   };
+//                   return false;
+//                 }); //window.tiledesk.on
+
+//               };// window.tileDeskAsyncInit 
+
+              
+//               function createCORSRequest(method, url, async) {
+//                 console.log("createCORSRequest");
+//                 var xhr = new XMLHttpRequest();
+
+//                 if ("withCredentials" in xhr) {
+//                   // Check if the XMLHttpRequest object has a "withCredentials" property.
+//                   // "withCredentials" only exists on XMLHTTPRequest2 objects.
+//                   xhr.open(method, url, async);
+//                   console.log("xhr12");
+//                 } else if (typeof XDomainRequest != "undefined") {
+//                   // Otherwise, check if XDomainRequest.
+//                   // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+//                   xhr = new XDomainRequest();
+//                   xhr.open(method, url);
+//                   console.log("xhr111");
+//                 } else {
+//                   // Otherwise, CORS is not supported by the browser.
+//                   xhr = null;
+//                   console.log("xhrnull");
+//                 }
+//                 return xhr;
+//               }
+
+        
+            </script>
+    </head>
+    <body>
+        <p style="text-align: right"><a href="www.google.it">link2</a></p>
+    </body>
+</html>

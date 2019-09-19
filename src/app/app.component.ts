@@ -105,6 +105,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
 
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
+            // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your firebase-config.json. See the Chat21-Web_widget Installation Page');
         }
 
@@ -167,7 +168,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.setParameter('isLogged', true);
                     that.g.setParameter('isShown', true);
                     that.g.setParameter('attributes', that.setAttributesFromStorageService());
-                    that.g.wdLog([' this.g.senderId', user.uid]);
                     that.startNwConversation();
                     that.startUI();
                     that.triggerIsLoggedInEvent();
@@ -183,6 +183,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     private initWidgetParamiters() {
+        // console.log('---------------- initWidgetParamiters ---------------- ');
         const that = this;
        // ------------------------------- //
        /**
@@ -194,6 +195,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
        const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
+                    // console.log('---------------- obsSettingsService ---------------- ');
                     // ------------------------------- //
                     /** INIT  */
                     that.initAll();
@@ -203,7 +205,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         });
         this.subscriptions.push(obsSettingsService);
-
         this.globalSettingsService.initWidgetParamiters(this.g, this.el);
        // ------------------------------- //
     }
@@ -220,6 +221,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 7 - set isInitialized and enable principal button
      */
     private initAll() {
+        // console.log('---------------- initAll ---------------- ');
+        this.addComponentToWindow(this.ngZone);
 
          /** TRANSLATION LOADER: */
          this.translatorService.translate(this.g);
@@ -250,12 +253,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.g.wdLog([' ---------------- A1 ---------------- ']);
         this.removeFirebasewebsocketFromLocalStorage();
-        this.triggerLoadParamsEvent();
-        this.addComponentToWindow(this.ngZone);
+        // this.triggerLoadParamsEvent();
+        ///this.addComponentToWindow(this.ngZone); // forse dovrebbe stare prima di tutti i triggers
 
         this.initLauncherButton();
         this.chatPresenceHandlerService.initialize();
-        // this.initChatSupportMode();
+        this.triggerLoadParamsEvent(); // first trigger
     }
 
     /** initLauncherButton
@@ -591,9 +594,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
             /** loggin with token */
-            windowContext['tiledesk'].signInWithCustomToken = function (token) {
+            windowContext['tiledesk'].signInWithCustomToken = function (response) {
                 ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(token);
+                    windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(response);
                 });
             };
             /** loggin anonymous */
@@ -680,8 +683,35 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog([messageSent]);
     }
 
-    /** */
-    private signInWithCustomToken(token) {
+    /** 
+     * 
+    */
+    private signInWithCustomToken(response: any) {
+        const that = this;
+        // console.log(response);
+        try {
+            const token = response.token;
+            const user = response.user;
+            const projectid = this.g.projectid;
+            this.g.wdLog(['signInWithCustomToken token ', token]);
+            this.authService.createFirebaseToken(token, projectid)
+            .subscribe(firebaseToken => {
+                that.g.setParameter('userToken', token);
+                that.g.setParameter('userEmail', user.email);
+                that.g.setParameter('userId', user._id);
+                that.g.setAttributeParameter('userEmail', user.email);
+                that.authService.authenticateFirebaseCustomToken(firebaseToken);
+            }, error => {
+                console.error('Error creating firebase token: ', error);
+                that.signOut();
+            });
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    }
+
+
+    private signInWithCustomTokenUniLe(token) {
         this.g.wdLog(['signInWithCustomToken token ', token]);
         const that = this;
         const projectid = this.g.projectid;
@@ -690,7 +720,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.authService.decode(token, projectid)
                     .subscribe(resDec => {
                         const attributes = that.g.attributes;
-                        const firebaseToken = response.firebaseToken;
+                        const firebaseToken = response;
                         this.g.wdLog(['firebaseToken', firebaseToken]);
                         this.g.wdLog(['resDec', resDec.decoded]);
                         that.g.setParameter('signInWithCustomToken', true);
@@ -701,7 +731,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.g.setParameter('signInWithCustomToken', true);
                         that.g.setParameter('signInWithCustomToken', true);
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
-
                         that.g.setAttributeParameter('userEmail', resDec.decoded.email);
                         that.g.setAttributeParameter('userFullname', resDec.decoded.name);
                         // attributes.userEmail = resDec.decoded.email;

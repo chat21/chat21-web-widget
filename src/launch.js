@@ -52,6 +52,14 @@ function loadIframe(tiledeskScriptBaseLocation) {
     // ifrm.style.display = 'none';
 
     /** */
+    window.tileDeskAsyncInit = function() {
+        console.log("tileDeskAsyncInit");
+        window.tiledesk.on('loadParams', function(event_data) {
+            signInWithCustomToken();
+        });
+    }
+
+    
     window.tiledesk.on('onInit', function(event_data) {
         console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
         if (window.tiledesk.angularcomponent.component.g.isOpen) {
@@ -96,7 +104,6 @@ function loadIframe(tiledeskScriptBaseLocation) {
  * 
  */
 function initWidget() {
-    
     var tiledeskroot = document.createElement('tiledeskwidget-root');
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
@@ -105,7 +112,7 @@ function initWidget() {
         this.tiledeskroot = tiledeskroot;
         console.log(" this.tiledeskroot",  this.tiledeskroot);
         this.on = function (event_name, handler) {
-            //console.log("addEventListener for "+ event_name, handler);
+            console.log("addEventListener for "+ event_name, handler);
             tiledeskroot.addEventListener(event_name, handler);
         };
         this.getBaseLocation = function() {
@@ -115,12 +122,10 @@ function initWidget() {
     console.log("window.tiledesk created");
     try {
         window.tileDeskAsyncInit();
-        console.log("tileDeskAsyncInit() called");
     }catch(er) {
         console.log("tileDeskAsyncInit() doesn't exists",er);
     }
     document.body.appendChild(tiledeskroot);
-
     initCSSWidget(tiledeskScriptBaseLocation);
     loadIframe(tiledeskScriptBaseLocation);
 }
@@ -138,4 +143,62 @@ function initCSSWidget(tiledeskScriptBaseLocation) {
         link.media = 'all';
         head.appendChild(link);
     // }
+}
+
+
+
+function signInWithCustomToken() {
+    let json = JSON.stringify({
+        "id_project": "5b55e806c93dde00143163dd"
+    });
+    
+    var httpRequest = createCORSRequest('POST', 'https://tiledesk-server-pre.herokuapp.com/auth/signinAnonymously',true); //set async to false because loadParams must return when the get is complete
+    if (!httpRequest) {
+        throw new Error('CORS not supported');
+    }
+    httpRequest.setRequestHeader('Content-type', 'application/json');
+    httpRequest.send(json);
+    httpRequest.onload = function() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                try {
+                    var response = JSON.parse(httpRequest.responseText);
+                    window.tiledesk.signInWithCustomToken(response);
+                }
+                catch(err) {
+                    console.error(err.message);
+                }
+                return true;
+            } else {
+                alert('There was a problem with the request.');
+            }
+        }         
+    };
+    httpRequest.onerror = function() {
+        console.error('There was an error!');
+        return false;
+    };
+}
+
+
+function createCORSRequest(method, url, async) {
+    console.log("createCORSRequest");
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+        // Check if the XMLHttpRequest object has a "withCredentials" property.
+        // "withCredentials" only exists on XMLHTTPRequest2 objects.
+        xhr.open(method, url, async);
+        console.log("xhr12");
+    } else if (typeof XDomainRequest != "undefined") {
+         // Otherwise, check if XDomainRequest.
+         // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+         xhr = new XDomainRequest();
+         xhr.open(method, url);
+         console.log("xhr111");
+    } else {
+         // Otherwise, CORS is not supported by the browser.
+         xhr = null;
+         console.log("xhrnull");
+    }
+    return xhr;
 }

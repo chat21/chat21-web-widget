@@ -32,6 +32,7 @@
     <script type="application/javascript">    
 
       function createCORSRequest(method, url, async) {
+        
         var xhr = new XMLHttpRequest();
         if ("withCredentials" in xhr) {
 
@@ -60,7 +61,7 @@
 
       window.tileDeskAsyncInit = function() {
       window.tiledesk.on('loadParams', function(event_data) {
-        // console.log("loadParams", event_data);
+        console.log("2 - loadParams->");
         // console.log("window.tiledesk", window.tiledesk);
         
         var httpRequest = createCORSRequest('POST', 'https://demo@f21.it:password@api.tiledesk.com/v1/5b55e806c93dde00143163dd/jwt/generatetestjwt',false); //set async to false because loadParams must return when the get is complete
@@ -69,7 +70,6 @@
         }
 
         // console.log("onreadystatechange1");
-       
         httpRequest.onload = function() {
           if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {

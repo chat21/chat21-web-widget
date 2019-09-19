@@ -65,13 +65,14 @@ export class GlobalSettingsService {
         // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
         .subscribe( response => {
-            // console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+            // console.log('1 - setParameters ', response);
             that.setParameters(response);
         }, (error) => {
-            // console.error('::getProjectParametersById', error);
+            console.error('::getProjectParametersById', error);
             that.setParameters(null);
         }, () => {
-            that.setParameters(null);
+            // console.log('3 - setParameters ');
+            // that.setParameters(null);
         });
         // ------------------------------- //
         // this.getProjectParametersById(globals, el)
@@ -278,7 +279,6 @@ export class GlobalSettingsService {
     */
     setParameters(response: any ) {
         if (response !== null) {
-            this.globals.wdLog(['----> setParameters', response]);
             this.setVariablesFromService(this.globals, response);
         }
         this.setVariablesFromSettings(this.globals);
@@ -757,6 +757,7 @@ export class GlobalSettingsService {
     * D: setVariableFromUrlParameters
     */
     setVariablesFromUrlParameters(globals: Globals) {
+        globals.wdLog(['setVariablesFromUrlParameters: ']);
         const windowContext = globals.windowContext;
         let TEMP: any;
         TEMP = getParameterByName(windowContext, 'tiledesk_tenant');
@@ -895,7 +896,6 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.isLogEnabled = stringToBoolean(TEMP);
         }
-        globals.wdLog(['isLogEnabled: ', globals.isLogEnabled]);
 
 
         TEMP = getParameterByName(windowContext, 'tiledesk_filterByRequester');
@@ -1003,8 +1003,6 @@ export class GlobalSettingsService {
             //     this.globals.online_msg = department['online_msg'];
             // }
             this.setDepartment(departments[0]);
-             console.log('this.globals.offline_msg ::::', this.globals.LABEL_FIRST_MSG_NO_AGENTS);
-             console.log('this.globals.online_msg ::::', this.globals.LABEL_FIRST_MSG);
             // return false;
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
