@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
   // tslint:disable-next-line:max-line-length
   messaggio_benvenuto = 'Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"';
   immagine_benvenuto = 'https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png';
+  buttonLabel = 'Chiedi';
   // ========= end:: component variables ======= //
 
   constructor(
@@ -52,6 +53,9 @@ export class HomeComponent implements OnInit {
         }
         if (key === 'immagine_benvenuto') {
           this.immagine_benvenuto = value;
+        }
+        if (key === 'button_label') {
+          this.buttonLabel = value;
         }
       });
     } catch (error) {

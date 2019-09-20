@@ -176,7 +176,7 @@ export class Globals {
    offline_msg: string;
 
    customAttributes: string;
-   hideAttachedButton: boolean;
+   hideAttachButton: boolean;
    showMicButton: boolean;
 
   constructor(
@@ -294,7 +294,7 @@ export class Globals {
     this.offline_msg = this.LABEL_FIRST_MSG_NO_AGENTS;
     this.online_msg = this.LABEL_FIRST_MSG;
 
-    this.hideAttachedButton = false;
+    this.hideAttachButton = false;
     this.showMicButton = false;
 
 
@@ -397,7 +397,7 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption, 'hideAttachedButton': this.hideAttachedButton, 'showMicButton': this.showMicButton
+      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton, 'showMicButton': this.showMicButton
     };
   }
 
