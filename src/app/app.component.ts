@@ -1247,7 +1247,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private triggerIsLoggedInEvent() {
         this.g.wdLog([' ---------------- triggerIsLoggedInEvent ---------------- ', this.g.isLogged]);
         const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
-        this.el.nativeElement.dispatchEvent(isLoggedIn);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(isLoggedIn);
+            // this.g.setParameter('windowContext', windowContext);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(isLoggedIn);
+        }
     }
 
     /** */
@@ -1255,7 +1262,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
-        this.el.nativeElement.dispatchEvent(loadParams);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(loadParams);
+            // this.g.setParameter('windowContext', windowContext);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(loadParams);
+        }
     }
 
     // ========= END:: TRIGGER FUNCTIONS ============//

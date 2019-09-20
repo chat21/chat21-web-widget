@@ -29,7 +29,7 @@
     height: 60px;
     padding: 4px;
     max-height: calc(100% - 10px);
-    overflow: scroll;
+    overflow: auto;
 }
     
 .ec_right::-webkit-scrollbar {

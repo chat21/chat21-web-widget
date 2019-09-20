@@ -766,12 +766,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   triggerBeforeMessageRender(message, messageEl, component) {
     // console.log('triggerBeforeMessageRender');
     try {
-      // tslint:disable-next-line:max-line-length
+      // console.log('triggerBeforeMessageRender');
       const beforeMessageRender = new CustomEvent('beforeMessageRender',
         { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-
-      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
-      // console.log('returnEventValue', returnEventValue);
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
+          this.g.windowContext = windowContext;
+      } else {
+        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+      }
     } catch (e) {
         console.error('Error triggering triggerBeforeMessageRender', e);
     }
@@ -780,12 +784,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   triggerAfterMessageRender(message, messageEl, component) {
     // console.log('triggerBeforeMessageRender');
     try {
-      // tslint:disable-next-line:max-line-length
+      // console.log('triggerAfterMessageRender');
       const afterMessageRender = new CustomEvent('afterMessageRender',
         { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-
-      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
-      // console.log('returnEventValue', returnEventValue);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
+            this.g.windowContext = windowContext;
+        } else {
+          const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+        }
     } catch (e) {
         console.error('Error triggering triggerAfterMessageRender', e);
     }
@@ -796,9 +804,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:max-line-length
   private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
     try {
-        // tslint:disable-next-line:max-line-length
-        const beforeMessageSend = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+      // console.log('triggerBeforeSendMessageEvent');
+      // tslint:disable-next-line:max-line-length
+      const beforeMessageSend = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageSend);
+          this.g.windowContext = windowContext;
+      } else {
         this.el.nativeElement.dispatchEvent(beforeMessageSend);
+      }
     } catch (e) {
         console.error('Error triggering triggerBeforeSendMessageEvent', e);
     }
@@ -807,9 +822,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:max-line-length
   private triggerAfterSendMessageEvent(message) {
     try {
+        // console.log('triggerAfterSendMessageEvent');
         // tslint:disable-next-line:max-line-length
         const afterMessageSend = new CustomEvent('afterMessageSend', { detail: { message: message } });
-        this.el.nativeElement.dispatchEvent(afterMessageSend);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageSend);
+            this.g.windowContext = windowContext;
+        } else {
+          this.el.nativeElement.dispatchEvent(afterMessageSend);
+        }
     } catch (e) {
         console.error('Error triggering triggerAfterSendMessageEvent', e);
     }
@@ -1318,7 +1340,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.audio.src = baseLocation + '/assets/sounds/Carme.mp3';
       that.g.wdLog(['****** soundMessage *****', this.audio.src]);
       this.audio.load();
-      // console.log('conversation play');
       setTimeout(function() {
         that.audio.play();
       }, 0);
