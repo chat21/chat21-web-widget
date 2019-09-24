@@ -9,7 +9,7 @@ import { AppConfigService } from '../../providers/app-config.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -97,7 +97,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isNewConversation = true;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
-
+  recipient_fullname: String;
   // attributes: any;
   // GUEST_LABEL = '';
 
@@ -146,9 +146,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
-      this.ngZone.run(() => {
-        that.scrollToBottom();
-      });
+      // this.ngZone.run(() => {
+        // that.scrollToBottom();
+      // });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
     this.setFocusOnId('chat21-main-message-context');
@@ -172,7 +172,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      this.scrollToBottom();
+      // this.scrollToBottom();
     }
   }
 
@@ -209,6 +209,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
+
+    try {
+      JSON.parse(this.g.customAttributes, (key, value) => {
+        if (key === 'recipient_fullname') {
+          this.g.recipientFullname = value;
+        }
+      });
+    } catch (error) {
+        console.log('> Error is handled attributes: ', error);
+    }
   }
 
   onResize(event) {
@@ -243,6 +253,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       this.addFirstMessage(this.g.online_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+    }
+
+    if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
+      this.g.areAgentsAvailableText = '';
     }
     this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
 
@@ -395,9 +409,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.messagingService.initialize( senderId, tenant, channelType );
       this.upSvc.initialize(senderId, tenant, this.conversationWith);
-      this.contactService.initialize(senderId, tenant, this.conversationWith);
+      // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
+      this.scrollToBottomStart();
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
@@ -464,7 +479,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     });
     this.subscriptions.push(subscriptionisOpenStartRating);
-
+    console.log('---------------------->', this.subscriptions);
     // NUOVO MESSAGGIO!!
     /**
      * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
@@ -489,7 +504,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 200);
+          }, 0);
         } else {
           that.g.wdLog(['3-------']);
           that.NUM_BADGES++;
@@ -525,14 +540,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private checkWritingMessages() {
     const that = this;
     const tenant = this.g.tenant;
-    const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
-    messagesRef.on('value', function (writing) {
-        if (writing.exists()) {
-            that.writingMessage = that.g.LABEL_WRITING;
-        } else {
-            that.writingMessage = '';
-        }
-    });
+    try {
+      const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
+      if (messagesRef) {
+        messagesRef.on('value', function (writing) {
+          if (writing.exists()) {
+              that.writingMessage = that.g.LABEL_WRITING;
+          } else {
+              that.writingMessage = '';
+          }
+        });
+      }
+    } catch (e) {
+      console.error('Error checkWritingMessages ', e);
+    }
   }
 
 
@@ -633,9 +654,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // this.setDepartment();
           msg = replaceBr(msg);
           this.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.scrollToBottom();
-          this.restoreTextArea();
-          this.scrollToBottom();
+          // this.restoreTextArea();
       }
       // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
       // this.textInputTextArea = '';
@@ -665,43 +684,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
-      // this.g.attributes.attachment = {
-      //   "type":"template",
-      //   "buttons":[
-      //     {
-      //       "type":"text",
-      //       "value":"Azione 0"
-      //     },
-      //     {
-      //       "type":"text",
-      //       "class": "button-success",
-      //       "value":"Azione 1"
-      //     },
-      //     {
-      //       "type":"text",
-      //       "class": "button-error",
-      //       "value":"Azione 2"
-      //     },
-          // {
-          //   "type":"text",
-          //   "class": "button-secondary",
-          //   "value":"Azione 3"
-          // },
-          // {
-          //   "type":"web_url",
-          //   "class": "button-warning",
-          //   "value":"Azione 4"
-          // },
-          // {
-          //   "type":"web_url",
-          //   "url":"https://www.messenger.com",
-          //   "title":"Visit Messenger"
-          // }
-      //   ]
-      // };
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
-      if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT) {
+      if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
           const projectid = this.g.projectid;
@@ -710,12 +695,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           const userEmail = this.g.userEmail;
           const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
           const widgetTitle = this.g.widgetTitle;
+          const conversationWith = this.conversationWith;
           this.triggerBeforeSendMessageEvent(
             recipientFullname,
             msg,
             type,
             metadata,
-            this.conversationWith,
+            conversationWith,
             recipientFullname,
             attributes,
             projectid,
@@ -738,7 +724,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             msg,
             type,
             metadata,
-            this.conversationWith,
+            conversationWith,
             recipientFullname,
             attributes,
             projectid,
@@ -746,6 +732,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             );
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
+          this.restoreTextArea();
       }
   }
 
@@ -769,9 +756,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // tslint:disable-next-line:max-line-length
       const beforeMessageRender = new CustomEvent('beforeMessageRender',
         { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-
-      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
-      // console.log('returnEventValue', returnEventValue);
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
+          this.g.windowContext = windowContext;
+      } else {
+        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+      }
     } catch (e) {
         console.error('Error triggering triggerBeforeMessageRender', e);
     }
@@ -783,9 +774,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // tslint:disable-next-line:max-line-length
       const afterMessageRender = new CustomEvent('afterMessageRender',
         { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-
-      const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
-      // console.log('returnEventValue', returnEventValue);
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
+          this.g.windowContext = windowContext;
+      } else {
+        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+      }
     } catch (e) {
         console.error('Error triggering triggerAfterMessageRender', e);
     }
@@ -798,7 +793,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     try {
         // tslint:disable-next-line:max-line-length
         const beforeMessageSend = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-        this.el.nativeElement.dispatchEvent(beforeMessageSend);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageSend);
+            this.g.windowContext = windowContext;
+        } else {
+          this.el.nativeElement.dispatchEvent(beforeMessageSend);
+        }
     } catch (e) {
         console.error('Error triggering triggerBeforeSendMessageEvent', e);
     }
@@ -809,7 +810,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     try {
         // tslint:disable-next-line:max-line-length
         const afterMessageSend = new CustomEvent('afterMessageSend', { detail: { message: message } });
-        this.el.nativeElement.dispatchEvent(afterMessageSend);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageSend);
+            this.g.windowContext = windowContext;
+        } else {
+          this.el.nativeElement.dispatchEvent(afterMessageSend);
+        }
     } catch (e) {
         console.error('Error triggering triggerAfterSendMessageEvent', e);
     }
@@ -934,40 +941,88 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+
   /**
    * scrollo la lista messaggi all'ultimo
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
-  scrollToBottom() {
-    this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
-    const that = this;
-    if ( this.isScrolling === false ) {
-      // const divScrollMe = this.scrollMe.nativeElement;
-      setTimeout(function () {
-        try {
-          that.isScrolling = true;
-          const objDiv = document.getElementById(that.idDivScroll);
-          //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-          setTimeout(function () {
-            objDiv.scrollIntoView(false);
-          }, 100);
-          that.isScrolling = false;
-          //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
-          //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
-          //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
-          // try {
-          //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
-          // } catch ( err ) { }
-          // // that.badgeNewMessages = 0;
-          // console.log(objDiv);
-        } catch (err) {
-            that.g.wdLog(['RIPROVO ::']);
-            that.isScrolling = false;
-          // that.scrollToBottom();
-        }
-      }, 0);
-    }
+
+ scrollToBottomStart() {
+  const that = this;
+  if ( this.isScrolling === false ) {
+    setTimeout(function () {
+      try {
+        that.isScrolling = true;
+        const objDiv = document.getElementById(that.idDivScroll);
+        setTimeout(function () {
+          that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+          objDiv.scrollIntoView(false);
+          objDiv.style.opacity = '1';
+        }, 200);
+        that.isScrolling = false;
+      } catch (err) {
+        that.g.wdLog(['RIPROVO dopo 1 sec::']);
+      }
+    }, 0);
   }
+}
+
+  /**
+   * scrollo la lista messaggi all'ultimo
+   * chiamato in maniera ricorsiva sino a quando non risponde correttamente
+  */
+ scrollToBottom() {
+  this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
+  const that = this;
+  // const divScrollMe = this.scrollMe.nativeElement;
+
+  if ( this.isScrolling === false ) {
+    // const divScrollMe = this.scrollMe.nativeElement;
+    setTimeout(function () {
+      try {
+        that.isScrolling = true;
+        const objDiv = document.getElementById(that.idDivScroll);
+        setTimeout(function () {
+          objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+          that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+          // objDiv.scrollIntoView(false);
+        }, 0);
+        that.isScrolling = false;
+
+        //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+        // setTimeout(function () {
+        //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+        // }, 500);
+
+        // let checkContentScrollPosition = false;
+        // do {
+        //   setTimeout(function () {
+        //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
+        //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+        //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+        //   }, 1000);
+        // }
+        // while (checkContentScrollPosition === false);
+        // that.isScrolling = false;
+
+        //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
+        //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
+        //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
+        // try {
+        //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
+        // } catch ( err ) { }
+        // // that.badgeNewMessages = 0;
+        // console.log(objDiv);
+      } catch (err) {
+          that.g.wdLog(['RIPROVO dopo 1 sec::']);
+          setTimeout(function () {
+            that.isScrolling = false;
+          }, 0);
+        //that.scrollToBottom();
+      }
+    }, 0);
+  }
+}
 
   // ========= end:: functions scroll position ======= //
 
@@ -1015,7 +1070,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 imageXLoad.onload = function () {
                   that.g.wdLog(['onload immagine']);
                   // that.arrayFilesLoad.push(imageXLoad);
-                  const uid = imageXLoad.src.substring(imageXLoad.src.length - 16);
+                  const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
                   that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
                   that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                   // INVIO MESSAGGIO
@@ -1028,7 +1083,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                   title: nameFile
                 };
                 // that.arrayFilesLoad.push(imageXLoad);
-                const uid = fileXLoad.src.substring(fileXLoad.src.length - 16);
+                const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
                 that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
                 that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                 // INVIO MESSAGGIO
@@ -1111,7 +1166,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                     message = 'Image: ' + metadata.src;
                 }
                 that.sendMessage(message, type_message, metadata);
-                that.scrollToBottom();
+                // that.scrollToBottom();
                 that.isFilePendingToUpload = false;
                 // return downloadURL;
             })
@@ -1252,10 +1307,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
     const windowContext = this.g.windowContext;
     windowContext.open(url, '_blank');
+    this.isMenuShow  = false;
   }
 
   toggleSound() {
     this.g.setParameter('isSoundActive', !this.g.isSoundActive);
+    this.isMenuShow  = false;
     // this.g.isSoundActive = !this.g.isSoundActive;
     // if ( this.g.isSoundActive === false ) {
     //   this.storageService.setItem('isSoundActive', false);
@@ -1291,6 +1348,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** */
   unsubscribe() {
+    this.g.wdLog(['******* unsubscribe *******']);
     this.subscriptions.forEach(function (subscription) {
         subscription.unsubscribe();
     });
@@ -1341,7 +1399,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** */
   returnOpenAttachment($event: String) {
     if ($event) {
-      this.sendMessage($event, TYPE_MSG_TEXT);
+      const metadata = {
+        'button': true
+      };
+      this.sendMessage($event, TYPE_MSG_TEXT, metadata);
+      // this.sendMessage($event, TYPE_MSG_TEXT);
     }
   }
 

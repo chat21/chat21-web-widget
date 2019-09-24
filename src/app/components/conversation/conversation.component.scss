@@ -6,12 +6,22 @@
 
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
+    // background-color: #ffffff;
+    // width: 100%;
+    // height: 100%;
+    // position: relative;
+    // margin: 0px;
+    // padding: 0px;
+
+    position: absolute;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
-    position: relative;
-    margin: 0px;
-    padding: 0px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 0.1px solid lightgray;
 
 
      /* SET ICON AVATAR */
@@ -65,6 +75,9 @@
      /* SET SCROLLBAR */
     // ============= CSS c21-header ================= // 
     .c21-header {
+        position: fixed;
+        left: 0px;
+        right: 0px;
         .c21-header-container{
             .c21-header-content {
                 .c21-header-writing{
@@ -92,6 +105,10 @@
     
     // ============= CSS c21-body ================= //
     .c21-body {
+        // -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        // -moz-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        // box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
+        position: fixed;
         .c21-body-container {
             .c21-body-header {
                 .chat21-header-modal-select {
@@ -125,7 +142,6 @@
                     left: 0;
                     bottom: 43px;
                     overflow: hidden;
-
                     .time{
                         margin-bottom: 20px;
                     }
@@ -136,7 +152,15 @@
                     }
 
                     #c21-contentScroll{
+                        position: absolute;
+                        left: 0px;
+                        right: 10px;
                         padding: 10px;
+                        // display: none;
+                        opacity: 0;
+                        -webkit-transition: opacity 0.5s; /* Safari */
+                        transition: opacity 0.5s;
+                        transition-timing-function: ease-in;
                     }
                     .chat21-conversation-parts-container::-webkit-scrollbar {
                         width: 8px;
@@ -154,30 +178,40 @@
                     #scroll-me {
                         height: 100%;
                         width: 100%;
-                        overflow-y: scroll;
+                        overflow-y: auto;
+                        overflow-x: hidden;
                         position: absolute;
                         top: 0;
                         right: 0;
                     }
+                    #scroll-me:hover {
+                        &::-webkit-scrollbar-thumb {
+                            background: #777777; 
+                        }
+                    }
                     .msg_container {
                         overflow: hidden;
                         display: flex;
-                        
+                        opacity: 0px;
                     }
                     /* ====== SET MESSAGES ====== */
                     .messages {
                         border-radius: 14px;
-                        padding: 6px 6px 6px 6px;
-                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                        padding: 14px;
+                        // padding: 6px 6px 6px 6px;
+                        // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                        // -webkit-animation: heartbeat 1.5s ease-in-out both;
+                        // animation: heartbeat 1.5s ease-in-out both;
+
                         p {
-                            font-size: 1.3em;
+                            font-size: 1.4em;
                             margin: 0 0 0 0;
                             padding: 0 0 0 0;
                             font-style: normal;
                             letter-spacing: normal;
                             font-stretch: normal;
                             font-variant: normal;
-                            font-weight: normal;
+                            font-weight: 300;
                             overflow: hidden;
                         }
                         img {
@@ -260,7 +294,7 @@
                         .msg_receive {
                             background-color: $light-white;
                             color: $black;
-                            max-width: calc(100% - 60px);
+                            max-width: 260px;
                             min-width: 14px;
                             margin: 0 20px 4px 10px;
                             height: fit-content;
@@ -282,13 +316,13 @@
 
 /* ================== CSS chat21-footer ==================== */ 
 #chat21-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: 0px;
     padding: 0;
-    box-shadow: 0 -1px 10px 1px $trasp-light-gray;
+    box-shadow: 0 -1px 0px 0px $trasp-light-gray;
     background: white;
 
 
@@ -296,20 +330,20 @@
         // display: block;
         // height: 100%;
         // background-color: red;
-        pointer-events: none;
+        pointer-events: auto;
     }
     .visible-text-area.active {
         // display: hidden;
         // height: 100%;
-        pointer-events: initial;
+        pointer-events: auto;
         // background-color: green;
     }
     .chat21-textarea-button.active{
-        pointer-events: initial;
+        pointer-events: auto;
     }
     .chat21-textarea-button{
         fill: $blue;
-        pointer-events: none;
+        pointer-events: auto;
     }
 
     
@@ -340,8 +374,8 @@
         cursor: pointer;
         background-color: #ffffff;
         border: 1px solid $trasp-light-gray;
-        -webkit-box-shadow: 0 3px 2px $trasp-light-black;
-        box-shadow: 0 3px 2px $trasp-light-black;
+        // -webkit-box-shadow: 0 3px 2px $trasp-light-black;
+        // box-shadow: 0 3px 2px $trasp-light-black;
         text-align: center;
         svg {
             margin: auto;
@@ -349,24 +383,32 @@
         }
     }
     #chat21-buttonToBottom:hover {
-        background-color: $light-gray;
+        background-color: $blue;
+        opacity: 1!important;
+        transition: all .45s ease-in-out!important;
+        -moz-transition: all .45s ease-in-out!important;
+        -webkit-transition: all .45s ease-in-out!important;
+        border: 1px solid #ffffff;
+        svg {
+            fill: #ffffff;
+        }
     }
 
     #chat21-main-message-context {
-        overflow: hidden auto;
+        overflow: hidden;
         word-wrap: break-word;
         resize: horizontal;
-        overflow-y: visible;
+        overflow-y: auto;
         box-sizing: border-box;
         color: $black;
         min-width: 100%;
         outline: 0;
         resize: none;
-        font-size: 1.3em;
-        line-height: 1.3em;
+        font-size: 1.4em;
+        line-height: 1.4em;
+        font-weight: 300;
         max-height: 110px;
         min-height: auto;
-    
         height: 20px;
         padding: 0px 40px;
         margin: 10px 0px 10px;
@@ -395,7 +437,8 @@
         left: 8px;
         bottom: 10px;
     }
-    #chat21-start-upload-doc {
+    #chat21-start-upload-doc,
+    #chat21-start-mic {
         left: 8px;
         top: 10px;
     }

@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 export class MessageModel {
+    public sender_urlImage: string;
     constructor(
         public uid: string,
         public language: string,

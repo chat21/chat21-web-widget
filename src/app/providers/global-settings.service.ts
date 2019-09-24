@@ -74,17 +74,8 @@ export class GlobalSettingsService {
             // console.log('3 - setParameters ');
             // that.setParameters(null);
         });
-        // ------------------------------- //
-        // this.getProjectParametersById(globals, el)
-        // .then(response => {
-        //     // this.globals.wdLog(['RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
-        //     that.setParameters(response);
-        // })
-        // .catch(error => {
-        //     that.setParameters(null);
-        //     this.globals.wdLog(['ERRORE°°°°°°°°°°°°°°°°°°°° ', error);
-        //     console.error(error);
-        // });
+        this.setParameters(null);
+
     }
 
     /** SET PROGECTID **
@@ -627,6 +618,17 @@ export class GlobalSettingsService {
             globals.showWidgetNameInConversation = (TEMP === true) ? true : false;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
+
+        TEMP = tiledeskSettings['customAttributes'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['40 - customAttributes:: ', TEMP]);
+            globals.customAttributes = TEMP;
+        }
+
+        TEMP = tiledeskSettings['hideAttachButton'];
+        if (TEMP !== undefined) {
+            globals.hideAttachButton = (TEMP === true) ? true : false;
+        }
     }
 
     /**
@@ -748,6 +750,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('filterByRequester');
         if (TEMP !== null) {
             this.globals.filterByRequester = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('hideAttachButton');
+        if (TEMP !== null) {
+            this.globals.hideAttachButton = (TEMP === true) ? true : false;
         }
 
     }
@@ -949,6 +955,18 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.fullscreenMode = stringToBoolean(TEMP);
         }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
+        if (TEMP) {
+            globals.customAttributes = stringToBoolean(TEMP);
+            this.globals.wdLog(['globals.customAttributes: ' + globals.customAttributes]);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideAttachButton');
+        if (TEMP) {
+            globals.hideAttachButton = stringToBoolean(TEMP);
+        }
+
     }
 
     /**

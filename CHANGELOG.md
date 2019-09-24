@@ -1,3 +1,9 @@
+# chat21-web-widget ver 3.0
+### 3.0.19
+- bug fix: css overflow: scroll  in bar of  the widget and callout (IE, Firefox-windows)
+- bug fix: init not work in launch.js (IE)
+- bug fix: triggers not work when the widget is in an iframe
+
 # chat21-web-widget ver 2.0
 ### 1.020
 - Add function reInit() widget

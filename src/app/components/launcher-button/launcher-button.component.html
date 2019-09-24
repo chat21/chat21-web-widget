@@ -1,6 +1,6 @@
 <!-- tabindex="000"-->
 
-<button aflauncherbutton #aflauncherbutton id="c21-launcher-button" class="c21-button-clean" 
+<button aflauncherbutton #aflauncherbutton id="c21-launcher-button" class="c21-button-clean scale-in-center" 
     *ngIf="g.isLogged == true && g.isOpen == false" 
     [ngClass]="{'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
     [ngStyle]="{ 'background-color': g.themeColor, 'bottom': g.marginY+'px!important', 'left':(g.align==='left')?g.marginX+'px!important':'', 'right':(g.align==='right')?g.marginX+'px!important':'' }"
@@ -12,7 +12,7 @@
     <div *ngIf="g.conversationsBadge>0" class="c21-divBudge">{{g.conversationsBadge}}</div>
 
     <!-- OPEN ICON -->
-    <div *ngIf="!g.isOpen" class="launcher-button" [@enterBubbleAnimation]>
+    <div *ngIf="!g.isOpen" class="launcher-button rotate-center" [@enterBubbleAnimation]>
         <svg role="img" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%"
             height="100%" viewBox="0 0 90 90">
             <path fill="none" d="M0 0h24v24H0V0z" />
@@ -21,7 +21,7 @@
     </div>
 
     <!-- CLOSE ICON -->
-    <div *ngIf="g.isOpen" class="launcher-button" [@enterCloseAnimation]>
+    <div *ngIf="g.isOpen" class="launcher-button rotate-center" [@enterCloseAnimation]>
         <svg role="img" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="100%"
             height="100%" viewBox="0 0 90 90">
             <path fill="none" d="M0 0h24v24H0V0z" />

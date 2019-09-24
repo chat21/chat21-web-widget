@@ -158,7 +158,7 @@ export class ConversationsService {
 
   // ============== begin:: subscribe to conversations ================//
   public checkListConversations() {
-    const limit = 100;
+    const limit = 10;
     const that = this;
     const firebaseConversations = firebase.database().ref(this.urlConversation);
     this.conversationRef = firebaseConversations.orderByChild('timestamp').limitToLast(limit);
@@ -171,15 +171,17 @@ export class ConversationsService {
       if (that.ifCanAddConversation(conversation)) {
           const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
           if (index === -1) {
-            // console.log('***** NEXT *****');
-            that.listConversations.unshift(conversation); // insert item top array
-            that.checkIsNew(conversation);
-            that.checkIsSound(conversation);
-            that.updateConversationBadge();
-            that.listConversations.sort(compareValues('timestamp', 'desc'));
-            that.listConversations = getUnique(that.listConversations, 'uid');
-            that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
-            that.obsListConversations.next(that.listConversations);
+            setTimeout(function () {
+              // console.log('***** NEXT *****');
+              that.listConversations.unshift(conversation); // insert item top array
+              that.checkIsNew(conversation);
+              that.checkIsSound(conversation);
+              that.updateConversationBadge();
+              that.listConversations.sort(compareValues('timestamp', 'desc'));
+              that.listConversations = getUnique(that.listConversations, 'uid');
+              that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
+              that.obsListConversations.next(that.listConversations);
+            }, 0);
           }
       }
     });
@@ -191,14 +193,16 @@ export class ConversationsService {
       if (that.ifCanAddConversation(conversation)) {
         const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
         if (index > -1) {
-          that.listConversations.splice(index, 1, conversation);
-          that.checkIsNew(conversation);
-          that.checkIsSound(conversation);
-          that.updateConversationBadge();
-          that.listConversations.sort(compareValues('timestamp', 'desc'));
-          that.listConversations = getUnique(that.listConversations, 'uid');
-          that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
-          that.obsListConversations.next(that.listConversations);
+          setTimeout(function () {
+            that.listConversations.splice(index, 1, conversation);
+            that.checkIsNew(conversation);
+            that.checkIsSound(conversation);
+            that.updateConversationBadge();
+            that.listConversations.sort(compareValues('timestamp', 'desc'));
+            that.listConversations = getUnique(that.listConversations, 'uid');
+            that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
+            that.obsListConversations.next(that.listConversations);
+          }, 0);
         }
       }
     });
@@ -208,10 +212,12 @@ export class ConversationsService {
       that.g.wdLog(['child_removed val *****', childSnapshot.val()]);
       const index = that.searchIndexInArrayForUid(that.listConversations, childSnapshot.key);
       if (index > -1) {
-        that.listConversations.splice(index, 1);
-        that.listConversations.sort(compareValues('timestamp', 'desc'));
-        that.listConversations = getUnique(that.listConversations, 'uid');
-        that.obsListConversations.next(that.listConversations);
+        setTimeout(function () {
+          that.listConversations.splice(index, 1);
+          that.listConversations.sort(compareValues('timestamp', 'desc'));
+          that.listConversations = getUnique(that.listConversations, 'uid');
+          that.obsListConversations.next(that.listConversations);
+        }, 0);
       }
       that.updateConversationBadge();
     });

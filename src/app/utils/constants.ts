@@ -24,6 +24,7 @@ export const MSG_STATUS_SEEN = 300;
 export const TYPE_MSG_TEXT = 'text';
 export const TYPE_MSG_IMAGE = 'image';
 export const TYPE_MSG_FILE = 'file';
+export const TYPE_MSG_BUTTON = 'button';
 
 // CHANNEL TYPE
 export const CHANNEL_TYPE_GROUP = 'group';
@@ -62,4 +63,7 @@ export const IMG_PROFILE_DEFAULT = '/assets/images/avatar_male_tiledesk.svg';
 
 // localstorage
 export const STORAGE_PREFIX = 'tiledesk_widget_';
+
+// start conversation bot (proxy)
+export const PROXY_MSG_START = '__start';
 

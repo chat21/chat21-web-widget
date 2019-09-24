@@ -1,24 +1,61 @@
 @import '../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
+
+
 #chat21-home-component {
-    position: relative;
-    background-color: #ffffff;
+    position: absolute;
     width: 100%;
     height: 100%;
 
+    /*********  Animations **********/
+    &.start-animation .fade-in-top {
+        -webkit-animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.3s both;
+        animation: fade-in-top 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.3s both;
+    }
+    &.start-animation .fade-in-bottom {
+        -webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+        animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+    }
+    &.start-animation .fade-in-bottom-footer {
+        -webkit-animation: fade-in-dw-up 1.0s ease-in 0.0s;
+        animation: fade-in-dw-up 1.0s ease-in 0.0s;
+    }
+
+
     /*********  c21-header **********/
     .c21-header {
-        min-height: 75px;
+        position: absolute;
+        width: 100%;
         height: 252px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+
         .c21-header-container {
-            padding: 24px 40px;
-            width: auto;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            .c21-header-button {
+                display: block;
+                width: 100%;
+                height: 70px;
+                position: absolute;
+                margin: 0;
+            }
             .c21-header-content {
                 position: relative;
+                margin: 30px 40px 0px 40px;
+                width: auto;
+                height: auto;
+                
                 .c21-logo {
+                    position: relative;
+                    width: auto;
                     height: 32px;
-                    margin-bottom: 16px;
+                    margin-bottom: 20px;
                     img {
                         max-width: 100%;
                         max-height: 100%;
@@ -27,18 +64,21 @@
                     }
                 }
                 .c21-text {
+                    font-family: 'Google Sans';
                     .c21-text-wellcome {
-                        font-family: 'Google Sans';
                         overflow: hidden;
                         line-height: 1.2em;
+                        max-height: 2.4em;
                         font-weight: 400;
-                        font-size: 3em; 
+                        font-size: 2.6em; 
+                        margin-bottom: 10px;
                     }
                     .c21-text-intro {
                         display: inline-block;
-                        line-height: 3em; 
                         font-size: 1.4em;
                         font-weight: 300;
+                        line-height: 1.2em;
+                        max-height: 2.4em;
                     }
                 }
             }
@@ -47,18 +87,23 @@
 
     /*********  c21-body **********/
     .c21-body {
-        top: 0px;
-        background-color: transparent;
-        overflow: scroll;
-        -webkit-box-shadow: inset 0 21px 4px -20px $trasp-light-black;
-        box-shadow: inset 0 21px 4px -20px $trasp-light-black;
-        .c21-body-container {
-            padding: 0 16px;
-            position: relative;
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 30px); //100%;
+        padding: 0px;
+        margin: 0px;
+        overflow: auto;
+        background-color: #ffffff;
+        top: 0;
+        box-shadow: none;
+        // .c21-body-container {
+            // padding: 0 16px;
+            // position: relative;
+
             .c21-body-content {
                 position: relative;
-                padding-top: 38%;
-                margin: 60px 0 40px 0;
+                padding: 210px 10px 20px 10px;
+                margin: 0;
                 .c21-cards {
                     .c21-card {
                         position: relative;
@@ -71,20 +116,24 @@
                         overflow: hidden;
                         -webkit-box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
                         box-shadow: 0 4px 15px 0 $trasp-light-black, 0 1px 2px 0 $trasp-light-black;
+                        z-index: 20;
+                        text-align: left;
                     }
                 } 
             } 
-        }
+        // }
     }
 
     /*********  c21-footer **********/
     .c21-footer {
         position: absolute;
-        bottom: 0px;
-        height: 30px;
-        background-color: white;
         width: 100%;
-        box-shadow: 0 -10px 10px 1px $trasp-light-gray;
+        height: 30px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        background-color: white;
+        box-shadow: 0 0px 10px 0px $trasp-light-gray;
 
         .c21-powered-by {
             height: 25px;

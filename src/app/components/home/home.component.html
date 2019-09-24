@@ -1,6 +1,6 @@
 
 <!-- tabindex="2000"-->
-<div id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
+<div #homeComponent id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
 
     <!-- HEADER -->
     <div class="c21-header" 
@@ -28,14 +28,14 @@
             <!-- CONTENT HEADER -->
             <div class="c21-header-content">
                 <!-- LOGO HEADER -->
-                <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo">
+                <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo fade-in-bottom">
                     <img src="{{g.BASE_LOCATION + g.DEFAULT_LOGO_CHAT}}" alt="logo">
                 </div>
-                <div *ngIf="g.logoChat != 'nologo' && g.logoChat != 'tiledesklogo'" class="c21-logo">
+                <div *ngIf="g.logoChat != 'nologo' && g.logoChat != 'tiledesklogo'" class="c21-logo fade-in-bottom">
                     <img src="{{g.logoChat}}" alt="logo">
                 </div>
                 <!-- MESSAGE HEADER -->
-                <div class="c21-text">
+                <div class="c21-text fade-in-bottom">
                     <div class="c21-text-wellcome">{{g.wellcomeTitle}}</div>          
                     <div *ngIf="g.wellcomeMsg" class="c21-text-intro">{{g.wellcomeMsg}}</div>
                 </div>
@@ -50,10 +50,10 @@
     <!-- CONTENT -->
     <div class="c21-body" (click)="hideMenuOptions()">
 
-        <div class="c21-body-container">
+        <!-- <div class="c21-body-container"> -->
             <div class="c21-body-content">
                 <div class="c21-cards">
-                    <div class="c21-card" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
+                    <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <tiledeskwidget-list-conversations 
                         [senderId]="senderId"
                         (eventNewConv)="returnNewConversation()" 
@@ -62,18 +62,17 @@
                         >
                         </tiledeskwidget-list-conversations>
                     </div>
+                    
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
         
 
     </div>
 
 
     <!-- FOOTER -->
-    <div class="c21-footer">
-
-        
+    <div class="c21-footer fade-in-bottom-footer">
         <tiledeskwidget-menu-options
         (eventSignOut)="returnSignOut()" 
         ></tiledeskwidget-menu-options>

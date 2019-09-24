@@ -1,0 +1,73 @@
+#buttons-in-message {
+    display: block; 
+    float: right; 
+    margin-bottom: 20px;
+    height: auto;
+    min-height: 40px;
+
+    .div-button {
+        float: left;
+    }
+    
+    .button-success{
+        background-color: white; 
+        color: #333333;
+        border: 1px solid rgb(28, 184, 65);
+    }
+    .button-error {
+        background-color: white; 
+        color: #333333;
+        border: 1px solid rgb(202, 60, 60);
+    }
+    .button-warning {
+        background-color: white; 
+        color: #333333;
+        border: 1px solid rgb(223, 117, 20);
+    }
+    .button-secondary {
+        background-color: white; 
+        color: #333333;
+        border: 1px solid rgb(66, 184, 221);
+    }
+    .button-success:hover {
+        color: white;
+        background: rgb(28, 184, 65);
+    }
+    .button-error:hover {
+        color: white;
+        background: rgb(202, 60, 60);
+    }
+    .button-warning:hover {
+        color: white;
+        background: rgb(223, 117, 20);
+    }
+    .button-secondary:hover {
+        color: white;
+        background: rgb(66, 184, 221);
+    } 
+}
+
+.button-in-msg {
+    position: relative;
+    max-width: 300px;
+    min-width: inherit;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid rgb(42, 106, 193);
+    border-radius: 20px;
+    margin: 3px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Muli', sans-serif;
+    font-size: 15px;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: -0.24px;
+    -webkit-font-smoothing: antialiased;
+    color: rgb(42, 106, 193);
+  }
+  .button-in-msg:hover {
+    color: white;
+    background:  rgb(42, 106, 193);
+  }
