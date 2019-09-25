@@ -45,6 +45,8 @@ import { DepartmentModel } from '../../../models/department';
 declare var startRecording: any;
 declare var stopRecording: any;
 
+declare var recordingTEST: any;
+
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -165,8 +167,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
 
     this.loadJS();
-    
-
 
     this.ngZone.run(() => {
       //const objDiv = document.getElementById(that.idDivScroll);
@@ -1301,6 +1301,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.audioRecorderService.load('WebAudioRecorder', 'audio').then(data => {
       // Script Loaded Successfully
       console.log(data);
+      recordingTEST();
     }).catch(error => console.log(error));
   }
 

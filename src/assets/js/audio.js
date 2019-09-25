@@ -19,8 +19,8 @@ var encodingTypeSelect = 'wav'; //document.getElementById("encodingTypeSelect");
 // recordButton.addEventListener("click", startRecording);
 // stopButton.addEventListener("click", stopRecording);
 
-function startRecordingXXX() {
-	// alert('chiamata ok');
+function recordingTEST() {
+	console.log("recordingTEST: OK");
 }
 
 function startRecording(urlAudiorepo, uid, callbackEndRecording) {

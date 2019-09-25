@@ -7,8 +7,8 @@ interface Scripts {
 }
 
 export const ScriptStore: Scripts[] = [
-  { name: 'WebAudioRecorder', src: '../../assets/js/WebAudioRecorder.min.js' },
-  { name: 'app', src: '../../assets/js/audio.js' }
+  { name: 'WebAudioRecorder', src: './assets/js/WebAudioRecorder.min.js' },
+  { name: 'audio', src: './assets/js/audio.js' }
 ];
 
 declare var document: any;
@@ -28,9 +28,6 @@ export class AudioRecorderService {
     });
   }
 
-  startRecording() {
-    console.log('1 startRecording');
-  }
 
   load(...scripts: string[]) {
     const promises: any[] = [];
