@@ -1,4 +1,8 @@
 # chat21-web-widget ver 3.0
+
+### 3.0.22
+- bug fix: custom auth in launch.js (function commented)
+
 ### 3.0.21
 - bug fix:  c21-text-wellcome change font 3.0em
 - new: updated changelog

@@ -52,12 +52,12 @@ function loadIframe(tiledeskScriptBaseLocation) {
     // ifrm.style.display = 'none';
 
      /** */
-     window.tileDeskAsyncInit = function() {
-        console.log("tileDeskAsyncInit");
-        window.tiledesk.on('loadParams', function(event_data) {
-            signInWithCustomToken();
-        });
-    }
+    //  window.tileDeskAsyncInit = function() {
+    //     console.log("tileDeskAsyncInit");
+    //     window.tiledesk.on('loadParams', function(event_data) {
+    //         // signInWithCustomToken();
+    //     });
+    // }
 
     /** */
     window.tiledesk.on('onInit', function(event_data) {
