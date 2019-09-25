@@ -1298,7 +1298,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   private loadJS() {
     // You can load multiple scripts by just providing the key as argument into load method of the service
-    this.audioRecorderService.load('WebAudioRecorder', 'app').then(data => {
+    this.audioRecorderService.load('WebAudioRecorder', 'audio').then(data => {
       // Script Loaded Successfully
       console.log(data);
     }).catch(error => console.log(error));
@@ -1315,8 +1315,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (textArea) {
         textArea.value = '';
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;
-    }
-      stopRecording();
+      }
+      try {
+        stopRecording();
+      } catch (error) {
+        console.log('> Error is: ', error);
+      }
     } else {
       this.isRecording = true;
       console.log('2 startRecording');
@@ -1332,20 +1336,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       });
       this.subscriptions.push(this.subTimer);
       const uid = createGuid();
-      startRecording(this.urlAudiorepo, uid, function(uuid: string) {
-        console.log(uuid);
-        const url = that.urlAudiorepo + '/audio/' + uuid;
-        const metadata = {
-          'src': url,
-          'type': TYPE_MSG_AUDIO,
-          'uid': uuid
-        };
-        metadata.src = url;
-        const message = 'Audio: ' + url;
-        that.sendMessage(message, TYPE_MSG_AUDIO, metadata);
-      });
+      try {
+        startRecording(this.urlAudiorepo, uid, function(uuid: string) {
+          console.log(uuid);
+          const url = that.urlAudiorepo + '/audio/' + uuid;
+          const metadata = {
+            'src': url,
+            'type': TYPE_MSG_AUDIO,
+            'uid': uuid
+          };
+          metadata.src = url;
+          const message = 'Audio: ' + url;
+          that.sendMessage(message, TYPE_MSG_AUDIO, metadata);
+        });
+      } catch (error) {
+        console.log('> Error is: ', error);
+      }
     }
-
   }
 
 
