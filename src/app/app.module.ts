@@ -41,6 +41,7 @@ import { AgentAvailabilityService } from './providers/agent-availability.service
 import { TranslatorService } from './providers/translator.service';
 import { WaitingService } from './providers/waiting.service';
 import { AppConfigService } from './providers/app-config.service';
+import { AudioRecorderService } from './providers/audio-recorder.service';
 
 
 // components
@@ -130,7 +131,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TranslatorService,
     ChatPresenceHandlerService,
     StorageService,
-    WaitingService
+    WaitingService,
+    AudioRecorderService
   ],
   bootstrap: [AppComponent]
 })

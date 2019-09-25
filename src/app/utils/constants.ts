@@ -25,6 +25,7 @@ export const TYPE_MSG_TEXT = 'text';
 export const TYPE_MSG_IMAGE = 'image';
 export const TYPE_MSG_FILE = 'file';
 export const TYPE_MSG_BUTTON = 'button';
+export const TYPE_MSG_AUDIO = 'audio';
 
 // CHANNEL TYPE
 export const CHANNEL_TYPE_GROUP = 'group';

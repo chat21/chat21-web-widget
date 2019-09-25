@@ -1,14 +1,20 @@
 // tslint:disable-next-line:max-line-length
 import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Observable} from 'rxjs/Rx';
+import { timer } from 'rxjs/observable/timer';
+
+
 import { Globals } from '../../utils/globals';
+
 // import { MessagingService } from '../../providers/messaging.service';
 import { GenericMessagingService } from '../../providers/generic-messaging.service';
 import { ConversationsService } from '../../providers/conversations.service';
 import { AppConfigService } from '../../providers/app-config.service';
+import { AudioRecorderService } from '../../providers/audio-recorder.service';
 
 import {
-  CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT, TYPE_MSG_BUTTON,
+  CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT, TYPE_MSG_AUDIO, TYPE_MSG_BUTTON,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
   TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, PROXY_MSG_START, TYPE_MSG_FILE
 } from '../../utils/constants';
@@ -23,7 +29,8 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { getImageUrlThumb, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+// tslint:disable-next-line:max-line-length
+import { createGuid, fromNumberToTime, getImageUrlThumb, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -34,6 +41,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import { AppComponent } from '../../app.component';
 import { StorageService } from '../../providers/storage.service';
 import { DepartmentModel } from '../../../models/department';
+
+declare var startRecording: any;
+declare var stopRecording: any;
+
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -62,6 +73,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   writingMessage = '';    // messaggio sta scrivendo...
   isMenuShow = false;
   isScrolling = false;
+  isRecording = false;
+  timer = Observable.timer(1000, 1000);
+  subTimer: Subscription;
+  urlAudiorepo: String;
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -136,7 +151,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public appComponent: AppComponent,
     public storageService: StorageService,
     public conversationsService: ConversationsService,
-    public appConfigService: AppConfigService
+    public appConfigService: AppConfigService,
+    public audioRecorderService: AudioRecorderService,
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
@@ -147,6 +163,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
+
+    this.loadJS();
+    
+
 
     this.ngZone.run(() => {
       //const objDiv = document.getElementById(that.idDivScroll);
@@ -223,6 +243,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       JSON.parse(this.g.customAttributes, (key, value) => {
         if (key === 'recipient_fullname') {
           this.g.recipientFullname = value;
+        }
+        if (key === 'url_audiorepo') {
+          this.urlAudiorepo = value;
         }
       });
     } catch (error) {
@@ -646,6 +669,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+      
       this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
@@ -700,7 +724,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
-
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
           const userFullname = this.g.userFullname;
@@ -894,7 +917,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
-    console.log('onScroll: ', event);
+    // console.log('onScroll: ', event);
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
@@ -1272,6 +1295,60 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //     this.scrollToBottom();
   // }
 
+
+  private loadJS() {
+    // You can load multiple scripts by just providing the key as argument into load method of the service
+    this.audioRecorderService.load('WebAudioRecorder', 'app').then(data => {
+      // Script Loaded Successfully
+      console.log(data);
+    }).catch(error => console.log(error));
+  }
+
+  recording(e: any) {
+    console.log('1 startRecording');
+    const that = this;
+    const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+    if (this.isRecording === true) {
+      this.isRecording = false;
+      this.subTimer.unsubscribe();
+      textArea.readOnly = false;
+      if (textArea) {
+        textArea.value = '';
+        textArea.placeholder = this.g.LABEL_PLACEHOLDER;
+    }
+      stopRecording();
+    } else {
+      this.isRecording = true;
+      console.log('2 startRecording');
+      // cambio icona
+      // inizio registrazione
+      // visualizzo time rec come placeholder e desabilito input testo
+      textArea.readOnly = true;
+      this.subTimer = this.timer.subscribe(val => {
+        if (textArea) {
+            textArea.value = '';  // clear the textarea
+            textArea.placeholder = fromNumberToTime(val); // .toString();  // restore the placholder
+        }
+      });
+      this.subscriptions.push(this.subTimer);
+      const uid = createGuid();
+      startRecording(this.urlAudiorepo, uid, function(uuid: string) {
+        console.log(uuid);
+        const url = that.urlAudiorepo + '/audio/' + uuid;
+        const metadata = {
+          'src': url,
+          'type': TYPE_MSG_AUDIO,
+          'uid': uuid
+        };
+        metadata.src = url;
+        const message = 'Audio: ' + url;
+        that.sendMessage(message, TYPE_MSG_AUDIO, metadata);
+      });
+    }
+
+  }
+
+
   // ========= end:: functions send image ======= //
 
   returnHome() {
@@ -1323,14 +1400,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-      //this.unsubscribe();
+    this.unsubscribe();
   }
 
 
   /** */
   unsubscribe() {
     this.subscriptions.forEach(function (subscription) {
+      try {
         subscription.unsubscribe();
+      } catch (error) {
+        console.log('> Error is: ', error);
+      }
     });
     this.subscriptions.length = 0;
     this.messagingService.unsubscribeAllReferences();

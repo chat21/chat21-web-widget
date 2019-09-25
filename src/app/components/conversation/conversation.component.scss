@@ -232,6 +232,16 @@
                             min-width: 14px;
                         }
 
+                        .msg_sent {
+                            &.clean {
+                                background-color: transparent;
+                            }
+                        }
+                        audio {
+                            max-width: 284px;
+                        }
+                        
+
                         .status-message {
                             width: 16px;
                             height: 16px;

@@ -16,7 +16,7 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, PROXY_MSG_START, TYPE_MSG_IMAGE } from '../utils/constants';
 // utils
-import { getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
+import { createGuid, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -242,7 +242,7 @@ export class GenericMessagingService {
     if (this.sessionUid) {
       console.log('> sessionUid: ', this.sessionUid);
     } else {
-      this.sessionUid = this.createGuid();
+      this.sessionUid = createGuid();
       this.storageService.setItem('sessionUid', this.sessionUid);
       console.log('> sessionUid: ', this.sessionUid);
     }
@@ -259,13 +259,7 @@ export class GenericMessagingService {
     // this.checkMessages(conversationWith);
   }
 
-  private createGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-       // tslint:disable-next-line:no-bitwise
-       const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-       return v.toString(16);
-    });
-  }
+
 
   /**
    * subcribe to mesages node (on added and removed message)
@@ -468,9 +462,12 @@ export class GenericMessagingService {
     this.g.wdLog(['metadata:: ', metadata.button]);
 
     // aggiungo un uid univoco ad ogni msg
-    const uid = (new Date().getTime()).toString(36);
+    let uid = createGuid(); // (new Date().getTime()).toString(36);
     attributes.uid = uid;
-
+    if (metadata.uid) {
+      uid = metadata.uid;
+      attributes.uid = metadata.uid;
+    }
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';
@@ -486,7 +483,7 @@ export class GenericMessagingService {
     const language = navigator.language;
     const dateSendingMessage = setHeaderDate(timestamp);
     const message = new MessageModel(
-      '',
+      uid,
       language,
       conversationWith,
       recipientFullname,
@@ -637,7 +634,11 @@ export class GenericMessagingService {
    */
   unsubscribeAllReferences() {
     this.g.wdLog(['--------> messagesRef.off']);
-    this.messagesRef.off();
+    try {
+      this.messagesRef.off();
+    } catch (error) {
+        console.log('> Error is: ', error);
+    }
     // this.conversationsRef.off('child_removed');
   }
 

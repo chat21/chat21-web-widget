@@ -18,7 +18,9 @@
         "testi.html",
         "launch.js",
         "iframe-style.css",
-        "firebase-config.json"
+        "firebase-config.json",
+        "js/WebAudioRecorder.min.js",
+        "js/audio.js"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -29,6 +31,10 @@
       "prefix": "tiledeskwidget",
       "styles": [
         "sass/styles.scss"
+      ],
+      "scripts": [
+        "assets/js/WebAudioRecorder.min.js",
+        "assets/js/audio.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
