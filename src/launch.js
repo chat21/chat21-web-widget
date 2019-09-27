@@ -124,7 +124,12 @@ function initWidget() {
         window.tileDeskAsyncInit();
         console.log("tileDeskAsyncInit() called");
     }catch(er) {
-        console.log("tileDeskAsyncInit() doesn't exists");
+      if (er instanceof ReferenceError) {
+         console.log("tileDeskAsyncInit() doesn't exists");
+      }else {
+         console.log("tileDeskAsyncInit() error",err);
+      }
+       
     }
     document.body.appendChild(tiledeskroot);
 
