@@ -1,6 +1,6 @@
 /** */
 ready(function() {
-    console.log('DOM is ready, call initWidget');
+    // console.log('DOM is ready, call initWidget');
     initWidget();
 });
 /** */
@@ -61,7 +61,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onInit', function(event_data) {
-        console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
+        // console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
         if (window.tiledesk.angularcomponent.component.g.isOpen) {
             containerDiv.classList.add("open");
             containerDiv.classList.remove("closed");
@@ -73,25 +73,25 @@ function loadIframe(tiledeskScriptBaseLocation) {
     });
     /** */
     window.tiledesk.on('onOpen', function(event_data) {
-        console.log("launch onOpen");
+        console.log("tiledesk onOpen");
         containerDiv.classList.add("open");
         containerDiv.classList.remove("closed");
         iDiv.classList.remove("callout");
     });
     /** */
     window.tiledesk.on('onClose', function(event_data) {
-        console.log("launch onClose");
+        console.log("tiledesk onClose");
         containerDiv.classList.add("closed");
         containerDiv.classList.remove("open");
     });
     /** */
     window.tiledesk.on('onOpenEyeCatcher', function(event_data) {
-        console.log("launch onOpenEyeCatcher", event_data);
+        console.log("tiledesk onOpenEyeCatcher", event_data);
         iDiv.classList.add("callout");
     });
      /** */
      window.tiledesk.on('onClosedEyeCatcher', function(event_data) {
-        console.log("launch onClosedEyeCatcher", event_data);
+        console.log("tiledesk onClosedEyeCatcher", event_data);
         iDiv.classList.remove("callout");
     });
     iDiv.appendChild(ifrm);  
@@ -110,7 +110,7 @@ function initWidget() {
     window.tiledesk = new function() {
         //this.type = "macintosh";
         this.tiledeskroot = tiledeskroot;
-        console.log(" this.tiledeskroot",  this.tiledeskroot);
+        // console.log(" this.tiledeskroot",  this.tiledeskroot);
         this.on = function (event_name, handler) {
             //console.log("addEventListener for "+ event_name, handler);
             tiledeskroot.addEventListener(event_name, handler);
@@ -124,7 +124,7 @@ function initWidget() {
         window.tileDeskAsyncInit();
         console.log("tileDeskAsyncInit() called");
     }catch(er) {
-        console.log("tileDeskAsyncInit() doesn't exists",er);
+        console.log("tileDeskAsyncInit() doesn't exists");
     }
     document.body.appendChild(tiledeskroot);
 
