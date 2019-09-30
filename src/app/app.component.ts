@@ -685,8 +685,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog([messageSent]);
     }
 
-    /** 
-     * 
+    /**
+     *
     */
     private signInWithCustomToken(response: any) {
         const that = this;

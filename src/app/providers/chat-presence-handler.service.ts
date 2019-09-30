@@ -104,6 +104,7 @@ export class ChatPresenceHandlerService {
    * 7 - aggiungo job su onDisconnect di lastOnlineRef che imposta timestamp
    * 8 - salvo reference connected nel singlelton !!!!! DA FARE
    * @param userid
+   * https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state
    */
   setupMyPresence(userid) {
     const that = this;
@@ -112,20 +113,26 @@ export class ChatPresenceHandlerService {
     this.lastOnlineRef = this.lastOnlineRefForUser(userid);
     const connectedRefURL = '/.info/connected';
     const conn = firebase.database().ref(connectedRefURL);
+
     conn.on('value', function(dataSnapshot) {
-      that.g.wdLog(['setupMyPresence: val: ' + dataSnapshot.val() + that.myConnectionsRef]);
-      if (dataSnapshot.val()) {
+      if (dataSnapshot.val() === true) {
+        that.g.wdLog(['setupMyPresence: val: ' + dataSnapshot.val() + that.myConnectionsRef]);
         if (that.myConnectionsRef) {
-          // this.deviceConnectionRef = myConnectionsRef.set(true);
-          const conection = true;
-          const keyMyConnectionRef = that.myConnectionsRef.push(conection);
-          // !!! quando faccio logout devo disconnettermi
-          keyMyConnectionRef.onDisconnect().remove(function(err) {
+          // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+          const con = that.myConnectionsRef.push();
+
+          // When I disconnect, remove this device
+          con.onDisconnect().remove(function(err) {
             if (err) {
               console.error('could not establish onDisconnect event', err);
             }
           });
-          // when I disconnect, update the last time I was seen online
+
+          // Add this device to my connections list
+          // this value could contain info about the device or a timestamp too
+          con.set(true);
+
+          // When I disconnect, update the last time I was seen online
           const now: Date = new Date();
           const timestamp = now.valueOf();
           that.lastOnlineRef.onDisconnect().set(timestamp, function(err) {
