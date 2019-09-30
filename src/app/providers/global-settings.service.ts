@@ -68,13 +68,12 @@ export class GlobalSettingsService {
             // console.log('1 - setParameters ', response);
             that.setParameters(response);
         }, (error) => {
-            console.error('::getProjectParametersById', error);
+            // console.log('2 - ::getProjectParametersById', error);
             that.setParameters(null);
         }, () => {
             // console.log('3 - setParameters ');
             // that.setParameters(null);
         });
-        this.setParameters(null);
 
     }
 
@@ -282,7 +281,7 @@ export class GlobalSettingsService {
         /** set css iframe from parameters */
         this.setCssIframe();
 
-        // this.globals.wdLog(['***************** END SET PARAMETERS *****************');
+        this.globals.wdLog(['***************** END SET PARAMETERS *****************']);
         this.obsSettingsService.next(true);
     }
 

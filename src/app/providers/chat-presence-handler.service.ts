@@ -113,20 +113,26 @@ export class ChatPresenceHandlerService {
     const connectedRefURL = '/.info/connected';
     const conn = firebase.database().ref(connectedRefURL);
     conn.on('value', function(dataSnapshot) {
-      //  that.g.wdLog(["KEY: ",dataSnapshot,that.deviceConnectionRef);
+      that.g.wdLog(['setupMyPresence: val: ' + dataSnapshot.val() + that.myConnectionsRef]);
       if (dataSnapshot.val()) {
-        // if (!that.myConnectionsRef || that.myConnectionsRef==='undefined') {
         if (that.myConnectionsRef) {
           // this.deviceConnectionRef = myConnectionsRef.set(true);
           const conection = true;
-          // that.deviceConnectionRef =
           const keyMyConnectionRef = that.myConnectionsRef.push(conection);
           // !!! quando faccio logout devo disconnettermi
-          keyMyConnectionRef.onDisconnect().remove();
+          keyMyConnectionRef.onDisconnect().remove(function(err) {
+            if (err) {
+              console.error('could not establish onDisconnect event', err);
+            }
+          });
           // when I disconnect, update the last time I was seen online
           const now: Date = new Date();
           const timestamp = now.valueOf();
-          that.lastOnlineRef.onDisconnect().set(timestamp);
+          that.lastOnlineRef.onDisconnect().set(timestamp, function(err) {
+            if (err) {
+              console.error('could not establish onDisconnect event', err);
+            }
+          });
         } else {
           that.g.wdLog(['This is an error. self.deviceConnectionRef already set. Cannot be set again.']);
         }
@@ -140,19 +146,19 @@ export class ChatPresenceHandlerService {
    */
   goOffline() {
     this.g.wdLog(['goOffline.', this.myConnectionsRef]);
-    // this.removeConnectionReference();
+    this.removeConnectionReference();
     this.removeLastOnlineReference();
   }
 
-  // removeConnectionReference() {
-  //   if (this.myConnectionsRef) {
-  //     this.myConnectionsRef.off();
-  //     that.g.wdLog(['goOffline 1', this.myConnectionsRef]);
-  //     this.myConnectionsRef.remove();
-  //     that.g.wdLog(['goOffline 2', this.myConnectionsRef]);
-  //     this.myConnectionsRef = null;
-  //   }
-  // }
+  removeConnectionReference() {
+    if (this.myConnectionsRef) {
+      this.myConnectionsRef.off();
+      this.g.wdLog(['goOffline 1', this.myConnectionsRef]);
+      this.myConnectionsRef.remove();
+      this.g.wdLog(['goOffline 2', this.myConnectionsRef]);
+      this.myConnectionsRef = null;
+    }
+  }
 
   removeLastOnlineReference() {
     if (this.lastOnlineRef) {

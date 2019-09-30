@@ -23,6 +23,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
     containerDiv.appendChild(iDiv);
 
     var ifrm = document.createElement("iframe");
+    ifrm.setAttribute("frameborder", "0");
+    ifrm.setAttribute("border", "0");
     //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
     // projectid= '5b55e806c93dde00143163dd'
     //var srcTileDesk =  `

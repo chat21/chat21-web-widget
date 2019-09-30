@@ -113,8 +113,8 @@ export class AuthService {
               if (that.unsubscribe) {
                 that.unsubscribe();
               }
-              that.obsLoggedUser.next(0);
               that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
+              that.obsLoggedUser.next(0);
           });
         })
     .catch(function(error) {
@@ -139,6 +139,7 @@ export class AuthService {
         if (that.unsubscribe) {
           that.unsubscribe();
         }
+        this.g.wdLog(['obsLoggedUser - authService.authenticateFirebaseCustomToken']);
         that.obsLoggedUser.next(firebase.auth().currentUser);
         // that.getToken();????
       })
@@ -148,8 +149,8 @@ export class AuthService {
           if (that.unsubscribe) {
             that.unsubscribe();
           }
-          that.obsLoggedUser.next(0);
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
+          that.obsLoggedUser.next(0);
       });
     })
     .catch(function(error) {
@@ -177,9 +178,9 @@ export class AuthService {
         if (that.unsubscribe) {
           that.unsubscribe();
         }
-        that.obsLoggedUser.next(firebase.auth().currentUser);
-        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword']);
         that.getIdToken();
+        that.g.wdLog(['authenticateFirebaseWithEmailAndPassword']);
+        that.obsLoggedUser.next(firebase.auth().currentUser);
       })
       .catch(function(error) {
         const errorCode = error.code;
@@ -187,8 +188,8 @@ export class AuthService {
         if (that.unsubscribe) {
           that.unsubscribe();
         }
-        that.obsLoggedUser.next(0);
         that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
+        that.obsLoggedUser.next(0);
       });
     })
     .catch(function(error) {
@@ -244,8 +245,10 @@ export class AuthService {
         that.unsubscribe();
       }
       if (code) {
+        that.g.wdLog(['obsLoggedUser', code]);
         that.obsLoggedUser.next(code);
       } else {
+        that.g.wdLog(['obsLoggedUser -1']);
         that.obsLoggedUser.next(-1);
       }
     })

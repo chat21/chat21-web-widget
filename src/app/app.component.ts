@@ -131,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     * https://forum.ionicframework.com/t/firebase-auth-currentuser-shows-me-null-but-it-logged-in/68411/4
     */
     setLoginSubscription() {
+        this.g.wdLog(['setLoginSubscription : ']);
         const that = this;
         /**
          * SUBSCRIBE TO ASYNC LOGIN FUNCTION
@@ -195,6 +196,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
        const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
+                    console.log('obsSettingsService');
                     // console.log('---------------- obsSettingsService ---------------- ');
                     // ------------------------------- //
                     /** INIT  */
@@ -836,7 +838,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // alert(currentUser.uid);
             this.initAll();
             /** sono loggato */
-            this.g.wdLog(['USER AUTENTICATE: ', currentUser.uid]);
+            this.g.wdLog(['reInit_old USER AUTENTICATE: ', currentUser.uid]);
             this.g.setParameter('senderId', currentUser.uid);
             this.g.setParameter('isLogged', true);
             this.g.setParameter('attributes', this.setAttributesFromStorageService());
