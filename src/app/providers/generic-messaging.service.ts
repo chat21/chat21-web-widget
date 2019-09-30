@@ -23,7 +23,6 @@ import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class GenericMessagingService {
-  @ViewChild('audio_receive') private audioReceive: ElementRef;
   tenant: string;
   senderId: string;
   conversationWith: string;
@@ -166,16 +165,6 @@ export class GenericMessagingService {
     //   this.messages.sort(this.compareValues('timestamp', 'asc'));
     //   this.obsAdded.next(msg);
 
-      try {
-        const audioPlayer = this.audioReceive.nativeElement;
-        audioPlayer.pause();
-        setTimeout(() => {
-          audioPlayer.play();
-          audioPlayer.currentTime = 0;
-        }, 1000);
-      } catch (e) {
-        console.log(e);
-      }
 
     }
   }
@@ -254,11 +243,11 @@ export class GenericMessagingService {
   connect(conversationWith) {
     this.sessionUid = this.storageService.getItem('sessionUid');
     if (this.sessionUid) {
-      console.log('> sessionUid: ', this.sessionUid);
+      // console.log('> sessionUid: ', this.sessionUid);
     } else {
       this.sessionUid = createGuid();
       this.storageService.setItem('sessionUid', this.sessionUid);
-      console.log('> sessionUid: ', this.sessionUid);
+      // console.log('> sessionUid: ', this.sessionUid);
     }
     this.g.wdLog(['***** connect MessagingService *****']);
 
@@ -269,6 +258,7 @@ export class GenericMessagingService {
     } catch (error) {
       // console.log('> Error is handled attributes: ', error);
     }
+
     // this.checkRemoveConversation(conversationWith);
     // this.checkMessages(conversationWith);
   }

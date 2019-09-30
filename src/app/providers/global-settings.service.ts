@@ -1044,8 +1044,8 @@ export class GlobalSettingsService {
             //     this.globals.online_msg = department['online_msg'];
             // }
             this.setDepartment(departments[0]);
-             console.log('this.globals.offline_msg ::::', this.globals.LABEL_FIRST_MSG_NO_AGENTS);
-             console.log('this.globals.online_msg ::::', this.globals.LABEL_FIRST_MSG);
+            //  console.log('this.globals.offline_msg ::::', this.globals.LABEL_FIRST_MSG_NO_AGENTS);
+            //  console.log('this.globals.online_msg ::::', this.globals.LABEL_FIRST_MSG);
             // return false;
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI

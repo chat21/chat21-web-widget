@@ -58,6 +58,9 @@ declare var recordingTEST: any;
 export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
+  // @ViewChild('audio_receive') private audioReceive: ElementRef;
+  // @ViewChild('audio_send') private audioSend: ElementRef;
+
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
@@ -139,6 +142,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========== end:: icon status message
 
   lastMsg = false;
+  isNwMsg = false;
+
 
   constructor(
     public el: ElementRef,
@@ -165,7 +170,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
-
+    this.isNwMsg = false;
     //this.loadJS();
 
     this.ngZone.run(() => {
@@ -210,8 +215,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.conversationsService.updateConversationBadge();
     }
   }
-
-
 
 
   /**
@@ -351,7 +354,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   addFirstMessage(text) {
     if (1 === 1) {
-      this.sendMessage(PROXY_MSG_START, TYPE_MSG_TEXT);
+      setTimeout(() => {
+        if (this.messages.length === 0) {
+          this.sendMessage(PROXY_MSG_START, TYPE_MSG_TEXT);
+        }
+      }, 1000);
     } else {
       const lang = this.g.lang;
       const channelType = this.g.channelType;
@@ -530,6 +537,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.scrollToBottom();
         }, 200);
       } else if (that.scrollMe) {
+        // aggingo writingMessage quando invio un nw msg e lo elimino quando ricevo una risposta
+        that.writingMessage = '';
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
@@ -561,11 +570,29 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }
         }, 1000);
       }
-
+      
     });
 
     this.subscriptions.push(obsAddedMessage);
   }
+
+
+ 
+  // autoplay() {
+  //    // TEST TEST TEST
+  //    try {
+  //       const audioPlayer = this.audioSend.nativeElement;
+  //       console.log('this.audioSend.nativeElement:: ' + this.audioSend.nativeElement);
+
+  //       audioPlayer.pause();
+  //       setTimeout(() => {
+  //         audioPlayer.play();
+  //         audioPlayer.currentTime = 0;
+  //       }, 1000);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  // }
 
   /**
    *
@@ -639,7 +666,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // });
   }
 
-
+  /** controllo se è l'ultimo messaggio appena ricevuto 
+   * imposto autoplay
+   */
+  isAutoplay(last: boolean) {
+    if (last === true && this.isNwMsg === true) {
+      return true;
+    }
+    return false;
+  }
 
 
   setFocusOnId(id) {
@@ -651,7 +686,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             textarea.focus();
         }
     }, 500);
-}
+  }
 
 
 
@@ -669,7 +704,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
+      // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
       } else if (keyCode === 9) {
@@ -718,6 +753,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
+
+      const that = this;
+      setTimeout(function () {
+        // aggingo writingMessage quando invio un nw msg e lo elimino quando ricevo una risposta
+        that.writingMessage = that.g.LABEL_WRITING;
+      }, 300);
+
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
@@ -1299,13 +1341,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // You can load multiple scripts by just providing the key as argument into load method of the service
     this.audioRecorderService.load('WebAudioRecorder', 'audio').then(data => {
       // Script Loaded Successfully
-      console.log(data);
+      // console.log(data);
       recordingTEST();
     }).catch(error => console.log(error));
   }
 
   recording(e: any) {
-    console.log('1 startRecording');
+    // console.log('1 startRecording');
+    this.isNwMsg = true;
     const that = this;
     const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
     if (this.isRecording === true) {
@@ -1323,7 +1366,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     } else {
       this.isRecording = true;
-      console.log('2 startRecording');
+      // console.log('2 startRecording');
       // cambio icona
       // inizio registrazione
       // visualizzo time rec come placeholder e desabilito input testo
@@ -1338,7 +1381,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const uid = createGuid();
       try {
         startRecording(this.urlAudiorepo, uid, function(uuid: string, filename: string) {
-          console.log(uuid);
+          // console.log(uuid);
           const url = that.urlAudiorepo + '/audio/' + filename;
           const metadata = {
             'src': url,
@@ -1463,6 +1506,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   isLastMessage(idMessage: string) {
+
     // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
     if (idMessage === this.messages[this.messages.length - 1].uid) {
       return true;
