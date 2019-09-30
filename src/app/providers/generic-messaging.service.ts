@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, ViewChild } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 // firebase
@@ -23,6 +23,7 @@ import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class GenericMessagingService {
+  @ViewChild('audio_receive') private audioReceive: ElementRef;
   tenant: string;
   senderId: string;
   conversationWith: string;
@@ -55,7 +56,7 @@ export class GenericMessagingService {
   URL_PROXY = 'https://bariapp.herokuapp.com/proxy';
 
   constructor(
-    //public el: ElementRef,
+    // public el: ElementRef,
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
     public g: Globals,
@@ -164,6 +165,18 @@ export class GenericMessagingService {
     //   }
     //   this.messages.sort(this.compareValues('timestamp', 'asc'));
     //   this.obsAdded.next(msg);
+
+      try {
+        const audioPlayer = this.audioReceive.nativeElement;
+        audioPlayer.pause();
+        setTimeout(() => {
+          audioPlayer.play();
+          audioPlayer.currentTime = 0;
+        }, 1000);
+      } catch (e) {
+        console.log(e);
+      }
+
     }
   }
 
@@ -207,6 +220,7 @@ export class GenericMessagingService {
     } else {
       message.status = MSG_STATUS_SENT_SERVER.toString();
       this.g.wdLog(['--------> ADD MSG', message.status]);
+
       this.messages.push(message);
     }
     this.messages.sort(this.compareValues('timestamp', 'asc'));

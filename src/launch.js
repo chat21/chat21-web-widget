@@ -23,6 +23,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
     containerDiv.appendChild(iDiv);
 
     var ifrm = document.createElement("iframe");
+    ifrm.setAttribute("frameborder", "0");
+    ifrm.setAttribute("border", "0");
     //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
     // projectid= '5b55e806c93dde00143163dd'
     //var srcTileDesk =  `
@@ -42,6 +44,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/vendor.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.bundle.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/assets/js/WebAudioRecorder.min.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/assets/js/audio.js"></script>';
     srcTileDesk += '</body>';
     srcTileDesk += '</html>';
     
@@ -137,4 +141,12 @@ function initCSSWidget(tiledeskScriptBaseLocation) {
         link.media = 'all';
         head.appendChild(link);
     // }
+}
+
+function loadJS(tiledeskScriptBaseLocation) {
+    var head  = document.getElementsByTagName('head')[0];
+    var scriptTag  = document.createElement('script');
+    scriptTag.src = tiledeskScriptBaseLocation+'/assets/js/audio.js';
+    scriptTag.type="text/javascript";
+    head.appendChild(link);
 }

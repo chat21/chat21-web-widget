@@ -166,7 +166,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
 
-    this.loadJS();
+    //this.loadJS();
 
     this.ngZone.run(() => {
       //const objDiv = document.getElementById(that.idDivScroll);
@@ -669,7 +669,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      
       this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
@@ -706,7 +705,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
         this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
-        console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+      this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored']);
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -1338,9 +1337,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(this.subTimer);
       const uid = createGuid();
       try {
-        startRecording(this.urlAudiorepo, uid, function(uuid: string) {
+        startRecording(this.urlAudiorepo, uid, function(uuid: string, filename: string) {
           console.log(uuid);
-          const url = that.urlAudiorepo + '/audio/' + uuid;
+          const url = that.urlAudiorepo + '/audio/' + filename;
           const metadata = {
             'src': url,
             'type': TYPE_MSG_AUDIO,

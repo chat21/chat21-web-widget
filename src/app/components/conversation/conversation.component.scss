@@ -305,6 +305,14 @@
                             margin: 0 20px 4px 10px;
                             height: fit-content;
                         }
+                        .msg_receive {
+                            &.clean {
+                                background-color: transparent;
+                            }
+                        }
+                        audio {
+                            max-width: 274px;
+                        }
                         
                     }
     

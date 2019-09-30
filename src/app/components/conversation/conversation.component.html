@@ -120,20 +120,28 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                                <div *ngFor="let message of messages" tabindex="1521" class="rowMsg">
+                                <div *ngFor="let message of messages; let last = last" tabindex="1521" class="rowMsg"  [ngClass]="{ last: last }">
     
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
                                             
-                                        <div [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent"  [class.clean]="message.type !== 'text'">
+                                        <div [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent" [class.clean]="message.type !== 'text'">
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" />
 
+                                            <!-- message type:: audio -->
+                                            <div *ngIf="message.type == 'audio'">
+                                                <audio controls controlsList="nodownload"  >
+                                                    <source src="{{message.metadata.src}}" type="audio/x-wav" >
+                                                    {{message.text}}
+                                                </audio>
+                                            </div>
+
                                             <!-- message type:: text -->
-                                            <div *ngIf="message.type == 'text'">
+                                            <div *ngIf="message.type !== 'audio' && message.type !== 'image'">
                                                 <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                     is ignored</div>
                                                 <ng-template #contentPopup>
@@ -148,13 +156,6 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
                                                     <!-- <p [innerHTML]="message.text | linky"></p> -->
                                                 </ng-template>
-                                            </div>
-
-                                            <div *ngIf="message.type == 'audio'">
-                                                <audio controls controlsList="nodownload"  >
-                                                    <source src="{{message.metadata.src}}" type="audio/x-wav" >
-                                                    {{message.text}}
-                                                </audio>
                                             </div>
 
                                         </div>
@@ -188,8 +189,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                         </div>
 
 
-                                        <div class="messages msg_receive">
-                                           
+                                        <div class="messages msg_receive" [class.clean]="message.type !== 'text'">
                                             <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
 
                                             <!-- message type:: image -->
@@ -197,32 +197,33 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" />
 
+                                            <!-- message type:: audio -->
+                                            <div *ngIf="message.type == 'audio'">
+                                                <audio #audio_receive class="audio_receive" controls controlsList="nodownload"  >
+                                                    <source src="{{message.metadata.src}}" type="audio/x-wav" >
+                                                    {{message.text}}
+                                                </audio>
+                                            </div>
+
                                             <!-- message type:: text -->
-                                            <div *ngIf="message.type == 'text'">
+                                            <div *ngIf="message.type !== 'audio' && message.type !== 'image'">
                                                
                                                 <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                     is ignored</div>
 
                                                 <ng-template #contentPopup>
-                                                    <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
-                                                    </p>
+                                                    <p style="text-decoration: underline; padding:8px; cursor: pointer;" (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                                 </ng-template>
+
                                                 <ng-template #contentNewTab>
-
-
                                                     <!-- old -->
                                                     <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
                                                     <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
-
                                                     <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
                                                     <!-- <p [innerHTML]="message.uid | linky"></p> -->
-
-                                                    <!-- <p [innerHTML]="videoUrl"></p> -->
-                                                    
+                                                    <!-- <p [innerHTML]="videoUrl"></p> -->  
                                                     <!-- <p [innerHTML]="message.print() | linky"></p> -->
                                                     <!-- <p [innerHTML]="message.text | linky"></p> -->
-
                                                 </ng-template>
                                             </div>
 
@@ -334,8 +335,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
     </div>
 
 
-    <div #div_attached *ngIf="g.hideAttachButton == false">
-        <label tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload" id="chat21-start-upload-doc">
+    <div #div_attached>
+        <label *ngIf="g.hideAttachButton == false" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload" id="chat21-start-upload-doc">
             <span class="v-align-center">
                 <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
                     <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->

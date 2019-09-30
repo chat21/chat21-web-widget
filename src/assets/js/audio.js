@@ -69,7 +69,7 @@ function startRecording(urlAudiorepo, uid, callbackEndRecording) {
 		// encodingTypeSelect.disabled = true;
 
 		recorder = new WebAudioRecorder(input, {
-		  	workerDir: "assets/js/", // must end with slash
+		  	workerDir: "/home/assets/js/", // "/home/assets/js/" // must end with slash
 		  	encoding: encodingType,
 		  	numChannels: 2, //2 is the default, mp3 encoding supports only 2
 			onEncoderLoading: function(recorder, encoding) {
@@ -86,12 +86,12 @@ function startRecording(urlAudiorepo, uid, callbackEndRecording) {
 		});
 
 		recorder.onComplete = function(recorder, blob) { 
-			const uuid = uid+'__STEREO.'+recorder.encoding;
-			console.log("Encoding complete : uid: " + uuid);
+			const filename = uid+'__STEREO.'+recorder.encoding;
+			console.log("Encoding complete : filename: " + filename);
 			// createDownloadLink(blob,recorder.encoding);
-			sendaudio(blob, urlAudiorepo, uid, function(val) {
-				console.log('callback sendaudio'+val);
-				callbackEndRecording(uid);
+			sendaudio(blob, urlAudiorepo, filename, function(val) {
+				console.log('callback sendaudio'+uid);
+				callbackEndRecording(uid,filename);
 			});
 			// encodingTypeSelect.disabled = false;
 		}
