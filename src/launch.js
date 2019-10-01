@@ -129,7 +129,7 @@ function initWidget() {
       if (er instanceof ReferenceError) {
          console.log("tileDeskAsyncInit() doesn't exists");
       }else {
-         console.log("tileDeskAsyncInit() error",err);
+         console.log("tileDeskAsyncInit() error",er);
       }
        
     }
