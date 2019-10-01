@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 3.0.24
+- bug fix: setupMyPresence on logout/login
+- bug fix: css border 0 on iframe
+
 ### 3.0.22
 - bug fix: custom auth in launch.js (function commented)
 
