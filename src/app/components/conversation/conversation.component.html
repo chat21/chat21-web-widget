@@ -134,7 +134,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                             <!-- message type:: audio -->
                                             <div *ngIf="message.type == 'audio'">
-                                                <audio controls controlsList="nodownload" >
+                                                <audio id="{{message.uid}}" #audio_msg controls controlsList="nodownload" (pause)="pauseAudioMsg($event)" (play)="playAudioMsg($event)">
                                                     <source src="{{message.metadata.src}}" type="audio/x-wav" >
                                                     {{message.text}}
                                                 </audio>
@@ -199,7 +199,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                             <!-- message type:: audio -->
                                             <div *ngIf="message.type == 'audio'">
-                                                <audio #audio_receive controls controlsList="nodownload" [attr.autoplay]="isAutoplay(last)? 'true': null" >
+                                                <audio id="{{message.uid}}" #audio_msg controls controlsList="nodownload" [attr.autoplay]="isAutoplay(last)? 'true': null" (pause)="pauseAudioMsg($event)" (play)="playAudioMsg($event)">
                                                     <source src="{{message.metadata.src}}" type="audio/x-wav" >
                                                     {{message.text}}
                                                 </audio>

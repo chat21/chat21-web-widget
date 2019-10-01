@@ -44,7 +44,6 @@ import { DepartmentModel } from '../../../models/department';
 
 declare var startRecording: any;
 declare var stopRecording: any;
-
 declare var recordingTEST: any;
 
 
@@ -58,7 +57,7 @@ declare var recordingTEST: any;
 export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
-  // @ViewChild('audio_receive') private audioReceive: ElementRef;
+  @ViewChild('audio_msg') private audioMessage: ElementRef;
   // @ViewChild('audio_send') private audioSend: ElementRef;
 
   // @HostListener('window:resize', ['$event'])
@@ -89,6 +88,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   showButtonToBottom = false;
   NUM_BADGES = 0;
   audio: any;
+  uidAudioPlayng: string;
   // ========= end:: gestione scroll view messaggi ======= //
 
 
@@ -753,11 +753,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      */
     sendMessage(msg, type, metadata?) {
-
+      // stoppo l'audio se è in play
+      this.pauseAudioMsg(null);
       const that = this;
       setTimeout(function () {
         // aggingo writingMessage quando invio un nw msg e lo elimino quando ricevo una risposta
-        that.writingMessage = that.g.LABEL_WRITING;
+        if (that.messages.length === 0) {
+          that.writingMessage = '';
+        } else {
+          that.writingMessage = that.g.LABEL_WRITING;
+        }
       }, 300);
 
       (metadata) ? metadata = metadata : metadata = '';
@@ -1348,7 +1353,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   recording(e: any) {
     // console.log('1 startRecording');
-    this.isNwMsg = true;
     const that = this;
     const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
     if (this.isRecording === true) {
@@ -1361,6 +1365,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
       try {
         stopRecording();
+        this.isNwMsg = true;
       } catch (error) {
         console.log('> Error is: ', error);
       }
@@ -1371,14 +1376,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // inizio registrazione
       // visualizzo time rec come placeholder e desabilito input testo
       textArea.readOnly = true;
-      this.subTimer = this.timer.subscribe(val => {
-        if (textArea) {
-            textArea.value = '';  // clear the textarea
-            textArea.placeholder = fromNumberToTime(val); // .toString();  // restore the placholder
-        }
+
+      navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function(stream) {
+        console.log('-------->>> You let me use your mic!');
+        that.subTimer = that.timer.subscribe(val => {
+          if (textArea) {
+              textArea.value = '';  // clear the textarea
+              textArea.placeholder = fromNumberToTime(val); // .toString();  // restore the placholder
+          }
+        });
+        that.subscriptions.push(that.subTimer);
+      })
+      .catch(function(err) {
+        console.log('-------->>> No mic for you!');
       });
-      this.subscriptions.push(this.subTimer);
       const uid = createGuid();
+      // stoppo l'audio se è in play
+      this.pauseAudioMsg(null);
       try {
         startRecording(this.urlAudiorepo, uid, function(uuid: string, filename: string) {
           // console.log(uuid);
@@ -1521,6 +1536,47 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         'button': true
       };
       this.sendMessage($event, TYPE_MSG_TEXT, metadata);
+    }
+  }
+
+  /**
+   * play audio msg
+   * @param e
+   */
+  playAudioMsg(e) {
+    // stop all audio
+    if (this.uidAudioPlayng) {
+      const divPlay = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+      divPlay.pause();
+      // console.log('> pausa: ', divPlay);
+    }
+    try {
+      // console.log(e.target.id);
+      // set uid audio playng
+      this.uidAudioPlayng = e.target.id;
+    } catch (error) {
+      console.log('> Error is handled attributes: ', error);
+    }
+  }
+
+  /**
+   *
+   * @param e
+   */
+  pauseAudioMsg(e) {
+    // stop all audio
+    if (this.uidAudioPlayng) {
+      const divPlay = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+      divPlay.pause();
+      // console.log('> pausa: ', divPlay);
+    }
+    try {
+      // console.log(e.target.id);
+      if (this.uidAudioPlayng) {
+        this.uidAudioPlayng = '';
+      }
+    } catch (error) {
+      console.log('> Error is handled attributes: ', error);
     }
   }
 
