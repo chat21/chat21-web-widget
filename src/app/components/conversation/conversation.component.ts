@@ -1564,20 +1564,54 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * @param e
    */
   pauseAudioMsg(e) {
-    // stop all audio
-    if (this.uidAudioPlayng) {
-      const divPlay = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
-      divPlay.pause();
-      // console.log('> pausa: ', divPlay);
+    try {
+      // stop all audio
+      if (this.uidAudioPlayng) {
+        const divPlay = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+        divPlay.pause();
+        // console.log('> pausa: ', divPlay);
+      }
+    } catch (error) {
+      console.log('> Error is: ', error);
     }
+
     try {
       // console.log(e.target.id);
       if (this.uidAudioPlayng) {
         this.uidAudioPlayng = '';
       }
     } catch (error) {
-      console.log('> Error is handled attributes: ', error);
+      console.log('> Error is: ', error);
     }
+  }
+
+  /**
+   *
+   * @param uid
+   */
+  playPausaAudioMsg(uid: string) {
+    console.log('playPausaAudioMsg: ', uid);
+    try {
+      const divPause = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+      if (divPause) {
+        divPause.pause();
+      }
+    } catch (error) {
+      console.log('> Error is: ', error);
+    }
+    try {
+      const divPlay = (<HTMLAudioElement>document.getElementById(uid));
+      if (divPlay) {
+        setTimeout(function() {
+          divPlay.play();
+          this.uidAudioPlayng = uid;
+          console.log('> play: ok', divPlay);
+        }, 300);
+      }
+    } catch (error) {
+      console.log('> Error is: ', error);
+    }
+
   }
 
 }

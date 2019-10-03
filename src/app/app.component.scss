@@ -41,8 +41,12 @@
 body {
     margin:0px;
 }
-
-
+button {
+    -webkit-user-select: text;  /* Chrome all / Safari all */
+    -moz-user-select: text;     /* Firefox all */
+    -ms-user-select: text;      /* IE 10+ */
+    user-select: text;
+}
 
 // .btn-new-conversation:hover{
 //     -webkit-animation: jello-horizontal 0.8s 0.1s both;
@@ -452,6 +456,8 @@ tiledeskwidget-root {
             position: absolute;
             height: 100%;
             width: 100%;
+            top: 0px;
+            bottom: 0px;
             z-index: 1;
             background-color: transparent;
             opacity: 0;
@@ -473,6 +479,8 @@ tiledeskwidget-root {
             &.modal-slide-in-right {
                 position: absolute;
                 left: 0px;
+                top: 0px;
+                bottom: 0px;
                 opacity: 1;
                 display: inline-block;
                 -webkit-animation-name: modal-active-in; /* Safari 4.0 - 8.0 */
@@ -512,6 +520,16 @@ tiledeskwidget-root {
             transition: all .45s ease-in-out!important;
             -moz-transition: all .45s ease-in-out!important;
             -webkit-transition: all .45s ease-in-out!important;
+            padding: 0px;
+            margin: 0px;
+            border-radius: 10%;
+        }
+
+        button:active,
+        button:focus
+        {
+            background: rgba(240,240,240,0.2)!important;
+            opacity: 1!important;
             padding: 0px;
             margin: 0px;
             border-radius: 10%;

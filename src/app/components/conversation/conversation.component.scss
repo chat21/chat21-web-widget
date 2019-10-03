@@ -131,6 +131,10 @@
                 /* no conflict
                 https://stackoverflow.com/questions/28556520/jquery-widget-css-conflicts-with-third-party-site */
                 /** CONTENT **/
+
+
+                
+
                 .chat21-sheet-content {
                     position: absolute;
                     top: 0;
@@ -198,7 +202,6 @@
                         // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
                         // -webkit-animation: heartbeat 1.5s ease-in-out both;
                         // animation: heartbeat 1.5s ease-in-out both;
-
                         p {
                             font-size: 1.4em;
                             margin: 0 0 0 0;
@@ -209,6 +212,7 @@
                             font-variant: normal;
                             font-weight: 300;
                             overflow: hidden;
+                            text-align: left;
                         }
                         img {
                             border-radius: 8px;
@@ -228,17 +232,31 @@
                             color: $col-msg-sent;
                             margin-right: 0;
                             margin-left: 4px;
+                            margin-top: 10px;
                             max-width: calc(100% - 30px);
                             min-width: 14px;
+                        }
+                        .msg_sent:focus,
+                        .msg_sent:active {
+                            //border: 0.5px solid rgb(240, 240, 110);
+                            box-shadow: 0 1px 8px 0 rgba(0,0,0,0.24), 0 0px 0px 0 rgba(0,0,0,0.19);
+                            // background-color: red;
                         }
 
                         .msg_sent {
                             &.clean {
                                 background-color: transparent;
+                                padding: 0px;
+                                margin: 10px;
                             }
                         }
                         audio {
-                            max-width: 284px;
+                            max-width: 264px;
+                            background-color: $light-white;
+                            border-radius: 14px;
+                        }
+                        audio::-webkit-media-controls-enclosure {
+                            background: transparent;
                         }
                         
 
@@ -268,6 +286,8 @@
                     }
     
                     /** recive message **/
+                    
+
                     .base_receive {
                         padding: 0px 0px 6px 0px;
                         /* avatar */
@@ -302,16 +322,30 @@
                             color: $black;
                             max-width: 260px;
                             min-width: 14px;
-                            margin: 0 20px 4px 10px;
-                            height: fit-content;
+                            margin: 10px 20px 4px 10px;
+                            height: fit-content;                            
+                        }
+                        .msg_receive:focus,
+                        .msg_receive:active {
+                            // border: 0.5px solid rgb(240, 240, 110);
+                            box-shadow: 0 1px 8px 0 rgba(0,0,0,0.24), 0 0px 0px 0 rgba(0,0,0,0.19);
+                            // background-color: red;
                         }
                         .msg_receive {
                             &.clean {
                                 background-color: transparent;
+                                padding: 0px;
+                                margin: 10px;
                             }
+                            
                         }
                         audio {
-                            max-width: 274px;
+                            max-width: 244px;
+                            background-color: $light-white;
+                            border-radius: 14px;
+                        }
+                        audio::-webkit-media-controls-enclosure {
+                            background: transparent;
                         }
                         
                     }
@@ -358,6 +392,16 @@
     .chat21-textarea-button{
         fill: $blue;
         pointer-events: auto;
+    }
+    .chat21-textarea-button:focus,
+    .chat21-textarea-button:active {
+        min-width: 24px;
+        min-height: 24px;
+        padding: 4 0 0 2;
+        background-color: $light-white;
+        border-radius: 12px;
+        box-shadow: $bck-msg-sent 0px 0px 0px 2px inset;
+        outline: none;
     }
 
     
@@ -424,7 +468,7 @@
         max-height: 110px;
         min-height: auto;
         height: 20px;
-        padding: 0px 40px;
+        padding: 3px 40px;
         margin: 10px 0px 10px;
         border: none;
     }
@@ -447,14 +491,22 @@
         right: 8px;
         bottom: 10px;
     }
+    #chat21-button-send:focus,
+    #chat21-button-send:active {
+        background-color: $light-white;
+        border-radius: 12px;
+    }
     #chat21-file{
         left: 8px;
         bottom: 10px;
     }
     #chat21-start-upload-doc,
     #chat21-start-mic {
-        left: 8px;
-        top: 10px;
+        left: 6px;
+        top: 8px;
+        padding: 4 0 0 2;
+        min-width: 24px;
+        min-height: 24px;
     }
 }
 
@@ -481,7 +533,10 @@
         display: flex;
         align-items: center;
     }
-    .c21-header-button:hover {
+    .c21-header-button:hover,
+    .c21-header-button:active,
+    .c21-header-button:focus
+    {
         background-color: whitesmoke;
         cursor: pointer;
     }

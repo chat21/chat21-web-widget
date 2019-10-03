@@ -53,6 +53,7 @@ export class GenericMessagingService {
   DEFAULT_RECIPIENT = 'bari_bot';
   DEFAULT_RECIPIENT_FULLNAME = 'Ernesto';
   URL_PROXY = 'https://bariapp.herokuapp.com/proxy';
+  AGENT_NAME = null;
 
   constructor(
     // public el: ElementRef,
@@ -109,8 +110,13 @@ export class GenericMessagingService {
       });
       // console.log('> attributes: ', attributes);
     } catch (error) {
-        // console.log('> Error is handled attributes: ', error);
+        console.log('> Error is: ', error);
     }
+
+    if (this.AGENT_NAME) {
+      message['agent'] = this.AGENT_NAME;
+    }
+
 
 
     this.g.wdLog(['------------------> body: ', JSON.stringify(message)]);
@@ -130,6 +136,19 @@ export class GenericMessagingService {
       // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
       const dateSendingMessage = setHeaderDate(message['timestamp']);
       // console.log('message[timestamp]: ', message['timestamp']);
+      try {
+        if (message['attributes']) {
+          const changeAgentTo = message['attributes']['changeAgentTo'];
+          if (changeAgentTo) {
+            this.AGENT_NAME = changeAgentTo;
+            localStorage.setItem('agent_name', changeAgentTo);
+          }
+          console.log('changeAgentTo::: ' + changeAgentTo);
+        }
+      } catch (e) {
+        console.error('Error is: ', e);
+      }
+
       const msg = new MessageModel(
         childSnapshot.key,
         message['language'],
@@ -147,6 +166,7 @@ export class GenericMessagingService {
         message['channel_type'],
         message['progectId']
       );
+
       msg.sender_urlImage = this.getUrlImgProfile(message['sender']);
       this.triggerGetImageUrlThumb(msg);
       this.addMessage(msg);
@@ -256,7 +276,17 @@ export class GenericMessagingService {
         this.messages = JSON.parse(this.storageService.getItem('messages'));
       }
     } catch (error) {
-      // console.log('> Error is handled attributes: ', error);
+      console.log('> Error is :', error);
+    }
+
+    try {
+      console.log('> GET agent_name storageService :');
+      if (this.storageService.getItem('agent_name')) {
+        this.AGENT_NAME = this.storageService.getItem('agent_name');
+        console.log('>this.AGENT_NAME :', this.AGENT_NAME);
+      }
+    } catch (error) {
+      console.log('> Error is :', error);
     }
 
     // this.checkRemoveConversation(conversationWith);
