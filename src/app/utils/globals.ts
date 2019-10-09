@@ -123,6 +123,7 @@ export class Globals {
   SEE_PREVIOUS: string;
   WAITING_TIME_FOUND: string;
   WAITING_TIME_NOT_FOUND: string;
+  CLOSED: string;
 
 
 

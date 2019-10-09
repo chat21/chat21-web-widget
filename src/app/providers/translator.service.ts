@@ -70,6 +70,7 @@ export class TranslatorService {
     globals.SEE_PREVIOUS = this.translateForKey('SEE_PREVIOUS');
     globals.WAITING_TIME_FOUND = this.translateForKey('WAITING_TIME_FOUND');
     globals.WAITING_TIME_NOT_FOUND = this.translateForKey('WAITING_TIME_NOT_FOUND');
+    globals.CLOSED = this.translateForKey('CLOSED');
 
     if (!globals.wellcomeTitle) {
       globals.wellcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */

@@ -46,13 +46,14 @@ export const en = {
     'LOGOUT': 'logout',
     'CLOSE': 'close',
     'PREV_CONVERSATIONS': 'Your conversations',
-    'YOU': 'Tu',
+    'YOU': 'You',
     'SHOW_ALL_CONV': 'show all',
     'START_A_CONVERSATION': 'Start a conversation',
     'NO_CONVERSATION': 'No conversation',
     'SEE_PREVIOUS': 'see previous',
     'WAITING_TIME_FOUND': 'The team typically replies in ',
-    'WAITING_TIME_NOT_FOUND': 'Will reply as soon as they can'
+    'WAITING_TIME_NOT_FOUND': 'The team will reply as soon as possible',
+    'CLOSED': 'CLOSED'
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -109,5 +110,6 @@ export const it = {
     'NO_CONVERSATION': 'Nessuna conversazione attiva',
     'SEE_PREVIOUS': 'vedi precedenti',
     'WAITING_TIME_FOUND': 'Il team tipicamente risponde in ',
-    'WAITING_TIME_NOT_FOUND': 'Vi risponderemo appena possibile'
+    'WAITING_TIME_NOT_FOUND': 'Vi risponderemo appena possibile',
+    'CLOSED': 'CHIUSA'
 };
