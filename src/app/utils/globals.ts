@@ -177,6 +177,8 @@ export class Globals {
    customAttributes: string;
    hideAttachButton: boolean;
 
+   departmentID: string;
+
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -197,7 +199,7 @@ export class Globals {
     }
     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
     if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
-        windowContext = window.parent;
+      windowContext = window.parent;
     }
     // this.parameters['windowContext'] = windowContext;
     this.windowContext = windowContext;
@@ -293,6 +295,7 @@ export class Globals {
     this.online_msg = this.LABEL_FIRST_MSG;
 
     this.hideAttachButton = false;
+    // this.departmentID = null;
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
@@ -393,7 +396,7 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton
+      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton, 'departmentID': this.departmentID
     };
   }
 
