@@ -1,5 +1,11 @@
 # chat21-web-widget ver 3.0
 
+### 3.0.26
+- new: added parameter 'departmentID' 
+
+### 3.0.25
+- bug fix: translate
+
 ### 3.0.24
 - bug fix: setupMyPresence on logout/login
 - bug fix: css border 0 on iframe
