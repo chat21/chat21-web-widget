@@ -14,7 +14,9 @@ import { DepartmentModel } from '../../models/department';
 import { MessageModel } from '../../models/message';
 import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
 // tslint:disable-next-line:max-line-length
-import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, PROXY_MSG_START, TYPE_MSG_IMAGE } from '../utils/constants';
+import { DEFAULT_AGENT, DEFAULT_RECIPIENT, DEFAULT_RECIPIENT_FULLNAME, PROXY_URL,
+IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT,
+UID_SUPPORT_GROUP_MESSAGES, TYPE_MSG_IMAGE, START_HIDDEN_MESSAGE } from '../utils/constants';
 // utils
 import { createGuid, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
@@ -49,10 +51,10 @@ export class GenericMessagingService {
   // sessionUid che individua univocamente la conversazione
   sessionUid: String;
 
-  DEFAULT_AGENT = 'supporto-anagrafe-vcqvkb';
-  DEFAULT_RECIPIENT = 'bari_bot';
-  DEFAULT_RECIPIENT_FULLNAME = 'Ernesto';
-  URL_PROXY = 'https://bariapp.herokuapp.com/proxy';
+  // DEFAULT_AGENT = 'supporto-anagrafe-vcqvkb';
+  // DEFAULT_RECIPIENT = 'bari_bot';
+  // DEFAULT_RECIPIENT_FULLNAME = 'Ernesto';
+  // PROXY_URL = 'https://bariapp.herokuapp.com/proxy';
   AGENT_NAME = null;
 
   constructor(
@@ -80,38 +82,53 @@ export class GenericMessagingService {
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
     // const options = new RequestOptions({ headers: headers });
-    let url = this.URL_PROXY;
+    let url = PROXY_URL;
     this.g.wdLog(['url: ', url]);
 
     message['session'] = this.sessionUid;
-    message['agent'] = this.DEFAULT_AGENT;
-    message['recipient'] = this.DEFAULT_RECIPIENT_FULLNAME;
-    message['recipient_fullname'] = this.DEFAULT_RECIPIENT_FULLNAME;
+    message['agent'] = DEFAULT_AGENT;
+    message['recipient'] = DEFAULT_RECIPIENT;
+    message['recipient_fullname'] = DEFAULT_RECIPIENT_FULLNAME;
+    this.g.start_hidden_message = START_HIDDEN_MESSAGE;
+
 
     try {
-      JSON.parse(this.g.customAttributes, (key, value) => {
-        this.g.wdLog(['keyX: ', key]);
-        this.g.wdLog(['valueX: ', value]);
-        if (key === 'url_proxy') {
-          url = value;
-        }
-        if (key === 'agent') {
-          message['agent'] = value;
-        }
-        if (key === 'recipient') {
-          message['recipient'] = value;
-          this.g.recipientId = value;
-        }
-        if (key === 'recipient_fullname') {
-          message['recipient_fullname'] = value;
-          this.g.recipientFullname = value;
-        }
-
-      });
-      // console.log('> attributes: ', attributes);
+      url = this.g.customAttributes.proxy_url;
+      message['agent'] = this.g.customAttributes.agent;
+      message['recipient'] = this.g.customAttributes.recipient;
+      message['recipient_fullname'] = this.g.customAttributes.recipient_fullname;
+      this.g.start_hidden_message = this.g.customAttributes.start_hidden_message;
     } catch (error) {
-        console.log('> Error is: ', error);
+      console.log('> Error is handled attributes: ', error);
     }
+
+    // try {
+    //   JSON.parse(this.g.customAttributes, (key, value) => {
+    //     this.g.wdLog(['keyX: ', key]);
+    //     this.g.wdLog(['valueX: ', value]);
+    //     if (key === 'proxy_url') {
+    //       url = value;
+    //     }
+    //     if (key === 'agent') {
+    //       message['agent'] = value;
+    //     }
+    //     if (key === 'recipient') {
+    //       message['recipient'] = value;
+    //       this.g.recipientId = value;
+    //     }
+    //     if (key === 'recipient_fullname') {
+    //       message['recipient_fullname'] = value;
+    //       this.g.recipientFullname = value;
+    //     }
+    //   });
+    //   // console.log('> attributes: ', attributes);
+    // } catch (error) {
+    //     console.log('> Error is: ', error);
+    // }
+
+
+
+
 
     if (this.AGENT_NAME) {
       message['agent'] = this.AGENT_NAME;
@@ -141,7 +158,8 @@ export class GenericMessagingService {
           const changeAgentTo = message['attributes']['changeAgentTo'];
           if (changeAgentTo) {
             this.AGENT_NAME = changeAgentTo;
-            localStorage.setItem('agent_name', changeAgentTo);
+            this.storageService.setItem('agent_name', changeAgentTo);
+            // localStorage.setItem('agent_name', changeAgentTo);
           }
           console.log('changeAgentTo::: ' + changeAgentTo);
         }
@@ -557,12 +575,12 @@ export class GenericMessagingService {
     //   //   that.g.wdLog(['****** changed *****', that.messages);
     // });
 
-    if (message.text !== PROXY_MSG_START) {
+    if (message.text !== this.g.start_hidden_message) {
       this.addMessage(message);
     }
 
     try {
-      if (message.text === PROXY_MSG_START && this.messages.length > 0) {
+      if (message.text === this.g.start_hidden_message && this.messages.length > 0) {
         return;
       }
     } catch (error) {

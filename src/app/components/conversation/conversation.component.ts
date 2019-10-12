@@ -16,7 +16,7 @@ import { AudioRecorderService } from '../../providers/audio-recorder.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT, TYPE_MSG_AUDIO, TYPE_MSG_BUTTON,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, PROXY_MSG_START, TYPE_MSG_FILE
+  TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, TYPE_MSG_FILE
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -241,19 +241,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
 
-
     try {
-      JSON.parse(this.g.customAttributes, (key, value) => {
-        if (key === 'recipient_fullname') {
-          this.g.recipientFullname = value;
-        }
-        if (key === 'url_audiorepo') {
-          this.urlAudiorepo = value;
-        }
-      });
+      this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
+      this.urlAudiorepo = this.g.customAttributes.urlAudiorepo;
     } catch (error) {
-        console.log('> Error is handled attributes: ', error);
+      console.log('> Error is handled attributes: ', error);
     }
+    // try {
+    //   JSON.parse(this.g.customAttributes, (key, value) => {
+    //     if (key === 'recipient_fullname') {
+    //       this.g.recipientFullname = value;
+    //     }
+    //     if (key === 'url_audiorepo') {
+    //       this.urlAudiorepo = value;
+    //     }
+    //   });
+    // } catch (error) {
+    //     console.log('> Error is handled attributes: ', error);
+    // }
   }
 
   onResize(event) {
@@ -354,9 +359,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   addFirstMessage(text) {
     if (1 === 1) {
+      try {
+        this.g.start_hidden_message = this.g.customAttributes.start_hidden_message;
+      } catch (error) {
+        console.log('> Error is handled attributes: ', error);
+      }
       setTimeout(() => {
         if (this.messages.length === 0) {
-          this.sendMessage(PROXY_MSG_START, TYPE_MSG_TEXT);
+
+          console.log('start_hidden_message:'+ this.g.start_hidden_message);
+          this.sendMessage(this.g.start_hidden_message, TYPE_MSG_TEXT);
         }
       }, 1000);
     } else {
@@ -570,7 +582,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }
         }, 1000);
       }
-      
     });
 
     this.subscriptions.push(obsAddedMessage);
@@ -1366,6 +1377,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       try {
         stopRecording();
         this.isNwMsg = true;
+        const btnStopRecord = (<HTMLInputElement>document.getElementById('chat21-start-mic'));
+        btnStopRecord.focus();
       } catch (error) {
         console.log('> Error is: ', error);
       }
@@ -1406,6 +1419,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           metadata.src = url;
           const message = 'Audio: ' + url;
           that.sendMessage(message, TYPE_MSG_AUDIO, metadata);
+          const btnStartRecord = (<HTMLInputElement>document.getElementById('chat21-start-mic'));
+          btnStartRecord.focus();
         });
       } catch (error) {
         console.log('> Error is: ', error);

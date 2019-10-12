@@ -103,7 +103,7 @@
             <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
           </div>
           <div *ngIf="conversation.is_new" [ngStyle]="{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
-          <div *ngIf="conversation.archived" class="c21-lablel-close">CHIUSA</div>
+          <div *ngIf="conversation.archived" class="c21-lablel-close">{{ g.CLOSED }}</div>
         </div>
         <div class="clear"></div>
       </button>

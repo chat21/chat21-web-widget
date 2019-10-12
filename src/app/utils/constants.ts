@@ -66,5 +66,11 @@ export const IMG_PROFILE_DEFAULT = '/assets/images/avatar_male_tiledesk.svg';
 export const STORAGE_PREFIX = 'tiledesk_widget_';
 
 // start conversation bot (proxy)
-export const PROXY_MSG_START = '__start';
+export const START_HIDDEN_MESSAGE = '__start';
+
+// dialogflow
+export const DEFAULT_AGENT = 'supporto-anagrafe-vcqvkb';
+export const DEFAULT_RECIPIENT = 'bari_bot';
+export const DEFAULT_RECIPIENT_FULLNAME = 'Ernesto';
+export const PROXY_URL = 'https://bariapp.herokuapp.com/proxy';
 

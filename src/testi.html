@@ -12,15 +12,26 @@
                   userId: "dario_test_user_id",
                   isLogEnabled: true,                     /** true/false **/
                   logoChat:"https://user-images.githubusercontent.com/9556761/64188450-bf255800-ce72-11e9-9485-20b31f626048.png",                  /** none/tiledesklogo/absolute url **/
-                  wellcomeTitle:"Servizio assistenza Città Metropolitana di Bari",            /** string **/
-                  wellcomeMsg: " ",                /** string **/
+                  welcomeTitle:"Servizio assistenza Città Metropolitana di Bari",            /** string **/
+                  welcomeMsg: " ",                /** string **/
                   allowTranscriptDownload: false,
                   widgetTitle: "Bari",
                   poweredBy: "",
                   showLogoutOption: false, 
                   marginX: '20px',
                   marginY: '20px',
-                  customAttributes: '{"url_audiorepo": "http://localhost:3000", "url_proxy": "https://bariapp.herokuapp.com/proxy", "agent": "supporto-anagrafe-vcqvkb", "recipient": "bari_bot", "recipient_fullname": "Hal 9000", "button_label": "Chiedi a Ernesto", "immagine_benvenuto": "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", "messaggio_benvenuto": "Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante \'Chiedi a Ernesto\'"}',
+                  // customAttributes: '{"url_audiorepo": "http://localhost:3000", "proxy_url": "https://baribot.herokuapp.com/proxy", "agent": "chatbot-253907", "recipient": "bari_bot", "recipient_fullname": "Hal 9000", "button_label": "Chiedi a Ernesto", "immagine_benvenuto": "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", "messaggio_benvenuto": "Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante \'Chiedi a Ernesto\'"}',
+                  customAttributes: {
+                    url_audiorepo: "http://localhost:3000",
+                    proxy_url: "https://baribot.herokuapp.com/proxy", 
+                    agent: "supporto-anagrafe-vcqvkb", 
+                    recipient: "supporto-anagrafe-vcqvkb", 
+                    recipient_fullname: "Hal 9000", 
+                    button_label: "Ask the bot", 
+                    welcome_image: "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", 
+                    welcome_summary: "Hello, I'm your Virtual Assistant, powered by Dialogflow. To get help push \'Ask the bot\'",
+                    start_hidden_message: "__start"
+                  },
                   hideAttachButton: true, // nasconde il pulsante allegati 
                   showMicButton: true // mostra il pulsante microfono
               };
@@ -36,7 +47,7 @@
               window.tileDeskAsyncInit = function() {
                 window.tiledesk.on('getImageUrlThumb', function(event_data) {
                   var message =  event_data.detail.message;
-                  if(message.sender === 'bot_comunebari'){
+                  if(message.sender === 'bari_bot'){
                     message.sender_urlImage = "https://user-images.githubusercontent.com/9556761/64333473-de3cfa80-cfd6-11e9-971b-c00c41dd2f91.png";
                   }
                 });

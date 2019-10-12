@@ -36,8 +36,8 @@
                 </div>
                 <!-- MESSAGE HEADER -->
                 <div class="c21-text fade-in-bottom">
-                    <div class="c21-text-wellcome">{{g.wellcomeTitle}}</div>          
-                    <div *ngIf="g.wellcomeMsg" class="c21-text-intro">{{g.wellcomeMsg}}</div>
+                    <div class="c21-text-welcome">{{g.welcomeTitle}}</div>          
+                    <div *ngIf="g.welcomeMsg" class="c21-text-intro">{{g.welcomeMsg}}</div>
                 </div>
             </div>
 
@@ -63,13 +63,13 @@
                         </tiledeskwidget-list-conversations>
                     </div> -->
                     <div class="c21-card fade-in-top" style="text-align: center;" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
-                        <img src="{{immagine_benvenuto}}" width="50%" style="float:left; padding: 10px; width: calc(40% - 20px);" />
+                        <img src="{{welcome_image}}" width="50%" style="float:left; padding: 10px; width: calc(40% - 20px);" />
                         <span style="display: inline-block;
                         padding: 10px 20px 10px 0px;
                         font-size: 15px;
                         font-weight: 300;
                         text-align: left;
-                        width: calc(60% - 20px);">{{messaggio_benvenuto}}
+                        width: calc(60% - 20px);">{{welcome_summary}}
                         </span>
                         <button  tabindex="1040" aflistconv #aflistconv class="c21-button-primary" (click)="returnNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
                             <span class="v-align-center">

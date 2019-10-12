@@ -25,12 +25,12 @@ export class HomeComponent implements OnInit {
   // ========= begin:: component variables ======= //
   tenant;
   widgetTitle;
-  wellcomeMsg;
-  wellcomeTitle;
+  welcomeMsg;
+  welcomeTitle;
   colorBck: string;
   // tslint:disable-next-line:max-line-length
-  messaggio_benvenuto = 'Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"';
-  immagine_benvenuto = 'https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png';
+  welcome_summary = 'Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante "Chiedi a Ernesto"';
+  welcome_image = 'https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png';
   buttonLabel = 'Chiedi';
   // ========= end:: component variables ======= //
 
@@ -45,22 +45,31 @@ export class HomeComponent implements OnInit {
     this.g.wdLog(['ngOnInit app-home']);
     this.tenant = this.g.tenant;
     this.colorBck = '#000000';
+
     try {
-      JSON.parse(this.g.customAttributes, (key, value) => {
-        // console.log('> attributes: ', key);
-        if (key === 'messaggio_benvenuto') {
-          this.messaggio_benvenuto = value;
-        }
-        if (key === 'immagine_benvenuto') {
-          this.immagine_benvenuto = value;
-        }
-        if (key === 'button_label') {
-          this.buttonLabel = value;
-        }
-      });
+      this.welcome_summary = this.g.customAttributes.welcome_summary;
+      this.welcome_image = this.g.customAttributes.welcome_image;
+      this.buttonLabel = this.g.customAttributes.button_label;
     } catch (error) {
-        console.log('> Error is handled attributes: ', error);
+      console.log('> Error is handled attributes: ', error);
     }
+
+    // try {
+    //   JSON.parse(this.g.customAttributes, (key, value) => {
+    //     // console.log('> attributes: ', key);
+    //     if (key === 'welcome_summary') {
+    //       this.welcome_summary = value;
+    //     }
+    //     if (key === 'welcome_image') {
+    //       this.welcome_image = value;
+    //     }
+    //     if (key === 'button_label') {
+    //       this.buttonLabel = value;
+    //     }
+    //   });
+    // } catch (error) {
+    //     console.log('> Error is handled attributes: ', error);
+    // }
 
     if (this.g.firstOpen === true) {
       this.addAnimation();

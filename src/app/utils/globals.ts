@@ -6,7 +6,7 @@ import { DepartmentModel } from '../../models/department';
 import { User } from '../../models/User';
 import { detectIfIsMobile, convertColorToRGBA, getParameterByName } from '../utils/utils';
 
-import { CHANNEL_TYPE_GROUP } from '../utils/constants';
+import { CHANNEL_TYPE_GROUP, START_HIDDEN_MESSAGE } from '../utils/constants';
 // import { TemplateBindingParseResult } from '@angular/compiler';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
@@ -101,9 +101,9 @@ export class Globals {
   BUTTON_DOWNLOAD_TRANSCRIPT: string;
   BUTTON_RESET_CONVERSATION: string;
   RATE_CHAT: string;
-  WELLCOME_TITLE: string;
-  WELLCOME_MSG: string;
-  WELLCOME: string;
+  WELCOME_TITLE: string;
+  WELCOME_MSG: string;
+  WELCOME: string;
   OPTIONS: string;
   SOUND_ON: string;
   SOUND_OFF: string;
@@ -125,6 +125,7 @@ export class Globals {
   SEE_PREVIOUS: string;
   WAITING_TIME_FOUND: string;
   WAITING_TIME_NOT_FOUND: string;
+  CLOSED: string;
 
 
 
@@ -153,8 +154,8 @@ export class Globals {
    allowTranscriptDownload: boolean;
    poweredBy: string;
    logoChat: string;
-   wellcomeTitle: string;
-   wellcomeMsg: string;
+   welcomeTitle: string;
+   welcomeMsg: string;
    recipientId: String;
    recipientFullname: String;
    userId: string;
@@ -175,9 +176,10 @@ export class Globals {
    online_msg: string;
    offline_msg: string;
 
-   customAttributes: string;
+   customAttributes: any;
    hideAttachButton: boolean;
    showMicButton: boolean;
+   start_hidden_message: string;
 
   constructor(
   ) {
@@ -296,7 +298,7 @@ export class Globals {
 
     this.hideAttachButton = false;
     this.showMicButton = false;
-
+    this.start_hidden_message = START_HIDDEN_MESSAGE;
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
@@ -387,13 +389,13 @@ export class Globals {
       'isOpen': this.isOpen, 'channelType': this.channelType,
       'lang': this.lang, 'calloutTimer': this.calloutTimer,
       'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
-      'wellcomeMsg': this.wellcomeMsg, 'calloutTitle': this.calloutTitle,
+      'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle, 'marginX': this.marginX,
+      'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
