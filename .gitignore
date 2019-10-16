@@ -48,3 +48,5 @@ test_widget.php
 !environment.prod.ts
 !environment.ts
 firebase-config.ts
+dist.zip
+dist_old.zip

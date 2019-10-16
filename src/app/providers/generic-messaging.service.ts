@@ -95,7 +95,7 @@ export class GenericMessagingService {
     try {
       url = this.g.customAttributes.proxy_url;
       message['agent'] = this.g.customAttributes.agent;
-      message['recipient'] = this.g.customAttributes.recipient;
+      message['recipient'] = this.g.customAttributes.agent;
       message['recipient_fullname'] = this.g.customAttributes.recipient_fullname;
       this.g.start_hidden_message = this.g.customAttributes.start_hidden_message;
     } catch (error) {

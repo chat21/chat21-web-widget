@@ -180,6 +180,7 @@ export class Globals {
    hideAttachButton: boolean;
    showMicButton: boolean;
    start_hidden_message: string;
+   showResetConversation: boolean;
 
   constructor(
   ) {
@@ -298,6 +299,7 @@ export class Globals {
 
     this.hideAttachButton = false;
     this.showMicButton = false;
+    this.showResetConversation = false;
     this.start_hidden_message = START_HIDDEN_MESSAGE;
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
@@ -399,7 +401,8 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton, 'showMicButton': this.showMicButton
+      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton, 'showMicButton': this.showMicButton,
+      'showResetConversation': this.showResetConversation
     };
   }
 

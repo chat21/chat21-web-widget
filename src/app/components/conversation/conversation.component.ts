@@ -44,7 +44,7 @@ import { DepartmentModel } from '../../../models/department';
 
 declare var startRecording: any;
 declare var stopRecording: any;
-declare var recordingTEST: any;
+declare var setBaseLocation: any;
 
 
 @Component({
@@ -171,7 +171,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
     this.isNwMsg = false;
-    //this.loadJS();
+    // set base location in audio.js
+    setBaseLocation(this.g.baseLocation);
 
     this.ngZone.run(() => {
       //const objDiv = document.getElementById(that.idDivScroll);
@@ -243,7 +244,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     try {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
-      this.urlAudiorepo = this.g.customAttributes.urlAudiorepo;
+      this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
     } catch (error) {
       console.log('> Error is handled attributes: ', error);
     }
@@ -367,7 +368,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       setTimeout(() => {
         if (this.messages.length === 0) {
 
-          console.log('start_hidden_message:'+ this.g.start_hidden_message);
+          console.log('start_hidden_message:' + this.g.start_hidden_message);
           this.sendMessage(this.g.start_hidden_message, TYPE_MSG_TEXT);
         }
       }, 1000);
@@ -542,6 +543,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const obsAddedMessage: Subscription = this.messagingService.obsAdded
     .subscribe(newMessage => {
       that.g.wdLog(['Subscription NEW MSG', newMessage]);
+      // aggingo writingMessage quando invio un nw msg e lo elimino quando ricevo una risposta
+      that.writingMessage = '';
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
         that.g.wdLog(['1-------']);
@@ -549,8 +552,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.scrollToBottom();
         }, 200);
       } else if (that.scrollMe) {
-        // aggingo writingMessage quando invio un nw msg e lo elimino quando ricevo una risposta
-        that.writingMessage = '';
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
@@ -1224,7 +1225,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 let message = 'File: ' + metadata.src;
                 if (metadata.type.startsWith('image')) {
                     type_message = TYPE_MSG_IMAGE;
-                    message = 'Image: ' + metadata.src;
+                    // message = 'Image: ' + metadata.src;
+                    message = '';
                 }
                 that.sendMessage(message, type_message, metadata);
                 //that.scrollToBottom();
@@ -1358,7 +1360,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.audioRecorderService.load('WebAudioRecorder', 'audio').then(data => {
       // Script Loaded Successfully
       // console.log(data);
-      recordingTEST();
     }).catch(error => console.log(error));
   }
 
@@ -1417,7 +1418,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             'uid': uuid
           };
           metadata.src = url;
-          const message = 'Audio: ' + url;
+          const message = null; // 'Audio: ' + url;
           that.sendMessage(message, TYPE_MSG_AUDIO, metadata);
           const btnStartRecord = (<HTMLInputElement>document.getElementById('chat21-start-mic'));
           btnStartRecord.focus();
@@ -1536,13 +1537,60 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   isLastMessage(idMessage: string) {
-
     // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
     if (idMessage === this.messages[this.messages.length - 1].uid) {
       return true;
     }
     return false;
   }
+
+  /** */
+  isClassClean(message: MessageModel) {
+    // [class.clean]= "message.type !== 'text' && !message.attributes.alwaysShowText"
+    // [class.clean]= "message.type !== 'text' && !message.attributes.alwaysShowText"
+    try {
+        if (message && message.type !== 'text' && message.attributes && !message.attributes.alwaysShowText) {
+          return true;
+        } else {
+          return false;
+        }
+    } catch (error) {
+      console.log('> Error is: ', error);
+      return false;
+    }
+  }
+
+  /** */
+  isTypeText(message: MessageModel) {
+    // *ngIf="message.type !== 'image' && message.type != 'audio' || (message.type == 'audio' && message.attributes.alwaysShowText)"
+    try {
+        // if (message.type !== 'image' && message.type !== 'audio' || (message.type === 'audio' && message.attributes.alwaysShowText)) {
+        if (message.type === 'text' || (message.type === 'audio' && message.attributes.alwaysShowText)) {
+          return true;
+        } else {
+          return false;
+        }
+    } catch (error) {
+      console.log('> Error is: ', error);
+      return false;
+    }
+  }
+
+  /** */
+  isAlwaysShowText(message: MessageModel) {
+    try {
+        // if (message.type !== 'image' && message.type !== 'audio' || (message.type === 'audio' && message.attributes.alwaysShowText)) {
+        if (message.attributes.alwaysShowText) {
+          return message.attributes.alwaysShowText;
+        } else {
+          return false;
+        }
+    } catch (error) {
+      console.log('> Error is: ', error);
+      return false;
+    }
+  }
+
 
   /** */
   returnOpenAttachment($event: String) {
@@ -1626,7 +1674,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     } catch (error) {
       console.log('> Error is: ', error);
     }
-
   }
 
 }

@@ -115,7 +115,7 @@ function initWidget() {
             return tiledeskScriptBaseLocation;
         }
     }
-    console.log("window.tiledesk created");
+    console.log("window.tiledesk created"+tiledeskScriptBaseLocation);
     try {
         window.tileDeskAsyncInit();
         console.log("tileDeskAsyncInit() called");
