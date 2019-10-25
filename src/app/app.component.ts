@@ -921,6 +921,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     returnCloseWidget() {
         this.isOpenConversation = false;
+        this.isOpenHome = true;
         // this.g.isOpen = false;
         // this.g.setIsOpen(false);
         this.f21_close();
