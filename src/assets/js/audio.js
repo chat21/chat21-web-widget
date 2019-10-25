@@ -166,6 +166,13 @@ function stopRecording() {
 // }
 
 function sendaudio(blob, urlAudiorepo, filename, callbackFunction) {
+	let url 
+	if(urlAudiorepo.toLowerCase().startsWith("http")){
+		url = urlAudiorepo;
+	} else {
+		url = this.baseLocation+urlAudiorepo;
+	}
+
     var xhr=new XMLHttpRequest();
     // xhr.onload = function(e) {
     //     if(this.readyState === 4) {
@@ -179,7 +186,7 @@ function sendaudio(blob, urlAudiorepo, filename, callbackFunction) {
 	};
     var fd=new FormData();
     fd.append("audio_data",blob, filename);
-    xhr.open("POST", urlAudiorepo+"/sendaudiomessage",true);
+    xhr.open("POST", url+"/sendaudiomessage",true);
 	xhr.send(fd);
 	// send con la callback che ritorna uid msg
   }

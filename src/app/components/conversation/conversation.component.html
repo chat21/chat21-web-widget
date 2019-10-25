@@ -118,13 +118,13 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                     <div class="chat21-conversation-parts-container">
                         <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
 
-                            <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" tabindex="1521"-->
+                            <div name="c21-contentScroll" id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" tabindex="1521"-->
                                 <div *ngFor="let message of messages; let last = last"  class="rowMsg"  [ngClass]="{ last: last }">
     
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
                                             
-                                        <button tabindex="1521" [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent c21-button-clean" (click)="playPausaAudioMsg(message.uid)">
+                                        <button tabindex="1521" [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent c21-button-clean" [class.clean]="isClassClean(message)" (click)="playPausaAudioMsg(message.uid)">
 
                                             <!-- message type:: image -->
                                             <div *ngIf="message.type == 'image'">

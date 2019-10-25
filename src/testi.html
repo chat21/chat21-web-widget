@@ -23,7 +23,7 @@
                   calloutTimer: 0,
                   // customAttributes: '{"url_audiorepo": "http://localhost:3000", "proxy_url": "https://baribot.herokuapp.com/proxy", "agent": "chatbot-253907", "recipient": "bari_bot", "recipient_fullname": "Hal 9000", "button_label": "Chiedi a Ernesto", "immagine_benvenuto": "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", "messaggio_benvenuto": "Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante \'Chiedi a Ernesto\'"}',
                   customAttributes: {
-                    url_audiorepo: "http://localhost:3000",
+                    url_audiorepo: "",
                     proxy_url: "https://baribot.herokuapp.com/proxy", 
                     agent: "supporto-anagrafe-vcqvkb", 
                     recipient: "supporto-anagrafe-vcqvkb", 
@@ -31,11 +31,18 @@
                     button_label: "Ask the bot", 
                     welcome_image: "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", 
                     welcome_summary: "Hello, I'm your Virtual Assistant, powered by Dialogflow. To get help push \'Ask the bot\'",
-                    start_hidden_message: "__start"
+                    start_hidden_message: "__start",
+                    payload: {
+                      codiceFiscale: "SPNNDR", 
+                      firstname: "Andrea",
+                      lastname: "Sponziello"
+                    }
                   },
                   hideAttachButton: true, // nasconde il pulsante allegati 
                   showMicButton: true, // mostra il pulsante microfono
-                  showResetConversation: true
+                  showResetConversation: true,
+
+                  
               };
               (function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];

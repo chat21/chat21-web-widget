@@ -144,6 +144,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   lastMsg = false;
   isNwMsg = false;
 
+  isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+
 
   constructor(
     public el: ElementRef,
@@ -779,7 +781,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
-      if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
+      // if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
+      if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
           const projectid = this.g.projectid;
@@ -1043,7 +1046,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.isScrolling = true;
           const objDiv = document.getElementById(that.idDivScroll);
           setTimeout(function () {
-            objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+            if (that.isIE === true) {
+              objDiv.scrollIntoView(false);
+            } else {
+              objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+            }
             that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
             // objDiv.scrollIntoView(false);
           }, 0);

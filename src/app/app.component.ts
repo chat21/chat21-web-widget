@@ -331,6 +331,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (senderId) {
             attributes['requester_id'] = senderId;
         }
+        try {
+            attributes['payload'] = this.g.customAttributes.payload;
+        } catch (error) {
+            console.log('> Error is handled payload: ', error);
+        }
+
         // this.storageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
         // console.log(' ---------------- setAttributes ---------------- ', attributes);
@@ -1044,7 +1050,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenConversation = true;
             }
         }
+
         this.startNwConversation();
+
+        setTimeout(() => {
+            this.isOpenHome = false; //DDP
+        }, 1000);
     }
 
     /**
@@ -1070,7 +1081,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
-        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenHomeTEMP = true; //DDP this.isOpenHome;
         const isOpenAllConversationTEMP = this.isOpenAllConversation;
         this.isOpenHome = false;
         this.isOpenAllConversation = false;
@@ -1087,7 +1098,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close all-conversation
      */
     private returnCloseAllConversation() {
-        const isOpenHomeTEMP = this.isOpenHome;
+        const isOpenHomeTEMP = true; //DDP this.isOpenHome;
         const isOpenConversationTEMP = this.isOpenConversation;
         this.isOpenHome = false;
         this.isOpenConversation = false;

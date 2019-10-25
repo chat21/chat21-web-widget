@@ -50,3 +50,5 @@ test_widget.php
 firebase-config.ts
 dist.zip
 dist_old.zip
+*.zip
+dist3.0.19-beta.16A

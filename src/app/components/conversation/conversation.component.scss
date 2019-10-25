@@ -4,6 +4,11 @@
 @import '../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
+.rowMsg{
+    position: relative;
+    height: auto;
+    display: block;
+}
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
     // background-color: #ffffff;
@@ -251,8 +256,8 @@
                             }
                         }
                         audio {
-                            max-width: 264px;
-                            background-color: $light-white;
+                            max-width: 244px;
+                            background-color: $bck-msg-sent;
                             border-radius: 14px;
                         }
                         audio::-webkit-media-controls-enclosure {

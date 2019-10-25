@@ -91,7 +91,6 @@ export class GenericMessagingService {
     message['recipient_fullname'] = DEFAULT_RECIPIENT_FULLNAME;
     this.g.start_hidden_message = START_HIDDEN_MESSAGE;
 
-
     try {
       url = this.g.customAttributes.proxy_url;
       message['agent'] = this.g.customAttributes.agent;
@@ -125,17 +124,9 @@ export class GenericMessagingService {
     // } catch (error) {
     //     console.log('> Error is: ', error);
     // }
-
-
-
-
-
     if (this.AGENT_NAME) {
       message['agent'] = this.AGENT_NAME;
     }
-
-
-
     this.g.wdLog(['------------------> body: ', JSON.stringify(message)]);
     return this.http
       .post(url, JSON.stringify(message), { headers })
@@ -584,19 +575,19 @@ export class GenericMessagingService {
         return;
       }
     } catch (error) {
-      // console.log('> Error is handled attributes: ', error);
+      console.log('> Error is handled attributes: ', error);
     }
 
 
     this.sendMessageService(message)
     .subscribe( response => {
-        //console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
+        console.log('RESPONSE°°°°°°°°°°°°°°°°°°°° ', response);
         that.onMessageReceived(response);
     }, (error) => {
-        //console.error('::onMessageReceivement', error);
+        console.error('::onMessageReceivement', error);
         // that.setParameters(null);
     }, () => {
-        //console.log('onMessageReceivement null');
+        console.log('onMessageReceivement null');
         // that.setParameters(null);
     });
     return message;
