@@ -672,6 +672,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
+             /** show callout */
+             windowContext['tiledesk'].showCallout = function () {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.showCallout();
+                });
+            };
+
         }
     }
 
@@ -832,6 +839,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.signOut();
     }
 
+    /** show callout */
+    private showCallout() {
+      if (this.g.isOpen === false) {
+        this.g.setParameter('displayEyeCatcherCard', 'block');
+        this.triggerOnOpenEyeCatcherEvent();
+      }
+    }
 
     // ========= end:: COMPONENT TO WINDOW ============//
 

@@ -1,4 +1,8 @@
 # chat21-web-widget ver 2.0
+### 3.0.19-beta.18
+- window.tiledesk.showCallout() // open callout window if widget is closed
+
+
 ### 1.020
 - Add function reInit() widget
 - Fixes bug 'undefined' on localstorage

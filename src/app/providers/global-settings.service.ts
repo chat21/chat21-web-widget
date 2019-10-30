@@ -646,6 +646,14 @@ export class GlobalSettingsService {
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
 
+        TEMP = tiledeskSettings['showResetConversation'];
+        // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.showResetConversation = (TEMP === true) ? true : false;
+            // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
+        }
+
+
     }
 
     /**
@@ -1005,6 +1013,7 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.showResetConversation = stringToBoolean(TEMP);
         }
+
 
     }
 

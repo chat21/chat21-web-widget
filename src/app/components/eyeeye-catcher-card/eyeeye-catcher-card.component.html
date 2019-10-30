@@ -2,13 +2,15 @@
 <!-- ******* EYE-CATCHER CARD  - DISPLAYED ONLY IS-MOBILE IS FALSE ******** -->
 <div *ngIf="!g.isMobile" class="eye-catcher-card scale-in-center"
 [ngClass]="{'c21-align-left' : g.align === 'left', 'c21-align-right' : g.align !== 'left'}"
-[ngStyle]="{ 'display':g.displayEyeCatcherCard,  'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
+[ngStyle]="{ 'display':g.displayEyeCatcherCard, 'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
 (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
-    <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
+    <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** 
+    [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}"
+    -->
     <div>
         <div class="eye-catcher-card-close-btn-wrapper" 
-            [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
+            [ngStyle]="{'display':g.displayEyeCatcherCard}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
             <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
                 <!-- <img class="eye-catcher-card-close-btn-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-close.svg"/> -->
                 <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg"
