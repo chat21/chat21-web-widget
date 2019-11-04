@@ -678,7 +678,9 @@ export class GenericMessagingService {
   unsubscribeAllReferences() {
     this.g.wdLog(['--------> messagesRef.off']);
     try {
-      this.messagesRef.off();
+      if (this.messagesRef) {
+        this.messagesRef.off();
+      }
     } catch (error) {
         console.log('> Error is: ', error);
     }

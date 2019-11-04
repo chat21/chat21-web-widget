@@ -439,7 +439,7 @@ export class ConversationsService {
             }
         })
         .catch(function (err) {
-            console.log(err);
+          this.g.wdLog(['> Error is: ', err]);
         });
     // }
 }

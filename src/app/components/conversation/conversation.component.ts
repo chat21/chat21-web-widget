@@ -248,7 +248,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
       this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
     } catch (error) {
-      console.log('> Error is handled attributes: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
     // try {
     //   JSON.parse(this.g.customAttributes, (key, value) => {
@@ -365,12 +365,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       try {
         this.g.start_hidden_message = this.g.customAttributes.start_hidden_message;
       } catch (error) {
-        console.log('> Error is handled attributes: ', error);
+        this.g.wdLog(['> Error is: ', error]);
       }
       setTimeout(() => {
         if (this.messages.length === 0) {
-
-          console.log('start_hidden_message:' + this.g.start_hidden_message);
           this.sendMessage(this.g.start_hidden_message, TYPE_MSG_TEXT);
         }
       }, 1000);
@@ -569,7 +567,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
 
-      if (newMessage && newMessage.text && that.lastMsg) {
+      /**
+       * imposto il focus sull'ultimo msg ricevuto se c'è testo per l'accessibilità
+       * cioè permetto l'autolettura dell'ultimo messaggio!!!
+       */
+      // && that.lastMsg
+      // that.g.wdLog(['4------- newMessage: ' + newMessage + ' that.lastMsg: ' + that.lastMsg]);
+      if (newMessage && newMessage.text ) {
+        that.g.wdLog(['4------- controllo focus']);
         setTimeout(function () {
           let messaggio = '';
           const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
@@ -577,7 +582,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           if (altTextArea && testFocus) {
             setTimeout(function () {
               if (newMessage.sender !== that.g.senderId) {
-                messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
+                messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
                 altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
                 testFocus.focus();
               }
@@ -1027,9 +1032,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }, 200);
           that.isScrolling = false;
         } catch (err) {
-          that.g.wdLog(['RIPROVO dopo 1 sec::']);
+          this.g.wdLog(['> Error is: ', err]);
         }
-      }, 0);
+      }, 300);
     }
   }
 
@@ -1081,7 +1086,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // // that.badgeNewMessages = 0;
           // console.log(objDiv);
         } catch (err) {
-            that.g.wdLog(['RIPROVO dopo 1 sec::']);
+            this.g.wdLog(['> Error is: ', err]);
             setTimeout(function () {
               that.isScrolling = false;
             }, 0);
@@ -1242,7 +1247,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             })
             .catch(error => {
                 // Use to signal error if something goes wrong.
-                console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+                this.g.wdLog(['> Error is: ', error]);
+                // console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
             });
       // this.resetLoadImage();
         that.g.wdLog(['reader-result: ', file]);
@@ -1367,7 +1373,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.audioRecorderService.load('WebAudioRecorder', 'audio').then(data => {
       // Script Loaded Successfully
       // console.log(data);
-    }).catch(error => console.log(error));
+    }).catch(error => this.g.wdLog(['> Error is: ', error]) );
   }
 
   recording(e: any) {
@@ -1388,7 +1394,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const btnStopRecord = (<HTMLInputElement>document.getElementById('chat21-start-mic'));
         btnStopRecord.focus();
       } catch (error) {
-        console.log('> Error is: ', error);
+        this.g.wdLog(['> Error is: ', error]);
       }
     } else {
       this.isRecording = true;
@@ -1400,7 +1406,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       navigator.mediaDevices.getUserMedia({ audio: true })
       .then(function(stream) {
-        console.log('-------->>> You let me use your mic!');
         that.subTimer = that.timer.subscribe(val => {
           if (textArea) {
               textArea.value = '';  // clear the textarea
@@ -1410,7 +1415,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.subscriptions.push(that.subTimer);
       })
       .catch(function(err) {
-        console.log('-------->>> No mic for you!');
+        this.g.wdLog(['> Error is: ', err]);
       });
       const uid = createGuid();
       // stoppo l'audio se è in play
@@ -1431,7 +1436,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           btnStartRecord.focus();
         });
       } catch (error) {
-        console.log('> Error is: ', error);
+        this.g.wdLog(['> Error is: ', error]);
       }
     }
   }
@@ -1498,7 +1503,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       try {
         subscription.unsubscribe();
       } catch (error) {
-        console.log('> Error is: ', error);
+        this.g.wdLog(['> Error is: ', error]);
       }
     });
     this.subscriptions.length = 0;
@@ -1562,7 +1567,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           return false;
         }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
       return false;
     }
   }
@@ -1578,7 +1583,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           return false;
         }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
       return false;
     }
   }
@@ -1593,7 +1598,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           return false;
         }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
       return false;
     }
   }
@@ -1625,7 +1630,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // set uid audio playng
       this.uidAudioPlayng = e.target.id;
     } catch (error) {
-      console.log('> Error is handled attributes: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
   }
 
@@ -1642,7 +1647,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         // console.log('> pausa: ', divPlay);
       }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
 
     try {
@@ -1651,7 +1656,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.uidAudioPlayng = '';
       }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
   }
 
@@ -1660,14 +1665,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * @param uid
    */
   playPausaAudioMsg(uid: string) {
-    console.log('playPausaAudioMsg: ', uid);
+    // console.log('playPausaAudioMsg: ', uid);
     try {
       const divPause = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
       if (divPause) {
         divPause.pause();
       }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
     try {
       const divPlay = (<HTMLAudioElement>document.getElementById(uid));
@@ -1675,11 +1680,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         setTimeout(function() {
           divPlay.play();
           this.uidAudioPlayng = uid;
-          console.log('> play: ok', divPlay);
         }, 300);
       }
     } catch (error) {
-      console.log('> Error is: ', error);
+      this.g.wdLog(['> Error is: ', error]);
     }
   }
 

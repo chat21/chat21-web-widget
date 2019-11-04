@@ -1,6 +1,16 @@
 # chat21-web-widget ver 2.0
+
+### 3.0.19-beta.18E
+- set focus on the last message recived (for auto-reading)
+
+### 3.0.19-beta.18D
+- add check startFromHome testi.html
+- hidden log.console
+- call loadParams on loadParams in testi.html
+
 ### 3.0.19-beta.18
 - window.tiledesk.showCallout() // open callout window if widget is closed
+- delete rotatedState in card emoticon and changed emoticon
 
 
 ### 1.020

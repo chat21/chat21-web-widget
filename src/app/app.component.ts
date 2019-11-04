@@ -306,6 +306,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             attributes = JSON.parse(this.storageService.getItem('attributes'));
             // console.log('> attributes: ', attributes);
         } catch (error) {
+            this.g.wdLog(['> Error is: ', error]);
             // console.log('> Error is handled attributes: ', error);
         }
         if (!attributes && attributes === null ) {
@@ -334,7 +335,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         try {
             attributes['payload'] = this.g.customAttributes.payload;
         } catch (error) {
-            console.log('> Error is handled payload: ', error);
+            this.g.wdLog(['> Error is handled payload: ', error]);
         }
 
         // this.storageService.setItem('attributes', JSON.stringify(attributes));
@@ -562,11 +563,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (departments.length > 1) {
-                this.isOpenSelectionDepartment = true;
-            } else {
+            try {
+                if (departments.length > 1) {
+                    this.isOpenSelectionDepartment = true;
+                } else {
+                    this.isOpenConversation = true;
+                }
+            } catch (error) {
                 this.isOpenConversation = true;
+                this.g.wdLog(['> Error is: ', error]);
             }
+
         }
 
         // visualizzo l'iframe!!!
@@ -947,8 +954,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     openCloseWidget($event) {
         this.g.setParameter('displayEyeCatcherCard', 'none');
+
         if ( this.g.isOpen === true ) {
             this.triggerOnOpenEvent();
+            this.startUI();
         } else {
             this.triggerOnCloseEvent();
         }
@@ -1247,7 +1256,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private triggerIsLoggedInEvent() {
         this.g.wdLog([' ---------------- triggerIsLoggedInEvent ---------------- ', this.g.isLogged]);
         const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
-        this.el.nativeElement.dispatchEvent(isLoggedIn);
+        // this.el.nativeElement.dispatchEvent(isLoggedIn);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(isLoggedIn);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(isLoggedIn);
+        }
     }
 
     /** */
@@ -1255,7 +1271,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
         const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
-        this.el.nativeElement.dispatchEvent(loadParams);
+        // this.el.nativeElement.dispatchEvent(loadParams);
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(loadParams);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(loadParams);
+        }
     }
 
     // ========= END:: TRIGGER FUNCTIONS ============//

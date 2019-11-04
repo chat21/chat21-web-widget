@@ -468,7 +468,13 @@ export class MessagingService {
    */
   unsubscribeAllReferences() {
     this.g.wdLog(['--------> messagesRef.off']);
-    this.messagesRef.off();
+    try {
+      if (this.messagesRef) {
+        this.messagesRef.off();
+      }
+    } catch (error) {
+      this.g.wdLog(['> Error is: ', error]);
+    }
     // this.conversationsRef.off('child_removed');
   }
 
