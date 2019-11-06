@@ -50,7 +50,7 @@ export class GlobalSettingsService {
         try {
             projectid = this.setProjectId();
         } catch (error) {
-            this.globals.wdLog(['error projectid: ', error.name]);
+            this.globals.wdLog(['> Error :' + error]);
             return;
         }
 
@@ -90,7 +90,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            // this.globals.wdLog(['1 > Error is handled: ', error.name]);
+            this.globals.wdLog(['> Error :' + error]);
         }
 
         // get projectid for attributeHtml//
@@ -99,7 +99,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            this.globals.wdLog(['2 > Error is handled: ', error.name]);
+            this.globals.wdLog(['> Error :' + error]);
         }
 
         // get projectid for UrlParameters//
@@ -108,7 +108,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            this.globals.wdLog(['3 > Error is handled: ', error.name]);
+            this.globals.wdLog(['> Error :' + error]);
         }
 
         // this.globals.wdLog(['projectid: ', this.globals.projectid);
@@ -133,43 +133,43 @@ export class GlobalSettingsService {
             this.globals.wdLog(['1 > baseLocation: ', baseLocation]);
             if (typeof baseLocation !== 'undefined') { this.globals.baseLocation = baseLocation; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             tiledeskSettings = this.globals.windowContext['tiledeskSettings'];
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             const persistence = tiledeskSettings['persistence'];
             if (typeof persistence !== 'undefined') { this.globals.persistence = persistence; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             const userToken = tiledeskSettings['userToken'];
             if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             const userId = tiledeskSettings['userId'];
             if (typeof userId !== 'undefined') { this.globals.userId = userId; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             const filterByRequester = tiledeskSettings['filterByRequester'];
             this.globals.wdLog(['1 > filterByRequester: ', filterByRequester]);
             if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === true) ? true : false; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
         try {
             const isLogEnabled = tiledeskSettings['isLogEnabled'];
             if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === true) ? true : false; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['> Error :' + error]);
         }
 
         // -------------------------------------- //
@@ -289,17 +289,30 @@ export class GlobalSettingsService {
      *
      */
     setCssIframe() {
-        const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskiframe');
+        const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskdiv');
         if (!divTiledeskiframe) {
             return;
         }
         if (this.globals.align === 'left') {
-            divTiledeskiframe.style.left =  this.globals.marginX;
+            if (this.globals.isMobile === false) {
+                divTiledeskiframe.style.left =  this.globals.marginX;
+            } else {
+                divTiledeskiframe.style.left =  '0px';
+            }
         } else if (this.globals.align === 'right') {
-            divTiledeskiframe.style.right =  this.globals.marginX;
+            console.log('this.globals.isMobile RIGHT' + this.globals.isMobile);
+            if (this.globals.isMobile === false) {
+                divTiledeskiframe.style.right =  this.globals.marginX;
+            } else {
+                divTiledeskiframe.style.right =  '0px';
+            }
         }
-        divTiledeskiframe.style.bottom =  this.globals.marginY;
-
+        if (this.globals.isMobile === false) {
+            divTiledeskiframe.style.bottom =  this.globals.marginY;
+        } else {
+            divTiledeskiframe.style.bottom =  '0px';
+        }
+        console.log('this.globals.fullscreenMode' + this.globals.fullscreenMode);
         if (this.globals.fullscreenMode === true) {
             divTiledeskiframe.style.left = 0;
             divTiledeskiframe.style.right = 0;
@@ -360,7 +373,7 @@ export class GlobalSettingsService {
             if (typeof variables !== 'undefined') {
                 for (const key of Object.keys(variables)) {
                     if (key === 'align' && variables[key] === 'left') {
-                        const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
+                        const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.left = '0';
                     }
                     if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
@@ -369,7 +382,7 @@ export class GlobalSettingsService {
                 }
             }
         } catch (error) {
-            this.globals.wdLog(['> Error is handled: ', error.name]);
+            this.globals.wdLog(['> Error :' + error]);
         }
 
         // if (response && response.project && response.project.widget !== null) {
@@ -485,7 +498,7 @@ export class GlobalSettingsService {
             globals.align = TEMP;
             // this.globals.wdLog(['15 - globals.align:: ', globals.align);
             if (globals.align === 'left') {
-                const divWidgetContainer = windowContext.document.getElementById('tiledeskiframe');
+                const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
                 divWidgetContainer.style.left = '0';
             }
             // globals.setParameter('align', TEMP);
@@ -829,7 +842,7 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
             if (globals.align === 'left') {
-                const divWidgetContainer = windowContext.document.getElementById('tiledeskiframe');
+                const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
                 divWidgetContainer.style.left = '0';
             }
         }

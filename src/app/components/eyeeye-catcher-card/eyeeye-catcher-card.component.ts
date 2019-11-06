@@ -9,10 +9,10 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   styleUrls: ['./eyeeye-catcher-card.component.scss'],
   animations: [
     trigger('rotatedState', [
-        state('default', style({ transform: 'scale(0)' })),
-        state('rotated', style({ transform: 'scale(1)' })),
-        transition('rotated => default', animate('1000ms ease-out')),
-        transition('default => rotated', animate('1000ms ease-in'))
+        // state('default', style({ transform: 'scale(0)' })),
+        // state('rotated', style({ transform: 'scale(1)' })),
+        // transition('rotated => default', animate('1000ms ease-out')),
+        // transition('default => rotated', animate('1000ms ease-in'))
     ])
   ]
 })
@@ -69,24 +69,24 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       const isOpen = this.g.isOpen;
-      if (isOpen === false) {
+      if (isOpen === false && this.g.isMobile === false) {
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
           this.g.setParameter('displayEyeCatcherCard', 'block');
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
-          this.rotateCalloutEmoticon();
+          // this.rotateCalloutEmoticon();
       } else {
-         // wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
+         this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
       }
   }
 
-  rotateCalloutEmoticon() {
-      // this.state = (this.state === 'default' ? 'rotated' : 'default');
-      if (this.state === 'default') {
-          setTimeout(() => this.state = 'rotated');
-      }
-  }
+  // rotateCalloutEmoticon() {
+  //     // this.state = (this.state === 'default' ? 'rotated' : 'default');
+  //     if (this.state === 'default') {
+  //         setTimeout(() => this.state = 'rotated');
+  //     }
+  // }
 
   /**
    * *** EYE-CATCHER CARD ***
@@ -103,7 +103,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OVER THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseEnter() {
       //  wdLog(['MOUSE ENTER THE CARD OR THE CLOSE BTN CONTAINER');
-      this.displayEyeCatcherCardCloseBtn = 'block';
+     //this.displayEyeCatcherCardCloseBtn = 'block';
   }
 
   /**
@@ -112,16 +112,16 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * LEAVE THE EYE-CATCHER CARD CLOSE BTN WRAPPER */
   mouseLeave() {
       //  wdLog(['MOUSE LEAVE THE CARD OR THE CLOSE BTN CONTAINER');
-      this.displayEyeCatcherCardCloseBtn = 'none';
+      //this.displayEyeCatcherCardCloseBtn = 'none';
   }
 
   /**
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
       this.eventOpenEyeCatcher.emit(false);
-        // this.g.displayEyeCatcherCard = 'none';
-        this.g.setParameter('displayEyeCatcherCard', 'none');
-        this.displayEyeCatcherCardCloseBtnWrapper = 'none';
+      // this.g.displayEyeCatcherCard = 'none';
+      this.g.setParameter('displayEyeCatcherCard', 'none');
+      this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 
   // /**

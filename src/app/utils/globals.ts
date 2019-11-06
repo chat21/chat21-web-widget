@@ -123,7 +123,7 @@ export class Globals {
   SEE_PREVIOUS: string;
   WAITING_TIME_FOUND: string;
   WAITING_TIME_NOT_FOUND: string;
-
+  CLOSED: string;
 
 
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
@@ -175,6 +175,8 @@ export class Globals {
 
    customAttributes: string;
    hideAttachButton: boolean;
+
+   isOpenNewMessage: boolean;
 
   constructor(
   ) {
@@ -292,6 +294,7 @@ export class Globals {
     this.online_msg = this.LABEL_FIRST_MSG;
 
     this.hideAttachButton = false;
+    this.isOpenNewMessage = false;
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 

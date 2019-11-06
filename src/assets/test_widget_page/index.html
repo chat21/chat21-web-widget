@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="referrer" content="no-referrer">
+    <title>Widget test page</title>
+    <style>
+
+        @-moz-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Firefox */
+        @-webkit-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Webkit */
+        @-ms-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* IE */
+        @keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Opera and prob css3 final iteration */
+
+        #preloader {
+            background: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 999999;
+            opacity: 1;
+            filter: alpha(opacity=100);
+            -webkit-transition: opacity 500ms ease;
+            transition: opacity 500ms ease, display 500ms;
+        }
+
+        #preloader .logo {
+            display: block;
+            width: 109px;
+            height: 39px;
+            background-repeat: no-repeat;
+            background-image: url(./tiledesk_widget_files/logo@2x-black.png);      
+            background-size: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -20px 0 0 -55px;
+            -moz-transition:all 1s ease-in-out;
+            -webkit-transition:all 1s ease-in-out;
+            -o-transition:all 1s ease-in-out;
+            -ms-transition:all 1s ease-in-out;
+            transition:all 1s ease-in-out;
+            /* order: name, direction, duration, iteration-count, timing-function */
+            -moz-animation:blink normal 2s infinite ease-in-out; /* Firefox */
+            -webkit-animation:blink normal 2s infinite ease-in-out; /* Webkit */
+            -ms-animation:blink normal 2s infinite ease-in-out; /* IE */
+            animation:blink normal 2s infinite ease-in-out; /* Opera and prob css3 final iteration */
+        }
+
+        #deferred-styles {
+            display: none;
+        }
+
+        body {
+            background-color: #f4f5f5 !important;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            font-weight: 300;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-weight: 300;
+            padding: 0;
+        }
+
+        #main h2 {
+            margin-top: 25px;
+            font-size: 14px;
+            font-weight: 300;
+            padding: 0;
+            display: block; /* Fallback for non-webkit */
+            display: -webkit-box;
+            max-height: 258px; /* Fallback for non-webkit */
+            line-height: 2.3;
+            -webkit-line-clamp: 8;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #wrapper {
+            display: none;
+            min-height: 100%;
+            margin-bottom: auto;
+        }
+
+        #main {
+            padding-bottom:100px;
+            margin: 20px auto 0 auto;
+        }
+
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .b_frame {
+            -webkit-box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            border: 0;
+            width: 400px;
+            height: 530px;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+        .col-md-6 {
+            margin-top: 30px;
+            padding: 0;
+        }
+
+
+        .b_integrations_agent_links {
+            margin-top: 50px;
+        }
+        .b_integrations_agent_links a {
+            color: black;
+            margin-right: 30px;
+        }
+        .b_integrations_agent_links a i {
+            color: gray;
+            margin-right: 10px;
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+        }
+
+        #shareModal .modal-body {
+            text-align: center;
+        }
+
+        footer#footer {
+            background-color: white;
+            text-align: center;
+
+            position: relative;
+            margin-top: -81px; /* negative value of footer height */
+            height: 80px;
+            clear:both;
+        }
+
+        .b-agent-demo_powered_by {
+
+        }
+
+        .b-agent-demo_powered_by a {
+            display: inline-block;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            text-decoration: none;
+        }
+
+        .b-agent-demo_powered_by span {
+            display: inline-block;
+            color: #B7BBC4;
+            text-transform: uppercase;
+            line-height: 20px;
+        }
+        .b-agent-demo_powered_by img {
+            display: inline-block;
+            height: 20px;
+            margin-left: 20px;
+        }
+        
+
+    </style>
+
+    <!-- <script type="text/javascript">
+
+        // redirect to mobile version
+
+        /**
+         * definitely not the best way to findout if there is a mobile browser
+         * @returns {any}
+         */
+        function deviceOS() {
+            var useragent = navigator.userAgent;
+            if(useragent.match(/Android/i)) {
+                return 'android';
+            } else if(useragent.match(/webOS/i)) {
+                return 'webos';
+            } else if(useragent.match(/iPhone/i)) {
+                return 'iphone';
+            } else if(useragent.match(/iPod/i)) {
+                return 'ipod';
+            } else if(useragent.match(/iPad/i)) {
+                return 'ipad';
+            } else if(useragent.match(/Windows Phone/i)) {
+                return 'windows phone';
+            } else if(useragent.match(/SymbianOS/i)) {
+                return 'symbian';
+            } else if(useragent.match(/RIM/i) || useragent.match(/BB/i)) {
+                return 'blackberry';
+            } else {
+                return false;
+            }
+        }
+
+        if (deviceOS()) {
+            var frameEl = document.getElementById('frame');
+            location.href = "";
+        }
+    </script> -->
+
+    <meta property="og:title" content="Widget test page">
+    <meta property="og:description" content="">
+    <meta property="og:locale" content="en">
+    <meta property="og:image" content="">
+    <link rel="icon" type="image/png" href="https://tiledesk.com/wp-content/uploads/2018/07/tiledesk-favicon.png">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script defer="" src="./tiledesk_widget_files/jquery.min.js"></script>
+    <script defer="" src="./tiledesk_widget_files/bootstrap.min.js"></script>
+
+    <script type="application/javascript">
+        window.tiledeskSettings = {
+            marginX: "100px",
+            marginY: "50px"
+        };
+          (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id; //js.async=!0;
+            js.src = "../../launch.js"; //"https://widget.tiledesk.com/v3/launch.js";
+            fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'tiledesk-jssdk'));
+    </script>
+
+    <script type="application/javascript">
+        console.log('window.location.href ',window.location.href);
+
+        var currentUrl = window.location.href
+    
+    
+        function shareOnFacebook() {
+        
+            var fbShareUrl = "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(currentUrl);
+            window.open(
+                fbShareUrl,
+                '_blank' 
+            );
+        }
+
+        function shareOnTwitter() {
+            var TwShareUrl = "https://twitter.com/share?url=" + encodeURIComponent(currentUrl);
+            window.open(
+
+                TwShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnLinkedin() {
+            var LinkedinShareUrl = "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(currentUrl);
+            window.open(
+                LinkedinShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnTelegram() {                                    
+            var TelegramShareUrl = "tg://msg_url?url=" + encodeURIComponent(currentUrl) ;
+            console.log('TelegramShareUrl ', TelegramShareUrl ) 
+            window.open(
+
+                TelegramShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnWhatsapp() {            
+            var WhatsappShareUrl = "whatsapp://send?text=" + currentUrl;
+            window.open(
+                WhatsappShareUrl,
+                '_blank' 
+            );
+        }
+                        
+        var url = new URL(currentUrl);
+        var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+        var project_name = url.searchParams.get("project_name");
+       
+        console.log('tiledesk_projectid: ', tiledesk_projectid);
+        console.log('project_name: ', project_name);
+        
+
+
+
+        window.onload = function() {
+            document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
+            document.getElementById("project_name").innerHTML = project_name;
+
+        }
+
+      
+
+        window.tileDeskAsyncInit = function() {
+                window.tiledesk.on('loadParams', function(event_data) {
+                    console.log('loadParams: ')
+                    window.tiledesk.open();
+            });
+        };
+        
+    </script>
+
+
+    <script>
+    var isOpen = getQueryVariable("isOpen");
+    var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+
+    console.log('isOpen >: ', isOpen);
+    if(isOpen == 'true') {
+        console.log('QUI ENTRO isOpen >: ', isOpen);
+        localStorage.setItem("tiledesk_widget_sv1_"+ tiledesk_projectid +"_isOpen", true);
+    } 
+
+
+    function getQueryVariable(variable)     {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+    </script>
+
+
+
+ 
+
+
+</head>
+
+<body class="website white" >
+
+<div id="preloader">
+    <div class="logo"></div>
+</div>
+
+<div id="wrapper">
+    <header id="header">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand" href="https://www.tiledesk.com/"></a>
+
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="https://docs.tiledesk.com/widget/web-sdk" target="_blank">WEB SDK &amp; Docs<span></span></a></li>
+                        <li><a href="https://www.tiledesk.com/pricing-cloud/" target="_blank">Pricing<span></span></a></li>
+                        <li><a href="https://www.tiledesk.com/blog/" target="_blank">Blog<span></span></a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="sign-up"><a href="https://support.tiledesk.com/dashboard/#/projects">GO TO CONSOLE</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="main" class="container">
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <h1 id="project_name" style="min-height: 39px;"></h1>
+                <h2></h2>
+                <div class="b_integrations_agent_links">
+                   
+                    <a href="" data-toggle="modal" data-target="#embedModal"><i class="fa-code fa"></i>Embed</a>
+                    <a href="mailto:?subject=Tiledesk%20widget%20test%20page"><i class="fa-envelope-o fa" target="_blank"></i>Email</a>
+                    <a href="" data-toggle="modal" data-target="#shareModal"><i class="fa-reply fa"></i>Share</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+               
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="embedModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Use following code to integrate the widget into your site:</h4>
+                    </div>
+                    <div class="modal-body" style="font-family: monospace;font-size: 12px;">
+                        <span style="margin-bottom: 0px; border:none !important">
+                            &lt;script type=&quot;application/javascript&quot;&gt; <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;window.tiledeskSettings = <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;projectid: </span> 
+                            <span id="project_id"> </span> 
+                            <span style="border:none !important">
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }; <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;        (function(d, s, id) { <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs = d.getElementsByTagName(s)[0];<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js = d.createElement(s); js.id = id; //js.async=!0;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.src = &quot;https://widget.tiledesk.com/v3/launch.js&quot;;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
+                            &lt;/script&gt;
+                        </span>
+
+                        <!-- <pre id="preid"> </pre> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="shareModal" role="dialog" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Share this page via social networks:</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <a onclick="shareOnFacebook()" style="cursor: pointer;text-decoration: none;">    
+                            
+                            <img src="./tiledesk_widget_files/facebook.png" alt="Facebook">
+                        </a>
+
+                        <!-- Twitter -->
+                        <a onclick="shareOnTwitter()" style="cursor: pointer;text-decoration: none;">     
+                            <img src="./tiledesk_widget_files/twitter.png" alt="Twitter">
+                        </a>
+
+                    
+
+                        <!-- LinkedIn -->
+                        <a onclick="shareOnLinkedin()" style="cursor: pointer;text-decoration: none;">
+                            <img src="./tiledesk_widget_files/linkedin.png" alt="LinkedIn">
+                        </a>
+
+                        <!-- telegram -->
+                        <a onclick="shareOnTelegram()" style="cursor: pointer;text-decoration: none;">
+                            <img src="./tiledesk_widget_files/telegram.png" alt="Telegram">
+                        </a>
+
+                        <!-- whatsapp -->
+                        <!-- <a onclick="shareOnWhatsapp()" style="cursor: pointer">
+                            <img src="./tiledesk_widget_files/whatsapp.png" alt="Whatsapp">
+                        </a> -->
+
+                   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="footer">
+    <div class="b-agent-demo_powered_by">
+        <a href="https://www.tiledesk.com/" target="_blank" style="cursor: pointer;text-decoration: none;">
+            <span style="position: relative; top: 2px;">Powered by</span>
+            <img src="./tiledesk_widget_files/logo@2x-black.png">
+        </a>
+    </div>
+
+</footer>
+
+
+<!-- <script>
+    // non-blocking CSS delivery
+    var loadDeferredStyles = function() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        console.log('addStylesNode ', addStylesNode)
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement);
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) {
+        raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+    } else {
+        window.addEventListener('load', loadDeferredStyles);
+    }
+</script> -->
+
+<!-- Google Analytics -->
+
+
+
+
+<div>
+    <link href="./tiledesk_widget_files/bootstrap.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- <link href="./tiledesk_widget_files/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link href="./tiledesk_widget_files/website-poly.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="./tiledesk_widget_files/css" rel="stylesheet" type="text/css"> -->
+</div>
+</body>
+</html>

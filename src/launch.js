@@ -71,6 +71,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         } else {
             containerDiv.classList.add("closed");
             containerDiv.classList.remove("open");
+            iDiv.classList.remove("messagePreview");
         }         
     });
     /** */
@@ -79,6 +80,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         containerDiv.classList.add("open");
         containerDiv.classList.remove("closed");
         iDiv.classList.remove("callout");
+        iDiv.classList.remove("messagePreview");
     });
     /** */
     window.tiledesk.on('onClose', function(event_data) {
@@ -91,10 +93,33 @@ function loadIframe(tiledeskScriptBaseLocation) {
         console.log("tiledesk onOpenEyeCatcher", event_data);
         iDiv.classList.add("callout");
     });
-     /** */
-     window.tiledesk.on('onClosedEyeCatcher', function(event_data) {
+    /** */
+    window.tiledesk.on('onClosedEyeCatcher', function(event_data) {
         console.log("tiledesk onClosedEyeCatcher", event_data);
         iDiv.classList.remove("callout");
+    });
+
+    /** */
+    window.tiledesk.on('onChangedConversation', function(event_data) {
+        console.log("tiledesk onChangedConversation", event_data);
+        try {
+            if (!window.tiledesk.angularcomponent.component.g.isOpen) {
+                iDiv.classList.add("messagePreview");
+                iDiv.classList.remove("callout");
+                // ----------------------------//
+            }  
+        } catch(er) {
+            console.log("> error: " + er);
+        }
+    });
+
+    window.tiledesk.on('onCloseMessagePreview', function(event_data) {
+        console.log("tiledesk onCloseMessagePreview", event_data);
+        try {
+            iDiv.classList.remove("messagePreview");
+        } catch(er) {
+            console.log("> error: " + er);
+        }
     });
     iDiv.appendChild(ifrm);  
     ifrm.contentWindow.document.open();
@@ -121,7 +146,6 @@ function initWidget() {
             return tiledeskScriptBaseLocation;
         }
     }
-    console.log("window.tiledesk created");
     try {
         window.tileDeskAsyncInit();
         console.log("tileDeskAsyncInit() called");
@@ -131,10 +155,8 @@ function initWidget() {
       }else {
          console.log("tileDeskAsyncInit() error",er);
       }
-       
     }
     document.body.appendChild(tiledeskroot);
-
     initCSSWidget(tiledeskScriptBaseLocation);
     loadIframe(tiledeskScriptBaseLocation);
 }

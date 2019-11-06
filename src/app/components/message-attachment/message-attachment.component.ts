@@ -30,14 +30,14 @@ export class MessageAttachmentComponent implements OnInit {
         this.type = this.message.attributes.attachment.type;
         // console.log(this.type);
       } catch (error) {
-        // console.log(error);
+        // this.g.wdLog(['> Error :' + error]);
         return;
       }
       try {
         this.buttons = this.message.attributes.attachment.buttons;
         // console.log(this.buttons);
       } catch (error) {
-        // console.log(error);
+        // this.g.wdLog(['> Error :' + error]);
         return;
       }
     }

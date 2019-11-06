@@ -9,7 +9,7 @@
     aria-label="    apri chat"
     >
 
-    <div *ngIf="g.conversationsBadge>0" class="c21-divBudge">{{g.conversationsBadge}}</div>
+    <div *ngIf="g.conversationsBadge>0 && g.conversationsBadge != true" class="c21-divBudge">{{g.conversationsBadge}}</div>
 
     <!-- OPEN ICON -->
     <div *ngIf="!g.isOpen" class="launcher-button rotate-center" [@enterBubbleAnimation]>

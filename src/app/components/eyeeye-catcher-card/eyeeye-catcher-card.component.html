@@ -5,15 +5,7 @@
 [ngStyle]="{ 'display':g.displayEyeCatcherCard,  'bottom': g.marginY+'px', 'left':(g.align==='left')?g.marginX+'px':'', 'right':(g.align==='right')?g.marginX+'px':'' }"
 (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
 
-    <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
-    <div>
-        <div class="eye-catcher-card-close-btn-wrapper" 
-            [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()">
-            <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()" [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}">
-                <img class="eye-catcher-card-close-btn-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS TRUE ******* -->
     <!-- <div *ngIf="!g.isMobile">
@@ -24,9 +16,22 @@
     </div> -->
 
     <!-- <button (click)="rotate()">Press me to rotate</button> -->
-    <div class="eye-catcher_row" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()" (click)=openChatFromEyeCatcherCard()>
+    <!-- <div class="eye-catcher_row" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()" (click)="openChatFromEyeCatcherCard()"> -->
+    <div class="eye-catcher_row">
 
-        <div class="eye-catcher_column ec_left" >
+        <!-- ******* EYE-CATCHER CLOSE BTN IF IS-MOBILE IS FALSE ******** -->
+        <!-- <div> -->
+            <div class="eye-catcher-card-close-btn-wrapper">
+                <!-- [ngStyle]="{'display':displayEyeCatcherCardCloseBtnWrapper}" (mouseenter) ="mouseEnter()" (mouseleave) ="mouseLeave()"></div> 
+                [ngStyle]="{'display':displayEyeCatcherCardCloseBtn}"
+                -->
+                <div class="eye-catcher-card-close-btn" (click)="closeEyeCatcherCard()">
+                    <img class="eye-catcher-card-close-btn-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-close.svg"/>
+                </div>
+            </div>
+        <!-- </div> -->
+
+        <div class="eye-catcher_column ec_left" (click)="openChatFromEyeCatcherCard()">
             <!-- <div class="eye-catcher-card-img-wrapper" [ngStyle]="{'background-color': g.themeColor }">
                 <img class="chat21-card-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
             </div> -->
@@ -35,27 +40,26 @@
             </div>
         </div>
 
-        <div class="eye-catcher_column ec_right" >
+        <div class="eye-catcher_column ec_right" (click)="openChatFromEyeCatcherCard()">
             <div class="eye-catcher-card-text-wrapper">
-                <div class="eye-catcher-card-title"> 
-                    <!-- Need Help? -->
-                    <span *ngIf="g.calloutTitle !== ''; else calloutTitle_placeholder">
-                        {{ g.calloutTitle }}
-                    </span>  
-                </div>
+                <!-- Need Help? -->
+                <p *ngIf="g.calloutTitle !== ''; else calloutTitle_placeholder" class="eye-catcher-card-title">
+                    {{ g.calloutTitle }}
+                </p>  
                 <ng-template #calloutTitle_placeholder>
-                    <!-- Need Help? -->
-                    {{ g.CALLOUT_TITLE_PLACEHOLDER }}
+                    <p class="eye-catcher-card-title">
+                        {{ g.CALLOUT_TITLE_PLACEHOLDER }}
+                    </p>
                 </ng-template>
-                <div class="eye-catcher-card-msg">
-                    <!-- Click here and start chatting with us!  -->
-                    <span *ngIf="g.calloutMsg !== ''; else calloutMsg_placeholder">
-                        {{ g.calloutMsg }}
-                    </span>   
-                </div>
+
+                <!-- Click here and start chatting with us!  -->
+                <p *ngIf="g.calloutMsg !== ''; else calloutMsg_placeholder" class="eye-catcher-card-msg">
+                    {{ g.calloutMsg }}
+                </p> 
                 <ng-template #calloutMsg_placeholder>
-                    <!-- Click here and start chatting with us! -->
-                    {{ g.CALLOUT_MSG_PLACEHOLDER }}
+                    <p class="eye-catcher-card-msg">
+                        {{ g.CALLOUT_MSG_PLACEHOLDER }}
+                    </p>
                 </ng-template>
             </div>
         </div>

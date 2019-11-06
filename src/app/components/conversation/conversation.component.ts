@@ -146,9 +146,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
-      // this.ngZone.run(() => {
-        // that.scrollToBottom();
-      // });
+      this.ngZone.run(() => {
+        that.scrollToBottom();
+      });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
     this.setFocusOnId('chat21-main-message-context');
@@ -217,7 +217,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
       });
     } catch (error) {
-        console.log('> Error is handled attributes: ', error);
+        this.g.wdLog(['> Error :' + error]);
     }
   }
 
@@ -512,6 +512,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
 
+      /**
+       * 
+       */
       if (newMessage && newMessage.text && that.lastMsg) {
         setTimeout(function () {
           let messaggio = '';
@@ -552,7 +555,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         });
       }
     } catch (e) {
-      console.error('Error checkWritingMessages ', e);
+      this.g.wdLog(['> Error :' + e]);
     }
   }
 
@@ -764,7 +767,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
       }
     } catch (e) {
-        console.error('Error triggering triggerBeforeMessageRender', e);
+      this.g.wdLog(['> Error :' + e]);
     }
   }
 
@@ -782,7 +785,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
       }
     } catch (e) {
-        console.error('Error triggering triggerAfterMessageRender', e);
+      this.g.wdLog(['> Error :' + e]);
     }
   }
 
@@ -801,7 +804,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           this.el.nativeElement.dispatchEvent(beforeMessageSend);
         }
     } catch (e) {
-        console.error('Error triggering triggerBeforeSendMessageEvent', e);
+      this.g.wdLog(['> Error :' + e]);
     }
   }
 
@@ -818,7 +821,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           this.el.nativeElement.dispatchEvent(afterMessageSend);
         }
     } catch (e) {
-        console.error('Error triggering triggerAfterSendMessageEvent', e);
+      this.g.wdLog(['> Error :' + e]);
     }
   }
 
@@ -961,7 +964,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }, 200);
         that.isScrolling = false;
       } catch (err) {
-        that.g.wdLog(['RIPROVO dopo 1 sec::']);
+        that.g.wdLog(['> Error :' + err]);
       }
     }, 0);
   }
@@ -983,8 +986,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.isScrolling = true;
         const objDiv = document.getElementById(that.idDivScroll);
         setTimeout(function () {
-          objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-          that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+          try {
+            objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+          } catch (err) {
+            that.g.wdLog(['> Error :' + err]);
+          }
           // objDiv.scrollIntoView(false);
         }, 0);
         that.isScrolling = false;
@@ -1014,7 +1021,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         // // that.badgeNewMessages = 0;
         // console.log(objDiv);
       } catch (err) {
-          that.g.wdLog(['RIPROVO dopo 1 sec::']);
+          that.g.wdLog(['> Error :' + err]);
           setTimeout(function () {
             that.isScrolling = false;
           }, 0);

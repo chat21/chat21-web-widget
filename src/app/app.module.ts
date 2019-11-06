@@ -56,6 +56,7 @@ import { MenuOptionsComponent } from './components/menu-options/menu-options.com
 import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
+import { LastMessageComponent } from './components/last-message/last-message.component';
 
 
 const appInitializerFn = (appConfig: AppConfigService) => {
@@ -83,7 +84,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     PreviewLoadingFilesComponent,
     MenuOptionsComponent,
     ListAllConversationsComponent,
-    MessageAttachmentComponent
+    MessageAttachmentComponent,
+    LastMessageComponent
   ],
   imports: [
     BrowserModule,

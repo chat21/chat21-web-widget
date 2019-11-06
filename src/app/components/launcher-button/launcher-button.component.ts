@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { StorageService } from '../../providers/storage.service';
+import { convertColorToRGBA } from '../../utils/utils';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
 // vedi: https://angular.io/guide/animations
@@ -39,7 +40,6 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 
 export class LauncherButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('aflauncherbutton') private aflauncherbutton: ElementRef;
-
   @Output() eventOpenCloseWidget = new EventEmitter<boolean>();
 
   isOpen: boolean;
@@ -54,11 +54,13 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // setTimeout(() => {
-    //     if (!this.g.isOpen && this.aflauncherbutton) {
-    //       this.aflauncherbutton.nativeElement.focus();
-    //     }
-    // }, 2000);
+    setTimeout(() => {
+        if (!this.g.isOpen && this.aflauncherbutton) {
+          // this.aflauncherbutton.nativeElement.focus();
+          const themeColor50 = convertColorToRGBA(this.g.themeColor, 50);
+          this.aflauncherbutton.nativeElement.style['box-shadow'] = '0px 4px 20px ' + themeColor50;
+        }
+    }, 0);
   }
 
 

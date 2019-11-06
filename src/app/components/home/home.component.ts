@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit {
         mainDiv.classList.add('start-animation');
       }
     } catch (error) {
-        console.log('> Error: ', error);
+        this.g.wdLog(['> Error :' + error]);
     }
   }
   removeAnimation() {
@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
         mainDiv.classList.remove('start-animation');
       }
     } catch (error) {
-        console.log('> Error: ', error);
+      this.g.wdLog(['> Error :' + error]);
     }
   }
 }

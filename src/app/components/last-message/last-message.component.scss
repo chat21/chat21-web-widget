@@ -1,0 +1,192 @@
+#messagePreview {
+    position: relative;
+    width: 320px;
+    /* bottom: 90; */
+    max-height: 200px;
+    height: 100%;
+    padding: 0px 10px 10px;
+    background-color: transparent;
+
+    font-family: "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-weight: normal;
+    text-align: left;
+    text-align-last: initial;
+    text-indent: 0px;
+    text-shadow: none;
+    text-transform: none;
+    box-sizing: content-box;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1;
+    font-variant: normal;
+}
+
+#new_message:hover {
+    .boxButtons {
+        display: block;
+        -webkit-animation: fade-in-dw-up 0.3s ease-in 0.0s;
+        animation: fade-in-dw-up 0.3s ease-in 0.0s;
+    }
+}
+
+.previewNewMessagge {
+    position: relative;
+    box-sizing: border-box;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(35, 47, 53, 0.09) 0px 2px 8px 0px;
+    clear: both;
+    margin-left: 45px;
+    margin-bottom: 8px;
+    border-radius: 5px 5px 5px 0px;
+    padding: 4;
+    font-size: 14px;
+}
+
+.previewNewMessagge::after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: -5px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0px 0px 13px 5px;
+    border-color: transparent transparent white;
+}
+    
+.c21-text.message_sender_fullname {
+    font-size: 13px;
+    padding: 0 10;
+    margin: 4 0;
+    clear: both;
+    color: rgb(104, 104, 104);
+}
+
+.c21-box-text {
+    max-height: 82;
+    overflow-y: auto;
+}
+
+.c21-text {
+    font-size: 14px;
+    color: black;
+    padding: 0 10; 
+    margin: 4 0;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.c21-text.c21-time {
+    font-size: 13px;
+    padding: 0 10;
+    clear: both;
+    color: rgb(115, 115, 118);
+}
+
+.c21-link {
+    text-decoration: underline; 
+    padding: 8px; 
+    cursor: pointer;
+}
+
+.c21-icon-avatar {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    bottom: 0px;
+    left: -40px;
+    box-shadow: rgba(35, 47, 53, 0.09) 0px 2px 8px 0px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+    overflow: hidden;
+}
+
+.c21-avatar-image {
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: absolute;
+}
+
+.c21-avatar-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.headerPreviewMessage {
+    position: relative;
+    height: 50;
+    margin: 10 0 0 50;
+}
+
+.boxButtons {
+    display: none;
+}
+
+.buttonClose {
+    transform: translateY(0px);
+    opacity: 1;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: all 120ms ease-out 80ms;
+}
+
+.buttonMore {
+    transform: translateY(0px);
+    opacity: 1;
+    display: inline-block;
+    transition: all 120ms ease-out 80ms;
+    text-align: center;
+}
+.buttonMore span,
+.buttonClose span {
+    display: block;
+    background-color: rgb(103, 120, 143);
+    color: rgb(255, 255, 255);
+    font-size: 13px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+    padding: 0px 8px;
+    border-radius: 16px;
+    background-position: center center;
+    padding: 0px 20px;
+}
+
+.buttonClose span {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+
+.buttonClose span svg {
+    padding: 6;
+}
+
+#new_message {
+    position: absolute;
+    left: 0;
+    right: 10;
+    bottom: 0;
+}
+
+/* ==================== MOBILE VERSION ==================== */ 
+@media (max-width: 451px) {
+    // #messagePreview {
+    //     .boxButtons {
+    //         display: block;
+    //     }
+    //     .buttonMore{
+    //         display: none;
+    //     }
+    //     #messagePreview:hover .boxButtons{
+    //         display: block;
+    //         -webkit-animation: none;
+    //         animation: none;
+    //     }
+    // }
+}

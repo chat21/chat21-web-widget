@@ -74,6 +74,7 @@ export class MessagingService {
   //   this.g.wdLog(['***** getMongDbDepartments *****', url]);
   //   // const url = `http://api.chat21.org/app1/departments`;
   //   // tslint:disable-next-line:max-line-length
+  // tslint:disable-next-line:max-line-length
   //   // const TOKEN = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnsiZW1haWwiOjEsImZpcnN0bmFtZSI6MSwibGFzdG5hbWUiOjEsInBhc3N3b3JkIjoxLCJpZCI6MX0sImdldHRlcnMiOnt9LCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUiLCJ3YXNQb3B1bGF0ZWQiOmZhbHNlLCJhY3RpdmVQYXRocyI6eyJwYXRocyI6eyJwYXNzd29yZCI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJsYXN0bmFtZSI6ImluaXQiLCJmaXJzdG5hbWUiOiJpbml0IiwiX2lkIjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsibGFzdG5hbWUiOnRydWUsImZpcnN0bmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImVtYWlsIjp0cnVlLCJfaWQiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9LCIkb3B0aW9ucyI6dHJ1ZX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJsYXN0bmFtZSI6IlNwb256aWVsbG8iLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJwYXNzd29yZCI6IiQyYSQxMCRkMHBTV3lTQkp5ejFQLmE0Y0QuamwubnpvbW9xMGlXZUlHRmZqRGNQZVhUeENpRUVJOTdNVyIsImVtYWlsIjoic3BvbnppZWxsb0BnbWFpbC5jb20iLCJfaWQiOiI1YWFiYWRlODM5ZGI3ZDAwMTQ3N2QzZDUifSwiJGluaXQiOnRydWUsImlhdCI6MTUyMTY1MjE3Mn0.-iBbE2gCDrcUF1uh9HdK1kVsIRyRCBi_Pvm7LJEKhbs';
   //   //  that.g.wdLog(['MONGO DB DEPARTMENTS URL', url, TOKEN);
   //   const headers = new Headers();
@@ -162,13 +163,11 @@ export class MessagingService {
           message['channel_type'],
           message['progectId']
         );
-
         msg.sender_urlImage = that.getUrlImgProfile(message['sender']);
         that.triggerGetImageUrlThumb(msg);
         if (that.messages.indexOf(message) === -1) {
           that.addMessage(msg);
         }
-
       }
     });
   }
@@ -188,17 +187,6 @@ export class MessagingService {
     }
   }
 
-  private triggerGetImageUrlThumb(message: MessageModel) {
-    try {
-        const windowContext = this.g.windowContext;
-        const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-          windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerGetImageUrlThumb);
-        }
-    } catch (e) {
-        console.error('Error triggering triggerAfterSendMessageEvent', e);
-    }
-  }
 
   private addMessage(message) {
     if (message && message.sender === this.senderId) {
@@ -213,6 +201,7 @@ export class MessagingService {
       this.g.wdLog(['--------> ADD MSG', message.status]);
       console.log('--------> MSG ESISTE: ', this.messages.indexOf(message));
       this.messages.push(message);
+      // this.triggerOnNewMessageReceived(message);
     }
 
     this.messages.sort(this.compareValues('timestamp', 'asc'));
@@ -220,7 +209,7 @@ export class MessagingService {
     try {
       this.storageService.setItem('messages', JSON.stringify(this.messages));
     } catch (error) {
-      console.log('> Error is handled attributes: ', error);
+      this.g.wdLog(['> Error :' + error]);
     }
   }
 
@@ -455,7 +444,7 @@ export class MessagingService {
     const key = UID_SUPPORT_GROUP_MESSAGES + newMessageRef.key;
     // sessionStorage.setItem(uid, key);
     this.g.wdLog(['setItem ************** UID:', uid, ' KWY: ', key]);
-    //this.storageService.setItem(uid, key);
+    // this.storageService.setItem(uid, key);
     this.conversationWith = key;
     return key;
   }
@@ -502,6 +491,24 @@ export class MessagingService {
     this.g.wdLog(['--------> messagesRef.off']);
     this.messagesRef.off();
     // this.conversationsRef.off('child_removed');
+  }
+
+
+  /** TRIGGERS */
+
+  /** */
+  private triggerGetImageUrlThumb(message: MessageModel) {
+    try {
+      const windowContext = this.g.windowContext;
+      const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerGetImageUrlThumb);
+      } else {
+        // this.el.nativeElement.dispatchEvent(triggerGetImageUrlThumb);
+      }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
   }
 
 }

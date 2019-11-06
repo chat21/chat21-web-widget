@@ -96,9 +96,26 @@
     tabindex -> 20
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
+    (eventOpenChat)="returnOpenChat()"
+    (eventOpenEyeCatcher)="returneventOpenEyeCatcher($event)"
+    ></tiledeskwidget-eyeeye-catcher-card>   
+    
+    
+    <!-- 
+    *************************************************************    
+    **************  PREVIEW NEW MESSAGE ****************
+    ************************************************************* 
+    -->
+    <!-- <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
     (eventOpenChat)="returnOpenChat()" 
     (eventOpenEyeCatcher)="returneventOpenEyeCatcher($event)"
-    ></tiledeskwidget-eyeeye-catcher-card>     
+    ></tiledeskwidget-eyeeye-catcher-card>      -->
+    <div *ngIf="!g.isOpen">
+        <tiledeskwidget-last-message
+        (eventCloseMessagePreview)="triggerOnCloseMessagePreview()"
+        (eventSelctedConv)="returnSelectedConversation($event)"
+        ></tiledeskwidget-last-message>
+    </div>
     
     
     <!-- 

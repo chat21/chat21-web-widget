@@ -35,7 +35,8 @@ export function supports_html5_storage() {
   try {
       return 'localStorage' in window && window['localStorage'] !== null;
   } catch (e) {
-      return false;
+    this.g.wdLog(['> Error :' + e]);
+    return false;
   }
 }
 
@@ -43,7 +44,8 @@ export function supports_html5_session() {
   try {
       return 'sessionStorage' in window && window['sessionStorage'] !== null;
   } catch (e) {
-      return false;
+    this.g.wdLog(['> Error :' + e]);
+    return false;
   }
 }
 
@@ -109,15 +111,19 @@ function convertUrlToTag(url) {
 
 
 export function isPopupUrl(url) {
-  const TEMP = url.split('popup=')[1];
-  // può essere seguito da & oppure "
-  if (TEMP) {
-    if (TEMP.startsWith('true')) {
-      return true;
+  try {
+    const TEMP = url.split('popup=')[1];
+    // può essere seguito da & oppure "
+    if (TEMP) {
+      if (TEMP.startsWith('true')) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
-  } else {
+  } catch (e) {
     return false;
   }
 }

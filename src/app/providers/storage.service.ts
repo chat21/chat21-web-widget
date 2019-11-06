@@ -19,7 +19,7 @@ export class StorageService {
       const sv = 'sv' + environment.shemaVersion + '_';
       prefix = prefix + sv;
     } catch (e) {
-        console.error('Error environment.shemaVersion', e);
+      this.g.wdLog(['> Error :' + e]);
     }
     // const newKey = this.g.projectid + '_' + key;
     const newKey = prefix + this.g.projectid + '_' + key; // this.g.projectid + '_' + key;
@@ -59,7 +59,7 @@ export class StorageService {
       const sv = 'sv' + environment.shemaVersion + '_';
       prefix = prefix + sv;
     } catch (e) {
-        console.error('Error environment.shemaVersion', e);
+      this.g.wdLog(['> Error :' + e]);
     }
     // const newKey = this.g.projectid + '_' + key;
     const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
@@ -98,7 +98,7 @@ export class StorageService {
       const sv = 'sv' + environment.shemaVersion + '_';
       prefix = prefix + sv;
     } catch (e) {
-        console.error('Error environment.shemaVersion', e);
+      this.g.wdLog(['> Error :' + e]);
     }
     // const newKey = this.g.projectid + '_' + key;
     const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
@@ -141,7 +141,7 @@ export class StorageService {
       const sv = 'sv' + environment.shemaVersion + '_';
       prefix = prefix + sv;
     } catch (e) {
-        console.error('Error environment.shemaVersion', e);
+      this.g.wdLog(['> Error :' + e]);
     }
     // if (this.g.persistence === 'local') {
     const prefixKey = prefix + this.g.projectid;

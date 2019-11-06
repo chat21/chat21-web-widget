@@ -4,32 +4,16 @@
 * *********************************************  
 */ 
 
+@import '../../../sass/variables';
+
+
+
+
 .eye-catcher_column {
     float: left;
     /* padding: 10px; */
     /* height: 300px;  */
     /* Should be removed. Only for demonstration */
-}
-
-.ec_left {
-    /* width: 90px; /* commented for new style */
-    width: 45px; /* added for new style */
-    padding-left: 10px;
-    /* padding-top: 24px; */ /* commented for new style */
-    /* padding-bottom: 24px; */ /* commented for new style */
-    padding-top: 4px; /* added for new style */
-    padding-bottom: 4px; /* added for new style */
-    /* background-color: #5d6c80; */
-    box-sizing: border-box;
-}
-
-.ec_right {
-    /* width: calc(100% - 90px); */ /* commented for new style */
-    width: calc(100% - 70px); /* added for new style */
-    height: 60px;
-    padding: 4px;
-    max-height: calc(100% - 10px);
-    overflow: hidden;
 }
     
 .ec_right::-webkit-scrollbar {
@@ -44,15 +28,16 @@
 }
 
 /* CLOSE BTN - BTN WRAPPER */
+.eye-catcher-card-emoticons-wrapper{
+    text-align: center;
+}
 .eye-catcher-card-close-btn-wrapper{
     z-index: 1;
     height: 40px;
     width: 40px;
     position: absolute;
-    // top: -35px;
-    // right: -2px;
-    top: 0px;
-    right: 0px;
+    top: -14px;
+    display: none;
 }
 /* CLOSE BTN */
 .eye-catcher-card-close-btn {
@@ -99,70 +84,119 @@
 /**
 * ********* CARD ********* */
 .eye-catcher-card{
-    position: fixed;
+    position: absolute;
     z-index: 1;
-    // margin: 95px 0;
-    margin: 0px 0px 10px 0px;
-    bottom: 10px;
-    // right: 20px;
-    /* bottom: 120px; */ /* commented for new style */
-    /* right: 36px; */ /* commented for new style */
+    bottom: 0px;
     cursor: pointer;
-    /* background-color: #f5f5f5; */ /* commented for new style */
     background-color: #ffffff;  /* added for new style */
-    border: 1px solid #dedfde;
-    box-shadow: 0 2px 8px 0 rgba(35,47,53,0.1);
-    /* width: 299px; */ /* commented for new style */
-    width: 270px; /* added for new style */
-    height: 68px;
-    /* min-height: 125px; */ /* commented for new style */
+    border: 0px solid #dedfde;
+    box-shadow: rgba(35, 47, 53, 0.09) 0px 2px 8px 0px;
+    width: 300px; /* added for new style */
+    height: 70px;
+    border-radius: 35px;
+
     &.c21-align-left{
-        margin-right: 0px;
-        margin-left: 68px;
+        margin: 16px 14px 15px 16px;
+        padding-left: 70px;
+        .eye-catcher-card-close-btn-wrapper{
+            right: -14px;
+        }
+        .ec_left {
+            width: 40px;
+            height: auto;
+            margin: 20px 4px 16px 0px;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .ec_right {
+            overflow: hidden;
+            width: calc(100% - 117px);
+            height: 100%;
+            padding: 4px 0px;
+            vertical-align: middle;
+            display: inline-table;
+            position: absolute;
+            top: 0;
+            left: 70;
+            max-height: 60px;
+            overflow: hidden;
+            line-height: 60px;
+        }
     }
+
     &.c21-align-right{
-        margin-right: 68px;
-        margin-left: 0px;
+        margin: 16px 14px 15px 16px;
+        padding-right: 70px;
+        .eye-catcher-card-close-btn-wrapper{
+            left: -14px;
+        }
+        .ec_left {
+            width: 40px;
+            height: auto;
+            margin: 18px 5px;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .ec_right {
+            overflow: hidden;
+            width: calc(100% - 115px);
+            height: 100%;
+            padding: 4px 0px;
+            vertical-align: middle;
+            display: inline-table;
+            position: absolute;
+            top: 0;
+            left: 45;
+            max-height: 60px;
+            overflow: hidden;
+            line-height: 60px;
+        }
+    }
+}
+
+.eye-catcher-card:hover {
+    .eye-catcher-card-close-btn-wrapper{
+        display: block;
     }
 }
 
 .eye-catcher-card-text-wrapper {
-    /* padding-left: 79px; */
-    /* max-width: 220px; */
-    width: 200px;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    font-family: 'Helvetica Neue', 'Apple Color Emoji', Helvetica, Arial, sans-serif; 
+    font-weight: normal;
+    word-wrap: break-word;
+    margin: 0px;
+    max-height: 60px;
+    position: absolute;
+    line-height: 2.0em;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .eye-catcher-card-title {
-    font-family: 'Google Sans', sans-serif; 
-    /* font-size: 24px; */  /* commented for new style */
     font-size: 15px;
-    /* color:#286abf;  */ /* commented for new style */
-    color: rgb(68, 72, 74); /* added for new style */
-    padding-left: 5px; 
-    padding-right: 10px; 
-    font-weight:500;
-    margin-bottom: 6px;
-    word-wrap: break-word;
-    margin-top: 0px;
-    line-height: normal;
+    color: #3b3c40;
+    display: block;
+    padding: 0px;
+    margin: 0px;
 }
-
 
 .eye-catcher-card-msg {
-    font-family: 'Google Sans', sans-serif; 
-    /* color: #286abf; */  /* commented for new style */
-    color: rgb(68, 72, 74); /* added for new style */
-    padding-left: 5px; 
-    padding-right: 10px; 
-    margin-top: 6px;
-    /* margin-bottom: 24px; */ /* commented for new style */
-    margin-bottom: 6px; 
     letter-spacing: 1px;
-    font-weight: 500;
-    word-wrap: break-word;
-    font-size: 12px;
-    line-height: normal;
+    font-size: 13px;
+    color: #7b7b7b;
+    display: block;
+    padding: 0px;
+    margin: 0px;
 }
+
 
 .eye-catcher-card-img-wrapper {
     /* background-color: #286abf;  */ /* commented for new style */
@@ -184,6 +218,6 @@
 }
 
 .chat21-card-emoticons {
-    font-size: 30px;
+    font-size: 26px;
 }
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */

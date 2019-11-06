@@ -30,6 +30,7 @@ export class ConversationsService {
   // obsAllConversations: any;
   obsArchivedConversations: any;
   obsListConversations: any;
+  obsChangeConversation: any;
 
   tenant: string;
   senderId: string;
@@ -57,7 +58,7 @@ export class ConversationsService {
     // this.obsAllConversations = new BehaviorSubject<[ConversationModel]>(null);
     this.obsArchivedConversations = new BehaviorSubject<[ConversationModel]>(null);
     this.obsListConversations = new BehaviorSubject<[ConversationModel]>(null);
-
+    this.obsChangeConversation = new BehaviorSubject<ConversationModel>(null);
   }
 
 
@@ -202,6 +203,7 @@ export class ConversationsService {
             that.listConversations = getUnique(that.listConversations, 'uid');
             that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
             that.obsListConversations.next(that.listConversations);
+            that.obsChangeConversation.next(conversation);
           }, 0);
         }
       }
@@ -465,5 +467,6 @@ export class ConversationsService {
   searchIndexInArrayForUid(items, key) {
     return items.findIndex(i => i.recipient === key);
   }
+
 
 }

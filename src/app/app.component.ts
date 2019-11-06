@@ -17,13 +17,13 @@ import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
+import { ConversationsService } from './providers/conversations.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 
 // firebase
 import * as firebase from 'firebase/app';
 import 'firebase/app';
-
 import { environment } from '../environments/environment';
 
 // utils
@@ -99,7 +99,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         private storageService: StorageService,
         public appConfigService: AppConfigService,
         public globalSettingsService: GlobalSettingsService,
-        public settingsSaverService: SettingsSaverService
+        public settingsSaverService: SettingsSaverService,
+        public conversationsService: ConversationsService
     ) {
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
@@ -122,6 +123,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     ngAfterViewInit() {
         // this.triggerOnViewInit();
+        this.ngZone.run(() => {
+            const that = this;
+            const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
+                that.ngZone.run(() => {
+                    if ( that.g.isOpen === false && conversation) {
+                        // that.g.isOpenNewMessage = true;
+                        that.g.setParameter('displayEyeCatcherCard', 'none');
+                        that.triggerOnChangedConversation(conversation);
+                        that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
+                    }
+                });
+            });
+            this.subscriptions.push(subChangedConversation);
+        });
     }
 
     // ========= begin:: SUBSCRIPTIONS ============//
@@ -309,7 +324,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             attributes = JSON.parse(this.storageService.getItem('attributes'));
             // console.log('> attributes: ', attributes);
         } catch (error) {
-            // console.log('> Error is handled attributes: ', error);
+            this.g.wdLog(['> Error :' + error]);
         }
         if (!attributes && attributes === null ) {
             attributes = {};
@@ -708,7 +723,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.signOut();
             });
         } catch (error) {
-            console.error('Error: ', error);
+            this.g.wdLog(['> Error :' + error]);
         }
     }
 
@@ -1024,6 +1039,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnSelectedConversation($event) {
         if ($event) {
+            if (this.g.isOpen === false) {
+                this.f21_open();
+            }
             this.conversationSelected = $event;
             // this.g.recipientId = $event.recipient;
             // this.g.setVariable('recipientId', $event.recipient);
@@ -1185,6 +1203,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+            this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onInit);
         }
@@ -1197,7 +1216,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
-            // this.g.setParameter('windowContext', windowContext);
             this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
@@ -1211,7 +1229,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
-            // this.g.setParameter('windowContext', windowContext);
             this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
@@ -1226,7 +1243,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
-            // this.g.setParameter('windowContext', windowContext);
             this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
@@ -1239,7 +1255,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
-            // this.g.setParameter('windowContext', windowContext);
             this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
@@ -1270,6 +1285,43 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(loadParams);
+        }
+    }
+
+
+    /** */
+    private triggerOnChangedConversation(conversation: ConversationModel) {
+        this.g.wdLog([' ---------------- triggerOnChangedConversation ---------------- ', conversation]);
+        try {
+            const triggerChangedConversation = new CustomEvent('onChangedConversation', { detail: { conversation: conversation } });
+            const windowContext = this.g.windowContext;
+            if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+                windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerChangedConversation);
+                this.g.windowContext = windowContext;
+            } else {
+                this.el.nativeElement.dispatchEvent(triggerChangedConversation);
+            }
+            this.g.isOpenNewMessage = true;
+        } catch (e) {
+            this.g.wdLog(['> Error :' + e]);
+        }
+    }
+
+    /** */
+    private triggerOnCloseMessagePreview() {
+        this.g.wdLog([' ---------------- triggerOnCloseMessagePreview ---------------- ']);
+        try {
+            const triggerCloseMessagePreview = new CustomEvent('onCloseMessagePreview', { detail: { } });
+            const windowContext = this.g.windowContext;
+            if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+                windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerCloseMessagePreview);
+                this.g.windowContext = windowContext;
+            } else {
+                this.el.nativeElement.dispatchEvent(triggerCloseMessagePreview);
+            }
+            this.g.isOpenNewMessage = false;
+        } catch (e) {
+            this.g.wdLog(['> Error :' + e]);
         }
     }
 

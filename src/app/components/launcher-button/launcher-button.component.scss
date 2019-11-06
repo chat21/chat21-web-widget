@@ -6,6 +6,9 @@
     height: 60px;
     cursor: pointer;
     display: block;
+    margin: 20px;
+    z-index: 1;
+    // box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 20px;
 
     .launcher-button{
         width:100%; 
