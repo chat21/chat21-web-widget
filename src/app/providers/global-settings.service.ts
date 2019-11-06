@@ -11,6 +11,7 @@ import { StorageService } from './storage.service';
 import { AppConfigService } from './app-config.service';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 
+
 @Injectable()
 export class GlobalSettingsService {
     globals: Globals;
@@ -171,6 +172,12 @@ export class GlobalSettingsService {
         } catch (error) {
             this.globals.wdLog(['> Error :' + error]);
         }
+        try {
+            const departmentID = tiledeskSettings['departmentID'];
+            if (typeof departmentID !== 'undefined') { this.globals.departmentID = departmentID; }
+        } catch (error) {
+            // this.globals.wdLog(['> Error is handled: ', error);
+        }
 
         // -------------------------------------- //
         // const windowContext = globals.windowContext;
@@ -275,7 +282,7 @@ export class GlobalSettingsService {
         this.setVariablesFromAttributeHtml(this.globals, this.el);
         this.setVariablesFromUrlParameters(this.globals);
         this.setVariableFromStorage(this.globals);
-
+        this.setDepartmentFromExternal();
         /** set color with gradient from theme's colors */
         this.globals.setColorWithGradient();
         /** set css iframe from parameters */
@@ -767,6 +774,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.hideAttachButton = (TEMP === true) ? true : false;
         }
+        TEMP = el.nativeElement.getAttribute('departmentID');
+        if (TEMP !== null) {
+            this.globals.departmentID = TEMP;
+        }
 
     }
 
@@ -979,6 +990,11 @@ export class GlobalSettingsService {
             globals.hideAttachButton = stringToBoolean(TEMP);
         }
 
+        TEMP = getParameterByName(windowContext, 'tiledesk_departmentID');
+        if (TEMP) {
+            globals.departmentID = TEMP;
+        }
+
     }
 
     /**
@@ -1065,7 +1081,34 @@ export class GlobalSettingsService {
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
             this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::']);
-            return;
+            // return;
+        }
+
+        this.setDepartmentFromExternal(); // chiamata ridondante viene fatta nel setParameters come ultima operazione
+    }
+
+
+    setDepartmentFromExternal() {
+        // se esiste un departmentID impostato dall'esterno,
+        // creo un department di default e lo imposto come department di default
+        this.globals.wdLog(['EXTERNAL departmentID ::::' + this.globals.departmentID]);
+        let isValidID = false;
+        if (this.globals.departmentID) {
+            this.globals.departments.forEach(department => {
+                if (department._id === this.globals.departmentID) {
+                    this.globals.wdLog(['EXTERNAL DEPARTMENT ::::' + department._id]);
+                    this.globals.setParameter('departmentDefault', department);
+                    this.setDepartment(department);
+                    isValidID = true;
+                    return;
+                }
+            });
+            if (isValidID === false) {
+                // se l'id passato non corrisponde a nessun id dipartimento esistente viene annullato
+                // per permettere di passare dalla modale dell scelta del dipartimento se necessario (+ di 1 dipartimento presente)
+                this.globals.departmentID = null;
+            }
+            this.globals.wdLog(['END departmentID ::::' + this.globals.departmentID + isValidID]);
         }
     }
 
