@@ -73,6 +73,7 @@ export class Globals {
   displayEyeCatcherCard: string;
 
   firstOpen = true;
+  departmentID = null;
 
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
