@@ -111,7 +111,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   preChatForm = false;
   themeColor50: string;
   textInputTextArea: String;
-  HEIGHT_DEFAULT = '20px';
+  HEIGHT_DEFAULT = '22px';
   conversationWith: string;
   isPopupUrl = isPopupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
@@ -244,9 +244,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
 
+
     try {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
       this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
+      this.g.wdLog(['> this.urlAudiorepo: ', this.urlAudiorepo]);
     } catch (error) {
       this.g.wdLog(['> Error is: ', error]);
     }
@@ -685,14 +687,25 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // });
   }
 
-  /** controllo se è l'ultimo messaggio appena ricevuto 
+  /** controllo se è l'ultimo messaggio appena ricevuto
    * imposto autoplay
    */
   isAutoplay(last: boolean) {
     if (last === true && this.isNwMsg === true) {
-      return true;
+      if (this.g.autoplay_activated && this.g.autoplay_activated === true) {
+        return true;
+      }
     }
     return false;
+  }
+
+  toggleAutoplay() {
+    if (this.g.autoplay_activated === true) {
+      this.g.autoplay_activated = false;
+    } else {
+      this.g.autoplay_activated = true;
+    }
+    this.g.setParameter('autoplay_activated', this.g.autoplay_activated);
   }
 
 
@@ -960,8 +973,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
           target.style.height = this.HEIGHT_DEFAULT;
       } else if (target.scrollHeight > target.offsetHeight) {
-          //   that.g.wdLog(['PASSO 2');
-          target.style.height = target.scrollHeight + 2 + 'px';
+          this.g.wdLog(['PASSO 2']);
+          target.style.height = target.scrollHeight  + 'px';
       } else {
           //   that.g.wdLog(['PASSO 3');
           target.style.height = this.HEIGHT_DEFAULT;
@@ -1422,7 +1435,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.pauseAudioMsg(null);
       try {
         startRecording(this.urlAudiorepo, uid, function(uuid: string, filename: string) {
-          // console.log(uuid);
           const url = that.urlAudiorepo + '/audio/' + filename;
           const metadata = {
             'src': url,

@@ -400,8 +400,8 @@
     }
     .chat21-textarea-button:focus,
     .chat21-textarea-button:active {
-        min-width: 24px;
-        min-height: 24px;
+        min-width: 20px;
+        min-height: 20px;
         padding: 4 0 0 2;
         background-color: $light-white;
         border-radius: 12px;
@@ -472,7 +472,7 @@
         font-weight: 300;
         max-height: 110px;
         min-height: auto;
-        height: 20px;
+        height: 22px;
         padding: 3px 40px;
         margin: 10px 0px 10px;
         border: none;

@@ -73,7 +73,7 @@ export class Globals {
   displayEyeCatcherCard: string;
 
   firstOpen = true;
-
+  autoplay_activated = true;
 
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;

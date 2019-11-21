@@ -93,7 +93,7 @@ function startRecording(urlAudiorepo, uid, callbackEndRecording) {
 			console.log("Encoding complete : filename: " + filename);
 			// createDownloadLink(blob,recorder.encoding);
 			sendaudio(blob, urlAudiorepo, filename, function(val) {
-				console.log('callback sendaudio'+uid);
+				console.log('callback sendaudio'+urlAudiorepo);
 				callbackEndRecording(uid,filename);
 			});
 			// encodingTypeSelect.disabled = false;

@@ -58,7 +58,7 @@ export class StarRatingWidgetService {
     // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
     // tslint:disable-next-line:max-line-length
     const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
-    this.g.wdLog(['url: ', url]);
+    this.g.wdLog(['2 url: ', url]);
     const body = {
       'rating': rate,
       'rating_message': message,

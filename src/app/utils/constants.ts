@@ -72,5 +72,5 @@ export const START_HIDDEN_MESSAGE = '__start';
 export const DEFAULT_AGENT = 'supporto-anagrafe-vcqvkb';
 export const DEFAULT_RECIPIENT = 'bari_bot';
 export const DEFAULT_RECIPIENT_FULLNAME = 'Ernesto';
-export const PROXY_URL = 'https://bariapp.herokuapp.com/proxy';
+export const PROXY_URL = '';
 

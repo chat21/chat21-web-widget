@@ -83,7 +83,7 @@ export class GenericMessagingService {
     headers.append('Content-Type', 'application/json');
     // const options = new RequestOptions({ headers: headers });
     let url = PROXY_URL;
-    this.g.wdLog(['url: ', url]);
+    // this.g.wdLog(['1 url: ', url]);
 
     message['session'] = this.sessionUid;
     message['agent'] = DEFAULT_AGENT;
@@ -238,7 +238,6 @@ export class GenericMessagingService {
     } else {
       message.status = MSG_STATUS_SENT_SERVER.toString();
       this.g.wdLog(['--------> ADD MSG', message.status]);
-
       this.messages.push(message);
     }
     this.messages.sort(this.compareValues('timestamp', 'asc'));
@@ -587,7 +586,7 @@ export class GenericMessagingService {
         console.error('::onMessageReceivement', error);
         // that.setParameters(null);
     }, () => {
-        console.log('onMessageReceivement null');
+        console.log('onMessageReceivement');
         // that.setParameters(null);
     });
     return message;

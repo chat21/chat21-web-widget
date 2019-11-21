@@ -1,5 +1,11 @@
 # chat21-web-widget ver 2.0
 
+### 3.0.19-beta.18G
+- added button autoplay true/false
+
+### 3.0.19-beta.18E
+- bug fix heigt footer on onfocus
+
 ### 3.0.19-beta.18E
 - set focus on the last message recived (for auto-reading)
 
