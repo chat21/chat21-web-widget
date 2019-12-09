@@ -49,7 +49,11 @@ Build for production with :  `ng build --prod --base-href --output-hashing none`
 ## Widget in action 
 To see this widget in action you can go on 'https://www.tiledesk.com'
 
-# Deploy to AWS S3 (Optional)
+# Deploy
+## Deploy to a web Server
+Copy the content of the dist folder to your Web Server (for example Apache or Nginx)
+
+## Deploy to AWS S3 (Optional)
 
 Run : `aws s3 sync . s3://tiledesk-widget`
 
