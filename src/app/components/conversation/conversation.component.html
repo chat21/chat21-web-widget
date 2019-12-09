@@ -375,6 +375,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
         <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
     </div>
 
+    <!-- <section>
+        <div id="transcript"><div></div></div>
+        <div id="playbutton"></div>
+    </section> -->
+
     <div class="visible-text-area" [class.active]="!isFilePendingToUpload">
         <textarea 
             start-focus-chat21-conversation-component
@@ -418,8 +423,9 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
         </div>
     </div>
 
-    <div #div_mic *ngIf="g.showMicButton">
-        <button *ngIf="!isRecording" tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic" (click)="recording($event)"> 
+    <div #div_mic *ngIf="g.showMicButton" id="playbutton">
+        <button *ngIf="!isRecording"  tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic">
+        <!-- (click)="recording($event)">  -->
             <span class="v-align-center">
                 <svg aria-label="registra traccia audio" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
                     <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z"/>
@@ -427,7 +433,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                 </svg>
             </span>
         </button>
-        <button  *ngIf="isRecording" tabindex="1502" aria-label="stop registrazione" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic" (click)="recording($event)" autofocus> 
+        <button  *ngIf="isRecording" tabindex="1502" aria-label="stop registrazione" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean " id="chat21-start-mic" autofocus> 
             <span class="v-align-center">
                 <svg aria-label="termina registrazione" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
                     <path d="M0 0h24v24H0z" fill="none"/>

@@ -46,6 +46,9 @@ declare var startRecording: any;
 declare var stopRecording: any;
 declare var setBaseLocation: any;
 
+declare var startSpeechToText: any;
+
+
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -195,6 +198,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     // console.log('attributes: ', this.g.attributes);
+    this.startSpeechToText();
     setTimeout(() => {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
@@ -1453,6 +1457,31 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+
+
+  startSpeechToText() {
+    console.log('startSpeechToText ' + this.isRecording);
+    const that = this;
+      const transcript = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+      const micButton = 'playbutton';
+      try {
+        startSpeechToText(micButton, function(streamed_text: string) {
+          console.log('startSpeechToText1' + streamed_text);
+          transcript.value = streamed_text;
+          that.isRecording = true;
+        },
+        function(final_text) {
+          console.log('startSpeechToText2' + final_text);
+          transcript.value = final_text;
+          const message = final_text; // 'Audio: ' + url;
+          that.isRecording = false;
+          that.sendMessage(message, TYPE_MSG_TEXT);
+        });
+      } catch (error) {
+        this.g.wdLog(['startSpeechToText > Error is: ', error]);
+      }
+
+  }
 
   // ========= end:: functions send image ======= //
 

@@ -46,6 +46,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/assets/js/WebAudioRecorder.min.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/assets/js/audio.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/assets/js/main.js"></script>';
+    
     srcTileDesk += '</body>';
     srcTileDesk += '</html>';
     
