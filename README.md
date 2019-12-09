@@ -33,7 +33,7 @@ With Chat21-web-widget you can:
 * Move to the downloaded project path ```cd <YOUR_PATH>```
 * Compile the project with ```npm install```
 
-[For Installing the Widget on your web site read the SDK page](docs/sdk.md)
+[For Installing the Widget on your web site read the guide on Tiledesk site](https://www.tiledesk.com)
 
 
 
@@ -47,7 +47,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 Build for production with :  `ng build --prod --base-href --output-hashing none`
 
 ## Widget in action 
-To see this widget in action you can go on 'http://chat21.org'
+To see this widget in action you can go on 'https://www.tiledesk.com'
 
 # Deploy to AWS S3 (Optional)
 
@@ -59,6 +59,3 @@ Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
 
 If you use AWS Cloud Front enable gzip compression.
 
-# Docker
-docker image build -t tiledesk-web-widget .
- docker run -p 4200:80  tiledesk-web-widget
