@@ -573,6 +573,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
 
+
       /**
        * imposto il focus sull'ultimo msg ricevuto se c'è testo per l'accessibilità
        * cioè permetto l'autolettura dell'ultimo messaggio!!!
@@ -591,12 +592,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
                 altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
                 testFocus.focus();
+                that.playPausaAudioMsg(newMessage.uid);
               }
             }, 1000);
           }
         }, 1000);
       }
     });
+
+    
 
     this.subscriptions.push(obsAddedMessage);
   }
@@ -706,6 +710,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   toggleAutoplay() {
     if (this.g.autoplay_activated === true) {
       this.g.autoplay_activated = false;
+      this.pauseAudioMsg(null);
     } else {
       this.g.autoplay_activated = true;
     }
@@ -883,13 +888,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   triggerAfterMessageRender(message, messageEl, component) {
-    // console.log('triggerBeforeMessageRender');
     try {
       // tslint:disable-next-line:max-line-length
       const afterMessageRender = new CustomEvent('afterMessageRender',
         { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
 
       const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+
+
       // console.log('returnEventValue', returnEventValue);
     } catch (e) {
         console.error('Error triggering triggerAfterMessageRender', e);
@@ -1717,6 +1723,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
     try {
       const divPlay = (<HTMLAudioElement>document.getElementById(uid));
+      console.log('divPlay: ', divPlay);
       if (divPlay) {
         setTimeout(function() {
           divPlay.play();

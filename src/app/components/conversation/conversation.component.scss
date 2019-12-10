@@ -341,6 +341,7 @@
                             max-width: 244px;
                             background-color: $bck-msg-sent;
                             border-radius: 14px;
+                            height: 0px;
                         }
                         audio::-webkit-media-controls-enclosure {
                             background: transparent;
@@ -430,6 +431,7 @@
                             max-width: 244px;
                             background-color: $light-white;
                             border-radius: 14px;
+                            height: 0px;
                         }
                         audio::-webkit-media-controls-enclosure {
                             background: transparent;

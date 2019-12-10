@@ -1,5 +1,12 @@
 # chat21-web-widget ver 2.0
 
+### 3.0.19-beta.19
+- added button stop audio
+- audio play auto on last msg
+- hidden audio in the msg
+- integrate startSpeechToText
+
+
 ### 3.0.19-beta.18G
 - added button autoplay true/false
 
