@@ -1,4 +1,6 @@
 # chat21-web-widget ver 2.0
+### 3.0.19-beta.19A
+- bug fixed: onfocus message that moves view to the top
 
 ### 3.0.19-beta.19
 - added button stop audio

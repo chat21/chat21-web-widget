@@ -591,8 +591,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
               if (newMessage.sender !== that.g.senderId) {
                 messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
                 altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
-                testFocus.focus();
+                //testFocus.focus(); //dopo il focus c'è tutta la view si sposta in su di qualche px
                 that.playPausaAudioMsg(newMessage.uid);
+                that.g.wdLog([' --------setTimeout-------- 6']);
               }
             }, 1000);
           }
