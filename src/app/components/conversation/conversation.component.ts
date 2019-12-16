@@ -147,6 +147,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   lastMsg = false;
   isNwMsg = false;
 
+  playMessageActived = true;
+
   isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
 
 
@@ -203,6 +205,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
       }
+      // this.g.wdLog([' --------scrollToBottom-------- ']);
+      // this.scrollToBottom();
     }, 1000);
 
   }
@@ -212,7 +216,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      //this.scrollToBottom();
+      this.scrollToBottom(true);
     }
   }
 
@@ -273,6 +277,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   onResize(event) {
     // tslint:disable-next-line:no-unused-expression
     this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
+    setTimeout(() => {
+      this.g.wdLog([' --------scrollToBottom XXXXXX-------- ']);
+      this.scrollToBottom();
+    }, 0);
   }
 
   /**
@@ -553,59 +561,73 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       that.writingMessage = '';
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
-        that.g.wdLog(['1-------']);
+        that.g.wdLog(['1-------', that.isNwMsg]);
         setTimeout(function () {
           that.scrollToBottom();
+          // if (that.isNwMsg === true) {
+          //   that.playAudioMessage(newMessage);
+          // }
         }, 200);
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
-          that.g.wdLog(['2-------']);
+          that.g.wdLog(['2-------', that.isNwMsg]);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
-          }, 0);
+            if (that.isNwMsg === true) {
+              that.playAudioMessage(newMessage);
+            }
+          }, 200);
         } else {
           that.g.wdLog(['3-------']);
-          that.NUM_BADGES++;
-          that.soundMessage();
+          setTimeout(function () {
+            that.scrollToBottom();
+            if (that.isNwMsg === true) {
+              that.playAudioMessage(newMessage);
+            }
+          }, 200);
+          // that.NUM_BADGES++;
+          // that.soundMessage();
         }
       }
 
 
-      /**
-       * imposto il focus sull'ultimo msg ricevuto se c'è testo per l'accessibilità
-       * cioè permetto l'autolettura dell'ultimo messaggio!!!
-       */
-      // && that.lastMsg
-      // that.g.wdLog(['4------- newMessage: ' + newMessage + ' that.lastMsg: ' + that.lastMsg]);
-      if (newMessage && newMessage.text ) {
-        that.g.wdLog(['4------- controllo focus']);
-        setTimeout(function () {
-          let messaggio = '';
-          const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
-          const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
-          if (altTextArea && testFocus) {
-            setTimeout(function () {
-              if (newMessage.sender !== that.g.senderId) {
-                messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
-                altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
-                //testFocus.focus(); //dopo il focus c'è tutta la view si sposta in su di qualche px
-                that.playPausaAudioMsg(newMessage.uid);
-                that.g.wdLog([' --------setTimeout-------- 6']);
-              }
-            }, 1000);
-          }
-        }, 1000);
-      }
     });
-
-    
 
     this.subscriptions.push(obsAddedMessage);
   }
 
+  playAudioMessage(newMessage) {
+    /**
+     * imposto il focus sull'ultimo msg ricevuto se c'è testo per l'accessibilità
+     * cioè permetto l'autolettura dell'ultimo messaggio!!!
+     */
+    // && that.lastMsg
+    // that.g.wdLog(['4------- newMessage: ' + newMessage + ' that.lastMsg: ' + that.lastMsg]);
+    this.g.wdLog(['1------- playAudioMessage', newMessage]);
+    const that = this;
+    if (newMessage && newMessage.text ) {
+      this.g.wdLog(['4------- controllo focus']);
+      setTimeout(function () {
+        let messaggio = '';
+        const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
+        const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
+        if (altTextArea && testFocus) {
+          setTimeout(function () {
+            if (newMessage.sender !== that.g.senderId) {
+              messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
+              altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
+              //testFocus.focus(); //dopo il focus c'è tutta la view si sposta in su di qualche px
+              that.playPausaAudioMsg(newMessage.uid);
+              that.g.wdLog([' --------setTimeout-------- 6']);
+            }
+          }, 1000);
+        }
+      }, 1000);
+    }
+  }
 
  
   // autoplay() {
@@ -856,6 +878,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             );
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
+          this.isNwMsg = true;
           this.restoreTextArea();
       }
   }
@@ -1063,7 +1086,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
-  scrollToBottom() {
+  scrollToBottom(withoutAnimation?: boolean) {
     this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
     const that = this;
     // const divScrollMe = this.scrollMe.nativeElement;
@@ -1075,7 +1098,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.isScrolling = true;
           const objDiv = document.getElementById(that.idDivScroll);
           setTimeout(function () {
-            if (that.isIE === true) {
+            if (that.isIE === true || withoutAnimation === true) {
               objDiv.scrollIntoView(false);
             } else {
               objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
@@ -1467,8 +1490,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   startSpeechToText() {
-    console.log('startSpeechToText ' + this.isRecording);
-    const that = this;
+      console.log('startSpeechToText ' + this.isRecording);
+      const that = this;
       const transcript = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
       const micButton = 'playbutton';
       try {
@@ -1476,6 +1499,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           console.log('startSpeechToText1' + streamed_text);
           transcript.value = streamed_text;
           that.isRecording = true;
+          that.resizeInputField();
         },
         function(final_text) {
           console.log('startSpeechToText2' + final_text);
@@ -1483,6 +1507,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           const message = final_text; // 'Audio: ' + url;
           that.isRecording = false;
           that.sendMessage(message, TYPE_MSG_TEXT);
+          that.restoreTextArea();
         });
       } catch (error) {
         this.g.wdLog(['startSpeechToText > Error is: ', error]);
@@ -1714,6 +1739,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   playPausaAudioMsg(uid: string) {
     // console.log('playPausaAudioMsg: ', uid);
+    const that = this;
     try {
       const divPause = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
       if (divPause) {
@@ -1727,7 +1753,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       console.log('divPlay: ', divPlay);
       if (divPlay) {
         setTimeout(function() {
-          divPlay.play();
+          if (that.g.autoplay_activated) {
+            divPlay.play();
+          }
           this.uidAudioPlayng = uid;
         }, 300);
       }
@@ -1735,5 +1763,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.wdLog(['> Error is: ', error]);
     }
   }
+
+
 
 }

@@ -1,4 +1,14 @@
 # chat21-web-widget ver 2.0
+
+### 3.0.19-beta.20
+- bug fixed: play stop on the last message received, by pressing the button mute
+- bug fixed: play stop on the last message received on new recording
+- bug fixed: no play last message received if is not new
+- bug fixed: scroll to bottom conversation when refresh page with widget closed and after open conversation
+- bug fixed: scroll to bottom when arrives new message and start position is top
+- bug fixed: resizeInputField when recording new vocal message
+- bug fixed: restoreTextArea after send vocal message
+
 ### 3.0.19-beta.19A
 - bug fixed: onfocus message that moves view to the top
 

@@ -424,7 +424,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
     </div>
 
     <div #div_mic *ngIf="g.showMicButton" id="playbutton">
-        <button *ngIf="!isRecording"  tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic">
+        <button *ngIf="!isRecording"  tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic" (click)="pauseAudioMsg($event)">
         <!-- (click)="recording($event)">  -->
             <span class="v-align-center">
                 <svg aria-label="registra traccia audio" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
