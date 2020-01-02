@@ -608,6 +608,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // that.g.wdLog(['4------- newMessage: ' + newMessage + ' that.lastMsg: ' + that.lastMsg]);
     this.g.wdLog(['1------- playAudioMessage', newMessage]);
     const that = this;
+    that.scrollToBottom();
+    this.g.wdLog(['---------scrollo sino alla fine prima di cambiare il focus e attivare l autoplay']);
     if (newMessage && newMessage.text ) {
       this.g.wdLog(['4------- controllo focus']);
       setTimeout(function () {

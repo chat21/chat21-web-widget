@@ -1,4 +1,6 @@
 # chat21-web-widget ver 2.0
+### 3.0.19-beta.21
+- bug fixed: scroll to bottom conversation when autoplay new message received
 
 ### 3.0.19-beta.20
 - bug fixed: play stop on the last message received, by pressing the button mute
