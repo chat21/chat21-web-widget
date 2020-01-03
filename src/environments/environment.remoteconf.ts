@@ -29,7 +29,7 @@ export const environment = {
     // storageBucket: firebaseConfig.storageBucket,
     // messagingSenderId: firebaseConfig.messagingSenderId
   },
-  apiUrl: 'http://localhost/api/',
+  apiUrl: '/api/',
   tenant: 'tilechat',
   defaultLang : 'en',
   shemaVersion : '1'
