@@ -1,4 +1,15 @@
 # chat21-web-widget ver 2.0
+
+
+### 3.0.19-beta.23
+- bug fixed: first scrollToBottom() 
+- bug fixed: add animation scrollToBottom
+- bug fixed: icon mic/pause 
+- bug fixed: play/stop message on push
+
+### 3.0.19-beta.22
+- bug fixed: refactoring scrollToBottom()
+
 ### 3.0.19-beta.21
 - bug fixed: scroll to bottom conversation when autoplay new message received
 

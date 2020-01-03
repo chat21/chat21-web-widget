@@ -150,7 +150,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   playMessageActived = true;
 
   isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-
+  firstScroll = true;
 
   constructor(
     public el: ElementRef,
@@ -216,7 +216,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      this.scrollToBottom(true);
+      //this.scrollToBottom(true);
     }
   }
 
@@ -479,7 +479,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // this.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
-      this.scrollToBottomStart();
+      //this.scrollToBottomStart();
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
@@ -575,18 +575,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.g.wdLog(['2-------', that.isNwMsg]);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
-            that.scrollToBottom();
             if (that.isNwMsg === true) {
               that.playAudioMessage(newMessage);
             }
+            that.scrollToBottom();
           }, 200);
         } else {
           that.g.wdLog(['3-------']);
           setTimeout(function () {
-            that.scrollToBottom();
             if (that.isNwMsg === true) {
               that.playAudioMessage(newMessage);
             }
+            that.scrollToBottom();
           }, 200);
           // that.NUM_BADGES++;
           // that.soundMessage();
@@ -1067,83 +1067,111 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
-  scrollToBottomStart() {
-    const that = this;
-    if ( this.isScrolling === false ) {
-      setTimeout(function () {
-        try {
-          that.isScrolling = true;
-          const objDiv = document.getElementById(that.idDivScroll);
-          setTimeout(function () {
-            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
-            objDiv.scrollIntoView(false);
-            objDiv.style.opacity = '1';
-          }, 200);
-          that.isScrolling = false;
-        } catch (err) {
-          this.g.wdLog(['> Error is: ', err]);
-        }
-      }, 300);
-    }
-  }
-
+  // scrollToBottomStart_old() {
+  //   const that = this;
+  //   if ( this.isScrolling === false ) {
+  //     setTimeout(function () {
+  //       try {
+  //         that.isScrolling = true;
+  //         const objDiv = document.getElementById(that.idDivScroll);
+  //         setTimeout(function () {
+  //           that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+  //           objDiv.scrollIntoView(false);
+  //           objDiv.style.opacity = '1';
+  //         }, 200);
+  //         that.isScrolling = false;
+  //       } catch (err) {
+  //         this.g.wdLog(['> Error is: ', err]);
+  //       }
+  //     }, 300);
+  //   }
+  // }
 
   scrollToBottom(withoutAnimation?: boolean) {
-    this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
+    console.log('scrollToBottom: ');
     const that = this;
-    // const divScrollMe = this.scrollMe.nativeElement;
-
-    if ( this.isScrolling === false ) {
-      // const divScrollMe = this.scrollMe.nativeElement;
+     try {
+      that.isScrolling = true;
+      const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+      // const element = objDiv[0] as HTMLElement;
       setTimeout(function () {
-        try {
-          that.isScrolling = true;
-          const objDiv = document.getElementById(that.idDivScroll);
-          setTimeout(function () {
-            if (that.isIE === true || withoutAnimation === true) {
-              objDiv.scrollIntoView(false);
-            } else {
-              objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-            }
-            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
-            // objDiv.scrollIntoView(false);
-          }, 0);
-          that.isScrolling = false;
-
-          //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-          // setTimeout(function () {
-          //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-          // }, 500);
-
-          // let checkContentScrollPosition = false;
-          // do {
-          //   setTimeout(function () {
-          //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
-          //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-          //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
-          //   }, 1000);
-          // }
-          // while (checkContentScrollPosition === false);
-          // that.isScrolling = false;
-
-          //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
-          //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
-          //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
-          // try {
-          //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
-          // } catch ( err ) { }
-          // // that.badgeNewMessages = 0;
-          // console.log(objDiv);
-        } catch (err) {
-            this.g.wdLog(['> Error is: ', err]);
-            setTimeout(function () {
-              that.isScrolling = false;
-            }, 0);
-          //that.scrollToBottom();
+        console.log('objDiv.scrollHeight: ' + objDiv.scrollHeight);
+        console.log('objDiv.clientHeight: ' + objDiv.parentElement.clientHeight);
+        console.log('objDiv.scrollTop: ' + objDiv.scrollBy);
+        if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+          objDiv.parentElement.classList.add('withoutAnimation');
+        } else {
+          objDiv.parentElement.classList.remove('withoutAnimation');
         }
+        objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+        objDiv.style.opacity = '1';
+        // element.animate({
+        //   scrollTop: element.scrollHeight // - element.clientHeight
+        // }, delayTime);
+        that.firstScroll = false;
       }, 0);
+    } catch (err) {
+      that.g.wdLog(['> Error :' + err]);
     }
-  }
+    that.isScrolling = false;
+   }
+
+  // scrollToBottom_old(withoutAnimation?: boolean) {
+  //   this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
+  //   const that = this;
+  //   // const divScrollMe = this.scrollMe.nativeElement;
+
+  //   if ( this.isScrolling === false ) {
+  //     // const divScrollMe = this.scrollMe.nativeElement;
+  //     setTimeout(function () {
+  //       try {
+  //         that.isScrolling = true;
+  //         const objDiv = document.getElementById(that.idDivScroll);
+  //         setTimeout(function () {
+  //           if (that.isIE === true || withoutAnimation === true) {
+  //             objDiv.scrollIntoView(false);
+  //           } else {
+  //             objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+  //           }
+  //           that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+  //           // objDiv.scrollIntoView(false);
+  //         }, 0);
+  //         that.isScrolling = false;
+
+  //         //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+  //         // setTimeout(function () {
+  //         //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+  //         // }, 500);
+
+  //         // let checkContentScrollPosition = false;
+  //         // do {
+  //         //   setTimeout(function () {
+  //         //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
+  //         //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+  //         //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+  //         //   }, 1000);
+  //         // }
+  //         // while (checkContentScrollPosition === false);
+  //         // that.isScrolling = false;
+
+  //         //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
+  //         //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
+  //         //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
+  //         // try {
+  //         //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
+  //         // } catch ( err ) { }
+  //         // // that.badgeNewMessages = 0;
+  //         // console.log(objDiv);
+  //       } catch (err) {
+  //           this.g.wdLog(['> Error is: ', err]);
+  //           setTimeout(function () {
+  //             that.isScrolling = false;
+  //           }, 0);
+  //         //that.scrollToBottom();
+  //       }
+  //     }, 0);
+  //   }
+  // }
 
   // ========= end:: functions scroll position ======= //
 
@@ -1709,6 +1737,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+
+  toggleRecording(e) {
+    this.isRecording = !this.isRecording;
+  }
   /**
    *
    * @param e
@@ -1743,27 +1775,51 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log('playPausaAudioMsg: ', uid);
     const that = this;
     try {
-      const divPause = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+      const divPause = (<HTMLAudioElement>document.getElementById(that.uidAudioPlayng));
+      const divPlay = (<HTMLAudioElement>document.getElementById(uid));
       if (divPause) {
         divPause.pause();
       }
-    } catch (error) {
-      this.g.wdLog(['> Error is: ', error]);
-    }
-    try {
-      const divPlay = (<HTMLAudioElement>document.getElementById(uid));
-      console.log('divPlay: ', divPlay);
-      if (divPlay) {
-        setTimeout(function() {
-          if (that.g.autoplay_activated) {
-            divPlay.play();
-          }
-          this.uidAudioPlayng = uid;
-        }, 300);
+
+      if (that.uidAudioPlayng === uid) {
+        that.uidAudioPlayng = '';
+      } else {
+        if (divPlay) {
+          setTimeout(function() {
+            if (that.g.autoplay_activated) {
+              divPlay.play();
+            }
+            this.uidAudioPlayng = uid;
+          }, 300);
+        }
       }
+
     } catch (error) {
       this.g.wdLog(['> Error is: ', error]);
     }
+    // try {
+    //   const divPause = (<HTMLAudioElement>document.getElementById(this.uidAudioPlayng));
+    //   if (divPause) {
+    //     divPause.pause();
+    //   }
+    // } catch (error) {
+    //   this.g.wdLog(['> Error is: ', error]);
+    // }
+    // try {
+    //   const divPlay = (<HTMLAudioElement>document.getElementById(uid));
+    //   console.log('divPlay: ', divPlay);
+    //   if (divPlay) {
+    //     setTimeout(function() {
+    //       if (that.g.autoplay_activated) {
+    //         divPlay.play();
+    //       }
+    //       this.uidAudioPlayng = uid;
+    //     }, 300);
+    //   }
+    // } catch (error) {
+    //   this.g.wdLog(['> Error is: ', error]);
+    // }
+
   }
 
 

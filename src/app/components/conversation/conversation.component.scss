@@ -5,6 +5,12 @@
 // @import '../../../sass/normalize.css';
 
 
+#scroll-me {
+    scroll-behavior: smooth;
+}
+#scroll-me.withoutAnimation {
+    scroll-behavior: unset;
+}
 
 .fft {
     position: absolute;
