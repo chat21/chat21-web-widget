@@ -1,5 +1,7 @@
 # chat21-web-widget ver 2.0
 
+### 3.0.19-beta.24
+- bug fixed: restoreTextArea (reset heigth text area on send message)
 
 ### 3.0.19-beta.23
 - bug fixed: first scrollToBottom() 

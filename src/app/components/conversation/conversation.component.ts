@@ -881,6 +881,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
           this.isNwMsg = true;
+
+          try {
+            const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+            target.value = '';
+            target.style.height = this.HEIGHT_DEFAULT;
+            console.log('target.style.height: ', target.style.height);
+          } catch (e) {
+            this.g.wdLog(['> Error :' + e]);
+          }
+
           this.restoreTextArea();
       }
   }
