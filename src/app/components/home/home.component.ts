@@ -25,8 +25,8 @@ export class HomeComponent implements OnInit {
   // ========= begin:: component variables ======= //
   tenant;
   widgetTitle;
-  wellcomeMsg;
-  wellcomeTitle;
+  welcomeMsg;
+  welcomeTitle;
   colorBck: string;
   // ========= end:: component variables ======= //
 

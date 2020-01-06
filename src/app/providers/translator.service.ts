@@ -46,9 +46,9 @@ export class TranslatorService {
     globals.BUTTON_EDIT_PROFILE = this.translateForKey('BUTTON_EDIT_PROFILE');
     globals.BUTTON_DOWNLOAD_TRANSCRIPT = this.translateForKey('BUTTON_DOWNLOAD_TRANSCRIPT');
     globals.RATE_CHAT = this.translateForKey('RATE_CHAT');
-    globals.WELLCOME_TITLE = this.translateForKey('WELLCOME_TITLE');
-    globals.WELLCOME_MSG = this.translateForKey('WELLCOME_MSG');
-    globals.WELLCOME = this.translateForKey('WELLCOME');
+    globals.WELCOME_TITLE = this.translateForKey('WELCOME_TITLE');
+    globals.WELCOME_MSG = this.translateForKey('WELCOME_MSG');
+    globals.WELCOME = this.translateForKey('WELCOME');
     globals.OPTIONS = this.translateForKey('OPTIONS');
     globals.SOUND_ON = this.translateForKey('SOUND_ON');
     globals.SOUND_OFF = this.translateForKey('SOUND_OFF');
@@ -72,11 +72,11 @@ export class TranslatorService {
     globals.WAITING_TIME_NOT_FOUND = this.translateForKey('WAITING_TIME_NOT_FOUND');
     globals.CLOSED = this.translateForKey('CLOSED');
 
-    if (!globals.wellcomeTitle) {
-      globals.wellcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
+    if (!globals.welcomeTitle) {
+      globals.welcomeTitle = globals.WELCOME_TITLE;   /** Set the widget welcome message. Value type : string */
     }
-    if (!globals.wellcomeMsg) {
-      globals.wellcomeMsg = globals.WELLCOME_MSG;       /** Set the widget welcome message. Value type : string */
+    if (!globals.welcomeMsg) {
+      globals.welcomeMsg = globals.WELCOME_MSG;       /** Set the widget welcome message. Value type : string */
     }
 
 

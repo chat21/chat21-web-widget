@@ -199,7 +199,7 @@ export class MessagingService {
     } else {
       message.status = MSG_STATUS_SENT_SERVER.toString();
       this.g.wdLog(['--------> ADD MSG', message.status]);
-      console.log('--------> MSG ESISTE: ', this.messages.indexOf(message));
+      // console.log('--------> MSG ESISTE: ', this.messages.indexOf(message));
       this.messages.push(message);
       // this.triggerOnNewMessageReceived(message);
     }

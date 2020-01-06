@@ -45,7 +45,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
           if (that.g.isOpen === false) {
             that.g.wdLog([' 2 - > obsChangeConversation ::: ']);
             that.conversation = conversation;
-            console.log('conv: ' + conversation);
+            // console.log('conv: ' + conversation);
           }
         });
     });
@@ -57,7 +57,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** */
   ngAfterViewInit() {
-    console.log('isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // console.log('isOpenNewMessage: ' + this.g.isOpenNewMessage);
   }
 
   /**
@@ -83,7 +83,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.g.wdLog(['openConversationByID: ', conversation]);
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    console.log('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // console.log('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     if ( conversation ) {
       this.eventSelctedConv.emit(conversation);
     }
@@ -92,14 +92,14 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   private closeMessagePreview() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     this.eventCloseMessagePreview.emit();
   }
   /** */
   ngOnDestroy() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    console.log('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // console.log('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     this.unsubscribe();
   }
 

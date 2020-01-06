@@ -65,7 +65,7 @@
                 }
                 .c21-text {
                     font-family: 'Google Sans';
-                    .c21-text-wellcome {
+                    .c21-text-welcome {
                         overflow: hidden;
                         line-height: 1.2em;
                         max-height: 2.4em;
@@ -134,6 +134,8 @@
         right: 0px;
         background-color: white;
         box-shadow: 0 0px 10px 0px $trasp-light-gray;
+        z-index: 20;
+        border-top: 1px solid $trasp-light-gray;
 
         .c21-powered-by {
             height: 25px;

@@ -121,6 +121,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   lastMsg = false;
 
+  isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+  firstScroll = true;
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -147,7 +150,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
       this.ngZone.run(() => {
-        that.scrollToBottom();
+        //that.scrollToBottom();
       });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
@@ -159,6 +162,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     // console.log('attributes: ', this.g.attributes);
+    //this.scrollToBottom(true);
     setTimeout(() => {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
@@ -169,10 +173,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   ngOnChanges() {
-    // console.log('ngOnChanges');
+    console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      // this.scrollToBottom();
+      //this.scrollToBottom();
     }
   }
 
@@ -210,15 +214,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
 
+
     try {
-      JSON.parse(this.g.customAttributes, (key, value) => {
-        if (key === 'recipient_fullname') {
-          this.g.recipientFullname = value;
-        }
-      });
+      this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
+      // this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
     } catch (error) {
-        this.g.wdLog(['> Error :' + error]);
+      console.log('> Error is handled attributes: ', error);
     }
+
+    // try {
+    //   JSON.parse(this.g.customAttributes, (key, value) => {
+    //     if (key === 'recipient_fullname') {
+    //       this.g.recipientFullname = value;
+    //     }
+    //   });
+    // } catch (error) {
+    //     this.g.wdLog(['> Error :' + error]);
+    // }
   }
 
   onResize(event) {
@@ -412,7 +424,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
-      this.scrollToBottomStart();
+      //this.scrollToBottomStart();
+
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
@@ -479,7 +492,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     });
     this.subscriptions.push(subscriptionisOpenStartRating);
-    console.log('---------------------->', this.subscriptions);
+    //console.log('---------------------->', this.subscriptions);
     // NUOVO MESSAGGIO!!
     /**
      * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
@@ -732,9 +745,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             attributes,
             projectid,
             channelType
-            );
+          );
           this.triggerAfterSendMessageEvent(messageSent);
           this.isNewConversation = false;
+
+          try {
+            const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+            target.value = '';
+            target.style.height = this.HEIGHT_DEFAULT;
+            console.log('target.style.height: ', target.style.height);
+          } catch (e) {
+            this.g.wdLog(['> Error :' + e]);
+          }
           this.restoreTextArea();
       }
   }
@@ -880,25 +902,25 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * chiamato ogni volta che cambia il contenuto della textarea
      */
     resizeInputField() {
-      const target = document.getElementById('chat21-main-message-context');
-      if (!target) {
-          return;
-      }
-      // tslint:disable-next-line:max-line-length
-      //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-      target.style.height = '100%';
-      if ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value === '\n') {
-          //   that.g.wdLog(['PASSO 0');
-          (document.getElementById('chat21-main-message-context') as HTMLInputElement).value = '';
-          target.style.height = this.HEIGHT_DEFAULT;
-      } else if (target.scrollHeight > target.offsetHeight) {
-          //   that.g.wdLog(['PASSO 2');
-          target.style.height = target.scrollHeight + 2 + 'px';
-      } else {
-          //   that.g.wdLog(['PASSO 3');
-          target.style.height = this.HEIGHT_DEFAULT;
-          // segno sto scrivendo
-          // target.offsetHeight - 15 + 'px';
+      try {
+        const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+        // tslint:disable-next-line:max-line-length
+        //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+        target.style.height = '100%';
+        if (target.value === '\n') {
+            target.value = '';
+            target.style.height = this.HEIGHT_DEFAULT;
+        } else if (target.scrollHeight > target.offsetHeight) {
+            target.style.height = target.scrollHeight + 2 + 'px';
+            target.style.minHeight = this.HEIGHT_DEFAULT;
+        } else {
+            //   that.g.wdLog(['PASSO 3');
+            target.style.height = this.HEIGHT_DEFAULT;
+            // segno sto scrivendo
+            // target.offsetHeight - 15 + 'px';
+        }
+      } catch (e) {
+        this.g.wdLog(['> Error :' + e]);
       }
       // tslint:disable-next-line:max-line-length
       //   that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
@@ -915,6 +937,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
+    console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
@@ -950,86 +973,113 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
- scrollToBottomStart() {
-  const that = this;
-  if ( this.isScrolling === false ) {
-    setTimeout(function () {
-      try {
-        that.isScrolling = true;
-        const objDiv = document.getElementById(that.idDivScroll);
-        setTimeout(function () {
-          that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
-          objDiv.scrollIntoView(false);
-          objDiv.style.opacity = '1';
-        }, 200);
-        that.isScrolling = false;
-      } catch (err) {
-        that.g.wdLog(['> Error :' + err]);
-      }
-    }, 0);
-  }
-}
+//  scrollToBottomStart() {
+//   const that = this;
+//   if ( this.isScrolling === false ) {
+//     setTimeout(function () {
+//       try {
+//         that.isScrolling = true;
+//         const objDiv = document.getElementById(that.idDivScroll);
+//         setTimeout(function () {
+//           that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+//           //objDiv.scrollIntoView(false);
+//           objDiv.style.opacity = '1';
+//         }, 200);
+//         that.isScrolling = false;
+//       } catch (err) {
+//         that.g.wdLog(['> Error :' + err]);
+//       }
+//     }, 0);
+//   }
+// }
 
   /**
    * scrollo la lista messaggi all'ultimo
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
- scrollToBottom() {
-  this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
+
+ scrollToBottom(withoutAnimation?: boolean) {
   const that = this;
-  // const divScrollMe = this.scrollMe.nativeElement;
-
-  if ( this.isScrolling === false ) {
-    // const divScrollMe = this.scrollMe.nativeElement;
+   try {
+    that.isScrolling = true;
+    const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+    // const element = objDiv[0] as HTMLElement;
     setTimeout(function () {
-      try {
-        that.isScrolling = true;
-        const objDiv = document.getElementById(that.idDivScroll);
-        setTimeout(function () {
-          try {
-            objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-            that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
-          } catch (err) {
-            that.g.wdLog(['> Error :' + err]);
-          }
-          // objDiv.scrollIntoView(false);
-        }, 0);
-        that.isScrolling = false;
 
-        //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-        // setTimeout(function () {
-        //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-        // }, 500);
-
-        // let checkContentScrollPosition = false;
-        // do {
-        //   setTimeout(function () {
-        //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
-        //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
-        //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
-        //   }, 1000);
-        // }
-        // while (checkContentScrollPosition === false);
-        // that.isScrolling = false;
-
-        //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
-        //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
-        //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
-        // try {
-        //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
-        // } catch ( err ) { }
-        // // that.badgeNewMessages = 0;
-        // console.log(objDiv);
-      } catch (err) {
-          that.g.wdLog(['> Error :' + err]);
-          setTimeout(function () {
-            that.isScrolling = false;
-          }, 0);
-        //that.scrollToBottom();
+      if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+        objDiv.parentElement.classList.add('withoutAnimation');
+      } else {
+        objDiv.parentElement.classList.remove('withoutAnimation');
       }
+      objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+      objDiv.style.opacity = '1';
+      that.firstScroll = false;
     }, 0);
+  } catch (err) {
+    that.g.wdLog(['> Error :' + err]);
   }
-}
+  that.isScrolling = false;
+ }
+
+//  scrollToBottom_old(withoutAnimation?: boolean) {
+//   this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
+//   const that = this;
+//   // const divScrollMe = this.scrollMe.nativeElement;
+
+//   if ( this.isScrolling === false ) {
+//     // const divScrollMe = this.scrollMe.nativeElement;
+//     setTimeout(function () {
+//       try {
+//         that.isScrolling = true;
+//         const objDiv = document.getElementById(that.idDivScroll);
+//         setTimeout(function () {
+//           try {
+//             if (that.isIE === true || withoutAnimation === true) {
+//               objDiv.scrollIntoView(false);
+//             } else {
+//               objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+//             }
+//             that.g.wdLog(['objDiv::', objDiv.scrollHeight]);
+//           } catch (err) {
+//             that.g.wdLog(['> Error :' + err]);
+//           }
+//           // objDiv.scrollIntoView(false);
+//         }, 0);
+//         that.isScrolling = false;
+
+//         //// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+//         // setTimeout(function () {
+//         //   objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+//         // }, 500);
+
+//         // let checkContentScrollPosition = false;
+//         // do {
+//         //   setTimeout(function () {
+//         //     that.g.wdLog(['RIPROVO dopo 1 sec::']);
+//         //     objDiv.scrollIntoView({behavior: 'smooth', block: 'end'});
+//         //     checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+//         //   }, 1000);
+//         // }
+//         // while (checkContentScrollPosition === false);
+//         // that.isScrolling = false;
+
+//         //   that.g.wdLog(['checkContentScrollPosition ::', this.divScrollMe);
+//         //   that.g.wdLog(['divScrollMe.diff ::', this.divScrollMe.scrollHeight - this.divScrollMe.scrollTop);
+//         //   that.g.wdLog(['divScrollMe.clientHeight ::', this.divScrollMe.clientHeight);
+//         // try {
+//         //   this.divScrollMe.nativeElement.scrollToTop = this.divScrollMe.nativeElement.scrollHeight;
+//         // } catch ( err ) { }
+//         // // that.badgeNewMessages = 0;
+//         // console.log(objDiv);
+//       } catch (err) {
+//           that.g.wdLog(['> Error :' + err]);
+//           setTimeout(function () {
+//             that.isScrolling = false;
+//           }, 0);
+//       }
+//     }, 0);
+//   }
+// }
 
   // ========= end:: functions scroll position ======= //
 
@@ -1134,7 +1184,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 };
             }
             this.g.wdLog(['metadata -------> ', metadata]);
-            this.scrollToBottom();
+            //this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
@@ -1173,7 +1223,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                     message = 'Image: ' + metadata.src;
                 }
                 that.sendMessage(message, type_message, metadata);
-                // that.scrollToBottom();
                 that.isFilePendingToUpload = false;
                 // return downloadURL;
             })
@@ -1203,7 +1252,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           sizeImage.width = MAX_WIDTH_IMAGES;
           sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
       }
-      // this.scrollToBottom();
       return sizeImage; // h.toString();
   }
 
@@ -1295,7 +1343,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //     // message.metadata.uid = message.uid;
   //       that.g.wdLog(['addLocalMessageImage: ', this.messages);
   //     this.isSelected = true;
-  //     this.scrollToBottom();
   // }
 
   // ========= end:: functions send image ======= //

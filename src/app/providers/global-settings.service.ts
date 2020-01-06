@@ -307,7 +307,7 @@ export class GlobalSettingsService {
                 divTiledeskiframe.style.left =  '0px';
             }
         } else if (this.globals.align === 'right') {
-            console.log('this.globals.isMobile RIGHT' + this.globals.isMobile);
+            // console.log('this.globals.isMobile RIGHT' + this.globals.isMobile);
             if (this.globals.isMobile === false) {
                 divTiledeskiframe.style.right =  this.globals.marginX;
             } else {
@@ -319,7 +319,7 @@ export class GlobalSettingsService {
         } else {
             divTiledeskiframe.style.bottom =  '0px';
         }
-        console.log('this.globals.fullscreenMode' + this.globals.fullscreenMode);
+        // console.log('this.globals.fullscreenMode' + this.globals.fullscreenMode);
         if (this.globals.fullscreenMode === true) {
             divTiledeskiframe.style.left = 0;
             divTiledeskiframe.style.right = 0;
@@ -582,17 +582,17 @@ export class GlobalSettingsService {
             globals.logoChat = TEMP;
             // globals.setParameter('logoChat', TEMP);
         }
-        TEMP = tiledeskSettings['wellcomeTitle'];
-        // this.globals.wdLog(['29 - wellcomeTitle:: ', TEMP);
+        TEMP = tiledeskSettings['welcomeTitle'];
+        // this.globals.wdLog(['29 - welcomeTitle:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.wellcomeTitle = TEMP;
-            // globals.setParameter('wellcomeTitle', TEMP);
+            globals.welcomeTitle = TEMP;
+            // globals.setParameter('welcomeTitle', TEMP);
         }
-        TEMP = tiledeskSettings['wellcomeMsg'];
-        // this.globals.wdLog(['30 - wellcomeMsg:: ', TEMP);
+        TEMP = tiledeskSettings['welcomeMsg'];
+        // this.globals.wdLog(['30 - welcomeMsg:: ', TEMP);
         if (TEMP !== undefined) {
-            globals.wellcomeMsg = TEMP;
-            // globals.setParameter('wellcomeMsg', TEMP);
+            globals.welcomeMsg = TEMP;
+            // globals.setParameter('welcomeMsg', TEMP);
         }
         TEMP = tiledeskSettings['autoStart'];
         // this.globals.wdLog(['31 - autoStart:: ', TEMP);
@@ -726,9 +726,9 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.calloutTimer = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('wellcomeMsg');
+        TEMP = el.nativeElement.getAttribute('welcomeMsg');
         if (TEMP !== null) {
-            this.globals.wellcomeMsg = TEMP;
+            this.globals.welcomeMsg = TEMP;
         }
         TEMP = el.nativeElement.getAttribute('calloutTitle');
         if (TEMP !== null) {
@@ -746,9 +746,9 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.logoChat = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('wellcomeTitle');
+        TEMP = el.nativeElement.getAttribute('welcomeTitle');
         if (TEMP !== null) {
-            this.globals.wellcomeTitle = TEMP;
+            this.globals.welcomeTitle = TEMP;
         }
         TEMP = el.nativeElement.getAttribute('autoStart');
         if (TEMP !== null) {
@@ -868,9 +868,9 @@ export class GlobalSettingsService {
             globals.marginY = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeMsg');
+        TEMP = getParameterByName(windowContext, 'tiledesk_welcomeMsg');
         if (TEMP) {
-            globals.wellcomeMsg = stringToBoolean(TEMP);
+            globals.welcomeMsg = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_callouttitle');
@@ -905,9 +905,9 @@ export class GlobalSettingsService {
             globals.logoChat = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_wellcomeTitle');
+        TEMP = getParameterByName(windowContext, 'tiledesk_welcomeTitle');
         if (TEMP) {
-            globals.wellcomeTitle = stringToBoolean(TEMP);
+            globals.welcomeTitle = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_autoStart');

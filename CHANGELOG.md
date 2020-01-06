@@ -1,5 +1,19 @@
 # chat21-web-widget ver 3.0
 
+### 3.0.27
+- new: window.tiledesk.showCallout()  // open callout window if widget is closed
+- bug fix: deleted hexadecimal with transparency x IE for display the border of the widget 
+- bug fix: deleted min height widget
+- bug fix: widget fullscreen con bordi netti
+- bug fix: added css .rowMsg; 
+- bug fix: changed customAttributes in json
+- bug fix: changed name variables to customAttributes
+- bug fix: changed wellcome in welcome
+- bug fix: restoreTextArea (reset heigth text area on send message)
+- bug fix: first scrollToBottom() 
+- bug fix: add animation scrollToBottom
+- bug fix: refactoring scrollToBottom()
+
 ### 3.0.26
 - new: added parameter 'departmentID' 
 
@@ -14,11 +28,11 @@
 - bug fix: custom auth in launch.js (function commented)
 
 ### 3.0.21
-- bug fix:  c21-text-wellcome change font 3.0em
+- bug fix:  c21-text-welcome change font 3.0em
 - new: updated changelog
 
 ### 3.0.20
-- bug fix:  c21-text-wellcome change font 3.0em
+- bug fix:  c21-text-welcome change font 3.0em
 - new: changed options icon
 - new: changed animation fade-in-dw-up
 - new: animation in  hp only on open widget

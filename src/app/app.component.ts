@@ -211,7 +211,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
        const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
-                    console.log('obsSettingsService');
+                    // console.log('obsSettingsService');
                     // console.log('---------------- obsSettingsService ---------------- ');
                     // ------------------------------- //
                     /** INIT  */
@@ -349,6 +349,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (senderId) {
             attributes['requester_id'] = senderId;
         }
+        try {
+            attributes['payload'] = this.g.customAttributes.payload;
+        } catch (error) {
+            this.g.wdLog(['> Error is handled payload: ', error]);
+        }
+
         // this.storageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
         // console.log(' ---------------- setAttributes ---------------- ', attributes);
@@ -684,6 +690,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
+            /** show callout */
+            windowContext['tiledesk'].showCallout = function () {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.showCallout();
+                });
+            };
+
         }
     }
 
@@ -871,6 +884,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.signOut();
     }
 
+    /** show callout */
+    private showCallout() {
+        if (this.g.isOpen === false) {
+            this.g.setParameter('displayEyeCatcherCard', 'block');
+            this.triggerOnOpenEyeCatcherEvent();
+        }
+    }
 
     // ========= end:: COMPONENT TO WINDOW ============//
 
@@ -1092,7 +1112,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenConversation = true;
             }
         }
-        console.log('this.g.departmentID' + this.g.departmentID + ' isOpenSelectionDepartment:' + this.isOpenSelectionDepartment);
+        // console.log('this.g.departmentID' + this.g.departmentID + ' isOpenSelectionDepartment:' + this.isOpenSelectionDepartment);
         this.startNwConversation();
     }
 

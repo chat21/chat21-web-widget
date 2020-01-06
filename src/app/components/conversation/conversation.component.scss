@@ -4,6 +4,14 @@
 @import '../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
+
+#scroll-me {
+    scroll-behavior: smooth;
+}
+#scroll-me.withoutAnimation {
+    scroll-behavior: unset;
+}
+
 // ============= CSS #chat21-conversation-component ================= //
 #chat21-conversation-component {
     // background-color: #ffffff;
@@ -94,6 +102,12 @@
                 }
             }
         }
+    }
+
+    .rowMsg{
+        position: relative;
+        height: auto;
+        display: block;
     }
     // .c21-header-button:hover {
     //     background-color: rgba(0, 0, 0, 0.4);
@@ -324,7 +338,6 @@
     padding: 0;
     box-shadow: 0 -1px 0px 0px $trasp-light-gray;
     background: white;
-
 
     .visible-text-area {
         // display: block;

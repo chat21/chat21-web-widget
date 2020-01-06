@@ -51,9 +51,9 @@ You can customize the widget passing these parameters to  window.tiledeskSetting
 
 * **userEmail**: Current user email address. Set this parameter to specify the visitor email address.
 
-* **wellcomeTitle**: The welcome title to show on the widget home page.
+* **welcomeTitle**: The welcome title to show on the widget home page.
 
-* **wellcomeMsg**: Set the widget welcome message. Value type : string
+* **welcomeMsg**: Set the widget welcome message. Value type : string
 
 * **widgetTitle**: Set the widget title label shown in the widget header. Value type : string. The default value is Tiledesk.
 
@@ -214,7 +214,7 @@ Important payload of event_data:
 <script type="application/javascript">    
       window.tileDeskAsyncInit = function() {
        window.tiledesk.on('loadParams', function(event_data) {
-         window.tiledeskSettings.wellcomeMsg = " Hello at: " + new Date().toLocaleString();
+         window.tiledeskSettings.welcomeMsg = " Hello at: " + new Date().toLocaleString();
        });
       }
 </script>

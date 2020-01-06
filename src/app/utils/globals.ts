@@ -100,9 +100,9 @@ export class Globals {
   BUTTON_EDIT_PROFILE: string;
   BUTTON_DOWNLOAD_TRANSCRIPT: string;
   RATE_CHAT: string;
-  WELLCOME_TITLE: string;
-  WELLCOME_MSG: string;
-  WELLCOME: string;
+  WELCOME_TITLE: string;
+  WELCOME_MSG: string;
+  WELCOME: string;
   OPTIONS: string;
   SOUND_ON: string;
   SOUND_OFF: string;
@@ -152,8 +152,8 @@ export class Globals {
    allowTranscriptDownload: boolean;
    poweredBy: string;
    logoChat: string;
-   wellcomeTitle: string;
-   wellcomeMsg: string;
+   welcomeTitle: string;
+   welcomeMsg: string;
    recipientId: String;
    recipientFullname: String;
    userId: string;
@@ -174,7 +174,7 @@ export class Globals {
    online_msg: string;
    offline_msg: string;
 
-   customAttributes: string;
+   customAttributes: any;
    hideAttachButton: boolean;
 
    isOpenNewMessage: boolean;
@@ -386,13 +386,13 @@ export class Globals {
       'isOpen': this.isOpen, 'channelType': this.channelType,
       'lang': this.lang, 'calloutTimer': this.calloutTimer,
       'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
-      'wellcomeMsg': this.wellcomeMsg, 'calloutTitle': this.calloutTitle,
+      'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
       'autoStart': this.autoStart, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
-      'wellcomeTitle': this.wellcomeTitle, 'marginX': this.marginX,
+      'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
