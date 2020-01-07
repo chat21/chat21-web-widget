@@ -707,9 +707,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
-          const attributes = this.g.attributes;
-          for (const [key, value] of Object.entries(additional_attributes)) {
-            attributes[key] = value
+          const g_attributes = this.g.attributes;
+          var attributes = {}
+          if (g_attributes) {
+            for (const [key, value] of Object.entries(g_attributes)) {
+              attributes[key] = value
+            }
+          }
+          if (additional_attributes) {
+            for (const [key, value] of Object.entries(additional_attributes)) {
+              attributes[key] = value
+            }
           }
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;

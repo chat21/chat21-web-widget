@@ -1,6 +1,6 @@
-npm version prerelease --preid=beta
-version=`node -e 'console.log(require("./package.json").version)'`
-echo "version $version"
+# npm version prerelease --preid=beta
+# version=`node -e 'console.log(require("./package.json").version)'`
+# echo "version $version"
 
 # environment=$(< current_version.ts)
 # start="CURR_VER_PROD = '"

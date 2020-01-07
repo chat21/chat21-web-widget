@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 3.0.28
+- new: adds the ability to send a hidden message to start the conversation
+
 ### 3.0.27
 - new: window.tiledesk.showCallout()  // open callout window if widget is closed
 - bug fix: deleted hexadecimal with transparency x IE for display the border of the widget 
