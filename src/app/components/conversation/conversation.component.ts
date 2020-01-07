@@ -141,6 +141,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
+    this.g.wdLog([' constructor: sending first message ']);
+    this.sendMessage("hi", "text", null, {"subtype": "info"}) // {"subtype": "info"}
     // this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
   }
 
@@ -208,8 +210,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.initializeChatManager();
 
 
-    this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
-    this.setAvailableAgentsStatus();
+    // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    // this.setAvailableAgentsStatus();
 
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
@@ -698,13 +700,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param msg
      * @param type
      * @param metadata
+     * @param attributes
      */
-    sendMessage(msg, type, metadata?) {
+    sendMessage(msg, type, metadata?, additional_attributes?) { //sponziello
       (metadata) ? metadata = metadata : metadata = '';
-      this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
+      this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const attributes = this.g.attributes;
+          for (const [key, value] of Object.entries(additional_attributes)) {
+            attributes[key] = value
+          }
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
           const userFullname = this.g.userFullname;
