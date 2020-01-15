@@ -205,8 +205,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
       }
-      // this.g.wdLog([' --------scrollToBottom-------- ']);
-      // this.scrollToBottom();
     }, 1000);
 
   }
@@ -562,8 +560,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
         that.g.wdLog(['1-------', that.isNwMsg]);
+        that.scrollToBottom(true);
         setTimeout(function () {
-          that.scrollToBottom();
           // if (that.isNwMsg === true) {
           //   that.playAudioMessage(newMessage);
           // }
@@ -574,19 +572,19 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         if (checkContentScrollPosition) {
           that.g.wdLog(['2-------', that.isNwMsg]);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+          that.scrollToBottom();
           setTimeout(function () {
             if (that.isNwMsg === true) {
               that.playAudioMessage(newMessage);
             }
-            that.scrollToBottom();
           }, 200);
         } else {
           that.g.wdLog(['3-------']);
+          that.scrollToBottom();
           setTimeout(function () {
             if (that.isNwMsg === true) {
               that.playAudioMessage(newMessage);
             }
-            that.scrollToBottom();
           }, 200);
           // that.NUM_BADGES++;
           // that.soundMessage();
@@ -608,7 +606,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // that.g.wdLog(['4------- newMessage: ' + newMessage + ' that.lastMsg: ' + that.lastMsg]);
     this.g.wdLog(['1------- playAudioMessage', newMessage]);
     const that = this;
-    that.scrollToBottom();
+    // that.scrollToBottom();
     this.g.wdLog(['---------scrollo sino alla fine prima di cambiare il focus e attivare l autoplay']);
     if (newMessage && newMessage.text ) {
       this.g.wdLog(['4------- controllo focus']);
@@ -622,7 +620,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
               messaggio += 'messaggio ricevuto da operatore: ' + that.g.recipientFullname;
               altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
               //testFocus.focus(); //dopo il focus c'è tutta la view si sposta in su di qualche px
-              that.playPausaAudioMsg(newMessage.uid);
+              //that.playPausaAudioMsg(newMessage.uid);
               that.g.wdLog([' --------setTimeout-------- 6']);
             }
           }, 1000);
@@ -1042,18 +1040,25 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
-    // console.log('onScroll: ', event);
+    const that = this;
     this.startScroll = false;
-    if (this.scrollMe) {
-      const divScrollMe = this.scrollMe.nativeElement;
-      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-      if (checkContentScrollPosition) {
-        this.showButtonToBottom = false;
-        this.NUM_BADGES = 0;
-      } else {
-        this.showButtonToBottom = true;
+    setTimeout(function () {
+      // console.log('onScroll: ', event);
+      if (that.scrollMe) {
+        const divScrollMe = that.scrollMe.nativeElement;
+        // console.log(divScrollMe.scrollTop);
+        // console.log(event);
+        // console.log(divScrollMe.scrollHeight);
+        if (!divScrollMe) { return; }
+        const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+        if (checkContentScrollPosition) {
+          that.showButtonToBottom = false;
+          that.NUM_BADGES = 0;
+        } else {
+          that.showButtonToBottom = true;
+        }
       }
-    }
+    }, 100);
   }
 
   /**
@@ -1104,6 +1109,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       that.isScrolling = true;
       const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
       // const element = objDiv[0] as HTMLElement;
+      if (!objDiv) { return; }
       setTimeout(function () {
         console.log('objDiv.scrollHeight: ' + objDiv.scrollHeight);
         console.log('objDiv.clientHeight: ' + objDiv.parentElement.clientHeight);

@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 3.0.19-beta.25
+- bug fixed: auto stop audio on last message recived
+
 ### 3.0.19-beta.24
 - bug fixed: restoreTextArea (reset heigth text area on send message)
 
