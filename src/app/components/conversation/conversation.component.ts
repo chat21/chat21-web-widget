@@ -708,7 +708,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const g_attributes = this.g.attributes;
-          var attributes = {}
+          var attributes = <any>{} // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}' 
           if (g_attributes) {
             for (const [key, value] of Object.entries(g_attributes)) {
               attributes[key] = value
