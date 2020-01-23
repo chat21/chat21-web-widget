@@ -31,11 +31,58 @@ With Chat21-web-widget you can:
 
 * Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
 * Move to the downloaded project path ```cd <YOUR_PATH>```
-* Compile the project with ```npm install```
 
-[For Installing the Widget on your web site read the guide on Tiledesk site](https://www.tiledesk.com)
+## Dev configuration 
 
+Configure the environment.ts file in `src/environments/`.
+Use the Firebase configuration file from your Firebase project to correctly configure the 'firebase' section.
 
+#### environment.ts
+```typescript
+export const environment = {
+  production: true,
+  version: require('../../package.json').version,
+  remoteConfig: false, // for performance don't load settings from remote
+  firebase: {
+    apiKey: 'CHANGEIT',
+    authDomain: 'CHANGEIT',
+    databaseURL: 'CHANGEIT',
+    projectId: 'CHANGEIT',
+    storageBucket: 'CHANGEIT',
+    messagingSenderId: 'CHANGEIT'
+  },
+  apiUrl: 'https://<YOUR_TILEDESK_SERVER>/',
+  tenant: 'tilechat',
+  defaultLang : 'en',
+  shemaVersion : '1'
+};
+
+```
+### RUN in dev
+
+Run the app with `ng serve`
+
+## Prod configuration
+
+For production installation, configure the environment.prod.ts file in `src/environments/`.
+
+#### environment.prod.ts
+```typescript
+export const environment = {
+  production: true,
+  ...
+};
+
+```
+
+# Build for production
+ 
+Run `ng build --prod --base-href ./`
+
+# Deploy
+
+## Deploy to a Web Server
+Copy the content of the dist folder to your Web Server (for example Apache or Nginx)
 
 ## Development server
 
@@ -46,8 +93,8 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Build for production with :  `ng build --prod --base-href --output-hashing none`
 
-## Widget in action 
-To see this widget in action you can go on 'https://www.tiledesk.com'
+## Widget in action
+You can see a configuration of this widget in action on 'https://www.tiledesk.com'
 
 # Deploy
 ## Deploy to a web Server
