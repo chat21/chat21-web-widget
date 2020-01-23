@@ -23,13 +23,12 @@ With Chat21-web-widget you can:
 # Prerequisites #
 * Install Git
 * Install Angular CLI with  `npm install -g @angular/cli`. More info here https://github.com/angular/angular-cli#installation
-* A Firebase project. Create one free on `https://firebase.google.com`
+* Create a Firebase project. Create one free on `https://firebase.google.com`
 * "Chat21 Firebase cloud functions" installed. Instructions:`https://github.com/chat21/chat21-cloud-functions`
-
 
 # Installation
 
-* Clone the repository with : ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
+* Clone the repository from master (or use a tagged release) with command: ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
 * Move to the downloaded project path ```cd <YOUR_PATH>```
 
 ## Dev configuration 
