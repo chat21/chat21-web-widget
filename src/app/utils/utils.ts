@@ -245,12 +245,12 @@ export function convertColorToRGBA(color, opacity) {
 }
 
 
-export function setLanguage(windowContext, translatorService) {
-  if (translatorService.getBrowserLanguage(windowContext)) {
-    return translatorService.getBrowserLanguage(windowContext);
-  }
-  return translatorService.getDefaultLanguage(windowContext);
-}
+// export function setLanguage(windowContext, translatorService) {
+//   if (translatorService.getBrowserLanguage(windowContext)) {
+//     return translatorService.getBrowserLanguage(windowContext);
+//   }
+//   return translatorService.getDefaultLanguage(windowContext);
+// }
 
 export function getParameterByName(windowContext: any, name: String) {
   const url = windowContext.location.href;

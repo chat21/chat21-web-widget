@@ -24,7 +24,7 @@ export class Globals {
   POWERED_BY = '<a tabindex="-1" target="_blank" href="http://www.tiledesk.com/">Powered by <b>TileDesk</b></a>';
 
   DEFAULT_LOGO_CHAT = '/assets/images/tiledesk_logo_white_small.png';
-  WIDGET_TITLE = 'TileDesk';
+  WIDGET_TITLE = 'Tiledesk';
 
   // private parameters = {};
   // private default_settings;
