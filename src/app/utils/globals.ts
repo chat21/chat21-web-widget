@@ -155,6 +155,7 @@ export class Globals {
    welcomeTitle: string;
    welcomeMsg: string;
    recipientId: String;
+   newConversationStart: boolean;
    recipientFullname: String;
    userId: string;
    userPassword: string;
@@ -175,6 +176,7 @@ export class Globals {
    offline_msg: string;
 
    customAttributes: any;
+   startMessage: any;
    hideAttachButton: boolean;
 
    isOpenNewMessage: boolean;
@@ -279,6 +281,15 @@ export class Globals {
     /** set margin bottom widget */
     this.isLogEnabled = false;
     // this.parameters['isLogEnabled'] = false;
+    this.startMessage = {
+      text: "hello",
+      type: "text",
+      attributes: {
+        subtype: "info"
+      },
+      metadata: {}
+    }
+    /** startMessage: The message to start a support conversation. */
 
     this.filterByRequester = false;
     /** show conversations with conversation.attributes.requester_id == user.uid */

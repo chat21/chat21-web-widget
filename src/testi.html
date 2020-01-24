@@ -59,23 +59,14 @@
                   // showAvailableAgents: false,                 /** true/false **/
                   // showLogoutOption: false,                    /** true/false **/
                   // showWidgetNameInConversation: true,    
-                  customAttributes: {
-                    url_audiorepo: "http://localhost:3000", //"https://egov2-dev.comune.bari.it/node",
-                    proxy_url: "https://baribot.herokuapp.com/proxy", 
-                    agent: "supporto-anagrafe-vcqvkb", 
-                    recipient: "supporto-anagrafe-vcqvkb", 
-                    recipient_fullname: "Hal 9000", 
-                    button_label: "Ask the bot", 
-                    welcome_image: "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", 
-                    welcome_summary: "Hello, I'm your Virtual Assistant, powered by Dialogflow. To get help push \'Ask the bot\'",
-                    start_hidden_message: "__start",
-                    payload: {
-                      codiceFiscale: "SPNNDR", 
-                      firstname: "Andrea",
-                      lastname: "Sponziello"
-                    }
+                  startMessage: {
+                    text: "hello",
+                    type: "text",
+                    attributes: {
+                      subtype: "info"
+                    },
+                    metadata: {}
                   },
-                  //customAttributes: '{"url_proxy": "https://bariapp.herokuapp.com/proxy", "agent": "supporto-anagrafe-vcqvkb", "recipient": "bari_bot", "recipient_fullname": "Hal 9000", "button_label": "Chiedi a Ernesto", "immagine_benvenuto": "https://user-images.githubusercontent.com/9556761/64190907-aec3ac00-ce77-11e9-8ce7-8935e43d15cb.png", "messaggio_benvenuto": "Ciao, mi chiamo Ernesto e sono il tuo assistente virtuale sul sito della Città Metropolitana di Bari. Per richiedere il mio aiuto premi il pulsante \'Chiedi a Ernesto\'"}',
                   hideAttachButton: false, // nasconde il pulsante allegati 
                   departmentID: '5d9db0698d26040017fa5d9d' /** l'id di un dipartimento esistente **/
  

@@ -1049,6 +1049,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
         this.g.setParameter('isOpenPrechatForm', false);
+        this.g.newConversationStart = false
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
 
@@ -1084,6 +1085,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnNewConversation() {
          this.g.wdLog(['returnNewConversation in APP COMPONENT']);
+         this.g.newConversationStart = true
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
         const preChatForm = this.g.preChatForm;
@@ -1156,6 +1158,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close all-conversation
      */
     private returnCloseAllConversation() {
+        console.log("Close all conversation")
         const isOpenHomeTEMP = this.isOpenHome;
         const isOpenConversationTEMP = this.isOpenConversation;
         this.isOpenHome = false;

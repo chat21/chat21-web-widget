@@ -142,8 +142,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
     this.g.wdLog([' constructor: sending first message ']);
-    this.sendMessage("hi", "text", null, {"subtype": "info"}) // {"subtype": "info"}
-    // this.soundMessage(); // SOLO UN TEST DA ELIMINARE!!!
+    console.log("get newconv " + this.g.newConversationStart)
+    if (this.g.newConversationStart == true) {
+      console.log("CONVERSATION IS NEW!")
+      // this.g.setParameter('newConversationStart', null)
+      this.g.newConversationStart = false
+      console.log("reset newconv " + this.g.newConversationStart)
+      console.log("start message ", this.g.startMessage)
+      var start_message = this.g.startMessage
+      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes) // {"subtype": "info"}  //sponziello
+    }
   }
 
   ngOnInit() {
@@ -209,7 +217,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     this.initializeChatManager();
 
-
+    // sponziello, commentato
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     // this.setAvailableAgentsStatus();
 
@@ -700,13 +708,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param msg
      * @param type
      * @param metadata
-     * @param attributes
+     * @param additional_attributes
      */
     sendMessage(msg, type, metadata?, additional_attributes?) { //sponziello
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
+           //sponziello
           const g_attributes = this.g.attributes;
           var attributes = {}
           if (g_attributes) {
@@ -719,6 +728,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
               attributes[key] = value
             }
           }
+           //fine-sponziello
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
           const userFullname = this.g.userFullname;
@@ -741,8 +751,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             recipientFullname = userFullname;
           } else if (userEmail) {
             recipientFullname = userEmail;
-          } else if (attributes && attributes.userFullname) {
-            recipientFullname = attributes.userFullname;
+          } else if (attributes && attributes["userFullname"]) {
+            recipientFullname = attributes["userFullname"];
           } else {
             recipientFullname = this.g.GUEST_LABEL;
           }

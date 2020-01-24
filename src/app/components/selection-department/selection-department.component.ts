@@ -153,6 +153,12 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
         this.g.wdLog([' closePage:  SelectDepartment']);
         this.eventClosePage.emit();
     }
+    
+    cancelPage() {
+        this.g.wdLog([' cancelPage:  SelectDepartment']);
+        this.g.newConversationStart = false
+        this.eventClosePage.emit();
+    }
     // ========= end:: ACTIONS ============//
 
 }
