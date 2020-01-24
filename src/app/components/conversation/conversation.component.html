@@ -50,7 +50,16 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                 <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
                      <span>{{g.widgetTitle}}</span>
                      <!-- <span>{{g.recipientFullname}}</span> -->
-                    <span id="agent-available-status">{{g.areAgentsAvailableText}}</span>
+                    <span id="agent-available-status">
+                        <!-- {{g.areAgentsAvailableText}} -->
+                    
+                        <span *ngIf="g.availableAgents.length <= 0"> 
+                            {{g?.AGENT_NOT_AVAILABLE }} 
+                        </span>
+                        <span *ngIf="g.availableAgents.length > 0"> 
+                            {{g?.AGENT_AVAILABLE}} 
+                        </span>
+                    </span>
                 </div>
                 <p class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
 

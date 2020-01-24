@@ -58,6 +58,7 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { LastMessageComponent } from './components/last-message/last-message.component';
 
+import { TranslateModule } from '@ngx-translate/core';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -107,7 +108,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       storageType: 'localStorage'
      }),
     MomentModule,
-    AngularResizedEventModule
+    AngularResizedEventModule,
+    TranslateModule.forRoot(),
   ],
   providers: [
     AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/

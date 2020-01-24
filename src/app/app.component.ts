@@ -27,8 +27,9 @@ import 'firebase/app';
 import { environment } from '../environments/environment';
 
 // utils
-import { getImageUrlThumb, strip_tags, isPopupUrl, popupUrl, detectIfIsMobile,
-    setLanguage, supports_html5_storage } from './utils/utils';
+// setLanguage,
+// getImageUrlThumb, 
+import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
 import { AppConfigService } from './providers/app-config.service';
 
@@ -37,7 +38,6 @@ import { GlobalSettingsService } from './providers/global-settings.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
 
 // import { TranslationLoader } from './translation-loader';
-
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -242,7 +242,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.addComponentToWindow(this.ngZone);
 
          /** TRANSLATION LOADER: */
-         this.translatorService.translate(this.g);
+        //  this.translatorService.translate(this.g);
+        this.translatorService.initI18n().then((result) => { 
+
+            console.log(`»»»» APP-COMPONENT.TS initI18n result'`, result);
+            this.translatorService.translate(this.g);
+        })
 
          /** SET ATTRIBUTES */
          const attributes = this.setAttributesFromStorageService();

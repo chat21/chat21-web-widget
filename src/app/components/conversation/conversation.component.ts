@@ -33,6 +33,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import { AppComponent } from '../../app.component';
 import { StorageService } from '../../providers/storage.service';
 import { DepartmentModel } from '../../../models/department';
+// import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'tiledeskwidget-conversation',
@@ -120,6 +121,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========== end:: icon status message
 
   lastMsg = false;
+  // _LABEL_PLACEHOLDER: string;
 
   isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
   firstScroll = true;
@@ -137,7 +139,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public appComponent: AppComponent,
     public storageService: StorageService,
     public conversationsService: ConversationsService,
-    public appConfigService: AppConfigService
+    public appConfigService: AppConfigService,
+    // private translate: TranslateService
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
@@ -159,7 +162,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.setFocusOnId('chat21-main-message-context');
     // this.attributes = this.setAttributes();
     this.updateConversationBadge();
+    // this.getTranslation();
   }
+
+
+  // getTranslation() {
+  //   this.translate.get('LABEL_PLACEHOLDER')
+  //     .subscribe((text: string) => {
+  //       this._LABEL_PLACEHOLDER = text; 
+  //     });
+  // }
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
@@ -263,10 +275,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.offline_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
+      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;  // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template 
     } else {
       this.addFirstMessage(this.g.online_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;  // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template 
     }
 
     if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
