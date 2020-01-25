@@ -727,7 +727,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
-           //sponziello
+           //sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
           const g_attributes = this.g.attributes;
           var attributes = <any>{} // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}' 
           if (g_attributes) {
