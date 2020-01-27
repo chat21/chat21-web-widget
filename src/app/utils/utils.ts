@@ -1,6 +1,7 @@
 import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
 import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
+import { environment } from '../../environments/environment';
 
 /**
  * calcolo il tempo trascorso tra due date
@@ -244,12 +245,12 @@ export function convertColorToRGBA(color, opacity) {
 }
 
 
-export function setLanguage(windowContext, translatorService) {
-  if (translatorService.getBrowserLanguage(windowContext)) {
-    return translatorService.getBrowserLanguage(windowContext);
-  }
-  return translatorService.getDefaultLanguage(windowContext);
-}
+// export function setLanguage(windowContext, translatorService) {
+//   if (translatorService.getBrowserLanguage(windowContext)) {
+//     return translatorService.getBrowserLanguage(windowContext);
+//   }
+//   return translatorService.getDefaultLanguage(windowContext);
+// }
 
 export function getParameterByName(windowContext: any, name: String) {
   const url = windowContext.location.href;
@@ -293,7 +294,7 @@ export function compareValues(key, order = 'asc') {
  * @param uid
  */
 export function getImageUrlThumb(uid: string) {
-  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
+  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + environment.firebase.storageBucket + '/o/' + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }
 

@@ -130,7 +130,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
-    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
+    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV; // IN THE TEMPLATE REPLACED LABEL_START_NW_CONV WITH g.LABEL_START_NW_CONV
     this.listConversations = [];
     this.archivedConversations = [];
     this.waitingTime = -1;

@@ -77,7 +77,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     this.g.wdLog(['initialize: ListConversationsComponent']);
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
-    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV;
+    this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV; // is used ?? LABEL_START_NW_CONV there isn't in the template
     this.subscriptions = [];
     this.listConversations = [];
     this.archivedConversations = [];

@@ -644,6 +644,12 @@ export class GlobalSettingsService {
             globals.customAttributes = TEMP;
         }
 
+        TEMP = tiledeskSettings['startMessage'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['40 - startMessage:: ', TEMP]);
+            globals.startMessage = TEMP;
+        }
+
         TEMP = tiledeskSettings['hideAttachButton'];
         if (TEMP !== undefined) {
             globals.hideAttachButton = (TEMP === true) ? true : false;
@@ -979,10 +985,11 @@ export class GlobalSettingsService {
             globals.fullscreenMode = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
+        TEMP = getParameterByName(windowContext, 'tiledesk_startMessage');
         if (TEMP) {
-            globals.customAttributes = stringToBoolean(TEMP);
-            this.globals.wdLog(['globals.customAttributes: ' + globals.customAttributes]);
+            console.log("MESSAGE::: " + TEMP)
+            globals.startMessage = JSON.parse(TEMP);
+            this.globals.wdLog(['globals.startMessage: ' + globals.startMessage]);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_hideAttachButton');

@@ -145,7 +145,34 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
-        // console.log('message[timestamp]: ', message['timestamp']);
+        
+        // SPONZIELLO PATCH // forces update of userFullname from remote command
+        console.log("Sponziello patch")
+        console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
+
+        
+        var saved_conversations_attributes_STRING = that.storageService.getItem('attributes')
+        var saved_conversations_attributes = {}
+        if (saved_conversations_attributes_STRING != null) {
+          saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING)
+        }
+        console.log("saved_conversations_attributes: " , saved_conversations_attributes)
+        
+        if (message['attributes'] && message['attributes']['updateUserFullname']) {
+          console.log("message->updateUserFullname! " , message['attributes']['updateUserFullname'])
+          let userFullname = message['attributes']['updateUserFullname']
+          saved_conversations_attributes['userFullname'] = userFullname
+          console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
+          that.g.userFullname = userFullname
+          that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
+        }
+        if (message['attributes'] && message['attributes']['updateUserEmail']) {
+          let userEmail = message['attributes']['updateUserEmail']
+          saved_conversations_attributes['userEmail'] = userEmail
+          that.g.userEmail = userEmail
+          that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
+        }
+        // end SPONZIELLO PATCH
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],

@@ -9,17 +9,17 @@
 export const environment = {
   production: false,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
-  remoteConfig: true,
+  remoteConfig: false,
   remoteConfigUrl: '/firebase-config.json',
   firebase: {
-    apiKey: 'CHANGEIT',
-    authDomain: 'CHANGEIT',
-    databaseURL: 'CHANGEIT',
-    projectId: 'CHANGEIT',
-    storageBucket: 'CHANGEIT',
-    messagingSenderId: 'CHANGEIT'
+    apiKey: 'AIzaSyCoWXHNvP1-qOllCpTshhC6VjPXeRTK0T4',
+    authDomain: 'chat21-pre-01.firebaseapp.com',
+    databaseURL: 'https://chat21-pre-01.firebaseio.com',
+    projectId: 'chat21-pre-01',
+    storageBucket: 'chat21-pre-01.appspot.com',
+    messagingSenderId: '77360455507'
   },
-  apiUrl: 'https://api.tiledesk.com/v1/',
+  apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   tenant: 'tilechat',
   defaultLang : 'en',
   shemaVersion : '1'
