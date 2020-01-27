@@ -709,7 +709,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
         this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
-          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+        console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -1043,9 +1043,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    try {
     that.isScrolling = true;
     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+    if (!objDiv) {
+      return;
+    }
     // const element = objDiv[0] as HTMLElement;
     setTimeout(function () {
-
       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
         objDiv.parentElement.classList.add('withoutAnimation');
       } else {
