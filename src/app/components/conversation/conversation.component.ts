@@ -508,17 +508,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
         that.g.wdLog(['1-------']);
-        setTimeout(function () {
-          that.scrollToBottom();
-        }, 200);
+        that.scrollToBottom(true);
+        // setTimeout(function () {
+        // }, 200);
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
           that.g.wdLog(['2-------']);
+          that.scrollToBottom();
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
-            that.scrollToBottom();
           }, 0);
         } else {
           that.g.wdLog(['3-------']);
@@ -528,7 +528,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
 
       /**
-       * 
+       *
        */
       if (newMessage && newMessage.text && that.lastMsg) {
         setTimeout(function () {
@@ -708,15 +708,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
           const g_attributes = this.g.attributes;
-          var attributes = {}
+          const attributes = {};
           if (g_attributes) {
             for (const [key, value] of Object.entries(g_attributes)) {
-              attributes[key] = value
+              attributes[key] = value;
             }
           }
           if (additional_attributes) {
             for (const [key, value] of Object.entries(additional_attributes)) {
-              attributes[key] = value
+              attributes[key] = value;
             }
           }
           const projectid = this.g.projectid;
@@ -741,8 +741,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             recipientFullname = userFullname;
           } else if (userEmail) {
             recipientFullname = userEmail;
-          } else if (attributes && attributes.userFullname) {
-            recipientFullname = attributes.userFullname;
+          } else if (attributes && attributes['userFullname']) {
+            recipientFullname = attributes['userFullname'];
           } else {
             recipientFullname = this.g.GUEST_LABEL;
           }
@@ -951,18 +951,21 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
-    console.log('************** SCROLLLLLLLLLL *****************');
+    // console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
-    if (this.scrollMe) {
-      const divScrollMe = this.scrollMe.nativeElement;
-      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-      if (checkContentScrollPosition) {
-        this.showButtonToBottom = false;
-        this.NUM_BADGES = 0;
-      } else {
-        this.showButtonToBottom = true;
+    setTimeout(function () {
+      if (this.scrollMe) {
+        const divScrollMe = this.scrollMe.nativeElement;
+        if (!divScrollMe) { return; }
+        const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+        if (checkContentScrollPosition) {
+          this.showButtonToBottom = false;
+          this.NUM_BADGES = 0;
+        } else {
+          this.showButtonToBottom = true;
+        }
       }
-    }
+    }, 100);
   }
 
   /**
