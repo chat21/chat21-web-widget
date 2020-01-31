@@ -102,6 +102,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public settingsSaverService: SettingsSaverService,
         public conversationsService: ConversationsService
     ) {
+        console.log("Initializing app.component...")
+        console.log("THIS.G (IN CONSTRUCTOR) : " , this.g)
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // console.log('appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
 
@@ -668,10 +670,37 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
             // tslint:disable-next-line:max-line-length
-            windowContext['tiledesk'].sendMessage = function (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+            windowContext['tiledesk'].sendMessage = function (senderFullname, recipientId, recipientFullname, msg, type, metadata, additional_attributes) {
+                const channel_type = 'group';
+                const _globals = windowContext['tiledesk'].angularcomponent.component.g
+                // console.log("THIS.G : " , windowContext['tiledesk'].angularcomponent.component.g)
+                const g_attributes = _globals.attributes;
+                const attributes = <any>{};
+                if (g_attributes) {
+                    for (const [key, value] of Object.entries(g_attributes)) {
+                    attributes[key] = value;
+                    }
+                }
+                if (additional_attributes) {
+                    for (const [key, value] of Object.entries(additional_attributes)) {
+                    attributes[key] = value;
+                    }
+                }
+
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component
-                        .sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes);
+                        .sendMessage(
+                            _globals.tenant,
+                            _globals.senderId,
+                            senderFullname,
+                            msg,
+                            type,
+                            metadata,
+                            recipientId,
+                            recipientFullname,
+                            attributes,
+                            _globals.projectid,
+                            channel_type);
                 });
             };
             /** set state PreChatForm close/open */
@@ -711,11 +740,42 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /** */
-    private sendMessage(senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
-        // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
+    private sendMessage(
+        tenant,
+        senderId,
+        senderFullname,
+        msg,
+        type,
+        metadata,
+        conversationWith,
+        recipientFullname,
+        attributes,
+        projectid,
+        channel_type) {
+            console.log("*********** ", tenant, senderId, senderFullname,
+            msg,
+            type,
+            metadata,
+            conversationWith,
+            recipientFullname,
+            attributes,
+            projectid,
+            channel_type);
         const messageSent = this.messagingService
-            .sendMessage(senderFullname, text, type, '', recipient, recipientFullname, attributes, null, channel_type);
+            .sendMessageFull(
+                tenant,
+                senderId,
+                senderFullname,
+                msg,
+                type,
+                metadata,
+                conversationWith,
+                recipientFullname,
+                attributes,
+                projectid,
+                channel_type);
             this.g.wdLog([messageSent]);
+            // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
     }
 
     /**

@@ -99,6 +99,24 @@
                   //}
                 });
 
+                
+                window.tiledesk.on('isLoggedIn', function(event_data) {       
+                  console.log("isLoggedIn called ");
+                  // (senderFullname, recipient, recipientFullname, text, type, channel_type, attributes) {
+                  //window.tiledesk.open();
+                    
+                  window.tiledesk.sendMessage(
+                    "Andrea",
+                    "support-group-" + Date.now(),
+                    "Andrea",
+                    "hello",
+                    "text",
+                    null,
+                    {subtype: "info"}
+                  )
+                });
+      
+
               };
 
             </script>
