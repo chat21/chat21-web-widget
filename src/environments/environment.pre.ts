@@ -12,12 +12,12 @@ export const environment = {
   loadRemoteTranslations: true,
   remoteTranslationsUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   firebase: {
-    apiKey: 'AIzaSyCoWXHNvP1-qOllCpTshhC6VjPXeRTK0T4',
-    authDomain: 'chat21-pre-01.firebaseapp.com',
-    databaseURL: 'https://chat21-pre-01.firebaseio.com',
-    projectId: 'chat21-pre-01',
-    storageBucket: 'chat21-pre-01.appspot.com',
-    messagingSenderId: '269505353043'
+    apiKey: 'CHANGEIT',
+    authDomain: 'CHANGEIT',
+    databaseURL: 'CHANGEIT',
+    projectId: 'CHANGEIT',
+    storageBucket: 'CHANGEIT',
+    messagingSenderId: 'CHANGEIT'
   },
   // apiUrl: 'https://api.tiledesk.com/v1/',
   apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',
