@@ -346,13 +346,61 @@ export class MessagingService {
   }
 
 
+  sendMessage(
+    senderFullname,
+    msg,
+    type,
+    metadata,
+    conversationWith,
+    recipientFullname,
+    attributes,
+    projectid,
+    channel_type) {
+    return this.sendMessageFull(
+      this.tenant,
+      this.senderId,
+      senderFullname,
+      msg, type,
+      metadata,
+      conversationWith,
+      recipientFullname,
+      attributes,
+      projectid,
+      channel_type
+    )
+  }
 
   /**
    *
    */
-  sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) { // : string {
+  sendMessageFull(
+    tenant,
+    senderId,
+    senderFullname,
+    msg,
+    type,
+    metadata,
+    conversationWith,
+    recipientFullname,
+    attributes,
+    projectid,
+    channel_type) {
     this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
-    this.g.wdLog(['attributes:: ', attributes.toString()]);
+    console.log(
+      'senderId: ', senderId,
+      'senderFullname: ', senderFullname,
+      ' msg: ', msg,
+      ' type: ', type,
+      ' metadata: ', metadata,
+      ' conversationWith: ', conversationWith,
+      ' recipientFullname: ', recipientFullname,
+      ' attributes: ', attributes,
+      ' projectid: ', projectid,
+      ' channel_type: ', channel_type
+    )
+    if (attributes) {
+      this.g.wdLog(['attributes:: ', attributes.toString()]);
+    }
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
       senderFullname = 'Guest';
@@ -371,7 +419,7 @@ export class MessagingService {
       language,
       conversationWith,
       recipientFullname,
-      this.senderId,
+      senderId,
       senderFullname,
       '',
       metadata,
@@ -384,7 +432,8 @@ export class MessagingService {
       projectid
     );
     // this.messages.push(message);
-    const conversationRef = firebase.database().ref(this.urlMessages + conversationWith);
+    const __urlMessages = '/apps/' + tenant + '/users/' + senderId + '/messages/';
+    const conversationRef = firebase.database().ref(__urlMessages + conversationWith);
     that.g.wdLog([message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
@@ -404,6 +453,7 @@ export class MessagingService {
     message.uid = key;
      that.g.wdLog(['messageRef: ', messageRef]);
     const messageForFirebase = message.asFirebaseMessage();
+    // console.log("messageForFirebase ", messageForFirebase)
      that.g.wdLog(['messageForFirebase: ', messageForFirebase]);
     messageRef.set(messageForFirebase, function (error) {
       // Callback comes here

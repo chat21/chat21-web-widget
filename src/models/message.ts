@@ -36,8 +36,8 @@ export class MessageModel {
             // headerDate: this.headerDate,
             type: this.type,
             attributes: this.attributes,
-            channel_type: this.channel_type,
-            projectid: this.projectid
+            channel_type: this.channel_type
+            // projectid: this.projectid // removed by sponziello
         };
 
         return message;

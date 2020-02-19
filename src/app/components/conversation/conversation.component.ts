@@ -528,17 +528,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
         that.g.wdLog(['1-------']);
-        that.scrollToBottom(true);
-        // setTimeout(function () {
-        // }, 200);
+        setTimeout(function () {
+          that.scrollToBottom();
+        }, 200);
       } else if (that.scrollMe) {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
           that.g.wdLog(['2-------']);
-          that.scrollToBottom();
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
+            that.scrollToBottom();
           }, 0);
         } else {
           that.g.wdLog(['3-------']);
@@ -548,7 +548,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
 
       /**
-       *
+       * 
        */
       if (newMessage && newMessage.text && that.lastMsg) {
         setTimeout(function () {
@@ -709,7 +709,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
         this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
-        console.log('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -722,15 +722,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * @param metadata
      * @param additional_attributes
      */
-    sendMessage(msg, type, metadata?, additional_attributes?) { //sponziello
+    sendMessage(msg, type, metadata?, additional_attributes?) { // sponziello
       (metadata) ? metadata = metadata : metadata = '';
       this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
       if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
           let recipientFullname = this.g.GUEST_LABEL;
-           //sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
+           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
           const g_attributes = this.g.attributes;
-          // const attributes = {};
-          var attributes = <any>{} // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}' 
+          // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}' 
+          const attributes = <any>{};
           if (g_attributes) {
             for (const [key, value] of Object.entries(g_attributes)) {
               attributes[key] = value;
@@ -738,7 +738,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }
           if (additional_attributes) {
             for (const [key, value] of Object.entries(additional_attributes)) {
-              attributes[key] = value;
+              attributes[key] = value
             }
           }
            //fine-sponziello
@@ -764,8 +764,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             recipientFullname = userFullname;
           } else if (userEmail) {
             recipientFullname = userEmail;
-          } else if (attributes && attributes['userFullname']) {
-            recipientFullname = attributes['userFullname'];
+          } else if (attributes && attributes["userFullname"]) {
+            recipientFullname = attributes["userFullname"];
           } else {
             recipientFullname = this.g.GUEST_LABEL;
           }
@@ -974,21 +974,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
-    // console.log('************** SCROLLLLLLLLLL *****************');
+    console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
-    setTimeout(function () {
-      if (this.scrollMe) {
-        const divScrollMe = this.scrollMe.nativeElement;
-        if (!divScrollMe) { return; }
-        const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-        if (checkContentScrollPosition) {
-          this.showButtonToBottom = false;
-          this.NUM_BADGES = 0;
-        } else {
-          this.showButtonToBottom = true;
-        }
+    if (this.scrollMe) {
+      const divScrollMe = this.scrollMe.nativeElement;
+      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+      if (checkContentScrollPosition) {
+        this.showButtonToBottom = false;
+        this.NUM_BADGES = 0;
+      } else {
+        this.showButtonToBottom = true;
       }
-    }, 100);
+    }
   }
 
   /**
@@ -1043,11 +1040,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    try {
     that.isScrolling = true;
     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
-    if (!objDiv) {
-      return;
-    }
     // const element = objDiv[0] as HTMLElement;
     setTimeout(function () {
+
       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
         objDiv.parentElement.classList.add('withoutAnimation');
       } else {

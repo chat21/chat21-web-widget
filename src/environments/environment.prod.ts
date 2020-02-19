@@ -4,6 +4,8 @@ export const environment = {
   production: true,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: false, // for performance don't load settings from remote
+  loadRemoteTranslations: true,
+  remoteTranslationsUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   firebase: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',

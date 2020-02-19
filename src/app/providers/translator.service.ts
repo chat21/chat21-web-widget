@@ -57,7 +57,7 @@ export class TranslatorService {
 
     if (environment.loadRemoteTranslations) {
 
-      return environment.remoteTranslationsUrl + this.g.projectid + '/labels2/' + browserLang.toUpperCase();
+      return environment.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();
 
     } else {
 
