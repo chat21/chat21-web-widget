@@ -45,7 +45,7 @@
     width: inherit;
     height: 100%;
     border-width: 0px;
-    max-height: 620px;
+    /*max-height: 620px;*/
     margin: 0px;
     margin: 0px;
     display: none;
@@ -54,7 +54,7 @@
 
 #tiledesk-container.open #tiledeskiframe {
     display: block;
-    width: 376px;
+    /*width: 376px;*/
     /* -webkit-animation: fade-in-shadow 0.4s ease-in 0.0s both;
     animation: fade-in-shadow 0.4s ease-in 0.0s both; */
     /* border-radius: 10px; */

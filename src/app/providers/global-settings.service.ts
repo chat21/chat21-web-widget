@@ -987,7 +987,7 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_startMessage');
         if (TEMP) {
-            console.log("MESSAGE::: " + TEMP)
+            console.log('MESSAGE::: ' + TEMP);
             globals.startMessage = JSON.parse(TEMP);
             this.globals.wdLog(['globals.startMessage: ' + globals.startMessage]);
         }
