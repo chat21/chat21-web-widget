@@ -134,7 +134,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
                                     
-                                        <div [ngClass]="{'button-in-msg' : message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
+                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
 
                                             <!-- message type:: image -->
                                             <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
