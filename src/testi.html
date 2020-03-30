@@ -20,7 +20,7 @@
                   // userPassword:"123456",
                   // userToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk4MGVkMGQ3ODY2ODk1Y2E0M2MyMGRhZmM4NTlmMThjNjcwMWU3OTYiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jaGF0LXYyLWRldiIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTYxMDIwNTg2LCJ1c2VyX2lkIjoicllXQmgwd2c2TE05U1drT2lMY0tySmdWVldkMiIsInN1YiI6InJZV0JoMHdnNkxNOVNXa09pTGNLckpnVlZXZDIiLCJpYXQiOjE1NjEwMjA1ODYsImV4cCI6MTU2MTAyNDE4NiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.SID7kHLV0v5t0fd18WtlX_HfZ2nU2Qg6GU3HB2nNx9J7yaQQdZv1zkvXMmtJGIMCXw1Z_HMVDkbjqPOGOS-Wz8AF_Vdrxj2ePX6K6amE_DfZz2ECG-VrOghOPjggYwMCykmJu6k2IOHc3Z1jq9rTqCanHqmElUXTwDwUIub4OQ_fn6Ak1krotdNNUbdoFFDiPKt_39UC92Z3jbUf-2FQgxOWSJg7h8pjShe6anEFtdmjX50hl0dtbKhMNNacWtczAtRBrr1u7QCL0D8K-dzzxuduQUEMlnGPzYyQtaYfAxjWRQ8PP1BUBPeTNLiYtj4oprcCUS61qr3lBdw6tumtMw',
                   // userId: "5b55e806c93dde00143163df", 
-                  isLogEnabled: true,                     /** true/false **/
+                  isLogEnabled: false,                     /** true/false **/
 
                   // preChatForm: false,
                   calloutTimer:"0",
@@ -89,6 +89,25 @@
                     }, 3000)
                 });
 
+                window.tiledesk.on('onNewConversation', function(event_data) {
+                    console.log("testi.html onNewConversation",event_data);
+                    var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+                    httpRequest.setRequestHeader('Content-type', 'application/json');
+                    httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
+                    httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"id_user":event_data.detail.global.senderId, "request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentID, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+                });
+
+                window.tiledesk.on('isLoggedIn', function(event_data) {
+                    console.log("testi.html isLoggedIn",event_data);
+                    var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+                    httpRequest.setRequestHeader('Content-type', 'application/json');
+                    httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
+                    //httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "status":"49","subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+                });
+
+
+                
     
                 
 

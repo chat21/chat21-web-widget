@@ -152,8 +152,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.newConversationStart = false
       console.log("reset newconv " + this.g.newConversationStart)
       console.log("start message ", this.g.startMessage)
-      var start_message = this.g.startMessage
-      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes) // {"subtype": "info"}  //sponziello
+      // do  not send message hello
+     //  var start_message = this.g.startMessage
+    // this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes) // {"subtype": "info"}  //sponziello
     }
   }
 
@@ -163,7 +164,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
       this.ngZone.run(() => {
-        //that.scrollToBottom();
+        // that.scrollToBottom();
       });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);

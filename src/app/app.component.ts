@@ -1030,9 +1030,36 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     startNwConversation() {
         this.g.wdLog(['AppComponent::startNwConversation']);
-        this.g.setParameter('recipientId', this.generateNewUidConversation());
+        const newConvId = this.generateNewUidConversation();
+
+       // console.log('this.g.isOpenPrechatForm', this.g.isOpenPrechatForm);
+        // && this.g.isOpenPrechatForm === false
+        if (this.g.newConversationStart === true) {
+            this.triggerNewConversationEvent(newConvId);
+        }
+        this.g.setParameter('recipientId', newConvId);
+
         this.g.wdLog([' recipientId: ', this.g.recipientId]);
     }
+
+
+    private triggerNewConversationEvent(newConvId) {
+        const default_settings = this.g.default_settings;
+        const appConfigs = this.appConfigService.getConfig();
+
+        this.g.wdLog([' ---------------- triggerNewConversationEvent ---------------- ', default_settings]);
+        // tslint:disable-next-line:max-line-length
+        const onNewConversation = new CustomEvent('onNewConversation', { detail: { global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs } });
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onNewConversation);
+        }
+
+    }
+
     // ========= end:: FUNCTIONS ============//
 
 
@@ -1150,7 +1177,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnNewConversation() {
          this.g.wdLog(['returnNewConversation in APP COMPONENT']);
-         this.g.newConversationStart = true
+         this.g.newConversationStart = true;
         // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
         // altrimenti mostro modale dipartimenti
         const preChatForm = this.g.preChatForm;
@@ -1287,9 +1314,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // ========= START:: TRIGGER FUNCTIONS ============//
     private triggerOnViewInit() {
         const default_settings = this.g.default_settings;
+        const appConfigs = this.appConfigService.getConfig();
+        // console.log('appConfigs', appConfigs);
         const windowContext = this.g.windowContext;
         this.g.wdLog([' ---------------- triggerOnInit ---------------- ', default_settings]);
-        const onInit = new CustomEvent('onInit', { detail: { default_settings: default_settings } });
+        // tslint:disable-next-line:max-line-length
+        const onInit = new CustomEvent('onInit', { detail: {  global: this.g, default_settings: default_settings, appConfigs: appConfigs  } });
+
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
             this.g.windowContext = windowContext;
@@ -1352,8 +1383,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     private triggerIsLoggedInEvent() {
+
+        const appConfigs = this.appConfigService.getConfig();
+        const default_settings = this.g.default_settings;
+
         this.g.wdLog([' ---------------- triggerIsLoggedInEvent ---------------- ', this.g.isLogged]);
-        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: this.g.isLogged });
+        // tslint:disable-next-line:max-line-length
+        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: {global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(isLoggedIn);
