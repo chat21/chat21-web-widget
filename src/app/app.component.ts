@@ -1100,10 +1100,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['onSelectDepartment: ', $event]);
             this.g.setParameter('departmentSelected', $event);
             // this.settingsSaverService.setVariable('departmentSelected', $event);
-            this.startNwConversation();
             this.isOpenHome = true;
             this.isOpenConversation = true;
             this.isOpenSelectionDepartment = false;
+            if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+                this.startNwConversation();
+            }
         }
     }
 
@@ -1124,10 +1126,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * completed prechatform
      */
     public returnPrechatFormComplete() {
-         this.g.wdLog(['returnPrechatFormComplete']);
+        this.g.wdLog(['returnPrechatFormComplete']);
         this.isOpenHome = true;
         this.isOpenConversation = true;
         this.g.setParameter('isOpenPrechatForm', false);
+        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            this.startNwConversation();
+        }
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
 
@@ -1141,7 +1146,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenSelectionDepartment = false;
         this.isOpenConversation = false;
         this.g.setParameter('isOpenPrechatForm', false);
-        this.g.newConversationStart = false
+        this.g.newConversationStart = false;
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
 
@@ -1206,8 +1211,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenConversation = true;
             }
         }
-        // console.log('this.g.departmentID' + this.g.departmentID + ' isOpenSelectionDepartment:' + this.isOpenSelectionDepartment);
-        this.startNwConversation();
+
+        console.log('isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
+        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            this.startNwConversation();
+        }
     }
 
     /**
