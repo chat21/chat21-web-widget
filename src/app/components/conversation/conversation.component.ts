@@ -145,16 +145,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
     this.g.wdLog([' constructor: sending first message ']);
-    console.log("get newconv " + this.g.newConversationStart)
-    if (this.g.newConversationStart == true) {
-      console.log("CONVERSATION IS NEW!")
+    console.log('get newconv ' + this.g.newConversationStart);
+    if (this.g.newConversationStart === true) {
+      console.log('CONVERSATION IS NEW!');
       // this.g.setParameter('newConversationStart', null)
-      this.g.newConversationStart = false
-      console.log("reset newconv " + this.g.newConversationStart)
-      console.log("start message ", this.g.startMessage)
+      this.g.newConversationStart = false;
+      console.log('reset newconv ' + this.g.newConversationStart);
+      console.log('start message ', this.g.startMessage);
       // do  not send message hello
-     //  var start_message = this.g.startMessage
-    // this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes) // {"subtype": "info"}  //sponziello
+      const start_message = this.g.startMessage;
+     if (this.g.startMessage) {
+      // tslint:disable-next-line:max-line-length
+      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
+      // {"subtype": "info"}  //sponziello
+     }
     }
   }
 

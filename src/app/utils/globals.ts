@@ -281,14 +281,16 @@ export class Globals {
     /** set margin bottom widget */
     this.isLogEnabled = false;
     // this.parameters['isLogEnabled'] = false;
-    this.startMessage = {
-      text: "hello",
-      type: "text",
-      attributes: {
-        subtype: "info"
-      },
-      metadata: {}
-    }
+
+    // this.startMessage = {
+    //   text: "hello",
+    //   type: "text",
+    //   attributes: {
+    //     subtype: "info"
+    //   },
+    //   metadata: {}
+    // }
+
     /** startMessage: The message to start a support conversation. */
 
     this.filterByRequester = false;

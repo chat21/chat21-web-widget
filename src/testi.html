@@ -83,16 +83,21 @@
                 console.log("testi.html tileDeskAsyncInit")
                 
                 window.tiledesk.on('loadParams', function(event_data) {
-                    console.log("testi.html loadParams");
+                    console.log("testi.html loadParams");                    
+                    // windows.tiledesk.signInAnanonymous()
+                    // windows.tiledesk.signWithCustomAuth()
                     setTimeout(function() {
                       window.tiledesk.showCallout()
                     }, 3000)
                 });
 
+
+                //da spostare in lauch.js al punto ****
                 window.tiledesk.on('onNewConversation', function(event_data) {
                     console.log("testi.html onNewConversation",event_data);
                     var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
                     httpRequest.setRequestHeader('Content-type', 'application/json');
+                    // event_data.detail.global.jwt //cosi prendi jwt di Tiledesk
                     httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
                     httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"id_user":event_data.detail.global.senderId, "request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentID, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
                 });
@@ -101,9 +106,8 @@
                     console.log("testi.html isLoggedIn",event_data);
                     var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
                     httpRequest.setRequestHeader('Content-type', 'application/json');
-                    httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
-                    //httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "status":"49","subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+                    httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');                    
+                    httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
                 });
 
 
