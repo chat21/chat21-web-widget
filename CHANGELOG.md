@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.0
+- stable version
+
 ### 3.0.28
 - new: adds the ability to send a hidden message to start the conversation
 

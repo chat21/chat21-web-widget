@@ -8,6 +8,7 @@ export class AppConfigService {
 
   constructor(private http: HttpClient) {
     this.appConfig = environment;
+    console.log('environment: ', environment);
   }
 
   loadAppConfig() {
