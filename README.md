@@ -30,6 +30,7 @@ With Chat21-web-widget you can:
 
 * Clone the repository from master (or use a tagged release) with command: ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
 * Move to the downloaded project path ```cd <YOUR_PATH>```
+* Build running: `npm install`
 
 ## Dev configuration 
 
