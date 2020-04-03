@@ -60,6 +60,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
   writingMessage = '';    // messaggio sta scrivendo...
+  isTypings = false;
+  private setTimeoutWritingMessages;
   isMenuShow = false;
   isScrolling = false;
 
@@ -105,6 +107,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   CLIENT_BROWSER: string = navigator.userAgent;
 
   // devo inserirle nel globals
+  obsTyping: Subscription;
   subscriptions: Subscription[] = [];
 
 
@@ -186,6 +189,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     // console.log('attributes: ', this.g.attributes);
     //this.scrollToBottom(true);
+    this.setSubscriptions();
     setTimeout(() => {
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
@@ -209,7 +213,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.conversationsService.updateConversationBadge();
     }
   }
-
 
 
 
@@ -242,7 +245,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
       // this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
     } catch (error) {
-      console.log('> Error is handled attributes: ', error);
+      this.g.wdLog(['> Error is handled attributes: ', error]);
     }
 
     // try {
@@ -284,10 +287,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const availableAgentsForDep = this.g.availableAgents;
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.offline_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;  // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template 
+      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
+      // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template 
     } else {
       this.addFirstMessage(this.g.online_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;  // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template 
+      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+      // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template 
     }
 
     if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
@@ -443,6 +448,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const channelType = this.g.channelType;
 
       this.messagingService.initialize( senderId, tenant, channelType );
+      this.messagingService.initWritingMessages(this.conversationWith);
+      this.messagingService.getWritingMessages();
+
       this.upSvc.initialize(senderId, tenant, this.conversationWith);
       // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
@@ -461,8 +469,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   initializeChatManager() {
     this.arrayFilesLoad = [];
-    this.setSubscriptions();
-    this.checkWritingMessages();
+    //this.setSubscriptions();
+    //this.checkWritingMessages();
   }
 
   /**
@@ -515,7 +523,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     });
     this.subscriptions.push(subscriptionisOpenStartRating);
-    //console.log('---------------------->', this.subscriptions);
+    // console.log('---------------------->', this.subscriptions);
     // NUOVO MESSAGGIO!!
     /**
      * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
@@ -549,7 +557,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
 
       /**
-       * 
+       *
        */
       if (newMessage && newMessage.text && that.lastMsg) {
         setTimeout(function () {
@@ -569,9 +577,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
 
     });
-
     this.subscriptions.push(obsAddedMessage);
+
+    this.subscriptionTyping();
   }
+
+
+
 
   /**
    *
@@ -739,10 +751,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }
           if (additional_attributes) {
             for (const [key, value] of Object.entries(additional_attributes)) {
-              attributes[key] = value
+              attributes[key] = value;
             }
           }
-           //fine-sponziello
+           // fine-sponziello
           const projectid = this.g.projectid;
           const channelType = this.g.channelType;
           const userFullname = this.g.userFullname;
@@ -938,6 +950,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /**
      * ridimensiona la textarea
      * chiamato ogni volta che cambia il contenuto della textarea
+     * imposto stato 'typing'
      */
     resizeInputField() {
       try {
@@ -957,6 +970,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             // segno sto scrivendo
             // target.offsetHeight - 15 + 'px';
         }
+        this.setWritingMessages(target.value);
       } catch (e) {
         this.g.wdLog(['> Error :' + e]);
       }
@@ -965,7 +979,56 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
+  // ========= begin:: typing ======= //
 
+  /**
+   *
+   * @param str
+   */
+  setWritingMessages(str) {
+    this.messagingService.setWritingMessages(str, this.g.channelType);
+  }
+
+  /**
+   * on subscribe Typings
+   */
+  subscriptionTyping() {
+    this.obsTyping = this.messagingService.obsTyping
+    .subscribe(childSnapshot => {
+      console.log('XXXXXXXXXX subscriptionTyping');
+      if (childSnapshot) {
+        // this.isTypings = true;
+        const that = this;
+        console.log('child_changed key', childSnapshot.key);
+        console.log('child_changed val', childSnapshot.val());
+        this.checkMemberId(childSnapshot.key);
+        clearTimeout(this.setTimeoutWritingMessages);
+        this.setTimeoutWritingMessages = setTimeout(function () {
+            that.isTypings = false;
+            that.writingMessage = that.g.LABEL_WRITING;
+        }, 2000);
+      }
+    });
+    this.subscriptions.push(this.obsTyping);
+  }
+
+  /**
+   *
+   * @param memberID
+   */
+  checkMemberId(memberID) {
+    const that = this;
+    if ( memberID.trim() !== ''
+            //&& memberID.trim() !== 'system'
+            && memberID.trim() !== this.g.senderId
+    ) {
+      if (that.isTypings === false) {
+        that.isTypings = true;
+      }
+    } else {
+      that.isTypings = false;
+    }
+  }
   // ================================ //
 
 
@@ -1222,7 +1285,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 };
             }
             this.g.wdLog(['metadata -------> ', metadata]);
-            //this.scrollToBottom();
+            // this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine

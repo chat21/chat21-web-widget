@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.1
+- new: typing conversation
+
 ### 4.0.0
 - stable version
 

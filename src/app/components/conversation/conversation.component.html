@@ -61,7 +61,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         </span>
                     </span>
                 </div>
-                <p class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
+                <p *ngIf="isTypings" class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
 
             </div>
 

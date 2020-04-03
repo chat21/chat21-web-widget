@@ -14,7 +14,7 @@ import { DepartmentModel } from '../../models/department';
 import { MessageModel } from '../../models/message';
 import { StarRatingWidgetService } from '../components/star-rating-widget/star-rating-widget.service';
 // tslint:disable-next-line:max-line-length
-import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES } from '../utils/constants';
+import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, CHANNEL_TYPE_GROUP } from '../utils/constants';
 // utils
 import { getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
@@ -23,6 +23,7 @@ import { AppConfigService } from '../providers/app-config.service';
 
 @Injectable()
 export class MessagingService {
+
   tenant: string;
   senderId: string;
   conversationWith: string;
@@ -30,11 +31,16 @@ export class MessagingService {
   urlConversation: string;
   urlNodeFirebaseGroups: string;
   urlNodeFirebaseContact: string;
+  urlNodeTypings: string;
+  setTimeoutWritingMessages: NodeJS.Timer;
+
   messagesRef: any;
   messages: Array<MessageModel>;
 
   obsAdded: any;
   obsAddedMsg: any;
+
+  obsTyping: any;
   // observableWidgetActive: any;
 
   firebaseMessagesKey: any;
@@ -60,6 +66,7 @@ export class MessagingService {
       throw new Error('apiUrl is not defined');
     }
     this.obsAdded = new BehaviorSubject<MessageModel>(null);
+    this.obsTyping = new BehaviorSubject<any>(null);
     // this.obsAddedMsg = new BehaviorSubject<string>(null);
     // this.observableWidgetActive = new BehaviorSubject<boolean>(this.isWidgetActive);
   }
@@ -97,6 +104,7 @@ export class MessagingService {
     this.tenant = tenant;
     this.urlMessages = '/apps/' + this.tenant + '/users/' + this.senderId + '/messages/';
     this.urlConversation = '/apps/' + this.tenant + '/users/' + this.senderId + '/conversations/';
+    this.urlNodeTypings = '/apps/' + this.tenant + '/typings/' + this.senderId;
   }
 
   /**
@@ -145,10 +153,9 @@ export class MessagingService {
         // imposto il giorno del messaggio
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
-        
         // SPONZIELLO PATCH // forces update of userFullname from remote command
-        console.log("Sponziello patch")
-        console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
+        //console.log("Sponziello patch")
+        //console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
 
         
         var saved_conversations_attributes_STRING = that.storageService.getItem('attributes')
@@ -156,20 +163,20 @@ export class MessagingService {
         if (saved_conversations_attributes_STRING != null) {
           saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING)
         }
-        console.log("saved_conversations_attributes: " , saved_conversations_attributes)
+        //console.log("saved_conversations_attributes: " , saved_conversations_attributes)
         
         if (message['attributes'] && message['attributes']['updateUserFullname']) {
-          console.log("message->updateUserFullname! " , message['attributes']['updateUserFullname'])
+          //console.log("message->updateUserFullname! " , message['attributes']['updateUserFullname'])
           let userFullname = message['attributes']['updateUserFullname']
           saved_conversations_attributes['userFullname'] = userFullname
-          console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
+          //console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
           that.g.userFullname = userFullname
           that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
         if (message['attributes'] && message['attributes']['updateUserEmail']) {
-          let userEmail = message['attributes']['updateUserEmail']
-          saved_conversations_attributes['userEmail'] = userEmail
-          that.g.userEmail = userEmail
+          const userEmail = message['attributes']['updateUserEmail'];
+          saved_conversations_attributes['userEmail'] = userEmail;
+          that.g.userEmail = userEmail;
           that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
         // end SPONZIELLO PATCH
@@ -367,7 +374,7 @@ export class MessagingService {
       attributes,
       projectid,
       channel_type
-    )
+    );
   }
 
   /**
@@ -397,7 +404,7 @@ export class MessagingService {
       ' attributes: ', attributes,
       ' projectid: ', projectid,
       ' channel_type: ', channel_type
-    )
+    );
     if (attributes) {
       this.g.wdLog(['attributes:: ', attributes.toString()]);
     }
@@ -560,6 +567,56 @@ export class MessagingService {
 
 
 
+  // BEGIN TYPING FUNCTIONS
+  /**
+   */
+  initWritingMessages(conversationWith) {
+    this.conversationWith = conversationWith;
+    this.urlNodeTypings = '/apps/' + this.tenant + '/typings/' + conversationWith;
+    console.log('checkWritingMessages', this.urlNodeTypings);
+  }
+
+  /**
+   * check if agent writing
+   */
+  getWritingMessages() {
+    const that = this;
+    const ref = firebase.database().ref(this.urlNodeTypings).orderByChild('timestamp').limitToLast(1);
+    ref.on('child_changed', function(childSnapshot) {
+        // that.events.publish('isTypings', childSnapshot);
+        console.log('------------- child_changed -----------');
+        that.obsTyping.next(childSnapshot);
+    });
+  }
+
+  /**
+   */
+  setWritingMessages(str, channel_type?) {
+    const that = this;
+    this.setTimeoutWritingMessages = setTimeout(function () {
+      let readUrlNodeTypings = that.urlNodeTypings;
+      if (channel_type === CHANNEL_TYPE_GROUP) {
+        readUrlNodeTypings = that.urlNodeTypings + '/' + that.senderId;
+        console.log('GRUPPO', readUrlNodeTypings);
+      }
+      console.log('setWritingMessages:', readUrlNodeTypings);
+      const timestamp =  firebase.database.ServerValue.TIMESTAMP;
+      const precence = {
+        'timestamp': timestamp,
+        'message': str
+      };
+      firebase.database().ref(readUrlNodeTypings).set(precence, function( error ) {
+        if (error) {
+          console.log('ERRORE', error);
+        } else {
+          console.log('OK update typing');
+        }
+      });
+    }, 500);
+  }
+  // END TYPING FUNCTIONS
+
+
   /**
    * called on ondestroy from component 'conversation'
    * detach all callbacks firebase on messagesRef
@@ -571,8 +628,9 @@ export class MessagingService {
   }
 
 
-  /** TRIGGERS */
 
+
+  /** TRIGGERS */
   /** */
   private triggerGetImageUrlThumb(message: MessageModel) {
     try {
