@@ -121,6 +121,11 @@ function loadIframe(tiledeskScriptBaseLocation) {
             console.log("> error: " + er);
         }
     });
+
+
+    // metti qui **** events
+
+
     iDiv.appendChild(ifrm);  
     ifrm.contentWindow.document.open();
     ifrm.contentWindow.document.write(srcTileDesk);
@@ -176,6 +181,8 @@ function initCSSWidget(tiledeskScriptBaseLocation) {
     // }
 }
 
+
+//DEPRECATED
 function signInWithCustomToken() {
     let json = JSON.stringify({
         "id_project": "5b55e806c93dde00143163dd"

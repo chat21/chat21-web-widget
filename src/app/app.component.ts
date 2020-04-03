@@ -778,9 +778,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
     }
 
+    
+
     /**
      *
     */
+//    DEPRECATED
     private signInWithCustomToken(response: any) {
         const that = this;
         // console.log(response);
@@ -805,7 +808,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-
+// UNUSED
     private signInWithCustomTokenUniLe(token) {
         this.g.wdLog(['signInWithCustomToken token ', token]);
         const that = this;
