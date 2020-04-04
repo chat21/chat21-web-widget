@@ -77,7 +77,10 @@ export const environment = {
 
 # Build for production
  
-Run `ng build --prod --base-href ./`
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+Build for production with :  `ng build --prod --base-href --output-hashing none`
+
 
 # Deploy
 
@@ -88,10 +91,6 @@ Copy the content of the dist folder to your Web Server (for example Apache or Ng
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Build
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-Build for production with :  `ng build --prod --base-href --output-hashing none`
 
 ## Widget in action
 You can see a configuration of this widget in action on 'https://www.tiledesk.com'
