@@ -149,20 +149,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.initAll();
     this.g.wdLog([' constructor: sending first message ']);
     console.log('get newconv ' + this.g.newConversationStart);
-    if (this.g.newConversationStart === true) {
-      console.log('CONVERSATION IS NEW!');
-      // this.g.setParameter('newConversationStart', null)
-      this.g.newConversationStart = false;
-      console.log('reset newconv ' + this.g.newConversationStart);
-      console.log('start message ', this.g.startMessage);
-      // do  not send message hello
-      const start_message = this.g.startMessage;
-     if (this.g.startMessage) {
-      // tslint:disable-next-line:max-line-length
-      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
-      // {"subtype": "info"}  //sponziello
-     }
-    }
+
   }
 
   ngOnInit() {
@@ -190,6 +177,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   ngAfterViewInit() {
+    this.g.currentConversationComponent = this;
+    if (this.g.newConversationStart === true) {
+      console.log('CONVERSATION IS NEW!');
+      this.onNewConversationComponentInit();
+      // this.g.setParameter('newConversationStart', null)
+      this.g.newConversationStart = false;
+      console.log('reset newconv ' + this.g.newConversationStart);
+      console.log('start message ', this.g.startMessage);
+      // do  not send message hello
+      const start_message = this.g.startMessage;
+     if (this.g.startMessage) {
+      // tslint:disable-next-line:max-line-length
+      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
+      // {"subtype": "info"}  //sponziello
+     }
+    }
+    // ------------------------------------------------ //
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
     // console.log('attributes: ', this.g.attributes);
     //this.scrollToBottom(true);
@@ -199,7 +203,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.afConversationComponent.nativeElement.focus();
       }
     }, 1000);
-
+    
   }
 
 
@@ -275,7 +279,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * imposto il messaggio online/offline a seconda degli agenti disponibili
    * aggiungo il primo messaggio alla conversazione
    */
-  private setAvailableAgentsStatus() {
+  public setAvailableAgentsStatus() {
 
     const departmentDefault: DepartmentModel =  this.g.departmentDefault;
     this.g.wdLog(['departmentDefault', departmentDefault]);
@@ -1566,4 +1570,25 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+
+  // ========= START:: TRIGGER FUNCTIONS ============//
+  private onNewConversationComponentInit() {
+
+    console.log('onNewConversationComponentInit: ' + this.conversationWith);
+    const newConvId = this.conversationWith;
+    const default_settings = this.g.default_settings;
+    const appConfigs = this.appConfigService.getConfig();
+
+    this.g.wdLog([' ---------------- triggerOnNewConversationComponentInit ---------------- ', default_settings]);
+    // tslint:disable-next-line:max-line-length
+    const onNewConversation = new CustomEvent('onNewConversationComponentInit', { detail: { global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs } });
+    const windowContext = this.g.windowContext;
+    if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
+        this.g.windowContext = windowContext;
+    } else {
+        this.el.nativeElement.dispatchEvent(onNewConversation);
+    }
+  }
+  // ========= END:: TRIGGER FUNCTIONS ============//
 }

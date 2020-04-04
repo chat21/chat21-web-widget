@@ -11,6 +11,8 @@ import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
+import { ConversationModel } from '../../models/conversation';
+import { ConversationComponent } from '../components/conversation/conversation.component';
 // import { variable } from '@angular/compiler/src/output/output_ast';
 // import { storage } from 'firebase';
 
@@ -58,6 +60,7 @@ export class Globals {
   lang: string;
   conversationsBadge: number;
   activeConversation: string;
+  public currentConversationComponent: ConversationComponent;
 
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
