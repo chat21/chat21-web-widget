@@ -570,9 +570,9 @@ export class GenericMessagingService {
     }
 
     try {
-      if (message.text === this.g.start_hidden_message && this.messages.length > 0) {
-        return;
-      }
+      // if (message.text === this.g.start_hidden_message && this.messages.length > 0) {
+      //   return;
+      // }
     } catch (error) {
       console.log('> Error is handled attributes: ', error);
     }

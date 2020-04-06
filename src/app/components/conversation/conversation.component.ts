@@ -175,6 +175,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {
     // this.initAll();
+    this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    this.setAvailableAgentsStatus();
+
+
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     const that = this;
     this.isNwMsg = false;
@@ -244,8 +248,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.initializeChatManager();
 
 
-    this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
-    this.setAvailableAgentsStatus();
+    // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    // this.setAvailableAgentsStatus();
 
     this.g.setParameter('activeConversation', this.conversationWith);
     // this.checkListMessages();
@@ -301,6 +305,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
     const availableAgentsForDep = this.g.availableAgents;
+
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.offline_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
@@ -377,12 +382,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       try {
         this.g.start_hidden_message = this.g.customAttributes.start_hidden_message;
       } catch (error) {
-        this.g.wdLog(['> Error is: ', error]);
+        // this.g.wdLog(['> Error is: ', error]);
       }
       setTimeout(() => {
-        if (this.messages.length === 0) {
+        // if (this.messages.length === 0) {
           this.sendMessage(this.g.start_hidden_message, TYPE_MSG_TEXT);
-        }
+        // }
       }, 1000);
     } else {
       const lang = this.g.lang;
@@ -830,7 +835,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }, 300);
 
       (metadata) ? metadata = metadata : metadata = '';
-      this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata]);
+      this.g.wdLog(['------> SEND MESSAGE: ', msg, type, metadata]);
       // if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
       if (msg && msg.trim() !== '' || type !== TYPE_MSG_TEXT ) {
           let recipientFullname = this.g.GUEST_LABEL;

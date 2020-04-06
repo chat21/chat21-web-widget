@@ -1,5 +1,8 @@
 # chat21-web-widget ver 2.0
 
+### 3.0.19-beta.27
+- new: send welcame message when open conversation
+
 ### 3.0.19-beta.25
 - bug fixed: auto stop audio on last message recived
 
