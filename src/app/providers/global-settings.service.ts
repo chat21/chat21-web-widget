@@ -847,7 +847,7 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_lang');
         if (TEMP) {
-            // globals.lang = stringToBoolean(TEMP);
+            globals.lang = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_callouttimer');

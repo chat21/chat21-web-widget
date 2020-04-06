@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.5
+- bug-fix: Detect user language in initI18n.
+
 ### 4.0.4
 - new: added onNewConversationComponentInit trigger
 - new: added currentConversationComponent in global

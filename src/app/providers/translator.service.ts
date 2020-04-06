@@ -83,6 +83,9 @@ export class TranslatorService {
 
     // Detect user language.
     let browserLang = this._translate.getBrowserLang();
+    if (this.g.lang && this.g.lang !== '') {
+      browserLang = this.g.lang;
+    }
 
     //    const languageUrl = this.getTranslationFileUrl(browserLang);
     //    console.log(`»»»» languageUrl `, languageUrl);

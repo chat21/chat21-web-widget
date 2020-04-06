@@ -27,6 +27,17 @@
 
 # sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
 
+npm version patch
+version=`node -e 'console.log(require("./package.json").version)'`
+echo "version $version"
+
+if [ "$version" != "" ]; then
+    git tag -a "v$version" -m "`git log -1 --format=%s`"
+    echo "Created a new tag, v$version"
+    git push --tags
+    npm publish
+fi
+
 ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=false
 cd dist
 aws s3 sync . s3://tiledesk-widget-pre/v2/
