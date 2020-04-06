@@ -1,5 +1,6 @@
 import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
+
 import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
 import { environment } from '../../environments/environment';
 
@@ -204,7 +205,12 @@ export function setColorFromString(str) {
 }
 
 export function getFromNow(windowContext, timestamp) {
-  moment.locale(windowContext.navigator.language);
+  let browserLang = windowContext.navigator.language;
+  if (this.g.lang && this.g.lang !== '') {
+    browserLang = this.g.lang;
+  }
+  moment.locale(browserLang); // 
+  console.log('getFromNow - browserLang: ', browserLang);
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;
 }

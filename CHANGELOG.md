@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.6
+- bug-fix: enhanced moment support
+
 ### 4.0.5
 - bug-fix: Detect user language in initI18n.
 
