@@ -209,7 +209,7 @@ export function getFromNow(windowContext, timestamp) {
   if (this.g.lang && this.g.lang !== '') {
     browserLang = this.g.lang;
   }
-  moment.locale(browserLang); // 
+  moment.locale(browserLang);
   console.log('getFromNow - browserLang: ', browserLang);
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;

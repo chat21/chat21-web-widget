@@ -22,12 +22,13 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     // ========= end:: Input/Output values ===========//
 
     // ========= begin:: component variables ======= //
-    // departments: DepartmentModel[];
+    departments: DepartmentModel[];
     // isLogged: boolean;
     // projectid: string;
     // ========= end:: component variables ======= //
 
     constructor(
+        private el: ElementRef,
         public g: Globals,
         public messagingService: MessagingService,
         public storageService: StorageService,
@@ -36,6 +37,13 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
+        if ( this.g.departments && this.g.departments.length > 0 ) {
+            this.departments = this.g.departments;
+            if (this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
+                this.departments = this.g.windowContext.tiledesk['beforeDepartmentsFormRender'](this.g.departments);
+                // console.log('departments: ', this.departments);
+            }
+        }
     }
 
     ngAfterViewInit() {
@@ -153,10 +161,10 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
         this.g.wdLog([' closePage:  SelectDepartment']);
         this.eventClosePage.emit();
     }
-    
+
     cancelPage() {
         this.g.wdLog([' cancelPage:  SelectDepartment']);
-        this.g.newConversationStart = false
+        this.g.newConversationStart = false;
         this.eventClosePage.emit();
     }
     // ========= end:: ACTIONS ============//

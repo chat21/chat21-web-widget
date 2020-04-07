@@ -28,7 +28,7 @@ import { environment } from '../environments/environment';
 
 // utils
 // setLanguage,
-// getImageUrlThumb, 
+// getImageUrlThumb,
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
 import { AppConfigService } from './providers/app-config.service';
