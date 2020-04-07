@@ -10,8 +10,15 @@
 - bug-fix: Detect user language in initI18n.
 
 ### 4.0.4
-- new: added onNewConversationComponentInit trigger
 - new: added currentConversationComponent in global
+- new: added onNewConversationComponentInit trigger. Now to enabled greetings features you must add these lines of code:
+
+window.tileDeskAsyncInit = function() {              
+    window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
+       window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
+    });
+}
+
 
 ### 4.0.1
 - new: typing conversation
