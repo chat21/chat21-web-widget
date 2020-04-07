@@ -14,7 +14,7 @@
               // Handler for .ready() called.
               window.tiledeskSettings = 
               {
-                  projectid: "5e2ea79f002a110017525edb", //"5e1ca4b861690200178596c9", // "5d9dae4c8d26040017fa5d91",  //'5d022a9b8fb8450017c67a37', //
+                  projectid: "5e2ea79f002a110017525edb", 
                   persistence:"local",                /** local/session/none **/
                   // userEmail: "czone555@gmail.com",
                   // userPassword:"123456",
@@ -56,7 +56,7 @@
                   isLogoutEnabled: true,
                   // filterByRequester: true,                  /** true/false **/
                   // showWaitTime: false,                        /** true/false **/
-                  // showAvailableAgents: false,                 /** true/false **/
+                  // showAvailableAgents: true,                 /** true/false **/
                   // showLogoutOption: false,                    /** true/false **/
                   // showWidgetNameInConversation: true,    
                   // startMessage: {
@@ -83,10 +83,10 @@
                 console.log("testi.html tileDeskAsyncInit")
                 
                 window.tiledesk.on('loadParams', function(event_data) {
-                    console.log("testi.html loadParams");
-                    setTimeout(function() {
-                      window.tiledesk.showCallout()
-                    }, 3000)
+                  console.log("testi.html loadParams");
+                  setTimeout(function() {
+                    window.tiledesk.showCallout()
+                  }, 3000)
                 });
 
 //                 window.tiledesk.on('onNewConversation', function(event_data) {
@@ -98,25 +98,73 @@
 //                 });
 
                 window.tiledesk.on('isLoggedIn', function(event_data) {
-                    console.log("testi.html isLoggedIn",event_data);
-                    var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-                    httpRequest.setRequestHeader('Content-type', 'application/json');
-                    httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
+                  console.log("testi.html isLoggedIn",event_data);
+                  var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+                  httpRequest.setRequestHeader('Content-type', 'application/json');
+                  httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
                     //httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "status":"49","subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+                  httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
                 });
 
-           
-                window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
-                    console.log("onNewConversationComponentInit");
-                    window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
-                });
+    //             window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
+    //               console.log("onNewConversationComponentInit");
+    //               const tenant = window.tiledesk.angularcomponent.component.g.tenant;
+    //               const projectid = window.tiledesk.angularcomponent.component.g.projectid;
+    //               const channelType = window.tiledesk.angularcomponent.component.g.channelType;
+    //               const senderFullname = window.tiledesk.angularcomponent.component.g.userFullname;
+    //               const userEmail = window.tiledesk.angularcomponent.component.g.userEmail;
+    //               const showWidgetNameInConversation = window.tiledesk.angularcomponent.component.g.showWidgetNameInConversation;
+    //               const widgetTitle = window.tiledesk.angularcomponent.component.g.widgetTitle;
+    //               const senderId = window.tiledesk.angularcomponent.component.g.senderId;
+    //               const conversationWith = event_data.detail.newConvId;
+    //               const recipientFullname = 'guest';
+    //               window.tiledesk.sendMessage(
+    //                 tenant,
+    //                 senderId,
+    //                 senderFullname,
+    //                 'hello',
+    //                 'text',
+    //                 null,
+    //                 conversationWith,
+    //                 recipientFullname,
+    //                 null,
+    //                 projectid,
+    //                 'group'
+    //               )
+    //   console.log(
+    //     'tenant:', tenant,
+    //   'senderId: ', senderId,
+    //   'senderFullname: ', senderFullname,
+    //   // ' msg: ', msg,
+    //   // ' type: ', type,
+    //   // ' metadata: ', metadata,
+    //   ' conversationWith: ', conversationWith,
+    //   ' recipientFullname: ', recipientFullname,
+    //   // ' attributes: ', attributes,
+    //   ' projectid: ', projectid,
+    //   // ' channel_type: ', channel_type
+    // );
+    //                 // window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
+    //             });
                 
-
-
-                
-    
-                
+              
+                window.tiledesk['beforeDepartmentsFormRender'] = function(departments){ 
+                  console.log('beforeDepartmentsFormRender', departments);
+                  var lang = window.tiledesk.angularcomponent.component.g.lang;
+                  if (lang && lang === 'ca'){
+                    return departments.filter(function(dep) {
+                        if (!dep.name.includes('Spanish')){
+                          return dep;
+                        }
+                    });
+                  } else {
+                    return departments.filter(function(dep) {
+                        if (!dep.name.includes('Valenciano')){
+                          return dep;
+                        }
+                    });
+                  }
+                }
 
                 // window.tiledesk.on('getImageUrlThumb', function(event_data) {
                 //   var message =  event_data.detail.message;
@@ -124,7 +172,6 @@ httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_
                 //     message.sender_urlImage = "https://user-images.githubusercontent.com/9556761/64333473-de3cfa80-cfd6-11e9-971b-c00c41dd2f91.png";
                 //   //}
                 // });
-
                 
                 // window.tiledesk.on('isLoggedIn', function(event_data) {
                 //   window.tiledesk.sendMessage(
@@ -137,9 +184,15 @@ httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_
                 //     {subtype: "info"} // additional_attributes (always merged with session attributes)
                 //   )
                 // });
-      
+
+                
+                function messageRender(){ 
+                  console.log('messageRender');
+                  return true;
+                }
 
               };
+              
 
             </script>
     </head>

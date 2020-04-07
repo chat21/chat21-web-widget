@@ -13,10 +13,10 @@ fi
 ng build --prod --base-href --output-hashing none --build-optimizer=false
 
 cd dist
-aws s3 sync . s3://tiledesk-widget/v3/
+aws s3 sync . s3://tiledesk-widget/v4/
 # --cache-control max-age=604800
 cd ..
 
 aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
-echo new version deployed $version on s3://tiledesk-widget/v3
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v3/index.html
+echo new version deployed $version on s3://tiledesk-widget/v4
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v4/index.html

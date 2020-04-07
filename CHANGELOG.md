@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.8
+- renamed tiledesk_widget_project in twp
+
 ### 4.0.7
 - new: added filter on departments
 
