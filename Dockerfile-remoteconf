@@ -22,7 +22,6 @@ RUN npm run ng build -- --prod --env=remoteconf --output-path=dist --base-href -
 FROM nginx:1.14.1-alpine
 
 ## Copy our default nginx config
-#COPY nginx/default.conf /etc/nginx/conf.d/
 COPY nginx-redirect.conf /etc/nginx/nginx.conf
 
 ## Remove default nginx website
@@ -32,6 +31,5 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /ng-app/dist /usr/share/nginx/html
 
 RUN echo "Chat21 Web Widget Started!!"
-
 
 CMD ["nginx", "-g", "daemon off;"]
