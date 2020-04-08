@@ -14,7 +14,7 @@
               // Handler for .ready() called.
               window.tiledeskSettings = 
               {
-                  projectid: "5e2ea79f002a110017525edb", 
+                  projectid: "5e8d7db806a5e200178e2df5", //"5b55e806c93dde00143163dd", //"5e8b398fef981300175e610e", //
                   persistence:"local",                /** local/session/none **/
                   // userEmail: "czone555@gmail.com",
                   // userPassword:"123456",
@@ -106,66 +106,96 @@
                   httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
                 });
 
-    //             window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
-    //               console.log("onNewConversationComponentInit");
-    //               const tenant = window.tiledesk.angularcomponent.component.g.tenant;
-    //               const projectid = window.tiledesk.angularcomponent.component.g.projectid;
-    //               const channelType = window.tiledesk.angularcomponent.component.g.channelType;
-    //               const senderFullname = window.tiledesk.angularcomponent.component.g.userFullname;
-    //               const userEmail = window.tiledesk.angularcomponent.component.g.userEmail;
-    //               const showWidgetNameInConversation = window.tiledesk.angularcomponent.component.g.showWidgetNameInConversation;
-    //               const widgetTitle = window.tiledesk.angularcomponent.component.g.widgetTitle;
-    //               const senderId = window.tiledesk.angularcomponent.component.g.senderId;
-    //               const conversationWith = event_data.detail.newConvId;
-    //               const recipientFullname = 'guest';
-    //               window.tiledesk.sendMessage(
-    //                 tenant,
-    //                 senderId,
-    //                 senderFullname,
-    //                 'hello',
-    //                 'text',
-    //                 null,
-    //                 conversationWith,
-    //                 recipientFullname,
-    //                 null,
-    //                 projectid,
-    //                 'group'
-    //               )
-    //   console.log(
-    //     'tenant:', tenant,
-    //   'senderId: ', senderId,
-    //   'senderFullname: ', senderFullname,
-    //   // ' msg: ', msg,
-    //   // ' type: ', type,
-    //   // ' metadata: ', metadata,
-    //   ' conversationWith: ', conversationWith,
-    //   ' recipientFullname: ', recipientFullname,
-    //   // ' attributes: ', attributes,
-    //   ' projectid: ', projectid,
-    //   // ' channel_type: ', channel_type
-    // );
-    //                 // window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
-    //             });
+                // window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
+                //   console.log("onNewConversationComponentInit");
+                //   const tenant = window.tiledesk.angularcomponent.component.g.tenant;
+                //   const projectid = window.tiledesk.angularcomponent.component.g.projectid;
+                //   const channelType = window.tiledesk.angularcomponent.component.g.channelType;
+                //   const senderFullname = window.tiledesk.angularcomponent.component.g.userFullname;
+                //   const userEmail = window.tiledesk.angularcomponent.component.g.userEmail;
+                //   const showWidgetNameInConversation = window.tiledesk.angularcomponent.component.g.showWidgetNameInConversation;
+                //   const widgetTitle = window.tiledesk.angularcomponent.component.g.widgetTitle;
+                //   const senderId = window.tiledesk.angularcomponent.component.g.senderId;
+                //   const conversationWith = event_data.detail.newConvId;
+                //   const recipientFullname = 'guest';
+                //   const message = 'hello';
+                //   const type = 'text';
+                //   window.tiledesk.sendMessage(
+                //     tenant,
+                //     senderId,
+                //     senderFullname,
+                //     message,
+                //     type,
+                //     null,
+                //     conversationWith,
+                //     recipientFullname,
+                //     {test:'test attributes'},
+                //     projectid,
+                //     'group'
+                //   )
+                //     // window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
+                // });
                 
               
-                window.tiledesk['beforeDepartmentsFormRender'] = function(departments){ 
-                  console.log('beforeDepartmentsFormRender', departments);
-                  var lang = window.tiledesk.angularcomponent.component.g.lang;
-                  if (lang && lang === 'ca'){
-                    return departments.filter(function(dep) {
-                        if (!dep.name.includes('Spanish')){
-                          return dep;
-                        }
-                    });
-                  } else {
-                    return departments.filter(function(dep) {
-                        if (!dep.name.includes('Valenciano')){
-                          return dep;
-                        }
-                    });
-                  }
-                }
+                // window.tiledesk['beforeDepartmentsFormRender'] = function(departments){ 
+                //   console.log('beforeDepartmentsFormRender', departments);
+                //   var lang = window.tiledesk.angularcomponent.component.g.lang;
+                //   if (lang && lang === 'ca'){
+                //     return departments.filter(function(dep) {
+                //         if (!dep.name.includes('Spanish')){
+                //           return dep;
+                //         }
+                //     });
+                //   } else {
+                //     return departments.filter(function(dep) {
+                //         if (!dep.name.includes('Valenciano')){
+                //           return dep;
+                //         }
+                //     });
+                //   }
+                // }
 
+                // window.tiledesk['beforeDepartmentsFormRender'] = function(departments){ 
+                //   console.log('beforeDepartmentsFormRender', departments);
+                //   var lang = window.tiledesk.angularcomponent.component.g.lang;
+                //   if (lang && lang === 'ca'){
+                //     return departments.filter(function(dep) {
+                //         if (!dep.name.includes(':Spanish')){
+                //           dep.name = dep.name.split(":")[0]
+                //           return dep;
+                //         }
+                //     });
+                //   } else {
+                //     return departments.filter(function(dep) {
+                //         if (!dep.name.includes(':Valenciano')){
+                //           dep.name = dep.name.split(":")[0]
+                //           return dep;
+                //         }
+                //     });
+                //   }
+                // }
+
+ 
+                // window.tiledesk['beforeDepartmentsFormRender'] = function(deps){ 
+                //   console.log('beforeDepartmentsFormRender', deps);
+                //   var departments = JSON.parse(JSON.stringify(deps));
+                //   var lang = window.tiledesk.angularcomponent.component.g.lang;
+                //   if (lang && lang === 'ca'){
+                //     return departments.filter(function(dep) {
+                //         if (dep.name.includes(':Spanish')){
+                //           dep.name = dep.name.split(":")[0]
+                //           return dep;
+                //         }
+                //     });
+                //   } else {
+                //     return departments.filter(function(dep) {
+                //         if (dep.name.includes(':Valenciano')){
+                //           dep.name = dep.name.split(":")[0]
+                //           return dep;
+                //         }
+                //     });
+                //   }
+                // }
                 // window.tiledesk.on('getImageUrlThumb', function(event_data) {
                 //   var message =  event_data.detail.message;
                 //   //if(message.sender === 'bot'){

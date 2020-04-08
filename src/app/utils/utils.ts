@@ -210,7 +210,7 @@ export function getFromNow(windowContext, timestamp) {
     browserLang = this.g.lang;
   }
   moment.locale(browserLang);
-  console.log('getFromNow - browserLang: ', browserLang);
+  // console.log('getFromNow - browserLang: ', browserLang);
   const date_as_string = moment.unix(timestamp).fromNow();
   return date_as_string;
 }

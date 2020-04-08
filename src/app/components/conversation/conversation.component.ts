@@ -148,8 +148,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
     this.g.wdLog([' constructor: sending first message ']);
-    console.log('get newconv ' + this.g.newConversationStart);
-
   }
 
   ngOnInit() {
@@ -179,12 +177,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit() {
     this.g.currentConversationComponent = this;
     if (this.g.newConversationStart === true) {
-      console.log('CONVERSATION IS NEW!');
       this.onNewConversationComponentInit();
       // this.g.setParameter('newConversationStart', null)
       this.g.newConversationStart = false;
-      console.log('reset newconv ' + this.g.newConversationStart);
-      console.log('start message ', this.g.startMessage);
+      // console.log('reset newconv ' + this.g.newConversationStart);
+      // console.log('start message ', this.g.startMessage);
       // do  not send message hello
       const start_message = this.g.startMessage;
      if (this.g.startMessage) {
@@ -203,12 +200,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.afConversationComponent.nativeElement.focus();
       }
     }, 1000);
-    
   }
 
 
   ngOnChanges() {
-    console.log('ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
       //this.scrollToBottom();
@@ -811,7 +806,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
             target.value = '';
             target.style.height = this.HEIGHT_DEFAULT;
-            console.log('target.style.height: ', target.style.height);
+            // console.log('target.style.height: ', target.style.height);
           } catch (e) {
             this.g.wdLog(['> Error :' + e]);
           }
@@ -1003,12 +998,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   subscriptionTyping() {
     this.obsTyping = this.messagingService.obsTyping
     .subscribe(childSnapshot => {
-      console.log('XXXXXXXXXX subscriptionTyping');
       if (childSnapshot) {
         // this.isTypings = true;
         const that = this;
-        console.log('child_changed key', childSnapshot.key);
-        console.log('child_changed val', childSnapshot.val());
+        // console.log('child_changed key', childSnapshot.key);
+        // console.log('child_changed val', childSnapshot.val());
         this.checkMemberId(childSnapshot.key);
         clearTimeout(this.setTimeoutWritingMessages);
         this.setTimeoutWritingMessages = setTimeout(function () {
@@ -1046,7 +1040,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // LISTEN TO SCROLL POSITION
   onScroll(event: any): void {
-    console.log('************** SCROLLLLLLLLLL *****************');
+    // console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
@@ -1573,8 +1567,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= START:: TRIGGER FUNCTIONS ============//
   private onNewConversationComponentInit() {
-
-    console.log('onNewConversationComponentInit: ' + this.conversationWith);
+    this.setConversation();
+    // console.log('onNewConversationComponentInit: ' + this.conversationWith);
     const newConvId = this.conversationWith;
     const default_settings = this.g.default_settings;
     const appConfigs = this.appConfigService.getConfig();

@@ -392,21 +392,22 @@ export class MessagingService {
     attributes,
     projectid,
     channel_type) {
-    this.g.wdLog(['SEND MESSAGE: ', msg, senderFullname, recipientFullname]);
-    console.log(
-      'senderId: ', senderId,
-      'senderFullname: ', senderFullname,
-      ' msg: ', msg,
-      ' type: ', type,
-      ' metadata: ', metadata,
-      ' conversationWith: ', conversationWith,
-      ' recipientFullname: ', recipientFullname,
-      ' attributes: ', attributes,
-      ' projectid: ', projectid,
-      ' channel_type: ', channel_type
-    );
+    this.g.wdLog(['>>> SEND MESSAGE: ']);
+    // console.log('tenant: ', tenant);
+    // console.log('senderId: ', senderId);
+    // console.log('senderFullname: ', senderFullname);
+    // console.log('msg: ', msg);
+    // console.log('type: ', type);
+    // console.log('metadata: ', metadata);
+    // console.log('conversationWith: ', conversationWith);
+    // console.log('recipientFullname: ', recipientFullname);
+    // console.log('attributes: ', attributes);
+    // console.log('projectid: ', projectid);
+    // console.log('channel_type: ', channel_type);
+
     if (attributes) {
-      this.g.wdLog(['attributes:: ', attributes.toString()]);
+      // this.g.wdLog(['attributes:: ', attributes.toString()]);
+      // console.log('attributes: ', attributes);
     }
     // const messageString = urlify(msg);
     if (!senderFullname || senderFullname === '' ) {
@@ -441,6 +442,7 @@ export class MessagingService {
     // this.messages.push(message);
     const __urlMessages = '/apps/' + tenant + '/users/' + senderId + '/messages/';
     const conversationRef = firebase.database().ref(__urlMessages + conversationWith);
+    // console.log('>>> url messaggio: ', __urlMessages + conversationWith);
     that.g.wdLog([message.toString()]);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
@@ -573,7 +575,7 @@ export class MessagingService {
   initWritingMessages(conversationWith) {
     this.conversationWith = conversationWith;
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/' + conversationWith;
-    console.log('checkWritingMessages', this.urlNodeTypings);
+    // console.log('checkWritingMessages', this.urlNodeTypings);
   }
 
   /**
@@ -584,7 +586,7 @@ export class MessagingService {
     const ref = firebase.database().ref(this.urlNodeTypings).orderByChild('timestamp').limitToLast(1);
     ref.on('child_changed', function(childSnapshot) {
         // that.events.publish('isTypings', childSnapshot);
-        console.log('------------- child_changed -----------');
+        // console.log('------------- child_changed -----------');
         that.obsTyping.next(childSnapshot);
     });
   }
@@ -597,9 +599,9 @@ export class MessagingService {
       let readUrlNodeTypings = that.urlNodeTypings;
       if (channel_type === CHANNEL_TYPE_GROUP) {
         readUrlNodeTypings = that.urlNodeTypings + '/' + that.senderId;
-        console.log('GRUPPO', readUrlNodeTypings);
+        // console.log('GRUPPO', readUrlNodeTypings);
       }
-      console.log('setWritingMessages:', readUrlNodeTypings);
+      // console.log('setWritingMessages:', readUrlNodeTypings);
       const timestamp =  firebase.database.ServerValue.TIMESTAMP;
       const precence = {
         'timestamp': timestamp,

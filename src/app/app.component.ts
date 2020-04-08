@@ -669,11 +669,55 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
+
+             /** send first message */
             // tslint:disable-next-line:max-line-length
-            windowContext['tiledesk'].sendMessage = function (senderFullname, recipientId, recipientFullname, msg, type, metadata, additional_attributes) {
-                const channel_type = 'group';
-                const _globals = windowContext['tiledesk'].angularcomponent.component.g
-                // console.log("THIS.G : " , windowContext['tiledesk'].angularcomponent.component.g)
+            windowContext['tiledesk'].sendMessage = function (
+                    tenant,
+                    senderId,
+                    senderFullname,
+                    message,
+                    type,
+                    metadata,
+                    recipientId,
+                    recipientFullname,
+                    additional_attributes,
+                    projectid,
+                    channel_type
+                ) {
+                const _globals = windowContext['tiledesk'].angularcomponent.component.g;
+
+                if (!tenant) {
+                    tenant = _globals.tenant;
+                }
+                if (!senderId) {
+                    senderId = _globals.senderId;
+                }
+                if (!senderFullname) {
+                    senderFullname = _globals.senderFullname;
+                }
+                if (!message) {
+                    message = 'hello';
+                }
+                if (!type) {
+                    type = 'text';
+                }
+                if (!metadata) {
+                    metadata = '';
+                }
+                if (!recipientId) {
+                    recipientId = _globals.recipientId;
+                }
+                if (!recipientFullname) {
+                    recipientFullname = _globals.recipientFullname;
+                }
+                if (!projectid) {
+                    projectid = _globals.projectId;
+                }
+                if (!channel_type || channel_type == null) {
+                    channel_type = 'group';
+                }
+                // set default attributes
                 const g_attributes = _globals.attributes;
                 const attributes = <any>{};
                 if (g_attributes) {
@@ -683,26 +727,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 if (additional_attributes) {
                     for (const [key, value] of Object.entries(additional_attributes)) {
-                    attributes[key] = value;
+                        attributes[key] = value;
                     }
                 }
 
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component
-                        .sendMessage(
-                            _globals.tenant,
-                            _globals.senderId,
-                            senderFullname,
-                            msg,
-                            type,
-                            metadata,
-                            recipientId,
-                            recipientFullname,
-                            attributes,
-                            _globals.projectid,
-                            channel_type);
+                    .sendMessage(
+                        tenant,
+                        senderId,
+                        senderFullname,
+                        message,
+                        type,
+                        metadata,
+                        recipientId,
+                        recipientFullname,
+                        attributes,
+                        projectid,
+                        channel_type
+                    );
                 });
             };
+
+
             /** set state PreChatForm close/open */
             windowContext['tiledesk'].endMessageRender = function () {
                 ngZone.run(() => {
@@ -778,7 +825,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
     }
 
-    
 
     /**
      *

@@ -10,7 +10,7 @@ if [ "$version" != "" ]; then
 fi
 
 # --build-optimizer=false if localstorage is disabled (webview) appears https://github.com/firebase/angularfire/issues/970
-ng build --prod --base-href --output-hashing none --build-optimizer=false
+ng build --prod --env=prod --base-href --output-hashing none --build-optimizer=false
 
 cd dist
 aws s3 sync . s3://tiledesk-widget/v4/
