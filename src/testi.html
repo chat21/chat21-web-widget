@@ -14,7 +14,7 @@
               // Handler for .ready() called.
               window.tiledeskSettings = 
               {
-                  projectid: "5e8b398fef981300175e610e", //"5e8d7db806a5e200178e2df5", , //" 5b55e806c93dde00143163dd", //
+                  projectid: "5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
                   persistence:"local",                /** local/session/none **/
                   // userEmail: "czone555@gmail.com",
                   // userPassword:"123456",
@@ -129,12 +129,28 @@
                 //     null,
                 //     conversationWith,
                 //     recipientFullname,
-                //     {test:'test attributes'},
+                //     {test:'test attributes', subtype: 'info'},
                 //     projectid,
                 //     'group'
                 //   )
                 //     // window.tiledesk.angularcomponent.component.g.currentConversationComponent.setAvailableAgentsStatus();
                 // });
+
+
+                window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
+                  console.log("onNewConversationComponentInit");
+                  const message = 'hello';
+                  const type = 'text';
+                  const metadata = {};
+                  const attributes = {test:'test attributes', subtype: 'info'};
+                  window.tiledesk.sendSupportMessage(
+                    message,
+                    type,
+                    metadata,
+                    attributes
+                  )
+                });
+                
                 
               
                 // window.tiledesk['beforeDepartmentsFormRender'] = function(departments){ 

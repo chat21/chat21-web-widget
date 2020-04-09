@@ -670,8 +670,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
-             /** send first message */
-            // tslint:disable-next-line:max-line-length
+            /** send first message */
             windowContext['tiledesk'].sendMessage = function (
                     tenant,
                     senderId,
@@ -714,7 +713,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (!projectid) {
                     projectid = _globals.projectId;
                 }
-                if (!channel_type || channel_type == null) {
+                if (!channel_type || channel_type === undefined) {
                     channel_type = 'group';
                 }
                 // set default attributes
@@ -730,7 +729,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         attributes[key] = value;
                     }
                 }
-
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component
                     .sendMessage(
@@ -748,6 +746,55 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     );
                 });
             };
+
+
+            /** send custom message from html page */
+            windowContext['tiledesk'].sendSupportMessage = function (
+                message,
+                type,
+                metadata,
+                additional_attributes
+            ) {
+                if (!message) {
+                    message = 'hello';
+                }
+                if (!type) {
+                    type = 'text';
+                }
+                if (!metadata) {
+                    metadata = {};
+                }
+                const _globals = windowContext['tiledesk'].angularcomponent.component.g;
+                const g_attributes = _globals.attributes;
+                const attributes = <any>{};
+                if (g_attributes) {
+                    for (const [key, value] of Object.entries(g_attributes)) {
+                        attributes[key] = value;
+                    }
+                }
+                if (additional_attributes) {
+                    for (const [key, value] of Object.entries(additional_attributes)) {
+                        attributes[key] = value;
+                    }
+                }
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component
+                    .sendMessage(
+                        _globals.tenant,
+                        _globals.senderId,
+                        _globals.senderFullname,
+                        message,
+                        type,
+                        metadata,
+                        _globals.recipientId,
+                        _globals.recipientFullname,
+                        attributes,
+                        _globals.projectid,
+                        _globals.channelType
+                    );
+                });
+            };
+
 
 
             /** set state PreChatForm close/open */

@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.11
+- new: added sendSupportMessage
+
 ### 4.0.10
 - new: added trigger onBeforeDepartmentsFormRender
 - bug fix: url in twp

@@ -173,6 +173,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     // ========= end:: ACTIONS ============//
 
 
+    // ========= START:: TRIGGER FUNCTIONS ============//
     private triggerOnbeforeDepartmentsFormRender() {
         this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
         const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: this.departments } });
@@ -183,7 +184,6 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
-
     }
-
+    // ========= END:: TRIGGER FUNCTIONS ============//
 }
