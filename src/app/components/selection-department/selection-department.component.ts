@@ -38,10 +38,13 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
         if ( this.g.departments && this.g.departments.length > 0 ) {
-            this.departments = this.g.departments;
             if (this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
+                this.departments = this.g.departments;
                 this.departments = this.g.windowContext.tiledesk['beforeDepartmentsFormRender'](this.g.departments);
                 // console.log('departments: ', this.departments);
+            } else {
+                this.departments = JSON.parse(JSON.stringify(this.g.departments));
+                this.triggerOnbeforeDepartmentsFormRender();
             }
         }
     }
@@ -168,5 +171,19 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
         this.eventClosePage.emit();
     }
     // ========= end:: ACTIONS ============//
+
+
+    private triggerOnbeforeDepartmentsFormRender() {
+        this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
+        const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: this.departments } });
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onOpen);
+        }
+
+    }
 
 }

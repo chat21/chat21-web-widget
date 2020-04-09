@@ -1,5 +1,10 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.10
+- new: added trigger onBeforeDepartmentsFormRender
+- bug fix: url in twp
+- bug fix: add new message
+
 ### 4.0.9
 - updated twp 
 
