@@ -50,26 +50,32 @@ export class StarRatingWidgetService {
     // });
   }
 
-  httpSendRate(rate, message, recipientId): Observable<string> {
+  httpSendRate(rate, message): Observable<string> {
     const headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers });
-    // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
-    // tslint:disable-next-line:max-line-length
-    const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
-    this.g.wdLog(['url: ', url]);
-    const body = {
-      'rating': rate,
-      'rating_message': message,
-      // 'uid': uid
-    };
-    this.g.wdLog(['------------------> options: ', options]);
-    this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
-    return this.http
-      .post(url, JSON.stringify(body), options)
-      .map(res => (res.json()));
-    // .timeout(10000) // in milli sec
+    const token = this.g.tiledeskToken;
+    const projectId = this.g.projectid;
+    const recipientId = this.g.recipientId;
+    if (rate && token && projectId && recipientId) {
+      headers.append('Authorization', token);
+      headers.append('Content-Type', 'application/json');
+      const options = new RequestOptions({ headers: headers });
+      // const url = this.API_URL + this.projectid + '/requests/' + this.requestid;
+      // const url = this.API_URL + 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' 
+      // tslint:disable-next-line:max-line-length
+      const url = this.API_URL + projectId + '/requests/' + recipientId + '/rating';
+      // 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
+      // project_id/requests/:id/rating
+      this.g.wdLog(['url: ', url]);
+      const body = {
+        'rating': rate,
+        'rating_message': message
+      };
+      this.g.wdLog(['------------------> options: ', options]);
+      this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
+      return this.http
+        .patch(url, JSON.stringify(body), options)
+        .map(res => (res.json()));
+    }
   }
 
   //  setProjectid(projectid: String) {

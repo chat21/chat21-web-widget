@@ -123,8 +123,47 @@ function loadIframe(tiledeskScriptBaseLocation) {
     });
 
 
-    // metti qui **** events
+    /**** BEGIN EVENST ****/
+    /** */
+    window.tiledesk.on('onNewConversation', function(event_data) {
+        console.log("test-custom-auth.html onNewConversation",event_data);
+        const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
+        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        if(tiledeskToken) {
+          var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+          httpRequest.setRequestHeader('Content-type', 'application/json');
+          httpRequest.setRequestHeader('Authorization',tiledeskToken);
+          httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentSelected.id, "language": event_data.detail.global.lang, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+        }
+    });
 
+    /** */
+    window.tiledesk.on('onLoggedIn', function(event_data) {
+        console.log("test-custom-auth.html onLoggedIn",event_data);
+        const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
+        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        if(tiledeskToken) {
+            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+            httpRequest.setRequestHeader('Content-type', 'application/json');
+            httpRequest.setRequestHeader('Authorization',tiledeskToken);
+            httpRequest.send(JSON.stringify({"name":"logged_in","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
+        }
+    });
+
+    /** */
+    window.tiledesk.on('onAuthStateChanged', function(event_data) {
+        console.log("test-custom-auth.html onAuthStateChanged",event_data);
+        const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
+        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        if(tiledeskToken) {
+            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+            httpRequest.setRequestHeader('Content-type', 'application/json');
+            httpRequest.setRequestHeader('Authorization',tiledeskToken);
+            httpRequest.send(JSON.stringify({"name":"auth_state_changed","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
+        }
+    });
+    
+    /**** END EVENST ****/
 
     iDiv.appendChild(ifrm);  
     ifrm.contentWindow.document.open();

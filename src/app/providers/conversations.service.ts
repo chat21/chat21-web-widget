@@ -41,6 +41,7 @@ export class ConversationsService {
   conversationRef: any;
   audio: any;
   badgeConversations: number;
+  setTimeoutSound: NodeJS.Timer;
 
   avatarPlaceholder = avatarPlaceholder;
   setColorFromString = setColorFromString;
@@ -455,11 +456,15 @@ export class ConversationsService {
    */
   soundMessage() {
     if (this.g.isSoundActive === true)  {
-      this.g.wdLog(['****** soundMessage *****']);
+      const that = this;
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
       this.audio.load();
-      this.audio.play();
+      clearTimeout(this.setTimeoutSound);
+      this.setTimeoutSound = setTimeout(function () {
+        that.audio.play();
+        that.g.wdLog(['****** soundMessage 2 *****']);
+      }, 1000);
       // console.log('conversations play');
     }
   }

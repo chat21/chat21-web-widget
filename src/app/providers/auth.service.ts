@@ -12,6 +12,8 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Globals } from '../utils/globals';
 import { supports_html5_storage, supports_html5_session } from '../utils/utils';
 import { AppConfigService } from './app-config.service';
+import { StorageService } from './storage.service';
+import { componentRefresh } from '@angular/core/src/render3/instructions';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +31,8 @@ export class AuthService {
     // private firebaseAuth: AngularFireAuth,
     public http: Http,
     public g: Globals,
-    public appConfigService: AppConfigService
+    public appConfigService: AppConfigService,
+    private storageService: StorageService
   ) {
     // this.user = firebaseAuth.authState;
     this.obsLoggedUser = new BehaviorSubject<any>(null);
@@ -50,12 +53,18 @@ export class AuthService {
           that.obsLoggedUser.next(0);
         }
       } else {
-        that.g.wdLog(['PASSO CURRENT USER']);
-        that.user = firebase.auth().currentUser;
-        that.g.wdLog(['onAuthStateChanged']);
-        that.getIdToken();
-        that.obsLoggedUser.next(firebase.auth().currentUser);
-        // that.obsCurrentUser.next(that.user);
+        console.log('that.environment.shemaVersion', environment.shemaVersion);
+        console.log('shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion'));
+        if (environment.shemaVersion !== that.storageService.getItemWithoutProjectId('shemaVersion')) {
+          that.signOut(0);
+        } else {
+          that.g.wdLog(['PASSO CURRENT USER']);
+          that.user = firebase.auth().currentUser;
+          that.g.wdLog(['onAuthStateChanged']);
+          that.getIdToken();
+          that.obsLoggedUser.next(firebase.auth().currentUser);
+          // that.obsCurrentUser.next(that.user);
+        }
       }
     });
   }
@@ -93,6 +102,133 @@ export class AuthService {
   }
 
 
+  // -------------- BEGIN SIGN IN ANONYMOUSLY  -------------- //
+
+  resigninAnonymousAuthentication() {
+    const tiledeskToken = this.g.tiledeskToken;
+    if (tiledeskToken) {
+      this.resigninAnonymously(tiledeskToken)
+      .subscribe(response => {
+        if (response.token) {
+          // const newTiledeskToken = response.token;
+          // console.log('tiledeskToken 1: ', tiledeskToken);
+          // console.log('tiledeskToken 2: ', newTiledeskToken);
+        }
+      });
+    }
+  }
+  /** */
+  anonymousAuthentication() {
+    const that = this;
+    this.signinAnonymously()
+    .subscribe(response => {
+      console.log('signinAnonymously: ', response);
+      if (response.token) {
+        const tiledeskToken = response.token;
+        // console.log(tiledeskToken);
+        // that.g.setParameter('tiledeskToken', tiledeskToken);
+        that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
+        that.createFirebaseToken(tiledeskToken, that.g.projectid)
+        .subscribe(firebaseToken => {
+          // that.g.setParameter('firebaseToken', firebaseToken);
+          that.storageService.setItemWithoutProjectId('firebaseToken', firebaseToken);
+          that.authenticateFirebaseCustomToken(firebaseToken);
+        }, error => {
+          console.log('createFirebaseToken: ', error);
+        });
+      }
+    }, error => {
+      console.log('Error creating firebase token: ', error);
+      that.signOut(0);
+    });
+  }
+
+  /** */
+  private resigninAnonymously(tiledeskToken) {
+    const url = this.API_URL + 'auth/resigninAnonymously';
+    this.g.wdLog(['url', url]);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', tiledeskToken);
+    const body = {
+      'id_project': this.g.projectid
+    };
+    this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
+    return this.http
+      .post(url, JSON.stringify(body), { headers })
+      .map((response) => response.json());
+  }
+
+  /** */
+  private signinAnonymously() {
+    const url = this.API_URL + 'auth/signinAnonymously';
+    this.g.wdLog(['url', url]);
+    // that.g.setParameter('tiledeskToken', tiledeskToken);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const body = {
+      'id_project': this.g.projectid
+    };
+    this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
+    return this.http
+      .post(url, JSON.stringify(body), { headers })
+      .map((response) => response.json());
+  }
+
+  /** */
+  // token è un Tiledesk token ritorna Firebase Token
+  public createFirebaseToken(token, projectId) {
+    // const url = this.API_URL + projectId + '/firebase/createtoken';
+    const url = this.API_URL + 'chat21/firebase/auth/createCustomToken';
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', token);
+    return this.http
+      .post(url, null, { headers })
+      .map((response) => response.text());
+  }
+
+  /** */
+  authenticateFirebaseCustomToken(token) {
+    this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken']);
+    const that = this;
+    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
+      // Sign-out successful.
+      firebase.auth().signInWithCustomToken(token)
+      .then(function(response) {
+        that.g.setParameter('signInWithCustomToken', true);
+
+        // that.g.setParameter('shemaVersion', environment.shemaVersion);
+        that.storageService.setItemWithoutProjectId('shemaVersion', environment.shemaVersion);
+
+        that.user = response.user;
+        if (that.unsubscribe) {
+          that.unsubscribe();
+        }
+        that.g.wdLog(['obsLoggedUser - authService.authenticateFirebaseCustomToken']);
+        that.obsLoggedUser.next(firebase.auth().currentUser);
+      })
+      .catch(function(error) {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          if (that.unsubscribe) {
+            that.unsubscribe();
+          }
+          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
+          that.obsLoggedUser.next(0);
+      });
+    })
+    .catch(function(error) {
+      console.error('Error setting firebase auth persistence', error);
+    });
+  }
+
+  // -------------- END SIGN IN ANONYMOUSLY  -------------- //
+
+
+
+
+  /** */
   authenticateFirebaseAnonymously() {
     // console.log('authenticateFirebaseAnonymously');
     const that = this;
@@ -123,49 +259,6 @@ export class AuthService {
     });
   }
 
-
-  authenticateFirebaseCustomToken(token) {
-    this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken']);
-    const that = this;
-    firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
-      // Sign-out successful.
-      firebase.auth().signInWithCustomToken(token)
-      .then(function(response) {
-        // that.g.wdLog(['USER by signInWithCustomToken: ' + response.user.getIdToken()]);
-        // console.log('USER by signInWithCustomToken: ', response);
-        that.g.setParameter('firebaseToken', token);
-        that.g.setParameter('signInWithCustomToken', true);
-        that.user = response.user;
-        if (that.unsubscribe) {
-          that.unsubscribe();
-        }
-        this.g.wdLog(['obsLoggedUser - authService.authenticateFirebaseCustomToken']);
-        that.obsLoggedUser.next(firebase.auth().currentUser);
-        // that.getToken();????
-      })
-      .catch(function(error) {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          if (that.unsubscribe) {
-            that.unsubscribe();
-          }
-          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
-          that.obsLoggedUser.next(0);
-      });
-    })
-    .catch(function(error) {
-      console.error('Error setting firebase auth persistence', error);
-    });
-    // firebase.auth().currentUser.getIdToken()
-    // .then(function(idToken) {
-    //   // Send token to your backend via HTTPS
-    //    that.g.wdLog(['idToken: ', idToken);
-    //   // ...
-    // }).catch(function(error) {
-    //   // Handle error
-    // });
-
-  }
 
 
 
@@ -234,7 +327,7 @@ export class AuthService {
   //     });
   // }
 
-  signOut(code: number) {
+  signOut(codice: number) {
     const that = this;
     // return this.firebaseAuth.auth.signOut()
     return firebase.auth().signOut()
@@ -244,11 +337,12 @@ export class AuthService {
       if (that.unsubscribe) {
         that.unsubscribe();
       }
-      if (code) {
-        that.g.wdLog(['obsLoggedUser', code]);
-        that.obsLoggedUser.next(code);
+      that.g.wdLog(['signOut', codice]);
+      if (codice >= 0) {
+        that.g.wdLog(['obsLoggedUser', codice]);
+        that.obsLoggedUser.next(codice);
       } else {
-        that.g.wdLog(['obsLoggedUser -1']);
+        that.g.wdLog(['obsLoggedUser (-1)']);
         that.obsLoggedUser.next(-1);
       }
     })
@@ -277,18 +371,6 @@ export class AuthService {
       .map((response) => response.json());
   }
 
-  //token è un Tiledesk token ritorna Firebase Token
-  public createFirebaseToken(token, projectId) {
-    // const url = this.API_URL + projectId + '/firebase/createtoken';
-    const url = this.API_URL + 'chat21/firebase/auth/createCustomToken';
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    // headers.append('Authorization', 'JWT ' + token);
-    headers.append('Authorization', token);
-    return this.http
-      .post(url, null, { headers })
-      .map((response) => response.text());
-  }
 
   getFirebaseAuthPersistence() {
     if (this.g.persistence === 'local') {

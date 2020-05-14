@@ -129,6 +129,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
   firstScroll = true;
 
+  setTimeoutSound: NodeJS.Timer;
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -147,7 +149,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.initAll();
-    this.g.wdLog([' constructor: sending first message ']);
+    this.g.wdLog([' constructor conversation component ']);
   }
 
   ngOnInit() {
@@ -1531,12 +1533,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const that = this;
       this.audio = new Audio();
       this.audio.src = baseLocation + '/assets/sounds/Carme.mp3';
-      that.g.wdLog(['****** soundMessage *****', this.audio.src]);
       this.audio.load();
       // console.log('conversation play');
-      setTimeout(function() {
+      clearTimeout(this.setTimeoutSound);
+      this.setTimeoutSound = setTimeout(function () {
         that.audio.play();
-      }, 0);
+        that.g.wdLog(['****** soundMessage 1 *****', that.audio.src]);
+      }, 1000);
     }
   }
 

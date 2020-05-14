@@ -69,6 +69,8 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       const isOpen = this.g.isOpen;
+      // console.log('isOpen', isOpen);
+      // console.log('this.g.isMobile', this.g.isMobile);
       if (isOpen === false && this.g.isMobile === false) {
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';

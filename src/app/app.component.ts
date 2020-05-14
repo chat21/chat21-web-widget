@@ -63,6 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     departments = [];
     marginBottom: number;
     conversationSelected: ConversationModel;
+    isBeingAuthenticated = false;           /** authentication is started */
     // ========= end:: parametri di stato widget ======= //
 
 
@@ -154,44 +155,58 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          * SUBSCRIBE TO ASYNC LOGIN FUNCTION
          */
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
+            console.log('obsLoggedUser ------------> ', user);
             this.ngZone.run(() => {
-                // console.log('obsLoggedUser ------------> ', user);
+                that.g.tiledeskToken = this.storageService.getItemWithoutProjectId('tiledeskToken');
+                that.g.firebaseToken = this.storageService.getItemWithoutProjectId('firebaseToken');
+
                 const autoStart = that.g.autoStart;
                 if (user === -2) {
                     /** ho fatto un reinit */
+                    console.log('sono nel caso reinit -2');
                     that.setAuthentication();
                     that.initAll();
                 } else if (user === -1) {
                     /** ho effettuato il logout: nascondo il widget */
+                    console.log('sono nel caso logout -1');
                     // console.log('obsLoggedUser', obsLoggedUser);
                     // console.log('this.subscriptions', that.subscriptions);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
                     that.g.isLogout = true;
+                    that.isBeingAuthenticated = false;
                     that.g.wdLog(['LOGOUT : ', user]);
-                    that.triggerIsLoggedInEvent();
                 } else if (user === 0) {
                     /** non sono loggato */
+                    console.log('sono nel caso in cui non sono loggato 0');
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
-                    // console.log('autoStart --------->', autoStart);
+                    console.log('autoStart --------->', autoStart);
                     if (autoStart === true) {
                         that.setAuthentication();
                     }
-                    that.triggerIsLoggedInEvent();
                 } else if (user) {
                     /** sono loggato */
+                    console.log('sono nel caso in cui sono loggato');
+                    that.g.wdLog([' anonymousAuthenticationInNewProject']);
+                    that.authService.resigninAnonymousAuthentication();
+
                     that.g.wdLog(['USER AUTENTICATE: ', user.uid]);
                     that.g.setParameter('senderId', user.uid);
                     that.g.setParameter('isLogged', true);
                     that.g.setParameter('isShown', true);
                     that.g.setParameter('attributes', that.setAttributesFromStorageService());
-                    that.startNwConversation();
+                    /* faccio scattare il trigger del login solo una volta */
+                    if (that.isBeingAuthenticated) {
+                        that.triggerOnLoggedIn();
+                        that.isBeingAuthenticated = false;
+                    }
                     that.startUI();
-                    that.triggerIsLoggedInEvent();
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);
                 }
+
+            //     // that.triggerOnAuthStateChanged();
             });
         });
         this.subscriptions.push(obsLoggedUser);
@@ -511,6 +526,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userPassword = this.g.userPassword;
         const userId = this.g.userId;
         const userToken = this.g.userToken;
+        this.isBeingAuthenticated = true;
 
         if (userEmail && userPassword) {
              this.g.wdLog([' ---------------- 10 ---------------- ']);
@@ -524,7 +540,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('senderId', userId);
             this.g.setParameter('isLogged', true);
             this.g.setParameter('attributes', this.setAttributesFromStorageService());
-            this.startNwConversation();
+            //this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
             // this.chatPresenceHandlerService.setupMyPresence(userId);
@@ -543,15 +559,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('senderId', currentUser.uid);
             this.g.setParameter('isLogged', true);
             this.g.setParameter('attributes', this.setAttributesFromStorageService());
-            this.startNwConversation();
+            //this.startNwConversation();
             this.startUI();
-             this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
+            this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
         } else {
             //  AUTENTICAZIONE ANONIMA
             this.g.wdLog([' ---------------- 14 ---------------- ']);
             this.g.wdLog([' authenticateFirebaseAnonymously']);
-            this.authService.authenticateFirebaseAnonymously();
+            this.authService.anonymousAuthentication();
+            // this.g.wdLog([' authenticateFirebaseAnonymously']);
+            // this.authService.authenticateFirebaseAnonymously();
         }
     }
     // ========= end:: AUTHENTICATION ============//
@@ -751,12 +769,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             /** send custom message from html page */
             windowContext['tiledesk'].sendSupportMessage = function (
                 message,
+                recipientId,
                 type,
                 metadata,
                 additional_attributes
             ) {
+                const _globals = windowContext['tiledesk'].angularcomponent.component.g;
                 if (!message) {
                     message = 'hello';
+                }
+                if (!recipientId) {
+                    recipientId = _globals.recipientId;
                 }
                 if (!type) {
                     type = 'text';
@@ -764,7 +787,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (!metadata) {
                     metadata = {};
                 }
-                const _globals = windowContext['tiledesk'].angularcomponent.component.g;
                 const g_attributes = _globals.attributes;
                 const attributes = <any>{};
                 if (g_attributes) {
@@ -786,7 +808,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         message,
                         type,
                         metadata,
-                        _globals.recipientId,
+                        recipientId,
                         _globals.recipientFullname,
                         attributes,
                         _globals.projectid,
@@ -1032,9 +1054,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('isLogged', true);
             this.g.setParameter('attributes', this.setAttributesFromStorageService());
             this.g.wdLog([' this.g.senderId', currentUser.uid]);
-            this.startNwConversation();
+            //this.startNwConversation();
             this.startUI();
-            // this.triggerIsLoggedInEvent();
             this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
             this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
         });
@@ -1089,10 +1110,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     signOut() {
          this.g.wdLog(['SIGNOUT']);
+         this.g.setIsOpen(false);
         // this.storageService.removeItem('attributes');
         this.storageService.clear();
         this.chatPresenceHandlerService.goOffline();
-        this.authService.signOut(null);
+        this.authService.signOut(-1);
     }
 
     /**
@@ -1127,14 +1149,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     startNwConversation() {
         this.g.wdLog(['AppComponent::startNwConversation']);
         const newConvId = this.generateNewUidConversation();
-
-       // console.log('this.g.isOpenPrechatForm', this.g.isOpenPrechatForm);
-        // && this.g.isOpenPrechatForm === false
-        if (this.g.newConversationStart === true) {
+        // if (this.g.newConversationStart === true) {
             this.triggerNewConversationEvent(newConvId);
-        }
+        // }
         this.g.setParameter('recipientId', newConvId);
-
         this.g.wdLog([' recipientId: ', this.g.recipientId]);
     }
 
@@ -1197,9 +1215,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('departmentSelected', $event);
             // this.settingsSaverService.setVariable('departmentSelected', $event);
             this.isOpenHome = true;
-            this.isOpenConversation = true;
             this.isOpenSelectionDepartment = false;
             if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+                this.isOpenConversation = true;
                 this.startNwConversation();
             }
         }
@@ -1224,9 +1242,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     public returnPrechatFormComplete() {
         this.g.wdLog(['returnPrechatFormComplete']);
         this.isOpenHome = true;
-        this.isOpenConversation = true;
         this.g.setParameter('isOpenPrechatForm', false);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            this.isOpenConversation = true;
             this.startNwConversation();
         }
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
@@ -1346,7 +1364,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenHome = isOpenHomeTEMP;
             this.isOpenConversation = false;
         }, 200);
-        this.startNwConversation();
+        //this.startNwConversation();
     }
 
     /**
@@ -1386,7 +1404,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenSelectionDepartment = false;
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
-        this.startNwConversation();
+        //this.startNwConversation();
     }
 
     /**
@@ -1401,7 +1419,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenSelectionDepartment = false;
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
-        this.startNwConversation();
+        //this.startNwConversation();
     }
 
     returneventOpenEyeCatcher($e) {
@@ -1485,23 +1503,41 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    /** */
-    private triggerIsLoggedInEvent() {
 
+
+    /** */
+    private triggerOnLoggedIn() {
         const appConfigs = this.appConfigService.getConfig();
         const default_settings = this.g.default_settings;
 
-        this.g.wdLog([' ---------------- triggerIsLoggedInEvent ---------------- ', this.g.isLogged]);
+        this.g.wdLog([' ---------------- triggerOnLoggedIn ---------------- ', this.g.isLogged]);
         // tslint:disable-next-line:max-line-length
-        const isLoggedIn = new CustomEvent('isLoggedIn', { detail: {global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        const onLoggedIn = new CustomEvent('onLoggedIn', { detail: {user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(isLoggedIn);
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedIn);
             this.g.windowContext = windowContext;
         } else {
-            this.el.nativeElement.dispatchEvent(isLoggedIn);
+            this.el.nativeElement.dispatchEvent(onLoggedIn);
         }
     }
+
+    /** */
+    private triggerOnAuthStateChanged() {
+        const appConfigs = this.appConfigService.getConfig();
+        const default_settings = this.g.default_settings;
+        this.g.wdLog([' ---------------- triggerOnAuthStateChanged ---------------- ', this.g.isLogged]);
+        // tslint:disable-next-line:max-line-length
+        const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: {user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAuthStateChanged);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onAuthStateChanged);
+        }
+    }
+
 
     /** */
     private triggerLoadParamsEvent() {

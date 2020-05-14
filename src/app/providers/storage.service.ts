@@ -21,12 +21,28 @@ export class StorageService {
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
-    // const newKey = this.g.projectid + '_' + key;
-    const newKey = prefix + this.g.projectid + '_' + key; // this.g.projectid + '_' + key;
-    // if (this.g.persistence === 'local') {
+    const newKey = prefix + this.g.projectid + '_' + key;
+    return this.getValueForKey(newKey);
+  }
+
+  /** */
+  public getItemWithoutProjectId (key) {
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+    const newKey = prefix + key;
+    return this.getValueForKey(newKey);
+  }
+
+  /** */
+  private getValueForKey(key) {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
-        return localStorage.getItem(newKey);
+        return localStorage.getItem(key);
       } else {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
@@ -34,7 +50,7 @@ export class StorageService {
     // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
-        return sessionStorage.getItem(newKey);
+        return sessionStorage.getItem(key);
       } else {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
@@ -44,7 +60,7 @@ export class StorageService {
       return null;
     } else {
       if (supports_html5_storage()) {
-        return localStorage.getItem(newKey);
+        return localStorage.getItem(key);
       } else {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
@@ -52,6 +68,8 @@ export class StorageService {
     }
   }
 
+
+  /** */
   public setItem (key, value) {
     this.removeItem(key);
     let prefix = STORAGE_PREFIX;
@@ -61,12 +79,29 @@ export class StorageService {
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
-    // const newKey = this.g.projectid + '_' + key;
     const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
-    // if (this.g.persistence === 'local') {
+    this.saveValueForKey(newKey, value);
+  }
+
+  /** */
+  public setItemWithoutProjectId (key, value) {
+    this.removeItem(key);
+    let prefix = STORAGE_PREFIX;
+    try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+    const newKey = prefix + key;
+    this.saveValueForKey(newKey, value);
+  }
+
+  /** */
+  private saveValueForKey(key, value) {
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
-        return localStorage.setItem(newKey, value);
+        return localStorage.setItem(key, value);
       } else {
         console.warn('localStorage is not defind. Storage disabled');
         return null;
@@ -74,7 +109,7 @@ export class StorageService {
     // } else if (this.g.persistence === 'session') {
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
-        return sessionStorage.setItem(newKey, value);
+        return sessionStorage.setItem(key, value);
       } else {
         console.warn('sessionStorage is not defind. Storage disabled');
         return null;
@@ -84,7 +119,7 @@ export class StorageService {
       return null;
     } else {
       if (supports_html5_storage()) {
-        return localStorage.setItem(newKey, value);
+        return localStorage.setItem(key, value);
       } else {
         console.warn('localStorage is not defind. Storage disabled');
         return null;

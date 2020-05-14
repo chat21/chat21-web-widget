@@ -38,7 +38,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
         if ( this.g.departments && this.g.departments.length > 0 ) {
-            if (this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
+            if (this.g.windowContext && this.g.windowContext.tiledesk && this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
                 this.departments = this.g.departments;
                 this.departments = this.g.windowContext.tiledesk['beforeDepartmentsFormRender'](this.g.departments);
                 // console.log('departments: ', this.departments);

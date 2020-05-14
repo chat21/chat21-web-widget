@@ -57,6 +57,8 @@ export class Globals {
 
   attributes: any;
   token: string;
+  tiledeskToken: string;
+  firebaseToken: string;
   lang: string;
   conversationsBadge: number;
   activeConversation: string;
@@ -377,6 +379,8 @@ export class Globals {
     this.supportMode = true;
     // this.parameters['supportMode'] = true;
     // this.parameters.push({'supportMode': true});
+
+    this.newConversationStart = true;
   }
 
 

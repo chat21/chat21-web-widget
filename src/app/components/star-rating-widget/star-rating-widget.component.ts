@@ -91,7 +91,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.g.wdLog(['sendRate!!!::', this.message]);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate(this.rate, this.message, this.g.recipientId)
+    this.starRatingWidgetService.httpSendRate(this.rate, this.message)
     .subscribe(
       response => {
         that.g.wdLog(['OK sender ::::', response]);

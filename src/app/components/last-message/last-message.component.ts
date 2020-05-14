@@ -44,6 +44,10 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         that.ngZone.run(() => {
           if (that.g.isOpen === false) {
             that.g.wdLog([' 2 - > obsChangeConversation ::: ']);
+            console.log(conversation);
+            if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+              return;
+            }
             that.conversation = conversation;
             // console.log('conv: ' + conversation);
           }

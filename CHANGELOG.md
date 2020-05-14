@@ -1,4 +1,29 @@
 # chat21-web-widget ver 3.0
+### 4.0.17
+- bug fix: shemaVersion, firebaseToken, tiledesk Token in storage without projectid
+- bug fix: rating_message
+- bug fix: callout and new message
+
+### 4.0.16
+- new: resigninAnonymousAuthentication 
+
+### 4.0.15
+- bug fix: show message in callout if attributes subtype != info
+
+### 4.0.14
+- bug fix: logout
+- bug fix: first login
+- bug fix: event on back to hp
+
+### 4.0.13
+- bug fix: removed id_user in events
+- bug fix: single notification sound
+
+### 4.0.12
+- bug fix: event on first message
+- new: logout if shemaVersion is != 4 
+- new: add events onAuthStateChanged and onLoggedIn
+
 
 ### 4.0.11
 - new: added sendSupportMessage

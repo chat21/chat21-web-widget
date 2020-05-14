@@ -14,7 +14,7 @@
               // Handler for .ready() called.
               window.tiledeskSettings = 
               {
-                  projectid: "5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
+                  projectid: "5e905307a52f07001781fae6", //"5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
                   persistence:"local",                /** local/session/none **/
                   // userEmail: "czone555@gmail.com",
                   // userPassword:"123456",
@@ -97,14 +97,14 @@
 //                     httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"id_user":event_data.detail.global.senderId, "request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentID, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
 //                 });
 
-                window.tiledesk.on('isLoggedIn', function(event_data) {
-                  console.log("testi.html isLoggedIn",event_data);
-                  var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-                  httpRequest.setRequestHeader('Content-type', 'application/json');
-                  httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
-                    //httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "status":"49","subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-                  httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-                });
+//                 window.tiledesk.on('isLoggedIn', function(event_data) {
+//                   console.log("testi.html isLoggedIn",event_data);
+//                   var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+//                   httpRequest.setRequestHeader('Content-type', 'application/json');
+//                   httpRequest.setRequestHeader('Authorization', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWFhOTkwMjRjM2IxMTAwMTRiNDc4ZjAiLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJmaXJzdG5hbWUiOiJBbmRyZWEiLCJsYXN0bmFtZSI6IkxlbyIsImVtYWlsdmVyaWZpZWQiOnRydWUsImlhdCI6MTU4MjMxMTE4NSwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJpc3MiOiJodHRwczovL3RpbGVkZXNrLmNvbSIsInN1YiI6InVzZXIiLCJqdGkiOiI4NjIwOTgzNi0wY2JhLTQzMTItYTEwZS01N2NmOGMxMzk0OWIifQ.xS5Bz40oWgziDnMTFKgXl12ipRZrUopGdfbULhBUJcY');
+//                     //httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "status":"49","subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+//                   httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+//                 });
 
                 // window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
                 //   console.log("onNewConversationComponentInit");
@@ -140,11 +140,13 @@
                 window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
                   console.log("onNewConversationComponentInit");
                   const message = 'hello';
+                  const recipientId = event_data.detail.newConvId;
                   const type = 'text';
                   const metadata = {};
                   const attributes = {test:'test attributes', subtype: 'info'};
                   window.tiledesk.sendSupportMessage(
                     message,
+                    recipientId,
                     type,
                     metadata,
                     attributes
