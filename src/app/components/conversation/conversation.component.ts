@@ -131,6 +131,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   setTimeoutSound: NodeJS.Timer;
 
+  showSpinner = false;
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -177,6 +179,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   ngAfterViewInit() {
+    this.isShowSpinner();
     this.g.currentConversationComponent = this;
     if (this.g.newConversationStart === true) {
       this.onNewConversationComponentInit();
@@ -1588,4 +1591,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
   // ========= END:: TRIGGER FUNCTIONS ============//
+
+  public isShowSpinner() {
+    const that = this;
+    if (this.messages && this.messages.length === 0) {
+      that.showSpinner = true;
+      setTimeout(() => {
+        that.showSpinner = false;
+      }, 5000);
+    } else {
+      that.showSpinner = false;
+    }
+  }
 }

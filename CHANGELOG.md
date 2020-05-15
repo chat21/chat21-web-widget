@@ -1,4 +1,7 @@
 # chat21-web-widget ver 3.0
+### 4.0.18
+- changed: add spinner to new conversation
+
 ### 4.0.17
 - bug fix: shemaVersion, firebaseToken, tiledesk Token in storage without projectid
 - bug fix: rating_message

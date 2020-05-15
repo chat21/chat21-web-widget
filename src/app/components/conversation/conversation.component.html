@@ -116,8 +116,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
             <div class="c21-body-content" tabindex="1520" aria-label=" messaggi della conversazione: ">
 
-                <!-- CONTENT -->
-                <div [class.active]="!isNewConversation && messages && messages.length == 0" class="chat21-spinner" id="chat21-spinner">
+                <!-- CONTENT !isNewConversation &&  -->
+                <div [class.active]="showSpinner" class="chat21-spinner" id="chat21-spinner">
                     <div class="chat21-bounce1"></div>
                     <div class="chat21-bounce2"></div>
                     <div class="chat21-bounce3"></div>
