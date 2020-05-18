@@ -177,7 +177,7 @@ export class AuthService {
 
   /** */
   // token è un Tiledesk token ritorna Firebase Token
-  public createFirebaseToken(token, projectId) {
+  public createFirebaseToken(token, projectId?) {
     // const url = this.API_URL + projectId + '/firebase/createtoken';
     const url = this.API_URL + 'chat21/firebase/auth/createCustomToken';
     const headers = new Headers();

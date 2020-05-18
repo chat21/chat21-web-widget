@@ -899,20 +899,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      *
     */
 //    DEPRECATED
-    private signInWithCustomToken(response: any) {
+    private signInWithCustomToken(token: string) {
         const that = this;
-        // console.log(response);
         try {
-            const token = response.token;
-            const user = response.user;
-            const projectid = this.g.projectid;
+            // const token = response.token;
+            // const user = response.user;
+            // const projectid = this.g.projectid;
             this.g.wdLog(['signInWithCustomToken token ', token]);
-            this.authService.createFirebaseToken(token, projectid)
+            this.authService.createFirebaseToken(token)
             .subscribe(firebaseToken => {
                 that.g.setParameter('userToken', token);
-                that.g.setParameter('userEmail', user.email);
-                that.g.setParameter('userId', user._id);
-                that.g.setAttributeParameter('userEmail', user.email);
+                // that.g.setParameter('userEmail', user.email);
+                // that.g.setParameter('userId', user._id);
+                // that.g.setAttributeParameter('userEmail', user.email);
                 that.authService.authenticateFirebaseCustomToken(firebaseToken);
             }, error => {
                 console.error('Error creating firebase token: ', error);

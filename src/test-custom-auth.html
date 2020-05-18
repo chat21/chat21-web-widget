@@ -8,59 +8,13 @@
       // Handler for .ready() called.
       window.tiledeskSettings = 
       {
-          projectid: "5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
-          persistence:"local",                /** local/session/none **/
-          // userEmail: "czone555@gmail.com",
-          // userPassword:"123456",
-          // userToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk4MGVkMGQ3ODY2ODk1Y2E0M2MyMGRhZmM4NTlmMThjNjcwMWU3OTYiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jaGF0LXYyLWRldiIsImF1ZCI6ImNoYXQtdjItZGV2IiwiYXV0aF90aW1lIjoxNTYxMDIwNTg2LCJ1c2VyX2lkIjoicllXQmgwd2c2TE05U1drT2lMY0tySmdWVldkMiIsInN1YiI6InJZV0JoMHdnNkxNOVNXa09pTGNLckpnVlZXZDIiLCJpYXQiOjE1NjEwMjA1ODYsImV4cCI6MTU2MTAyNDE4NiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.SID7kHLV0v5t0fd18WtlX_HfZ2nU2Qg6GU3HB2nNx9J7yaQQdZv1zkvXMmtJGIMCXw1Z_HMVDkbjqPOGOS-Wz8AF_Vdrxj2ePX6K6amE_DfZz2ECG-VrOghOPjggYwMCykmJu6k2IOHc3Z1jq9rTqCanHqmElUXTwDwUIub4OQ_fn6Ak1krotdNNUbdoFFDiPKt_39UC92Z3jbUf-2FQgxOWSJg7h8pjShe6anEFtdmjX50hl0dtbKhMNNacWtczAtRBrr1u7QCL0D8K-dzzxuduQUEMlnGPzYyQtaYfAxjWRQ8PP1BUBPeTNLiYtj4oprcCUS61qr3lBdw6tumtMw',
-          // userId: "5b55e806c93dde00143163df", 
-          isLogEnabled: false,                     /** true/false **/
-          // preChatForm: false,
-          calloutTimer:"0",
-          // calloutTitle:"calloutTitle",
-          // calloutMsg:"calloutMsg",
-          // themeColor:"#cccccc",
-          // themeForegroundColor:"#000000",
-          // logoChat:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png",                  /** none/tiledesklogo/absolute url **/
-          // welcomeTitle:"welcomeTitle",            /** string **/
-          // welcomeMsg:"welcomeMsg",                /** string **/
-          align: "right",                             /** left/right **/
-          
-          // development: true, // da verificare in tiledesk.js
-          // tenant: "tilechat2",
-          // recipientId: "support-group-Lhug32g57j5xyB7IgT4",
-          
-          // widgetTitle: "widget Title Test",
-          // poweredBy: "poweredBy",
-          // userEmail: "czone555@gmail.com",
-          // userPassword: "123456",
-          // userFullname: "Dario",
-          // isOpen: true,                             /** true/false **/
-          // channelType: "group",                     /** group/direct **/
-          // lang: "en",                               /** it/en **/
-          // marginX: "40px",
-          // marginY: "40px",
-          // fullscreenMode: true,
-          // hideHeaderCloseButton: true,
-          allowTranscriptDownload: true,
-          // startFromHome: false,                       /** true/false **/
-          // autoStart: false,                           /** true/false **/
-          // isShown: false,                             /** true/false **/
+          // PRE:   
+          projectid: "5ec2498f5bda140034cce267", //"5e8b398fef981300175e610e ", //
+          // PROD: 
+          // projectid: "5ebf9cc892befe00190552d6",
+          isLogEnabled: false,
+          autoStart: false,                       
           isLogoutEnabled: true,
-          // filterByRequester: true,                  /** true/false **/
-          // showWaitTime: false,                        /** true/false **/
-          // showAvailableAgents: true,                 /** true/false **/
-          // showLogoutOption: false,                    /** true/false **/
-          // showWidgetNameInConversation: true,    
-          // startMessage: {
-          //   text: "hello",
-          //   type: "text",
-          //   attributes: {
-          //     subtype: "info"
-          //   },
-          //   metadata: {}
-          // },
-          hideAttachButton: false
       };
 
       (function(d, s, id) {
@@ -72,39 +26,19 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
       
+     
       window.tileDeskAsyncInit = function() {
-        
+       
         window.tiledesk.on('loadParams', function(event_data) {
           console.log("test-custom-auth.html loadParams");
           setTimeout(function() {
-            window.tiledesk.showCallout()
+            //window.tiledesk.showCallout();
+            // token PRE
+            window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJzdWIiOiJ1c2VyZXh0ZXJuYWwiLCJhdWQiOiJodHRwczovL3RpbGVkZXNrLmNvbS9wcm9qZWN0cy81ZWMyNDk4ZjViZGExNDAwMzRjY2UyNjcifQ.wlx_y3daHcJ7LFmAu1QcgakTqqHdAlNsJhk7-sRr1OQ");
+            // token PROD
+            // window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJhbmRyZWFjdXN0b20iLCJsYXN0bmFtZSI6Imxlb2N1c3RvbSIsImVtYWlsIjoiZW1haWwyQGVtYWlsLmNvbSIsImN1c3RvbUF0dHIiOiJjMSIsInN1YiI6InVzZXJleHRlcm5hbCIsImF1ZCI6Imh0dHBzOi8vdGlsZWRlc2suY29tL3Byb2plY3RzLzVlYmY5Y2M4OTJiZWZlMDAxOTA1NTJkNiJ9.al6ovk6KvsboENrVnWe6AdpezhDc6hW7shQHm0-tzX0");
           }, 3000)
         });
-
-  //       window.tiledesk.on('onNewConversation', function(event_data) {
-  //         console.log("test-custom-auth.html onNewConversation",event_data);
-  //         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-  //         console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
-  //         if(tiledeskToken) {
-  //           var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-  //           httpRequest.setRequestHeader('Content-type', 'application/json');
-  //           httpRequest.setRequestHeader('Authorization',tiledeskToken);
-  //           httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"id_user":event_data.detail.global.senderId, "request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentID, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-  //         }
-  //       });
-
-  //       window.tiledesk.on('isLoggedIn', function(event_data) {
-  //         console.log("test-custom-auth.html isLoggedIn",event_data);
-  //         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-  //         console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
-  //         if(tiledeskToken) {
-  //           var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-  //           httpRequest.setRequestHeader('Content-type', 'application/json');
-  //           httpRequest.setRequestHeader('Authorization',tiledeskToken);
-  //           httpRequest.send(JSON.stringify({"name":"log_in","attributes": {"id_user":event_data.detail.global.senderId, "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
-  //         }
-  //       });
-        
       };
     </script>
   </head>

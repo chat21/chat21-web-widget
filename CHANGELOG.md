@@ -1,4 +1,8 @@
 # chat21-web-widget ver 3.0
+
+### 4.0.19
+- bug fix: signInWithCustomToken
+
 ### 4.0.18
 - changed: add spinner to new conversation
 
