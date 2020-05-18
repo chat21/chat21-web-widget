@@ -902,17 +902,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private signInWithCustomToken(token: string) {
         const that = this;
         try {
-            // const token = response.token;
-            // const user = response.user;
-            // const projectid = this.g.projectid;
-            this.g.wdLog(['signInWithCustomToken token ', token]);
-            this.authService.createFirebaseToken(token)
-            .subscribe(firebaseToken => {
-                that.g.setParameter('userToken', token);
-                // that.g.setParameter('userEmail', user.email);
-                // that.g.setParameter('userId', user._id);
-                // that.g.setAttributeParameter('userEmail', user.email);
-                that.authService.authenticateFirebaseCustomToken(firebaseToken);
+            this.authService.signInWithCustomToken(token)
+            .subscribe(resp => {
+                that.g.wdLog(['signInWithCustomToken token ', resp]);
+                 if (resp.success === true && resp.token) {
+                    // that.g.setParameter('userEmail', resp.user.email);
+                    // that.g.setParameter('userId', resp.user._id);
+                    // that.g.setAttributeParameter('userEmail', resp.user.email);
+                    that.authService.createFirebaseToken(resp.token)
+                    .subscribe(firebaseToken => {
+                        that.g.setParameter('firebaseToken', firebaseToken);
+                        that.authService.authenticateFirebaseCustomToken(firebaseToken);
+                    }, error => {
+                        console.error('Error creating firebase token: ', error);
+                        that.signOut();
+                    });
+                 }
             }, error => {
                 console.error('Error creating firebase token: ', error);
                 that.signOut();

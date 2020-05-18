@@ -175,6 +175,16 @@ export class AuthService {
       .map((response) => response.json());
   }
 
+  public signInWithCustomToken(token: string) {
+    const url = this.API_URL + 'auth/signinWithCustomToken';
+    this.g.wdLog(['url', url]);
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', token);
+    return this.http
+    .post(url, null, { headers })
+    .map((response) => response.json());
+  }
   /** */
   // token è un Tiledesk token ritorna Firebase Token
   public createFirebaseToken(token, projectId?) {
