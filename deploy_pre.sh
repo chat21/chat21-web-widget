@@ -47,3 +47,9 @@ cd ..
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
 echo new version deployed $version/ on s3://tiledesk-widget-pre/v2
 echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
+
+
+## AZIONI per committare: 
+## 1) modificare package.json e package-lock.json aggiungendo il num di versione nuovo
+## 2) fare il commit tramite sourcetree
+## 3) da terminale richiamare ./deploy_pre.sh
