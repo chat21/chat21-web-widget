@@ -1,4 +1,7 @@
 # chat21-web-widget ver 3.0
+### 4.0.22
+- bug fix: timeout spinner
+
 ### 4.0.21
 - bug fix: with autoStart == false not start the login 
 - bug fix: save tiledesk token in global
