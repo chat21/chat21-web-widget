@@ -22,9 +22,10 @@
         js = d.createElement(s); 
         js.id = id; //js.async=!0;
         // PRE
-        js.src = "./launch.js"; // https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/
+        // js.src = "./launch.js"; //
+        js.src = "https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/launch.js";
         // PROD
-        // js.src = "https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v4/launch.js";
+        // js.src = "https://widget.tiledesk.com/v4/launch.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
       

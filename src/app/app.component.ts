@@ -161,8 +161,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (autoStart === false) { return; }
             console.log('obsLoggedUser ------------> ', user, autoStart);
             this.ngZone.run(() => {
-                // that.g.tiledeskToken = that.storageService.getItemWithoutProjectId('tiledeskToken');
-                // that.g.firebaseToken = that.storageService.getItemWithoutProjectId('firebaseToken');
+                const tiledeskTokenTEMP = that.storageService.getItemWithoutProjectId('tiledeskToken');
+                if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
+                    that.g.tiledeskToken = tiledeskTokenTEMP;
+                }
+                const firebaseTokenTEMP = that.storageService.getItemWithoutProjectId('firebaseToken');
+                if (firebaseTokenTEMP && firebaseTokenTEMP !== undefined) {
+                    that.g.firebaseToken = firebaseTokenTEMP;
+                }
+
                 console.log('tiledeskToken ------------> ', that.g.tiledeskToken);
                 if (user === -2) {
                     /** ho fatto un reinit */
