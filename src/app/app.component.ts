@@ -923,10 +923,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.setAttributeParameter('userEmail', resp.user.email);
                     console.log('salvo tiledesk token:: ', resp.token);
                     that.g.tiledeskToken = resp.token;
-                    that.g.setParameter('tiledeskToken', resp.token);
+                    // that.g.setParameter('tiledeskToken', resp.token);
+                    that.storageService.setItemWithoutProjectId('tiledeskToken', resp.token);
                     that.authService.createFirebaseToken(resp.token)
                     .subscribe(firebaseToken => {
-                        that.g.setParameter('firebaseToken', firebaseToken);
+                        that.g.firebaseToken = firebaseToken;
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
                     }, error => {
                         console.error('Error creating firebase token: ', error);

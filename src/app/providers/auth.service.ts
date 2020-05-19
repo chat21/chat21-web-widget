@@ -105,11 +105,14 @@ export class AuthService {
   // -------------- BEGIN SIGN IN ANONYMOUSLY  -------------- //
 
   resigninAnonymousAuthentication() {
+    const that = this;
     const tiledeskToken = this.g.tiledeskToken;
     if (tiledeskToken) {
       this.resigninAnonymously(tiledeskToken)
       .subscribe(response => {
         if (response.token) {
+          that.g.tiledeskToken = tiledeskToken;
+          that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
           // const newTiledeskToken = response.token;
           // console.log('tiledeskToken 1: ', tiledeskToken);
           // console.log('tiledeskToken 2: ', newTiledeskToken);
@@ -127,12 +130,9 @@ export class AuthService {
         const tiledeskToken = response.token;
         console.log('salvo tiledesk token:: ', tiledeskToken);
         that.g.tiledeskToken = tiledeskToken;
-        that.g.setParameter('tiledeskToken', tiledeskToken);
         that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
         that.createFirebaseToken(tiledeskToken, that.g.projectid)
         .subscribe(firebaseToken => {
-          // that.g.setParameter('firebaseToken', firebaseToken);
-          that.storageService.setItemWithoutProjectId('firebaseToken', firebaseToken);
           that.authenticateFirebaseCustomToken(firebaseToken);
         }, error => {
           console.log('createFirebaseToken: ', error);
@@ -178,8 +178,7 @@ export class AuthService {
   public signInWithCustomToken(token: string) {
     console.log('salvo tiledesk token:: ', token);
     this.g.tiledeskToken = token;
-    console.log('salvo tiledesk token:: ', token);
-    this.g.setParameter('tiledeskToken', token);
+    this.storageService.setItemWithoutProjectId('tiledeskToken', token);
     this.g.autoStart = true;
     const url = this.API_URL + 'auth/signinWithCustomToken';
     this.g.wdLog(['url', url]);
@@ -206,15 +205,15 @@ export class AuthService {
   /** */
   authenticateFirebaseCustomToken(token) {
     this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken']);
+    this.g.firebaseToken = token;
+    this.storageService.setItemWithoutProjectId('firebaseToken', token);
     const that = this;
     firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
       // Sign-out successful.
       firebase.auth().signInWithCustomToken(token)
       .then(function(response) {
         that.g.setParameter('signInWithCustomToken', true);
-        // that.g.setParameter('shemaVersion', environment.shemaVersion);
         that.storageService.setItemWithoutProjectId('shemaVersion', environment.shemaVersion);
-
         that.user = response.user;
         if (that.unsubscribe) {
           that.unsubscribe();
