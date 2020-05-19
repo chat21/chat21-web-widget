@@ -1,4 +1,8 @@
 # chat21-web-widget ver 3.0
+### 4.0.21
+- bug fix: with autoStart == false not start the login 
+- bug fix: save tiledesk token in global
+- bug fix: hide the spinner when the first message arrives
 
 ### 4.0.20
 - new: added signInWithCustomToken before createCustomToken

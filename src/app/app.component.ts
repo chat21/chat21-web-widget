@@ -155,12 +155,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          * SUBSCRIBE TO ASYNC LOGIN FUNCTION
          */
         const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
-            console.log('obsLoggedUser ------------> ', user);
+            // if autostart == false don't autenticate!
+            // after called signInWithCustomToken need set autostart == true
+            const autoStart = that.g.autoStart;
+            if (autoStart === false) { return; }
+            console.log('obsLoggedUser ------------> ', user, autoStart);
             this.ngZone.run(() => {
-                that.g.tiledeskToken = this.storageService.getItemWithoutProjectId('tiledeskToken');
-                that.g.firebaseToken = this.storageService.getItemWithoutProjectId('firebaseToken');
-
-                const autoStart = that.g.autoStart;
+                // that.g.tiledeskToken = that.storageService.getItemWithoutProjectId('tiledeskToken');
+                // that.g.firebaseToken = that.storageService.getItemWithoutProjectId('firebaseToken');
+                console.log('tiledeskToken ------------> ', that.g.tiledeskToken);
                 if (user === -2) {
                     /** ho fatto un reinit */
                     console.log('sono nel caso reinit -2');
@@ -181,10 +184,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     console.log('sono nel caso in cui non sono loggato 0');
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
-                    console.log('autoStart --------->', autoStart);
-                    if (autoStart === true) {
+                    // console.log('autoStart --------->', autoStart);
+                    // if (autoStart === true) {
                         that.setAuthentication();
-                    }
+                    // }
                 } else if (user) {
                     /** sono loggato */
                     console.log('sono nel caso in cui sono loggato');
@@ -209,6 +212,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             //     // that.triggerOnAuthStateChanged();
             });
         });
+        
+        console.log('onAuthStateChanged ------------> ');
         this.subscriptions.push(obsLoggedUser);
         this.authService.onAuthStateChanged();
     }
@@ -909,6 +914,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.setParameter('userEmail', resp.user.email);
                     // that.g.setParameter('userId', resp.user._id);
                     // that.g.setAttributeParameter('userEmail', resp.user.email);
+                    console.log('salvo tiledesk token:: ', resp.token);
+                    that.g.tiledeskToken = resp.token;
+                    that.g.setParameter('tiledeskToken', resp.token);
                     that.authService.createFirebaseToken(resp.token)
                     .subscribe(firebaseToken => {
                         that.g.setParameter('firebaseToken', firebaseToken);

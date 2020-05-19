@@ -126,9 +126,9 @@ function loadIframe(tiledeskScriptBaseLocation) {
     /**** BEGIN EVENST ****/
     /** */
     window.tiledesk.on('onNewConversation', function(event_data) {
-        console.log("test-custom-auth.html onNewConversation",event_data);
+        console.log("test-custom-auth.html onNewConversation >>>",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        console.log(">>>> tiledeskToken >>>> ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
           var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
           httpRequest.setRequestHeader('Content-type', 'application/json');
@@ -141,7 +141,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     window.tiledesk.on('onLoggedIn', function(event_data) {
         console.log("test-custom-auth.html onLoggedIn",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
             var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
             httpRequest.setRequestHeader('Content-type', 'application/json');
@@ -154,7 +154,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     window.tiledesk.on('onAuthStateChanged', function(event_data) {
         console.log("test-custom-auth.html onAuthStateChanged",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-        console.log("------------------->>>> tiledeskToken: ",tiledeskToken);
+        console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
             var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
             httpRequest.setRequestHeader('Content-type', 'application/json');

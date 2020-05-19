@@ -125,8 +125,9 @@ export class AuthService {
       console.log('signinAnonymously: ', response);
       if (response.token) {
         const tiledeskToken = response.token;
-        // console.log(tiledeskToken);
-        // that.g.setParameter('tiledeskToken', tiledeskToken);
+        console.log('salvo tiledesk token:: ', tiledeskToken);
+        that.g.tiledeskToken = tiledeskToken;
+        that.g.setParameter('tiledeskToken', tiledeskToken);
         that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
         that.createFirebaseToken(tiledeskToken, that.g.projectid)
         .subscribe(firebaseToken => {
@@ -163,7 +164,6 @@ export class AuthService {
   private signinAnonymously() {
     const url = this.API_URL + 'auth/signinAnonymously';
     this.g.wdLog(['url', url]);
-    // that.g.setParameter('tiledeskToken', tiledeskToken);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = {
@@ -176,6 +176,11 @@ export class AuthService {
   }
 
   public signInWithCustomToken(token: string) {
+    console.log('salvo tiledesk token:: ', token);
+    this.g.tiledeskToken = token;
+    console.log('salvo tiledesk token:: ', token);
+    this.g.setParameter('tiledeskToken', token);
+    this.g.autoStart = true;
     const url = this.API_URL + 'auth/signinWithCustomToken';
     this.g.wdLog(['url', url]);
     const headers = new Headers();
@@ -207,7 +212,6 @@ export class AuthService {
       firebase.auth().signInWithCustomToken(token)
       .then(function(response) {
         that.g.setParameter('signInWithCustomToken', true);
-
         // that.g.setParameter('shemaVersion', environment.shemaVersion);
         that.storageService.setItemWithoutProjectId('shemaVersion', environment.shemaVersion);
 
