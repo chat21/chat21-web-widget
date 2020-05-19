@@ -1,4 +1,7 @@
 # chat21-web-widget ver 3.0
+### 4.0.23
+- bug fix: tiledesk token in local storage
+
 ### 4.0.22
 - bug fix: timeout spinner
 
