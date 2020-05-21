@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.25
+- bug fix: log; css close callout; vieport TWP page 
+
 ### 4.0.24
 - changed: set firebase.auth.Auth.Persistence.NONE;
 
