@@ -26,14 +26,14 @@ export class TranslatorService {
     public g: Globals
   ) {
 
-    let windowContext = window
+    let windowContext = window;
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
       windowContext = window.parent;
     }
 
     if (windowContext['tiledesk']) {
       this.baseLocation = windowContext['tiledesk'].getBaseLocation()
-      console.log(`»»»» initI18n baseLocation`, this.baseLocation);
+      // console.log(`»»»» initI18n baseLocation`, this.baseLocation);
     }
 
   }
@@ -53,7 +53,7 @@ export class TranslatorService {
 
 
   getTranslationFileUrl(browserLang) {
-    console.log(`»»»» getTranslationFileUrl `, environment);
+    // console.log(`»»»» getTranslationFileUrl `, environment);
 
     if (environment.loadRemoteTranslations) {
 
@@ -75,10 +75,10 @@ export class TranslatorService {
   initI18n(): Promise<any> {
 
     this._translate.addLangs(['en', 'it']);
-    console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
+    // console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
 
     // Set the default language for translation strings.
-    let defaultLanguage = 'en';
+    const defaultLanguage = 'en';
     this._translate.setDefaultLang(defaultLanguage);
 
     // Detect user language.
@@ -106,8 +106,8 @@ export class TranslatorService {
           this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((data) => {
             // console.log(`»»»» initI18n Get default language - data `, data);
 
-            console.log(`»»»» initI18n Successfully initialized default language from URL'`, data.url);
-            console.log(`»»»» initI18n - »»» default language - data body `, JSON.parse(data["_body"]));
+            // console.log(`»»»» initI18n Successfully initialized default language from URL'`, data.url);
+            // console.log(`»»»» initI18n - »»» default language - data body `, JSON.parse(data["_body"]));
 
             if (environment.loadRemoteTranslations) {
 
@@ -149,7 +149,7 @@ export class TranslatorService {
           }, () => {
 
             resolve(true);
-            console.log('»»»» initI18n Get default language * COMPLETE *');
+            // console.log('»»»» initI18n Get default language * COMPLETE *');
           });
 
           return Observable.throw(error);
@@ -157,17 +157,17 @@ export class TranslatorService {
         .subscribe((data) => {
           // I18N File loaded successfully, we can proceed
           // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
-          console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
-          console.log(`»»»» initI18n - »»» ${browserLang} language - data body`, JSON.parse(data._body));
+          // console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
+          // console.log(`»»»» initI18n - »»» ${browserLang} language - data body`, JSON.parse(data._body));
 
           this._translate.use(browserLang);
-          console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
+          // console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
 
           if (environment.loadRemoteTranslations) {
 
             const remote_translation_res = JSON.parse(data._body);
             // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res); 
-            console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
+            // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
 
             this._translate.setTranslation(browserLang, remote_translation_res.data);
            
@@ -184,7 +184,7 @@ export class TranslatorService {
         }, () => {
 
           resolve(true);
-          console.log(`»»»» initI18n Get '${browserLang}' language - COMPLETE`);
+          // console.log(`»»»» initI18n Get '${browserLang}' language - COMPLETE`);
         });
 
     });
@@ -251,7 +251,7 @@ export class TranslatorService {
 
 
     this._translate.get(labels).subscribe(res => {
-      console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
+      // console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
       globals.LABEL_PLACEHOLDER = res['LABEL_PLACEHOLDER']
       globals.LABEL_START_NW_CONV = res['LABEL_START_NW_CONV'];
       globals.LABEL_FIRST_MSG = res['LABEL_FIRST_MSG'];
@@ -321,7 +321,7 @@ export class TranslatorService {
 
     // translate
 
-    console.log('»»»»» globals', globals)
+    // console.log('»»»»» globals', globals)
     // globals.LABEL_PLACEHOLDER = this.translateForKey('LABEL_PLACEHOLDER') // done
     // globals.LABEL_START_NW_CONV = this.translateForKey('LABEL_START_NW_CONV'); // done
     // globals.LABEL_FIRST_MSG = this.translateForKey('LABEL_FIRST_MSG'); // done

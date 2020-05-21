@@ -54,8 +54,8 @@ export class AuthService {
           that.obsLoggedUser.next(0);
         }
       } else {
-        console.log('that.environment.shemaVersion', environment.shemaVersion);
-        console.log('shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion'));
+        that.g.wdLog(['that.environment.shemaVersion', environment.shemaVersion]);
+        that.g.wdLog(['shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion')]);
         const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
         const shemaVersionTEMP = that.storageService.getItemWithoutProjectId('shemaVersion');
         if (environment.shemaVersion !== shemaVersionTEMP) {
@@ -118,7 +118,7 @@ export class AuthService {
         if (response.token) {
           that.g.tiledeskToken = tiledeskToken;
           that.storageService.setItem('tiledeskToken', tiledeskToken);
-          //that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
+          // that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
           // const newTiledeskToken = response.token;
           // console.log('tiledeskToken 1: ', tiledeskToken);
           // console.log('tiledeskToken 2: ', newTiledeskToken);
@@ -140,9 +140,9 @@ export class AuthService {
     } else {
       this.signinAnonymously()
       .subscribe(response => {
-        console.log('signinAnonymously: ', response);
+        that.g.wdLog(['signinAnonymously: ', response]);
         if (response.token) {
-          console.log('salvo tiledesk token:: ', response.token);
+          that.g.wdLog(['salvo tiledesk token:: ', response.token]);
           that.g.tiledeskToken = response.token;
           // remove tiledeskToken from storage
           // this.storageService.removeItemForSuffix('_tiledeskToken');
@@ -194,7 +194,7 @@ export class AuthService {
   }
 
   public signInWithCustomToken(token: string) {
-    console.log('salvo tiledesk token:: ', token);
+    this.g.wdLog(['salvo tiledesk token:: ', token]);
     this.g.tiledeskToken = token;
     this.storageService.setItem('tiledeskToken', token);
     // this.storageService.setItemWithoutProjectId('tiledeskToken', token);
