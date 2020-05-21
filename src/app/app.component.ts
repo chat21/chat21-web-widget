@@ -161,7 +161,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (autoStart === false) { return; }
             console.log('obsLoggedUser ------------> ', user, autoStart);
             this.ngZone.run(() => {
-                const tiledeskTokenTEMP = that.storageService.getItemWithoutProjectId('tiledeskToken');
+                // const tiledeskTokenTEMP = that.storageService.getItemWithoutProjectId('tiledeskToken');
+                const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
                 if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
                     that.g.tiledeskToken = tiledeskTokenTEMP;
                 }
@@ -199,8 +200,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     /** sono loggato */
                     console.log('sono nel caso in cui sono loggato');
                     that.g.wdLog([' anonymousAuthenticationInNewProject']);
-                    that.authService.resigninAnonymousAuthentication();
-
+                    // that.authService.resigninAnonymousAuthentication();
+                    // confronto id utente tiledesk con id utente di firebase
+                    // senderid deve essere == id di firebase
+                    console.log('SENDERID: ', user.uid);
+                    console.log('FIREBASEID: ', );
                     that.g.wdLog(['USER AUTENTICATE: ', user.uid]);
                     that.g.setParameter('senderId', user.uid);
                     that.g.setParameter('isLogged', true);
@@ -539,7 +543,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userId = this.g.userId;
         const userToken = this.g.userToken;
         this.isBeingAuthenticated = true;
-
+        const tiledeskToken = this.g.tiledeskToken;
         if (userEmail && userPassword) {
              this.g.wdLog([' ---------------- 10 ---------------- ']);
             // se esistono email e psw faccio un'autenticazione firebase con email
@@ -562,7 +566,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog([' ---------------- 12 ---------------- ']);
             this.g.wdLog(['this.g.userToken:: ', userToken]);
             this.authService.authenticateFirebaseCustomToken(userToken);
-        } else if (this.authService.getCurrentUser()) {
+        } else if (this.authService.getCurrentUser() && tiledeskToken) {
             //  SONO GIA' AUTENTICATO
             this.g.wdLog([' ---------------- 13 ---------------- ']);
             const currentUser = this.authService.getCurrentUser();
@@ -921,10 +925,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.setParameter('userEmail', resp.user.email);
                     // that.g.setParameter('userId', resp.user._id);
                     // that.g.setAttributeParameter('userEmail', resp.user.email);
-                    console.log('salvo tiledesk token:: ', resp.token);
-                    that.g.tiledeskToken = resp.token;
-                    // that.g.setParameter('tiledeskToken', resp.token);
-                    that.storageService.setItemWithoutProjectId('tiledeskToken', resp.token);
                     that.authService.createFirebaseToken(resp.token)
                     .subscribe(firebaseToken => {
                         that.g.firebaseToken = firebaseToken;

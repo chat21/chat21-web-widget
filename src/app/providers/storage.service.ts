@@ -142,6 +142,16 @@ export class StorageService {
     return this.removeItemForKey(newKey);
   }
 
+  public removeItemForSuffix(suffix: string) {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.indexOf(suffix) !== -1) {
+        localStorage.removeItem(key);
+      }
+    }
+  }
+
+
   public removeItemForKey(key: string) {
     // console.log('removeItemForKey:: ', key);
     if (this.g.persistence === 'local') {

@@ -45,6 +45,7 @@ export class AuthService {
 
   onAuthStateChanged() {
     const that = this;
+    that.g.wdLog(['onAuthStateChanged']);
     // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
@@ -55,7 +56,11 @@ export class AuthService {
       } else {
         console.log('that.environment.shemaVersion', environment.shemaVersion);
         console.log('shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion'));
-        if (environment.shemaVersion !== that.storageService.getItemWithoutProjectId('shemaVersion')) {
+        const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
+        const shemaVersionTEMP = that.storageService.getItemWithoutProjectId('shemaVersion');
+        if (environment.shemaVersion !== shemaVersionTEMP) {
+          that.signOut(0);
+        } else if (!tiledeskTokenTEMP || tiledeskTokenTEMP === undefined) {
           that.signOut(0);
         } else {
           that.g.wdLog(['PASSO CURRENT USER']);
@@ -112,7 +117,8 @@ export class AuthService {
       .subscribe(response => {
         if (response.token) {
           that.g.tiledeskToken = tiledeskToken;
-          that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
+          that.storageService.setItem('tiledeskToken', tiledeskToken);
+          //that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
           // const newTiledeskToken = response.token;
           // console.log('tiledeskToken 1: ', tiledeskToken);
           // console.log('tiledeskToken 2: ', newTiledeskToken);
@@ -123,25 +129,37 @@ export class AuthService {
   /** */
   anonymousAuthentication() {
     const that = this;
-    this.signinAnonymously()
-    .subscribe(response => {
-      console.log('signinAnonymously: ', response);
-      if (response.token) {
-        const tiledeskToken = response.token;
-        console.log('salvo tiledesk token:: ', tiledeskToken);
-        that.g.tiledeskToken = tiledeskToken;
-        that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
-        that.createFirebaseToken(tiledeskToken, that.g.projectid)
-        .subscribe(firebaseToken => {
-          that.authenticateFirebaseCustomToken(firebaseToken);
-        }, error => {
-          console.log('createFirebaseToken: ', error);
-        });
-      }
-    }, error => {
-      console.log('Error creating firebase token: ', error);
-      that.signOut(0);
-    });
+    const tiledeskToken = that.storageService.getItem('tiledeskToken');
+    if (tiledeskToken) {
+      that.createFirebaseToken(tiledeskToken, that.g.projectid)
+      .subscribe(firebaseToken => {
+        that.authenticateFirebaseCustomToken(firebaseToken);
+      }, error => {
+        console.log('createFirebaseToken: ', error);
+      });
+    } else {
+      this.signinAnonymously()
+      .subscribe(response => {
+        console.log('signinAnonymously: ', response);
+        if (response.token) {
+          console.log('salvo tiledesk token:: ', response.token);
+          that.g.tiledeskToken = response.token;
+          // remove tiledeskToken from storage
+          // this.storageService.removeItemForSuffix('_tiledeskToken');
+          that.storageService.setItem('tiledeskToken', response.token);
+          // that.storageService.setItemWithoutProjectId('tiledeskToken', tiledeskToken);
+          that.createFirebaseToken(response.token, that.g.projectid)
+          .subscribe(firebaseToken => {
+            that.authenticateFirebaseCustomToken(firebaseToken);
+          }, error => {
+            console.log('createFirebaseToken: ', error);
+          });
+        }
+      }, error => {
+        console.log('Error creating firebase token: ', error);
+        that.signOut(0);
+      });
+    }
   }
 
   /** */
@@ -178,7 +196,8 @@ export class AuthService {
   public signInWithCustomToken(token: string) {
     console.log('salvo tiledesk token:: ', token);
     this.g.tiledeskToken = token;
-    this.storageService.setItemWithoutProjectId('tiledeskToken', token);
+    this.storageService.setItem('tiledeskToken', token);
+    // this.storageService.setItemWithoutProjectId('tiledeskToken', token);
     this.g.autoStart = true;
     const url = this.API_URL + 'auth/signinWithCustomToken';
     this.g.wdLog(['url', url]);
@@ -386,6 +405,8 @@ export class AuthService {
 
 
   getFirebaseAuthPersistence() {
+    return firebase.auth.Auth.Persistence.NONE;
+    /*
     if (this.g.persistence === 'local') {
       // console.log('getFirebaseAuthPersistence local');
       if (supports_html5_storage()) {
@@ -410,6 +431,7 @@ export class AuthService {
         return firebase.auth.Auth.Persistence.NONE;
       }
     }
+    */
   }
 
 

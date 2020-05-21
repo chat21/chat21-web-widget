@@ -14,7 +14,7 @@
               // Handler for .ready() called.
               window.tiledeskSettings = 
               {
-                  projectid: "5ec3e803f0b4b80034b1a412", //"5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
+                  projectid: "5e905307a52f07001781fae6", //"5b55e806c93dde00143163dd", //"5e8d7db806a5e200178e2df5", , //"5e8b398fef981300175e610e ", //
                   persistence:"local",                /** local/session/none **/
                   // userEmail: "czone555@gmail.com",
                   // userPassword:"123456",
@@ -82,12 +82,12 @@
               window.tileDeskAsyncInit = function() {
                 console.log("testi.html tileDeskAsyncInit")
                 
-                // window.tiledesk.on('loadParams', function(event_data) {
-                //   console.log("testi.html loadParams");
-                //   setTimeout(function() {
-                //     window.tiledesk.showCallout()
-                //   }, 3000)
-                // });
+                window.tiledesk.on('loadParams', function(event_data) {
+                  console.log("testi.html loadParams");
+                  setTimeout(function() {
+                    window.tiledesk.showCallout()
+                  }, 3000)
+                });
 
 //                 window.tiledesk.on('onNewConversation', function(event_data) {
 //                     console.log("testi.html onNewConversation",event_data);
@@ -137,21 +137,21 @@
                 // });
 
 
-                // window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
-                //   console.log("onNewConversationComponentInit");
-                //   const message = 'hello';
-                //   const recipientId = event_data.detail.newConvId;
-                //   const type = 'text';
-                //   const metadata = {};
-                //   const attributes = {test:'test attributes', subtype: 'info'};
-                //   window.tiledesk.sendSupportMessage(
-                //     message,
-                //     recipientId,
-                //     type,
-                //     metadata,
-                //     attributes
-                //   )
-                // });
+                window.tiledesk.on('onNewConversationComponentInit', function(event_data) {
+                  console.log("onNewConversationComponentInit");
+                  const message = 'hello';
+                  const recipientId = event_data.detail.newConvId;
+                  const type = 'text';
+                  const metadata = {};
+                  const attributes = {test:'test attributes', subtype: 'info'};
+                  window.tiledesk.sendSupportMessage(
+                    message,
+                    recipientId,
+                    type,
+                    metadata,
+                    attributes
+                  )
+                });
                 
                 
               
@@ -233,32 +233,32 @@
                 //   )
                 // });
 
-                // window.tiledesk.on('onBeforeDepartmentsFormRender', function(event_data) {
-                //   var departments =  event_data.detail.departments;
-                //   var lang = window.tiledesk.angularcomponent.component.g.lang;
-                //   console.log('onBeforeDepartmentsFormRender', departments, lang);
-                //   if (lang && lang === 'ca'){
-                //     return departments.filter(function(dep) {
-                //         if (dep.name.includes(':Spanish')){
-                //           dep.name = dep.name.split(":")[0]
-                //           return dep;
-                //         }
-                //     });
-                //   } else {
-                //     return departments.filter(function(dep) {
-                //         if (dep.name.includes(':Valenciano')){
-                //           dep.name = dep.name.split(":")[0]
-                //           return dep;
-                //         }
-                //     });
-                //   }
-                // });
+                window.tiledesk.on('onBeforeDepartmentsFormRender', function(event_data) {
+                  var departments =  event_data.detail.departments;
+                  var lang = window.tiledesk.angularcomponent.component.g.lang;
+                  console.log('onBeforeDepartmentsFormRender', departments, lang);
+                  if (lang && lang === 'ca'){
+                    return departments.filter(function(dep) {
+                        if (dep.name.includes(':Spanish')){
+                          dep.name = dep.name.split(":")[0]
+                          return dep;
+                        }
+                    });
+                  } else {
+                    return departments.filter(function(dep) {
+                        if (dep.name.includes(':Valenciano')){
+                          dep.name = dep.name.split(":")[0]
+                          return dep;
+                        }
+                    });
+                  }
+                });
 
                 
-                // function messageRender(){ 
-                //   console.log('messageRender');
-                //   return true;
-                // }
+                function messageRender(){ 
+                  console.log('messageRender');
+                  return true;
+                }
 
               };
               
