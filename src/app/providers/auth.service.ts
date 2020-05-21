@@ -45,7 +45,7 @@ export class AuthService {
 
   onAuthStateChanged() {
     const that = this;
-    that.g.wdLog(['onAuthStateChanged']);
+    that.g.wdLog(['-------------------- >>>> onAuthStateChanged <<<< ------------------------']);
     // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
     this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {

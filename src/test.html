@@ -1,301 +1,40 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Tilechat Widget</title>
-  <base href="./">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-</head>
-<style>
-.align-right {
-    text-align: right;
-}
-</style>
-<body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="./">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="application/javascript"> 
+      // Handler for .ready() called.
+      window.tiledeskSettings = 
+      {
+          // PRE:   
+          projectid: "5ec2498f5bda140034cce267",
+          // PROD: 
+          // projectid: "5ebf9cc892befe00190552d6",
+          isLogEnabled: false
+      };
 
-        <button id="idShow">
-          SHOW
-        </button>
-        <button id="idHide">
-          HIDE
-        </button>
-        <button id="idOpen">
-          OPEN
-        </button>
-        <button id="idClose">
-          CLOSE
-        </button>
-        <button id="idAuth">
-            AUTH passing JWT Token
-        </button>
-        <button id="idAuthAuto">
-          AUTH with email & password
-        </button>
-
-        <button id="changeWelcomeTitle">
-          Change WelcomeTitle
-        </button>
-    
-        <button id="preChatForm">
-            preChatForm
-        </button>
-        
-        
-        <script type="application/javascript">
-        $( document ).ready(function() {
-    
-    
-          
-          // Handler for .ready() called.
-          window.tiledeskSettings = 
-          {
-              projectid: "5b55e806c93dde00143163dd",
-              development: true,
-              calloutTimer: 10,
-              // userFullname: "Dario",
-              // userEmail: "czone555@gmail.com",
-              welcomeTitle: "Benvenuti su questa chat",
-              welcomeMsg: "Come possiamo aiutarti?",
-              logoChat: "http://serataromanticaroma.it/wp-content/uploads/2018/09/Logo-bianco-04.png",
-              startFromHome: true,
-              preChatForm: true,
-              autoStart: true,
-              isLogEnabled:true,
-              persistence: 'session'
-              //persistence: 'local'
-          };
-    
-          (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); 
-            js.id = id; //js.async=!0;
-            js.src = "./tiledesk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'tiledesk-jssdk'));
-  
-          localStorage.setItem("user_fullname", "Andrea from localStorage");
-          localStorage.setItem("user_email", "andrea.leo@f21.it");
-    
-          window.tileDeskAsyncInit = function() {
-              window.tiledesk.on('loadParams', function(event_data) {
-                window.tiledeskSettings.welcomeMsg = " Hello at: " + new Date().toLocaleString();
-                window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
-                window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
-                window.tiledesk.show();
-                window.tiledesk.open();
-                //window.tiledesk.hide();
-                //window.tiledesk.open();
-            });
-    
-            window.tiledesk.on('beforeMessageSend', function(event_data) {
-              var message =  event_data.detail;
-              message.attributes.pagetitle = document.title;
-              message.attributes.userCompany = "Frontiere21";
-            });
-    
-            window.tiledesk.on('afterMessageSend', function(event_data) {
-              console.log("afterMessageSend called ", event_data);
-            });
-            
-    
-            window.tiledesk.on('isLoggedIn', function(event_data) {
-              console.log("isLoggedIn called ", event_data);
-            });
-            
-            // function sendMessageFromComponent(component) {
-            //     component.sendMessage("hello from web api", "text");
-            //   }
-
-            window.tiledesk.on('afterMessageRender', function(event_data) {
-              // console.log("event_data", event_data);
-              
-
-              var message =  event_data.detail.message;  
-              var messageEl = event_data.detail.messageEl;
-              var component = event_data.detail.component;
-              // console.log("component",component);              
-
-               console.info("afterMessageRender message", message, " and messageEl", messageEl);              
-              //  console.info(message.uid);
-              
-             
-              // console.log("innerHTML",messageEl.innerHTML);
-              // console.log("innerHTML.indexOf", messageEl.innerHTML.indexOf("box"));
-
-                if (message.text === "ciao" && messageEl.innerHTML.indexOf("box")==-1) {
-                
-
-                messageEl.innerHTML = message.text + 
-                  `<br><br>
-                  <div class="box">
-                  <button type="button" onclick='alert("hello")'>Alert</button>
-                  <button type="button" onclick='window.tiledesk.hide()'>Hide</button>
-                  <button type="button" onclick='window.tiledesk.sendMessage("Web Api", "${message.recipient}", "${message.recipient_fullname}", "hello from web api", "text", "group", null)'>Send Message</button>                  
-                  <button type="button" id="buttonSendMessageFromComponent-${message.uid}">Send Message from component</button>
-                  <div>`;
-
-
-                   var buttonSendMessageFromComponent = document.getElementById('buttonSendMessageFromComponent-'+message.uid);
-
-                    buttonSendMessageFromComponent.addEventListener('click', function (e) {
-                      component.sendMessage("hello from web api from button"+message.uid, "text");
-                    });
-
-                    
-                    window.tiledesk.endMessageRender();
-                // console.log("innerHTML",messageEl.innerHTML);
-              }
-              
-             
-              
-              //if (message.text === "ciao" && !messageEl.getAttribute("rendered")) {
-              // console.log("messageEl.attribute.rendered", messageEl.getAttribute("rendered"));
-                // messageEl.setAttribute("rendered", true);
-
-                
-
-
-
-              // messageEl.innerHTML = message.text +  message.attribues.customJson
-
-
-
-              // var sanitizer = event_data.detail.sanitizer;
-              // console.log("sanitizer", sanitizer);
-              // bypassSecurityTrustHtml
-              // message.text = sanitizer.bypassSecurityTrustHtml('<button type="button">Click Me!</button>');
-              //message.text = sanitizer.bypassSecurityTrustHtml('<b>Click Me!</b>');
-              // message.text ='<button type="button">Click Me!</button>';
-              // event_data.preventDefault();
-              // return false;
-            }); 
-
-          }
-    
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); 
+        js.id = id; //js.async=!0;
+        // PRE
+        // js.src = "./launch.js"; //
+        js.src = "https://widget-pre.tiledesk.com/v2/launch.js"; 
+        // PROD
+        // js.src = "https://widget.tiledesk.com/v4/launch.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'tiledesk-jssdk'));
+      
+     
+      window.tileDeskAsyncInit = function() {
+        window.tiledesk.on('loadParams', function(event_data) { 
         });
-
-       
-    
-        var isOpenPrechatForm = true;
-    
-        $( "#idShow" ).click(function() {
-          // alert( "Handler for .click() idShow." );
-          window.tiledesk.show();
-        });
-        $( "#idHide" ).click(function() {
-          // alert( "Handler for .click() idHide." );
-          window.tiledesk.hide();
-        });
-        $( "#idOpen" ).click(function() {
-          // alert( "Handler for .click() idOpen." );
-          window.tiledesk.open();
-        });
-        $( "#idClose" ).click(function() {
-          // alert( "Handler for .click() idClose." );
-          window.tiledesk.close();
-        });
-        $( "#idAuth" ).click(function() {
-          // alert( "Handler for .click() idAuth." );
-          var token = prompt("Please enter jwt token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW5kcmVhIiwiZW1haWwiOiJhbmRyZWEubGVvQGZyb250aWVyZTIxLml0IiwiaWF0IjoxNTQwNDYwOTM2MzkzLCJleHRlcm5hbF9pZCI6IjEyMzQ1NiJ9.wD9YDI3hEXBipoQ7kUIPRqNybFNuXZb9OPEqkxLtJoY");
-          window.tiledesk.signInWithCustomToken(token);
-          //window.tiledesk.signInAnonymous();
-        });
-
-        $( "#idAuthAuto" ).click(function() {
-          var email = prompt("Please enter the email", "demo@f21.it");
-          var password = prompt("Please enter the password", "password");
-          var jwtAttributes = prompt("Please enter the jwt field", '{"external_id":"123456","name":"Andrea","email":"auth@email.com", "custom_code":"654321" }');
-
-          var httpRequest = createCORSRequest('POST', 'https://api.tiledesk.com/v1/5b55e806c93dde00143163dd/jwt/generatetestjwt',false); //set async to false because loadParams must return when the get is complete
-          if (!httpRequest) {
-            throw new Error('CORS not supported');
-          }
-
-        console.log("onreadystatechange1");
-       
-            httpRequest.onload = function() {
-              if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                if (httpRequest.status === 200) {
-                  // alert(httpRequest.responseText);
-                  console.log("httpRequest.responseText", httpRequest.responseText);
-                  var responseJson = JSON.parse(httpRequest.responseText);
-                  // console.log("responseJson.token", responseJson.token);
-                  var token = responseJson.token.replace('JWT ', '');
-                  console.log("token", token);
-                  window.tiledesk.signInWithCustomToken(token);
-                  return true;
-                } else {
-                  alert('There was a problem with the request.');
-                }
-              }         
-            };
-
-            httpRequest.onerror = function() {
-              console.error('There was an error!');
-            };
-
-            httpRequest.setRequestHeader('Authorization', 'Basic ' + btoa(email + ":" + password));
-            httpRequest.setRequestHeader('Content-Type', 'application/json');
-
-            console.log("jwtAttributes", jwtAttributes);
-            // var body = JSON.stringify(jwtAttributes);
-            var body = jwtAttributes;
-            console.log("body", body);
-
-            httpRequest.send(body);         
-            return false;
-
-          });
-
-       
-       $( "#changeWelcomeTitle" ).click(function() {
-        var welcomeTitle = prompt("Please enter the welcometitle", "Custom welcome message");
-        window.tiledesk.angularcomponent.ngZone.run(() => {
-          window.tiledesk.angularcomponent.component.g.welcomeTitle = welcomeTitle;
-        });
-       });
-
-        $( "#preChatForm" ).click(function() {
-          isOpenPrechatForm = !isOpenPrechatForm;
-          // alert( "Handler for .click() isOpenPrechatForm. "+isOpenPrechatForm );
-          window.tiledesk.setPreChatForm(isOpenPrechatForm);
-        });
-
-
-
-         function createCORSRequest(method, url, async) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-
-              // Check if the XMLHttpRequest object has a "withCredentials" property.
-              // "withCredentials" only exists on XMLHTTPRequest2 objects.
-              xhr.open(method, url, async);
-              // console.log("xhr12");
-            } else if (typeof XDomainRequest != "undefined") {
-
-              // Otherwise, check if XDomainRequest.
-              // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-              xhr = new XDomainRequest();
-              xhr.open(method, url);
-              // console.log("xhr111");
-
-            } else {
-
-              // Otherwise, CORS is not supported by the browser.
-              xhr = null;
-              // console.log("xhrnull");
-
-            }
-            return xhr;
-      }
-        
-          
-        </script>
-
-
-</body>
-
+      };
+    </script>
+  </head>
+  <body>
+  </body>
 </html>

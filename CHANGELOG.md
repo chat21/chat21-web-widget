@@ -1,4 +1,8 @@
 # chat21-web-widget ver 3.0
+
+### 4.0.24
+- changed: set firebase.auth.Auth.Persistence.NONE;
+
 ### 4.0.23
 - bug fix: tiledesk token in local storage
 
