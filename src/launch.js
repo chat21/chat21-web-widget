@@ -131,9 +131,9 @@ function loadIframe(tiledeskScriptBaseLocation) {
         console.log(">>>> tiledeskToken >>>> ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
           var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-          httpRequest.setRequestHeader('Content-type', 'application/json');
+          httpRequest.setRequestHeader('Content-type', 'application/json');
           httpRequest.setRequestHeader('Authorization',tiledeskToken);
-          httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentSelected.id, "language": event_data.detail.global.lang, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
+          httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentSelected.id, "language": event_data.detail.global.lang, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
         }
     });
 
@@ -144,7 +144,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
             var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-            httpRequest.setRequestHeader('Content-type', 'application/json');
+            httpRequest.setRequestHeader('Content-type','application/json');
             httpRequest.setRequestHeader('Authorization',tiledeskToken);
             httpRequest.send(JSON.stringify({"name":"logged_in","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
         }
@@ -157,7 +157,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
             var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
-            httpRequest.setRequestHeader('Content-type', 'application/json');
+            httpRequest.setRequestHeader('Content-type','application/json');
             httpRequest.setRequestHeader('Authorization',tiledeskToken);
             httpRequest.send(JSON.stringify({"name":"auth_state_changed","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
         }
@@ -223,56 +223,48 @@ function initCSSWidget(tiledeskScriptBaseLocation) {
 
 //DEPRECATED
 function signInWithCustomToken() {
-    let json = JSON.stringify({
-        "id_project": "5b55e806c93dde00143163dd"
+    let json = JSON.stringify({
+        "id_project": "5b55e806c93dde00143163dd"
     });
-    
-    var httpRequest = createCORSRequest('POST', 'https://tiledesk-server-pre.herokuapp.com/auth/signinAnonymously',true); //set async to false because loadParams must return when the get is complete
-    if (!httpRequest) {
-        throw new Error('CORS not supported');
-    }
-    httpRequest.setRequestHeader('Content-type', 'application/json');
-    httpRequest.send(json);
-    httpRequest.onload = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                try {
-                    var response = JSON.parse(httpRequest.responseText);
-                    window.tiledesk.signInWithCustomToken(response);
-                }
-                catch(err) {
-                    console.error(err.message);
-                }
-                return true;
-            } else {
-                alert('There was a problem with the request.');
-            }
-        }         
-    };
-    httpRequest.onerror = function() {
-        console.error('There was an error!');
-        return false;
-    };
+	var httpRequest = createCORSRequest('POST', 'https://tiledesk-server-pre.herokuapp.com/auth/signinAnonymously',true); 
+    if (!httpRequest) {
+        throw new Error('CORS not supported');
+    }
+    httpRequest.setRequestHeader('Content-type','application/json');
+	httpRequest.send(json);
+    httpRequest.onload = function() {
+      if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {
+                    try {
+                        var response = JSON.parse(httpRequest.responseText);
+                        window.tiledesk.signInWithCustomToken(response);
+                    }
+                    catch(err) {
+                        console.error(err.message);
+                    }
+                    return true;
+        } else {
+            alert('There was a problem with the request.');
+        }
+      }
+   	};
+	httpRequest.onerror = function() {
+		console.error('There was an error!');
+        return false;
+	};
 }
 
-function createCORSRequest(method, url, async) {
+
+function createCORSRequest(method, url, async) {
     console.log("createCORSRequest");
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // Check if the XMLHttpRequest object has a "withCredentials" property.
-        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, url, async);
-        console.log("xhr12");
-    } else if (typeof XDomainRequest != "undefined") {
-         // Otherwise, check if XDomainRequest.
-         // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-         xhr = new XDomainRequest();
-         xhr.open(method, url);
-         console.log("xhr111");
-    } else {
-         // Otherwise, CORS is not supported by the browser.
-         xhr = null;
-         console.log("xhrnull");
-    }
-    return xhr;
+	var xhr = new XMLHttpRequest();
+	if ("withCredentials" in xhr) {
+		xhr.open(method, url, async);
+	} else if (typeof XDomainRequest != "undefined") {
+		xhr = new XDomainRequest();
+		xhr.open(method, url);
+	} else {
+		xhr = null;
+	}
+	return xhr;
 }
