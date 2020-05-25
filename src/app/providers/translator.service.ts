@@ -312,7 +312,7 @@ export class TranslatorService {
       console.log('»»»»»» »»»»»» GET TRANSLATED LABELS - ERROR ', error);
 
     }, () => {
-      console.log('»»»»»» »»»»»» GET TRANSLATED LABELS * COMPLETE *');
+      // console.log('»»»»»» »»»»»» GET TRANSLATED LABELS * COMPLETE *');
     });
 
 

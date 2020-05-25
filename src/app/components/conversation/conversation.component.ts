@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
@@ -42,7 +42,7 @@ import { DepartmentModel } from '../../../models/department';
   // tslint:disable-next-line:use-host-property-decorator
   host: {'(window:resize)': 'onResize($event)'}
 })
-export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
+export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, AfterViewChecked {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
@@ -131,7 +131,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   setTimeoutSound: NodeJS.Timer;
 
-  showSpinner = false;
+  public showSpinner = false;
 
   constructor(
     public el: ElementRef,
@@ -147,6 +147,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public storageService: StorageService,
     public conversationsService: ConversationsService,
     public appConfigService: AppConfigService,
+    public cdRef: ChangeDetectorRef
     // private translate: TranslateService
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
@@ -222,6 +223,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  ngAfterViewChecked() {
+    this.isShowSpinner();
+    this.cdRef.detectChanges();
+  }
+
+  public isShowSpinner() {
+    const that = this;
+    that.showSpinner = true;
+    setTimeout(() => {
+      that.showSpinner = false;
+    }, 5000);
+  }
 
 
   /**
@@ -1592,11 +1605,5 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
   // ========= END:: TRIGGER FUNCTIONS ============//
 
-  public isShowSpinner() {
-    const that = this;
-    that.showSpinner = true;
-    setTimeout(() => {
-      that.showSpinner = false;
-    }, 5000);
-  }
+  
 }

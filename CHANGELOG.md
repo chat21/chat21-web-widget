@@ -1,7 +1,12 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.26
+- bug fix: removed console.log;
+- bug fix: renamed error in console.log;
+- bug fix: showSpinner changed in html page
+
 ### 4.0.25
-- bug fix: log; css close callout; vieport TWP page 
+- bug fix: removed console.log; css close callout; vieport TWP page; 
 
 ### 4.0.24
 - changed: set firebase.auth.Auth.Persistence.NONE;
