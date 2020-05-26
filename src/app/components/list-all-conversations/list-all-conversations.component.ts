@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { convertMessage, compareValues } from '../../utils/utils';
+import { getUrlImgProfile, convertMessage, compareValues } from '../../utils/utils';
 
 // models
 import { ConversationModel } from '../../../models/conversation';
@@ -32,6 +32,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
 
   // ========= begin:: dichiarazione funzioni ======= //
   convertMessage = convertMessage;
+  getUrlImgProfile = getUrlImgProfile;
   // ========= end:: dichiarazione funzioni ========= //
 
   // ========= begin:: sottoscrizioni ======= //
@@ -162,16 +163,16 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   /** */
-  getUrlImgProfile(uid?: string): string {
-    const baseLocation = this.g.baseLocation;
-    if (!uid || uid === 'system' ) {
-        return baseLocation + IMG_PROFILE_BOT;
-      } else if (uid === 'error') {
-        return baseLocation + IMG_PROFILE_DEFAULT;
-    } else {
-        return baseLocation + IMG_PROFILE_DEFAULT;
-    }
-  }
+  // getUrlImgProfile(uid?: string): string {
+  //   const baseLocation = this.g.baseLocation;
+  //   if (!uid || uid === 'system' ) {
+  //       return baseLocation + IMG_PROFILE_BOT;
+  //     } else if (uid === 'error') {
+  //       return baseLocation + IMG_PROFILE_DEFAULT;
+  //   } else {
+  //       return baseLocation + IMG_PROFILE_DEFAULT;
+  //   }
+  // }
   // ========= end:: ACTIONS ============//
 
 

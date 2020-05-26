@@ -6,7 +6,7 @@ import { MessageModel } from '../../../models/message';
 import { ConversationsService } from '../../providers/conversations.service';
 
 // utils
-import { getImageUrlThumb, popupUrl, isPopupUrl, strip_tags, replaceBr } from '../../utils/utils';
+import { popupUrl, isPopupUrl, strip_tags, replaceBr } from '../../utils/utils';
 
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
@@ -38,7 +38,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     public g: Globals,
     public conversationsService: ConversationsService
   ) {
-    this.g.wdLog(' ---------------- ngOnInit LastMessageComponent ---------------- ');
+    this.g.wdLog([' ---------------- ngOnInit LastMessageComponent ---------------- ']);
     const that = this;
     const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
         that.ngZone.run(() => {

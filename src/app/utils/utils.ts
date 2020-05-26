@@ -1,7 +1,22 @@
 import * as moment from 'moment/moment';
 import 'moment/locale/it.js';
 
-import { FIREBASESTORAGE_BASE_URL_IMAGE, ARRAY_DAYS, LABEL_TODAY, LABEL_TOMORROW, LABEL_LAST_ACCESS, LABEL_TO } from './constants';
+// firebase
+import * as firebase from 'firebase/app';
+import 'firebase/storage';
+
+
+// tslint:disable-next-line:max-line-length
+import {
+  IMG_PROFILE_BOT,
+  IMG_PROFILE_DEFAULT,
+  FIREBASESTORAGE_BASE_URL_IMAGE,
+  ARRAY_DAYS,
+  LABEL_TODAY,
+  LABEL_TOMORROW,
+  LABEL_LAST_ACCESS,
+  LABEL_TO
+} from './constants';
 import { environment } from '../../environments/environment';
 
 /**
@@ -295,11 +310,24 @@ export function compareValues(key, order = 'asc') {
   };
 }
 
+
+export function getUrlImgProfile(uid: string) {
+  const baseLocation = this.g.baseLocation;
+  if (!uid || uid === 'system' ) {
+    return baseLocation + IMG_PROFILE_BOT;
+  } else if ( uid === 'error') {
+    return baseLocation + IMG_PROFILE_DEFAULT;
+  } else {
+      return getImageUrlThumb(uid);
+  }
+}
+
 /**
  *
  * @param uid
  */
 export function getImageUrlThumb(uid: string) {
+  // tslint:disable-next-line:max-line-length
   const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + environment.firebase.storageBucket + '/o/' + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }

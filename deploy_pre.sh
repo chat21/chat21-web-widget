@@ -40,13 +40,14 @@ fi
 
 ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=false
 cd dist
-aws s3 sync . s3://tiledesk-widget-pre/v2/
+aws s3 sync . s3://tiledesk-widget-pre/v2/$version/
 cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/v2
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v2/$version
 echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
+echo or https://widget-pre.tiledesk.com/v2/$version/index.html
 
 
 ## AZIONI per committare: 

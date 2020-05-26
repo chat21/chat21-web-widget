@@ -192,14 +192,13 @@ function initWidget() {
     }
     try {
         window.tileDeskAsyncInit();
-        // console.log("tileDeskAsyncInit() called");
+        //console.log("tileDeskAsyncInit() called");
     }catch(er) {
-      if (er instanceof ReferenceError) {
-        console.log("tileDeskAsyncInit() doesn't exists");
-      }else {
-        let error = "error in async initialization";
-        console.log(error);
-      }
+        if (typeof window.tileDeskAsyncInit == "undefined") { 
+            console.log("tileDeskAsyncInit() doesn't exists");
+        } else {
+            console.log(er);
+        }
     }
     document.body.appendChild(tiledeskroot);
     initCSSWidget(tiledeskScriptBaseLocation);

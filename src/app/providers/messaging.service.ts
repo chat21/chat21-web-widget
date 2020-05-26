@@ -16,7 +16,7 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, CHANNEL_TYPE_GROUP } from '../utils/constants';
 // utils
-import { getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
+import { getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -52,6 +52,7 @@ export class MessagingService {
   departments: DepartmentModel[];
   filterSystemMsg = true;
 
+  getUrlImgProfile = getUrlImgProfile;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService,
@@ -210,16 +211,16 @@ export class MessagingService {
    * recupero url immagine profilo
    * @param uid
    */
-  getUrlImgProfile(uid: string): string {
-    const baseLocation = this.g.baseLocation;
-    if (!uid || uid === 'system' ) {
-      return baseLocation + IMG_PROFILE_BOT;
-    } else if ( uid === 'error') {
-      return baseLocation + IMG_PROFILE_DEFAULT;
-    } else {
-      return getImageUrlThumb(uid);
-    }
-  }
+  // getUrlImgProfile(uid: string): string {
+  //   const baseLocation = this.g.baseLocation;
+  //   if (!uid || uid === 'system' ) {
+  //     return baseLocation + IMG_PROFILE_BOT;
+  //   } else if ( uid === 'error') {
+  //     return baseLocation + IMG_PROFILE_DEFAULT;
+  //   } else {
+  //     return uid; //getImageUrlThumb(uid);
+  //   }
+  // }
 
 
   private addMessage(message) {

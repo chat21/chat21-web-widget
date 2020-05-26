@@ -4,7 +4,13 @@ import { Subscription } from 'rxjs/Subscription';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';
-import { getImageUrlThumb, setColorFromString, avatarPlaceholder, convertMessage, compareValues } from '../../utils/utils';
+import {
+  getUrlImgProfile,
+  setColorFromString,
+  avatarPlaceholder,
+  convertMessage,
+  compareValues
+} from '../../utils/utils';
 import {
   IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
@@ -47,6 +53,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
   convertMessage = convertMessage;
   setColorFromString = setColorFromString;
   avatarPlaceholder = avatarPlaceholder;
+  getUrlImgProfile = getUrlImgProfile;
   // ========= end:: dichiarazione funzioni ========= //
 
 
@@ -134,7 +141,8 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.listConversations = [];
     this.archivedConversations = [];
     this.waitingTime = -1;
-    this.availableAgents = this.g.availableAgents;
+    this.availableAgents = this.g.availableAgents.slice(0, 5);
+
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);
     this.conversationsService.initialize(this.senderId, this.tenant);
@@ -241,16 +249,16 @@ checkShowAllConversation() {
   }
 
   /** */
-  getUrlImgProfile(uid?: string): string {
-    const baseLocation = this.g.baseLocation;
-    if (!uid || uid === 'system' ) {
-        return baseLocation + IMG_PROFILE_BOT;
-      } else if (uid === 'error') {
-        return baseLocation + IMG_PROFILE_DEFAULT;
-    } else {
-        return baseLocation + IMG_PROFILE_DEFAULT;
-    }
-  }
+  // getUrlImgProfile(uid?: string): string {
+  //   const baseLocation = this.g.baseLocation;
+  //   if (!uid || uid === 'system' ) {
+  //       return baseLocation + IMG_PROFILE_BOT;
+  //     } else if (uid === 'error') {
+  //       return baseLocation + IMG_PROFILE_DEFAULT;
+  //   } else {
+  //       return baseLocation + IMG_PROFILE_DEFAULT;
+  //   }
+  // }
 
 
   private openConversationByID(conversation) {

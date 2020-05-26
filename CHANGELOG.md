@@ -1,5 +1,12 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.27
+- bug fix: removed timeout animation;
+- bug fix: profile image or placeholder;
+- bug fix: animations msg into;
+- bug fix: asyncInit in launc.js;
+- bug fix: limit 5 agents;
+
 ### 4.0.26
 - bug fix: removed console.log;
 - bug fix: renamed error in console.log;

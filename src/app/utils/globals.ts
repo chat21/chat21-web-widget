@@ -462,8 +462,9 @@ export class Globals {
    * @param message
    */
   public wdLog(message: any) {
-    if ( this.isLogEnabled ) {
-        console.log(message.toString());
+    if ( this.isLogEnabled && message.length > 0 ) {
+      message.forEach(element => console.log(element));
+      //console.log(message.toString());
     }
   }
 

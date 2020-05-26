@@ -91,6 +91,42 @@
 
 
 
+    .c21-pallozzo{
+        display: inline;
+    }
+
+    
+    .c21-ball {
+        position: relative;
+        border: 2px solid #ffffff;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        text-align: center;
+        margin-left: -10px;
+        .c21-ball-label {
+            color: #ffffff;
+            margin: auto;
+            font-size: 20px;
+            user-select: none;
+            font-weight: 500;
+        }
+        .c21-avatar-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 50%;
+        }
+    }
 
     .c21-body {
         position: relative;

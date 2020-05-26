@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import {from } from 'rxjs/observable/from';
+
 // firebase
 import * as firebase from 'firebase/app';
 import 'firebase/database';
@@ -12,7 +14,8 @@ import { Globals } from '../utils/globals';
 // models
 import { ConversationModel } from '../../models/conversation';
 // utils
-import { getUnique, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+// tslint:disable-next-line:max-line-length
+import { getUrlImgProfile, getUnique, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
 
 // import { ConsoleReporter } from 'jasmine';
 import { SettingsSaverService } from '../providers/settings-saver.service';
@@ -46,6 +49,7 @@ export class ConversationsService {
   avatarPlaceholder = avatarPlaceholder;
   setColorFromString = setColorFromString;
   getFromNow = getFromNow;
+  getUrlImgProfile = getUrlImgProfile;
 
   constructor(
     public g: Globals,
@@ -399,7 +403,7 @@ export class ConversationsService {
 
   private setConversation(childSnapshot, archived) {
     const that = this;
-     that.g.wdLog(['snapshot.val() *****', that.senderId, childSnapshot.val()]);
+     that.g.wdLog(['setConversation -> snapshot.val() *****', that.senderId, childSnapshot.val()]);
     if (childSnapshot.val()) {
       const conversation: ConversationModel = childSnapshot.val();
       conversation.uid = childSnapshot.key;
@@ -408,28 +412,44 @@ export class ConversationsService {
       conversation.time_last_message = that.getFromNow(this.g.windowContext, timestampNumber);
       // conversation.time_last_message = that.getFromNow(timestampNumber);
       conversation.archived = archived;
-
       if (conversation.sender === that.senderId) {
         conversation.sender_fullname = this.g.YOU;
       }
-      // if (conversation.sender !== that.senderId) {
-      //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
-      //   conversation.color = that.setColorFromString(conversation.sender_fullname);
-      // }
-      // this.setImageConversation(conversation, '1');
-
-      const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
-      conversation.image = IMG_PROFILE_SUPPORT;
-      // conversation.badge = 1;
-      // that.conversations.push(conversation); // insert item bottom array
+      if (conversation.sender !== that.senderId) {
+        conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
+        conversation.color = that.setColorFromString(conversation.sender_fullname);
+        conversation.image = that.getUrlImgProfile(conversation.sender);
+      } else {
+        conversation.avatar = that.avatarPlaceholder(conversation.recipient_fullname);
+        conversation.color = that.setColorFromString(conversation.recipient_fullname);
+        conversation.image = that.getUrlImgProfile(conversation.recipient);
+      }
+      // that.checkFirebaseUrl(conversation.image);
       return conversation;
     }
     return;
   }
 
 
-  setImageConversation(conv, conversation_with) {
+  private checkFirebaseUrl(imageurl: string) {
+    // tslint:disable-next-line:max-line-length
+    // console.log('checkFirebaseUrl::: ', imageurl);
+    // const storageRef = firebase.storage().refFromURL(imageurl);
+    // storageRef.getDownloadURL()
+    // .then((response) => {
+    //   // Found it. Do whatever
+    //   console.log(':::ESISTE::: ', response);
+    //   return imageurl;
+    // })
+    // .catch((err) => {
+    //   // Didn't exist... or some other error
+    //   //console.log(':::ERRORE::: ', err);
+    //   //return null;
+    // });
+  }
 
+
+  setImageConversation(conv, conversation_with) {
     const IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
     conv.image = IMG_PROFILE_SUPPORT;
     // if (conv.channel_type === TYPE_DIRECT) {

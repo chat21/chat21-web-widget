@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
@@ -22,7 +22,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { getImageUrlThumb, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+import { getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -42,7 +42,7 @@ import { DepartmentModel } from '../../../models/department';
   // tslint:disable-next-line:use-host-property-decorator
   host: {'(window:resize)': 'onResize($event)'}
 })
-export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, AfterViewChecked {
+export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
@@ -131,7 +131,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, 
 
   setTimeoutSound: NodeJS.Timer;
 
-  public showSpinner = false;
+  public showSpinner = true;
+
+  getUrlImgProfile = getUrlImgProfile;
 
   constructor(
     public el: ElementRef,
@@ -146,8 +148,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, 
     public appComponent: AppComponent,
     public storageService: StorageService,
     public conversationsService: ConversationsService,
-    public appConfigService: AppConfigService,
-    public cdRef: ChangeDetectorRef
+    public appConfigService: AppConfigService
+    // public cdRef: ChangeDetectorRef
     // private translate: TranslateService
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
@@ -180,7 +182,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, 
   // }
 
   ngAfterViewInit() {
-    this.isShowSpinner();
+    // this.isShowSpinner();
     this.g.currentConversationComponent = this;
     if (this.g.newConversationStart === true) {
       this.onNewConversationComponentInit();
@@ -223,18 +225,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, 
     }
   }
 
-  ngAfterViewChecked() {
-    this.isShowSpinner();
-    this.cdRef.detectChanges();
-  }
+  // ngAfterViewChecked() {
+  //   this.isShowSpinner();
+  //   this.cdRef.detectChanges();
+  // }
 
-  public isShowSpinner() {
-    const that = this;
-    that.showSpinner = true;
-    setTimeout(() => {
-      that.showSpinner = false;
-    }, 5000);
-  }
+  // public isShowSpinner() {
+  //   const that = this;
+  //   setTimeout(() => {
+  //     that.showSpinner = false;
+  //   }, 5000);
+  // }
 
 
   /**
@@ -946,27 +947,27 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, 
 /**
      * recupero url immagine profilo
      * @param uid
-     */
-    getUrlImgProfile(uid): string {
-      const baseLocation = this.g.baseLocation;
-      if (!uid || uid === 'system' ) {
-        return baseLocation + IMG_PROFILE_BOT;
-      } else if ( uid === 'error') {
-        return baseLocation + IMG_PROFILE_DEFAULT;
-      } else {
-          return getImageUrlThumb(uid);
-      }
-      // if (!uid) {
-      //   return this.IMG_PROFILE_SUPPORT;
-      // }
-      // const profile = this.contactService.getContactProfile(uid);
-      // if (profile && profile.imageurl) {
-      //       that.g.wdLog(['profile::', profile, ' - profile.imageurl', profile.imageurl);
-      //     return profile.imageurl;
-      // } else {
-      //     return this.IMG_PROFILE_SUPPORT;
-      // }
-  }
+  //    */
+  //   getUrlImgProfile(uid: string) {
+  //     const baseLocation = this.g.baseLocation;
+  //     if (!uid || uid === 'system' ) {
+  //       return baseLocation + IMG_PROFILE_BOT;
+  //     } else if ( uid === 'error') {
+  //       return baseLocation + IMG_PROFILE_DEFAULT;
+  //     } else {
+  //         return getImageUrlThumb(uid);
+  //     }
+  //     // if (!uid) {
+  //     //   return this.IMG_PROFILE_SUPPORT;
+  //     // }
+  //     // const profile = this.contactService.getContactProfile(uid);
+  //     // if (profile && profile.imageurl) {
+  //     //       that.g.wdLog(['profile::', profile, ' - profile.imageurl', profile.imageurl);
+  //     //     return profile.imageurl;
+  //     // } else {
+  //     //     return this.IMG_PROFILE_SUPPORT;
+  //     // }
+  // }
 
   /**
      * ridimensiona la textarea
