@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.28
+- bug fix: conversation.image;
+
 ### 4.0.27
 - bug fix: removed timeout animation;
 - bug fix: profile image or placeholder;
