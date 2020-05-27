@@ -177,7 +177,8 @@ function loadIframe(tiledeskScriptBaseLocation) {
 function initWidget() {
     var tiledeskroot = document.createElement('tiledeskwidget-root');
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
-    var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
+    var tiledeskScriptBaseLocation = document.currentScript.src;
+    //var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
     window.tiledesk = new function() {
         //this.type = "macintosh";
         this.tiledeskroot = tiledeskroot;

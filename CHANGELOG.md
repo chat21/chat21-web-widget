@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.29
+- bug fix: changed tiledeskScriptBaseLocation in launc.js;
+
 ### 4.0.28
 - bug fix: conversation.image;
 
