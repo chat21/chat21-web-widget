@@ -612,7 +612,7 @@ export class MessagingService {
         if (error) {
           console.log('ERRORE', error);
         } else {
-          console.log('OK update typing');
+          // console.log('OK update typing');
         }
       });
     }, 500);

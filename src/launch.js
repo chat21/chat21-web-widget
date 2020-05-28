@@ -3,6 +3,7 @@ ready(function() {
     // console.log('DOM is ready, call initWidget');
     initWidget();
 });
+
 /** */
 function ready(callbackFunction){
     if(document.readyState != 'loading')
@@ -10,9 +11,11 @@ function ready(callbackFunction){
     else
       document.addEventListener("DOMContentLoaded", callbackFunction)
 }
-                                     
+       
+
 /** */
 function loadIframe(tiledeskScriptBaseLocation) {
+
     var containerDiv = document.createElement('div');
     containerDiv.setAttribute('id','tiledesk-container');
     containerDiv.classList.add("closed");
@@ -25,10 +28,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     var ifrm = document.createElement("iframe");
     ifrm.setAttribute("frameborder", "0");
     ifrm.setAttribute("border", "0");
-    //ifrm.setAttribute("src", tiledeskScriptBaseLocation+"/index.html?windowcontext=window.parent");
-    // projectid= '5b55e806c93dde00143163dd'
-    //var srcTileDesk =  `
-    
+       
     var srcTileDesk = '<html lang="en">';
     srcTileDesk += '<head>';
     srcTileDesk += '<meta charset="utf-8">';
@@ -47,20 +47,9 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '</body>';
     srcTileDesk += '</html>';
     
-        //ifrm.setAttribute("srcdoc", srcTileDesk);
-        //ifrm.document.write(srcTileDesk);
     ifrm.setAttribute('id','tiledeskiframe');
     ifrm.setAttribute('tiledesk_context','parent');
-    // ifrm.style.display = 'none';
-
-     /** */
-    //  window.tileDeskAsyncInit = function() {
-    //     console.log("tileDeskAsyncInit");
-    //     window.tiledesk.on('loadParams', function(event_data) {
-    //         // signInWithCustomToken();
-    //     });
-    // }
-
+   
     /** */
     window.tiledesk.on('onInit', function(event_data) {
         // console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
@@ -130,7 +119,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log(">>>> tiledeskToken >>>> ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
-          var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+          var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',true); //set async to false because loadParams must return when the get is complete
           httpRequest.setRequestHeader('Content-type', 'application/json');
           httpRequest.setRequestHeader('Authorization',tiledeskToken);
           httpRequest.send(JSON.stringify({"name":"new_conversation","attributes": {"request_id":event_data.detail.newConvId, "department": event_data.detail.global.departmentSelected.id, "language": event_data.detail.global.lang, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "attributes":event_data.detail.global.attributes}}));
@@ -143,7 +132,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
-            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',true); //set async to false because loadParams must return when the get is complete
             httpRequest.setRequestHeader('Content-type','application/json');
             httpRequest.setRequestHeader('Authorization',tiledeskToken);
             httpRequest.send(JSON.stringify({"name":"logged_in","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
@@ -156,7 +145,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
-            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',false); //set async to false because loadParams must return when the get is complete
+            var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',true); //set async to false because loadParams must return when the get is complete
             httpRequest.setRequestHeader('Content-type','application/json');
             httpRequest.setRequestHeader('Authorization',tiledeskToken);
             httpRequest.send(JSON.stringify({"name":"auth_state_changed","attributes": {"fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language": event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
@@ -169,16 +158,18 @@ function loadIframe(tiledeskScriptBaseLocation) {
     ifrm.contentWindow.document.open();
     ifrm.contentWindow.document.write(srcTileDesk);
     ifrm.contentWindow.document.close();
+
 }
+
 
 /**
  * 
  */
 function initWidget() {
     var tiledeskroot = document.createElement('tiledeskwidget-root');
-    var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
-    var tiledeskScriptBaseLocation = document.currentScript.src;
-    //var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
+    //var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
+    var tiledeskScriptLocation = document.currentScript.src;
+    var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
     window.tiledesk = new function() {
         //this.type = "macintosh";
         this.tiledeskroot = tiledeskroot;
@@ -205,6 +196,10 @@ function initWidget() {
     initCSSWidget(tiledeskScriptBaseLocation);
     loadIframe(tiledeskScriptBaseLocation);
 }
+
+
+
+
 
 function initCSSWidget(tiledeskScriptBaseLocation) {
     var cssId = 'iframeCss';  // you could encode the css path itself to generate id..

@@ -41,16 +41,18 @@ fi
 ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=false
 cd dist
 aws s3 sync . s3://tiledesk-widget-pre/v2/$version/
+aws s3 sync . s3://tiledesk-widget-pre/v2/
 cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/v2/$version
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v2 and s3://tiledesk-widget-pre/v2/$version
 echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
-echo or https://widget-pre.tiledesk.com/v2/$version/index.html
+echo or https://widget-pre.tiledesk.com/v2/index.html and https://widget-pre.tiledesk.com/v2/$version/index.html
 
 
 ## AZIONI per committare: 
 ## 1) modificare package.json e package-lock.json aggiungendo il num di versione nuovo
-## 2) fare il commit tramite sourcetree
-## 3) da terminale richiamare ./deploy_pre.sh
+## 2) aggiornare il CHANGELOG
+## 3) fare il commit tramite sourcetree
+## 4) da terminale richiamare ./deploy_pre.sh

@@ -464,7 +464,7 @@ export class Globals {
   public wdLog(message: any) {
     if ( this.isLogEnabled && message.length > 0 ) {
       message.forEach(element => console.log(element));
-      //console.log(message.toString());
+      // console.log(message.toString());
     }
   }
 

@@ -913,9 +913,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     /**
-     *
+     * Custom Auth called from the test-custom-auth.html
+     * note: https://tiledesk.atlassian.net/browse/TD-42?atlOrigin=eyJpIjoiMGMyZmVmNDgzNTFjNGZkZjhiMmM2Y2U1MmYyNzkwODMiLCJwIjoiaiJ9
     */
-//    DEPRECATED
     private signInWithCustomToken(token: string) {
         const that = this;
         try {
@@ -944,7 +944,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-// UNUSED
+    // UNUSED
     private signInWithCustomTokenUniLe(token) {
         this.g.wdLog(['signInWithCustomToken token ', token]);
         const that = this;

@@ -1,5 +1,11 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.30
+- bug fix: limit 5 agent avatars;
+- bug fix: removed log;
+- bug fix: css callout;
+- bug fix: load logo in test_widget_page;
+
 ### 4.0.29
 - bug fix: changed tiledeskScriptBaseLocation in launc.js;
 

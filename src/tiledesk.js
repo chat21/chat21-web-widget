@@ -6,7 +6,7 @@ function ready(callbackFunction){
 }
 
 ready(event => {
-    console.log('DOM is ready, call initWidget');
+    // console.log('DOM is ready, call initWidget');
     initWidget();
 });
 

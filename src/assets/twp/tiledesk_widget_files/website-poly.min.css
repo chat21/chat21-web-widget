@@ -5511,7 +5511,7 @@ only screen and (max-width:768px) and (min-device-pixel-ratio:2),
 only screen and (max-width:768px) and (min-resolution:192dpi),
 only screen and (max-width:768px) and (min-resolution:2dppx) {
     .navbar-brand {
-        background-image: url(logo-mobile@2x.png);
+        background-image: url(logo-mobile.png);
         background-size: 82px 34px
     }
 }

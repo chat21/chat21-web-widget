@@ -13,11 +13,11 @@ import { Globals } from '../utils/globals';
 @Injectable()
 export class TranslatorService {
 
-  // private defaultLanguage = 'it'; // default language
+  private defaultLanguage = 'en'; // default language
   private language: string; // user language
   // private translations: Object;
 
-  translated_string: any
+  translated_string: any;
   baseLocation: string;
 
   constructor(
@@ -32,42 +32,31 @@ export class TranslatorService {
     }
 
     if (windowContext['tiledesk']) {
-      this.baseLocation = windowContext['tiledesk'].getBaseLocation()
+      this.baseLocation = windowContext['tiledesk'].getBaseLocation();
       // console.log(`»»»» initI18n baseLocation`, this.baseLocation);
     }
 
   }
 
   /**
-   * 
+   *
    * Return the browser language
    * used by humanWaitingTime in list-conversation
-   *  
-   * @returns 
+   *
+   * @returns
    */
   public getLanguage() {
     // return this.language;
     return this._translate.getBrowserLang();
-
   }
 
 
   getTranslationFileUrl(browserLang) {
     // console.log(`»»»» getTranslationFileUrl `, environment);
-
     if (environment.loadRemoteTranslations) {
-
       return environment.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();
-
     } else {
-
-      // let windowContext = window
-      // if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
-      //   windowContext = window.parent;
-      // }
-      // return windowContext['tiledesk'].getBaseLocation() + `/assets/i18n/${browserLang}.json`
-
-      return this.baseLocation + `/assets/i18n/${browserLang}.json`
+      return this.baseLocation + `/assets/i18n/${browserLang}.json`;
     }
   }
 
@@ -80,7 +69,6 @@ export class TranslatorService {
     // Set the default language for translation strings.
     const defaultLanguage = 'en';
     this._translate.setDefaultLang(defaultLanguage);
-
     // Detect user language.
     let browserLang = this._translate.getBrowserLang();
     if (this.g.lang && this.g.lang !== '') {
@@ -89,108 +77,74 @@ export class TranslatorService {
       this.g.lang = browserLang;
     }
 
-    //    const languageUrl = this.getTranslationFileUrl(browserLang);
-    //    console.log(`»»»» languageUrl `, languageUrl);
+
+
+    // const languageUrl = this.getTranslationFileUrl(browserLang);
+    // console.log(`»»»» browserLang `, browserLang, this.g.lang);
 
 
     // Try to load the I18N JSON file for the detected language
     return new Promise((resolve, reject) => {
-
+      const that = this;
       this.http.get(this.getTranslationFileUrl(browserLang))
-        .catch((error: any) => {
-          // I18N File failed to load, fall back to default language
-          console.log(`»»»» initI18n !!! Problem with '${browserLang}' language initialization from URL `, error.url, ` - ERROR: `, error);
 
-          this._translate.use(defaultLanguage);
-
-          this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((data) => {
-            // console.log(`»»»» initI18n Get default language - data `, data);
-
-            // console.log(`»»»» initI18n Successfully initialized default language from URL'`, data.url);
-            // console.log(`»»»» initI18n - »»» default language - data body `, JSON.parse(data["_body"]));
-
-            if (environment.loadRemoteTranslations) {
-
-              const remote_translation_res = JSON.parse(data["_body"]);
-              this._translate.setTranslation(defaultLanguage, remote_translation_res.data);
-
-            } else {
-
-              this._translate.setTranslation(defaultLanguage, JSON.parse(data["_body"]));
-            }
-
-          }, (error) => {
-            //  failed to load  default language from remote - fall back to local default language
-
-            console.log(`»»»» initI18n Get default language - ERROR `, error);
-            console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR ?`, environment.loadRemoteTranslations);
-
-            // if (environment.loadRemoteTranslations) {
-            //   console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR 2 ?`, environment.loadRemoteTranslations);
-
-            //   const localUrl = this.baseLocation + `/assets/i18n/${defaultLanguage}.json`;
-            //   console.log(`»»»» initI18n - »»» loadRemoteTranslations localUrl `, localUrl);
-
-            //   this.http.get(localUrl).subscribe((data) => {
-            //     console.log(`»»»» initI18n - »»» HERE data ???? `, JSON.parse(data["_body"]));
-
-            //     this._translate.use(defaultLanguage);
-            //     this._translate.setTranslation(defaultLanguage, JSON.parse(data["_body"]));
-
-            //   }, (error) => {
-            //     console.log(`»»»» initI18n Get default language - ERROR IN ERROR`, error);
-
-            //   }, () => {
-
-            //   });
-            // }
-
-
-          }, () => {
-
-            resolve(true);
-            // console.log('»»»» initI18n Get default language * COMPLETE *');
-          });
-
-          return Observable.throw(error);
-        })
-        .subscribe((data) => {
-          // I18N File loaded successfully, we can proceed
-          // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
-          // console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
-          // console.log(`»»»» initI18n - »»» ${browserLang} language - data body`, JSON.parse(data._body));
-
-          this._translate.use(browserLang);
-          // console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
-
-          if (environment.loadRemoteTranslations) {
-
-            const remote_translation_res = JSON.parse(data._body);
-            // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res); 
-            // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
-
-            this._translate.setTranslation(browserLang, remote_translation_res.data);
-           
-            
-          } else {
-
-            this._translate.setTranslation(browserLang, JSON.parse(data._body));
-          }
-
-
-        }, (error) => {
-          console.log(`»»»» initI18n Get '${browserLang}' language - ERROR `, error);
-
+      .catch((error: any) => {
+        // I18N File failed to load, fall back to default language
+        // console.log(`»»»» initI18n !!! Problem with '${browserLang}' language initialization from URL `, error.url, ` - ERROR: `, error);
+        this._translate.use(defaultLanguage);
+        this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((data) => {
+          this.translateWithBrowserLang(data['_body'], defaultLanguage);
+        }, (er) => {
+          // failed to load  default language from remote - fall back to local default language
+          // console.log(`»»»» initI18n Get default language - ERROR `, er);
+          // console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR ?`, environment.loadRemoteTranslations);
         }, () => {
-
           resolve(true);
-          // console.log(`»»»» initI18n Get '${browserLang}' language - COMPLETE`);
+          // console.log('»»»» initI18n Get default language * COMPLETE *');
         });
+        return Observable.throw(error);
+      })
+
+      .subscribe((data) => {
+        // I18N File loaded successfully, we can proceed
+        // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
+        // console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
+        if (!data._body || data._body === undefined || data._body === '') {
+          browserLang = defaultLanguage;
+          this.g.lang = defaultLanguage;
+          this._translate.use(defaultLanguage);
+          // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
+          this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((defaultdata) => {
+            // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, defaultdata);
+            this.translateWithBrowserLang(defaultdata['_body'], browserLang);
+          });
+        } else {
+          // console.log(`»»»» translateWithBrowserLang '${browserLang}' language.'`);
+          this.translateWithBrowserLang(data._body, browserLang);
+        }
+      }, (error) => {
+        console.log(`»»»» initI18n Get '${browserLang}' language - ERROR `, error);
+      }, () => {
+        resolve(true);
+        // console.log(`»»»» initI18n Get '${browserLang}' language - COMPLETE`);
+      });
 
     });
   }
 
 
+  private translateWithBrowserLang(body: any, lang: string) {
+    this._translate.use(lang);
+    // console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
+    if (environment.loadRemoteTranslations) {
+      const remote_translation_res = JSON.parse(body);
+      // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);
+      // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
+      this._translate.setTranslation(lang, remote_translation_res.data);
+    } else {
+      this._translate.setTranslation(lang, JSON.parse(body));
+    }
+  }
 
   /** */
   public translate(globals) {
@@ -198,7 +152,7 @@ export class TranslatorService {
 
     // this.setLanguage(globals.windowContext, globals.lang);
 
-    let labels: string[] = [
+    const labels: string[] = [
       'LABEL_PLACEHOLDER',
       'LABEL_START_NW_CONV',
       'LABEL_FIRST_MSG',
@@ -247,7 +201,7 @@ export class TranslatorService {
       'WAITING_TIME_FOUND',
       'WAITING_TIME_NOT_FOUND',
       'CLOSED'
-    ]
+    ];
 
 
     this._translate.get(labels).subscribe(res => {
