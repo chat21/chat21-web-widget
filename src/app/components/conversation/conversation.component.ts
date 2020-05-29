@@ -709,7 +709,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
+      // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
       if (keyCode === 13) {
           this.performSendingMessage();
       } else if (keyCode === 9) {

@@ -21,7 +21,7 @@ export class AuthService {
   // public user: firebase.User;
   public user: any;
   private token: string;
-  obsLoggedUser: BehaviorSubject<any>;
+  obsLoggedUser = new BehaviorSubject<any>(null);
   // obsCurrentUser: BehaviorSubject<any>;
 
   unsubscribe: any;
@@ -35,9 +35,8 @@ export class AuthService {
     private storageService: StorageService
   ) {
     // this.user = firebaseAuth.authState;
-    this.obsLoggedUser = new BehaviorSubject<any>(null);
+    //this.obsLoggedUser = new BehaviorSubject<any>(null);
     // this.obsCurrentUser = new BehaviorSubject<any>(null);
-
     this.API_URL = appConfigService.getConfig().apiUrl;
   }
 
@@ -68,7 +67,6 @@ export class AuthService {
           that.g.wdLog(['onAuthStateChanged']);
           that.getIdToken();
           that.obsLoggedUser.next(firebase.auth().currentUser);
-          // that.obsCurrentUser.next(that.user);
         }
       }
     });
@@ -262,7 +260,7 @@ export class AuthService {
 
   /** */
   authenticateFirebaseAnonymously() {
-    // console.log('authenticateFirebaseAnonymously');
+    this.g.wdLog(['authenticateFirebaseAnonymously']);
     const that = this;
     firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
           firebase.auth().signInAnonymously()
@@ -287,7 +285,6 @@ export class AuthService {
         })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
-      // that.obsLoggedUser.next(0);
     });
   }
 

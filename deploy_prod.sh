@@ -13,6 +13,7 @@ fi
 ng build --prod --env=prod --base-href --output-hashing none --build-optimizer=false
 
 cd dist
+aws s3 sync . s3://tiledesk-widget/v4/$version/
 aws s3 sync . s3://tiledesk-widget/v4/
 # --cache-control max-age=604800
 cd ..

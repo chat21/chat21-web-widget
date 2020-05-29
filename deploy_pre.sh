@@ -46,10 +46,10 @@ cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/v2 and s3://tiledesk-widget-pre/v2/$version
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v2 and s3://tiledesk-widget-pre/v2/$version/
 echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
-echo or https://widget-pre.tiledesk.com/v2/index.html and https://widget-pre.tiledesk.com/v2/$version/index.html
-
+echo https://widget-pre.tiledesk.com/v2/index.html
+echo https://widget-pre.tiledesk.com/v2/$version/index.html
 
 ## AZIONI per committare: 
 ## 1) modificare package.json e package-lock.json aggiungendo il num di versione nuovo

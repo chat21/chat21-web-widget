@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.31
+- check: autoStart: false; persistence: 'session'; startFromHome: false; preChatForm: true
+- bug fix: triggerOnAuthStateChanged;
+
 ### 4.0.30
 - bug fix: limit 5 agent avatars;
 - bug fix: removed log;
