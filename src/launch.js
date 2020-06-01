@@ -167,34 +167,39 @@ function loadIframe(tiledeskScriptBaseLocation) {
  */
 function initWidget() {
     var tiledeskroot = document.createElement('tiledeskwidget-root');
-    //var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
-    var tiledeskScriptLocation = document.currentScript.src;
-    var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
-    window.tiledesk = new function() {
-        //this.type = "macintosh";
-        this.tiledeskroot = tiledeskroot;
-        // console.log(" this.tiledeskroot",  this.tiledeskroot);
-        this.on = function (event_name, handler) {
-            //console.log("addEventListener for "+ event_name, handler);
-            tiledeskroot.addEventListener(event_name, handler);
-        };
-        this.getBaseLocation = function() {
-            return tiledeskScriptBaseLocation;
+    var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
+    //var currentScript = document.currentScript;
+    //var tiledeskScriptLocation = '';
+    //setInterval(function(){
+        //tiledeskScriptLocation = currentScript.src;
+        // console.log(tiledeskScriptLocation)
+        var tiledeskScriptBaseLocation = tiledeskScriptLocation.replace("/launch.js","");
+        window.tiledesk = new function() {
+            //this.type = "macintosh";
+            this.tiledeskroot = tiledeskroot;
+            // console.log(" this.tiledeskroot",  this.tiledeskroot);
+            this.on = function (event_name, handler) {
+                //console.log("addEventListener for "+ event_name, handler);
+                tiledeskroot.addEventListener(event_name, handler);
+            };
+            this.getBaseLocation = function() {
+                return tiledeskScriptBaseLocation;
+            }
         }
-    }
-    try {
-        window.tileDeskAsyncInit();
-        //console.log("tileDeskAsyncInit() called");
-    }catch(er) {
-        if (typeof window.tileDeskAsyncInit == "undefined") { 
-            console.log("tileDeskAsyncInit() doesn't exists");
-        } else {
-            console.log(er);
+        try {
+            window.tileDeskAsyncInit();
+            //console.log("tileDeskAsyncInit() called");
+        }catch(er) {
+            if (typeof window.tileDeskAsyncInit == "undefined") { 
+                console.log("tileDeskAsyncInit() doesn't exists");
+            } else {
+                console.log(er);
+            }
         }
-    }
-    document.body.appendChild(tiledeskroot);
-    initCSSWidget(tiledeskScriptBaseLocation);
-    loadIframe(tiledeskScriptBaseLocation);
+        document.body.appendChild(tiledeskroot);
+        initCSSWidget(tiledeskScriptBaseLocation);
+        loadIframe(tiledeskScriptBaseLocation);
+    //},2000);
 }
 
 

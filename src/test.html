@@ -34,14 +34,14 @@
       
      
       window.tileDeskAsyncInit = function() {
-        console.log("window.tileDeskAsyncInit()");
+        // console.log("window.tileDeskAsyncInit()");
         window.tiledesk.on('onAuthStateChanged', function (event_data) {
             console.log("onAuthStateChanged---->", event_data.detail.isLogged);
             if (!event_data.detail.isLogged) {
                 console.log("!NOT logged, fired also on startup!");
                 window.tiledesk.setPreChatForm(true);
-                window.tiledesk.signInAnonymous();
-                // window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
+                //window.tiledesk.signInAnonymous();
+                window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
                 window.tiledesk.hide();
             } else {
               console.log("logged in, fired also on startup!");

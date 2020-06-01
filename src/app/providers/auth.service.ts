@@ -6,6 +6,8 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
 import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
@@ -21,8 +23,7 @@ export class AuthService {
   // public user: firebase.User;
   public user: any;
   private token: string;
-  obsLoggedUser = new BehaviorSubject<any>(null);
-  // obsCurrentUser: BehaviorSubject<any>;
+  obsLoggedUser = new ReplaySubject<any>(1);
 
   unsubscribe: any;
   API_URL: string;
@@ -32,45 +33,56 @@ export class AuthService {
     public http: Http,
     public g: Globals,
     public appConfigService: AppConfigService,
-    private storageService: StorageService
+    private storageService: StorageService,
   ) {
-    // this.user = firebaseAuth.authState;
-    //this.obsLoggedUser = new BehaviorSubject<any>(null);
-    // this.obsCurrentUser = new BehaviorSubject<any>(null);
     this.API_URL = appConfigService.getConfig().apiUrl;
   }
 
-
-
-  onAuthStateChanged() {
-    const that = this;
-    that.g.wdLog(['-------------------- >>>> onAuthStateChanged <<<< ------------------------']);
-    // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
-    this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        that.g.wdLog(['NO CURRENT USER PASSO NULL']);
-        if (that.g.isLogout === false ) {
-          that.obsLoggedUser.next(0);
-        }
-      } else {
-        that.g.wdLog(['that.environment.shemaVersion', environment.shemaVersion]);
-        that.g.wdLog(['shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion')]);
-        const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
-        const shemaVersionTEMP = that.storageService.getItemWithoutProjectId('shemaVersion');
-        if (environment.shemaVersion !== shemaVersionTEMP) {
-          that.signOut(0);
-        } else if (!tiledeskTokenTEMP || tiledeskTokenTEMP === undefined) {
-          that.signOut(0);
-        } else {
-          that.g.wdLog(['PASSO CURRENT USER']);
-          that.user = firebase.auth().currentUser;
-          that.g.wdLog(['onAuthStateChanged']);
-          that.getIdToken();
-          that.obsLoggedUser.next(firebase.auth().currentUser);
-        }
-      }
-    });
+  initialize() {
+    const tiledeskTokenTEMP = this.storageService.getItem('tiledeskToken');
+    this.g.wdLog([' ---------------- AuthService initialize ---------------- ']);
+    if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
+        this.g.tiledeskToken = tiledeskTokenTEMP;
+        // SONO già loggato
+        this.g.wdLog([' ---------------- SONO già loggato ---------------- ']);
+        this.authenticationWithCustomToken(this.g.tiledeskToken);
+    } else {
+        // NON sono loggato;
+        this.g.wdLog([' ---------------- NON sono loggato ---------------- ']);
+        this.obsLoggedUser.next(0);
+    }
   }
+
+
+  // onAuthStateChanged() {
+  //   const that = this;
+  //   that.g.wdLog(['-------------------- >>>> onAuthStateChanged <<<< ------------------------']);
+  //   // https://stackoverflow.com/questions/37370224/firebase-stop-listening-onauthstatechanged
+  //   this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
+  //     if (!user) {
+  //       that.g.wdLog(['NO CURRENT USER PASSO NULL']);
+  //       if (that.g.isLogout === false ) {
+  //         that.obsLoggedUser.next(0);
+  //       }
+  //     } else {
+  //       that.g.wdLog(['that.environment.shemaVersion', environment.shemaVersion]);
+  //       that.g.wdLog(['shemaVersion', that.storageService.getItemWithoutProjectId('shemaVersion')]);
+  //       const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
+  //       const shemaVersionTEMP = that.storageService.getItemWithoutProjectId('shemaVersion');
+  //       if (environment.shemaVersion !== shemaVersionTEMP) {
+  //         that.signOut(0);
+  //       } else if (!tiledeskTokenTEMP || tiledeskTokenTEMP === undefined) {
+  //         that.signOut(0);
+  //       } else {
+  //         that.g.wdLog(['PASSO CURRENT USER']);
+  //         that.user = firebase.auth().currentUser;
+  //         that.g.wdLog(['onAuthStateChanged']);
+  //         that.getIdToken();
+  //         that.obsLoggedUser.next(firebase.auth().currentUser);
+  //       }
+  //     }
+  //   });
+  // }
 
   getCurrentUser() {
     this.g.wdLog([' ---------------- getCurrentUser ---------------- ']);
@@ -124,6 +136,21 @@ export class AuthService {
       });
     }
   }
+
+  /** */
+  authenticationWithCustomToken(tiledeskToken) {
+    const that = this;
+    if (tiledeskToken) {
+      this.createFirebaseToken(tiledeskToken, this.g.projectid)
+      .subscribe(firebaseToken => {
+        that.authenticateFirebaseCustomToken(firebaseToken);
+      }, error => {
+        console.log('createFirebaseToken: ', error);
+        that.signOut(400);
+      });
+    }
+  }
+
   /** */
   anonymousAuthentication() {
     const that = this;
@@ -245,7 +272,7 @@ export class AuthService {
             that.unsubscribe();
           }
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
-          that.obsLoggedUser.next(0);
+          that.obsLoggedUser.next(400);
       });
     })
     .catch(function(error) {
@@ -280,7 +307,7 @@ export class AuthService {
                 that.unsubscribe();
               }
               that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
-              that.obsLoggedUser.next(0);
+              that.obsLoggedUser.next(400);
           });
         })
     .catch(function(error) {
@@ -311,7 +338,7 @@ export class AuthService {
           that.unsubscribe();
         }
         that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
-        that.obsLoggedUser.next(0);
+        that.obsLoggedUser.next(400);
       });
     })
     .catch(function(error) {
@@ -377,7 +404,7 @@ export class AuthService {
     })
     .catch(err => {
       that.g.wdLog(['Something went wrong in signOut:', err.message]);
-      that.obsLoggedUser.next(firebase.auth().currentUser);
+      //that.obsLoggedUser.next(firebase.auth().currentUser);
     });
   }
 

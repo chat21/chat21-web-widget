@@ -39,7 +39,7 @@
 
 
       window.tileDeskAsyncInit = function() {
-          window.tiledesk.on('loadParams', function(event_data) {
+          window.tiledesk.on('onLoadParams', function(event_data) {
             window.tiledeskSettings.welcomeMsg = " Hello at: " + new Date().toLocaleString();
             window.tiledeskSettings.userFullname = localStorage.getItem("user_fullname");
             window.tiledeskSettings.userEmail = localStorage.getItem("user_email");
@@ -49,14 +49,14 @@
             //window.tiledesk.open();
         });
 
-        window.tiledesk.on('beforeMessageSend', function(event_data) {
+        window.tiledesk.on('onBeforeMessageSend', function(event_data) {
           var message =  event_data.detail;
           message.attributes.pagetitle = document.title;
           message.attributes.userCompany = "Frontiere21";
         });
 
-        window.tiledesk.on('afterMessageSend', function(event_data) {
-          console.log("afterMessageSend called ", event_data);
+        window.tiledesk.on('onAfterMessageSend', function(event_data) {
+          console.log("onAfterMessageSend called ", event_data);
         });
 
         window.tiledesk.on('isLoggedIn', function(event_data) {

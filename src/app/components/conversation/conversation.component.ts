@@ -889,13 +889,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
     try {
         // tslint:disable-next-line:max-line-length
-        const beforeMessageSend = new CustomEvent('beforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+        const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageSend);
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
             this.g.windowContext = windowContext;
         } else {
-          this.el.nativeElement.dispatchEvent(beforeMessageSend);
+          this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
         }
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
@@ -906,13 +906,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private triggerAfterSendMessageEvent(message) {
     try {
         // tslint:disable-next-line:max-line-length
-        const afterMessageSend = new CustomEvent('afterMessageSend', { detail: { message: message } });
+        const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageSend);
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
             this.g.windowContext = windowContext;
         } else {
-          this.el.nativeElement.dispatchEvent(afterMessageSend);
+          this.el.nativeElement.dispatchEvent(onAfterMessageSend);
         }
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);

@@ -1,5 +1,14 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.34
+- bug fix: startFromHome
+
+### 4.0.33
+- changed: handling errors in authenticate
+
+### 4.0.32
+- changed: customize obsLoggedUser step1
+
 ### 4.0.31
 - check: autoStart: false; persistence: 'session'; startFromHome: false; preChatForm: true
 - bug fix: triggerOnAuthStateChanged;

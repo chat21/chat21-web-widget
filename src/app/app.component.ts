@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     departments = [];
     marginBottom: number;
     conversationSelected: ConversationModel;
-    isBeingAuthenticated = false;           /** authentication is started */
+    // isBeingAuthenticated = false;           /** authentication is started */
     // ========= end:: parametri di stato widget ======= //
 
 
@@ -138,6 +138,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                 });
             });
+            this.authService.initialize();
             this.subscriptions.push(subChangedConversation);
         });
     }
@@ -173,6 +174,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (user === -2) {
                     /** ho fatto un reinit */
                     that.g.wdLog(['sono nel caso reinit -2']);
+                    that.g.setParameter('isLogged', false);
+                    that.g.setParameter('isShown', false);
+                    that.g.isLogout = true;
+                    that.triggerOnAuthStateChanged();
                     if (autoStart !== false) {
                         that.setAuthentication();
                         that.initAll();
@@ -185,17 +190,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
                     that.g.isLogout = true;
-                    that.isBeingAuthenticated = false;
-                    that.g.wdLog(['LOGOUT : ', user]);
+                    // that.isBeingAuthenticated = false;
+                    that.triggerOnAuthStateChanged();
+                    //that.triggerOnLoggedOut();
                 } else if (user === 0) {
                     /** non sono loggato */
                     that.g.wdLog(['sono nel caso in cui non sono loggato 0']);
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
+                    that.triggerOnAuthStateChanged();
                     if (autoStart !== false) {
                         that.setAuthentication();
                     }
+                } else if (user === 400) {
+                    that.g.wdLog([' ERRORE LOGIN ']);
+                    that.storageService.removeItem('tiledeskToken');
+                    return;
                 } else if (user) {
                     /** sono loggato */
                     that.g.wdLog(['sono nel caso in cui sono loggato']);
@@ -203,15 +214,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.authService.resigninAnonymousAuthentication();
                     // confronto id utente tiledesk con id utente di firebase
                     // senderid deve essere == id di firebase
-
-                    /* faccio scattare il trigger del login solo una volta */
-                    if (that.isBeingAuthenticated) {
-                        that.triggerOnLoggedIn();
-                        that.isBeingAuthenticated = false;
-                    }
                     that.g.setParameter('senderId', user.uid);
                     that.g.setParameter('isLogged', true);
                     that.g.setParameter('attributes', that.setAttributesFromStorageService());
+                    /* faccio scattare il trigger del login solo una volta */
+                    // if (that.isBeingAuthenticated) {
+                    //     that.triggerOnLoggedIn();
+                    //     that.isBeingAuthenticated = false;
+                    // }
+                    that.triggerOnAuthStateChanged();
                     that.startUI();
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);
@@ -222,12 +233,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.wdLog([' INIT obsLoggedUser']);
                     return;
                 }
-                that.triggerOnAuthStateChanged();
+                // that.triggerOnAuthStateChanged();
             //});
         });
         //that.g.wdLog(['onAuthStateChanged ------------> ']);
         this.subscriptions.push(obsLoggedUser);
-        this.authService.onAuthStateChanged();
+        //this.authService.onAuthStateChanged();
     }
     // ========= end:: SUBSCRIPTIONS ============//
 
@@ -542,7 +553,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userPassword = this.g.userPassword;
         const userId = this.g.userId;
         const userToken = this.g.userToken;
-        this.isBeingAuthenticated = true;
+        // this.isBeingAuthenticated = true;
         const tiledeskToken = this.g.tiledeskToken;
         if (userEmail && userPassword) {
              this.g.wdLog([' ---------------- 10 ---------------- ']);
@@ -624,6 +635,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenSelectionDepartment = true;
             } else {
                 this.isOpenConversation = true;
+                this.startNwConversation();
             }
         }
 
@@ -933,12 +945,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
                     }, error => {
                         console.error('Error creating firebase token: ', error);
-                        that.signOut();
+                        //that.signOut();
                     });
                  }
             }, error => {
                 console.error('Error creating firebase token: ', error);
-                that.signOut();
+                that.signOut(400);
             });
         } catch (error) {
             this.g.wdLog(['> Error :' + error]);
@@ -976,7 +988,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // that.g.wdLog(['call signout');
-                        that.signOut();
+                        //that.signOut();
                     });
                     // , () => {
                     //     that.g.wdLog(['!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
@@ -984,7 +996,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             }, error => {
                 console.error('Error creating firebase token: ', error);
                 // that.g.wdLog(['call signout');
-                that.signOut();
+                that.signOut(400);
             });
             // , () => {
                 // that.g.wdLog(['!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
@@ -1086,7 +1098,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private logout() {
-        this.signOut();
+        this.signOut(-1);
     }
 
     /** show callout */
@@ -1131,13 +1143,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 1 - clear local storage
      * 2 - remove user in firebase
     */
-    signOut() {
+    signOut(cod) {
          this.g.wdLog(['SIGNOUT']);
          this.g.setIsOpen(false);
         // this.storageService.removeItem('attributes');
         this.storageService.clear();
         this.chatPresenceHandlerService.goOffline();
-        this.authService.signOut(-1);
+        this.authService.signOut(cod);
     }
 
     /**
@@ -1412,7 +1424,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * logout
      */
     returnSignOut() {
-        this.signOut();
+        this.signOut(-1);
     }
 
     /**
@@ -1545,6 +1557,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+     /** */
+     private triggerOnLoggedOut() {
+        const appConfigs = this.appConfigService.getConfig();
+        const default_settings = this.g.default_settings;
+
+        this.g.wdLog([' ---------------- triggerOnLoggedOut ---------------- ', this.g.isLogged]);
+        // tslint:disable-next-line:max-line-length
+        const onLoggedOut = new CustomEvent('onLoggedOut', { detail: {isLogged: this.g.isLogged, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedOut);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onLoggedOut);
+        }
+    }
+
     /** */
     private triggerOnAuthStateChanged() {
         const appConfigs = this.appConfigService.getConfig();
@@ -1564,15 +1593,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     private triggerLoadParamsEvent() {
-        this.g.wdLog([' ---------------- triggerLoadParamsEvent ---------------- ', this.g.default_settings]);
+        this.g.wdLog([' ---------------- triggerOnLoadParamsEvent ---------------- ', this.g.default_settings]);
         const default_settings = this.g.default_settings;
-        const loadParams = new CustomEvent('loadParams', { detail: { default_settings: default_settings } });
+        const onLoadParams = new CustomEvent('onLoadParams', { detail: { default_settings: default_settings } });
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(loadParams);
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
             this.g.windowContext = windowContext;
         } else {
-            this.el.nativeElement.dispatchEvent(loadParams);
+            this.el.nativeElement.dispatchEvent(onLoadParams);
         }
     }
 

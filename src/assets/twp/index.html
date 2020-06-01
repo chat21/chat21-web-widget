@@ -286,8 +286,8 @@
         }
 
         window.tileDeskAsyncInit = function() {
-                window.tiledesk.on('loadParams', function(event_data) {
-                    // console.log('loadParams: ')
+                window.tiledesk.on('onLoadParams', function(event_data) {
+                    // console.log('onLoadParams: ')
                     window.tiledesk.open();
             });
         };

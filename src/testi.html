@@ -82,8 +82,8 @@
               window.tileDeskAsyncInit = function() {
                 console.log("testi.html tileDeskAsyncInit")
                 
-                window.tiledesk.on('loadParams', function(event_data) {
-                  console.log("testi.html loadParams");
+                window.tiledesk.on('onLoadParams', function(event_data) {
+                  console.log("testi.html onLoadParams");
                   setTimeout(function() {
                     window.tiledesk.showCallout()
                   }, 3000)

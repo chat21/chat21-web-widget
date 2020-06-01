@@ -60,8 +60,8 @@
 
 
       window.tileDeskAsyncInit = function() {
-      window.tiledesk.on('loadParams', function(event_data) {
-        console.log("2 - loadParams->");
+      window.tiledesk.on('onLoadParams', function(event_data) {
+        console.log("2 - onLoadParams->");
         // console.log("window.tiledesk", window.tiledesk);
         
         var httpRequest = createCORSRequest('POST', 'https://demo@f21.it:password@api.tiledesk.com/v1/5b55e806c93dde00143163dd/jwt/generatetestjwt',false); //set async to false because loadParams must return when the get is complete
