@@ -15,7 +15,7 @@
           isLogEnabled: true,
           autoStart: false,
           persistence: 'session',
-          startFromHome: false,
+          startFromHome: true,
           preChatForm: true
       };
 
@@ -36,11 +36,19 @@
       window.tileDeskAsyncInit = function() {
         // console.log("window.tileDeskAsyncInit()");
         window.tiledesk.on('onAuthStateChanged', function (event_data) {
-            console.log("onAuthStateChanged---->", event_data.detail.isLogged);
+          /* passo event 
+           -2: vengo da un reinit. NON SCATTA L'EVENTO;
+           -1: vengo da un logout. NON SCATTA L'EVENTO;
+            0: non sono loggato;
+          200: sono loggato;
+          400: errore. IN CASO DI ERRORE NON SCATTA L'EVENTO
+          */
+            console.log("onAuthStateChanged----> ", event_data.detail.event, "<------");
             if (!event_data.detail.isLogged) {
                 console.log("!NOT logged, fired also on startup!");
                 window.tiledesk.setPreChatForm(true);
                 //window.tiledesk.signInAnonymous();
+                //window.tiledesk.signInWithCustomToken("JWT WRONG_TOKEN_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
                 window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
                 window.tiledesk.hide();
             } else {

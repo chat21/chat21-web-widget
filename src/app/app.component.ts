@@ -154,9 +154,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const that = this;
         /**
          * SUBSCRIBE TO ASYNC LOGIN FUNCTION
+         * RESP
+         * -2: ho fatto il reinit // DA TESTARE!!!
+         * -1: ho fatto il logout
+         * 0: non sono loggato
+         * 200: sono loggato
+         * 400: errore nel login
+         * 410: errore login (firebase)
          */
-        const obsLoggedUser = this.authService.obsLoggedUser.subscribe((user) => {
-            this.g.wdLog(['obsLoggedUser ------------> ', user]);
+        const obsLoggedUser = this.authService.obsLoggedUser.subscribe((resp) => {
+            this.g.wdLog(['obsLoggedUser ------------> ', resp]);
             // if autostart == false don't autenticate!
             // after called signInWithCustomToken need set autostart == true
             //this.ngZone.run(() => {
@@ -171,44 +178,41 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 const autoStart = this.g.autoStart;
                 that.g.wdLog(['tiledeskToken ------------> ', that.g.tiledeskToken]);
-                if (user === -2) {
+                if (resp === -2) {
                     /** ho fatto un reinit */
                     that.g.wdLog(['sono nel caso reinit -2']);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
+                    that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
-                    that.triggerOnAuthStateChanged();
+                    // that.triggerOnAuthStateChanged(resp);
                     if (autoStart !== false) {
                         that.setAuthentication();
                         that.initAll();
                     }
-                } else if (user === -1) {
+                } else if (resp === -1) {
                     /** ho effettuato il logout: nascondo il widget */
                     that.g.wdLog(['sono nel caso logout -1']);
                     // that.g.wdLog(['obsLoggedUser', obsLoggedUser);
                     // that.g.wdLog(['this.subscriptions', that.subscriptions);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
+                    that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
-                    // that.isBeingAuthenticated = false;
-                    that.triggerOnAuthStateChanged();
-                    //that.triggerOnLoggedOut();
-                } else if (user === 0) {
+                    // that.triggerOnAuthStateChanged(resp);
+                } else if (resp === 0) {
                     /** non sono loggato */
                     that.g.wdLog(['sono nel caso in cui non sono loggato 0']);
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
                     that.g.setParameter('isShown', false);
-                    that.triggerOnAuthStateChanged();
+                    that.triggerOnAuthStateChanged(resp);
                     if (autoStart !== false) {
                         that.setAuthentication();
                     }
-                } else if (user === 400) {
-                    that.g.wdLog([' ERRORE LOGIN ']);
-                    that.storageService.removeItem('tiledeskToken');
-                    return;
-                } else if (user) {
+                } else if (resp === 200) {
                     /** sono loggato */
+                    const user = that.authService.getCurrentUser();
                     that.g.wdLog(['sono nel caso in cui sono loggato']);
                     that.g.wdLog([' anonymousAuthenticationInNewProject']);
                     // that.authService.resigninAnonymousAuthentication();
@@ -222,13 +226,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     //     that.triggerOnLoggedIn();
                     //     that.isBeingAuthenticated = false;
                     // }
-                    that.triggerOnAuthStateChanged();
+                    that.triggerOnAuthStateChanged(resp);
                     that.startUI();
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);
                     if (autoStart !== false) {
                         that.g.setParameter('isShown', true);
                     }
+                } else if (resp >= 400) {
+                    that.g.wdLog([' ERRORE LOGIN ']);
+                    that.storageService.removeItem('tiledeskToken');
+                    return;
                 } else {
                     that.g.wdLog([' INIT obsLoggedUser']);
                     return;
@@ -945,7 +953,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
                     }, error => {
                         console.error('Error creating firebase token: ', error);
-                        //that.signOut();
+                        that.signOut(400);
                     });
                  }
             }, error => {
@@ -988,7 +996,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // that.g.wdLog(['call signout');
-                        //that.signOut();
+                       that.signOut(400);
                     });
                     // , () => {
                     //     that.g.wdLog(['!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
@@ -1064,6 +1072,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 3 - reinit widget
     */
     private reInit() {
+        this.authService.signOut(-2);
         this.storageService.clear();
         const divWidgetRoot = this.g.windowContext.document.getElementsByTagName('tiledeskwidget-root')[0];
         const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
@@ -1575,12 +1584,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /** */
-    private triggerOnAuthStateChanged() {
+    private triggerOnAuthStateChanged(event) {
         const appConfigs = this.appConfigService.getConfig();
         const default_settings = this.g.default_settings;
         this.g.wdLog([' ---------------- triggerOnAuthStateChanged ---------------- ', this.g.isLogged]);
         // tslint:disable-next-line:max-line-length
-        const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: {isLogged: this.g.isLogged, user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: {event: event, isLogged: this.g.isLogged, user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
         const windowContext = this.g.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onAuthStateChanged);

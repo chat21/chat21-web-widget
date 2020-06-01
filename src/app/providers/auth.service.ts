@@ -23,7 +23,7 @@ export class AuthService {
   // public user: firebase.User;
   public user: any;
   private token: string;
-  obsLoggedUser = new ReplaySubject<any>(1);
+  obsLoggedUser = new ReplaySubject<number>(1);
 
   unsubscribe: any;
   API_URL: string;
@@ -138,7 +138,7 @@ export class AuthService {
   }
 
   /** */
-  authenticationWithCustomToken(tiledeskToken) {
+  authenticationWithCustomToken(tiledeskToken: string) {
     const that = this;
     if (tiledeskToken) {
       this.createFirebaseToken(tiledeskToken, this.g.projectid)
@@ -161,6 +161,7 @@ export class AuthService {
         that.authenticateFirebaseCustomToken(firebaseToken);
       }, error => {
         console.log('createFirebaseToken: ', error);
+        that.signOut(400);
       });
     } else {
       this.signinAnonymously()
@@ -178,11 +179,12 @@ export class AuthService {
             that.authenticateFirebaseCustomToken(firebaseToken);
           }, error => {
             console.log('createFirebaseToken: ', error);
+            that.signOut(400);
           });
         }
       }, error => {
         console.log('Error creating firebase token: ', error);
-        that.signOut(0);
+        that.signOut(400);
       });
     }
   }
@@ -263,7 +265,7 @@ export class AuthService {
           that.unsubscribe();
         }
         that.g.wdLog(['obsLoggedUser - authService.authenticateFirebaseCustomToken']);
-        that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.obsLoggedUser.next(200);
       })
       .catch(function(error) {
           const errorCode = error.code;
@@ -272,11 +274,12 @@ export class AuthService {
             that.unsubscribe();
           }
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
-          that.obsLoggedUser.next(400);
+          that.signOut(410);
       });
     })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
+      that.signOut(410);
     });
   }
 
@@ -298,7 +301,7 @@ export class AuthService {
             }
             that.g.wdLog(['authenticateFirebaseAnonymously']);
             that.getIdToken();
-            that.obsLoggedUser.next(firebase.auth().currentUser);
+            that.obsLoggedUser.next(200);
           })
           .catch(function(error) {
               const errorCode = error.code;
@@ -307,11 +310,12 @@ export class AuthService {
                 that.unsubscribe();
               }
               that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
-              that.obsLoggedUser.next(400);
+              that.signOut(410);
           });
         })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
+      that.signOut(410);
     });
   }
 
@@ -329,7 +333,7 @@ export class AuthService {
         }
         that.getIdToken();
         that.g.wdLog(['authenticateFirebaseWithEmailAndPassword']);
-        that.obsLoggedUser.next(firebase.auth().currentUser);
+        that.obsLoggedUser.next(200);
       })
       .catch(function(error) {
         const errorCode = error.code;
@@ -338,11 +342,12 @@ export class AuthService {
           that.unsubscribe();
         }
         that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
-        that.obsLoggedUser.next(400);
+        that.signOut(410);
       });
     })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
+      that.signOut(410);
     });
   }
 
@@ -394,17 +399,20 @@ export class AuthService {
         that.unsubscribe();
       }
       that.g.wdLog(['signOut', codice]);
-      if (codice >= 0) {
-        that.g.wdLog(['obsLoggedUser', codice]);
-        that.obsLoggedUser.next(codice);
-      } else {
-        that.g.wdLog(['obsLoggedUser (-1)']);
-        that.obsLoggedUser.next(-1);
-      }
+      that.g.wdLog(['obsLoggedUser', codice]);
+      that.obsLoggedUser.next(codice);
+      // if (codice >= 0) {
+      //   that.g.wdLog(['obsLoggedUser', codice]);
+      //   that.obsLoggedUser.next(codice);
+      // } else {
+      //   that.g.wdLog(['obsLoggedUser (-1)']);
+      //   that.obsLoggedUser.next(-1);
+      // }
     })
     .catch(err => {
       that.g.wdLog(['Something went wrong in signOut:', err.message]);
       //that.obsLoggedUser.next(firebase.auth().currentUser);
+      that.obsLoggedUser.next(400);
     });
   }
 

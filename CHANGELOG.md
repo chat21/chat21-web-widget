@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.35
+- bug fix: triggerOnAuthStateChanged on reinit, logout and error.
+
 ### 4.0.34
 - bug fix: startFromHome
 
