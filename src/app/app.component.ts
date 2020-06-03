@@ -235,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                 } else if (resp >= 400) {
                     that.g.wdLog([' ERRORE LOGIN ']);
-                    that.storageService.removeItem('tiledeskToken');
+                    // that.storageService.removeItem('tiledeskToken');
                     return;
                 } else {
                     that.g.wdLog([' INIT obsLoggedUser']);
@@ -953,12 +953,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.authService.authenticateFirebaseCustomToken(firebaseToken);
                     }, error => {
                         console.error('Error creating firebase token: ', error);
-                        that.signOut(400);
+                        that.signOut(-1);
                     });
                  }
             }, error => {
                 console.error('Error creating firebase token: ', error);
-                that.signOut(400);
+                that.signOut(-1);
             });
         } catch (error) {
             this.g.wdLog(['> Error :' + error]);
@@ -996,7 +996,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }, error => {
                         console.error('Error decoding token: ', error);
                        // that.g.wdLog(['call signout');
-                       that.signOut(400);
+                       that.signOut(-1);
                     });
                     // , () => {
                     //     that.g.wdLog(['!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
@@ -1004,7 +1004,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             }, error => {
                 console.error('Error creating firebase token: ', error);
                 // that.g.wdLog(['call signout');
-                that.signOut(400);
+                that.signOut(-1);
             });
             // , () => {
                 // that.g.wdLog(['!!! NEW REQUESTS HISTORY - DOWNLOAD REQUESTS AS CSV * COMPLETE *');
@@ -1072,8 +1072,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 3 - reinit widget
     */
     private reInit() {
-        this.authService.signOut(-2);
-        this.storageService.clear();
+        if (!firebase.auth().currentUser) {
+            this.g.wdLog(['reInit ma NON SONO LOGGATO!']);
+        } else {
+            this.authService.signOut(-2);
+            this.storageService.clear();
+        }
         const divWidgetRoot = this.g.windowContext.document.getElementsByTagName('tiledeskwidget-root')[0];
         const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
         divWidgetContainer.remove();
@@ -1153,12 +1157,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 2 - remove user in firebase
     */
     signOut(cod) {
-         this.g.wdLog(['SIGNOUT']);
-         this.g.setIsOpen(false);
+        this.g.wdLog(['SIGNOUT']);
+        if (this.g.isLogged === true) {
+            this.g.wdLog(['prima ero loggato allora mi sloggo!']);
+            this.g.setIsOpen(false);
+            this.storageService.clear();
+            this.chatPresenceHandlerService.goOffline();
+            this.authService.signOut(cod);
+        }
         // this.storageService.removeItem('attributes');
-        this.storageService.clear();
-        this.chatPresenceHandlerService.goOffline();
-        this.authService.signOut(cod);
     }
 
     /**

@@ -146,7 +146,7 @@ export class AuthService {
         that.authenticateFirebaseCustomToken(firebaseToken);
       }, error => {
         console.log('createFirebaseToken: ', error);
-        that.signOut(400);
+        that.signOut(-1);
       });
     }
   }
@@ -161,7 +161,7 @@ export class AuthService {
         that.authenticateFirebaseCustomToken(firebaseToken);
       }, error => {
         console.log('createFirebaseToken: ', error);
-        that.signOut(400);
+        that.signOut(-1);
       });
     } else {
       this.signinAnonymously()
@@ -179,12 +179,12 @@ export class AuthService {
             that.authenticateFirebaseCustomToken(firebaseToken);
           }, error => {
             console.log('createFirebaseToken: ', error);
-            that.signOut(400);
+            that.signOut(-1);
           });
         }
       }, error => {
         console.log('Error creating firebase token: ', error);
-        that.signOut(400);
+        that.signOut(-1);
       });
     }
   }
@@ -274,12 +274,12 @@ export class AuthService {
             that.unsubscribe();
           }
           that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
-          that.signOut(410);
+          that.signOut(-1);
       });
     })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
-      that.signOut(410);
+      that.signOut(-1);
     });
   }
 
@@ -310,12 +310,12 @@ export class AuthService {
                 that.unsubscribe();
               }
               that.g.wdLog(['signInAnonymously ERROR: ', errorCode, errorMessage]);
-              that.signOut(410);
+              that.signOut(-1);
           });
         })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
-      that.signOut(410);
+      that.signOut(-1);
     });
   }
 
@@ -342,12 +342,12 @@ export class AuthService {
           that.unsubscribe();
         }
         that.g.wdLog(['authenticateFirebaseWithEmailAndPassword ERROR: ', errorCode, errorMessage]);
-        that.signOut(410);
+        that.signOut(-1);
       });
     })
     .catch(function(error) {
       console.error('Error setting firebase auth persistence', error);
-      that.signOut(410);
+      that.signOut(-1);
     });
   }
 
@@ -401,17 +401,10 @@ export class AuthService {
       that.g.wdLog(['signOut', codice]);
       that.g.wdLog(['obsLoggedUser', codice]);
       that.obsLoggedUser.next(codice);
-      // if (codice >= 0) {
-      //   that.g.wdLog(['obsLoggedUser', codice]);
-      //   that.obsLoggedUser.next(codice);
-      // } else {
-      //   that.g.wdLog(['obsLoggedUser (-1)']);
-      //   that.obsLoggedUser.next(-1);
-      // }
     })
     .catch(err => {
       that.g.wdLog(['Something went wrong in signOut:', err.message]);
-      //that.obsLoggedUser.next(firebase.auth().currentUser);
+      // that.obsLoggedUser.next(firebase.auth().currentUser);
       that.obsLoggedUser.next(400);
     });
   }

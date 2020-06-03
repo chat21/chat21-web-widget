@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.37
+- bug fix: triggerOnAuthStateChanged on error;
+
 ### 4.0.36
 - changed: triggerOnAuthStateChanged on logout;
 
