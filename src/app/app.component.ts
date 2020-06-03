@@ -199,7 +199,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.setParameter('isShown', false);
                     that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
-                    // that.triggerOnAuthStateChanged(resp);
+                    that.triggerOnAuthStateChanged(resp);
                 } else if (resp === 0) {
                     /** non sono loggato */
                     that.g.wdLog(['sono nel caso in cui non sono loggato 0']);
