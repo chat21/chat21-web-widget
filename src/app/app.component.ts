@@ -182,7 +182,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     /** ho fatto un reinit */
                     that.g.wdLog(['sono nel caso reinit -2']);
                     that.g.setParameter('isLogged', false);
-                    that.g.setParameter('isShown', false);
+                    that.hideAllWidget();
+                    // that.g.setParameter('isShown', false, true);
                     that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
                     // that.triggerOnAuthStateChanged(resp);
@@ -196,7 +197,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.wdLog(['obsLoggedUser', obsLoggedUser);
                     // that.g.wdLog(['this.subscriptions', that.subscriptions);
                     that.g.setParameter('isLogged', false);
-                    that.g.setParameter('isShown', false);
+                    that.hideAllWidget();
+                    // that.g.setParameter('isShown', false, true);
                     that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
                     that.triggerOnAuthStateChanged(resp);
@@ -205,7 +207,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.wdLog(['sono nel caso in cui non sono loggato 0']);
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
-                    that.g.setParameter('isShown', false);
+                    that.hideAllWidget();
+                    // that.g.setParameter('isShown', false, true);
                     that.triggerOnAuthStateChanged(resp);
                     if (autoStart !== false) {
                         that.setAuthentication();
@@ -231,7 +234,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);
                     if (autoStart !== false) {
-                        that.g.setParameter('isShown', true);
+                        that.showAllWidget();
+                        // that.g.setParameter('isShown', true, true);
                     }
                 } else if (resp >= 400) {
                     that.g.wdLog([' ERRORE LOGIN ']);
@@ -643,7 +647,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenSelectionDepartment = true;
             } else {
                 this.isOpenConversation = true;
-                this.startNwConversation();
+                if (!this.g.recipientId) {
+                    this.startNwConversation();
+                }
             }
         }
 
@@ -1032,12 +1038,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** show all widget */
     private showAllWidget() {
-        this.g.setParameter('isShown', true);
+        const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+        if (divWidgetContainer) {
+            divWidgetContainer.style.display = 'block';
+        }
+        this.g.setParameter('isShown', true, true);
     }
 
     /** hide all widget */
     private hideAllWidget() {
-        this.g.setParameter('isShown', false);
+        const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+        if (divWidgetContainer) {
+            divWidgetContainer.style.display = 'none';
+        }
+        this.g.setParameter('isShown', false, true);
     }
 
     /** open popup conversation */
@@ -1201,9 +1215,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.wdLog(['AppComponent::startNwConversation']);
         const newConvId = this.generateNewUidConversation();
         // if (this.g.newConversationStart === true) {
-            this.triggerNewConversationEvent(newConvId);
         // }
         this.g.setParameter('recipientId', newConvId);
+        this.triggerNewConversationEvent(newConvId);
         this.g.wdLog([' recipientId: ', this.g.recipientId]);
     }
 
@@ -1326,11 +1340,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.f21_open();
             }
             this.conversationSelected = $event;
-            // this.g.recipientId = $event.recipient;
-            // this.g.setVariable('recipientId', $event.recipient);
             this.g.setParameter('recipientId', $event.recipient);
-            // this.settingsSaverService.setVariable('recipientId', $event.recipient);
-
             this.isOpenConversation = true;
              this.g.wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);

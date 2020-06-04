@@ -1606,5 +1606,5 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
   // ========= END:: TRIGGER FUNCTIONS ============//
 
-  
+
 }

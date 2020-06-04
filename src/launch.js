@@ -77,6 +77,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         containerDiv.classList.add("closed");
         containerDiv.classList.remove("open");
     });
+
     /** */
     window.tiledesk.on('onOpenEyeCatcher', function(event_data) {
         // console.log("tiledesk onOpenEyeCatcher", event_data);

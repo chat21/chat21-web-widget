@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.38
+- bug fix: shown/hide iframe;
+- changed: removed variables in local storage
+
 ### 4.0.37
 - bug fix: triggerOnAuthStateChanged on error;
 

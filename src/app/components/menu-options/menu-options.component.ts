@@ -29,12 +29,12 @@ export class MenuOptionsComponent implements OnInit {
   }
 
   f21_toggle_options() {
-    this.g.setParameter('isOpenMenuOptions', !this.g.isOpenMenuOptions);
+    this.g.setParameter('isOpenMenuOptions', !this.g.isOpenMenuOptions, true);
   }
 
   toggleSound() {
-    this.g.setParameter('isSoundActive', !this.g.isSoundActive);
-    this.g.setParameter('isOpenMenuOptions', false);
+    this.g.setParameter('isSoundActive', !this.g.isSoundActive, true);
+    this.g.setParameter('isOpenMenuOptions', false, true);
     // this.g.isSoundActive = !this.g.isSoundActive;
     // if ( this.g.isSoundActive === false ) {
     //   this.storageService.setItem('isSoundActive', false);
@@ -44,7 +44,7 @@ export class MenuOptionsComponent implements OnInit {
   }
 
   signOut() {
-    this.g.setParameter('isOpenMenuOptions', false);
+    this.g.setParameter('isOpenMenuOptions', false, true);
     this.eventSignOut.emit();
   }
 

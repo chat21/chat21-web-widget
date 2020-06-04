@@ -441,10 +441,13 @@ export class Globals {
    * @param key
    * @param val
    */
-  public setParameter(key: string, val: any) {
+  public setParameter(key: string, val: any, storage?: boolean) {
+    // storage = true;
     this[key] = val;
     const obj = {'key': key, 'val': val};
-    this.obsObjChanged.next(obj);
+    if (storage === true) {
+      this.obsObjChanged.next(obj);
+    }
   }
 
   /**

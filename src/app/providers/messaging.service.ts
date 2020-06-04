@@ -241,11 +241,11 @@ export class MessagingService {
 
     this.messages.sort(this.compareValues('timestamp', 'asc'));
     this.obsAdded.next(message);
-    try {
-      this.storageService.setItem('messages', JSON.stringify(this.messages));
-    } catch (error) {
-      this.g.wdLog(['> Error :' + error]);
-    }
+    // try {
+    //   this.storageService.setItem('messages', JSON.stringify(this.messages));
+    // } catch (error) {
+    //   this.g.wdLog(['> Error :' + error]);
+    // }
   }
 
   /**
