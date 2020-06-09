@@ -388,7 +388,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['> Error :' + error]);
         }
         if (!attributes && attributes === null ) {
-            attributes = {};
+            if ( this.g.attributes ) {
+                attributes = this.g.attributes;
+            } else {
+                attributes = {};
+            }
         }
         // that.g.wdLog(['attributes: ', attributes);
         // that.g.wdLog(['CLIENT_BROWSER: ', CLIENT_BROWSER);
@@ -950,9 +954,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe(resp => {
                 that.g.wdLog(['signInWithCustomToken token ', resp]);
                  if (resp.success === true && resp.token) {
-                    // that.g.setParameter('userEmail', resp.user.email);
-                    // that.g.setParameter('userId', resp.user._id);
-                    // that.g.setAttributeParameter('userEmail', resp.user.email);
+                     if (resp.user) {
+                        const fullName = resp.user.firstname + ' ' + resp.user.lastname;
+                        that.g.setParameter('userFullname', fullName);
+                        that.g.setParameter('userEmail', resp.user.email);
+                        that.g.setParameter('userId', resp.user._id);
+                        that.g.setAttributeParameter('userEmail', resp.user.email);
+                        that.g.setAttributeParameter('userFullname', fullName);
+                     }
                     that.authService.createFirebaseToken(resp.token)
                     .subscribe(firebaseToken => {
                         that.g.firebaseToken = firebaseToken;

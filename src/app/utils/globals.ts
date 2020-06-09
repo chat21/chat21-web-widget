@@ -457,7 +457,7 @@ export class Globals {
    */
   public setAttributeParameter(key: string, val: any) {
     this.attributes[key] = val;
-    this.setParameter('attributes', this.attributes);
+    this.setParameter('attributes', this.attributes, true);
   }
 
   /**

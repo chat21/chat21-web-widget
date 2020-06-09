@@ -9,11 +9,11 @@
       window.tiledeskSettings = 
       {
           // PRE:   
-          // projectid: "5ec2498f5bda140034cce267",
+          projectid: "5ec2498f5bda140034cce267",
           // PROD: 
-          projectid: "5ebf9cc892befe00190552d6",
+          // projectid: "5ebf9cc892befe00190552d6",
           isLogEnabled: true,
-          autoStart: false,
+          // autoStart: false,
           persistence: 'session',
           startFromHome: true,
           preChatForm: true
@@ -25,10 +25,10 @@
         js = d.createElement(s); 
         js.id = id; //js.async=!0;
         // PRE
-        // js.src = "./launch.js"; //
+        js.src = "./launch.js"; //
         // js.src = "https://widget-pre.tiledesk.com/v2/launch.js"; 
         // PROD
-        js.src = "https://widget.tiledesk.com/v4/launch.js";
+        // js.src = "https://widget.tiledesk.com/v4/launch.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
       
@@ -49,11 +49,11 @@
                 window.tiledesk.setPreChatForm(true);
                 //window.tiledesk.signInAnonymous();
                 //window.tiledesk.signInWithCustomToken("JWT WRONG_TOKEN_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
-                window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
-                window.tiledesk.hide();
+                //window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.J2QDzWxlou7dJzTIaOajJkN-yQ_EiJM6bLpJ7fm-EXM");
+                //window.tiledesk.hide();
             } else {
               console.log("logged in, fired also on startup!");
-              window.tiledesk.show();
+              //window.tiledesk.show();
             }
         });
 
