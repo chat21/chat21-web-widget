@@ -34,4 +34,5 @@ COPY --from=builder /ng-app/dist /usr/share/nginx/html
 RUN echo "Chat21 Web Widget Started!!"
 
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/widget-config.json > /usr/share/nginx/html/widget-config.json && exec nginx -g 'daemon off;'"]

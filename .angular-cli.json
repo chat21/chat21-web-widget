@@ -19,7 +19,8 @@
         "test-custom-auth.html",
         "launch.js",
         "iframe-style.css",
-        "firebase-config.json"
+        "firebase-config.json",
+        "widget-config.json"
       ],
       "index": "index.html",
       "main": "main.ts",

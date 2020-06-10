@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.40
+- new: dokerize project
+
 ### 4.0.39
 - changed: email and fullname saved in attribute parameters after signInWithCustomToken
 

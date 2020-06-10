@@ -1,0 +1,12 @@
+{
+    "remoteTranslationsUrl": "${TRANSLATE_URL}",
+    "firebase": {
+        "apiKey": "${FIREBASE_APIKEY}",
+        "authDomain": "${FIREBASE_AUTHDOMAIN}",
+        "databaseURL": "${FIREBASE_DATABASEURL}",
+        "projectId": "${FIREBASE_PROJECT_ID}",
+        "storageBucket": "${FIREBASE_STORAGEBUCKET}",
+        "messagingSenderId": "${FIREBASE_MESSAGINGSENDERID}"
+    },
+    "apiUrl": "${API_URL}"
+}
