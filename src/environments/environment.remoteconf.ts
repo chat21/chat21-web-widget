@@ -9,7 +9,7 @@
 export const environment = {
   production: false,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
-  remoteConfig: true,
+  remoteConfig: false,
   // remoteConfigUrl: 'http://localhost/api/chat21/config',
   // remoteConfigUrl: window.location.hostname + '/api/chat21/config',
   // remoteConfigUrl: `${ window.location.protocol }//${ window.location.hostname}` + '/api/chat21/config',
