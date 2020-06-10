@@ -109,3 +109,19 @@ Run : `aws --profile f21 s3 sync . s3://tiledesk-widget`
 
 If you use AWS Cloud Front enable gzip compression.
 
+
+# Run with docker
+
+  
+To run Chat21-ionic on port 8080 run:
+
+```
+
+curl https://raw.githubusercontent.com/chat21/chat21-web-widget/master/env.sample --output .env
+
+nano .env #configure .env file properly
+
+docker run -p 4200:80 --env-file .env chat21/chat21-web-widget
+
+```
+
