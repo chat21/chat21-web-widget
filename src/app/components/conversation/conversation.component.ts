@@ -1342,7 +1342,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
                 let message = 'File: ' + metadata.src;
                 if (metadata.type.startsWith('image')) {
                     type_message = TYPE_MSG_IMAGE;
-                    message = 'Image: ' + metadata.src;
+                    message = ''; // 'Image: ' + metadata.src;
                 }
                 that.sendMessage(message, type_message, metadata);
                 that.isFilePendingToUpload = false;

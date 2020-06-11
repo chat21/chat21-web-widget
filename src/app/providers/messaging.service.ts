@@ -254,7 +254,7 @@ export class MessagingService {
   checkMessage(message): boolean {
     if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
       // se è un messaggio vuoto non fare nulla
-      return false;
+      //return false;
     }
     if (this.filterSystemMsg && message.attributes && message.attributes['subtype'] === 'info') {
       // se è un msg inviato da system NON fare nulla

@@ -140,22 +140,26 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                         <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
 
                                             <!-- message type:: image -->
-                                            <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
+                                            <div>
+                                                <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" />
+                                            
+                                                <!-- message type:: text -->
+                                                <!-- <div *ngIf="message.type == 'text'"> -->
+                                                <div *ngIf="message.text">
+                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
+                                                        is ignored</div>
+                                                    <ng-template #contentPopup>
+                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;"
+                                                            (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
+                                                    </ng-template>
+                                                    <ng-template #contentNewTab>
+                                                        <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                        <!-- <p [innerHTML]="message.text | linky"></p> -->
+                                                    </ng-template>
+                                                </div>
 
-                                            <!-- message type:: text -->
-                                            <div *ngIf="message.type == 'text'">
-                                                <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
-                                                    is ignored</div>
-                                                <ng-template #contentPopup>
-                                                    <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                                </ng-template>
-                                                <ng-template #contentNewTab>
-                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
-                                                    <!-- <p [innerHTML]="message.text | linky"></p> -->
-                                                </ng-template>
                                             </div>
 
                                         </div>
@@ -193,38 +197,41 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                             
                                             <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
 
-                                            <!-- message type:: image -->
-                                            <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
-                                                [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                                [height]="getSizeImg(message).height" />
+                                            <div>
+                                                <!-- message type:: image -->
+                                                <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
+                                                    [src]="message.metadata.src" [width]="getSizeImg(message).width"
+                                                    [height]="getSizeImg(message).height" />
 
-                                            <!-- message type:: text -->
-                                            <div *ngIf="message.type == 'text';">
-                                               
-                                                <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
-                                                    is ignored</div>
+                                                <!-- message type:: text -->
+                                                <!-- <div *ngIf="message.type == 'text';"> -->
+                                                <div *ngIf="message.text">
+                                                
+                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
+                                                        is ignored</div>
 
-                                                <ng-template #contentPopup>
-                                                    <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                        (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
-                                                    </p>
-                                                </ng-template>
-                                                <ng-template #contentNewTab>
+                                                    <ng-template #contentPopup>
+                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;"
+                                                            (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
+                                                        </p>
+                                                    </ng-template>
+                                                    <ng-template #contentNewTab>
 
 
-                                                    <!-- old -->
-                                                    <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
-                                                    <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
+                                                        <!-- old -->
+                                                        <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
+                                                        <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
 
-                                                    <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
-                                                    <!-- <p [innerHTML]="message.uid | linky"></p> -->
+                                                        <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                        <!-- <p [innerHTML]="message.uid | linky"></p> -->
 
-                                                    <!-- <p [innerHTML]="videoUrl"></p> -->
-                                                    
-                                                    <!-- <p [innerHTML]="message.print() | linky"></p> -->
-                                                    <!-- <p [innerHTML]="message.text | linky"></p> -->
+                                                        <!-- <p [innerHTML]="videoUrl"></p> -->
+                                                        
+                                                        <!-- <p [innerHTML]="message.print() | linky"></p> -->
+                                                        <!-- <p [innerHTML]="message.text | linky"></p> -->
 
-                                                </ng-template>
+                                                    </ng-template>
+                                                </div>
                                             </div>
 
                                         </div>

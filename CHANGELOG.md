@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.41
+- changed: show message with image and text (step1)
+
 ### 4.0.40
 - new: dokerize project
 
