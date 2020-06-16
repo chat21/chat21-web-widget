@@ -35,4 +35,4 @@ RUN echo "Chat21 Web Widget Started!!"
 
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/widget-config.json > /usr/share/nginx/html/widget-config.json && exec nginx -g 'daemon off;'"]
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/widget-config-template.json > /usr/share/nginx/html/widget-config.json && exec nginx -g 'daemon off;'"]
