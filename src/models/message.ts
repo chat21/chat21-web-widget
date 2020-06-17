@@ -13,7 +13,7 @@ export class MessageModel {
         public sender_fullname: string,
         public status: string,
         public metadata: any,
-        public text: string,
+        public text: any,
         public timestamp: any,
         public headerDate: string,
         public type: string,

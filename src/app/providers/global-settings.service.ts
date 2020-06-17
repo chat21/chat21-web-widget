@@ -987,7 +987,6 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_startMessage');
         if (TEMP) {
-            // console.log('MESSAGE::: ' + TEMP);
             globals.startMessage = JSON.parse(TEMP);
             this.globals.wdLog(['globals.startMessage: ' + globals.startMessage]);
         }
@@ -1000,6 +999,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_departmentID');
         if (TEMP) {
             globals.departmentID = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_persistence');
+        if (TEMP) {
+            globals.persistence = TEMP;
         }
 
     }

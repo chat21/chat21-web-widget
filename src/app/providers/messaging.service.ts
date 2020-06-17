@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
+import {DomSanitizer} from '@angular/platform-browser';
 
 // firebase
 import * as firebase from 'firebase/app';
@@ -59,7 +60,8 @@ export class MessagingService {
     public http: Http,
     public g: Globals,
     public storageService: StorageService,
-    public appConfigService: AppConfigService
+    public appConfigService: AppConfigService,
+    private sanitizer: DomSanitizer
   ) {
     this.API_URL = appConfigService.getConfig().apiUrl;
     //  that.g.wdLog(['MessagingService::this.API_URL',  this.API_URL );
@@ -148,7 +150,10 @@ export class MessagingService {
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
-      const text = replaceBr(message['text']);
+      const video_pattern = /^(tdvideo:.*)/mg;
+      const key = 'tdvideo:';
+      const messageText = that.splitMessageForKey(key, video_pattern, message.text); // message.text;
+      // const message = replaceBr(messageText); // message['text']);
 
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
@@ -190,7 +195,7 @@ export class MessagingService {
           message['sender_fullname'],
           message['status'],
           message['metadata'],
-          text,
+          messageText,
           message['timestamp'],
           dateSendingMessage,
           message['type'],
@@ -224,7 +229,7 @@ export class MessagingService {
 
 
   private addMessage(message) {
-    if (message && message.sender === this.senderId) {
+      if (message && message.sender === this.senderId) {
       const index = searchIndexInArrayForUid(this.messages, message.key);
       if (index < 0) {
         this.g.wdLog(['--------> ADD MSG IMG', index, message]);
@@ -246,6 +251,72 @@ export class MessagingService {
     // } catch (error) {
     //   this.g.wdLog(['> Error :' + error]);
     // }
+  }
+
+
+  splitMessageForKey(key, pattern, message) {
+    // const split_pattern = /^(tdvideo:.*)/mg;
+    const parts = message.split(pattern);
+    const commands: any = [];
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i].trim();
+      if (i % 2 !== 0) {
+        console.log('part ::: ', part);
+        const urlVideo = part.replace(key, '').trim();
+        const command = {};
+        command['type'] = 'video';
+        command['url'] = urlVideo;
+        commands.push(command);
+        message = message.replace(part, '').trim();
+      }
+    }
+    if (commands.length === 0) {
+      return message;
+    }
+    if (message !== '') {
+      message = '<div style="padding: 14px 0 10px 0;">' + message + '</div>';
+    }
+    let videoTags = '';
+    for (let i = 0; i < commands.length; i++) {
+      let urlVideo = commands[i]['url'];
+      let videoTag = '';
+      const keyYoutube = 'https://youtu.be/';
+      const keyVimeo = 'https://vimeo.com/';
+      console.log('urlVideo:: ', urlVideo);
+      if (urlVideo.includes(keyYoutube)) {
+        urlVideo = urlVideo.replace(keyYoutube, 'https://youtube.com/embed/').trim();
+        console.log('YOUTUBE:: ', urlVideo);
+      } else if (urlVideo.includes(keyVimeo)) {
+        urlVideo = urlVideo.replace(keyVimeo, 'https://player.vimeo.com/video/').trim();
+        console.log('VIMEO:: ', urlVideo);
+      } else {
+        videoTag += '<video width="100%" height="210" controls="controls" style="color:green;">';
+        videoTag += '<source src="' + urlVideo + '" type="video/mp4">';
+        videoTag += '<source src="' + urlVideo + '" type="video/ogg">';
+        videoTag += '<source src="' + urlVideo + '" type="video/webm">';
+        videoTag += 'Your browser does not support the video tag.';
+        videoTag += '</video>';
+      }
+
+      // let videoTag = '<object data="https://player.vimeo.com/video/88081351"';
+      // // let videoTag = '<object data="https://youtube.com/embed/HXOHEKye0nE"';
+      // videoTag += 'width="100%" style="max-width:100%; max-height:200px;">';
+      // videoTag += '</object>';
+
+      videoTag += '<iframe class="video" src="' + urlVideo + '"';
+      videoTag += 'style="width:100%; height: auto;"';
+      videoTag += 'frameborder="0" allow="autoplay; fullscreen" allowfullscreen>';
+      videoTag += '</iframe>';
+
+      // let videoTag = '<div style="max-width:100%; max-height:200px; float:none; clear:both; margin: 0px auto;">';
+      // videoTag += '<embed type="video" src="' + urlVideo + '" width="100%" title="">';
+      // videoTag += '</div>';
+      videoTags = videoTags.concat(videoTag);
+    }
+    message = message.concat(videoTags);
+    message = this.sanitizer.bypassSecurityTrustHtml(message);
+    // console.log('message ::: ', message);
+    return message;
   }
 
   /**

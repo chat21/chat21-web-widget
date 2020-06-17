@@ -1,7 +1,7 @@
 {
   "name": "@chat21/chat21-web-widget",
   "author": "Dario De Pascalis - Frontiere21 SRL",
-  "version": "4.0.41",
+  "version": "4.0.42",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiledesk.com",
   "repository": {
@@ -52,6 +52,7 @@
     "intl": "^1.2.5",
     "ionicons": "^3.0.0",
     "less": "^2.7.3",
+    "marked": "^1.1.0",
     "material-design-icons": "^3.0.1",
     "node-sass": "^4.13.0",
     "rxjs": "^5.4.2",

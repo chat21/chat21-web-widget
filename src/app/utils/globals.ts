@@ -103,7 +103,7 @@ export class Globals {
   NO: string;
   BUTTON_CLOSE_TO_ICON: string;
   BUTTON_EDIT_PROFILE: string;
-  BUTTON_DOWNLOAD_TRANSCRIPT: string;
+  DOWNLOAD_TRANSCRIPT: string;
   RATE_CHAT: string;
   WELCOME_TITLE: string;
   WELCOME_MSG: string;
@@ -114,7 +114,6 @@ export class Globals {
   LOGOUT: string;
   CUSTOMER_SATISFACTION: string;
   YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE: string;
-  DOWNLOAD_TRANSCRIPT: string;
   YOUR_RATING: string;
   WRITE_YOUR_OPINION: string;
   SUBMIT: string;

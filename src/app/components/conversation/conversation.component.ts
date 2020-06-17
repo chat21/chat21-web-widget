@@ -64,6 +64,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private setTimeoutWritingMessages;
   isMenuShow = false;
   isScrolling = false;
+  isButtonsDisabled = true;
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -153,7 +154,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // private translate: TranslateService
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
-    this.initAll();
     this.g.wdLog([' constructor conversation component ']);
   }
 
@@ -167,9 +167,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       });
     });
     this.subscriptions.push(subscriptionEndRenderMessage);
-    this.setFocusOnId('chat21-main-message-context');
     // this.attributes = this.setAttributes();
-    this.updateConversationBadge();
     // this.getTranslation();
   }
 
@@ -183,31 +181,61 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.currentConversationComponent = this;
-    if (this.g.newConversationStart === true) {
-      this.onNewConversationComponentInit();
-      // this.g.setParameter('newConversationStart', null)
-      this.g.newConversationStart = false;
-      // console.log('reset newconv ' + this.g.newConversationStart);
-      // console.log('start message ', this.g.startMessage);
-      // do  not send message hello
-      const start_message = this.g.startMessage;
-     if (this.g.startMessage) {
-      // tslint:disable-next-line:max-line-length
-      this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
-      // {"subtype": "info"}  //sponziello
-     }
-    }
-    // ------------------------------------------------ //
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    // console.log('attributes: ', this.g.attributes);
-    //this.scrollToBottom(true);
-    this.setSubscriptions();
+    // --------------------------- //
+    // after animation intro
     setTimeout(() => {
+      this.initAll();
+      this.setFocusOnId('chat21-main-message-context');
+      this.updateConversationBadge();
+
+      this.g.currentConversationComponent = this;
+      if (this.g.newConversationStart === true) {
+        this.onNewConversationComponentInit();
+        this.g.newConversationStart = false;
+        const start_message = this.g.startMessage;
+        if (this.g.startMessage) {
+          this.sendMessage(
+            start_message.text,
+            start_message.type,
+            start_message.metadata,
+            start_message.attributes
+          );
+          // {"subtype": "info"}  //sponziello
+        }
+      }
+      this.setSubscriptions();
       if (this.afConversationComponent) {
         this.afConversationComponent.nativeElement.focus();
       }
-    }, 1000);
+      this.isButtonsDisabled = false;
+    }, 300);
+
+    // this.g.currentConversationComponent = this;
+    // if (this.g.newConversationStart === true) {
+    //   this.onNewConversationComponentInit();
+    //   // this.g.setParameter('newConversationStart', null)
+    //   this.g.newConversationStart = false;
+    //   // console.log('reset newconv ' + this.g.newConversationStart);
+    //   // console.log('start message ', this.g.startMessage);
+    //   // do  not send message hello
+    //   const start_message = this.g.startMessage;
+    //  if (this.g.startMessage) {
+    //   // tslint:disable-next-line:max-line-length
+    //   this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
+    //   // {"subtype": "info"}  //sponziello
+    //  }
+    // }
+    // // ------------------------------------------------ //
+    // this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    // // console.log('attributes: ', this.g.attributes);
+    // //this.scrollToBottom(true);
+    // this.setSubscriptions();
+    // setTimeout(() => {
+    //   if (this.afConversationComponent) {
+    //     this.afConversationComponent.nativeElement.focus();
+    //   }
+    // }, 1000);
   }
 
 
@@ -834,18 +862,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   printMessage(message, messageEl, component) {
-    // console.log('messageEl', messageEl);
-    // console.log('component', component);
-
     this.triggerBeforeMessageRender(message, messageEl, component);
-
-    const messageText = message.text;
-    // console.log('triggerBeforeMessageRender after');
-    // TODO Aggiungi linky
+    const messageText = message.text; // this.sanitizer.bypassSecurityTrustHtml();
     this.triggerAfterMessageRender(message, messageEl, component);
-
     return messageText;
   }
+
 
   triggerBeforeMessageRender(message, messageEl, component) {
     // console.log('triggerBeforeMessageRender');

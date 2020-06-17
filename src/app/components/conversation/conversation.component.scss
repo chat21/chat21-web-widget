@@ -77,7 +77,6 @@
             min-height: 25px;
             object-fit: cover;
         }
-        
     }
 
      /* SET SCROLLBAR */
@@ -220,7 +219,7 @@
 
                         p {
                             font-size: 1.4em;
-                            margin: 0 0 0 0;
+                            margin: 0;
                             padding: 14px;
                             font-style: normal;
                             letter-spacing: normal;
@@ -237,6 +236,21 @@
                             height: auto;
                             object-fit: cover;
                         }
+                        .message_innerhtml {
+                            margin: 0px;
+                            padding: 0px 14px;
+                            margin-block-start: 0!important;
+                            margin-block-end: 0!important;
+                            p {
+                                margin-block-start: 0!important;
+                                margin-block-end: 0!important;
+                                margin: 0;
+                            }
+                            .text-message {
+                                padding-top: 14px;
+                            }
+                        }
+                        
                     }
                     /* send message */
                     .base_sent {
@@ -343,21 +357,13 @@
     background: white;
 
     .visible-text-area {
-        // display: block;
-        // height: 100%;
-        // background-color: red;
         pointer-events: auto;
     }
-    .visible-text-area.active {
-        // display: hidden;
-        // height: 100%;
-        pointer-events: auto;
-        // background-color: green;
-    }
-    .chat21-textarea-button.active{
+    
+    .chat21-textarea-button {
         pointer-events: auto;
     }
-    .chat21-textarea-button{
+    .chat21-textarea-button {
         fill: $blue;
         pointer-events: auto;
     }
@@ -435,15 +441,18 @@
         position: absolute;
         display: block;
         bottom: 22px;
-        opacity: 0.3;
         width: 20px;
         height: 20px;
+        opacity: 0.3;
         cursor: initial;
+        &.active {
+            opacity: 1;
+            cursor: pointer;
+        }
     }
-    .chat21-textarea-button.active {
-        opacity: 1;
-        cursor: pointer;
-    }
+   
+
+
 
     #chat21-button-send {
         right: 8px;

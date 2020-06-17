@@ -226,6 +226,13 @@ tiledeskwidget-root {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+            p {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                margin-block-start: 0em;
+                margin-block-end: 0em;
+            }
         }
         .v-align-center{
             display: inline-flex;

@@ -1,5 +1,18 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.42
+- new: add splitMessageForKey for video in chat (al momento non utilizzata!)
+- new: add markdown messages (https://github.com/markedjs/marked, https://www.jamiecockrill.com/2018-04-30-marked-directive/, https://markrabey.com/2019/05/31/angular-markdown-pipe/)
+- new: lock the archived chats
+- new: added tiledesk_persistence
+- changed: start page detail conversation on end intro animation
+- bug fix: disabled button header until intro animation is complete
+
+
+### 4.0.41A
+- changed: remove BUTTON_DOWNLOAD_TRANSCRIPT
+- new: added ngx-markdown step 1
+
 ### 4.0.41
 - changed: show message with image and text (step1)
 

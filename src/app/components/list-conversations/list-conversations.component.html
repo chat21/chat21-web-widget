@@ -48,7 +48,7 @@
           <div class="c21-right-conv">
             <div class="c21-last-time">{{conversation.time_last_message}}</div>
             <div class="truncate c21-name">{{conversation.sender_fullname }}</div>
-            <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="convertMessage(conversation.last_message_text)"></div>
+            <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text | marked"></div>
           </div>
           <div *ngIf="conversation.is_new" [ngStyle] = "{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
         </div>

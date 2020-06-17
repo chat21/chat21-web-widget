@@ -9,6 +9,9 @@ import { AppComponent } from './app.component';
 // import { AngularFireAuthModule } from '@angular/fire/auth';
 // import * as firebase from 'firebase';
 
+
+// Directives
+
 // Import the library module
 import { environment } from '../environments/environment';
 import { HttpClientModule} from '@angular/common/http';
@@ -18,6 +21,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { LinkyModule } from 'angular-linky';
 import { AngularResizedEventModule } from 'angular-resize-event';
+
 
 // utils
 import { Globals } from './utils/globals';
@@ -59,6 +63,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
 import { LastMessageComponent } from './components/last-message/last-message.component';
 
 import { TranslateModule } from '@ngx-translate/core';
+import { MarkedPipe } from './directives/marked.pipe';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -86,7 +91,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MenuOptionsComponent,
     ListAllConversationsComponent,
     MessageAttachmentComponent,
-    LastMessageComponent
+    LastMessageComponent,
+    MarkedPipe
   ],
   imports: [
     BrowserModule,

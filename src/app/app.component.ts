@@ -1425,14 +1425,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
-        const isOpenHomeTEMP = this.isOpenHome;
-        const isOpenAllConversationTEMP = this.isOpenAllConversation;
-        this.isOpenHome = false;
+        // const isOpenHomeTEMP = this.isOpenHome;
+        // const isOpenAllConversationTEMP = this.isOpenAllConversation;
+        this.isOpenHome = true;
         this.isOpenAllConversation = false;
+        this.isOpenConversation = false;
         setTimeout(() => {
-            this.isOpenAllConversation = isOpenAllConversationTEMP;
-            this.isOpenHome = isOpenHomeTEMP;
-            this.isOpenConversation = false;
+            // this.isOpenAllConversation = isOpenAllConversationTEMP;
+            // this.isOpenHome = isOpenHomeTEMP;
+            // this.isOpenConversation = false;
         }, 200);
         // this.startNwConversation();
     }

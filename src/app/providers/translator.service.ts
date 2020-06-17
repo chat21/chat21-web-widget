@@ -175,7 +175,7 @@ export class TranslatorService {
       'NO',
       'BUTTON_CLOSE_TO_ICON',
       'BUTTON_EDIT_PROFILE',
-      'BUTTON_DOWNLOAD_TRANSCRIPT',
+      'DOWNLOAD_TRANSCRIPT',
       'RATE_CHAT',
       'WELLCOME_TITLE',
       'WELLCOME_MSG',
@@ -185,7 +185,6 @@ export class TranslatorService {
       'LOGOUT',
       'CUSTOMER_SATISFACTION',
       'YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE',
-      'DOWNLOAD_TRANSCRIPT',
       'YOUR_RATING',
       'WRITE_YOUR_OPINION',
       'SUBMIT',
@@ -228,7 +227,7 @@ export class TranslatorService {
       globals.NO = res['NO']; // is used ??
       globals.BUTTON_CLOSE_TO_ICON = res['BUTTON_CLOSE_TO_ICON'];
       globals.BUTTON_EDIT_PROFILE = res['BUTTON_EDIT_PROFILE']; // is used ??
-      globals.BUTTON_DOWNLOAD_TRANSCRIPT = res['BUTTON_DOWNLOAD_TRANSCRIPT'];
+      globals.DOWNLOAD_TRANSCRIPT = res['DOWNLOAD_TRANSCRIPT'];
       globals.RATE_CHAT = res['RATE_CHAT']; // is used ??
       globals.WELLCOME_TITLE = res['WELLCOME_TITLE'];
       globals.WELLCOME_MSG = res['WELLCOME_MSG'];
@@ -238,7 +237,6 @@ export class TranslatorService {
       globals.LOGOUT = res['LOGOUT'];
       globals.CUSTOMER_SATISFACTION = res['CUSTOMER_SATISFACTION'];
       globals.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE = res['YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE'];
-      globals.DOWNLOAD_TRANSCRIPT = res['DOWNLOAD_TRANSCRIPT'];
       globals.YOUR_RATING = res['YOUR_RATING']; // is used ??
       globals.WRITE_YOUR_OPINION = res['WRITE_YOUR_OPINION'];
       globals.SUBMIT = res['SUBMIT']; // se nn si carica la traduzione nn viene visualizzato il testo e si riname bloccati
@@ -298,7 +296,7 @@ export class TranslatorService {
     // globals.NO = this.translateForKey('NO'); // done
     // globals.BUTTON_CLOSE_TO_ICON = this.translateForKey('BUTTON_CLOSE_TO_ICON');  // done
     // globals.BUTTON_EDIT_PROFILE = this.translateForKey('BUTTON_EDIT_PROFILE');   // done
-    // globals.BUTTON_DOWNLOAD_TRANSCRIPT = this.translateForKey('BUTTON_DOWNLOAD_TRANSCRIPT'); // done
+    // globals.DOWNLOAD_TRANSCRIPT = this.translateForKey('DOWNLOAD_TRANSCRIPT'); // done
     // globals.RATE_CHAT = this.translateForKey('RATE_CHAT'); // done
     // globals.WELLCOME_TITLE = this.translateForKey('WELLCOME_TITLE');  // done
     // globals.WELLCOME_MSG = this.translateForKey('WELLCOME_MSG'); // done
