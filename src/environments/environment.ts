@@ -10,7 +10,7 @@ export const environment = {
   production: false,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: true,
-  remoteConfigUrl: '/widget-config.json',
+  remoteConfigUrl: './widget-config.json',
   remoteTranslationsUrl: 'http://localhost:3000/',
   loadRemoteTranslations: true,
   firebase: {
