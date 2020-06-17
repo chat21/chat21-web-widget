@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.42A
+- bug fix: check archived chats
+
 ### 4.0.42
 - new: add splitMessageForKey for video in chat (al momento non utilizzata!)
 - new: add markdown messages (https://github.com/markedjs/marked, https://www.jamiecockrill.com/2018-04-30-marked-directive/, https://markrabey.com/2019/05/31/angular-markdown-pipe/)

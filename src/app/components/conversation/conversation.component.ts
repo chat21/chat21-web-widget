@@ -65,6 +65,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isMenuShow = false;
   isScrolling = false;
   isButtonsDisabled = true;
+  isConversationArchived = false;
 
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -270,6 +271,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * do per scontato che this.userId esiste!!!
    */
   initAll() {
+    if (this.conversation && this.conversation.archived) {
+      this.isConversationArchived = true;
+    }
     const themeColor = this.g.themeColor;
     this.themeColor50 = convertColorToRGBA(themeColor, 50);
     this.messages = [];

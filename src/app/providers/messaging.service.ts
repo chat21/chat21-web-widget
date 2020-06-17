@@ -152,7 +152,8 @@ export class MessagingService {
       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
-      const messageText = that.splitMessageForKey(key, video_pattern, message.text); // message.text;
+      // const messageText = that.splitMessageForKey(key, video_pattern, message.text); 
+      const messageText = message.text;
       // const message = replaceBr(messageText); // message['text']);
 
       if (that.checkMessage(message)) {
