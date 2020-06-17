@@ -19,7 +19,6 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT'
   },
-  // apiUrl: 'https://api.tiledesk.com/v1/',
   apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   tenant: 'tilechat',
   defaultLang : 'en',
