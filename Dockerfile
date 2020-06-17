@@ -15,8 +15,8 @@ COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
 
-# RUN npm run ng build -- --output-path=dist 
-RUN npm run ng build -- --output-path=dist --base-href ./
+RUN npm run ng build -- --prod --output-path=dist --base-href ./ --output-hashing none --build-optimizer=false
+
 
 ### STAGE 2: Setup ###
 
@@ -33,6 +33,4 @@ COPY --from=builder /ng-app/dist /usr/share/nginx/html
 
 RUN echo "Chat21 Web Widget Started!!"
 
-
-# CMD ["nginx", "-g", "daemon off;"]
-CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/widget-config.json > /usr/share/nginx/html/widget-config.json && exec nginx -g 'daemon off;'"]
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/widget-config-template.json > /usr/share/nginx/html/widget-config.json && exec nginx -g 'daemon off;'"]

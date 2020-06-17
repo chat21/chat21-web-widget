@@ -10,7 +10,7 @@ export class AppConfigService {
 
   constructor(private http: HttpClient, public g: Globals) {
     this.appConfig = environment;
-    this.g.wdLog(['environment: ', environment]);
+    console.log('chat21-web-widget environment: ', environment);
   }
 
   loadAppConfig() {
@@ -18,7 +18,7 @@ export class AppConfigService {
     return this.http.get(this.appConfig.remoteConfigUrl)
       .toPromise()
       .then(data => {
-        this.appConfig.firebase = data;
+        this.appConfig = data;
       }).catch(err => {
         // console.log('error loadAppConfig');
       });
