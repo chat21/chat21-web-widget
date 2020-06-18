@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.42D
+- changed: removed markdown in list-conversation
+
 ### 4.0.42C
 - bug fix: url color in list-conversation
 - bug fix: max-height in list-conversation
