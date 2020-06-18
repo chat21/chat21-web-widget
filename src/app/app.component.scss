@@ -218,6 +218,24 @@ tiledeskwidget-root {
         a:active {
             color: #ffffff;
         }
+        #c21-app-list-conversations,
+        #c21-app-list-all-conversations {
+            a:link {
+                color: #3a3c4c;
+            }
+            /* visited link */
+            a:visited {
+                color: #3a3c4c;
+            }
+            /* mouse over link */
+            a:hover {
+                color: #3a3c4c;
+            }
+            /* selected link */
+            a:active {
+                color: #3a3c4c;
+            }
+        }
         div.clear {
             all: unset;
             clear: both;
