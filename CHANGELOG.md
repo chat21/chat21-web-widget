@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.42E
+- bug fix: br message
+
 ### 4.0.42D
 - changed: removed markdown in list-conversation
 

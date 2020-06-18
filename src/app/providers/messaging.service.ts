@@ -153,8 +153,8 @@ export class MessagingService {
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
       // const messageText = that.splitMessageForKey(key, video_pattern, message.text); 
-      const messageText = message.text;
-      // const message = replaceBr(messageText); // message['text']);
+      // const messageText = message.text;
+      const messageText = replaceBr(message.text); // message['text']);
 
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
