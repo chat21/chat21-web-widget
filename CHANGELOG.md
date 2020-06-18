@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.43
+- bug fix: add word-wrap: break-word; on .message
+
 ### 4.0.42E
 - bug fix: br message
 
