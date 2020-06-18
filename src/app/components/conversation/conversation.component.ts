@@ -867,7 +867,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   printMessage(message, messageEl, component) {
     this.triggerBeforeMessageRender(message, messageEl, component);
-    const messageText = message.text; // this.sanitizer.bypassSecurityTrustHtml();
+    const messageText = message.text;
     this.triggerAfterMessageRender(message, messageEl, component);
     return messageText;
   }

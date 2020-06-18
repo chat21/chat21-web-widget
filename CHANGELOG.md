@@ -1,7 +1,11 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.42B
+- bug fix: url in _blank
+
 ### 4.0.42A
 - bug fix: check archived chats
+
 
 ### 4.0.42
 - new: add splitMessageForKey for video in chat (al momento non utilizzata!)
