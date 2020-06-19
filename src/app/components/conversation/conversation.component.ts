@@ -22,7 +22,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr, convertMessage } from '../../utils/utils';
+import { getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -98,7 +98,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
   isPopupUrl = isPopupUrl;
-  convertMessage = convertMessage;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   isNewConversation = true;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
@@ -868,7 +867,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   printMessage(message, messageEl, component) {
     this.triggerBeforeMessageRender(message, messageEl, component);
-    const messageText = this.convertMessage(message.text);
+    const messageText = message.text;
     this.triggerAfterMessageRender(message, messageEl, component);
     return messageText;
   }

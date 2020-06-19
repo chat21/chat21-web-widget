@@ -20,7 +20,7 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, CHANNEL_TYPE_GROUP } from '../utils/constants';
 // utils
-import { getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr } from '../utils/utils';
+import { getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr, convertMessage } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -57,6 +57,7 @@ export class MessagingService {
   filterSystemMsg = true;
 
   getUrlImgProfile = getUrlImgProfile;
+  convertMessage = convertMessage;
 
   constructor(
     public starRatingWidgetService: StarRatingWidgetService,
@@ -158,8 +159,8 @@ export class MessagingService {
       const key = 'tdvideo:';
       // const messageText = that.splitMessageForKey(key, video_pattern, message.text);
       // const messageText = message.text;
-      let messageText = replaceBr(message.text); // message['text']);
-      // messageText = that.purify(messageText);
+      let messageText = that.convertMessage(message.text);
+      messageText = replaceBr(messageText); // message['text']);
 
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
@@ -369,15 +370,6 @@ export class MessagingService {
     };
   }
 
-  /**
-   * Either use pipe to sanitize your content when binding to [innerHTML] or use NgDompurifySanitizer service manually.
-   * <div [innerHtml]="value | dompurify"></div>
-   */
-  purify(value: string): any {
-    const message = this.sanitizer.bypassSecurityTrustHtml(value);
-    return message;
-    // return this.dompurifySanitizer.sanitize(SecurityContext.HTML, value);
-  }
 
   /**
    * ?????????????????????????????????

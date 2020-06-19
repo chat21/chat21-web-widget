@@ -1,7 +1,12 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.43B
+- change: step 1 sanitized messages
+- change: step 2 replaced \n in message
+- change: step 3 added markdown (only messages received)
+
 ### 4.0.43A
-- add: sanitixe message
+- add: sanitize the output HTML
 
 ### 4.0.43
 - bug fix: add word-wrap: break-word; on .message

@@ -149,16 +149,16 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 <!-- <div *ngIf="message.type == 'text'"> -->
                                                     
                                                 <div *ngIf="message.text">
-                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
+                                                    <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                    <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>
                                                     <ng-template #contentPopup>
                                                         <p style="text-decoration: underline; padding:8px; cursor: pointer;"
                                                             (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
                                                     </ng-template>
                                                     <ng-template #contentNewTab>
-                                                        <!-- <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p> -->
-                                                        <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
-                                                    </ng-template>
+                                                        <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                    </ng-template> -->
                                                 </div>
 
                                             </div>

@@ -233,7 +233,8 @@
                             border-radius: 8px;
                             padding: 3px;
                             margin-bottom: 0px;
-                            max-width: 100%;
+                            max-width: calc(100% - 6px);
+                            width: auto;
                             height: auto;
                             object-fit: cover;
                         }
@@ -267,7 +268,9 @@
                             max-width: calc(100% - 30px);
                             min-width: 14px;
                         }
-
+                        .message_innerhtml {
+                            padding: 14px;
+                        }
                         .status-message {
                             width: 16px;
                             height: 16px;
@@ -331,7 +334,9 @@
                             margin: 0 20px 4px 10px;
                             height: fit-content;
                         }
-                        
+                        .message_innerhtml {
+                            padding: 0 14px;
+                        }
                     }
     
                     .message_sender_fullname{
