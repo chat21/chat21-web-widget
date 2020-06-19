@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import {DomSanitizer} from '@angular/platform-browser';
 
+import {SecurityContext} from '@angular/core';
+// import {NgDompurifySanitizer} from '@tinkoff/ng-dompurify';
+
 // firebase
 import * as firebase from 'firebase/app';
 import 'firebase/database';
@@ -61,7 +64,8 @@ export class MessagingService {
     public g: Globals,
     public storageService: StorageService,
     public appConfigService: AppConfigService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    // private readonly dompurifySanitizer: NgDompurifySanitizer
   ) {
     this.API_URL = appConfigService.getConfig().apiUrl;
     //  that.g.wdLog(['MessagingService::this.API_URL',  this.API_URL );
@@ -152,9 +156,10 @@ export class MessagingService {
       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
-      // const messageText = that.splitMessageForKey(key, video_pattern, message.text); 
+      // const messageText = that.splitMessageForKey(key, video_pattern, message.text);
       // const messageText = message.text;
-      const messageText = replaceBr(message.text); // message['text']);
+      let messageText = replaceBr(message.text); // message['text']);
+      // messageText = that.purify(messageText);
 
       if (that.checkMessage(message)) {
         // imposto il giorno del messaggio
@@ -364,6 +369,15 @@ export class MessagingService {
     };
   }
 
+  /**
+   * Either use pipe to sanitize your content when binding to [innerHTML] or use NgDompurifySanitizer service manually.
+   * <div [innerHtml]="value | dompurify"></div>
+   */
+  purify(value: string): any {
+    const message = this.sanitizer.bypassSecurityTrustHtml(value);
+    return message;
+    // return this.dompurifySanitizer.sanitize(SecurityContext.HTML, value);
+  }
 
   /**
    * ?????????????????????????????????
