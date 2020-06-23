@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.44A
+- bug-fix: placeholder and logo widget in hp and conversation
+- bug-fix: name widget
+
 ### 4.0.44
 - change: renamed variable hideAttachButton in showAttachmentButton
 - new: added showAllConversations parameter

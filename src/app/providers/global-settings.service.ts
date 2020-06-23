@@ -10,6 +10,7 @@ import { TemplateBindingParseResult } from '@angular/compiler';
 import { StorageService } from './storage.service';
 import { AppConfigService } from './app-config.service';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
+import { ProjectModel } from '../../models/project';
 
 
 @Injectable()
@@ -66,7 +67,27 @@ export class GlobalSettingsService {
         // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
         .subscribe( response => {
-            // console.log('1 - setParameters ', response);
+            const project = response['project'];
+            console.log('1 - setParameters ', project);
+            that.globals.project.initialize(
+                project['id'],
+                project['activeOperatingHours'],
+                project['channels'],
+                project['name'],
+                project['createdAt'],
+                project['createdBy'],
+                project['isActiveSubscription'],
+                project['profile'],
+                project['agents'],
+                project['trialDays'],
+                project['type'],
+                project['status'],
+                project['trialDaysLeft'],
+                project['trialExpired'],
+                project['updatedAt'],
+                project['versions']
+            );
+            console.log('globals.project ----------------->', that.globals.project);
             that.setParameters(response);
         }, (error) => {
             // console.log('2 - ::getProjectParametersById', error);

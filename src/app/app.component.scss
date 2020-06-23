@@ -138,9 +138,13 @@ body {
     .avatar-image {
         position: absolute;
         top: 0;
+        bottom: 0;
+        margin: auto 0;
         left: 0;
         width: 100%;
         height: 100%;
+        max-width: 42px;
+        max-height: 42px;
         text-align: center;
         background-color: transparent;
         background-repeat: no-repeat;

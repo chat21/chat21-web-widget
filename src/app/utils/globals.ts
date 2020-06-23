@@ -43,7 +43,7 @@ export class Globals {
   getParameterByName = getParameterByName;
   convertColorToRGBA = convertColorToRGBA;
   // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
-  project: ProjectModel;
+  project = new ProjectModel();
   senderId: string;
   tenant: string;
   channelType: string;
@@ -325,7 +325,7 @@ export class Globals {
     this.tenant = environment.tenant;
     // this.parameters['tenant'] = environment.tenant;
     // this.parameters.push({'tenant': environment.tenant});
-    this.widgetTitle = this.tenant;
+
     /** Set the widget title label shown in the widget header. Value type : string.
     The default value is Tiledesk. */
                                                         /** name tenant ex: tilechat */
@@ -407,12 +407,15 @@ export class Globals {
     if (!this.logoChat || this.logoChat === 'tiledesklogo' || this.logoChat === 'nologo') {
       avatarImage = undefined;
     }
-    this.project = new ProjectModel(
-      this.projectid,
-      this.widgetTitle,
+    let projectName = this.project.name;
+    if (this.widgetTitle && this.widgetTitle !== '') {
+      projectName = this.widgetTitle;
+    }
+    this.project.customization(
+      projectName,
       avatarImage,
-      avatarPlaceholder(this.widgetTitle),
-      setColorFromString(this.widgetTitle),
+      avatarPlaceholder(projectName),
+      setColorFromString(projectName),
       this.welcomeTitle,
       this.welcomeMsg
     );

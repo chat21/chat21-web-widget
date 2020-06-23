@@ -52,7 +52,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         <div *ngIf="!g.project.logoChat"#avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
                         <div *ngIf="g.project.logoChat" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
                     </div>
-                    <div class="titleText">{{g.widgetTitle}}</div>
+                    <div class="titleText">{{g.project.widgetTitle}}</div>
                 </div>
                 <p *ngIf="isTypings" class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
 

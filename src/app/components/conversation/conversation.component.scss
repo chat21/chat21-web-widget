@@ -61,8 +61,11 @@
         width: 42px;
         line-height: 42px;
     }
-     
-
+    .avatar-image {
+        max-width: 30px;
+        max-height: 30px;
+    }
+    
      /* SET ICON AVATAR */
      .c21-icon-avatar {
         position: relative;
