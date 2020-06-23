@@ -104,6 +104,9 @@
                 position: relative;
                 padding: 210px 10px 20px 10px;
                 margin: 0;
+                &.nologo{
+                    padding: 160px 10px 20px 10px;
+                }
                 .c21-cards {
                     .c21-card {
                         position: relative;

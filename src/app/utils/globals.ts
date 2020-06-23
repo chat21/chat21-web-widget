@@ -403,17 +403,13 @@ export class Globals {
 
   /** */
   public setProjectParameters() {
-    let avatarImage = this.logoChat;
-    if (!this.logoChat || this.logoChat === 'tiledesklogo' || this.logoChat === 'nologo') {
-      avatarImage = undefined;
-    }
     let projectName = this.project.name;
     if (this.widgetTitle && this.widgetTitle !== '') {
       projectName = this.widgetTitle;
     }
     this.project.customization(
       projectName,
-      avatarImage,
+      this.logoChat,
       avatarPlaceholder(projectName),
       setColorFromString(projectName),
       this.welcomeTitle,

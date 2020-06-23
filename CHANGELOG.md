@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.44B
+- bug-fix: placeholder and logo widget in hp and conversation
+
 ### 4.0.44A
 - bug-fix: placeholder and logo widget in hp and conversation
 - bug-fix: name widget

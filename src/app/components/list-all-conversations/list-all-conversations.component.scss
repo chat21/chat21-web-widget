@@ -22,7 +22,7 @@
         position: relative;
         margin: 0;
         padding: 0;
-        
+
         .c21-title {
             position: absolute;
             left: 50px;
@@ -40,19 +40,27 @@
         }
     
         .titleText {
-            position: absolute;
+            position: relative;
             line-height: 42px;
-            top: 0;
-            left: 50px;
             text-align: left;
         }
         .avatar-project {
             position: relative;
             padding: 0;
             margin: 0;
+            margin: 0 10px 0 0;
+            float: left;
             height: 42px;
             width: 42px;
             line-height: 42px;
+        }
+        .avatar-placeholder {
+            font-size: 16px;
+        }
+        .avatar-image {
+            max-width: 30px;
+            max-height: 30px;
+            margin: 6px;
         }
 
         .c21-header-container{

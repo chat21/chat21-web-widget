@@ -48,9 +48,9 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                 <!-- TITLE HEADER -->
                 <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
-                    <div class='avatar-project' item-start>
-                        <div *ngIf="!g.project.logoChat"#avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
-                        <div *ngIf="g.project.logoChat" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
+                    <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
+                        <div *ngIf="g.project.logoChat == 'tiledesklogo'" #avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
+                        <div *ngIf="g.project.logoChat !== 'tiledesklogo'" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
                     </div>
                     <div class="titleText">{{g.project.widgetTitle}}</div>
                 </div>

@@ -29,9 +29,9 @@
             <div class="c21-header-content">
                 <!-- LOGO HEADER -->
 
-                <div class='avatar-project' item-start>
-                    <div *ngIf="!g.project.logoChat"#avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
-                    <div *ngIf="g.project.logoChat" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
+                <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
+                    <div *ngIf="g.project.logoChat == 'tiledesklogo'" #avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
+                    <div *ngIf="g.project.logoChat !== 'tiledesklogo'" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
                 </div>
 
                 <!-- <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo fade-in-bottom">
@@ -58,7 +58,7 @@
     <div class="c21-body" (click)="hideMenuOptions()">
 
         <!-- <div class="c21-body-container"> -->
-            <div class="c21-body-content">
+            <div class="c21-body-content" [class.nologo]="g.project.logoChat === 'nologo'">
                 <div class="c21-cards">
                     <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <tiledeskwidget-list-conversations 
