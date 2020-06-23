@@ -28,12 +28,19 @@
             <!-- CONTENT HEADER -->
             <div class="c21-header-content">
                 <!-- LOGO HEADER -->
-                <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo fade-in-bottom">
+
+                <div class='avatar-project' item-start>
+                    <div *ngIf="!g.project.logoChat"#avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
+                    <div *ngIf="g.project.logoChat" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
+                </div>
+
+                <!-- <div *ngIf="g.logoChat == 'tiledesklogo'" class="c21-logo fade-in-bottom">
                     <img src="{{g.BASE_LOCATION + g.DEFAULT_LOGO_CHAT}}" alt="logo">
                 </div>
                 <div *ngIf="g.logoChat != 'nologo' && g.logoChat != 'tiledesklogo'" class="c21-logo fade-in-bottom">
                     <img src="{{g.logoChat}}" alt="logo">
-                </div>
+                </div> -->
+
                 <!-- MESSAGE HEADER -->
                 <div class="c21-text fade-in-bottom">
                     <div class="c21-text-welcome">{{g.welcomeTitle}}</div>          

@@ -179,6 +179,22 @@ export class GlobalSettingsService {
             // this.globals.wdLog(['> Error is handled: ', error);
         }
 
+        try {
+            const showAttachmentButton = tiledeskSettings['showAttachmentButton'];
+            // tslint:disable-next-line:max-line-length
+            if (typeof showAttachmentButton !== 'undefined') { this.globals.showAttachmentButton = (showAttachmentButton === true) ? true : false; }
+        } catch (error) {
+            this.globals.wdLog(['> Error :' + error]);
+        }
+
+        try {
+            const showAllConversations = tiledeskSettings['showAllConversations'];
+            // tslint:disable-next-line:max-line-length
+            if (typeof showAllConversations !== 'undefined') { this.globals.showAllConversations = (showAllConversations === true) ? true : false; }
+        } catch (error) {
+            this.globals.wdLog(['> Error :' + error]);
+        }
+
         // -------------------------------------- //
         // const windowContext = globals.windowContext;
         // if (!windowContext['tiledesk']) {
@@ -650,10 +666,16 @@ export class GlobalSettingsService {
             globals.startMessage = TEMP;
         }
 
-        TEMP = tiledeskSettings['hideAttachButton'];
+        TEMP = tiledeskSettings['showAttachmentButton'];
         if (TEMP !== undefined) {
-            globals.hideAttachButton = (TEMP === true) ? true : false;
+            globals.showAttachmentButton = (TEMP === true) ? true : false;
         }
+
+        TEMP = tiledeskSettings['showAllConversations'];
+        if (TEMP !== undefined) {
+            globals.showAllConversations = (TEMP === true) ? true : false;
+        }
+
     }
 
     /**
@@ -776,13 +798,17 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.filterByRequester = (TEMP === true) ? true : false;
         }
-        TEMP = el.nativeElement.getAttribute('hideAttachButton');
+        TEMP = el.nativeElement.getAttribute('showAttachmentButton');
         if (TEMP !== null) {
-            this.globals.hideAttachButton = (TEMP === true) ? true : false;
+            this.globals.showAttachmentButton = (TEMP === true) ? true : false;
         }
         TEMP = el.nativeElement.getAttribute('departmentID');
         if (TEMP !== null) {
             this.globals.departmentID = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('showAllConversations');
+        if (TEMP !== null) {
+            this.globals.showAllConversations = (TEMP === true) ? true : false;
         }
 
     }
@@ -991,9 +1017,9 @@ export class GlobalSettingsService {
             this.globals.wdLog(['globals.startMessage: ' + globals.startMessage]);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_hideAttachButton');
+        TEMP = getParameterByName(windowContext, 'tiledesk_showAttachmentButton');
         if (TEMP) {
-            globals.hideAttachButton = stringToBoolean(TEMP);
+            globals.showAttachmentButton = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_departmentID');
@@ -1004,6 +1030,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_persistence');
         if (TEMP) {
             globals.persistence = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_showAllConversations');
+        if (TEMP) {
+            globals.showAllConversations = stringToBoolean(TEMP);
         }
 
     }

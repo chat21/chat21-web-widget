@@ -4,7 +4,9 @@ import { environment } from '../../environments/environment';
 // import { TranslatorService } from '../providers/translator.service';
 import { DepartmentModel } from '../../models/department';
 import { User } from '../../models/User';
-import { detectIfIsMobile, convertColorToRGBA, getParameterByName } from '../utils/utils';
+import { ProjectModel } from '../../models/project';
+
+import { detectIfIsMobile, convertColorToRGBA, getParameterByName, setColorFromString, avatarPlaceholder } from '../utils/utils';
 
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 // import { TemplateBindingParseResult } from '@angular/compiler';
@@ -41,6 +43,7 @@ export class Globals {
   getParameterByName = getParameterByName;
   convertColorToRGBA = convertColorToRGBA;
   // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
+  project: ProjectModel;
   senderId: string;
   tenant: string;
   channelType: string;
@@ -130,7 +133,6 @@ export class Globals {
   WAITING_TIME_NOT_FOUND: string;
   CLOSED: string;
 
-
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
    globalsParameters: any;
    autoStart: boolean;
@@ -181,7 +183,8 @@ export class Globals {
 
    customAttributes: any;
    startMessage: any;
-   hideAttachButton: boolean;
+   showAttachmentButton: boolean;
+   showAllConversations: boolean;
 
    isOpenNewMessage: boolean;
 
@@ -248,7 +251,7 @@ export class Globals {
     this.userEmail = '';
     /** Current user email address. Set this parameter to specify the visitor
     email address.  */
-    this.widgetTitle = this.WIDGET_TITLE;
+    this.widgetTitle = '';
     /** Set the widget title label shown in the widget header. Value type : string.
     The default value is Tiledesk. */
     this.hideHeaderCloseButton = false;
@@ -311,8 +314,9 @@ export class Globals {
     this.offline_msg = this.LABEL_FIRST_MSG_NO_AGENTS;
     this.online_msg = this.LABEL_FIRST_MSG;
 
-    this.hideAttachButton = false;
     this.isOpenNewMessage = false;
+    this.showAttachmentButton = true;
+    this.showAllConversations = true;
 
     // ============ END: SET EXTERNAL PARAMETERS ==============//
 
@@ -321,6 +325,9 @@ export class Globals {
     this.tenant = environment.tenant;
     // this.parameters['tenant'] = environment.tenant;
     // this.parameters.push({'tenant': environment.tenant});
+    this.widgetTitle = this.tenant;
+    /** Set the widget title label shown in the widget header. Value type : string.
+    The default value is Tiledesk. */
                                                         /** name tenant ex: tilechat */
     this.channelType = CHANNEL_TYPE_GROUP;
     // this.parameters['channelType'] = CHANNEL_TYPE_GROUP;
@@ -380,6 +387,7 @@ export class Globals {
     // this.parameters.push({'supportMode': true});
 
     this.newConversationStart = true;
+
   }
 
 
@@ -390,6 +398,25 @@ export class Globals {
     this.createDefaultSettingsObject();
     this.setParameter('isMobile', detectIfIsMobile(this.windowContext));
     this.setParameter('attributes', this.attributes);
+    this.setProjectParameters();
+  }
+
+  /** */
+  public setProjectParameters() {
+    let avatarImage = this.logoChat;
+    if (!this.logoChat || this.logoChat === 'tiledesklogo' || this.logoChat === 'nologo') {
+      avatarImage = undefined;
+    }
+    this.project = new ProjectModel(
+      this.projectid,
+      this.widgetTitle,
+      avatarImage,
+      avatarPlaceholder(this.widgetTitle),
+      setColorFromString(this.widgetTitle),
+      this.welcomeTitle,
+      this.welcomeMsg
+    );
+    console.log('this.project::::: ', this.project);
   }
 
   /**
@@ -415,7 +442,8 @@ export class Globals {
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
-      'showLogoutOption': this.showLogoutOption, 'hideAttachButton': this.hideAttachButton
+      'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
+      'showAllConversations': this.showAllConversations
     };
   }
 
@@ -469,5 +497,6 @@ export class Globals {
       // console.log(message.toString());
     }
   }
+
 
 }

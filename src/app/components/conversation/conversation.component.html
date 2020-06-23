@@ -48,18 +48,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                 <!-- TITLE HEADER -->
                 <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
-                     <span>{{g.widgetTitle}}</span>
-                     <!-- <span>{{g.recipientFullname}}</span> -->
-                    <span id="agent-available-status">
-                        <!-- {{g.areAgentsAvailableText}} -->
-                    
-                        <span *ngIf="g.availableAgents.length <= 0"> 
-                            {{g?.AGENT_NOT_AVAILABLE }} 
-                        </span>
-                        <span *ngIf="g.availableAgents.length > 0"> 
-                            {{g?.AGENT_AVAILABLE}} 
-                        </span>
-                    </span>
+                    <div class='avatar-project' item-start>
+                        <div *ngIf="!g.project.logoChat"#avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
+                        <div *ngIf="g.project.logoChat" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
+                    </div>
+                    <div class="titleText">{{g.widgetTitle}}</div>
                 </div>
                 <p *ngIf="isTypings" class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p>
 
@@ -330,7 +323,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
             </textarea>
         </div>
 
-        <div #div_attached *ngIf="g.hideAttachButton == false">
+        <div #div_attached *ngIf="g.showAttachmentButton == true">
             <label tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
             <span class="v-align-center">
                 <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">

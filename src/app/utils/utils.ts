@@ -196,10 +196,10 @@ export function replaceBr(text) {
   return text;
 }
 
-export function avatarPlaceholder(conversation_with_fullname) {
+export function avatarPlaceholder(name: string) {
   let initials = '';
-  if (conversation_with_fullname) {
-    const arrayName = conversation_with_fullname.split(' ');
+  if (name) {
+    const arrayName = name.split(' ');
     arrayName.forEach(member => {
       if (member.trim().length > 1 && initials.length < 3) {
         initials += member.substring(0, 1).toUpperCase();
@@ -209,7 +209,7 @@ export function avatarPlaceholder(conversation_with_fullname) {
   return initials;
 }
 
-export function setColorFromString(str) {
+export function setColorFromString(str: string) {
   const arrayBckColor = ['#fba76f', '#80d066', '#73cdd0', '#ecd074', '#6fb1e4', '#f98bae'];
   let num = 0;
   if (str) {
@@ -362,4 +362,3 @@ export function getUnique(arr, comp) {
     .filter(e => arr[e]).map(e => arr[e]);
    return unique;
 }
-

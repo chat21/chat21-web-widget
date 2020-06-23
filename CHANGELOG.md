@@ -1,9 +1,15 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.44
+- change: renamed variable hideAttachButton in showAttachmentButton
+- new: added showAllConversations parameter
+- new: added placeholder and logo widget in hp and conversation
+
 ### 4.0.43B
 - change: step 1 sanitized messages
 - change: step 2 replaced \n in message
 - change: step 3 added markdown (only messages received)
+- bug fix: changed width image with message
 
 ### 4.0.43A
 - add: sanitize the output HTML

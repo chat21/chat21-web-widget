@@ -30,7 +30,38 @@
     right: 0px;
     bottom: 0px;
     // border: 0.1px solid lightgray;
+    .c21-title {
+        position: absolute;
+        left: 50px;
+        right: 100px;
+        display: inline-block;
+        width: auto;
+        height: 42px;
+        padding: 0px;
+        margin: 5px 0px;
+        font-size: 1.6em;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
+    .titleText {
+        position: absolute;
+        line-height: 42px;
+        top: 0;
+        left: 50px;
+        text-align: left;
+    }
+    .avatar-project {
+        position: relative;
+        padding: 0;
+        margin: 0;
+        height: 42px;
+        width: 42px;
+        line-height: 42px;
+    }
+     
 
      /* SET ICON AVATAR */
      .c21-icon-avatar {
