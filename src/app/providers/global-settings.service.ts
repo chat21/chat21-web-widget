@@ -68,25 +68,27 @@ export class GlobalSettingsService {
         this.getProjectParametersById(projectid)
         .subscribe( response => {
             const project = response['project'];
-            console.log('1 - setParameters ', project);
-            that.globals.project.initialize(
-                project['id'],
-                project['activeOperatingHours'],
-                project['channels'],
-                project['name'],
-                project['createdAt'],
-                project['createdBy'],
-                project['isActiveSubscription'],
-                project['profile'],
-                project['agents'],
-                project['trialDays'],
-                project['type'],
-                project['status'],
-                project['trialDaysLeft'],
-                project['trialExpired'],
-                project['updatedAt'],
-                project['versions']
-            );
+            // console.log('1 - setParameters ', project);
+            if (project) {
+                that.globals.project.initialize(
+                    project['id'],
+                    project['activeOperatingHours'],
+                    project['channels'],
+                    project['name'],
+                    project['createdAt'],
+                    project['createdBy'],
+                    project['isActiveSubscription'],
+                    project['profile'],
+                    project['agents'],
+                    project['trialDays'],
+                    project['type'],
+                    project['status'],
+                    project['trialDaysLeft'],
+                    project['trialExpired'],
+                    project['updatedAt'],
+                    project['versions']
+                );
+            }
             console.log('globals.project ----------------->', that.globals.project);
             that.setParameters(response);
         }, (error) => {

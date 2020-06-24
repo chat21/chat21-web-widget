@@ -1,12 +1,14 @@
 #buttons-in-message {
     display: block; 
-    float: right; 
+    float: right;
+    margin-top: -20px; 
     margin-bottom: 20px;
     height: auto;
     min-height: 40px;
 
     .div-button {
-        float: left;
+        // float: left;
+        float: right; 
     }
     
     .button-success{
