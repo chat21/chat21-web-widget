@@ -191,7 +191,9 @@ textarea::placeholder {
         white-space: normal;
         letter-spacing: -0.24px;
         -webkit-font-smoothing: antialiased;
-    
+        .message_innerhtml{
+            padding: 0px 14px!important;
+        }
         p{
             font-size: 15px!important;
             font-family: 'Muli', sans-serif!important;
