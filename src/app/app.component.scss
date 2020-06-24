@@ -39,7 +39,15 @@
 // }
 
 
-
+.tooltip {
+    font-family: 'Roboto','Google Sans', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-variant: normal;
+    font-weight: 300;
+}
 
 body {
     margin:0px;
@@ -307,6 +315,7 @@ tiledeskwidget-root {
         }
         /* TIME */
         .time {
+            display: none;
             font-size: 1em;
             color: $gray;
             text-align: left;

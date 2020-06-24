@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.45A
+- new: added tooltip to message
+
 ### 4.0.45
 - bug-fix: css - buttons aligned right in the message
 

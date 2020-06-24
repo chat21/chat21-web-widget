@@ -3,6 +3,7 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
+
 // import { AngularFireModule } from '@angular/fire';
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
 // import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -11,6 +12,7 @@ import { AppComponent } from './app.component';
 
 
 // Directives
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 // Import the library module
 import { environment } from '../environments/environment';
@@ -116,6 +118,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MomentModule,
     AngularResizedEventModule,
     TranslateModule.forRoot(),
+    TooltipModule
   ],
   providers: [
     AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
