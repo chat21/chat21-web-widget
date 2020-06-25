@@ -1,4 +1,13 @@
 # chat21-web-widget ver 3.0
+
+### 4.0.46
+- bug-fix: test_widget_page responsive
+
+### 4.0.45G
+- bug-fix: close mobile tooltip 
+- bug-fix: fixed error on tooltip configuration
+- bug-fix: order buttons in message
+
 ### 4.0.45C
 - bug-fix: customize css tooltip 
 

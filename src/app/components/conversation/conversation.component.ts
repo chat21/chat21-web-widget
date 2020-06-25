@@ -136,21 +136,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   public showSpinner = true;
 
   getUrlImgProfile = getUrlImgProfile;
-
-
-  tooltipOptionsLeft = {
-    'placement': 'left',
-    'show-delay': 1000,
+  tooltipOptions = {
+    'show-delay': 1500,
     'tooltip-class': 'chat-tooltip',
     'theme': 'light',
     'shadow': false,
-  };
-  tooltipOptionsRight = {
-    'placement': 'right',
-    'show-delay': 1000,
-    'tooltip-class': 'chat-tooltip',
-    'theme': 'light',
-    'shadow': false,
+    'hide-delay-mobile': 0,
+    'hideDelayAfterClick': 3000,
+    'hide-delay': 200
   };
 
   constructor(
@@ -1649,4 +1642,31 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= END:: TRIGGER FUNCTIONS ============//
 
 
+  /**
+   * function customize tooltip
+   */
+  handleTooltipEvents(event) {
+    const that = this;
+    const showDelay = this.tooltipOptions['showDelay'];
+    // console.log(this.tooltipOptions);
+    setTimeout(function () {
+      try {
+        const domRepresentation = document.getElementsByClassName('chat-tooltip');
+        if (domRepresentation) {
+          const item = domRepresentation[0] as HTMLInputElement;
+          console.log(item);
+          if (!item.classList.contains('tooltip-show')) {
+            item.classList.add('tooltip-show');
+          }
+          setTimeout(function () {
+            if (item.classList.contains('tooltip-show')) {
+              item.classList.remove('tooltip-show');
+            }
+          }, that.tooltipOptions['hideDelayAfterClick']);
+        }
+      } catch (err) {
+          that.g.wdLog(['> Error :' + err]);
+      }
+    }, showDelay);
+  }
 }

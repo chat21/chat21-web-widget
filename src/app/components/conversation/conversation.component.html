@@ -122,7 +122,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                         <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
 
                             <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                                <div *ngFor="let message of messages let last = last" tabindex="1521" class="rowMsg">
+                                <div *ngFor="let message of messages let last = last; let i = index" tabindex="1521" class="rowMsg">
     
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
@@ -138,7 +138,10 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 <!-- message type:: text -->
                                                 <!-- <div *ngIf="message.type == 'text'"> -->
                                                     
-                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" [options]="tooltipOptionsLeft">
+                                                <div *ngIf="message.text" [tooltip]="timeTooltipLeft" [options]="tooltipOptions" placement="left" content-type="template" (click)="handleTooltipEvents($event)"> 
+                                                    <ng-template #timeTooltipLeft>
+                                                        <span>{{message.timestamp | amTimeAgo}}</span>
+                                                    </ng-template>
                                                     <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
                                                     <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>
@@ -195,9 +198,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     [height]="getSizeImg(message).height" />
 
                                                 <!-- message type:: text -->
-                                                <!-- <div *ngIf="message.type == 'text';"> -->
-                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" [options]="tooltipOptionsRight">
-                                                
+                                                <!-- <div *ngIf="message.type == 'text';">  {{message.timestamp  | amTimeAgo}}-->
+                                                <div *ngIf="message.text" [tooltip]="timeTooltipRight" [options]="tooltipOptions" placement="right" content-type="template" (click)="handleTooltipEvents($event)">
+                                                    <ng-template #timeTooltipRight>
+                                                        <span>{{message.timestamp  | amTimeAgo}}</span>
+                                                    </ng-template>
                                                     <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>
 
@@ -231,7 +236,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
 
                                     <div class="time slide-in-left" [ngClass]="{'sender' : message.sender == g.senderId}">
-                                        <time *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
+                                        <time #timeTooltip *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
                                     </div>
 
 
