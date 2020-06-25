@@ -138,7 +138,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                 <!-- message type:: text -->
                                                 <!-- <div *ngIf="message.type == 'text'"> -->
                                                     
-                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" placement="left" theme="light" show-delay="500">
+                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" [options]="tooltipOptionsLeft">
                                                     <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
                                                     <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>
@@ -196,7 +196,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                                 <!-- message type:: text -->
                                                 <!-- <div *ngIf="message.type == 'text';"> -->
-                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" placement="right" theme="light" show-delay="500">
+                                                <div *ngIf="message.text" tooltip="{{message.timestamp  | amTimeAgo}}" [options]="tooltipOptionsRight">
                                                 
                                                     <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>

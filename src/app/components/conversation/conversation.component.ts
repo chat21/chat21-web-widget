@@ -137,6 +137,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   getUrlImgProfile = getUrlImgProfile;
 
+
+  tooltipOptionsLeft = {
+    'placement': 'left',
+    'show-delay': 1000,
+    'tooltip-class': 'chat-tooltip',
+    'theme': 'light',
+    'shadow': false,
+  };
+  tooltipOptionsRight = {
+    'placement': 'right',
+    'show-delay': 1000,
+    'tooltip-class': 'chat-tooltip',
+    'theme': 'light',
+    'shadow': false,
+  };
+
   constructor(
     public el: ElementRef,
     public g: Globals,

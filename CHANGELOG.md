@@ -1,4 +1,6 @@
 # chat21-web-widget ver 3.0
+### 4.0.45C
+- bug-fix: customize css tooltip 
 
 ### 4.0.45B
 - bug-fix: css - button big message 
