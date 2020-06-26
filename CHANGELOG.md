@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.46A
+- bug-fix: right alignment of the buttons
+
 ### 4.0.46
 - bug-fix: test_widget_page responsive
 

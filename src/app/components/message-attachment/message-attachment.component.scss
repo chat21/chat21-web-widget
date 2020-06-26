@@ -1,6 +1,6 @@
 #buttons-in-message {
-    display: flex; 
-    float: right;
+    text-align: right;
+    display: block; 
     margin-top: -6px;
     margin-bottom: 20px;
     height: auto;
@@ -8,7 +8,7 @@
 
     .div-button {
         // float: left;
-        float: right; 
+        display: inline-block;
     }
     
     .button-success{
