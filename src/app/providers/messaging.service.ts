@@ -154,6 +154,7 @@ export class MessagingService {
     //// SUBSCRIBE ADDED ////
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
+      console.log('1 passo -----', message);
       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
@@ -167,23 +168,21 @@ export class MessagingService {
         // const timestamp =  firebase.database.ServerValue.TIMESTAMP;
         const dateSendingMessage = setHeaderDate(message['timestamp']);
         // SPONZIELLO PATCH // forces update of userFullname from remote command
-        //console.log("Sponziello patch")
-        //console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
+        // console.log("Sponziello patch")
+        // console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
 
-        
-        var saved_conversations_attributes_STRING = that.storageService.getItem('attributes')
-        var saved_conversations_attributes = {}
+        const saved_conversations_attributes_STRING = that.storageService.getItem('attributes');
+        let saved_conversations_attributes = {};
         if (saved_conversations_attributes_STRING != null) {
           saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING)
         }
-        //console.log("saved_conversations_attributes: " , saved_conversations_attributes)
-        
+        // console.log("saved_conversations_attributes: " , saved_conversations_attributes)
         if (message['attributes'] && message['attributes']['updateUserFullname']) {
-          //console.log("message->updateUserFullname! " , message['attributes']['updateUserFullname'])
-          let userFullname = message['attributes']['updateUserFullname']
-          saved_conversations_attributes['userFullname'] = userFullname
-          //console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
-          that.g.userFullname = userFullname
+          // console.log("message->updateUserFullname! " , message['attributes']['updateUserFullname'])
+          const userFullname = message['attributes']['updateUserFullname'];
+          saved_conversations_attributes['userFullname'] = userFullname;
+          // console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
+          that.g.userFullname = userFullname;
           that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
         if (message['attributes'] && message['attributes']['updateUserEmail']) {
@@ -332,7 +331,7 @@ export class MessagingService {
   checkMessage(message): boolean {
     if (message.text.trim() === '' && message.type === TYPE_MSG_TEXT) {
       // se è un messaggio vuoto non fare nulla
-      //return false;
+      // return false;
     }
     if (this.filterSystemMsg && message.attributes && message.attributes['subtype'] === 'info') {
       // se è un msg inviato da system NON fare nulla

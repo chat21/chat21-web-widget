@@ -9,7 +9,7 @@
       window.tiledeskSettings = 
       {
           // PRE:   
-          projectid: "5eeb47035852fa0034482a8d",
+          projectid: "5ec3e803f0b4b80034b1a412",
           // PROD: 
           // projectid: "5ee09bf5168dc700191dfb47",
           isLogEnabled: true,
@@ -21,7 +21,8 @@
           // tenant: "tenant test",
           // widgetTitle: "widget Title Test"
           showAttachmentButton: false,
-          showAllConversations: false
+          showAllConversations: false,
+          privacyField: 'Accetto i termini della privacy <a style="text-transform: none" target="_blank" href="http://www.tiledesk.com/privacy.html">Privacy Policy</a>'
            
       };
 
@@ -62,12 +63,17 @@
               //window.tiledesk.show();
             }
         });
-
         // window.tiledesk.on('loadParams', function(event_data) { 
         // });
+      };
+      function approved() {
+          window.tiledesk.setPolicyPrivacy();
       };
     </script>
   </head>
   <body>
+    <button id="isApproved" onclick="approved()">
+      SET APPROVED TRUE
+    </button>
   </body>
 </html>

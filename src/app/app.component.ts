@@ -732,6 +732,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
+            windowContext['tiledesk'].setPolicyPrivacy = function () {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.setPolicyPrivacy();
+                });
+            };
 
             /** send first message */
             windowContext['tiledesk'].sendMessage = function (
@@ -1043,6 +1048,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.storageService.removeItem('preChatForm');
             }
         }
+    }
+
+    private setPolicyPrivacy() {
+        this.g.privacyApproved = true;
+        this.g.setAttributeParameter('privacyApproved', this.g.privacyApproved);
+        this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
+        this.g.setParameter('preChatForm', false);
+        this.storageService.removeItem('preChatForm');
     }
 
     /** show all widget */

@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.47
+- new: added Policy Privacy
+
 ### 4.0.46A
 - bug-fix: right alignment of the buttons
 

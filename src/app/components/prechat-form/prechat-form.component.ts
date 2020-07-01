@@ -12,7 +12,7 @@ import { StorageService } from '../../providers/storage.service';
 
 export class PrechatFormComponent implements OnInit, AfterViewInit {
   @ViewChild('afPrechatFormComponent') private afPrechatFormComponent: ElementRef;
-
+  @ViewChild('privacyInputField') private privacyInputField: ElementRef;
   // ========= begin:: Input/Output values ===========//
   @Output() eventClosePage = new EventEmitter();
   @Output() eventCloseForm = new EventEmitter();
@@ -83,7 +83,19 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   openNewConversation() {
     if (this.g.attributes) {
       const attributes = this.g.attributes;
-
+      if ( this.privacyInputField && this.privacyInputField.nativeElement.checked === false) {
+        // console.log(this.privacyInputField.nativeElement.checked);
+        this.g.privacyApproved = false;
+        const spanCheck = window.document.getElementById('span-checkmark');
+        // console.log('-----------> ', spanCheck);
+        if (spanCheck) {
+          spanCheck.classList.add('unchecked');
+        }
+        return;
+      } else if ( this.privacyInputField && this.privacyInputField.nativeElement.checked === true) {
+        this.g.privacyApproved = true;
+      }
+      this.g.setAttributeParameter('privacyApproved', this.g.privacyApproved);
       this.g.setAttributeParameter('userFullname', this.userFullname);
       this.g.setAttributeParameter('userEmail', this.userEmail);
       // attributes['userFullname'] = this.userFullname;
@@ -93,6 +105,16 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
       this.eventCloseForm.emit();
     } else {
       // mostro messaggio di errore
+    }
+  }
+
+
+  /**  */
+  checkInput() {
+    const spanCheck = window.document.getElementById('span-checkmark');
+    console.log('-----------> ', spanCheck);
+    if (spanCheck) {
+      spanCheck.classList.remove('unchecked');
     }
   }
 

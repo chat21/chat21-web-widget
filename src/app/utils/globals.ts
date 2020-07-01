@@ -82,6 +82,7 @@ export class Globals {
 
   firstOpen = true;
   departmentID = null;
+  privacyApproved = false;
 
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;
@@ -185,6 +186,7 @@ export class Globals {
    startMessage: any;
    showAttachmentButton: boolean;
    showAllConversations: boolean;
+   privacyField: string;
 
    isOpenNewMessage: boolean;
 
@@ -442,7 +444,7 @@ export class Globals {
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
-      'showAllConversations': this.showAllConversations
+      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField
     };
   }
 

@@ -218,6 +218,15 @@ export class GlobalSettingsService {
             this.globals.wdLog(['> Error :' + error]);
         }
 
+
+        try {
+            const privacyField = tiledeskSettings['privacyField'];
+            if (typeof privacyField !== 'undefined') { this.globals.privacyField = privacyField; }
+        } catch (error) {
+            this.globals.wdLog(['> Error :' + error]);
+        }
+
+
         // -------------------------------------- //
         // const windowContext = globals.windowContext;
         // if (!windowContext['tiledesk']) {
@@ -699,6 +708,12 @@ export class GlobalSettingsService {
             globals.showAllConversations = (TEMP === true) ? true : false;
         }
 
+        TEMP = tiledeskSettings['privacyField'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['privacyField:: ', TEMP]);
+            globals.privacyField = TEMP;
+        }
+
     }
 
     /**
@@ -832,6 +847,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('showAllConversations');
         if (TEMP !== null) {
             this.globals.showAllConversations = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('privacyField');
+        if (TEMP !== null) {
+            this.globals.privacyField = TEMP;
         }
 
     }
@@ -1058,6 +1077,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_showAllConversations');
         if (TEMP) {
             globals.showAllConversations = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_privacyField');
+        if (TEMP) {
+            globals.privacyField = TEMP;
         }
 
     }
