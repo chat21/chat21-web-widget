@@ -732,9 +732,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
-            windowContext['tiledesk'].setPolicyPrivacy = function () {
+            windowContext['tiledesk'].setPrivacyPolicy = function () {
                 ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.setPolicyPrivacy();
+                    windowContext['tiledesk']['angularcomponent'].component.setPrivacyPolicy();
                 });
             };
 
@@ -1050,7 +1050,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    private setPolicyPrivacy() {
+    private setPrivacyPolicy() {
         this.g.privacyApproved = true;
         this.g.setAttributeParameter('privacyApproved', this.g.privacyApproved);
         this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
