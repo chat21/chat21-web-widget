@@ -1066,6 +1066,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             divWidgetContainer.style.display = 'block';
             this.g.setParameter('isShown', true, true);
         } else {
+            this.g.startHidden = false;
             this.g.setParameter('isShown', false, true);
         }
     }
