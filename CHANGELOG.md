@@ -1,4 +1,8 @@
 # chat21-web-widget ver 3.0
+
+### 4.0.49
+- bug-fix: show widget with startHidden true
+
 ### 4.0.48
 - new: added startHidden
 
