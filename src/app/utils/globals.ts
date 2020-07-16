@@ -137,6 +137,7 @@ export class Globals {
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
    globalsParameters: any;
    autoStart: boolean;
+   startHidden: boolean;
    isShown: boolean;
    isOpen: boolean;
    startFromHome: boolean;
@@ -218,6 +219,7 @@ export class Globals {
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
     this.baseLocation = this.BASE_LOCATION;
     this.autoStart = true;
+    this.startHidden = false;
     /** start Authentication and startUI */
     this.isShown = true;
     /** show/hide all widget -> js call: showAllWidget */
@@ -437,7 +439,7 @@ export class Globals {
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
       'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
-      'autoStart': this.autoStart, 'isShown': this.isShown,
+      'autoStart': this.autoStart, 'startHidden': this.startHidden, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
       'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,

@@ -648,6 +648,10 @@ export class GlobalSettingsService {
             globals.autoStart = (TEMP === true) ? true : false;
             // globals.setParameter('autoStart', (TEMP === false) ? false : true);
         }
+        TEMP = tiledeskSettings['startHidden'];
+        if (TEMP !== undefined) {
+            globals.startHidden = (TEMP === true) ? true : false;
+        }
         TEMP = tiledeskSettings['isShown'];
         // this.globals.wdLog(['32 - isShown:: ', TEMP);
         if (TEMP !== undefined) {
@@ -820,6 +824,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.autoStart = (TEMP === true) ? true : false;
         }
+        TEMP = el.nativeElement.getAttribute('startHidden');
+        if (TEMP !== null) {
+            this.globals.startHidden = (TEMP === true) ? true : false;
+        }
         TEMP = el.nativeElement.getAttribute('isShown');
         if (TEMP !== null) {
             this.globals.isShown = (TEMP === true) ? true : false;
@@ -987,6 +995,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_autoStart');
         if (TEMP) {
             globals.autoStart = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_startHidden');
+        if (TEMP) {
+            globals.startHidden = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_isShown');

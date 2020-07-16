@@ -1060,11 +1060,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** show all widget */
     private showAllWidget() {
+        const startHidden = this.g.startHidden;
         const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
-        if (divWidgetContainer) {
+        if (divWidgetContainer && startHidden === false) {
             divWidgetContainer.style.display = 'block';
+            this.g.setParameter('isShown', true, true);
+        } else {
+            this.g.setParameter('isShown', false, true);
         }
-        this.g.setParameter('isShown', true, true);
     }
 
     /** hide all widget */

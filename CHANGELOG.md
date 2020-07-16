@@ -1,4 +1,6 @@
 # chat21-web-widget ver 3.0
+### 4.0.48
+- new: added startHidden
 
 ### 4.0.47
 - new: added privacy policy
