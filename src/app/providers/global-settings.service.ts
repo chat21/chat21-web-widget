@@ -323,6 +323,7 @@ export class GlobalSettingsService {
      * E: imposto i parametri recuperati dallo storage in global
     */
     setParameters(response: any ) {
+        this.globals.wdLog(['***************** setParameters *****************', response]);
         if (response !== null) {
             this.setVariablesFromService(this.globals, response);
         }
@@ -383,6 +384,7 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
+        this.globals.wdLog(['> setVariablesFromService :' + response]);
         this.globals = globals;
         // DEPARTMENTS
         try {
@@ -444,11 +446,13 @@ export class GlobalSettingsService {
         try {
             const strIp = response['ip'];
             const IP = strIp.split(',').shift();
-            console.log('this.globals.attributes.IP ----------------->', IP);
-
+            if ( !this.globals.attributes ) {
+                this.globals.attributes = {};
+            }
             this.globals.attributes['ipAddress'] = IP;
             this.globals.setAttributeParameter('ipAddress', IP);
-            console.log('this.globals.attributes.IP ----------------->', this.globals.attributes);
+            this.globals.wdLog(['> ipAddress :' + IP]);
+            // console.log('this.globals.attributes.IP ----------------->', this.globals.attributes);
         } catch (error) {
             this.globals.wdLog(['> Error :' + error]);
         }
