@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.50
+- new: added ipAddress in attributes
+
 ### 4.0.49
 - bug-fix: show widget with startHidden true
 

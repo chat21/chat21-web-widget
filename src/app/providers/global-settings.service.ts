@@ -440,6 +440,19 @@ export class GlobalSettingsService {
             this.globals.wdLog(['> Error :' + error]);
         }
 
+        // IP
+        try {
+            const strIp = response['ip'];
+            const IP = strIp.split(',').shift();
+            console.log('this.globals.attributes.IP ----------------->', IP);
+
+            this.globals.attributes['ipAddress'] = IP;
+            this.globals.setAttributeParameter('ipAddress', IP);
+            console.log('this.globals.attributes.IP ----------------->', this.globals.attributes);
+        } catch (error) {
+            this.globals.wdLog(['> Error :' + error]);
+        }
+
         // if (response && response.project && response.project.widget !== null) {
         //     this.globals.wdLog(['response.widget: ', response.project.widget);
         //     const variables = response.project.widget;
