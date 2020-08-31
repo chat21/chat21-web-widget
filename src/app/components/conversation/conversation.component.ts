@@ -160,6 +160,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public storageService: StorageService,
     public conversationsService: ConversationsService,
     public appConfigService: AppConfigService
+    
     // public cdRef: ChangeDetectorRef
     // private translate: TranslateService
   ) {

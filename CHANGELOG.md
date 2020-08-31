@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.51
+- bug-fix: read remoteConfigUrl from widget-config
+
 ### 4.0.50
 - new: added ipAddress in attributes
 

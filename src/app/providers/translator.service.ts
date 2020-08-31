@@ -10,6 +10,8 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Globals } from '../utils/globals';
 
+import { AppConfigService } from './app-config.service';
+
 @Injectable()
 export class TranslatorService {
 
@@ -19,11 +21,13 @@ export class TranslatorService {
 
   translated_string: any;
   baseLocation: string;
+  remoteTranslationsUrl: string;
 
   constructor(
     private _translate: TranslateService,
     public http: Http,
-    public g: Globals
+    public g: Globals,
+    public appConfigService: AppConfigService
   ) {
 
     let windowContext = window;
@@ -52,9 +56,18 @@ export class TranslatorService {
 
 
   getTranslationFileUrl(browserLang) {
-    // console.log(`»»»» getTranslationFileUrl `, environment);
+    this.remoteTranslationsUrl = environment.remoteTranslationsUrl;
+    // console.log(`»»»» initI18n remoteTranslationsUrl`, this.remoteTranslationsUrl);
+    const remoteTranslationsUrl = this.appConfigService.getConfig().remoteTranslationsUrl;
+    if (remoteTranslationsUrl) {
+      this.remoteTranslationsUrl = remoteTranslationsUrl;
+    }
+    // console.log(`»»»» initI18n remoteTranslationsUrl2`, this.appConfigService.getConfig());
+    this.g.wdLog([' constructor conversation component ']);
+
+    // console.log(`»»»» getTranslationFileUrl `, this.remoteTranslationsUrl);
     if (environment.loadRemoteTranslations) {
-      return environment.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();
+      return this.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();
     } else {
       return this.baseLocation + `/assets/i18n/${browserLang}.json`;
     }
@@ -62,7 +75,6 @@ export class TranslatorService {
 
   // https://github.com/ngx-translate/core/issues/282
   initI18n(): Promise<any> {
-
     this._translate.addLangs(['en', 'it']);
     // console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
 
@@ -96,8 +108,8 @@ export class TranslatorService {
           this.translateWithBrowserLang(data['_body'], defaultLanguage);
         }, (er) => {
           // failed to load  default language from remote - fall back to local default language
-          // console.log(`»»»» initI18n Get default language - ERROR `, er);
-          // console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR ?`, environment.loadRemoteTranslations);
+          console.log(`»»»» initI18n Get default language - ERROR `, er);
+          console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR ?`, environment.loadRemoteTranslations);
         }, () => {
           resolve(true);
           // console.log('»»»» initI18n Get default language * COMPLETE *');

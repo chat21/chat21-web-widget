@@ -112,6 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your firebase-config.json. See the Chat21-Web_widget Installation Page');
         }
+        console.log('---> remoteTranslationsUrl: ', appConfigService.getConfig().remoteTranslationsUrl);
 
         firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);
@@ -298,18 +299,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // that.g.wdLog(['---------------- initAll ---------------- ');
         this.addComponentToWindow(this.ngZone);
 
-         /** TRANSLATION LOADER: */
+        /** TRANSLATION LOADER: */
         //  this.translatorService.translate(this.g);
         this.translatorService.initI18n().then((result) => {
             this.g.wdLog(['»»»» APP-COMPONENT.TS initI18n result', result]);
             this.translatorService.translate(this.g);
         });
 
-         /** SET ATTRIBUTES */
-         const attributes = this.setAttributesFromStorageService();
-         if (attributes) {
+        /** SET ATTRIBUTES */
+        const attributes = this.setAttributesFromStorageService();
+        if (attributes) {
             this.g.attributes = attributes;
-         }
+        }
 
         /**
          * SUBSCRIPTION :
