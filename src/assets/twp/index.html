@@ -273,18 +273,30 @@
                 '_blank' 
             );
         }
+
+        function goToConsole(){
+            var url = new URL(currentUrl);
+            var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+            var project_name = url.searchParams.get("project_name");
+           
+            //var urlConsole = "https://support-pre.tiledesk.com/dashboard/#/project/"+tiledesk_projectid+"/home";
+            var urlConsole = "https://console.tiledesk.com/v2/dashboard/#/project/"+tiledesk_projectid+"/home";
+            window.open(
+                urlConsole,
+                '_blank' 
+            );
+        }
                         
         var url = new URL(currentUrl);
         var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
         var project_name = url.searchParams.get("project_name");
-       
+        var urlConsole = "https://console.tiledesk.com/v2/dashboard/#/projects/"+tiledesk_projectid+"/home";
         // console.log('tiledesk_projectid: ', tiledesk_projectid);
         // console.log('project_name: ', project_name);
         
         window.onload = function() {
             document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
             document.getElementById("project_name").innerHTML = project_name;
-
         }
 
         window.tileDeskAsyncInit = function() {
@@ -348,7 +360,7 @@
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="sign-up"><a href="https://console.tiledesk.com/v2/dashboard/#/projects">GO TO CONSOLE</a></li>
+                            <li class="sign-up"><a onclick="goToConsole()" href="#">GO TO CONSOLE</a></li>
                         </ul>
                     </div>
                 </div>

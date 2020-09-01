@@ -199,7 +199,7 @@ export class GlobalSettingsService {
             const departmentID = tiledeskSettings['departmentID'];
             if (typeof departmentID !== 'undefined') { this.globals.departmentID = departmentID; }
         } catch (error) {
-            // this.globals.wdLog(['> Error is handled: ', error);
+            this.globals.wdLog(['departmentID > Error is handled: ', error]);
         }
 
         try {
@@ -1112,6 +1112,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_privacyField');
         if (TEMP) {
             globals.privacyField = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_customToken');
+        if (TEMP) {
+            globals.customToken = TEMP;
         }
 
     }

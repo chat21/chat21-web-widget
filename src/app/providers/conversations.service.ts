@@ -259,6 +259,7 @@ export class ConversationsService {
 
     //// SUBSCRIBE CHANGED ////
     ref.on('child_changed', function (childSnapshot) {
+      that.g.wdLog(['child_changed.val() *****', childSnapshot.val()]);
       const conversation = that.setConversation(childSnapshot, true);
       if (that.ifCanAddConversation(conversation)) {
         const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
@@ -275,6 +276,7 @@ export class ConversationsService {
 
     //// SUBSCRIBE REMOVED ////
     ref.on('child_removed', function (childSnapshot) {
+      that.g.wdLog(['child_removed.val() *****', childSnapshot.val()]);
       const index = that.searchIndexInArrayForUid(that.archivedConversations, childSnapshot.key);
       if (index > -1) {
         that.archivedConversations.splice(index, 1);
@@ -294,16 +296,20 @@ export class ConversationsService {
    */
   private ifCanAddConversation(conversation: ConversationModel) {
     // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
+    
     this.g.wdLog(['***** filterByRequester *****', this.g.filterByRequester]);
     // this.g.wdLog(['***** requester_id *****', conversation.attributes.requester_id]);
     this.g.wdLog(['***** that.g.senderId *****', this.g.senderId]);
-    if (this.g.filterByRequester === false ||
+    if (conversation.uid === 'undefined') {
+      return false;
+    } else if (this.g.filterByRequester === false ||
       (this.g.filterByRequester === true && conversation.attributes && conversation.attributes.requester_id === this.g.senderId)
       ) {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
+    } else {
+      this.g.wdLog(['***** ifCanAddConversation *****', conversation, false]);
+      return false;
+    }
   }
 
   /**
@@ -478,7 +484,7 @@ export class ConversationsService {
     if (this.g.isSoundActive === true)  {
       const that = this;
       this.audio = new Audio();
-      this.audio.src = this.g.baseLocation + '/assets/sounds/Carme.mp3';
+      this.audio.src = this.g.baseLocation + '/assets/sounds/justsaying.mp3';
       this.audio.load();
       clearTimeout(this.setTimeoutSound);
       this.setTimeoutSound = setTimeout(function () {

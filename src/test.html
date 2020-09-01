@@ -9,7 +9,18 @@
       window.tiledeskSettings = 
       {
           // PRE:   
-          projectid: "5ec3e803f0b4b80034b1a412",
+          projectid: "5f4d01fb5ef9fa0045f10564",
+          // departmentID : "5f4d026b5ef9fa0045f10586",
+          // projectid: "5f1802e79cf1b20012179257",
+          // departmentID : "5f1fd9749cf1b20012391176",  calloutTimer:0,
+          // isOpen:true,
+          // persistence: 'session',
+          // showWaitTime: false,
+          // hideHeaderCloseButton: true,
+          // lang : 'en',
+          // align:'right',
+          // userFullname: " ",
+          // userEmail: "",
           // PROD: 
           // projectid: "5ee09bf5168dc700191dfb47",
           isLogEnabled: true,
@@ -17,11 +28,11 @@
           // autoStart: false,
           // persistence: 'session'
           // startFromHome: true,
-          // preChatForm: true
+          //preChatForm: false,
           // tenant: "tenant test",
           // widgetTitle: "widget Title Test"
-          showAttachmentButton: false,
-          showAllConversations: false,
+          //showAttachmentButton: false,
+          //showAllConversations: false,
           privacyField: 'Accetto i termini della privacy <a style="text-transform: none" target="_blank" href="http://www.tiledesk.com/privacy.html">Privacy Policy</a>'
            
       };
@@ -42,6 +53,10 @@
      
       window.tileDeskAsyncInit = function() {
         // console.log("window.tileDeskAsyncInit()");
+        window.tiledesk.on('onMessageCreated', function(event_data) {
+          console.log(" TRIGGER onMessageCreated -> ", event_data.detail);
+        });
+
         window.tiledesk.on('onAuthStateChanged', function (event_data) {
           /* passo event 
            -2: vengo da un reinit. NON SCATTA L'EVENTO;
@@ -53,7 +68,7 @@
             console.log("onAuthStateChanged----> ", event_data.detail.event, "<------");
             if (!event_data.detail.isLogged) {
                 console.log("!NOT logged, fired also on startup!");
-                window.tiledesk.setPreChatForm(true);
+                // window.tiledesk.setPreChatForm(true);
                 //window.tiledesk.signInAnonymous();
                 //window.tiledesk.signInWithCustomToken("JWT WRONG_TOKEN_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.DrupfEEu0rBzOF7zPYsoU5Yg0YlN_9v6dvduG2sbE8c");
                 //window.tiledesk.signInWithCustomToken("JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjMiLCJmaXJzdG5hbWUiOiJtYXJpbyIsImxhc3RuYW1lIjoicm9zc2kiLCJlbWFpbCI6Im1hcmlvcm9zc2lAZW1haWwuY29tIiwiY3VzdG9tQXR0ciI6ImMxIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNWVjMjQ5OGY1YmRhMTQwMDM0Y2NlMjY3In0.J2QDzWxlou7dJzTIaOajJkN-yQ_EiJM6bLpJ7fm-EXM");

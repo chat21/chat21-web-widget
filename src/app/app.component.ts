@@ -110,7 +110,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             // tslint:disable-next-line:max-line-length
-            throw new Error('firebase config is not defined. Please create your firebase-config.json. See the Chat21-Web_widget Installation Page');
+            throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
         }
         console.log('---> remoteTranslationsUrl: ', appConfigService.getConfig().remoteTranslationsUrl);
 
@@ -156,7 +156,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         /**
          * SUBSCRIBE TO ASYNC LOGIN FUNCTION
          * RESP
-         * -2: ho fatto il reinit // DA TESTARE!!!
+         * -2: ho fatto il reinit
          * -1: ho fatto il logout
          * 0: non sono loggato
          * 200: sono loggato
@@ -167,8 +167,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['obsLoggedUser ------------> ', resp]);
             // if autostart == false don't autenticate!
             // after called signInWithCustomToken need set autostart == true
-            //this.ngZone.run(() => {
+            // this.ngZone.run(() => {
                 // const tiledeskTokenTEMP = that.storageService.getItemWithoutProjectId('tiledeskToken');
+
                 const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
                 if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
                     that.g.tiledeskToken = tiledeskTokenTEMP;
@@ -246,12 +247,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.wdLog([' INIT obsLoggedUser']);
                     return;
                 }
+
                 // that.triggerOnAuthStateChanged();
-            //});
+            // });
         });
-        //that.g.wdLog(['onAuthStateChanged ------------> ']);
+        // that.g.wdLog(['onAuthStateChanged ------------> ']);
         this.subscriptions.push(obsLoggedUser);
-        //this.authService.onAuthStateChanged();
+        // this.authService.onAuthStateChanged();
     }
     // ========= end:: SUBSCRIPTIONS ============//
 
@@ -274,6 +276,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // ------------------------------- //
                     /** INIT  */
                     that.initAll();
+
                     /** AUTH */
                     that.setLoginSubscription();
                 }

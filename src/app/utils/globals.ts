@@ -188,6 +188,7 @@ export class Globals {
    showAttachmentButton: boolean;
    showAllConversations: boolean;
    privacyField: string;
+   customToken: string;
 
    isOpenNewMessage: boolean;
 
@@ -446,7 +447,7 @@ export class Globals {
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
-      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField
+      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'customToken': this.customToken
     };
   }
 

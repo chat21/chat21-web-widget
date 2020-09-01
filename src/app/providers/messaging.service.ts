@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -60,6 +60,7 @@ export class MessagingService {
   convertMessage = convertMessage;
 
   constructor(
+    // private el: ElementRef,
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
     public g: Globals,
@@ -235,7 +236,7 @@ export class MessagingService {
 
 
   private addMessage(message) {
-      if (message && message.sender === this.senderId) {
+    if (message && message.sender === this.senderId) {
       const index = searchIndexInArrayForUid(this.messages, message.key);
       if (index < 0) {
         this.g.wdLog(['--------> ADD MSG IMG', index, message]);
@@ -251,7 +252,9 @@ export class MessagingService {
     }
 
     this.messages.sort(this.compareValues('timestamp', 'asc'));
+    this.triggerOnMessageCreated(message);
     this.obsAdded.next(message);
+
     // try {
     //   this.storageService.setItem('messages', JSON.stringify(this.messages));
     // } catch (error) {
@@ -710,7 +713,7 @@ export class MessagingService {
 
 
 
-  /** TRIGGERS */
+  // ========= START:: TRIGGER FUNCTIONS ============//
   /** */
   private triggerGetImageUrlThumb(message: MessageModel) {
     try {
@@ -725,5 +728,19 @@ export class MessagingService {
       this.g.wdLog(['> Error :' + e]);
     }
   }
+
+  /** */
+  private triggerOnMessageCreated( message: MessageModel) {
+    this.g.wdLog([' ---------------- triggerOnMessageCreated ---------------- ', message]);
+    const onMessageCreated = new CustomEvent('onMessageCreated', { detail: { message: message } });
+    const windowContext = this.g.windowContext;
+    if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        windowContext.tiledesk.tiledeskroot.dispatchEvent(onMessageCreated);
+        this.g.windowContext = windowContext;
+    } else {
+        // this.el.nativeElement.dispatchEvent(onMessageCreated);
+    }
+  }
+  // ========= END:: TRIGGER FUNCTIONS ============//
 
 }

@@ -1,5 +1,13 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.57
+- new: added check isValid to conversation list
+- change: changed notification sound
+- bug-fix: changed message error (firebase config is not defined in firebase-config.json...)
+- bug-fix: fixed error with startFromHome:false and notification new message
+- bug-fix: fixed error link on "go to console"
+- new: added trigger onMessageCreated
+
 ### 4.0.54
 - bug-fix: log
 

@@ -253,7 +253,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnChanges() {
     if (this.isOpen === true) {
       this.updateConversationBadge();
-      //this.scrollToBottom();
+      // this.scrollToBottom();
     }
   }
 
@@ -645,9 +645,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.subscriptionTyping();
   }
-
-
-
 
   /**
    *
@@ -1585,7 +1582,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if ( isSoundActive ) {
       const that = this;
       this.audio = new Audio();
-      this.audio.src = baseLocation + '/assets/sounds/Carme.mp3';
+      this.audio.src = baseLocation + '/assets/sounds/justsaying.mp3';
       this.audio.load();
       // console.log('conversation play');
       clearTimeout(this.setTimeoutSound);

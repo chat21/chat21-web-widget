@@ -41,6 +41,15 @@ export class AuthService {
   initialize() {
     const tiledeskTokenTEMP = this.storageService.getItem('tiledeskToken');
     this.g.wdLog([' ---------------- AuthService initialize ---------------- ']);
+    /** SIGIN WITH JWT CUSTOM TOKEN */
+    // aggiungo nel local storage e mi autentico
+    // this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
+    // if (this.g.customToken) {
+    //   // mi loggo con custom token passato nell'url
+    //   this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
+    //   this.authenticationWithCustomToken(this.g.customToken);
+    //   this.g.tiledeskToken = this.g.customToken;
+    // } else
     if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
         this.g.tiledeskToken = tiledeskTokenTEMP;
         // SONO già loggato
@@ -140,6 +149,7 @@ export class AuthService {
   /** */
   authenticationWithCustomToken(tiledeskToken: string) {
     const that = this;
+    this.g.wdLog(['authenticationWithCustomToken: ']);
     if (tiledeskToken) {
       this.createFirebaseToken(tiledeskToken, this.g.projectid)
       .subscribe(firebaseToken => {
@@ -154,6 +164,7 @@ export class AuthService {
   /** */
   anonymousAuthentication() {
     const that = this;
+    this.g.wdLog(['anonymousAuthentication: ']);
     const tiledeskToken = that.storageService.getItem('tiledeskToken');
     if (tiledeskToken) {
       that.createFirebaseToken(tiledeskToken, that.g.projectid)
