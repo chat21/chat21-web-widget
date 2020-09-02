@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.58
+- new: added trigger onConversationUpdated
+
 ### 4.0.57
 - new: added check isValid to conversation list
 - change: changed notification sound

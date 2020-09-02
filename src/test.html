@@ -49,14 +49,26 @@
         // js.src = "https://widget.tiledesk.com/v4/launch.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
-      
      
+      
       window.tileDeskAsyncInit = function() {
+
+        var dateLoadPage = Date.now();
+        window.tiledesk.on('onConversationUpdated', function(event_data) {
+          var dateConvUpdate = event_data.detail.conversation.timestamp
+          console.log(" TRIGGER onConversationUpdated -> ", event_data.detail.conversation);
+          console.log("dateLoadPage-> ", dateLoadPage);
+          console.log("dateConvUpdate-> ", dateConvUpdate);
+          if(dateLoadPage < dateConvUpdate){
+            console.log(" NUOVO MESSAGGIO!!!");
+          }
+        });
+
         // console.log("window.tileDeskAsyncInit()");
         window.tiledesk.on('onMessageCreated', function(event_data) {
           console.log(" TRIGGER onMessageCreated -> ", event_data.detail);
         });
-
+        
         window.tiledesk.on('onAuthStateChanged', function (event_data) {
           /* passo event 
            -2: vengo da un reinit. NON SCATTA L'EVENTO;

@@ -19,6 +19,7 @@ import { getUrlImgProfile, getUnique, avatarPlaceholder, setColorFromString, get
 
 // import { ConsoleReporter } from 'jasmine';
 import { SettingsSaverService } from '../providers/settings-saver.service';
+import { ConversationComponent } from '../components/conversation/conversation.component';
 
 
 
@@ -187,6 +188,7 @@ export class ConversationsService {
               that.listConversations = getUnique(that.listConversations, 'uid');
               that.g.wdLog(['checkListConversations - child_added: ', that.listConversations.length]);
               that.obsListConversations.next(that.listConversations);
+              that.triggerOnConversationUpdated(conversation);
             }, 0);
           }
       }
@@ -209,6 +211,7 @@ export class ConversationsService {
             that.g.wdLog(['checkListConversations child_changed *****', that.listConversations, index]);
             that.obsListConversations.next(that.listConversations);
             that.obsChangeConversation.next(conversation);
+            that.triggerOnConversationUpdated(conversation);
           }, 0);
         }
       }
@@ -253,6 +256,7 @@ export class ConversationsService {
           that.archivedConversations.sort(compareValues('timestamp', 'desc'));
           that.archivedConversations = getUnique(that.archivedConversations, 'uid');
           that.obsArchivedConversations.next(that.archivedConversations);
+          that.triggerOnConversationUpdated(conversation);
         }
       }
     });
@@ -270,6 +274,7 @@ export class ConversationsService {
           that.archivedConversations = getUnique(that.archivedConversations, 'uid');
           that.obsArchivedConversations.next(that.archivedConversations);
           that.g.wdLog([' checkListArchivedConversations child_changed *****', that.archivedConversations, index]);
+          that.triggerOnConversationUpdated(conversation);
         }
       }
     });
@@ -296,7 +301,6 @@ export class ConversationsService {
    */
   private ifCanAddConversation(conversation: ConversationModel) {
     // console.log('***** CONTROLLO FILTRO BY REQUESTER ID *****');
-    
     this.g.wdLog(['***** filterByRequester *****', this.g.filterByRequester]);
     // this.g.wdLog(['***** requester_id *****', conversation.attributes.requester_id]);
     this.g.wdLog(['***** that.g.senderId *****', this.g.senderId]);
@@ -499,5 +503,20 @@ export class ConversationsService {
     return items.findIndex(i => i.recipient === key);
   }
 
+
+  // ========= START:: TRIGGER FUNCTIONS ============//
+  /** */
+  private triggerOnConversationUpdated( conversation: ConversationModel) {
+    this.g.wdLog([' ---------------- triggerOnConversationUpdated ---------------- ', conversation]);
+    const onConversationUpdated = new CustomEvent('onConversationUpdated', { detail: { conversation: conversation } });
+    const windowContext = this.g.windowContext;
+    if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        windowContext.tiledesk.tiledeskroot.dispatchEvent(onConversationUpdated);
+        this.g.windowContext = windowContext;
+    } else {
+        // this.el.nativeElement.dispatchEvent(onMessageCreated);
+    }
+  }
+  // ========= END:: TRIGGER FUNCTIONS ============//
 
 }
