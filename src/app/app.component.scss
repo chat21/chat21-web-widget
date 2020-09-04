@@ -238,7 +238,7 @@ tiledeskwidget-root {
         margin: 0px;
     }
     
-    #chat21-container {
+    #tiledesk-container {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -741,7 +741,7 @@ tiledeskwidget-root {
     }
 
     @media (max-width: 451px) {
-        #chat21-container {
+        #tiledesk-container {
             .header-button.close {
                 display: flex;
             }

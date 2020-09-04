@@ -233,7 +233,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // }
                     that.triggerOnAuthStateChanged(resp);
                     that.startUI();
-                    that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
+                    that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart]);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);
                     if (autoStart !== false) {
                         that.showAllWidget();

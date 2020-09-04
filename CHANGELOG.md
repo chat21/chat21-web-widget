@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.59
+- bug-fix: show widget in index.html
+
 ### 4.0.58
 - new: added trigger onConversationUpdated
 

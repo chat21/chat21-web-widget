@@ -206,16 +206,19 @@ export class Globals {
     this.globalsParameters = {};
     this.filterSystemMsg = true;
 
-    let windowContext = window;
+    let wContext: any = window;
+    console.log('windowContext 0', wContext);
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
-      windowContext = window.parent;
+      wContext = window.parent;
     }
+    console.log('windowContext 1', wContext);
     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
     if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
-        windowContext = window.parent;
+      wContext = window.parent;
     }
+    console.log('windowContext 2', wContext);
     // this.parameters['windowContext'] = windowContext;
-    this.windowContext = windowContext;
+    this.windowContext = wContext;
 
     // ============ BEGIN: SET EXTERNAL PARAMETERS ==============//
     this.baseLocation = this.BASE_LOCATION;
