@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.60
+- change: added "event", "isLogged", "user_id" (in attributes) to triggerOnAuthStateChanged
+
 ### 4.0.59
 - bug-fix: show widget in index.html
 
