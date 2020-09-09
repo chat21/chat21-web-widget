@@ -1048,6 +1048,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * on subscribe Typings
    */
   subscriptionTyping() {
+    // console.log('subscriptionTyping');
     this.obsTyping = this.messagingService.obsTyping
     .subscribe(childSnapshot => {
       if (childSnapshot) {

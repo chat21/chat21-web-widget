@@ -5616,7 +5616,7 @@ body.modal-open .modal[style]:not([style='display: none;']) .modal-dialog {
     font-size: 14px
 }
 
-#preloader {
+/* #preloader {
     display: none
-}
+} */
 

@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.61
+- bug-fix: typing not work
+
 ### 4.0.60
 - change: added "event", "isLogged", "user_id" (in attributes) to triggerOnAuthStateChanged
 

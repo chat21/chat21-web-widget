@@ -86,7 +86,7 @@
         }
 
         #wrapper {
-            display: none;
+            /* display: block!important; */
             min-height: 100%;
             margin-bottom: auto;
         }
@@ -221,17 +221,27 @@
             marginX: "100px",
             marginY: "50px"
         };
-          (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id; //js.async=!0;
-            js.src = "../../launch.js";
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'tiledesk-jssdk'));
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id; //js.async=!0;
+        js.src = "../../launch.js"; 
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'tiledesk-jssdk'));
+
     </script>
 
     <script type="application/javascript">
-        // console.log('window.location.href ',window.location.href);
+        let baseUrlConsole = "https://console.tiledesk.com/v2/dashboard/";
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const urlToConsole = urlParams.get('goToConsole');
+        if(urlToConsole){
+            baseUrlConsole = urlToConsole;
+        }
+        
+
+
         var currentUrl = window.location.href
         function shareOnFacebook() {
             var fbShareUrl = "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(currentUrl);
@@ -279,8 +289,8 @@
             var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
             var project_name = url.searchParams.get("project_name");
            
-            //var urlConsole = "https://support-pre.tiledesk.com/dashboard/#/project/"+tiledesk_projectid+"/home";
-            var urlConsole = "https://console.tiledesk.com/v2/dashboard/#/project/"+tiledesk_projectid+"/home";
+            var urlConsole = baseUrlConsole + "#/project/"+tiledesk_projectid+"/home";
+            //var urlConsole = "dashboard/#/project/"+tiledesk_projectid+"/home";
             window.open(
                 urlConsole,
                 '_blank' 
@@ -290,7 +300,7 @@
         var url = new URL(currentUrl);
         var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
         var project_name = url.searchParams.get("project_name");
-        var urlConsole = "https://console.tiledesk.com/v2/dashboard/#/projects/"+tiledesk_projectid+"/home";
+        var urlConsole = baseUrlConsole + "#/projects/"+tiledesk_projectid+"/home";
         // console.log('tiledesk_projectid: ', tiledesk_projectid);
         // console.log('project_name: ', project_name);
         
@@ -300,9 +310,16 @@
         }
 
         window.tileDeskAsyncInit = function() {
-                window.tiledesk.on('onLoadParams', function(event_data) {
-                    // console.log('onLoadParams: ')
-                    window.tiledesk.open();
+            window.tiledesk.on('onLoadParams', function(event_data) {
+                // console.log('onLoadParams: ')
+                window.tiledesk.open();
+            });
+
+            window.tiledesk.on('onInit', function(event_data) {
+                setTimeout(() => {
+                    document.getElementById("preloader").style.display = "none";
+                }, 1000);
+                
             });
         };
         

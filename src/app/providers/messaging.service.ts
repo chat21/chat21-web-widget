@@ -524,7 +524,7 @@ export class MessagingService {
     const __urlMessages = '/apps/' + tenant + '/users/' + senderId + '/messages/';
     const conversationRef = firebase.database().ref(__urlMessages + conversationWith);
     // console.log('>>> url messaggio: ', __urlMessages + conversationWith);
-    that.g.wdLog([message.toString()]);
+    console.log('message: ', message);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {
@@ -664,10 +664,11 @@ export class MessagingService {
    */
   getWritingMessages() {
     const that = this;
-    const ref = firebase.database().ref(this.urlNodeTypings).orderByChild('timestamp').limitToLast(1);
+    // console.log('------------- getWritingMessages -----------', that.urlNodeTypings);
+    const ref = firebase.database().ref(that.urlNodeTypings).orderByChild('timestamp').limitToLast(100);
     ref.on('child_changed', function(childSnapshot) {
         // that.events.publish('isTypings', childSnapshot);
-        // console.log('------------- child_changed -----------');
+        // console.log('------------- getWritingMessages child_changed -----------');
         that.obsTyping.next(childSnapshot);
     });
   }
