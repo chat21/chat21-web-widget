@@ -41,7 +41,8 @@
     
         .titleText {
             position: relative;
-            line-height: 42px;
+            font-size: 1em;
+            line-height: 40px;
             text-align: left;
         }
         .avatar-project {
@@ -113,12 +114,12 @@
 
                 .c21-header-writing{
                     position: absolute;
-                    bottom: 4px;
+                    bottom: 3px;
                     width: 100%;
                     text-align: center;
                     margin: 0px;
                     padding: 0px;
-                    font-size: 1.2em;
+                    font-size: 1.1em;
                     color: #ffffff;
                 }
             }

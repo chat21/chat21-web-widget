@@ -83,6 +83,7 @@ export class Globals {
   firstOpen = true;
   departmentID = null;
   privacyApproved = false;
+  startedAt = new Date();
 
   // ============ BEGIN: LABELS ==============//
   LABEL_PLACEHOLDER: string;

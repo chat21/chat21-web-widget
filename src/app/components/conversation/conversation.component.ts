@@ -22,7 +22,7 @@ import { MessageModel } from '../../../models/message';
 import { UploadModel } from '../../../models/upload';
 
 // utils
-import { getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
 
 
 // Import the resized event model
@@ -1578,6 +1578,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * altrimenti -> SOUND
    */
   soundMessage() {
+    isJustRecived
     const isSoundActive = this.g.isSoundActive;
     const baseLocation = this.g.baseLocation;
     if ( isSoundActive ) {

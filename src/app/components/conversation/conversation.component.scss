@@ -48,8 +48,9 @@
 
     .titleText {
         position: relative;
-        line-height: 42px;
+        line-height: 40px;
         text-align: left;
+        font-size: 1em;
     }
     .avatar-project {
         position: relative;
@@ -129,12 +130,12 @@
                     position: absolute;
                     left: 40px;
                     right: 40px;
-                    bottom: 4px;
+                    bottom: 3px;
                     width: auto;
                     text-align: center;
                     margin: 0px;
                     padding: 0px;
-                    font-size: 1.2em;
+                    font-size: 1.1em;
                     color: #ffffff;
                 }
             }

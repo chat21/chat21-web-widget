@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.62
+- bug-fix: logo widget
+- bug-fix: sound on new message
+
 ### 4.0.61
 - bug-fix: typing not work
 

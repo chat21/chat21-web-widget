@@ -362,3 +362,10 @@ export function getUnique(arr, comp) {
     .filter(e => arr[e]).map(e => arr[e]);
    return unique;
 }
+
+export function isJustRecived(startedAt, time) {
+  if (time > startedAt) {
+    return true;
+  }
+  return false;
+}

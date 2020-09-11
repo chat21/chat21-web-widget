@@ -15,7 +15,7 @@ import { Globals } from '../utils/globals';
 import { ConversationModel } from '../../models/conversation';
 // utils
 // tslint:disable-next-line:max-line-length
-import { getUrlImgProfile, getUnique, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
+import { isJustRecived, getUrlImgProfile, getUnique, avatarPlaceholder, setColorFromString, getFromNow, compareValues } from '../utils/utils';
 
 // import { ConsoleReporter } from 'jasmine';
 import { SettingsSaverService } from '../providers/settings-saver.service';
@@ -347,7 +347,7 @@ export class ConversationsService {
     && conversation.sender !== this.senderId && conversation.is_new === true) {
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
-      this.soundMessage();
+      this.soundMessage(conversation.timestamp);
     }
   }
 
@@ -484,7 +484,11 @@ export class ConversationsService {
    * se sono nella conversazione in fondo alla pagina -> NO SOUND
    * altrimenti -> SOUND
    */
-  soundMessage() {
+  soundMessage(timestamp?) {
+    if (!isJustRecived(this.g.startedAt, timestamp)) {
+      return;
+    }
+
     if (this.g.isSoundActive === true)  {
       const that = this;
       this.audio = new Audio();

@@ -9,7 +9,8 @@
       window.tiledeskSettings = 
       {
           // PRE:   
-          projectid: "5f4d01fb5ef9fa0045f10564",
+          projectid: "5f4d01fb5ef9fa0045f10564", //"5f4cf9efc85eca0012dcfe2a",
+          isOpen: true, 
           // departmentID : "5f4d026b5ef9fa0045f10586",
           // projectid: "5f1802e79cf1b20012179257",
           // departmentID : "5f1fd9749cf1b20012391176",  calloutTimer:0,
@@ -50,24 +51,24 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'tiledesk-jssdk'));
      
-      
+
       window.tileDeskAsyncInit = function() {
 
-        var dateLoadPage = Date.now();
-        window.tiledesk.on('onConversationUpdated', function(event_data) {
-          var dateConvUpdate = event_data.detail.conversation.timestamp
-          console.log(" TRIGGER onConversationUpdated -> ", event_data.detail.conversation);
-          console.log("dateLoadPage-> ", dateLoadPage);
-          console.log("dateConvUpdate-> ", dateConvUpdate);
-          if(dateLoadPage < dateConvUpdate){
-            console.log(" NUOVO MESSAGGIO!!!");
-          }
-        });
+        // var dateLoadPage = Date.now();
+        // window.tiledesk.on('onConversationUpdated', function(event_data) {
+        //   var dateConvUpdate = event_data.detail.conversation.timestamp
+        //   console.log(" TRIGGER onConversationUpdated -> ", event_data.detail.conversation);
+        //   console.log("dateLoadPage-> ", dateLoadPage);
+        //   console.log("dateConvUpdate-> ", dateConvUpdate);
+        //   if(dateLoadPage < dateConvUpdate){
+        //     console.log(" NUOVO MESSAGGIO!!!");
+        //   }
+        // });
 
         // console.log("window.tileDeskAsyncInit()");
-        window.tiledesk.on('onMessageCreated', function(event_data) {
-          console.log(" TRIGGER onMessageCreated -> ", event_data.detail);
-        });
+        // window.tiledesk.on('onMessageCreated', function(event_data) {
+        //   console.log(" TRIGGER onMessageCreated -> ", event_data.detail);
+        // });
         
         window.tiledesk.on('onAuthStateChanged', function (event_data) {
           /* passo event 
