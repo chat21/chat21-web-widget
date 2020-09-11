@@ -397,6 +397,7 @@ export class ConversationsService {
     });
     this.g.wdLog(['updateConversationBadge', conversationsBadge]);
     // console.log("updateConversationBadge", conversationsBadge);
+    this.g.conversationsBadge = conversationsBadge;
     this.g.setParameter('conversationsBadge', conversationsBadge);
     // this.settingsSaverService.setVariable('conversationsBadge', conversationsBadge);
   }

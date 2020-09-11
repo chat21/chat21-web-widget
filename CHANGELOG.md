@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.63
+- bug-fix: badge conversations
+
 ### 4.0.62
 - bug-fix: logo widget
 - bug-fix: sound on new message
