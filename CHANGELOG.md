@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.65
+- bug-fix: logo widget
+
 ### 4.0.64
 - changed: send event "201" on first auth
 
