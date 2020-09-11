@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.64
+- changed: send event "201" on first auth
+
 ### 4.0.63
 - bug-fix: badge conversations
 

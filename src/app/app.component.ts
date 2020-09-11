@@ -49,7 +49,7 @@ import { SettingsSaverService } from './providers/settings-saver.service';
 
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     obsEndRenderMessage: any;
-
+    stateLoggedUser;
     // ========= begin:: parametri di stato widget ======= //
     isInitialized = false;              /** if true show button */
     isOpenHome = true;                  /** check open/close component home ( sempre visibile xchè il primo dello stack ) */
@@ -181,6 +181,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 const autoStart = this.g.autoStart;
                 that.g.wdLog(['tiledeskToken ------------> ', that.g.tiledeskToken]);
                 if (resp === -2) {
+                    that.stateLoggedUser = resp;
                     /** ho fatto un reinit */
                     that.g.wdLog(['sono nel caso reinit -2']);
                     that.g.setParameter('isLogged', false);
@@ -194,6 +195,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         that.initAll();
                     }
                 } else if (resp === -1) {
+                    that.stateLoggedUser = resp;
                     /** ho effettuato il logout: nascondo il widget */
                     that.g.wdLog(['sono nel caso logout -1']);
                     // that.g.wdLog(['obsLoggedUser', obsLoggedUser);
@@ -203,19 +205,25 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.setParameter('isShown', false, true);
                     that.storageService.removeItem('tiledeskToken');
                     that.g.isLogout = true;
-                    that.triggerOnAuthStateChanged(resp);
+                    that.triggerOnAuthStateChanged(that.stateLoggedUser);
                 } else if (resp === 0) {
+                    that.stateLoggedUser = resp;
                     /** non sono loggato */
                     that.g.wdLog(['sono nel caso in cui non sono loggato 0']);
                     that.g.wdLog(['NO CURRENT USER AUTENTICATE: ']);
                     that.g.setParameter('isLogged', false);
                     that.hideAllWidget();
                     // that.g.setParameter('isShown', false, true);
-                    that.triggerOnAuthStateChanged(resp);
+                    that.triggerOnAuthStateChanged(that.stateLoggedUser);
                     if (autoStart !== false) {
                         that.setAuthentication();
                     }
                 } else if (resp === 200) {
+                    if (that.stateLoggedUser === 0) {
+                        that.stateLoggedUser = 201;
+                    } else {
+                        that.stateLoggedUser = resp;
+                    }
                     /** sono loggato */
                     const user = that.authService.getCurrentUser();
                     that.g.wdLog(['sono nel caso in cui sono loggato']);
@@ -231,7 +239,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     //     that.triggerOnLoggedIn();
                     //     that.isBeingAuthenticated = false;
                     // }
-                    that.triggerOnAuthStateChanged(resp);
+                    that.triggerOnAuthStateChanged(that.stateLoggedUser);
                     that.startUI();
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart]);
                     that.chatPresenceHandlerService.setupMyPresence(user.uid);

@@ -126,9 +126,9 @@ body {
 .avatar-project {
     position: relative;
     padding: 0;
-    margin: 0 0 10px 0;
+    margin: 0;
     height: 52px;
-    width: 52px;
+    width: 100%;
     line-height: 52px;
 
     .avatar-placeholder {
@@ -159,7 +159,7 @@ body {
         background-repeat: no-repeat;
         background-size: contain;
         background-attachment: initial;
-        background-position: center;
+        background-position: left;
         background-origin: content-box;
     }
 }
