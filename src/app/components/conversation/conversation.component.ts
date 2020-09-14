@@ -616,7 +616,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         } else {
           that.g.wdLog(['3-------']);
           that.NUM_BADGES++;
-          that.soundMessage();
+          that.soundMessage(newMessage.timestamp);
         }
       }
 
@@ -1577,8 +1577,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * se sono nella conversazione in fondo alla pagina -> NO SOUND
    * altrimenti -> SOUND
    */
-  soundMessage() {
-    isJustRecived
+  soundMessage(timestamp?) {
+    if (!isJustRecived(this.g.startedAt, timestamp)) {
+      return;
+    }
     const isSoundActive = this.g.isSoundActive;
     const baseLocation = this.g.baseLocation;
     if ( isSoundActive ) {

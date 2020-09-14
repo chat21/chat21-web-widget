@@ -52,7 +52,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
    
     /** */
     window.tiledesk.on('onInit', function(event_data) {
-        // console.log("launch onInit isopen", window.tiledesk.angularcomponent.component.g.isOpen);
+        // console.log("launch onInit isopen", tiledeskScriptBaseLocation, window.tiledesk.angularcomponent.component.g.isOpen);
         if (window.tiledesk.angularcomponent.component.g.isOpen) {
             containerDiv.classList.add("open");
             containerDiv.classList.remove("closed");
@@ -187,6 +187,8 @@ function initWidget() {
                 return tiledeskScriptBaseLocation;
             }
         }
+        // console.log('tiledeskScriptBaseLocation:: ', tiledeskScriptBaseLocation);
+
         try {
             window.tileDeskAsyncInit();
             //console.log("tileDeskAsyncInit() called");

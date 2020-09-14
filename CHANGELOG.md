@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.66
+- bug-fix: showAttachmentButton
+- change: added baseurl to remoteConfigUrl
+
 ### 4.0.65
 - bug-fix: logo widget
 

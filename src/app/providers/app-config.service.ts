@@ -4,6 +4,8 @@ import { environment } from '../../environments/environment';
 // services
 import { Globals } from '../utils/globals';
 
+import { getParameterByName } from '../utils/utils';
+
 @Injectable()
 export class AppConfigService {
   private appConfig;
@@ -14,8 +16,31 @@ export class AppConfigService {
   }
 
   loadAppConfig() {
-    // return this.http.get(this.appConfig.apiUrl + 'settings')
-    return this.http.get(this.appConfig.remoteConfigUrl)
+    // START GET BASE URL and create absolute url of remoteConfigUrl //
+    let urlConfigFile = this.appConfig.remoteConfigUrl;
+    if (!this.appConfig.remoteConfigUrl.startsWith('http')) {
+      let wContext: any = window;
+      if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
+        wContext = window.parent;
+      }
+      const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
+      if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
+        wContext = window.parent;
+      }
+      if (!wContext['tiledesk']) {
+        return;
+      } else {
+          const baseLocation =  wContext['tiledesk'].getBaseLocation();
+          if (baseLocation !== undefined) {
+              // globals.setParameter('baseLocation', baseLocation);
+              this.g.baseLocation = baseLocation;
+              urlConfigFile = this.g.baseLocation + this.appConfig.remoteConfigUrl;
+          }
+      }
+    }
+    // console.log("baseURL: ", this.g.baseLocation , this.appConfig.remoteConfigUrl );
+    // END GET BASE URL and create absolute url of remoteConfigUrl //
+    return this.http.get(urlConfigFile)
       .toPromise()
       .then(data => {
         this.appConfig = data;

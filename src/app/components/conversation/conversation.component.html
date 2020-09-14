@@ -325,8 +325,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
             </textarea>
         </div>
 
-        <div #div_attached *ngIf="g.showAttachmentButton == true">
-            <label tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
+        <div #div_attached>
+            <label *ngIf="g.showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
             <span class="v-align-center">
                 <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
                     <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
