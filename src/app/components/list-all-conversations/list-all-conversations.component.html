@@ -66,10 +66,10 @@
 
         <!-- TITLE HEADER -->
         <div class="c21-title" [ngStyle]="{'color': g.themeForegroundColor}">
-          <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
+          <!-- <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
             <div *ngIf="g.project.logoChat == 'tiledesklogo'" #avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
             <div *ngIf="g.project.logoChat !== 'tiledesklogo'" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
-          </div>
+          </div> -->
           <div class="titleText">{{g.project.widgetTitle}}</div>
           <!-- <span id="agent-available-status">{{areAgentsAvailableText}}</span> -->
         </div>
