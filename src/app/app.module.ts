@@ -67,27 +67,13 @@ import { LastMessageComponent } from './components/last-message/last-message.com
 import { TranslateModule } from '@ngx-translate/core';
 import { MarkedPipe } from './directives/marked.pipe';
 
-// const appInitializerFn = (appConfig: AppConfigService) => {
-//   return () => {
-//     // if (environment.remoteConfig) {
-//     //   const appConfigFile = appConfig.loadAppConfig();
-//     //   console.log('appConfigFile:: ', appConfigFile);
-//     //   return appConfigFile;
-//     // }
-//   };
-// };
-
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
     if (environment.remoteConfig) {
-      appConfig.loadAppConfig()
-      .subscribe(response => {
-        return response;
-      });
+      return appConfig.loadAppConfig();
     }
   };
 };
-
 
 
 @NgModule({

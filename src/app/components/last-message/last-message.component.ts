@@ -48,7 +48,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
               return;
             }
             that.conversation = conversation;
-            console.log('conv: ' + conversation);
+            // console.log('conv: ' + conversation);
           }
         });
     });

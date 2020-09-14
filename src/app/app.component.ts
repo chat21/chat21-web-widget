@@ -112,7 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
         }
-        console.log('---> remoteTranslationsUrl: ', appConfigService.getConfig().remoteTranslationsUrl);
+        // console.log('---> remoteTranslationsUrl: ', appConfigService.getConfig().remoteTranslationsUrl);
 
         firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);

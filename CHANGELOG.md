@@ -1,5 +1,10 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.68
+- bug-fix: load remoteConfigUrl with HttpClient
+- bug-fix: logo widget max width
+- bug-fix: console.log
+
 ### 4.0.67
 - bug-fix: load remoteConfigUrl
 - bug-fix: avatar logo widget

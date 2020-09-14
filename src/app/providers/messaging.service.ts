@@ -155,7 +155,7 @@ export class MessagingService {
     //// SUBSCRIBE ADDED ////
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
-      console.log('1 passo -----', message);
+      // console.log('1 passo -----', message);
       that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
@@ -270,7 +270,7 @@ export class MessagingService {
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i].trim();
       if (i % 2 !== 0) {
-        console.log('part ::: ', part);
+        // console.log('part ::: ', part);
         const urlVideo = part.replace(key, '').trim();
         const command = {};
         command['type'] = 'video';
@@ -291,13 +291,13 @@ export class MessagingService {
       let videoTag = '';
       const keyYoutube = 'https://youtu.be/';
       const keyVimeo = 'https://vimeo.com/';
-      console.log('urlVideo:: ', urlVideo);
+      // console.log('urlVideo:: ', urlVideo);
       if (urlVideo.includes(keyYoutube)) {
         urlVideo = urlVideo.replace(keyYoutube, 'https://youtube.com/embed/').trim();
-        console.log('YOUTUBE:: ', urlVideo);
+        // console.log('YOUTUBE:: ', urlVideo);
       } else if (urlVideo.includes(keyVimeo)) {
         urlVideo = urlVideo.replace(keyVimeo, 'https://player.vimeo.com/video/').trim();
-        console.log('VIMEO:: ', urlVideo);
+        // console.log('VIMEO:: ', urlVideo);
       } else {
         videoTag += '<video width="100%" height="210" controls="controls" style="color:green;">';
         videoTag += '<source src="' + urlVideo + '" type="video/mp4">';
@@ -524,7 +524,7 @@ export class MessagingService {
     const __urlMessages = '/apps/' + tenant + '/users/' + senderId + '/messages/';
     const conversationRef = firebase.database().ref(__urlMessages + conversationWith);
     // console.log('>>> url messaggio: ', __urlMessages + conversationWith);
-    console.log('message: ', message);
+    // console.log('message: ', message);
 
     // firebaseMessagesCustomUid.push(message, function(error) {
     //   if (error) {

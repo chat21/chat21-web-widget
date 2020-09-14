@@ -112,7 +112,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   /**  */
   checkInput() {
     const spanCheck = window.document.getElementById('span-checkmark');
-    console.log('-----------> ', spanCheck);
+    // console.log('-----------> ', spanCheck);
     if (spanCheck) {
       spanCheck.classList.remove('unchecked');
     }

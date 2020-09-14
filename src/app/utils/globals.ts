@@ -208,16 +208,16 @@ export class Globals {
     this.filterSystemMsg = true;
 
     let wContext: any = window;
-    console.log('windowContext 0', wContext);
+    // console.log('windowContext 0', wContext);
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
       wContext = window.parent;
     }
-    console.log('windowContext 1', wContext);
+    // console.log('windowContext 1', wContext);
     const windowcontextFromWindow = getParameterByName(window, 'windowcontext');
     if (windowcontextFromWindow !== null && windowcontextFromWindow === 'window.parent') {
       wContext = window.parent;
     }
-    console.log('windowContext 2', wContext);
+    // console.log('windowContext 2', wContext);
     // this.parameters['windowContext'] = windowContext;
     this.windowContext = wContext;
 
@@ -424,7 +424,7 @@ export class Globals {
       this.welcomeTitle,
       this.welcomeMsg
     );
-    console.log('this.project::::: ', this.project);
+    // console.log('this.project::::: ', this.project);
   }
 
   /**

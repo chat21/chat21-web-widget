@@ -89,7 +89,7 @@ export class GlobalSettingsService {
                     project['versions']
                 );
             }
-            console.log('globals.project ----------------->', that.globals.project);
+            // console.log('globals.project ----------------->', that.globals.project);
             that.setParameters(response);
         }, (error) => {
             // console.log('2 - ::getProjectParametersById', error);
