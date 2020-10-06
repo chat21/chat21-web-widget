@@ -232,10 +232,10 @@
     </script>
 
     <script type="application/javascript">
-        let baseUrlConsole = "https://console.tiledesk.com/v2/dashboard/";
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const urlToConsole = urlParams.get('goToConsole');
+        var baseUrlConsole = "https://console.tiledesk.com/v2/dashboard/";
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var urlToConsole = urlParams.get('goToConsole');
         if(urlToConsole){
             baseUrlConsole = urlToConsole;
         }
