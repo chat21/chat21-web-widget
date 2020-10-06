@@ -7,47 +7,47 @@
     min-height: 40px;
 
     .div-button {
-        // float: left;
         display: inline-block;
     }
     
-    .button-success{
-        background-color: white; 
-        color: #333333;
-        border: 1px solid rgb(28, 184, 65);
-    }
-    .button-error {
-        background-color: white; 
-        color: #333333;
-        border: 1px solid rgb(202, 60, 60);
-    }
-    .button-warning {
-        background-color: white; 
-        color: #333333;
-        border: 1px solid rgb(223, 117, 20);
-    }
-    .button-secondary {
-        background-color: white; 
-        color: #333333;
-        border: 1px solid rgb(66, 184, 221);
-    }
-    .button-success:hover {
-        color: white;
-        background: rgb(28, 184, 65);
-    }
-    .button-error:hover {
-        color: white;
-        background: rgb(202, 60, 60);
-    }
-    .button-warning:hover {
-        color: white;
-        background: rgb(223, 117, 20);
-    }
-    .button-secondary:hover {
-        color: white;
-        background: rgb(66, 184, 221);
-    } 
+    // .button-success {
+    //     background-color: white; 
+    //     color: #333333;
+    //     border: 1px solid rgb(28, 184, 65);
+    // }
+    // .button-error {
+    //     background-color: white; 
+    //     color: #333333;
+    //     border: 1px solid rgb(202, 60, 60);
+    // }
+    // .button-warning {
+    //     background-color: white; 
+    //     color: #333333;
+    //     border: 1px solid rgb(223, 117, 20);
+    // }
+    // .button-secondary {
+    //     background-color: white; 
+    //     color: #333333;
+    //     border: 1px solid rgb(66, 184, 221);
+    // }
+    // .button-success:hover {
+    //     color: white;
+    //     background: rgb(28, 184, 65);
+    // }
+    // .button-error:hover {
+    //     color: white;
+    //     background: rgb(202, 60, 60);
+    // }
+    // .button-warning:hover {
+    //     color: white;
+    //     background: rgb(223, 117, 20);
+    // }
+    // .button-secondary:hover {
+    //     color: white;
+    //     background: rgb(66, 184, 221);
+    // } 
 }
+
 
 .button-in-msg {
     position: relative;
@@ -68,8 +68,62 @@
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
     color: rgb(42, 106, 193);
-  }
-  .button-in-msg:hover {
-    color: white;
-    background:  rgb(42, 106, 193);
-  }
+    &:focus,
+    &:hover {
+        color: white;
+        background:  rgb(42, 106, 193);
+    }
+
+    &.text {
+        // color: rgb(42, 106, 193);
+        transition: background-color .6s ease;
+    }
+    &.url {
+        transition: background-color .6s ease;
+        .icon-button-action {
+            position: absolute;
+            top: 3;
+            right: 3;
+            svg {
+                fill: rgb(42, 106, 193);
+            }
+        }
+        &:focus,
+        &:hover {
+            color: white;
+            background:  rgb(42, 106, 193);
+            .icon-button-action {
+                svg {
+                    fill: rgb(255,255,255);
+                }
+            }
+        }
+    }
+    &.action {
+        transition: background-color .6s ease;
+        &:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: 50%;
+            transform-style: flat;
+            transform: translate3d(-50%,-50%,0);
+            background: rgba(white,.1);
+            border-radius: 100%;
+            transition: width .3s ease, height .3s ease;
+        }
+        &:focus,
+        &:hover {
+            color: white;
+            background:  rgb(42, 106, 193);
+        }
+        &:active {
+            &:after {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    }
+}

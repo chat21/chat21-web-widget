@@ -11,6 +11,7 @@ import { MessageModel } from '../../../models/message';
 export class MessageAttachmentComponent implements OnInit {
   // ========= begin:: Input/Output values ============//
   @Output() eventOpenAttachment = new EventEmitter<string>();
+  @Output() eventClickOnAttachmentButton = new EventEmitter<any>();
   @Input() message: MessageModel;
   // ========= end:: Input/Output values ============//
 
@@ -44,11 +45,24 @@ export class MessageAttachmentComponent implements OnInit {
   }
 
   /** */
-  actionButton($event) {
-    // alert($event);
-    if ( $event ) {
-      this.eventOpenAttachment.emit($event);
+  actionButtonText(event: any) {
+    if ( event ) {
+      this.eventOpenAttachment.emit(event.value);
     }
   }
 
+  /** */
+  actionButtonUrl(event: any) {
+    if ( event && event.link && event.link !== '') {
+      // event.target
+      this.eventClickOnAttachmentButton.emit(event);
+    }
+  }
+
+  actionButtonAction(event: any) {
+    if ( event && event.action && event.action !== '') {
+      // event.target
+      this.eventClickOnAttachmentButton.emit(event);
+    }
+  }
 }

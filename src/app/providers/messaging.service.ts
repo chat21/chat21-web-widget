@@ -156,7 +156,7 @@ export class MessagingService {
     this.messagesRef.on('child_added', function (childSnapshot) {
       const message = childSnapshot.val();
       // console.log('1 passo -----', message);
-      that.g.wdLog(['child_added *****', childSnapshot.key, JSON.stringify(message)]);
+      that.g.wdLog(['A: child_added *****', childSnapshot.key, JSON.stringify(message)]);
       const video_pattern = /^(tdvideo:.*)/mg;
       const key = 'tdvideo:';
       // const messageText = that.splitMessageForKey(key, video_pattern, message.text);
@@ -175,7 +175,7 @@ export class MessagingService {
         const saved_conversations_attributes_STRING = that.storageService.getItem('attributes');
         let saved_conversations_attributes = {};
         if (saved_conversations_attributes_STRING != null) {
-          saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING)
+          saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING);
         }
         // console.log("saved_conversations_attributes: " , saved_conversations_attributes)
         if (message['attributes'] && message['attributes']['updateUserFullname']) {
@@ -192,6 +192,42 @@ export class MessagingService {
           that.g.userEmail = userEmail;
           that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
+
+        // TEST BUTTONS
+        // message['attributes'] = {
+        //   attachment: {
+        //     type: 'template',
+        //     buttons: [
+        //         {
+        //             type: 'action',
+        //             value: 'EXECUTE AN ACTION',
+        //             action: 'my-action-name',
+        //             show_reply: true
+        //         },
+        //         {
+        //           type: "url",
+        //           value: "SITE 2",
+        //           link: "http://www.ietf.org",
+        //           target: "external"
+        //         },
+        //         {
+        //           type: "url",
+        //           value: "SITE 1",
+        //           link: "http://www.tiledesk.com",
+        //           target: "self"
+        //         },
+        //         {
+        //           type: "text",
+        //           value: "REPLY ONE"
+        //         },
+        //         {
+        //             type: "text",
+        //             value: "REPLY TWO"
+        //         }
+        //     ]
+        //   }
+        // };
+  
         // end SPONZIELLO PATCH
         const msg = new MessageModel(
           childSnapshot.key,

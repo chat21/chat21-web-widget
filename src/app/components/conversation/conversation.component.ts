@@ -1611,14 +1611,56 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /** */
-  returnOpenAttachment($event: String) {
-    if ($event) {
+  returnOpenAttachment(event: String) {
+    if (event) {
       const metadata = {
         'button': true
       };
-      this.sendMessage($event, TYPE_MSG_TEXT, metadata);
+      this.sendMessage(event, TYPE_MSG_TEXT, metadata);
       // this.sendMessage($event, TYPE_MSG_TEXT);
     }
+  }
+
+  /** */
+  returnClickOnAttachmentButton(event: any) {
+    if (!event || !event.type) {
+      return;
+    }
+    switch (event.type) {
+      case 'url':
+        try {
+          this.openLink(event);
+        } catch (err) {
+          this.g.wdLog(['> Error :' + err]);
+        }
+        return;
+      case 'action':
+        try {
+          this.actionButton(event);
+        } catch (err) {
+          this.g.wdLog(['> Error :' + err]);
+        }
+        return false;
+      default: return;
+    }
+  }
+
+  /** */
+  private openLink(event: any) {
+    const link = event.link ? event.link : '';
+    const target = event.target ? event.target : '';
+    if (target === 'self') {
+      window.open(link, '_self');
+    } else {
+      window.open(link, '_blank');
+    }
+  }
+
+  /** */
+  private actionButton(event: any) {
+    const action = event.action ? event.action : '';
+    const showReply = event.show_reply ? event.show_reply : '';
+    this.g.wdLog(['> action :' + action]);
   }
 
 

@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.70
+- new: added link and action buttons
+
 ### 4.0.69
 - change: remoteConfig: true
 
