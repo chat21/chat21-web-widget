@@ -62,14 +62,12 @@ export class MessageAttachmentComponent implements OnInit {
   actionButtonAction(event: any) {
     if ( event && event.action && event.action !== '') {
       const spanCheck = window.document.getElementById('actionButton');
-      // console.log('-----------> ', spanCheck);
       if (spanCheck) {
         spanCheck.classList.add('active');
         setTimeout(function() {
           spanCheck.classList.remove('active');
         }, 400);
       }
-      // event.target
       this.eventClickOnAttachmentButton.emit(event);
     }
   }

@@ -1658,9 +1658,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** */
   private actionButton(event: any) {
+    console.log(event);
     const action = event.action ? event.action : '';
-    const showReply = event.show_reply ? event.show_reply : '';
-    this.g.wdLog(['> action :' + action]);
+    const message = event.value ? event.value : '';
+    const subtype = event.show_reply ?  '' : 'info';
+
+    const attributes = {
+      action: action,
+      subtype: subtype
+    };
+    this.sendMessage(message, TYPE_MSG_TEXT, null, attributes);
+    this.g.wdLog(['> action :']);
   }
 
 
