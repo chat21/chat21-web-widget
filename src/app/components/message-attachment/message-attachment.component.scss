@@ -68,22 +68,32 @@
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
     color: rgb(42, 106, 193);
-    &:focus,
-    &:hover {
-        color: white;
-        background:  rgb(42, 106, 193);
-    }
+    // &:focus,
+    // &:hover {
+    //     color: white;
+    //     background:  rgb(42, 106, 193);
+    // }
 
     &.text {
         // color: rgb(42, 106, 193);
         transition: background-color .6s ease;
+        &:focus,
+        &:hover {
+            color: white;
+            background:  rgb(42, 106, 193);
+            .icon-button-action {
+                svg {
+                    fill: rgb(255,255,255);
+                }
+            }
+        }
     }
     &.url {
         transition: background-color .6s ease;
         .icon-button-action {
             position: absolute;
-            top: 3;
-            right: 3;
+            top: -1;
+            right: 1;
             svg {
                 fill: rgb(42, 106, 193);
             }
@@ -100,7 +110,18 @@
         }
     }
     &.action {
+        background:  rgb(255,255,255);
         transition: background-color .6s ease;
+        &:focus,
+        &:hover {
+            color: white;
+            background:  rgb(42, 106, 193);
+            .icon-button-action {
+                svg {
+                    fill: rgb(255,255,255);
+                }
+            }
+        }
         &:after {
             content: "";
             position: absolute;
@@ -110,20 +131,32 @@
             left: 50%;
             transform-style: flat;
             transform: translate3d(-50%,-50%,0);
-            background: rgba(white,.1);
+            background: rgba(white,.2);
             border-radius: 100%;
-            transition: width .3s ease, height .3s ease;
+            transition: width .5s ease, height .5s ease;
         }
-        &:focus,
-        &:hover {
-            color: white;
-            background:  rgb(42, 106, 193);
-        }
-        &:active {
+        &.active {
             &:after {
                 width: 200px;
                 height: 200px;
             }
+            
         }
+        
+        // &:focus{
+        //     color: white;
+        //     background:  rgb(42, 106, 193);
+        // }
+        // &:hover {
+        //     transition: background-color .6s ease;
+        // //     color: white;
+        // //     background:  rgb(42, 106, 193);
+        // }
+        // &:active {
+        //     &:after {
+        //         width: 200px;
+        //         height: 200px;
+        //     }
+        // }
     }
 }

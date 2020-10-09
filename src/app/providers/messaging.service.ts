@@ -227,7 +227,7 @@ export class MessagingService {
         //     ]
         //   }
         // };
-  
+
         // end SPONZIELLO PATCH
         const msg = new MessageModel(
           childSnapshot.key,

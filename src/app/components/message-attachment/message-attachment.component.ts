@@ -9,6 +9,7 @@ import { MessageModel } from '../../../models/message';
   styleUrls: ['./message-attachment.component.scss']
 })
 export class MessageAttachmentComponent implements OnInit {
+
   // ========= begin:: Input/Output values ============//
   @Output() eventOpenAttachment = new EventEmitter<string>();
   @Output() eventClickOnAttachmentButton = new EventEmitter<any>();
@@ -54,13 +55,20 @@ export class MessageAttachmentComponent implements OnInit {
   /** */
   actionButtonUrl(event: any) {
     if ( event && event.link && event.link !== '') {
-      // event.target
       this.eventClickOnAttachmentButton.emit(event);
     }
   }
 
   actionButtonAction(event: any) {
     if ( event && event.action && event.action !== '') {
+      const spanCheck = window.document.getElementById('actionButton');
+      // console.log('-----------> ', spanCheck);
+      if (spanCheck) {
+        spanCheck.classList.add('active');
+        setTimeout(function() {
+          spanCheck.classList.remove('active');
+        }, 400);
+      }
       // event.target
       this.eventClickOnAttachmentButton.emit(event);
     }

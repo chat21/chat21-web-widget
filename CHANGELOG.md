@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.71
+- change: changed animation and css in link and action buttons
+- change: changed widget logo logic (now: nologo or url image)
+
 ### 4.0.70
 - new: added link and action buttons
 
