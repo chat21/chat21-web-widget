@@ -131,9 +131,14 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                             <!-- message type:: image -->
                                             <div>
-                                                <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
+                                                <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
+                                                    <img class="message-contentX message-content-imageX"
+                                                    [src]="message.metadata.src" 
+                                                    />
+                                                </div>
+                                                <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                                [height]="getSizeImg(message).height" />
+                                                [height]="getSizeImg(message).height" /> -->
                                             
                                                 <!-- message type:: text -->
                                                 <!-- <div *ngIf="message.type == 'text'"> -->
@@ -193,9 +198,12 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                             <div>
                                                 <!-- message type:: image -->
-                                                <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
-                                                    [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                                    [height]="getSizeImg(message).height" />
+                                                <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
+                                                    <img class="message-contentX message-content-imageX"
+                                                    [src]="message.metadata.src" 
+                                                    />
+                                                </div>
+                                               
 
                                                 <!-- message type:: text -->
                                                 <!-- <div *ngIf="message.type == 'text';">  {{message.timestamp  | amTimeAgo}}-->

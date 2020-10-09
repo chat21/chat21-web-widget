@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.73
+- bug-fix: resized image (sent in message) with attribute size
+
 ### 4.0.72
 - new: send message on action button
 
