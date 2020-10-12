@@ -36,21 +36,23 @@
                 <img class="chat21-card-img" src="{{g.baseLocation}}/assets/images/tiledesk-chat-ballon-big-badge.svg"/>     
             </div> -->
             <div [@rotatedState]='state' class="eye-catcher-card-emoticons-wrapper">
-                <span  class="chat21-card-emoticons">✋ </span>
+                <span *ngIf="emoticon" class="chat21-card-emoticons">{{emoticon}}</span>
             </div>
         </div>
 
         <div class="eye-catcher_column ec_right" (click)="openChatFromEyeCatcherCard()">
             <div class="eye-catcher-card-text-wrapper">
+                <p class="eye-catcher-card-title">{{ title }}</p>
+                
                 <!-- Need Help? -->
-                <p *ngIf="g.calloutTitle !== ''; else calloutTitle_placeholder" class="eye-catcher-card-title">
+                <!-- <p *ngIf="g.calloutTitle !== ''; else calloutTitle_placeholder" class="eye-catcher-card-title">
                     {{ g.calloutTitle }}
                 </p>  
                 <ng-template #calloutTitle_placeholder>
                     <p class="eye-catcher-card-title">
                         {{ g.CALLOUT_TITLE_PLACEHOLDER }}
                     </p>
-                </ng-template>
+                </ng-template> -->
 
                 <!-- Click here and start chatting with us!  -->
                 <p *ngIf="g.calloutMsg !== ''; else calloutMsg_placeholder" class="eye-catcher-card-msg">

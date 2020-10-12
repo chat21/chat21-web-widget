@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.75
+- new: added emoticon as the first character in the callout field
+
 ### 4.0.74
 - bug-fix: disabled auto zoom in input 'Text' - Safari on iPhone 
 - change: enabled callout on mobile device
