@@ -221,3 +221,9 @@
     font-size: 26px;
 }
 /* ./ end EYE-CATCHER CARD & EYE-CATCHER CARD  */
+
+@media (max-width: 451px) {
+    .eye-catcher-card {
+        max-width: calc(100% - 90px);
+    }
+}

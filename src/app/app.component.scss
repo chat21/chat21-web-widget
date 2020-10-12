@@ -6,7 +6,9 @@
 @import url("../sass/hover.css");
 
 /** custom scroll bar **/
-
+input, select:focus, textarea {
+    font-size: 16px !important;
+}
 // IE
 // #scroll-me { 
 //     color:black;

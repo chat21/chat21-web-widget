@@ -39,6 +39,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('EyeeyeCatcherCardComponent ngOnInit');
       // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
   this.state = 'default';
   this.g.setParameter('displayEyeCatcherCard', 'none');
@@ -55,6 +56,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * if calloutTimer >= 0
    */
   private openIfCallOutTimer() {
+    console.log('openIfCallOutTimer');
     const that = this;
     const calloutTimer = this.g.calloutTimer;
     if (calloutTimer >= 0) {
@@ -69,9 +71,9 @@ export class EyeeyeCatcherCardComponent implements OnInit {
    * OPEN THE EYE-CATCHER CARD (aka CALLOUT) ONLY IF THE CHAT IS CLOSED */
   openEyeCatcher() {
       const isOpen = this.g.isOpen;
-      // console.log('isOpen', isOpen);
-      // console.log('this.g.isMobile', this.g.isMobile);
-      if (isOpen === false && this.g.isMobile === false) {
+      console.log('isOpen', isOpen);
+      console.log('this.g.isMobile', this.g.isMobile);
+      if (isOpen === false ) { // && this.g.isMobile === false
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
           this.g.setParameter('displayEyeCatcherCard', 'block');
