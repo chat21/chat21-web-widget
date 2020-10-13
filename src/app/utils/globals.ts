@@ -64,7 +64,7 @@ export class Globals {
   firebaseToken: string;
   lang: string;
   conversationsBadge: number;
-  activeConversation: string;
+  activeConversation: ConversationModel;
   public currentConversationComponent: ConversationComponent;
 
   isOpenStartRating: boolean;
@@ -374,7 +374,7 @@ export class Globals {
     // this.parameters['conversationsBadge'] = 0;
     // this.parameters.push({'conversationsBadge': 0});
 
-    this.activeConversation = '';
+    this.activeConversation = null;
     // this.parameters['activeConversation'] = '';
     // this.parameters.push({'activeConversation': ''});
 

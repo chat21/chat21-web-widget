@@ -125,9 +125,9 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                 <div *ngFor="let message of messages let last = last; let i = index" tabindex="1521" class="rowMsg">
     
                                     <!-- message sender:: -->
-                                    <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right" >
+                                    <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right">
                                     
-                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  >
+                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
 
                                             <!-- message type:: image -->
                                             <div>
@@ -192,7 +192,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                         </div>
 
 
-                                        <div class="messages msg_receive">
+                                        <div class="messages msg_receive" [class.emoticon]="message.emoticon">
                             
                                             <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
 
@@ -211,8 +211,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     <ng-template #timeTooltipRight>
                                                         <span>{{message.timestamp  | amTimeAgo}}</span>
                                                     </ng-template>
-                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
-                                                        is ignored</div>
+                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
 
                                                     <ng-template #contentPopup>
                                                         <p style="text-decoration: underline; padding:8px; cursor: pointer;"
@@ -224,8 +223,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
                                                         <!-- old -->
                                                         <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
-                                                        <!-- <div [innerHTML]="message.text | safeHtml"></div> -->
-                                                        <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
+                                                        <!-- <div [innerHTML]="message.text | safeHtml"></div> 
+                                                        [innerHTML]="printMessage(message, messageEl, this) | marked"-->
+                                                        <!-- <p #messageEl class="message_innerhtml" >{{message.text}}</p> -->
+                                                        <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+
                                                         <!-- <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p> -->
                                                         <!-- <p [innerHTML]="message.uid | linky"></p> -->
 

@@ -19,7 +19,8 @@ export class MessageModel {
         public type: string,
         public attributes: any,
         public channel_type: string,
-        public projectid: string
+        public projectid: string,
+        public emoticon?: boolean
     ) { }
 
     asFirebaseMessage(): Object {

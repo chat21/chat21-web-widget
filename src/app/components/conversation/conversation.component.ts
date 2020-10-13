@@ -160,7 +160,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public storageService: StorageService,
     public conversationsService: ConversationsService,
     public appConfigService: AppConfigService
-    
+
     // public cdRef: ChangeDetectorRef
     // private translate: TranslateService
   ) {
@@ -186,13 +186,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // getTranslation() {
   //   this.translate.get('LABEL_PLACEHOLDER')
   //     .subscribe((text: string) => {
-  //       this._LABEL_PLACEHOLDER = text; 
+  //       this._LABEL_PLACEHOLDER = text;
   //     });
   // }
 
   ngAfterViewInit() {
     // this.isShowSpinner();
     this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    // this.storageService.setItem('activeConversation', this.conversation.uid);
     // --------------------------- //
     // after animation intro
     setTimeout(() => {
@@ -301,7 +302,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     // this.setAvailableAgentsStatus();
 
-    this.g.setParameter('activeConversation', this.conversationWith);
+    this.g.setParameter('activeConversation', this.conversation, true);
     // this.checkListMessages();
 
 
@@ -352,11 +353,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
       this.addFirstMessage(this.g.offline_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template 
+      // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template
     } else {
       this.addFirstMessage(this.g.online_msg);
       this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template 
+      // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template
     }
 
     if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
@@ -519,7 +520,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
-      //this.scrollToBottomStart();
+      // this.scrollToBottomStart();
 
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
@@ -533,8 +534,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   initializeChatManager() {
     this.arrayFilesLoad = [];
-    //this.setSubscriptions();
-    //this.checkWritingMessages();
+    // this.setSubscriptions();
+    // this.checkWritingMessages();
   }
 
   /**
@@ -803,7 +804,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           let recipientFullname = this.g.GUEST_LABEL;
            // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
           const g_attributes = this.g.attributes;
-          // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}' 
+          // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}'
           const attributes = <any>{};
           if (g_attributes) {
             for (const [key, value] of Object.entries(g_attributes)) {
@@ -838,8 +839,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             recipientFullname = userFullname;
           } else if (userEmail) {
             recipientFullname = userEmail;
-          } else if (attributes && attributes["userFullname"]) {
-            recipientFullname = attributes["userFullname"];
+          } else if (attributes && attributes['userFullname']) {
+            recipientFullname = attributes['userFullname'];
           } else {
             recipientFullname = this.g.GUEST_LABEL;
           }
@@ -1073,9 +1074,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   checkMemberId(memberID) {
     const that = this;
-    if ( memberID.trim() !== ''
-            //&& memberID.trim() !== 'system'
-            && memberID.trim() !== this.g.senderId
+     // && memberID.trim() !== 'system'
+    if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
     ) {
       if (that.isTypings === false) {
         that.isTypings = true;
@@ -1504,12 +1504,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
-    this.g.setParameter('activeConversation', null);
+    this.g.setParameter('activeConversation', null, true);
     this.eventClose.emit();
   }
 
   returnCloseWidget() {
-    this.g.setParameter('activeConversation', null);
+    this.g.setParameter('activeConversation', null, true);
     this.eventCloseWidget.emit();
   }
 
@@ -1552,7 +1552,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-      this.unsubscribe();
+    this.storageService.removeItem('activeConversation');
+    this.unsubscribe();
   }
 
 

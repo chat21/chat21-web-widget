@@ -310,6 +310,15 @@
                         .message_innerhtml {
                             padding: 14px;
                         }
+                        .emoticon {
+                            background-color: transparent!important;
+                            font-size: 4em;
+                            .message_innerhtml {
+                                padding: 0;
+                                margin: 0;
+                            }
+                        }                        
+                        
                         .status-message {
                             width: 16px;
                             height: 16px;
@@ -376,6 +385,14 @@
                         .message_innerhtml {
                             padding: 0 14px;
                         }
+                        .emoticon {
+                            background-color: transparent!important;
+                            font-size: 4em;
+                            .message_innerhtml {
+                                padding: 0;
+                                margin: 0;
+                            }
+                        }                     
                     }
     
                     .message_sender_fullname{
@@ -548,6 +565,7 @@
     }
     
 }
+
 
 
 

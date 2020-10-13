@@ -132,7 +132,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
                 that.ngZone.run(() => {
                     if ( that.g.isOpen === false && conversation) {
-                        // that.g.isOpenNewMessage = true;
                         that.g.setParameter('displayEyeCatcherCard', 'none');
                         that.triggerOnChangedConversation(conversation);
                         that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
@@ -644,7 +643,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
-        if (this.g.startFromHome) {
+        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        this.g.wdLog([' ============ idConversation ===============', conversationActive ]);
+        if (conversationActive) {
+            // this.g.recipientId = conversationActive.recipient;
+            this.returnSelectedConversation(conversationActive);
+        } else if (this.g.startFromHome) {
             this.isOpenConversation = false;
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenSelectionDepartment = false;

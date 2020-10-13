@@ -88,7 +88,7 @@ export class ConversationsService {
       if ( valIsOpen === true ) {
         that.listConversations.forEach(element => {
           // if ( that.g.activeConversation === element.uid ) {
-          if ( that.g.activeConversation === element.uid ) {
+          if ( that.g.activeConversation && that.g.activeConversation.uid === element.uid ) {
             that.updateIsNew(element);
             that.updateConversationBadge();
           }
@@ -343,7 +343,7 @@ export class ConversationsService {
    */
   public checkIsSound(conversation) {
     // console.log('conversation', conversation);
-    if (this.g.activeConversation !== conversation.recipient
+    if (this.g.activeConversation && this.g.activeConversation.recipient !== conversation.recipient
     && conversation.sender !== this.senderId && conversation.is_new === true) {
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
@@ -359,8 +359,7 @@ export class ConversationsService {
    * check if new or modify conversation is on active conversation
    */
   public checkIsNew(conversation) {
-    if ( this.g.activeConversation === conversation.uid
-      && this.g.isOpen === true ) {
+    if ( this.g.activeConversation && this.g.activeConversation.uid === conversation.uid && this.g.isOpen === true ) {
       this.updateIsNew(conversation);
     }
   }

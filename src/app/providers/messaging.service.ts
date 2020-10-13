@@ -20,7 +20,8 @@ import { StarRatingWidgetService } from '../components/star-rating-widget/star-r
 // tslint:disable-next-line:max-line-length
 import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATUS_RECEIVED, TYPE_MSG_TEXT, UID_SUPPORT_GROUP_MESSAGES, CHANNEL_TYPE_GROUP } from '../utils/constants';
 // utils
-import { getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr, convertMessage } from '../utils/utils';
+// tslint:disable-next-line:max-line-length
+import { isEmoji, getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr, convertMessage } from '../utils/utils';
 import { Globals } from '../utils/globals';
 import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
@@ -194,34 +195,34 @@ export class MessagingService {
         }
 
         // TEST BUTTONS
-        message['attributes'] = {
-          attachment: {
-            type: 'template',
-            buttons: [
+        // message['attributes'] = {
+        //   attachment: {
+        //     type: 'template',
+        //     buttons: [
                 // {
                 //     type: 'action',
                 //     value: 'EXECUTE AN ACTION',
                 //     action: 'my-action-name',
                 //     show_reply: true
                 // },
-                {
-                  type: "url",
-                  value: "SELF",
-                  link: "http://www.tiledesk.com",
-                  target: "self"
-                },
-                {
-                  type: "url",
-                  value: "PARENT",
-                  link: "http://www.tiledesk.com",
-                  target: "parent"
-                },
-                {
-                  type: "url",
-                  value: "BLANK",
-                  link: "http://www.ietf.org",
-                  target: "blank"
-                }
+                // {
+                //   type: "url",
+                //   value: "SELF",
+                //   link: "http://www.tiledesk.com",
+                //   target: "self"
+                // },
+                // {
+                //   type: "url",
+                //   value: "PARENT",
+                //   link: "http://www.tiledesk.com",
+                //   target: "parent"
+                // },
+                // {
+                //   type: "url",
+                //   value: "BLANK",
+                //   link: "http://www.ietf.org",
+                //   target: "blank"
+                // }
                 // {
                 //   type: "text",
                 //   value: "REPLY ONE"
@@ -230,10 +231,11 @@ export class MessagingService {
                 //     type: "text",
                 //     value: "REPLY TWO"
                 // }
-            ]
-          }
-        };
-
+        //     ]
+        //   }
+        // };
+        // messageText = '😀';
+        const emoticon = that.checkIsEmoticon(messageText);
         // end SPONZIELLO PATCH
         const msg = new MessageModel(
           childSnapshot.key,
@@ -250,7 +252,8 @@ export class MessagingService {
           message['type'],
           message['attributes'],
           message['channel_type'],
-          message['progectId']
+          message['progectId'],
+          emoticon
         );
         msg.sender_urlImage = that.getUrlImgProfile(message['sender']);
         that.triggerGetImageUrlThumb(msg);
@@ -259,6 +262,23 @@ export class MessagingService {
         }
       }
     });
+  }
+
+
+  checkIsEmoticon(message: string) {
+    this.g.wdLog(['> message.length :' + message.length]);
+    if (message.length > 2) {
+      return false;
+    }
+    let fistChar = '';
+    try {
+      fistChar = message.trim(); // .charAt(0);
+      this.g.wdLog(['> fistChar :' + fistChar]);
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+      return false;
+    }
+    return isEmoji(fistChar);
   }
 
   /**

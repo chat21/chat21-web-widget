@@ -1,6 +1,6 @@
 # chat21-web-widget ver 3.0
 
-### next
+### 4.0.77
 - new: changed css of the message with a single emoticon
 - new: open widget on the last conversation
 
