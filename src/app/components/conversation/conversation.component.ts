@@ -1651,6 +1651,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const target = event.target ? event.target : '';
     if (target === 'self') {
       window.open(link, '_self');
+    } else if (target === 'parent') {
+      window.open(link, '_parent');
     } else {
       window.open(link, '_blank');
     }

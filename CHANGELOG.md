@@ -1,5 +1,12 @@
 # chat21-web-widget ver 3.0
 
+### next
+- new: changed css of the message with a single emoticon
+- new: open widget on the last conversation
+
+### 4.0.76
+- new: added target self, parent, blank in button message
+
 ### 4.0.75
 - new: added emoticon as the first character in the callout field
 
