@@ -181,10 +181,10 @@ textarea::placeholder {
         position: relative;
         max-width: 300px;
         min-width: inherit;
-        padding: 8px 16px!important;;
+        padding: 8px 16px;
         cursor: auto;
         border: 1px solid rgb(255, 255, 255);
-        border-radius: 20px!important;;
+        border-radius: 20px!important;
         margin: 3px;
         overflow: hidden;
         font-family: 'Muli', sans-serif;
@@ -195,7 +195,7 @@ textarea::placeholder {
         letter-spacing: -0.24px;
         -webkit-font-smoothing: antialiased;
         .message_innerhtml{
-            padding: 0px 14px!important;
+            // padding: 0px 14px!important;
         }
         p{
             font-size: 15px!important;

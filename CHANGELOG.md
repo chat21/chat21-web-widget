@@ -1,5 +1,12 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.78
+- bug-fix: bug css align callout left
+- bug-fix: bug css width line text on mobile device
+- new: installed emoji-regex
+- bug-fix: first character in the callout field
+- change: show link button in all messages not only on the last one
+
 ### 4.0.77
 - new: changed css of the message with a single emoticon
 - new: open widget on the last conversation

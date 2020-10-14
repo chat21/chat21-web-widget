@@ -14,6 +14,7 @@ export class MessageAttachmentComponent implements OnInit {
   @Output() eventOpenAttachment = new EventEmitter<string>();
   @Output() eventClickOnAttachmentButton = new EventEmitter<any>();
   @Input() message: MessageModel;
+  @Input() isLastMessage: boolean;
   // ========= end:: Input/Output values ============//
 
   public type: string;

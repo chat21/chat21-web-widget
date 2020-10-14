@@ -199,38 +199,38 @@ export class MessagingService {
         //   attachment: {
         //     type: 'template',
         //     buttons: [
-                // {
-                //     type: 'action',
-                //     value: 'EXECUTE AN ACTION',
-                //     action: 'my-action-name',
-                //     show_reply: true
-                // },
-                // {
-                //   type: "url",
-                //   value: "SELF",
-                //   link: "http://www.tiledesk.com",
-                //   target: "self"
-                // },
-                // {
-                //   type: "url",
-                //   value: "PARENT",
-                //   link: "http://www.tiledesk.com",
-                //   target: "parent"
-                // },
-                // {
-                //   type: "url",
-                //   value: "BLANK",
-                //   link: "http://www.ietf.org",
-                //   target: "blank"
-                // }
-                // {
-                //   type: "text",
-                //   value: "REPLY ONE"
-                // },
-                // {
-                //     type: "text",
-                //     value: "REPLY TWO"
-                // }
+        //         {
+        //             type: 'action',
+        //             value: 'EXECUTE AN ACTION',
+        //             action: 'my-action-name',
+        //             show_reply: true
+        //         },
+        //         {
+        //           type: "url",
+        //           value: "SELF",
+        //           link: "http://www.tiledesk.com",
+        //           target: "self"
+        //         },
+        //         {
+        //           type: "url",
+        //           value: "PARENT",
+        //           link: "http://www.tiledesk.com",
+        //           target: "parent"
+        //         },
+        //         {
+        //           type: "url",
+        //           value: "BLANK",
+        //           link: "http://www.ietf.org",
+        //           target: "blank"
+        //         },
+        //         {
+        //           type: "text",
+        //           value: "REPLY ONE"
+        //         },
+        //         {
+        //             type: "text",
+        //             value: "REPLY TWO"
+        //         }
         //     ]
         //   }
         // };

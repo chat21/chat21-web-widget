@@ -1,7 +1,7 @@
 <div id="buttons-in-message">
   <div *ngFor="let button of buttons" class="div-button">
       <!-- <div class="alt">{{button.value}}</div> -->
-      <div *ngIf="button.type === 'text'" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">
+      <div *ngIf="button.type === 'text' && isLastMessage === true" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">
         {{button.value}}
       </div>
 
@@ -21,7 +21,7 @@
         <div class="clear"></div>
       </div> 
 
-      <div *ngIf="button.type === 'action'" #actionButton id="actionButton" class="button-in-msg {{button.type}}" (click)="actionButtonAction(button)" title="{{button.value}}">
+      <div *ngIf="button.type === 'action' && isLastMessage === true" #actionButton id="actionButton" class="button-in-msg {{button.type}}" (click)="actionButtonAction(button)" title="{{button.value}}">
         {{button.value}}
       </div> 
 

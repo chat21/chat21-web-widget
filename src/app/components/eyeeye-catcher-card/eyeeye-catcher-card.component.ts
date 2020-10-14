@@ -89,21 +89,22 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   }
 
   checkIsEmoji() {
-    let title = this.g.CALLOUT_TITLE_PLACEHOLDER;
+    let title = this.g.CALLOUT_TITLE_PLACEHOLDER.trim();
     if (this.g.calloutTitle && this.g.calloutTitle !== '') {
-      title = this.g.calloutTitle;
+      title = this.g.calloutTitle.trim();
     }
-    // console.log('checkIsEmoji calloutTitle:', title);
-    const fistChar = title.trim().charAt(0);
-    // console.log('fistChar: ', fistChar);
-    const isEm = isEmoji(fistChar);
-    // console.log('isEm: ', isEm);
-    if (isEm) {
-      this.emoticon = fistChar;
-      this.title = title.substring(1);
-    } else {
-      this.emoticon = null;
-      this.title = title;
+    this.title = title;
+    const emojiRegex = require('emoji-regex');
+    const regex = emojiRegex();
+    let match: any;
+    while (match = regex.exec(title)) {
+      const emoji = match[0];
+      // console.log(`Matched sequence ${ emoji } — code points: ${ [...emoji].length }`);
+      if (title.indexOf(emoji) === 0) {
+        this.title = title.replace(emoji, '');
+        this.emoticon = emoji;
+      }
+      break;
     }
   }
 
