@@ -125,7 +125,7 @@
             overflow: hidden;
             width: calc(100% - 40px);
             height: 100%;
-            padding: 4px 0px;
+            padding: 0px;
             vertical-align: middle;
             display: inline-table;
             position: absolute;
@@ -161,7 +161,7 @@
             overflow: hidden;
             width: calc(100% - 115px);
             height: 100%;
-            padding: 4px 0px;
+            padding: 0px;
             vertical-align: middle;
             display: inline-table;
             position: absolute;
@@ -201,8 +201,8 @@
     font-size: 15px;
     color: #3b3c40;
     display: block;
-    padding: 0px;
     margin: 0px;
+    padding: 10px 0 4px 0;
 }
 
 .eye-catcher-card-msg {
