@@ -1,5 +1,6 @@
 <div id="buttons-in-message">
-  <div *ngFor="let button of buttons" class="div-button">
+  
+  <span *ngFor="let button of buttons" class="div-button">
       <!-- <div class="alt">{{button.value}}</div> -->
       <div *ngIf="button.type === 'text' && isLastMessage === true" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">
         {{button.value}}
@@ -29,5 +30,5 @@
         
     </button> -->
 
-  </div>
+  </span>
 </div>

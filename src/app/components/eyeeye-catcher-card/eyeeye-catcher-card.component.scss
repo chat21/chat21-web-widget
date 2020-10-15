@@ -131,9 +131,9 @@
             position: absolute;
             top: 0;
             left: 0;
-            max-height: 60px;
+            // max-height: 60px;
             overflow: hidden;
-            line-height: 60px;
+            // line-height: 60px;
         }
 
         .eye-catcher_row {
@@ -167,9 +167,9 @@
             position: absolute;
             top: 0;
             left: 46px;
-            max-height: 60px;
+            // max-height: 60px;
             overflow: hidden;
-            line-height: 60px;
+            // line-height: 60px;
         }
     }
 }
@@ -189,7 +189,7 @@
     font-weight: normal;
     word-wrap: break-word;
     margin: 0px;
-    max-height: 60px;
+    // max-height: 60px;
     position: absolute;
     line-height: normal;
     top: 50%;
@@ -202,7 +202,7 @@
     color: #3b3c40;
     display: block;
     margin: 0px;
-    padding: 10px 0 4px 0;
+    padding: 0 0 4px 0;
 }
 
 .eye-catcher-card-msg {

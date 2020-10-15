@@ -253,7 +253,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                     <!-- message type:: button &&  -->
                                     <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 
                                         <tiledeskwidget-message-attachment 
-                                        style="height: 100%; min-height: 50px; display: block"
+                                        style="height: 100%; display: block;"
                                         [message]="message"
                                         [isLastMessage] = "isLastMessage(message.uid)"
                                         (eventOpenAttachment)="returnOpenAttachment($event)"

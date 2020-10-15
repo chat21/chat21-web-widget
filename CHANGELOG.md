@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.79
+- bug-fix: changed min-height buttons in message
+
 ### 4.0.78
 - bug-fix: bug css align callout left
 - bug-fix: bug css width line text on mobile device

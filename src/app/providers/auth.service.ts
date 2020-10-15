@@ -149,7 +149,7 @@ export class AuthService {
   /** */
   authenticationWithCustomToken(tiledeskToken: string) {
     const that = this;
-    this.g.wdLog(['authenticationWithCustomToken: ']);
+    this.g.wdLog(['tiledeskToken::: ', tiledeskToken]);
     if (tiledeskToken) {
       this.createFirebaseToken(tiledeskToken, this.g.projectid)
       .subscribe(firebaseToken => {
@@ -261,12 +261,14 @@ export class AuthService {
 
   /** */
   authenticateFirebaseCustomToken(token) {
-    this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken']);
+    this.g.wdLog(['1 - authService.authenticateFirebaseCustomToken', token]);
     this.g.firebaseToken = token;
     this.storageService.setItemWithoutProjectId('firebaseToken', token);
     const that = this;
+    // token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTYwMjc1ODU2MCwiZXhwIjoxNjAyNzYyMTYwLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1hMHIxNkBjaGF0MjEtcHJlLTAxLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstYTByMTZAY2hhdDIxLXByZS0wMS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Ijg0YWM2NGVmLTM3YzYtNDRkOS1iZjQzLWVlMzdkMGQ4NDViZCJ9.sRwWmaRRhmQJHt5KtFGoL5QNEOscouKjV9Gy_5yvTgRS0_hkRysmnsptzcIJn5yzDnPMI78reN_ZvZi-zmAUepmT08MaEW6rmn0A5gD5QlbsnAotok0nujIRqi_b7FCegBs29Ud4e436N6yo_kjtydWW9Or7NkMuOTDQHFLmCDr5l4AxapX0CdgOF32QD1L8xrRbQl0JpnZPhWqOZli6w-8Un4FSrpY7d4G6TJF6fIfGbhuruCAJTO1Zur42C0CU62mVEaUN42tvpagXTtzKDP9NFEv20bs4ti-_FIbruCGTRl2jeX51-BtmdTGGTMN6dKZ4bpcg9KA06GTfQcKaiw';
     firebase.auth().setPersistence(this.getFirebaseAuthPersistence()).then(function() {
       // Sign-out successful.
+      that.g.wdLog(['2 - authService.signInWithCustomToken', token]);
       firebase.auth().signInWithCustomToken(token)
       .then(function(response) {
         that.g.setParameter('signInWithCustomToken', true);
@@ -279,13 +281,18 @@ export class AuthService {
         that.obsLoggedUser.next(200);
       })
       .catch(function(error) {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          if (that.unsubscribe) {
-            that.unsubscribe();
-          }
-          that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', errorCode, errorMessage]);
-          that.signOut(-1);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode === 'auth/invalid-custom-token') {
+          alert('The token you provided is not valid.');
+        } else {
+          console.error(error);
+        }
+        // if (that.unsubscribe) {
+        //   that.unsubscribe();
+        // }
+        // that.g.wdLog(['authenticateFirebaseCustomToken ERROR: ', error]);
+        // that.signOut(-1);
       });
     })
     .catch(function(error) {
