@@ -301,8 +301,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // sponziello, commentato
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     // this.setAvailableAgentsStatus();
+    if (this.conversation) {
+      this.g.setParameter('activeConversation', this.conversation, true);
+    }
 
-    this.g.setParameter('activeConversation', this.conversation, true);
     // this.checkListMessages();
 
 
@@ -1504,12 +1506,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
-    this.g.setParameter('activeConversation', null, true);
+    this.g.setParameter('activeConversation', null, false);
     this.eventClose.emit();
   }
 
   returnCloseWidget() {
-    this.g.setParameter('activeConversation', null, true);
+    this.g.setParameter('activeConversation', null, false);
     this.eventCloseWidget.emit();
   }
 

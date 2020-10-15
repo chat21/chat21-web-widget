@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.80
+- bug-fix: activeConversation undefined in local storage
+
 ### 4.0.79
 - bug-fix: changed min-height buttons in message
 
