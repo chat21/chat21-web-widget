@@ -28,7 +28,7 @@ import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, search
 // Import the resized event model
 import { ResizedEvent } from 'angular-resize-event/resized-event';
 
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 import { AppComponent } from '../../app.component';
 import { StorageService } from '../../providers/storage.service';
@@ -918,7 +918,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.g.wdLog(['> Error :' + e]);
     }
   }
-
 
 
   // tslint:disable-next-line:max-line-length

@@ -136,6 +136,8 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     [src]="message.metadata.src" 
                                                     />
                                                 </div>
+
+                            
                                                 <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
                                                 [src]="message.metadata.src" [width]="getSizeImg(message).width"
                                                 [height]="getSizeImg(message).height" /> -->
@@ -202,6 +204,10 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     <img class="message-contentX message-content-imageX"
                                                     [src]="message.metadata.src" 
                                                     />
+                                                </div>
+
+                                                <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'width': message.metadata.width, 'height': message.metadata.height }">
+                                                    <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
                                                 </div>
                                                
 

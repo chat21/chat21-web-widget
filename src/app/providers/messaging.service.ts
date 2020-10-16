@@ -234,9 +234,21 @@ export class MessagingService {
         //     ]
         //   }
         // };
-        // messageText = '😀';
         const emoticon = that.checkIsEmoticon(messageText);
         // end SPONZIELLO PATCH
+        // ------------------------- //
+        // TEST
+        if (message['metadata'] && message['type'] === 'frame') {
+          if (!message['metadata'].height) {
+            message['metadata'].height = '200';
+            message['metadata'].width = '100%';
+          }
+          message['metadata'].src = that.bypassSecurityTrustResourceUrl(message['metadata'].src);
+        }
+
+        // message['metadata'] = metadata;
+        // message['type'] = 'frame';
+        // ------------------------- //
         const msg = new MessageModel(
           childSnapshot.key,
           message['language'],
@@ -264,6 +276,10 @@ export class MessagingService {
     });
   }
 
+  bypassSecurityTrustResourceUrl(url: string ) {
+    const src = this.sanitizer.bypassSecurityTrustResourceUrl( url );
+    return src;
+  }
 
   checkIsEmoticon(message: string) {
     this.g.wdLog(['> message.length :' + message.length]);
