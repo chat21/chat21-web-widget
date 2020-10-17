@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.82
+- bug-fix: markdown on received messages
+
 ### 4.0.81
 - new: added type message 'iframe'
 

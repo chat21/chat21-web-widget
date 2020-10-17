@@ -232,7 +232,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                         <!-- <div [innerHTML]="message.text | safeHtml"></div> 
                                                         [innerHTML]="printMessage(message, messageEl, this) | marked"-->
                                                         <!-- <p #messageEl class="message_innerhtml" >{{message.text}}</p> -->
-                                                        <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                        <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
 
                                                         <!-- <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p> -->
                                                         <!-- <p [innerHTML]="message.uid | linky"></p> -->
