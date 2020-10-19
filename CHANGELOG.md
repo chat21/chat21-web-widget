@@ -1,5 +1,11 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.83
+- bug-fix: markdown on send messages
+- bug-fix: icon on url message
+- bug-fix: css with markdown actived
+- bug-fix: max-width iframe
+
 ### 4.0.82
 - bug-fix: markdown on received messages
 

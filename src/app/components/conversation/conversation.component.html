@@ -127,7 +127,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                     <!-- message sender:: -->
                                     <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right">
                                     
-                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'auto'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
+                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'0 8px'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
 
                                             <!-- message type:: image -->
                                             <div>
@@ -149,7 +149,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     <ng-template #timeTooltipLeft>
                                                         <span>{{message.timestamp | amTimeAgo}}</span>
                                                     </ng-template>
-                                                    <p #messageEl class="message_innerhtml" [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+                                                    <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
                                                     <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
                                                         is ignored</div>
                                                     <ng-template #contentPopup>
@@ -206,7 +206,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                                     />
                                                 </div>
 
-                                                <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'width': message.metadata.width, 'height': message.metadata.height }">
+                                                <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'max-width': '100%', 'width': message.metadata.width, 'height': message.metadata.height }">
                                                     <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
                                                 </div>
                                                

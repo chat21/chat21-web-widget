@@ -5,9 +5,16 @@
     margin-bottom: 5px;
     height: auto;
 
+
     .div-button {
         display: inline-block;
+        .button-in-msg {
+            padding: 8px 16px!important;
+        }
     }
+
+    
+    
     
     // .button-success {
     //     background-color: white; 
@@ -52,7 +59,6 @@
     position: relative;
     max-width: 300px;
     min-width: inherit;
-    padding: 8px 16px;
     cursor: pointer;
     border: 1px solid rgb(42, 106, 193);
     border-radius: 20px;
@@ -67,12 +73,14 @@
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
     color: rgb(42, 106, 193);
+    line-height: 16px;
     // &:focus,
     // &:hover {
     //     color: white;
     //     background:  rgb(42, 106, 193);
     // }
 
+    
     &.text {
         // color: rgb(42, 106, 193);
         transition: background-color .6s ease;
