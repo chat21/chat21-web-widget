@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.84
+- bug-fix: align widget left/right mobile/desktop
+
 ### 4.0.83
 - bug-fix: markdown on send messages
 - bug-fix: icon on url message

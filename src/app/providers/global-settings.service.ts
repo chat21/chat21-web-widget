@@ -345,23 +345,18 @@ export class GlobalSettingsService {
      *
      */
     setCssIframe() {
+        // tslint:disable-next-line:max-line-length
+        this.globals.wdLog(['***************** setCssIframe *****************', this.globals.windowContext.document.getElementById('tiledeskdiv')]);
         const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskdiv');
         if (!divTiledeskiframe) {
             return;
         }
         if (this.globals.align === 'left') {
-            if (this.globals.isMobile === false) {
-                divTiledeskiframe.style.left =  this.globals.marginX;
-            } else {
-                divTiledeskiframe.style.left =  '0px';
-            }
-        } else if (this.globals.align === 'right') {
-            // console.log('this.globals.isMobile RIGHT' + this.globals.isMobile);
-            if (this.globals.isMobile === false) {
-                divTiledeskiframe.style.right =  this.globals.marginX;
-            } else {
-                divTiledeskiframe.style.right =  '0px';
-            }
+            divTiledeskiframe.classList.add('align-left');
+            divTiledeskiframe.style.left =  this.globals.marginX;
+        } else {
+            divTiledeskiframe.classList.add('align-right');
+            divTiledeskiframe.style.right =  this.globals.marginX;
         }
         if (this.globals.isMobile === false) {
             divTiledeskiframe.style.bottom =  this.globals.marginY;
@@ -431,7 +426,10 @@ export class GlobalSettingsService {
                 for (const key of Object.keys(variables)) {
                     if (key === 'align' && variables[key] === 'left') {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
-                        divWidgetContainer.style.left = '0';
+                        divWidgetContainer.style.left = '0!important';
+                    } else if (key === 'align' && variables[key] === 'right') {
+                        const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
+                        divWidgetContainer.style.right = '0!important';
                     }
                     if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
                         globals[key] = stringToBoolean(variables[key]);
@@ -565,15 +563,15 @@ export class GlobalSettingsService {
             // globals.setParameter('lang', TEMP);
         }
         TEMP = tiledeskSettings['align'];
-        // this.globals.wdLog(['15 - align:: ', TEMP);
+        this.globals.wdLog(['1 - align:: ', TEMP ]);
         if (TEMP !== undefined) {
             globals.align = TEMP;
-            // this.globals.wdLog(['15 - globals.align:: ', globals.align);
+            const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
             if (globals.align === 'left') {
-                const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
-                divWidgetContainer.style.left = '0';
+                divWidgetContainer.classList.add('align-left');
+            } else {
+                divWidgetContainer.classList.add('align-right');
             }
-            // globals.setParameter('align', TEMP);
         }
         TEMP = tiledeskSettings['marginX'];
         // this.globals.wdLog(['16 - marginX:: ', TEMP);
@@ -949,11 +947,14 @@ export class GlobalSettingsService {
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_align');
+        this.globals.wdLog(['2 - align:: ', TEMP ]);
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
+            const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
             if (globals.align === 'left') {
-                const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
-                divWidgetContainer.style.left = '0';
+                divWidgetContainer.classList.add('align-left');
+            } else {
+                divWidgetContainer.classList.add('align-right');
             }
         }
 

@@ -243,7 +243,7 @@ export class Globals {
     /** You can require customers to enter information like name and email
     before sending a chat message by enabling the Pre-Chat form. Permitted
     values: true, false. The default value is false. */
-    this.align = 'right';
+    this.align = '';
     /** if it is true, the chat window is automatically open when the
     widget is loaded. Permitted values: true, false. Default value : false */
     this.calloutTimer = -1;

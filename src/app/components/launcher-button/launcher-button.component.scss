@@ -38,5 +38,12 @@
 @media (max-width: 451px) {
     #c21-launcher-button {
         //display: none;
+        &.c21-align-right {
+            right: 0;
+        }
+        &.c21-align-left {
+            left: 0;
+        }
+        
     } 
 }
