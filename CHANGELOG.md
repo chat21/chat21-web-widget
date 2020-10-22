@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.85
+- bug-fix: width balloon message received
+
 ### 4.0.84
 - bug-fix: align widget left/right mobile/desktop
 
