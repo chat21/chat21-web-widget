@@ -5484,9 +5484,9 @@ only screen and (min-resolution:2dppx) {
         display: none
     }
     .navbar-brand {
-        background-image: url(logo-mobile.png);
-        width: 82px;
-        height: 34px;
+        background-image: url(logo-short.png);
+        width: auto;
+        max-height: 34px;
         margin-top: 6px
     }
     .content-box,
@@ -5511,8 +5511,8 @@ only screen and (max-width:768px) and (min-device-pixel-ratio:2),
 only screen and (max-width:768px) and (min-resolution:192dpi),
 only screen and (max-width:768px) and (min-resolution:2dppx) {
     .navbar-brand {
-        background-image: url(logo-mobile.png);
-        background-size: 82px 34px
+        background-image: url(logo-short.png);
+        background-size: 34px 34px
     }
 }
 

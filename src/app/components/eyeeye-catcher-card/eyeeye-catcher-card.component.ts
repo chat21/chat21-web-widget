@@ -74,12 +74,13 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   openEyeCatcher() {
       this.checkIsEmoji();
       const isOpen = this.g.isOpen;
-      // console.log('isOpen', isOpen);
+       console.log('calloutStaus ---------> ', this.g.calloutStaus);
       // console.log('this.g.isMobile', this.g.isMobile);
-      if (isOpen === false ) { // && this.g.isMobile === false
+      if (isOpen === false && this.g.calloutStaus) { // && this.g.isMobile === false
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
           this.g.setParameter('displayEyeCatcherCard', 'block');
+          this.g.setParameter('calloutStaus', false, true);
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           // this.rotateCalloutEmoticon();

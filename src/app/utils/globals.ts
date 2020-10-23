@@ -148,6 +148,7 @@ export class Globals {
    calloutTimer: number;
    calloutTitle: string;
    calloutMsg: string;
+   calloutStaus: boolean;
    userFullname: string;
    userEmail: string;
    widgetTitle: string;
@@ -253,6 +254,8 @@ export class Globals {
     this.calloutTitle = '';
     /** title box callout */
     this.calloutMsg = '';
+    /** stato callout (shown only first time) */
+    this.calloutStaus = true;
     /** message box callout */
     this.userFullname = '';
     /** userFullname: Current user fullname. Set this parameter to specify
@@ -438,7 +441,7 @@ export class Globals {
       'userEmail': this.userEmail, 'userPassword': this.userPassword,
       'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
       'isOpen': this.isOpen, 'channelType': this.channelType,
-      'lang': this.lang, 'calloutTimer': this.calloutTimer,
+      'lang': this.lang, 'calloutTimer': this.calloutTimer, 'calloutStaus': this.calloutStaus,
       'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
       'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
