@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.87
+- bug-fix: sound on new message
+
 ### 4.0.86
 - bug-fix: css logo and favicon in assets/twp/index.html
 - change: shown callout only the first time

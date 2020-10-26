@@ -342,9 +342,18 @@ export class ConversationsService {
    *
    */
   public checkIsSound(conversation) {
-    // console.log('conversation', conversation);
-    if (this.g.activeConversation && this.g.activeConversation.recipient !== conversation.recipient
-    && conversation.sender !== this.senderId && conversation.is_new === true) {
+    console.log('1 -- checkIsSound conversation', conversation);
+    console.log('1 -- checkIsSound this.g.activeConversation', this.g.activeConversation);
+    // console.log('1 -- checkIsSound this.g.activeConversation.recipient', this.g.activeConversation.recipient);
+    // console.log('1 -- checkIsSound conversation.recipient', conversation.recipient);
+    console.log('1 -- checkIsSound conversation.sender', conversation.sender);
+    console.log('1 -- checkIsSound this.senderId', this.senderId);
+    console.log('1 -- checkIsSound conversation.is_new', conversation.is_new);
+    if (!this.g.activeConversation ||
+        (this.g.activeConversation.recipient !== conversation.recipient
+        && conversation.sender !== this.senderId
+        && conversation.is_new === true)) {
+      console.log('sound-massege: ', conversation.timestamp);
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
       this.soundMessage(conversation.timestamp);
@@ -485,7 +494,9 @@ export class ConversationsService {
    * altrimenti -> SOUND
    */
   soundMessage(timestamp?) {
-    if (!isJustRecived(this.g.startedAt, timestamp)) {
+    this.g.wdLog(['****** soundMessage startedAt *****', this.g.startedAt.getTime()]);
+    this.g.wdLog(['****** soundMessage timestamp *****', timestamp]);
+    if (!isJustRecived(this.g.startedAt.getTime(), timestamp)) {
       return;
     }
 

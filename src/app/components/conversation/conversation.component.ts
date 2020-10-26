@@ -1580,7 +1580,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * altrimenti -> SOUND
    */
   soundMessage(timestamp?) {
-    if (!isJustRecived(this.g.startedAt, timestamp)) {
+    if (!isJustRecived(this.g.startedAt.getTime(), timestamp)) {
       return;
     }
     const isSoundActive = this.g.isSoundActive;

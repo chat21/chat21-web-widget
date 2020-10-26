@@ -375,7 +375,9 @@ export function getUnique(arr, comp) {
 
 export function isJustRecived(startedAt, time) {
   if (time > startedAt) {
+    this.g.wdLog(['messaggio ricevuto x la prima volta']);
     return true;
   }
+  this.g.wdLog(['messaggio già ricevuto']);
   return false;
 }
