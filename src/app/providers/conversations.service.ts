@@ -499,7 +499,6 @@ export class ConversationsService {
     if (!isJustRecived(this.g.startedAt.getTime(), timestamp)) {
       return;
     }
-
     if (this.g.isSoundActive === true)  {
       const that = this;
       this.audio = new Audio();

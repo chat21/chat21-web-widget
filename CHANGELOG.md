@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.88
+- bug-fix: Cannot read property 'g' of undefined
+
 ### 4.0.87
 - bug-fix: sound on new message
 
