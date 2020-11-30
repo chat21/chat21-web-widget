@@ -1,5 +1,9 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.89
+- bug-fix: new message on startFromHome false only when chat is opened
+- change: disabled soundMessage
+
 ### 4.0.88
 - bug-fix: Cannot read property 'g' of undefined
 

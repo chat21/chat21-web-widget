@@ -164,7 +164,7 @@ export class Globals {
    logoChat: string;
    welcomeTitle: string;
    welcomeMsg: string;
-   recipientId: String;
+   recipientId: string;
    newConversationStart: boolean;
    recipientFullname: String;
    userId: string;

@@ -118,7 +118,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     window.tiledesk.on('onNewConversation', function(event_data) {
         // console.log("test-custom-auth.html onNewConversation >>>",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
-        // console.log(">>>> tiledeskToken >>>> ",window.tiledesk.angularcomponent.component.g);
+        // console.log(">>>> tiledeskToken >>>> ",event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid);
         if(tiledeskToken) {
           var httpRequest = createCORSRequest('POST', event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid+'/events',true); //set async to false because loadParams must return when the get is complete
           httpRequest.setRequestHeader('Content-type', 'application/json');

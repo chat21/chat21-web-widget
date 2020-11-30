@@ -645,30 +645,39 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenAllConversation = false;
         const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
         this.g.wdLog([' ============ idConversation ===============', conversationActive ]);
+        // this.g.recipientId = null;
         if (conversationActive) {
-            // this.g.recipientId = conversationActive.recipient;
+            // console.log('77777');
+            this.g.recipientId = conversationActive.recipient;
             this.returnSelectedConversation(conversationActive);
         } else if (this.g.startFromHome) {
+            // console.log('66666');
             this.isOpenConversation = false;
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenSelectionDepartment = false;
         } else if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
+            // console.log('55555');
             this.g.setParameter('isOpenPrechatForm', true);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
             if (departments.length > 1 && this.g.departmentID == null) {
+                // console.log('44444');
                 this.isOpenSelectionDepartment = true;
             }
         } else {
+            // console.log('33333');
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
             if (departments.length > 1 && !this.g.departmentID == null) {
+                // console.log('22222');
                 this.isOpenSelectionDepartment = true;
             } else {
-                this.isOpenConversation = true;
-                if (!this.g.recipientId) {
-                    this.startNwConversation();
+                // console.log('11111', this.g.isOpen, this.g.recipientId);
+                this.isOpenConversation = false;
+                if (!this.g.recipientId && this.g.isOpen) {
+                    //this.startNwConversation();
+                    this.openNewConversation();
                 }
             }
         }
@@ -1108,7 +1117,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isInitialized = true;
             this.storageService.setItem('isOpen', 'true');
             // this.g.displayEyeCatcherCard = 'none';
-
             this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
         }
@@ -1256,11 +1264,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     startNwConversation() {
         this.g.wdLog(['AppComponent::startNwConversation']);
         const newConvId = this.generateNewUidConversation();
-        // if (this.g.newConversationStart === true) {
-        // }
         this.g.setParameter('recipientId', newConvId);
-        this.triggerNewConversationEvent(newConvId);
         this.g.wdLog([' recipientId: ', this.g.recipientId]);
+        this.triggerNewConversationEvent(newConvId);
     }
 
 
@@ -1272,6 +1278,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // tslint:disable-next-line:max-line-length
         const onNewConversation = new CustomEvent('onNewConversation', { detail: { global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs } });
         const windowContext = this.g.windowContext;
+
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
             this.g.windowContext = windowContext;
@@ -1304,7 +1311,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     openCloseWidget($event) {
         this.g.setParameter('displayEyeCatcherCard', 'none');
+        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        // console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
         if ( this.g.isOpen === true ) {
+            if (!conversationActive && !this.g.startFromHome) {
+                this.isOpenHome = false;
+                this.isOpenConversation = true;
+                this.startNwConversation();
+            } else if (conversationActive) {
+                this.isOpenHome = false;
+                this.isOpenConversation = true;
+            }
+            this.g.startFromHome = true;
             this.triggerOnOpenEvent();
         } else {
             this.triggerOnCloseEvent();
@@ -1378,9 +1396,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnSelectedConversation($event) {
         if ($event) {
-            if (this.g.isOpen === false) {
-                this.f21_open();
-            }
+            // if (this.g.isOpen === false) {
+            //     this.f21_open();
+            // }
             this.conversationSelected = $event;
             this.g.setParameter('recipientId', $event.recipient);
             this.isOpenConversation = true;
@@ -1753,5 +1771,44 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
     // }
     // ============ end: functions pass values to external ============//
+
+    private openNewConversation() {
+        this.g.wdLog(['openNewConversation in APP COMPONENT']);
+        this.g.newConversationStart = true;
+       // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
+       // altrimenti mostro modale dipartimenti
+       const preChatForm = this.g.preChatForm;
+       const attributes = this.g.attributes;
+       const departments = this.g.departments;
+
+       // that.g.wdLog(['departments: ', departments, departments.length);
+       if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
+           // if (preChatForm && (!attributes.userFullname || !attributes.userEmail)) {
+           this.isOpenConversation = false;
+           this.g.setParameter('isOpenPrechatForm', true);
+           // this.settingsSaverService.setVariable('isOpenPrechatForm', true);
+           this.isOpenSelectionDepartment = false;
+           if (departments && departments.length > 1 && this.g.departmentID == null) {
+               this.isOpenSelectionDepartment = true;
+           }
+       } else {
+           // this.g.isOpenPrechatForm = false;
+           this.g.setParameter('isOpenPrechatForm', false);
+           // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
+           this.isOpenConversation = false;
+           this.isOpenSelectionDepartment = false;
+           if (departments && departments.length > 1 && this.g.departmentID == null) {
+               this.isOpenSelectionDepartment = true;
+           } else {
+               this.isOpenConversation = true;
+           }
+       }
+
+       this.g.wdLog(['isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment]);
+       if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+           this.startNwConversation();
+       }
+   }
+
 
 }

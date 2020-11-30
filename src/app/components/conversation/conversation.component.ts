@@ -102,7 +102,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isNewConversation = true;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
-  recipient_fullname: String;
+  recipient_fullname: string;
   // attributes: any;
   // GUEST_LABEL = '';
 
@@ -192,7 +192,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    this.g.wdLog([' --------ngAfterViewInit--------AAAAAA ', this.g.recipientId]);
     // this.storageService.setItem('activeConversation', this.conversation.uid);
     // --------------------------- //
     // after animation intro
@@ -301,6 +301,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // sponziello, commentato
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     // this.setAvailableAgentsStatus();
+    this.g.wdLog([' ---------------- 6: activeConversation ------------------- ', this.conversation]);
     if (this.conversation) {
       this.g.setParameter('activeConversation', this.conversation, true);
     }
@@ -308,11 +309,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.checkListMessages();
 
 
-    try {
+    if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
-      // this.urlAudiorepo = this.g.customAttributes.url_audiorepo;
-    } catch (error) {
-      this.g.wdLog(['> Error is handled attributes: ', error]);
     }
 
     // try {
@@ -470,7 +468,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private setConversation() {
     const recipientId = this.g.recipientId;
     const channelType = this.g.channelType;
-    this.g.wdLog(['setConversation recipientId: ', recipientId, channelType]);
+    this.g.wdLog(['setConversation recipientId::: ', recipientId, channelType]);
     if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
     if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
@@ -513,7 +511,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const senderId = this.g.senderId;
       const tenant = this.g.tenant;
       const channelType = this.g.channelType;
-
+      if (!this.conversationWith && this.g.recipientId) {
+        this.conversationWith = this.g.recipientId;
+      }
+      // console.log('connectConversation -- >: ', senderId, tenant, channelType, this.conversationWith, this.g.recipientId);
       this.messagingService.initialize( senderId, tenant, channelType );
       this.messagingService.initWritingMessages(this.conversationWith);
       this.messagingService.getWritingMessages();
@@ -523,7 +524,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
       // this.scrollToBottomStart();
-
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
   }
@@ -603,7 +603,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       that.g.wdLog(['Subscription NEW MSG', newMessage]);
       const senderId = that.g.senderId;
       if ( that.startScroll || newMessage.sender === senderId) {
-        that.g.wdLog(['1-------']);
+        that.g.wdLog(['*A 1-------']);
         setTimeout(function () {
           that.scrollToBottom();
         }, 200);
@@ -611,15 +611,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
-          that.g.wdLog(['2-------']);
+          that.g.wdLog(['*A2-------']);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.scrollToBottom();
           }, 0);
         } else {
-          that.g.wdLog(['3-------']);
+          that.g.wdLog(['*A3-------']);
           that.NUM_BADGES++;
-          that.soundMessage(newMessage.timestamp);
+          // that.soundMessage(newMessage.timestamp);
         }
       }
 
@@ -1505,12 +1505,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
+    this.storageService.removeItem('activeConversation');
     this.g.setParameter('activeConversation', null, false);
     this.eventClose.emit();
   }
 
   returnCloseWidget() {
-    this.g.setParameter('activeConversation', null, false);
+    //this.g.setParameter('activeConversation', null, false);
     this.eventCloseWidget.emit();
   }
 
@@ -1553,7 +1554,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-    this.storageService.removeItem('activeConversation');
+    //this.storageService.removeItem('activeConversation');
     this.unsubscribe();
   }
 
@@ -1662,7 +1663,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** */
   private actionButton(event: any) {
-    console.log(event);
+    // console.log(event);
     const action = event.action ? event.action : '';
     const message = event.value ? event.value : '';
     const subtype = event.show_reply ?  '' : 'info';
@@ -1678,7 +1679,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= START:: TRIGGER FUNCTIONS ============//
   private onNewConversationComponentInit() {
+    this.g.wdLog([' ---------------- onNewConversationComponentInit -------------- ']);
     this.setConversation();
+    // this.connectConversation();
+
     // console.log('onNewConversationComponentInit: ' + this.conversationWith);
     const newConvId = this.conversationWith;
     const default_settings = this.g.default_settings;
@@ -1710,7 +1714,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         const domRepresentation = document.getElementsByClassName('chat-tooltip');
         if (domRepresentation) {
           const item = domRepresentation[0] as HTMLInputElement;
-          console.log(item);
+          // console.log(item);
           if (!item.classList.contains('tooltip-show')) {
             item.classList.add('tooltip-show');
           }

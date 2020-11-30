@@ -121,8 +121,8 @@ export class MessagingService {
    * genero un uid univoco
    * da passare al servizio ogni volta che invio un msg
    */
-  connect(conversationWith) {
-    this.g.wdLog(['***** connect MessagingService *****']);
+  connect(conversationWith: string) {
+    this.g.wdLog(['***** connect MessagingService *****', conversationWith]);
     this.checkRemoveConversation(conversationWith);
     this.checkMessages(conversationWith);
   }
@@ -135,6 +135,7 @@ export class MessagingService {
     const urlMessages = this.urlMessages + conversationWith;
     const firebaseMessages = firebase.database().ref(urlMessages);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
+    this.g.wdLog(['checkMessages *****', urlMessages]);
     this.subscriptionsToMessages();
   }
 

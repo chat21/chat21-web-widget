@@ -356,7 +356,7 @@ export class ConversationsService {
       console.log('sound-massege: ', conversation.timestamp);
       // const badge = (conversation.is_new) ? 1 : 0;
       // that.updateBadge(conversation, badge);
-      this.soundMessage(conversation.timestamp);
+      // this.soundMessage(conversation.timestamp);
     }
   }
 
