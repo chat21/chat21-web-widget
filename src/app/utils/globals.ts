@@ -166,7 +166,7 @@ export class Globals {
    welcomeMsg: string;
    recipientId: string;
    newConversationStart: boolean;
-   recipientFullname: String;
+   recipientFullname: string;
    userId: string;
    userPassword: string;
    userToken: string;

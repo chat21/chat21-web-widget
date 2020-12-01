@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.90
+- bug-fix: save new conversation in local storage
+
 ### 4.0.89
 - bug-fix: new message on startFromHome false only when chat is opened
 - change: disabled soundMessage

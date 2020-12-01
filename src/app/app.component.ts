@@ -676,7 +676,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // console.log('11111', this.g.isOpen, this.g.recipientId);
                 this.isOpenConversation = false;
                 if (!this.g.recipientId && this.g.isOpen) {
-                    //this.startNwConversation();
+                    // this.startNwConversation();
                     this.openNewConversation();
                 }
             }

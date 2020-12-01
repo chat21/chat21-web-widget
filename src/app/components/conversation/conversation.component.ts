@@ -194,6 +194,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.isShowSpinner();
     this.g.wdLog([' --------ngAfterViewInit--------AAAAAA ', this.g.recipientId]);
     // this.storageService.setItem('activeConversation', this.conversation.uid);
+    
     // --------------------------- //
     // after animation intro
     setTimeout(() => {
@@ -472,7 +473,30 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
     if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
+    if (!this.conversation) {
+      this.conversation = new ConversationModel(
+        recipientId,
+        {},
+        channelType,
+        true,
+        '',
+        recipientId,
+        this.g.recipientFullname,
+        this.g.senderId,
+        this.g.userFullname,
+        '0',
+        0,
+        TYPE_MSG_TEXT,
+        '',
+        '',
+        '',
+        '',
+        0,
+        false
+        );
+    }
   }
+
 
   /**
    *
