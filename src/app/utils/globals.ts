@@ -158,6 +158,7 @@ export class Globals {
    themeForegroundColor: string;
    themeColor50: string;
    colorGradient: string;
+   colorGradient180: string;
    showWidgetNameInConversation: boolean;
    allowTranscriptDownload: boolean;
    poweredBy: string;
@@ -462,6 +463,7 @@ export class Globals {
   setColorWithGradient() {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
+    this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
 }
 
   /**

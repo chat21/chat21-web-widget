@@ -25,6 +25,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   userEmail: string;
   // ========= end:: component variables ======= //
 
+  colorBck: string;
+
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
@@ -38,6 +40,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   }
 
   initialize() {
+    this.colorBck = '#000000';
     this.preChatFormGroup = this.createForm(this.formBuilder);
     if (this.preChatFormGroup) {
       this.subcribeToFormChanges();

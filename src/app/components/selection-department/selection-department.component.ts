@@ -27,6 +27,8 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     // projectid: string;
     // ========= end:: component variables ======= //
 
+    colorBck:string;
+
     constructor(
         private el: ElementRef,
         public g: Globals,
@@ -37,6 +39,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
+        this.colorBck = '#000000';
         if ( this.g.departments && this.g.departments.length > 0 ) {
             if (this.g.windowContext && this.g.windowContext.tiledesk && this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
                 this.departments = this.g.departments;

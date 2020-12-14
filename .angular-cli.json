@@ -20,7 +20,8 @@
         "launch.js",
         "iframe-style.css",
         "firebase-config.json",
-        "widget-config-template.json"
+        "widget-config-template.json",
+        "widget-config.json"
       ],
       "index": "index.html",
       "main": "main.ts",

@@ -59,6 +59,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.step = 0;
+    this.colorBck = '#000000';
   }
 
   dowloadTranscript() {

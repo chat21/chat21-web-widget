@@ -48,6 +48,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
 
   tenant = '';
   themeColor = '';
+  colorBck = '';
   themeForegroundColor = '';
   LABEL_START_NW_CONV: string;
   // ========= end:: variabili del componente ======== //
@@ -84,6 +85,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     this.archivedConversations = [];
     this.allConversations = [];
 
+    this.colorBck = '#000000';
 
     this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant]);

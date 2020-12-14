@@ -94,6 +94,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   userFullname: string;
   preChatForm = false;
   themeColor50: string;
+  colorBck: string;
   textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
@@ -171,6 +172,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit() {
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
+    this.colorBck = '#000000';
     const that = this;
     const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
       this.ngZone.run(() => {
