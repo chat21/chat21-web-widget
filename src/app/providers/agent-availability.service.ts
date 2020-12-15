@@ -5,7 +5,7 @@
 
 import { Injectable } from '@angular/core';
 import { User } from '../../models/User';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';

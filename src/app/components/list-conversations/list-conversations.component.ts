@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 // services
 import { ConversationsService } from '../../providers/conversations.service';
 import { Globals } from '../../utils/globals';

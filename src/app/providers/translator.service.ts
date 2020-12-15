@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../environments/environment';
 
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Globals } from '../utils/globals';

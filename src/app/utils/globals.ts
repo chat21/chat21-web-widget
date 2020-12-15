@@ -10,7 +10,7 @@ import { detectIfIsMobile, convertColorToRGBA, getParameterByName, setColorFromS
 
 import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 // import { TemplateBindingParseResult } from '@angular/compiler';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 // import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
 import { ConversationModel } from '../../models/conversation';

@@ -10,8 +10,8 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { DepartmentModel } from '../../models/department';
 // models

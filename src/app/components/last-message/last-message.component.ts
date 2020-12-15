@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, OnDestroy, AfterViewInit, NgZone, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 // services
 import { Globals } from '../../utils/globals';
 import { MessageModel } from '../../../models/message';

@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Http, Headers, RequestOptions } from '@angular/http';

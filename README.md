@@ -125,3 +125,16 @@ docker run -p 4200:80 --env-file .env chat21/chat21-web-widget
 
 ```
 
+
+
+
+
+
+ng update @angular/cli --migrate-only --from=1.7.1
+
+npm i rxjs-tslint
+node_modules/.bin/rxjs-5-to-6-migrate -p src/tsconfig.app.json 
+
+
+    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular-devkit/build-angular": "^0.1100.4",

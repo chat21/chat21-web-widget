@@ -1,7 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 // services
 import { Globals } from '../utils/globals';
 import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
@@ -673,6 +673,7 @@ export class GlobalSettingsService {
             globals.isShown = (TEMP === true) ? true : false;
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
+        // nn documentato
         TEMP = tiledeskSettings['filterByRequester'];
         // this.globals.wdLog(['34 - filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
@@ -698,19 +699,23 @@ export class GlobalSettingsService {
             globals.showLogoutOption = (TEMP === true) ? true : false;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
+
+        // nn documentato
         TEMP = tiledeskSettings['showWidgetNameInConversation'];
         // this.globals.wdLog(['39 - showWidgetNameInConversation:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showWidgetNameInConversation = (TEMP === true) ? true : false;
             // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
         }
-
+        
+        // nn documentato
         TEMP = tiledeskSettings['customAttributes'];
         if (TEMP !== undefined) {
             this.globals.wdLog(['40 - customAttributes:: ', TEMP]);
             globals.customAttributes = TEMP;
         }
 
+        // nn documentato
         TEMP = tiledeskSettings['startMessage'];
         if (TEMP !== undefined) {
             this.globals.wdLog(['40 - startMessage:: ', TEMP]);
@@ -722,11 +727,13 @@ export class GlobalSettingsService {
             globals.showAttachmentButton = (TEMP === true) ? true : false;
         }
 
+        // nn documentato
         TEMP = tiledeskSettings['showAllConversations'];
         if (TEMP !== undefined) {
             globals.showAllConversations = (TEMP === true) ? true : false;
         }
 
+        // nn documentato
         TEMP = tiledeskSettings['privacyField'];
         if (TEMP !== undefined) {
             this.globals.wdLog(['privacyField:: ', TEMP]);

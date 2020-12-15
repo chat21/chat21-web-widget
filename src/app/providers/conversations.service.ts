@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {from } from 'rxjs/observable/from';
+import {from } from 'rxjs';
 
 // firebase
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 // services
 import { Globals } from '../utils/globals';

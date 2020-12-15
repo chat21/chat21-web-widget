@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Globals } from '../utils/globals';
 import { Headers, Http } from '@angular/http';
 import { AppConfigService } from '../providers/app-config.service';
