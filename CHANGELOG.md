@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### branch master - untagged
+- Updated Firebase dependency to 7.24.0
+
 ### 4.0.90
 - bug-fix: save new conversation in local storage
 
@@ -17,7 +20,7 @@
 - bug-fix: css logo and favicon in assets/twp/index.html
 - change: shown callout only the first time
 
-### 4.0.85
+### 4.0.85 -> Cloud Production
 - bug-fix: width balloon message received
 
 ### 4.0.84
