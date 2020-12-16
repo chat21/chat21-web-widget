@@ -2,6 +2,7 @@
 
 ### branch master - untagged
 - Updated Firebase dependency to 7.24.0
+- Started development to support callback for events and method (see file test-callbackbased-methods-events.html) 
 
 ### 4.0.90
 - bug-fix: save new conversation in local storage
