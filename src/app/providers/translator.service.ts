@@ -30,7 +30,7 @@ export class TranslatorService {
     public appConfigService: AppConfigService
   ) {
 
-    let windowContext = window;
+    let windowContext; //= window;
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
       windowContext = window.parent;
     }
@@ -121,19 +121,19 @@ export class TranslatorService {
         // I18N File loaded successfully, we can proceed
         // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
         // console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
-        if (!data._body || data._body === undefined || data._body === '') {
-          browserLang = defaultLanguage;
-          this.g.lang = defaultLanguage;
-          this._translate.use(defaultLanguage);
-          // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
-          this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((defaultdata) => {
-            // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, defaultdata);
-            this.translateWithBrowserLang(defaultdata['_body'], browserLang);
-          });
-        } else {
-          // console.log(`»»»» translateWithBrowserLang '${browserLang}' language.'`);
-          this.translateWithBrowserLang(data._body, browserLang);
-        }
+        // if (!data._body || data._body === undefined || data._body === '') {
+        //   browserLang = defaultLanguage;
+        //   this.g.lang = defaultLanguage;
+        //   this._translate.use(defaultLanguage);
+        //   // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
+        //   this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((defaultdata) => {
+        //     // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, defaultdata);
+        //     this.translateWithBrowserLang(defaultdata['_body'], browserLang);
+        //   });
+        // } else {
+        //   // console.log(`»»»» translateWithBrowserLang '${browserLang}' language.'`);
+        //   this.translateWithBrowserLang(data._body, browserLang);
+        // }
       }, (error) => {
         console.log(`»»»» initI18n Get '${browserLang}' language - ERROR `, error);
       }, () => {

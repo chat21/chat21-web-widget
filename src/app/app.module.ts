@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
+// import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
@@ -104,7 +104,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     // AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     // AngularFirestoreModule,
     BrowserAnimationsModule,
-    HttpModule,
+    // HttpModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -117,31 +117,31 @@ const appInitializerFn = (appConfig: AppConfigService) => {
      }),
     MomentModule,
     AngularResizedEventModule,
-    TranslateModule.forRoot(),
+     TranslateModule.forRoot(),
     TooltipModule
   ],
   providers: [
-    AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInitializerFn,
-      multi: true,
-      deps: [AppConfigService]
-    },
-    AuthService,
-    MessagingService,
-    Globals,
-    GlobalSettingsService,
-    SettingsSaverService,
-    ConversationsService,
-    UploadService,
-    ContactService,
-    StarRatingWidgetService,
-    AgentAvailabilityService,
-    TranslatorService,
-    ChatPresenceHandlerService,
-    StorageService,
-    WaitingService
+    // AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: appInitializerFn,
+    //   multi: true,
+    //   deps: [AppConfigService]
+    // },
+    // AuthService,
+    // MessagingService,
+    // Globals,
+    // GlobalSettingsService,
+    // SettingsSaverService,
+    // ConversationsService,
+    // UploadService,
+    // ContactService,
+    // StarRatingWidgetService,
+    // AgentAvailabilityService,
+    // TranslatorService,
+    // ChatPresenceHandlerService,
+    // StorageService,
+    // WaitingService
   ],
   bootstrap: [AppComponent]
 })

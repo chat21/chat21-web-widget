@@ -138,3 +138,9 @@ node_modules/.bin/rxjs-5-to-6-migrate -p src/tsconfig.app.json
 
     "@angular-devkit/build-angular": "~0.13.0",
     "@angular-devkit/build-angular": "^0.1100.4",
+
+
+ng update @angular/cli @angular/core --force
+
+npm i -D typescript@4.0.5
+
