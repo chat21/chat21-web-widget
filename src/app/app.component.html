@@ -15,7 +15,7 @@
         <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
             <!-- [class.active]="true" -->
             <tiledeskwidget-home 
-            [senderId]="senderId"
+            [listConversations]="listConversations"
             (eventClose)="returnCloseWidget()" 
             (eventNewConv)="returnNewConversation()" 
             (eventSelctedConv)="returnSelectedConversation($event)"

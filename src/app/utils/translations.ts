@@ -1,5 +1,6 @@
 // 'LABEL_START_NW_CONV' : 'START A NEW CONVERSATION',
 export const en = {
+    'LABEL_TU': 'you ',
     'LABEL_PLACEHOLDER': 'type your message..',
     'LABEL_START_NW_CONV': 'New conversation',
     'LABEL_FIRST_MSG': 'Describe shortly your problem, you will be contacted by an agent.',

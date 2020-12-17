@@ -165,6 +165,7 @@ export class TranslatorService {
     // this.setLanguage(globals.windowContext, globals.lang);
 
     const labels: string[] = [
+      'LABEL_TU',
       'LABEL_PLACEHOLDER',
       'LABEL_START_NW_CONV',
       'LABEL_FIRST_MSG',
@@ -217,6 +218,7 @@ export class TranslatorService {
 
     this._translate.get(labels).subscribe(res => {
       // console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
+      globals.LABEL_TU = res['LABEL_TU']
       globals.LABEL_PLACEHOLDER = res['LABEL_PLACEHOLDER']
       globals.LABEL_START_NW_CONV = res['LABEL_START_NW_CONV'];
       globals.LABEL_FIRST_MSG = res['LABEL_FIRST_MSG'];

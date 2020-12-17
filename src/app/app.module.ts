@@ -24,7 +24,8 @@ import { MomentModule } from 'angular2-moment';
 import { LinkyModule } from 'angular-linky';
 import { AngularResizedEventModule } from 'angular-resize-event';
 
-
+//config
+import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE } from '../../src/chat21-core/utils/constants';
 // utils
 import { Globals } from './utils/globals';
 
@@ -47,10 +48,21 @@ import { TranslatorService } from './providers/translator.service';
 import { WaitingService } from './providers/waiting.service';
 import { AppConfigService } from './providers/app-config.service';
 
+import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
+import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
+import { ConversationHandlerService } from '../chat21-core/providers/abstract/conversation-handler.service';
+import { FirebaseConversationsHandler } from '../chat21-core/providers/firebase/firebase-conversations-handler';
+import { FirebaseConversationHandler } from '../chat21-core/providers/firebase/firebase-conversation-handler';
+import { FirebaseConversationHandlerBuilderService } from '../chat21-core/providers/firebase/firebase-conversation-handler-builder.service';
+// import { DatabaseProvider } from '../chat21-core/providers/database';
+import { ChatManager } from './../chat21-core/providers/chat-manager';
+import { CustomTranslateService } from './../chat21-core/providers/custom-translate.service';
+
+
 
 // components
 import { SelectionDepartmentComponent } from './components/selection-department/selection-department.component';
-import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
+import { HomeConversationsComponent } from './components/home-conversations/home-conversations.component';
 import { HomeComponent } from './components/home/home.component';
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
@@ -64,8 +76,17 @@ import { StarRatingWidgetComponent } from './components/star-rating-widget/star-
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { LastMessageComponent } from './components/last-message/last-message.component';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MarkedPipe } from './directives/marked.pipe';
+import { ActivatedRoute } from '@angular/router';
+import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
+import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
+
+// FACTORIES
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -75,6 +96,43 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
+export function authenticationFactory(http: HttpClient, route: ActivatedRoute) {
+  console.log('authenticationFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseAuthService(http, route);
+  } else {
+    return new FirebaseAuthService(http, route);
+  }
+}
+
+export function conversationsHandlerFactory() {
+  console.log('conversationsHandlerFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseConversationsHandler();
+  } else {
+    return new FirebaseConversationsHandler();
+  }
+}
+
+export function conversationHandlerBuilderFactory() {
+  console.log('conversationHandlerBuilderFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseConversationHandlerBuilderService();
+  } else {
+    return new FirebaseConversationHandlerBuilderService();
+  }
+}
+
+export function conversationHandlerFactory() {
+  console.log('conversationHandlerBuilderFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseConversationHandler();
+  } else {
+    return new FirebaseConversationHandler();
+  }
+}
+
+
 
 @NgModule({
   declarations: [
@@ -83,7 +141,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     UserProfileComponent,
     StarRatingWidgetComponent,
     SelectionDepartmentComponent,
-    ListConversationsComponent,
+    HomeConversationsComponent,
     HomeComponent,
     LauncherButtonComponent,
     ConversationComponent,
@@ -94,7 +152,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     ListAllConversationsComponent,
     MessageAttachmentComponent,
     LastMessageComponent,
-    MarkedPipe
+    MarkedPipe,
+    ListConversationsComponent
   ],
   imports: [
     BrowserModule,
@@ -117,7 +176,13 @@ const appInitializerFn = (appConfig: AppConfigService) => {
      }),
     MomentModule,
     AngularResizedEventModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    }),
     TooltipModule
   ],
   providers: [
@@ -127,6 +192,31 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
+    },
+    // {
+    //   provide: AuthService,
+    //   useFactory: authenticationFactory,
+    //   deps: [HttpClient, ActivatedRoute, Chat21Service]
+    //  },
+    {
+      provide: AuthService,
+      useFactory: authenticationFactory,
+      deps: [HttpClient, ActivatedRoute]
+    },
+    {
+      provide: ConversationsHandlerService,
+      useFactory: conversationsHandlerFactory,
+      deps: []
+    },
+    {
+      provide: ConversationHandlerBuilderService,
+      useFactory: conversationHandlerBuilderFactory,
+      deps: []
+    },
+    {
+      provide: ConversationHandlerService,
+      useFactory: conversationHandlerFactory,
+      deps: []
     },
     AuthService,
     MessagingService,
@@ -141,7 +231,10 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TranslatorService,
     ChatPresenceHandlerService,
     StorageService,
-    WaitingService
+    WaitingService,
+    //chat21-core
+    CustomTranslateService,
+    ChatManager
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,4 @@
+import { ConversationHandlerService } from 'src/app/services/abstract/conversation-handler.service';
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
@@ -12,12 +13,11 @@ import { Globals } from './utils/globals';
 
 
 // import { AuthService } from './core/auth.service';
-import { AuthService } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ContactService } from './providers/contact.service';
 import { StorageService } from './providers/storage.service';
 import { TranslatorService } from './providers/translator.service';
-import { ConversationsService } from './providers/conversations.service';
+//import { ConversationsService } from './providers/conversations.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 
@@ -30,12 +30,18 @@ import { environment } from '../environments/environment';
 // setLanguage,
 // getImageUrlThumb,
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage } from './utils/utils';
-import { ConversationModel } from '../models/conversation';
+import { ConversationModel } from '../chat21-core/models/conversation';
 import { AppConfigService } from './providers/app-config.service';
 
 
 import { GlobalSettingsService } from './providers/global-settings.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
+import { User } from '../models/User';
+import { CustomTranslateService } from '../chat21-core/providers/custom-translate.service';
+import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
+import { ChatManager } from '../chat21-core/providers/chat-manager';
+import { AuthService } from './providers/auth.service';
+
 
 // import { TranslationLoader } from './translation-loader';
 
@@ -79,6 +85,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     subscriptions: Subscription[] = []; /** */
     // ========= end:: sottoscrizioni ======= //
 
+    // ========= begin:: variabili del componente ======= //
+    listConversations: Array<ConversationModel>;
+    // ========= end:: variabili del componente ======== //
 
     // ========= begin:: DA SPOSTARE ======= //
     IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
@@ -92,6 +101,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         private ngZone: NgZone,
         public g: Globals,
         public translatorService: TranslatorService,
+        private translateService: CustomTranslateService,
         public authService: AuthService,
         public messagingService: MessagingService,
         public contactService: ContactService,
@@ -101,7 +111,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public appConfigService: AppConfigService,
         public globalSettingsService: GlobalSettingsService,
         public settingsSaverService: SettingsSaverService,
-        public conversationsService: ConversationsService
+        //public conversationsService: ConversationsService,
+        public conversationsHandlerService: ConversationsHandlerService,
+        public chatManager: ChatManager,
     ) {
         // that.g.wdLog(["Initializing app.component...")
         // that.g.wdLog(["THIS.G (IN CONSTRUCTOR) : " , this.g);
@@ -129,18 +141,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.triggerOnViewInit();
         this.ngZone.run(() => {
             const that = this;
-            const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
+            const subChangedConversation = this.conversationsHandlerService.conversationsChanged.subscribe((conversation) => {
                 that.ngZone.run(() => {
                     if ( that.g.isOpen === false && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
-                        that.triggerOnChangedConversation(conversation);
+                        //TODO-GAB: riabilitare dpo
+                        //that.triggerOnChangedConversation(conversation);
                         that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
                     }
                 });
             });
-            this.authService.initialize();
+            //this.authService.initialize();
             this.subscriptions.push(subChangedConversation);
         });
+        this.authService.initialize();
+        this.chatManager.initialize();
     }
 
     // ========= begin:: SUBSCRIPTIONS ============//
@@ -257,6 +272,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 // that.triggerOnAuthStateChanged();
             // });
+            this.initConversationsHandler(environment.tenant, that.g.senderId)
         });
         // that.g.wdLog(['onAuthStateChanged ------------> ']);
         this.subscriptions.push(obsLoggedUser);
@@ -347,7 +363,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.initLauncherButton();
         this.chatPresenceHandlerService.initialize();
-        this.triggerLoadParamsEvent(); // first trigger
+        this.triggerLoadParamsEvent(); // first trigger 
     }
 
     /** initLauncherButton
@@ -356,6 +372,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     initLauncherButton() {
         this.isInitialized = true;
         this.marginBottom = +this.g.marginY + 70;
+    }
+
+    initConversationsHandler(tenant: string, senderId: string){
+        this.g.wdLog(['initialize: ListConversationsComponent']);
+        const keys = [
+        'LABEL_TU'
+        ];
+        const translationMap = this.translateService.translateLanguage(keys);
+        this.listConversations = [];
+        //this.availableAgents = this.g.availableAgents.slice(0, 5);
+
+        this.g.wdLog(['senderId: ', senderId]);
+        this.g.wdLog(['tenant: ', tenant]);
+
+         // 1 - init chatConversationsHandler and  archviedConversationsHandler
+         this.conversationsHandlerService.initialize(tenant,senderId, translationMap)
+         // 2 - get conversations from storage
+        // this.chatConversationsHandler.getConversationsFromStorage();
+        // 5 - connect conversationHandler and archviedConversationsHandler to firebase event (add, change, remove)
+        this.conversationsHandlerService.connect();
+        this.listConversations = this.conversationsHandlerService.conversations;
+         // 6 - save conversationHandler in chatManager
+        this.chatManager.setConversationsHandler(this.conversationsHandlerService);
+
+        this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
+        this.g.wdLog(['this.listConversations', this.listConversations]);
     }
 
     /** initChatSupportMode

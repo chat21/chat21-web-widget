@@ -62,13 +62,13 @@
             <div class="c21-body-content" [class.nologo]="g.project.logoChat === 'nologo'">
                 <div class="c21-cards">
                     <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
-                        <tiledeskwidget-list-conversations 
-                        [senderId]="senderId"
+                        <tiledeskwidget-home-conversations 
+                        [listConversations]="listConversations"
                         (eventNewConv)="returnNewConversation()" 
                         (eventSelctedConv)="returnSelectedConversation($event)"
                         (eventOpenAllConv)="returnOpenAllConversation()"
                         >
-                        </tiledeskwidget-list-conversations>
+                        </tiledeskwidget-home-conversations>
                     </div>
                     
                 </div>

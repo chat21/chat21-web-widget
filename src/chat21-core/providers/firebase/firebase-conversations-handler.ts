@@ -1,0 +1,408 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+// firebase
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import 'firebase/database';
+import 'firebase/auth';
+import 'firebase/storage';
+
+// models
+import { ConversationModel } from '../../models/conversation';
+
+// services
+import { ConversationsHandlerService } from '../abstract/conversations-handler.service';
+//import { DatabaseProvider } from '../database';
+
+// utils
+import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
+import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
+import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid } from '../../utils/utils';
+
+
+
+// @Injectable({ providedIn: 'root' })
+@Injectable()
+export class FirebaseConversationsHandler extends ConversationsHandlerService {
+
+    // BehaviorSubject
+    BSConversationDetail: BehaviorSubject<ConversationModel>;
+    readAllMessages: BehaviorSubject<string>;
+    conversationsAdded: BehaviorSubject<ConversationModel[]>;
+    conversationsChanged: BehaviorSubject<ConversationModel[]>;
+    conversationsRemoved: BehaviorSubject<ConversationModel[]>;
+    loadedConversationsStorage: BehaviorSubject<ConversationModel[]>;
+
+    // public params
+    conversations: Array<ConversationModel> = [];
+    uidConvSelected: string;
+    tenant: string;
+    // imageRepo: ImageRepoService = new FirebaseImageRepoService();
+
+    // private params
+    private loggedUserId: string;
+    private translationMap: Map<string, string>;
+    private isConversationClosingMap: Map<string, boolean>;
+
+    private ref: firebase.database.Query;
+    private audio: any;
+    private setTimeoutSound: any;
+
+    constructor(
+        //public databaseProvider: DatabaseProvider
+    ) {
+        super();
+    }
+
+    /**
+     * inizializzo conversations handler
+     */
+    initialize(
+        tenant: string,
+        userId: string,
+        translationMap: Map<string, string>
+        ) {
+        this.tenant = tenant;
+        this.loggedUserId = userId;
+        this.translationMap = translationMap;
+        this.conversations = [];
+        this.isConversationClosingMap = new Map();
+        //this.databaseProvider.initialize(userId, this.tenant);
+        //this.getConversationsFromStorage();
+    }
+
+    /**
+     * mi connetto al nodo conversations
+     * creo la reference
+     * mi sottoscrivo a change, removed, added
+     */
+    connect() {
+        const that = this;
+        const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
+        console.log('connect -------> conversations', urlNodeFirebase);
+        this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
+        this.ref.on('child_changed', (childSnapshot) => {
+            that.changed(childSnapshot);
+        });
+        this.ref.on('child_removed', (childSnapshot) => {
+            that.removed(childSnapshot);
+        });
+        this.ref.on('child_added', (childSnapshot) => {
+            that.added(childSnapshot);
+        });
+        // SET AUDIO
+        this.audio = new Audio();
+        this.audio.src = URL_SOUND;
+        this.audio.load();
+        
+    }
+
+    /**
+     * restituisce il numero di conversazioni nuove
+     */
+    countIsNew(): number {
+        let num = 0;
+        this.conversations.forEach((element) => {
+            if (element.is_new === true) {
+                num++;
+            }
+        });
+        return num;
+    }
+
+    /**
+     * Returns the status of the conversations with conversationId from isConversationClosingMap
+     * @param conversationId the conversation id
+     * @returns true if the conversation is waiting to be closed, false otherwise
+     */
+    getClosingConversation(conversationId: string) {
+        return this.isConversationClosingMap[conversationId];
+    }
+
+    /**
+     * Add the conversation with conversationId to the isConversationClosingMap
+     * @param conversationId the id of the conversation of which it wants to save the state
+     * @param status true if the conversation is waiting to be closed, false otherwise
+     */
+    setClosingConversation(conversationId: string, status: boolean) {
+        this.isConversationClosingMap[conversationId] = status;
+    }
+
+    /**
+     * Delete the conversation with conversationId from the isConversationClosingMap
+     * @param conversationId the id of the conversation of which is wants to delete
+     */
+    deleteClosingConversation(conversationId: string) {
+    this.isConversationClosingMap.delete(conversationId);
+    }
+
+
+    public getConversationDetail(tenant: string, loggedUserUid: string, conversationId: string) {
+        const conversationSelected = this.conversations.find(item => item.uid === conversationId);
+        console.log('>>>>>>>>>>>>>> getConversationDetail *****: ', conversationSelected);
+        if (conversationSelected) {
+            this.BSConversationDetail.next(conversationSelected);
+        } else {
+            const urlNodeFirebase = '/apps/' + tenant + '/users/' + loggedUserUid + '/conversations/' + conversationId;
+            console.log('urlNodeFirebase conversationDetail *****', urlNodeFirebase);
+            const firebaseMessages = firebase.database().ref(urlNodeFirebase);
+            firebaseMessages.on('value', (childSnapshot) => {
+                console.log('>>>>>>>>>>>>>> urlNodeFirebase conversationDetail *****: ', childSnapshot.val());
+                const conversation: ConversationModel = childSnapshot.val();
+                this.BSConversationDetail.next(conversation);
+            });
+        }
+    }
+    /**
+     * dispose reference di conversations
+     */
+    dispose() {
+        this.conversations = [];
+        this.uidConvSelected = '';
+        //this.ref.off();
+        // this.ref.off("child_changed");
+        // this.ref.off("child_removed");
+        // this.ref.off("child_added");
+        console.log('DISPOSE::: ', this.ref);
+    }
+
+
+    // ---------------------------------------------------------- //
+    // BEGIN PRIVATE FUNCTIONS
+    // ---------------------------------------------------------- //
+    /**
+     *
+     */
+    // private getConversationsFromStorage() {
+    //     const that = this;
+    //     this.databaseProvider.getConversations()
+    //     .then((conversations: [ConversationModel]) => {
+    //         that.loadedConversationsStorage.next(conversations);
+    //     })
+    //     .catch((e) => {
+    //         console.log('error: ', e);
+    //     });
+    // }
+
+
+    /**
+     *
+     * @param childSnapshot
+     */
+    private conversationGenerate(childSnapshot: any): boolean {
+        console.log('conversationGenerate: ', childSnapshot.val());
+        const childData: ConversationModel = childSnapshot.val();
+        childData.uid = childSnapshot.key;
+        const conversation = this.completeConversation(childData);
+        if (this.isValidConversation(conversation)) {
+            this.setClosingConversation(childSnapshot.key, false);
+            const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
+            if (index > -1) {
+                this.conversations.splice(index, 1, conversation);
+            } else {
+                this.conversations.splice(0, 0, conversation);
+            }
+            //this.databaseProvider.setConversation(conversation);
+            this.conversations.sort(compareValues('timestamp', 'desc'));
+            if (conversation.is_new) {
+                this.soundMessage();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+    /**
+     * 1 -  completo la conversazione con i parametri mancanti
+     * 2 -  verifico che sia una conversazione valida
+     * 3 -  salvo stato conversazione (false) nell'array delle conversazioni chiuse
+     * 4 -  aggiungo alla pos 0 la nuova conversazione all'array di conversazioni 
+     *      o sostituisco la conversazione con quella preesistente
+     * 5 -  salvo la conversazione nello storage
+     * 6 -  ordino l'array per timestamp
+     * 7 -  pubblico conversations:update
+     */
+    private added(childSnapshot: any) {
+        if (this.conversationGenerate(childSnapshot)) {
+            this.conversationsAdded.next(this.conversations);
+        } else {
+            console.error('ChatConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+        }
+    }
+
+    /**
+     * 1 -  completo la conversazione con i parametri mancanti
+     * 2 -  verifico che sia una conversazione valida
+     * 3 -  aggiungo alla pos 0 la nuova conversazione all'array di conversazioni 
+     * 4 -  salvo la conversazione nello storage
+     * 5 -  ordino l'array per timestamp
+     * 6 -  pubblico conversations:update
+     * 7 -  attivo sound se è un msg nuovo
+     */
+    private changed(childSnapshot: any) {
+        if (this.conversationGenerate(childSnapshot)) {
+            this.conversationsChanged.next(this.conversations);
+        } else {
+            console.error('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+        }
+    }
+
+    /**
+     * 1 -  cerco indice conversazione da eliminare
+     * 2 -  elimino conversazione da array conversations
+     * 3 -  elimino la conversazione dallo storage
+     * 4 -  pubblico conversations:update
+     * 5 -  elimino conversazione dall'array delle conversazioni chiuse
+     */
+    private removed(childSnapshot: any) {
+        const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
+        if (index > -1) {
+            this.conversations.splice(index, 1);
+            // this.conversations.sort(compareValues('timestamp', 'desc'));
+            //this.databaseProvider.removeConversation(childSnapshot.key);
+            this.conversationsRemoved.next(this.conversations);
+        }
+        // remove the conversation from the isConversationClosingMap
+        this.deleteClosingConversation(childSnapshot.key);
+    }
+
+
+    /**
+     * Completo conversazione aggiungendo:
+     * 1 -  nel caso in cui sender_fullname e recipient_fullname sono vuoti, imposto i rispettivi id come fullname,
+     *      in modo da avere sempre il campo fullname popolato
+     * 2 -  imposto conversation_with e conversation_with_fullname con i valori del sender o al recipient,
+     *      a seconda che il sender corrisponda o meno all'utente loggato. Aggiungo 'tu:' se il sender coincide con il loggedUser
+     *      Se il sender NON è l'utente loggato, ma è una conversazione di tipo GROUP, il conversation_with_fullname
+     *      sarà uguale al recipient_fullname
+     * 3 -  imposto stato conversazione, che indica se ci sono messaggi non letti nella conversazione
+     * 4 -  imposto il tempo trascorso tra l'ora attuale e l'invio dell'ultimo messaggio
+     * 5 -  imposto avatar, colore e immagine
+     * @param conv
+     */
+    private completeConversation(conv): ConversationModel {
+        console.log('completeConversation', conv);
+        const LABEL_TU = this.translationMap.get('LABEL_TU');
+        conv.selected = false;
+        if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
+            conv.sender_fullname = conv.sender;
+        }
+        if (!conv.recipient_fullname || conv.recipient_fullname === 'undefined' || conv.recipient_fullname.trim() === '') {
+            conv.recipient_fullname = conv.recipient;
+        }
+        let conversation_with_fullname = conv.sender_fullname;
+        let conversation_with = conv.sender;
+        if (conv.sender === this.loggedUserId) {
+            conversation_with = conv.recipient;
+            conversation_with_fullname = conv.recipient_fullname;
+            conv.last_message_text = LABEL_TU + conv.last_message_text;
+        } else if (conv.channel_type === TYPE_GROUP) {
+            conversation_with = conv.recipient;
+            conversation_with_fullname = conv.recipient_fullname;
+            conv.last_message_text = conv.last_message_text;
+        }
+        conv.conversation_with_fullname = conversation_with_fullname;
+
+        conv.status = this.setStatusConversation(conv.sender, conv.uid);
+        conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
+        conv.avatar = avatarPlaceholder(conversation_with_fullname);
+        conv.color = getColorBck(conversation_with_fullname);
+        // conv.image = this.imageRepo.getImageThumb(conversation_with);
+        // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
+        return conv;
+    }
+
+    /** */
+    private setStatusConversation(sender: string, uid: string): string {
+        let status = '0'; // letto
+        if (sender === this.loggedUserId || uid === this.uidConvSelected) {
+            status = '0';
+        } else {
+            status = '1'; // non letto
+        }
+        return status;
+    }
+
+    /**
+     * calcolo il tempo trascorso da ora al timestamp passato
+     * @param timestamp
+     */
+    private getTimeLastMessage(timestamp: string) {
+        const timestampNumber = parseInt(timestamp, 10) / 1000;
+        const time = getFromNow(timestampNumber);
+        return time;
+    }
+
+    /**
+     * attivo sound se è un msg nuovo
+     */
+    private soundMessage() {
+        console.log('****** soundMessage *****', this.audio);
+        const that = this;
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        clearTimeout(this.setTimeoutSound);
+        this.setTimeoutSound = setTimeout(() => {
+            that.audio.play()
+            .then(() => {
+                console.log('****** soundMessage played *****');
+            })
+            .catch((error: any) => {
+                console.log('***soundMessage error*', error);
+            });
+        }, 1000);
+    }
+
+    /**
+     *  check if the conversations is valid or not
+     */
+    private isValidConversation(convToCheck: ConversationModel): boolean {
+        if (!this.isValidField(convToCheck.uid)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.is_new)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.last_message_text)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.recipient)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.recipient_fullname)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.sender)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.sender_fullname)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.status)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.timestamp)) {
+            return false;
+        }
+        if (!this.isValidField(convToCheck.channel_type)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param field
+     */
+    private isValidField(field: any): boolean {
+        return (field === null || field === undefined) ? false : true;
+    }
+
+    // ---------------------------------------------------------- //
+    // END PRIVATE FUNCTIONS
+    // ---------------------------------------------------------- //
+
+}

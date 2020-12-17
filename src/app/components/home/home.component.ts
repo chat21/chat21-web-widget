@@ -1,4 +1,5 @@
 import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { ConversationModel } from '../../../chat21-core/models/conversation';
 import { Globals } from '../../utils/globals';
 import { convertColorToRGBA } from '../../utils/utils';
 
@@ -18,7 +19,7 @@ export class HomeComponent implements OnInit {
   @Output() eventClose = new EventEmitter();
   @Output() eventSignOut = new EventEmitter();
   @Output() eventOpenAllConv = new EventEmitter();
-  @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========/
 
 
@@ -52,6 +53,7 @@ export class HomeComponent implements OnInit {
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
     // this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     // this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
+
   }
 
   // ========= begin:: ACTIONS ============//

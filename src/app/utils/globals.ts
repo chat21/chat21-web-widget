@@ -86,6 +86,7 @@ export class Globals {
   startedAt = new Date();
 
   // ============ BEGIN: LABELS ==============//
+  LABEL_TU: string;
   LABEL_PLACEHOLDER: string;
   LABEL_START_NW_CONV: string;
   LABEL_FIRST_MSG: string;
