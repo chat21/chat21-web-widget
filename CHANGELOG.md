@@ -1,6 +1,6 @@
 # chat21-web-widget ver 3.0
 
-### 4.0.91
+### 4.0.92
 - change: refactored 'send new message';
 - change: saved id conversation active in local storage;
 - change: open widget on last conversation;
@@ -8,6 +8,7 @@
 - bug-fix: startFromHome true/false management;
 - change: saved id active conversation on opening conversation detail;
 - bug-fix: changed workflow 'new conversation' button;
+
 
 ### 4.0.90
 - bug-fix: save new conversation in local storage
@@ -26,7 +27,7 @@
 - bug-fix: css logo and favicon in assets/twp/index.html
 - change: shown callout only the first time
 
-### 4.0.85
+### 4.0.85 -> Cloud Production
 - bug-fix: width balloon message received
 
 ### 4.0.84
