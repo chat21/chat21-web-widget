@@ -320,86 +320,108 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
     <!-- FOOTER -->
     <div id="chat21-footer" (click)="hideMenuOptions()">
-        <div *ngIf="showButtonToBottom" id="chat21-buttonToBottom" (click)="scrollToBottom()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
-            <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
-        </div>
 
-        <div class="visible-text-area">
-            <textarea 
-                [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
-                start-focus-chat21-conversation-component
-                inputTextArea 
-                #textbox 
-                tabindex="1501" 
-                aria-labelledby="altTextArea"
-                rows="1" 
-                id="chat21-main-message-context" 
-                class='f21textarea c21-button-clean'
-                [(ngModel)]="textInputTextArea"
-                (ngModelChange)="resizeInputField()" 
-                (keypress)="onkeypress($event)" 
-                placeholder="{{g.LABEL_PLACEHOLDER}}">
-            </textarea>
-        </div>
+        <div *ngIf="isConversationArchived; then conversationArchived else conversationActive">here is ignored</div>
 
-        <div #div_attached>
-            <label *ngIf="g.showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
-            <span class="v-align-center">
-                <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
-                    <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
-                    <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
-                </svg>
-            </span>
-            <input 
-            [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
-            tabindex="1503" 
-            type="file" 
-            aria-label="seleziona allegato" 
-            accept="image/*,.pdf,.zip" 
-            name="chat21-file"
-            id="chat21-file" 
-            class="inputfile" 
-            [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
-            (change)="detectFiles($event)" 
-            />
-            </label>
-            <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
-            <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">
+        <ng-template #conversationArchived>
+            <div style="text-align: center;">
+                <button tabindex="1040" aflistconv #aflistconv class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
+                    <span class="v-align-center">
+                      <svg [ngStyle]="{'fill': 'yellow' }" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': g.themeForegroundColor}"/>
+                      </svg>
+                    </span>
+                    <span class="v-align-center c21-label-button">
+                      {{LABEL_SEND_NEW_MESSAGE}}
+                    </span>  
+                    <div class="clear"></div>
+                </button>
+            </div>
+        </ng-template>
+        
+        <ng-template #conversationActive>
+
+            <div *ngIf="showButtonToBottom" id="chat21-buttonToBottom" (click)="scrollToBottom()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
+                <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
+            </div>
+
+            <div class="visible-text-area">
+                <textarea 
+                    [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
+                    start-focus-chat21-conversation-component
+                    inputTextArea 
+                    #textbox 
+                    tabindex="1501" 
+                    aria-labelledby="altTextArea"
+                    rows="1" 
+                    id="chat21-main-message-context" 
+                    class='f21textarea c21-button-clean'
+                    [(ngModel)]="textInputTextArea"
+                    (ngModelChange)="resizeInputField()" 
+                    (keypress)="onkeypress($event)" 
+                    placeholder="{{g.LABEL_PLACEHOLDER}}">
+                </textarea>
+            </div>
+
+            <div #div_attached>
+                <label *ngIf="g.showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
                 <span class="v-align-center">
                     <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                        <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
+                        <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
                     </svg>
                 </span>
+                <input 
+                [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
+                tabindex="1503" 
+                type="file" 
+                aria-label="seleziona allegato" 
+                accept="image/*,.pdf,.zip" 
+                name="chat21-file"
+                id="chat21-file" 
+                class="inputfile" 
+                [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
+                (change)="detectFiles($event)" 
+                />
+                </label>
+                <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
+                <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">
+                    <span class="v-align-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                        </svg>
+                    </span>
+                </div>
             </div>
-        </div>
+    
 
-
-        <!-- <div #div_mic *ngIf="g.showMicButton" id="playbutton">
-            <button *ngIf="!isRecording"  tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic" (click)="toggleRecording($event)">
-                <span class="v-align-center">
-                    <svg aria-label="registra traccia audio" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
-                        <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z"/>
-                        <path d="M17,11c0,2.76-2.24,5-5,5s-5-2.24-5-5H5c0,3.53,2.61,6.43,6,6.92V21h2v-3.08c3.39-0.49,6-3.39,6-6.92H17z"/>    
-                    </svg>
-                </span>
-            </button>
-            <button  *ngIf="isRecording" tabindex="1502" aria-label="stop registrazione" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean " id="chat21-start-mic" (click)="toggleRecording($event)" autofocus> 
-                <span class="v-align-center">
-                    <svg aria-label="termina registrazione" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M6 6h12v12H6z"/>
-                    </svg>
-                </span>
-            </button>
-        </div> -->
+            <!-- <div #div_mic *ngIf="g.showMicButton" id="playbutton">
+                <button *ngIf="!isRecording"  tabindex="1502" aria-label="microfono" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean" id="chat21-start-mic" (click)="toggleRecording($event)">
+                    <span class="v-align-center">
+                        <svg aria-label="registra traccia audio" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
+                            <path d="M12,14c1.66,0,3-1.34,3-3V5c0-1.66-1.34-3-3-3S9,3.34,9,5v6C9,12.66,10.34,14,12,14z"/>
+                            <path d="M17,11c0,2.76-2.24,5-5,5s-5-2.24-5-5H5c0,3.53,2.61,6.43,6,6.92V21h2v-3.08c3.39-0.49,6-3.39,6-6.92H17z"/>    
+                        </svg>
+                    </span>
+                </button>
+                <button  *ngIf="isRecording" tabindex="1502" aria-label="stop registrazione" for="chat21-file" [class.active]="true" class="chat21-textarea-button c21-button-clean " id="chat21-start-mic" (click)="toggleRecording($event)" autofocus> 
+                    <span class="v-align-center">
+                        <svg aria-label="termina registrazione" xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor}" width="24" height="24" viewBox="0 0 28 28">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M6 6h12v12H6z"/>
+                        </svg>
+                    </span>
+                </button>
+            </div> -->
         
         
-        <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
-            <span>{{nameFile}}</span>
-        </div> -->
-        <span id="testFocus" tabindex="1599" onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()"></span>
-        <span id="altTextArea" style="display: none">scrivi la tua domanda</span>
+            <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
+                <span>{{nameFile}}</span>
+            </div> -->
+            <span id="testFocus" tabindex="1599" onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()"></span>
+            <span id="altTextArea" style="display: none">scrivi la tua domanda</span>
+        </ng-template>
 
     </div>
 

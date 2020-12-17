@@ -29,6 +29,8 @@ import { environment } from '../environments/environment';
 // utils
 // setLanguage,
 // getImageUrlThumb,
+
+import { CONVERSATION_STATUS } from './utils/constants';
 import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage } from './utils/utils';
 import { ConversationModel } from '../models/conversation';
 import { AppConfigService } from './providers/app-config.service';
@@ -49,6 +51,7 @@ import { SettingsSaverService } from './providers/settings-saver.service';
 
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     obsEndRenderMessage: any;
+    obsOpenConversation: any;
     stateLoggedUser;
     // ========= begin:: parametri di stato widget ======= //
     isInitialized = false;              /** if true show button */
@@ -87,6 +90,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // isMobile: boolean;
     // ========= end:: DA SPOSTARE ========= //
 
+    public idActiveConversation: string;
+
     constructor(
         private el: ElementRef,
         private ngZone: NgZone,
@@ -116,6 +121,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);
+        this.obsOpenConversation = new BehaviorSubject(null);
     }
 
     /** */
@@ -643,43 +649,46 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
-        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
-        this.g.wdLog([' ============ idConversation ===============', conversationActive ]);
+        // const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        // this.idActiveConversation = JSON.parse(this.storageService.getItem('idActiveConversation'));
+        this.g.wdLog([' ============ idConversation ===============' ]);
         // this.g.recipientId = null;
-        if (conversationActive) {
-            // console.log('77777');
-            this.g.recipientId = conversationActive.recipient;
-            this.returnSelectedConversation(conversationActive);
-        } else if (this.g.startFromHome) {
-            // console.log('66666');
+        // if (this.idActiveConversation) {
+        //     console.log('77777 idActiveConversation', this.idActiveConversation);
+        //     this.g.recipientId = this.idActiveConversation; // conversationActive.recipient;
+        //     this.openConversation();
+        //     //this.returnSelectedConversation(conversationActive);
+
+        if (this.g.startFromHome) {
+            console.log(' startUI ---> startFromHome');
             this.isOpenConversation = false;
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenSelectionDepartment = false;
         } else if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
-            // console.log('55555');
+            console.log(' startUI ---> preChatForm');
             this.g.setParameter('isOpenPrechatForm', true);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (departments.length > 1 && this.g.departmentID == null) {
-                // console.log('44444');
-                this.isOpenSelectionDepartment = true;
-            }
+            // if (departments.length > 1 && this.g.departmentID == null) {
+            //     // console.log(' startUI ---> departments');
+            //     this.isOpenSelectionDepartment = true;
+            // }
+        } else  if (departments.length > 1 && this.g.departmentID == null) {
+             console.log(' startUI ---> departments');
+            this.isOpenSelectionDepartment = true;
         } else {
-            // console.log('33333');
+            console.log(' startUI ---> new conversation ');
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
-            if (departments.length > 1 && !this.g.departmentID == null) {
-                // console.log('22222');
-                this.isOpenSelectionDepartment = true;
-            } else {
-                // console.log('11111', this.g.isOpen, this.g.recipientId);
-                this.isOpenConversation = false;
-                if (!this.g.recipientId && this.g.isOpen) {
+            // if (departments.length > 1 && !this.g.departmentID == null) {
+            //     this.isOpenSelectionDepartment = true;
+            // } else {
+                if (this.g.isOpen) {
                     // this.startNwConversation();
-                    this.openNewConversation();
+                    this.openConversation();
                 }
-            }
+            // }
         }
 
         // visualizzo l'iframe!!!
@@ -1310,17 +1319,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * onClick button open/close widget
      */
     openCloseWidget($event) {
+        console.log('openCloseWidget');
+        // openConversation
         this.g.setParameter('displayEyeCatcherCard', 'none');
-        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        const idActiveConversation = this.storageService.getItem('idActiveConversation');
         // console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
         if ( this.g.isOpen === true ) {
-            if (!conversationActive && !this.g.startFromHome) {
+            if (!idActiveConversation && !this.g.startFromHome) {
                 this.isOpenHome = false;
                 this.isOpenConversation = true;
-                this.startNwConversation();
-            } else if (conversationActive) {
+                this.obsOpenConversation.next(CONVERSATION_STATUS);
+            } else if (idActiveConversation) {
                 this.isOpenHome = false;
                 this.isOpenConversation = true;
+                this.obsOpenConversation.next(idActiveConversation);
             }
             this.g.startFromHome = true;
             this.triggerOnOpenEvent();
@@ -1328,6 +1340,25 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.triggerOnCloseEvent();
         }
 
+        // console.log('openCloseWidget');
+        // this.g.setParameter('displayEyeCatcherCard', 'none');
+        // const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        // // console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
+        // if ( this.g.isOpen === true ) {
+        //     if (!conversationActive && !this.g.startFromHome) {
+        //         this.isOpenHome = false;
+        //         this.isOpenConversation = true;
+        //         //this.startNwConversation();
+        //         this.obsOpenConversation.next(conversationActive.uid);
+        //     } else if (conversationActive) {
+        //         this.isOpenHome = false;
+        //         this.isOpenConversation = true;
+        //     }
+        //     this.g.startFromHome = true;
+        //     this.triggerOnOpenEvent();
+        // } else {
+        //     this.triggerOnCloseEvent();
+        // }
     }
 
     /**
@@ -1343,7 +1374,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenSelectionDepartment = false;
             if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
                 this.isOpenConversation = true;
-                this.startNwConversation();
+                //this.startNwConversation();
+                this.obsOpenConversation.next();
             }
         }
     }
@@ -1370,7 +1402,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
             this.isOpenConversation = true;
-            this.startNwConversation();
+            // this.startNwConversation();
+            this.obsOpenConversation.next();
         }
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
@@ -1402,7 +1435,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.conversationSelected = $event;
             this.g.setParameter('recipientId', $event.recipient);
             this.isOpenConversation = true;
-             this.g.wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
+            this.g.wdLog(['onSelectConversation in APP COMPONENT: ', $event]);
+            this.obsOpenConversation.next(this.conversationSelected.uid);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
             // this.messages = this.messagingService.messages;
         }
@@ -1449,7 +1483,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.g.wdLog(['isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment]);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-            this.startNwConversation();
+            // this.startNwConversation();
+            this.obsOpenConversation.next(CONVERSATION_STATUS);
         }
     }
 
@@ -1476,6 +1511,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
+        console.log('returnCloseConversation');
         // const isOpenHomeTEMP = this.isOpenHome;
         // const isOpenAllConversationTEMP = this.isOpenAllConversation;
         this.isOpenHome = true;
@@ -1772,9 +1808,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
     // ============ end: functions pass values to external ============//
 
-    private openNewConversation() {
-        this.g.wdLog(['openNewConversation in APP COMPONENT']);
-        this.g.newConversationStart = true;
+    /**
+     * apro conversazione quando startFromHome == false
+     * */
+    private openConversation() {
+        this.g.wdLog(['openConversation in APP COMPONENT']);
+        try {
+            this.g.wdLog(['openConversation 2']);
+            this.idActiveConversation = this.storageService.getItem('idActiveConversation');
+            this.g.wdLog(['openConversation 3', this.idActiveConversation]);
+            if (!this.idActiveConversation) {
+                this.g.newConversationStart = true;
+                this.g.wdLog(['openConversation newConversationStart TRUE']);
+            }
+            this.g.wdLog(['openConversation 4']);
+            this.isOpenConversation = true;
+            if (this.idActiveConversation) {
+                this.obsOpenConversation.next(this.idActiveConversation);
+            } else {
+                this.obsOpenConversation.next(CONVERSATION_STATUS);
+            }
+        } catch (error) {
+            this.g.wdLog(['openConversation 5']);
+            this.g.wdLog(['> Error :' + error]);
+        }
+
+        /*
        // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
        // altrimenti mostro modale dipartimenti
        const preChatForm = this.g.preChatForm;
@@ -1806,8 +1865,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
        this.g.wdLog(['isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment]);
        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-           this.startNwConversation();
+           //this.startNwConversation();
+           this.obsNewConversation.next(true);
        }
+       */
    }
 
 

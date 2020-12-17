@@ -13,7 +13,7 @@ export class StorageService {
   // globals.setParameter(key, globalVar.key.value);
   // globals.getParameters('windowContext');
 
-  public getItem (key): any {
+  public getItem (key: string): any {
     let prefix = STORAGE_PREFIX;
     try {
       const sv = 'sv' + environment.shemaVersion + '_';
@@ -40,8 +40,10 @@ export class StorageService {
 
   /** */
   private getValueForKey(key) {
+    console.log('getValueForKey: ', this.g.persistence );
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
+        console.log('getValueForKey: ', key);
         return localStorage.getItem(key);
       } else {
         console.warn('localStorage is not defind. Storage disabled');

@@ -176,6 +176,7 @@ export class TranslatorService {
       'LABEL_FIELD_EMAIL',
       'LABEL_ERROR_FIELD_EMAIL',
       'LABEL_WRITING',
+      'LABEL_SEND_NEW_MESSAGE',
       'AGENT_NOT_AVAILABLE',
       'AGENT_AVAILABLE',
       'GUEST_LABEL',
@@ -228,6 +229,7 @@ export class TranslatorService {
       globals.LABEL_FIELD_EMAIL = res['LABEL_FIELD_EMAIL'];
       globals.LABEL_ERROR_FIELD_EMAIL = res['LABEL_ERROR_FIELD_EMAIL'];
       globals.LABEL_WRITING = res['LABEL_WRITING'];
+      globals.LABEL_SEND_NEW_MESSAGE = res['LABEL_SEND_NEW_MESSAGE'];
       globals.AGENT_NOT_AVAILABLE = res['AGENT_NOT_AVAILABLE']; // is used ??
       globals.AGENT_AVAILABLE = res['AGENT_AVAILABLE'];
       globals.GUEST_LABEL = res['GUEST_LABEL'];

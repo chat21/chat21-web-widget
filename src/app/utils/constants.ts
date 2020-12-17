@@ -11,6 +11,9 @@ export const ARRAY_DAYS =  ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Ve
 export const CALLOUT_TIMER_DEFAULT = 0;
 
 
+// CONVERSATIONS
+export const CONVERSATION_STATUS = 'new-conversation';
+
 // MESSAGES STATUS
 export const MSG_STATUS_FAILED = -100;
 export const MSG_STATUS_SENDING = 0;

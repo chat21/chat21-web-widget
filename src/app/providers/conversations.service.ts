@@ -97,6 +97,12 @@ export class ConversationsService {
     });
   }
 
+  loadConversationDetail(tenant: string, senderId: string, idConversation: string): any {
+    const urlConversationDetail = '/apps/' + tenant + '/users/' + senderId + '/conversations/' + idConversation;
+    console.log('urlConversationDetail:: ', urlConversationDetail);
+    const firebaseConversationDetail = firebase.database().ref(urlConversationDetail);
+    return firebaseConversationDetail.once('value');
+  }
 
   // // ============== begin:: subscribe to conversations ================//
   // public checkListConversationsLimit(limit?) {

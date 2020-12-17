@@ -97,6 +97,7 @@ export class Globals {
   LABEL_FIELD_EMAIL: string;
   LABEL_ERROR_FIELD_EMAIL: string;
   LABEL_WRITING: string;
+  LABEL_SEND_NEW_MESSAGE: string;
   AGENT_NOT_AVAILABLE: string;
   AGENT_AVAILABLE: string;
   GUEST_LABEL: string;

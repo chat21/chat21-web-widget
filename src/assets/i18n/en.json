@@ -10,6 +10,7 @@
     "LABEL_FIELD_EMAIL": "Email",
     "LABEL_ERROR_FIELD_EMAIL": "Enter a valid email address.",
     "LABEL_WRITING": "is writing...",
+    "LABEL_SEND_NEW_MESSAGE": "Send a new message",
     "AGENT_NOT_AVAILABLE": " Offline",
     "AGENT_AVAILABLE": " Online",
     "GUEST_LABEL": "Guest",

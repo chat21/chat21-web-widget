@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, OnDestroy, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
 import { MessagingService } from '../../providers/messaging.service';
@@ -9,7 +9,8 @@ import { AppConfigService } from '../../providers/app-config.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT,
+  CONVERSATION_STATUS
 } from '../../utils/constants';
 import { UploadService } from '../../providers/upload.service';
 import { ContactService } from '../../providers/contact.service';
@@ -42,13 +43,15 @@ import { DepartmentModel } from '../../../models/department';
   // tslint:disable-next-line:use-host-property-decorator
   host: {'(window:resize)': 'onResize($event)'}
 })
-export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
+export class ConversationComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   @Output() eventClose = new EventEmitter();
   @Output() eventCloseWidget = new EventEmitter();
+  @Output() eventNewConversation = new EventEmitter<string>();
+
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
@@ -88,6 +91,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // text used within the html
   private LABEL_PLACEHOLDER: string;
+  public LABEL_SEND_NEW_MESSAGE: string;
   private API_URL: string;
 
   userEmail: string;
@@ -99,7 +103,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   conversationWith: string;
   isPopupUrl = isPopupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
-  isNewConversation = true;
+  isNewConversation = false;
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
   recipient_fullname: string;
@@ -109,7 +113,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   CLIENT_BROWSER: string = navigator.userAgent;
 
   // devo inserirle nel globals
-  obsTyping: Subscription;
+  // obsTyping: Subscription;
   subscriptions: Subscription[] = [];
 
 
@@ -166,105 +170,603 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.g.wdLog([' constructor conversation component ']);
+    this.LABEL_SEND_NEW_MESSAGE = 'Invia un nuovo messaggio'; // this.g.LABEL_SEND_NEW_MESSAGE;
   }
 
+
+  // +++++++++++++++ begin:: SYSTEM FUNCTIONS +++++++++++++++ //
+  /**
+   * ngOnInit
+   */
   ngOnInit() {
-    // this.initAll();
-    this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
-    const that = this;
-    const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
-      this.ngZone.run(() => {
-        // that.scrollToBottom();
-      });
-    });
-    this.subscriptions.push(subscriptionEndRenderMessage);
-    // this.attributes = this.setAttributes();
-    // this.getTranslation();
+    this.g.wdLog([' ConversationComponent ngOnInit: app-conversation ']);
+    this.initSubscriptions();
   }
 
-
-  // getTranslation() {
-  //   this.translate.get('LABEL_PLACEHOLDER')
-  //     .subscribe((text: string) => {
-  //       this._LABEL_PLACEHOLDER = text;
-  //     });
-  // }
-
+  /**
+   * ngAfterViewInit:
+   * after animation intro
+   */
   ngAfterViewInit() {
-    // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit--------AAAAAA ', this.g.recipientId]);
-    // this.storageService.setItem('activeConversation', this.conversation.uid);
-    
-    // --------------------------- //
-    // after animation intro
+    this.g.wdLog([' ConversationComponent --------ngAfterViewInit-------- ']);
+    const themeColor = this.g.themeColor;
+    this.themeColor50 = convertColorToRGBA(themeColor, 50);
     setTimeout(() => {
-      this.initAll();
-      this.setFocusOnId('chat21-main-message-context');
-      this.updateConversationBadge();
-
       this.g.currentConversationComponent = this;
-      if (this.g.newConversationStart === true) {
-        this.onNewConversationComponentInit();
-        this.g.newConversationStart = false;
-        const start_message = this.g.startMessage;
-        if (this.g.startMessage) {
-          this.sendMessage(
-            start_message.text,
-            start_message.type,
-            start_message.metadata,
-            start_message.attributes
-          );
-          // {"subtype": "info"}  //sponziello
-        }
-      }
-      this.setSubscriptions();
-      if (this.afConversationComponent) {
+      if (this.afConversationComponent && this.afConversationComponent.nativeElement) {
         this.afConversationComponent.nativeElement.focus();
       }
+      this.setFocusOnId('chat21-main-message-context');
       this.isButtonsDisabled = false;
     }, 300);
-
-    // this.g.currentConversationComponent = this;
-    // if (this.g.newConversationStart === true) {
-    //   this.onNewConversationComponentInit();
-    //   // this.g.setParameter('newConversationStart', null)
-    //   this.g.newConversationStart = false;
-    //   // console.log('reset newconv ' + this.g.newConversationStart);
-    //   // console.log('start message ', this.g.startMessage);
-    //   // do  not send message hello
-    //   const start_message = this.g.startMessage;
-    //  if (this.g.startMessage) {
-    //   // tslint:disable-next-line:max-line-length
-    //   this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
-    //   // {"subtype": "info"}  //sponziello
-    //  }
-    // }
-    // // ------------------------------------------------ //
-    // this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    // // console.log('attributes: ', this.g.attributes);
-    // //this.scrollToBottom(true);
-    // this.setSubscriptions();
-    // setTimeout(() => {
-    //   if (this.afConversationComponent) {
-    //     this.afConversationComponent.nativeElement.focus();
-    //   }
-    // }, 1000);
   }
 
-
+  /**
+   * ngOnChanges
+   */
   ngOnChanges() {
+    // console.log('ConversationComponent ngOnChanges');
     if (this.isOpen === true) {
       this.updateConversationBadge();
       // this.scrollToBottom();
     }
   }
 
+  /**
+   * elimino tutte le sottoscrizioni
+   */
+  ngOnDestroy() {
+    this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
+    // this.storageService.removeItem('idActiveConversation');
+    this.unsubscribe();
+  }
+
+
+  // +++++++++++++++ end:: SYSTEM FUNCTIONS +++++++++++++++ //
+
+
+  // +++++++++++++++ begin:: MY FUNCTIONS +++++++++++++++ //
+  /**
+   * 1
+   * initSubscriptions
+   */
+  initSubscriptions() {
+    this.g.wdLog([' ConversationComponent initSubscriptions ']);
+    const that = this;
+
+    // subscriptionEndRenderMessage
+    const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
+      this.ngZone.run(() => {
+        // that.scrollToBottom();
+      });
+    });
+    this.subscriptions.push(subscriptionEndRenderMessage);
+
+    // subscriptionOpenConversation
+    const subscriptionOpenConversation = this.appComponent.obsOpenConversation.subscribe( (data: any) => {
+      console.log(' subscriptionOpenConversation -------------->' + data + '<----');
+      // if (data) {
+        that.conversationBuilder(data);
+      // }
+    });
+    this.subscriptions.push(subscriptionOpenConversation);
+
+    // subscriptionisOpenStarRating
+    this.starRatingWidgetService.setOsservable(false);
+    const subscriptionisOpenStarRating = this.starRatingWidgetService.obsCloseConversation.subscribe((isOpenStarRating: boolean) => {
+      that.starRatingPanel(isOpenStarRating);
+    });
+    this.subscriptions.push(subscriptionisOpenStarRating);
+
+    // subscriptionAddedMessage
+    const subscriptionAddedMessage = this.messagingService.obsAdded.subscribe((message: any) => {
+      that.messageAdded(message);
+    });
+    this.subscriptions.push(subscriptionAddedMessage);
+
+    // subscriptionTyping
+    const subscriptionTyping = this.messagingService.obsTyping.subscribe((childSnapshot: any) => {
+      that.typing(childSnapshot);
+    });
+    this.subscriptions.push(subscriptionTyping);
+  }
+
+  /**
+   * typing
+   * @param childSnapshot
+   */
+  private typing(childSnapshot: any) {
+    if (childSnapshot) {
+      // this.isTypings = true;
+      const that = this;
+      this.checkMemberId(childSnapshot.key);
+      clearTimeout(this.setTimeoutWritingMessages);
+      this.setTimeoutWritingMessages = setTimeout(() => {
+          that.isTypings = false;
+          that.writingMessage = that.g.LABEL_WRITING;
+      }, 2000);
+    }
+  }
+
+  /**
+   * Open/Close StarRating panel
+   * @param isOpenStarRating
+   */
+  private starRatingPanel(isOpenStarRating: boolean) {
+    this.g.setParameter('isOpenStarRating', isOpenStarRating);
+    if (isOpenStarRating === false) {
+      this.g.wdLog(['CHIUDOOOOO!!!! isOpenStarRating']);
+    } else if (isOpenStarRating === true) {
+      this.g.wdLog(['APROOOOOOOO!!!! isOpenStarRating']);
+    }
+  }
+
+  /**
+   * messageAdded
+   * @param message
+   * scroll element: https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+   */
+  private messageAdded(message: any) {
+    this.g.wdLog(['messageAdded: ', message]);
+    const that = this;
+    const senderId = this.g.senderId;
+    if ( this.startScroll || message.sender === senderId) {
+      this.g.wdLog(['*A 1-------']);
+      setTimeout(() => {
+        that.scrollToBottom();
+      }, 200);
+    } else if (this.scrollMe) {
+      const divScrollMe = this.scrollMe.nativeElement;
+      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+      if (checkContentScrollPosition) {
+        this.g.wdLog(['*A2-------']);
+        setTimeout(() => {
+          that.scrollToBottom();
+        }, 0);
+      } else {
+        this.g.wdLog(['*A3-------']);
+        this.NUM_BADGES++;
+        // that.soundMessage(newMessage.timestamp);
+      }
+    }
+
+    if (message && message.text && this.lastMsg) {
+      try {
+        let messaggio = '';
+        const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
+        const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
+        if (altTextArea && testFocus) {
+          setTimeout(function () {
+            if (message.sender !== this.g.senderId) {
+              messaggio += 'messaggio ricevuto da operatore: ' + message.sender_fullname;
+              altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + message.text;
+              testFocus.focus();
+            }
+          }, 1000);
+        }
+      } catch (e) {
+        this.g.wdLog(['> Error :' + e]);
+      }
+    }
+
+  }
+
+  /**
+   * 1
+   * conversationBuilder
+   * @param data
+   */
+  conversationBuilder(data: string) {
+    console.log(' subscriptionOpenConversation --------------> 0', data);
+    if (data && data !== CONVERSATION_STATUS) {
+      console.log(' subscriptionOpenConversation --------------> 1', data);
+      this.isNewConversation = false;
+      this.loadConversationDetail(data);
+    } else if (data && data === CONVERSATION_STATUS) {
+      console.log(' subscriptionOpenConversation --------------> 2');
+      this.isNewConversation = true;
+      this.createNewConversation();
+    }
+    this.initConversation();
+    this.updateConversationBadge();
+  }
+
+  /**
+   * 2
+   * loadConversationDetail
+   * @param idConversation
+   */
+  loadConversationDetail(idConversation: string) {
+    console.log('loadConversationDetail::::::::::: ', idConversation);
+    this.storageService.setItem('idActiveConversation', idConversation);
+    const that = this;
+    const tenant = this.g.tenant;
+    const senderId = this.g.senderId;
+    this.conversationsService.loadConversationDetail(tenant, senderId, idConversation)
+    .then(function(dataSnapshot: any) {
+      console.log('loadConversationDetail:: ', dataSnapshot.val());
+      if (dataSnapshot.val()) {
+        console.log('loadConversationDetail:: 1');
+        that.conversation = dataSnapshot.val();
+        that.isConversationArchived = false;
+        // if (that.conversation.archived) {
+        //   that.isConversationArchived = true;
+        // }
+      } else if (idConversation && !that.isNewConversation) {
+        console.log('loadConversationDetail:: 2');
+        // la conversazione è archiviata !!!
+        that.isConversationArchived = true;
+      } else {
+        console.log('loadConversationDetail:: 3');
+        that.isConversationArchived = false;
+      }
+
+      // console.log('dataSnapshot:::::::::::--> ', that.conversation, that.isNewConversation, idConversation);
+    });
+  }
+
+  /**
+   * 3
+   * createNewConversation
+   */
+  createNewConversation() {
+    this.g.wdLog(['AppComponent::startNwConversation 222']);
+    const newUidConversation = this.generateNewUidConversation();
+    this.g.setParameter('recipientId', newUidConversation);
+    this.g.wdLog([' recipientId: ', this.g.recipientId]);
+    this.loadConversationDetail(newUidConversation);
+    this.triggerNewConversationEvent(newUidConversation);
+  }
+
+  /**
+   * genero un nuovo conversationWith
+   * al login o all'apertura di una nuova conversazione
+   */
+  generateNewUidConversation() {
+    this.g.wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
+    return this.messagingService.generateUidConversation(this.g.senderId);
+  }
+
+  /**
+   * updateConversationBadge
+   */
   updateConversationBadge() {
     if (this.conversation) {
       this.conversationsService.updateIsNew(this.conversation);
       this.conversationsService.updateConversationBadge();
     }
   }
+
+  /**
+   * initConversation
+   */
+  initConversation() {
+    this.messages = [];
+    this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
+    this.setConversation();
+    this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
+    this.connectConversation();
+    this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
+    this.initializeChatManager();
+
+    // sponziello, commentato
+    // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    // this.setAvailableAgentsStatus();
+
+    // this.g.wdLog([' ---------------- 6: activeConversation ------------------- ', this.conversation]);
+    // if (this.conversation) {
+    //   this.g.setParameter('activeConversation', this.conversation, true);
+    // }
+    // this.checkListMessages();
+
+    if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
+      this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
+    }
+    // this.storageService.setItem('idActiveConversation', this.conversationWith);
+  }
+
+  /**
+    * this.g.recipientId:
+    * this.g.senderId:
+    * this.g.channelType:
+    * this.g.tenant
+    * 1 - setto channelTypeTEMP ( group / direct )
+    *    a seconda che recipientId contenga o meno 'group'
+    * 2 - setto conversationWith
+    * 2 - setto conversationWith
+    *    uguale a recipientId se esiste
+    *    uguale al senderId nel this.storageService se esiste
+    *    generateUidConversation
+    */
+  private setConversation() {
+    // se recipientId lo imposto in global-setting prendendolo dall'url se esiste!
+    // altrimenti lo imposto recuperandolo dal localStorage se esiste
+    // altrimenti genero un uid per la nuova conversazione
+    let recipientId = this.g.recipientId;
+    this.g.wdLog(['setConversation recipientId::: ', recipientId]);
+    const senderId = this.g.senderId;
+    if ( !recipientId ) {
+      let recipientIdTEMP = this.storageService.getItem('idActiveConversation');
+      // let recipientIdTEMP = this.setRecipientId(senderId);
+      if (!recipientIdTEMP) {
+        recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
+      }
+      recipientId = recipientIdTEMP;
+    }
+    this.g.setParameter('recipientId', recipientId);
+
+
+    const channelType = this.g.channelType;
+    this.g.wdLog(['setConversation channelType::: ', channelType]);
+    if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
+    this.conversationWith = recipientId; // as string;
+  }
+
+  /**
+   *
+   */
+  // private setRecipientId(senderId: string) {
+  //   const recipientIdTEMP = this.storageService.getItem(senderId);
+  //   return recipientIdTEMP;
+  // }
+
+
+  /**
+   *
+   */
+  private setChannelType() {
+    let channelTypeTEMP = CHANNEL_TYPE_GROUP;
+    const projectid = this.g.projectid;
+    if (this.recipientId && this.recipientId.indexOf('group') !== -1) {
+      channelTypeTEMP = CHANNEL_TYPE_GROUP;
+    } else if (!projectid) {
+      channelTypeTEMP = CHANNEL_TYPE_DIRECT;
+    }
+    return channelTypeTEMP;
+  }
+
+  /**
+   *  1 - init messagingService
+   *  2 - connect: recupero ultimi X messaggi
+   */
+  private connectConversation() {
+    const senderId = this.g.senderId;
+    const tenant = this.g.tenant;
+    const channelType = this.g.channelType;
+    if (!this.conversationWith && this.g.recipientId) {
+      this.conversationWith = this.g.recipientId;
+    }
+    // console.log('connectConversation -- >: ', senderId, tenant, channelType, this.conversationWith, this.g.recipientId);
+    this.messagingService.initialize( senderId, tenant, channelType );
+    this.messagingService.initWritingMessages(this.conversationWith);
+    this.messagingService.getWritingMessages();
+
+    this.upSvc.initialize(senderId, tenant, this.conversationWith);
+    // his.contactService.initialize(senderId, tenant, this.conversationWith);
+    this.messagingService.connect( this.conversationWith );
+    this.messages = this.messagingService.messages;
+    // this.scrollToBottomStart();
+    // this.messages.concat(this.messagingService.messages);
+    // this.messagingService.resetBadge(this.conversationWith);
+  }
+
+  /**
+   * inizializzo variabili
+   * effettuo il login anonimo su firebase
+   * se il login è andato a buon fine recupero id utente
+   */
+  initializeChatManager() {
+    this.arrayFilesLoad = [];
+    // this.setSubscriptions();
+    // this.checkWritingMessages();
+  }
+
+  /**
+   *
+   */
+  private checkWritingMessages() {
+    const that = this;
+    const tenant = this.g.tenant;
+    try {
+      const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
+      if (messagesRef) {
+        messagesRef.on('value', function (writing) {
+          if (writing.exists()) {
+              that.writingMessage = that.g.LABEL_WRITING;
+          } else {
+              that.writingMessage = '';
+          }
+        });
+      }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+  }
+
+  /**
+   * setFocusOnId
+   * @param id
+   */
+  setFocusOnId(id: string) {
+    setTimeout(function () {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+            //   that.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
+            textarea.setAttribute('value', ' ');
+            textarea.focus();
+        }
+    }, 500);
+  }
+
+
+  /**
+   * performSendingMessage
+   */
+  private performSendingMessage() {
+    // const msg = document.getElementsByClassName('f21textarea')[0];
+    let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+    if (msg && msg.trim() !== '') {
+        //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
+        // this.resizeInputField();
+        // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+        // this.setDepartment();
+        msg = replaceBr(msg);
+        this.sendMessage(msg, TYPE_MSG_TEXT);
+        // this.restoreTextArea();
+    }
+    // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
+    // this.textInputTextArea = '';
+    // this.restoreTextArea();
+  }
+
+  /**
+   * restoreTextArea
+   */
+  private restoreTextArea() {
+    //   that.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
+    this.resizeInputField();
+    const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+    this.textInputTextArea = ''; // clear the textarea
+    if (textArea) {
+        textArea.value = '';  // clear the textarea
+        textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
+        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
+    } else {
+          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+    }
+    this.setFocusOnId('chat21-main-message-context');
+  }
+  // +++++++++++++++ end:: MY FUNCTIONS +++++++++++++++ //
+
+
+
+
+
+
+
+  // +++++++++++++++ begin:: ACTIONS +++++++++++++++ //
+  /**
+   * quando premo un tasto richiamo questo metodo che:
+   * verifica se è stato premuto 'invio'
+   * se si azzera testo
+   * imposta altezza campo come min di default
+   * leva il focus e lo reimposta dopo pochi attimi
+   * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
+   * invio messaggio
+   * @param event
+   */
+  onkeypress(event: any) {
+    const keyCode = event.which || event.keyCode;
+    this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+    if (keyCode === 13) {
+        this.performSendingMessage();
+    } else if (keyCode === 9) {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * onSendPressed
+   */
+  onSendPressed(event: any) {
+    this.g.wdLog(['onSendPressed:event', event]);
+    this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+    if (this.isFilePendingToUpload) {
+      this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
+      // its a file
+      this.loadFile();
+      this.isFilePendingToUpload = false;
+      // disabilito pulsanti
+      this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+    } else {
+      if ( this.textInputTextArea && this.textInputTextArea.length > 0 ) {
+        this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
+        // its a message
+        this.performSendingMessage();
+        // restore the text area
+        // this.restoreTextArea();
+      }
+    }
+  }
+
+  /**
+   * ridimensiona la textarea
+   * chiamato ogni volta che cambia il contenuto della textarea
+   * imposto stato 'typing'
+   */
+  resizeInputField() {
+    try {
+      const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+      // tslint:disable-next-line:max-line-length
+      // that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+      target.style.height = '100%';
+      if (target.value === '\n') {
+          target.value = '';
+          target.style.height = this.HEIGHT_DEFAULT;
+      } else if (target.scrollHeight > target.offsetHeight) {
+          target.style.height = target.scrollHeight + 2 + 'px';
+          target.style.minHeight = this.HEIGHT_DEFAULT;
+      } else {
+          //   that.g.wdLog(['PASSO 3');
+          target.style.height = this.HEIGHT_DEFAULT;
+          // segno sto scrivendo
+          // target.offsetHeight - 15 + 'px';
+      }
+      this.setWritingMessages(target.value);
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+    // tslint:disable-next-line:max-line-length
+    // that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  }
+  // +++++++++++++++ end:: ACTIONS +++++++++++++++ //
+
+
+
+  // +++++++++++++++ begin:: typing +++++++++++++++ //
+
+  /**
+   * setWritingMessages
+   * @param str
+   */
+  setWritingMessages(str: string) {
+    this.messagingService.setWritingMessages(str, this.g.channelType);
+  }
+
+
+  /**
+   * checkMemberId
+   * @param memberID
+   */
+  checkMemberId(memberID: string) {
+    const that = this;
+     // && memberID.trim() !== 'system'
+    if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
+    ) {
+      if (that.isTypings === false) {
+        that.isTypings = true;
+      }
+    } else {
+      that.isTypings = false;
+    }
+  }
+  // +++++++++++++++ end:: typing +++++++++++++++ //
+
+  // +++++++++++++++ begin:: DESTROY ALL SUBSCRIPTIONS +++++++++++++++ //
+  /**
+   * unsubscribe
+   */
+  unsubscribe() {
+    this.g.wdLog(['******* unsubscribe *******']);
+    this.subscriptions.forEach(function (subscription) {
+        subscription.unsubscribe();
+    });
+    this.subscriptions.length = 0;
+    this.messagingService.unsubscribeAllReferences();
+    this.g.wdLog(['this.subscriptions', this.subscriptions]);
+  }
+// +++++++++++++++ end:: DESTROY ALL SUBSCRIPTIONS +++++++++++++++
+
 
   // ngAfterViewChecked() {
   //   this.isShowSpinner();
@@ -279,54 +781,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
 
-  /**
-   * do per scontato che this.userId esiste!!!
-   */
-  initAll() {
-    if (this.conversation && this.conversation.archived) {
-      this.isConversationArchived = true;
-    }
-    const themeColor = this.g.themeColor;
-    this.themeColor50 = convertColorToRGBA(themeColor, 50);
-    this.messages = [];
-
-    this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
-    this.setConversation();
-
-    this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
-    this.connectConversation();
-
-    this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
-    this.initializeChatManager();
-
-    // sponziello, commentato
-    // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
-    // this.setAvailableAgentsStatus();
-    this.g.wdLog([' ---------------- 6: activeConversation ------------------- ', this.conversation]);
-    if (this.conversation) {
-      this.g.setParameter('activeConversation', this.conversation, true);
-    }
-
-    // this.checkListMessages();
-
-
-    if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
-      this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
-    }
-
-    // try {
-    //   JSON.parse(this.g.customAttributes, (key, value) => {
-    //     if (key === 'recipient_fullname') {
-    //       this.g.recipientFullname = value;
-    //     }
-    //   });
-    // } catch (error) {
-    //     this.g.wdLog(['> Error :' + error]);
-    // }
-  }
-
-  onResize(event) {
-    // tslint:disable-next-line:no-unused-expression
+  onResize(event: any) {
     this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
   }
 
@@ -337,38 +792,38 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * imposto il messaggio online/offline a seconda degli agenti disponibili
    * aggiungo il primo messaggio alla conversazione
    */
-  public setAvailableAgentsStatus() {
+  // public setAvailableAgentsStatus() {
 
-    const departmentDefault: DepartmentModel =  this.g.departmentDefault;
-    this.g.wdLog(['departmentDefault', departmentDefault]);
-    this.g.wdLog(['messages1: ', this.g.online_msg, this.g.offline_msg]);
-    if (!this.g.online_msg || this.g.online_msg === 'undefined' || this.g.online_msg === '') {
-      this.g.online_msg = this.g.LABEL_FIRST_MSG;
-    }
-    if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
-      this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
-    }
+  //   const departmentDefault: DepartmentModel =  this.g.departmentDefault;
+  //   this.g.wdLog(['departmentDefault', departmentDefault]);
+  //   this.g.wdLog(['messages1: ', this.g.online_msg, this.g.offline_msg]);
+  //   if (!this.g.online_msg || this.g.online_msg === 'undefined' || this.g.online_msg === '') {
+  //     this.g.online_msg = this.g.LABEL_FIRST_MSG;
+  //   }
+  //   if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
+  //     this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
+  //   }
 
-    this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
-    const availableAgentsForDep = this.g.availableAgents;
-    if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
-      this.addFirstMessage(this.g.offline_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template
-    } else {
-      this.addFirstMessage(this.g.online_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template
-    }
+  //   this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
+  //   const availableAgentsForDep = this.g.availableAgents;
+  //   if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
+  //     this.addFirstMessage(this.g.offline_msg);
+  //     this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
+  //     // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template
+  //   } else {
+  //     this.addFirstMessage(this.g.online_msg);
+  //     this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+  //     // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template
+  //   }
 
-    if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
-      this.g.areAgentsAvailableText = '';
-    }
-    this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
+  //   if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
+  //     this.g.areAgentsAvailableText = '';
+  //   }
+  //   this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
 
-    // this.getAvailableAgentsForDepartment();
+  //   // this.getAvailableAgentsForDepartment();
 
-  }
+  // }
 
     /**
    * mi sottoscrivo al nodo /departments/' + idDepartmentSelected + '/operators/';
@@ -424,145 +879,38 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //   });
   // }
 
-  addFirstMessage(text) {
-    const lang = this.g.lang;
-    const channelType = this.g.channelType;
-    const projectid = this.g.projectid;
+  // addFirstMessage(text) {
+  //   const lang = this.g.lang;
+  //   const channelType = this.g.channelType;
+  //   const projectid = this.g.projectid;
 
 
-    text = replaceBr(text);
-    const timestampSendingMessage = new Date('01/01/2000').getTime();
-    const msg = new MessageModel(
-      '000000',
-      lang,
-      this.conversationWith,
-      'Bot',
-      '', // sender
-      'Bot', // sender fullname
-      '200', // status
-      '', // metadata
-      text,
-      timestampSendingMessage,
-      '',
-      TYPE_MSG_TEXT,
-      '', // attributes
-      channelType,
-      projectid
-    );
-    this.g.wdLog(['addFirstMessage ----------> ' + text]);
-    this.messages.unshift(msg);
-  }
-
-  /**
-    * this.g.recipientId:
-    * this.g.senderId:
-    * this.g.channelType:
-    * this.g.tenant
-    * 1 - setto channelTypeTEMP ( group / direct )
-    *    a seconda che recipientId contenga o meno 'group'
-    * 2 - setto conversationWith
-    * 2 - setto conversationWith
-    *    uguale a recipientId se esiste
-    *    uguale al senderId nel this.storageService se esiste
-    *    generateUidConversation
-  */
-  private setConversation() {
-    const recipientId = this.g.recipientId;
-    const channelType = this.g.channelType;
-    this.g.wdLog(['setConversation recipientId::: ', recipientId, channelType]);
-    if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
-    if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
-    this.conversationWith = recipientId as string;
-    if (!this.conversation) {
-      this.conversation = new ConversationModel(
-        recipientId,
-        {},
-        channelType,
-        true,
-        '',
-        recipientId,
-        this.g.recipientFullname,
-        this.g.senderId,
-        this.g.userFullname,
-        '0',
-        0,
-        TYPE_MSG_TEXT,
-        '',
-        '',
-        '',
-        '',
-        0,
-        false
-        );
-    }
-  }
+  //   text = replaceBr(text);
+  //   const timestampSendingMessage = new Date('01/01/2000').getTime();
+  //   const msg = new MessageModel(
+  //     '000000',
+  //     lang,
+  //     this.conversationWith,
+  //     'Bot',
+  //     '', // sender
+  //     'Bot', // sender fullname
+  //     '200', // status
+  //     '', // metadata
+  //     text,
+  //     timestampSendingMessage,
+  //     '',
+  //     TYPE_MSG_TEXT,
+  //     '', // attributes
+  //     channelType,
+  //     projectid
+  //   );
+  //   this.g.wdLog(['addFirstMessage ----------> ' + text]);
+  //   this.messages.unshift(msg);
+  // }
 
 
-  /**
-   *
-   */
-  private setRecipientId() {
-    let recipientIdTEMP: string;
-    const senderId = this.g.senderId;
-    recipientIdTEMP = this.storageService.getItem(senderId);
-    if (!recipientIdTEMP) {
-      // questa deve essere sincrona!!!!
-      recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
-    }
-    return recipientIdTEMP;
-  }
-
-  /**
-   *
-   */
-  private setChannelType() {
-    let channelTypeTEMP = CHANNEL_TYPE_GROUP;
-    const projectid = this.g.projectid;
-    if (this.recipientId && this.recipientId.indexOf('group') !== -1) {
-      channelTypeTEMP = CHANNEL_TYPE_GROUP;
-    } else if (!projectid) {
-      channelTypeTEMP = CHANNEL_TYPE_DIRECT;
-    }
-    return channelTypeTEMP;
-  }
 
 
-  /**
-   *  1 - init messagingService
-   *  2 - connect: recupero ultimi X messaggi
-   */
-  private connectConversation() {
-      const senderId = this.g.senderId;
-      const tenant = this.g.tenant;
-      const channelType = this.g.channelType;
-      if (!this.conversationWith && this.g.recipientId) {
-        this.conversationWith = this.g.recipientId;
-      }
-      // console.log('connectConversation -- >: ', senderId, tenant, channelType, this.conversationWith, this.g.recipientId);
-      this.messagingService.initialize( senderId, tenant, channelType );
-      this.messagingService.initWritingMessages(this.conversationWith);
-      this.messagingService.getWritingMessages();
-
-      this.upSvc.initialize(senderId, tenant, this.conversationWith);
-      // his.contactService.initialize(senderId, tenant, this.conversationWith);
-      this.messagingService.connect( this.conversationWith );
-      this.messages = this.messagingService.messages;
-      // this.scrollToBottomStart();
-      // this.messages.concat(this.messagingService.messages);
-      // this.messagingService.resetBadge(this.conversationWith);
-  }
-
-
-  /**
-   * inizializzo variabili
-   * effettuo il login anonimo su firebase
-   * se il login è andato a buon fine recupero id utente
-   */
-  initializeChatManager() {
-    this.arrayFilesLoad = [];
-    // this.setSubscriptions();
-    // this.checkWritingMessages();
-  }
 
   /**
    *
@@ -593,113 +941,58 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //   return this.g.attributes;
   // }
 
-  /**
-   * imposto le sottoscrizioni
-   * 1 - conversazione chiusa (CHAT CHIUSA)
-   * 2 - nuovo messaggio
-   */
-  setSubscriptions() {
-    const that = this;
-    this.starRatingWidgetService.setOsservable(false);
-    // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    // tslint:disable-next-line:max-line-length
-    that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
-    const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
-    .subscribe(isOpenStartRating => {
-      that.g.setParameter('isOpenStartRating', isOpenStartRating);
-      if (isOpenStartRating === false) {
-          that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
-      } else if (isOpenStartRating === true) {
-          that.g.wdLog(['APROOOOOOOO!!!! StartRating']);
-      }
-    });
-    this.subscriptions.push(subscriptionisOpenStartRating);
-    // console.log('---------------------->', this.subscriptions);
-    // NUOVO MESSAGGIO!!
-    /**
-     * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
-     * altrimenti:  se esiste scrollMe (div da scrollare) verifico la posizione
-     *  se:         sono alla fine della pagina scrollo alla fine
-     *  altrimenti: aumento il badge
-     */
-    const obsAddedMessage: Subscription = this.messagingService.obsAdded
-    .subscribe(newMessage => {
-      that.g.wdLog(['Subscription NEW MSG', newMessage]);
-      const senderId = that.g.senderId;
-      if ( that.startScroll || newMessage.sender === senderId) {
-        that.g.wdLog(['*A 1-------']);
-        setTimeout(function () {
-          that.scrollToBottom();
-        }, 200);
-      } else if (that.scrollMe) {
-        const divScrollMe = that.scrollMe.nativeElement;
-        const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
-        if (checkContentScrollPosition) {
-          that.g.wdLog(['*A2-------']);
-          // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-          setTimeout(function () {
-            that.scrollToBottom();
-          }, 0);
-        } else {
-          that.g.wdLog(['*A3-------']);
-          that.NUM_BADGES++;
-          // that.soundMessage(newMessage.timestamp);
-        }
-      }
 
-      /**
-       *
-       */
-      if (newMessage && newMessage.text && that.lastMsg) {
-        setTimeout(function () {
-          let messaggio = '';
-          const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
-          const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
-          if (altTextArea && testFocus) {
-            setTimeout(function () {
-              if (newMessage.sender !== that.g.senderId) {
-                messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
-                altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
-                testFocus.focus();
-              }
-            }, 1000);
-          }
-        }, 1000);
-      }
+  // addNewConversation() {
+  //   // è una new conversazione
+  //   console.log('addNewConversation: ', this.messages.length, this.conversation);
+  //   if (this.messages.length <= 1 && !this.conversation) {
 
-    });
-    this.subscriptions.push(obsAddedMessage);
+  //   const now: Date = new Date();
+  //   const timestamp = now.valueOf();
 
-    this.subscriptionTyping();
-  }
+  //   // if (conversation.sender === that.senderId) {
+  //   //   conversation.sender_fullname = this.g.YOU;
+  //   // }
+  //   // if (conversation.sender !== that.senderId) {
+  //   //   conversation.avatar = that.avatarPlaceholder(conversation.sender_fullname);
+  //   //   conversation.color = that.setColorFromString(conversation.sender_fullname);
+  //   //   conversation.image = that.getUrlImgProfile(conversation.sender);
+  //   // } else {
+  //   //   conversation.avatar = that.avatarPlaceholder(conversation.recipient_fullname);
+  //   //   conversation.color = that.setColorFromString(conversation.recipient_fullname);
+  //   //   conversation.image = that.getUrlImgProfile(conversation.recipient);
+  //   // }
 
-  /**
-   *
-   */
-  private checkWritingMessages() {
-    const that = this;
-    const tenant = this.g.tenant;
-    try {
-      const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
-      if (messagesRef) {
-        messagesRef.on('value', function (writing) {
-          if (writing.exists()) {
-              that.writingMessage = that.g.LABEL_WRITING;
-          } else {
-              that.writingMessage = '';
-          }
-        });
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+
+  //     this.conversation = new ConversationModel(
+  //       this.conversationWith,
+  //       {},
+  //       this.g.channelType,
+  //       true,
+  //       '',
+  //       this.recipientId,
+  //       this.g.recipientFullname,
+  //       this.g.senderId,
+  //       this.g.YOU,
+  //       '0',
+  //       timestamp,
+  //       TYPE_MSG_TEXT,
+  //       '',
+  //       '',
+  //       '',
+  //       '',
+  //       0,
+  //       false
+  //       );
+  //   }
+  // }
+
 
 
   /**
    *
    */
-  checkListMessages() {
+  // checkListMessages() {
     // const that = this;
     // this.messagingService.checkListMessages(this.conversationWith)
     // .then(function (snapshot) {
@@ -743,77 +1036,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // }).catch(function (error) {
     //     console.error('checkListMessages ERROR: ', error);
     // });
-  }
+  // }
 
 
 
 
-  setFocusOnId(id) {
-    setTimeout(function () {
-        const textarea = document.getElementById(id);
-        if (textarea) {
-            //   that.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
-            textarea.setAttribute('value', ' ');
-            textarea.focus();
-        }
-    }, 500);
-}
 
 
 
 
-/**
-     * quando premo un tasto richiamo questo metodo che:
-     * verifica se è stato premuto 'invio'
-     * se si azzera testo
-     * imposta altezza campo come min di default
-     * leva il focus e lo reimposta dopo pochi attimi
-     * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
-     * invio messaggio
-     * @param event
-     */
-    onkeypress(event) {
-      const keyCode = event.which || event.keyCode;
-      this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
-      if (keyCode === 13) {
-          this.performSendingMessage();
-      } else if (keyCode === 9) {
-        event.preventDefault();
-      }
-  }
 
-  private performSendingMessage() {
-      // const msg = document.getElementsByClassName('f21textarea')[0];
-      let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      if (msg && msg.trim() !== '') {
-          //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
-          // this.resizeInputField();
-          // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.setDepartment();
-          msg = replaceBr(msg);
-          this.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.restoreTextArea();
-      }
-      // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
-      // this.textInputTextArea = '';
-      // this.restoreTextArea();
-  }
-
-  private restoreTextArea() {
-    //   that.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
-    this.resizeInputField();
-    const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
-    this.textInputTextArea = ''; // clear the textarea
-    if (textArea) {
-        textArea.value = '';  // clear the textarea
-        textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
-        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
-    } else {
-          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
-    }
-    this.setFocusOnId('chat21-main-message-context');
-  }
 
 
   /**
@@ -899,7 +1131,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
   }
 
-  printMessage(message, messageEl, component) {
+  /**
+   * printMessage
+   * @param message
+   * @param messageEl
+   * @param component
+   */
+  printMessage(message: any, messageEl: any, component: any) {
     this.triggerBeforeMessageRender(message, messageEl, component);
     const messageText = message.text;
     this.triggerAfterMessageRender(message, messageEl, component);
@@ -907,101 +1145,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
-  triggerBeforeMessageRender(message, messageEl, component) {
-    // console.log('triggerBeforeMessageRender');
-    try {
-      // tslint:disable-next-line:max-line-length
-      const beforeMessageRender = new CustomEvent('beforeMessageRender',
-        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-      const windowContext = this.g.windowContext;
-      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
-          this.g.windowContext = windowContext;
-      } else {
-        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-  triggerAfterMessageRender(message, messageEl, component) {
-    // console.log('triggerBeforeMessageRender');
-    try {
-      // tslint:disable-next-line:max-line-length
-      const afterMessageRender = new CustomEvent('afterMessageRender',
-        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-      const windowContext = this.g.windowContext;
-      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-          windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
-          this.g.windowContext = windowContext;
-      } else {
-        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-
-  // tslint:disable-next-line:max-line-length
-  private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-  // tslint:disable-next-line:max-line-length
-  private triggerAfterSendMessageEvent(message) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onAfterMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-  /**
-   *
-   */
-
-  onSendPressed(event) {
-    this.g.wdLog(['onSendPressed:event', event]);
-    this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
-    if (this.isFilePendingToUpload) {
-      this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
-      // its a file
-      this.loadFile();
-      this.isFilePendingToUpload = false;
-      // disabilito pulsanti
-      this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
-    } else {
-      if ( this.textInputTextArea.length > 0 ) {
-        this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
-        // its a message
-        this.performSendingMessage();
-        // restore the text area
-        // this.restoreTextArea();
-      }
-    }
-  }
 
 /**
      * recupero url immagine profilo
@@ -1028,88 +1171,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //     // }
   // }
 
-  /**
-     * ridimensiona la textarea
-     * chiamato ogni volta che cambia il contenuto della textarea
-     * imposto stato 'typing'
-     */
-    resizeInputField() {
-      try {
-        const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
-        // tslint:disable-next-line:max-line-length
-        //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-        target.style.height = '100%';
-        if (target.value === '\n') {
-            target.value = '';
-            target.style.height = this.HEIGHT_DEFAULT;
-        } else if (target.scrollHeight > target.offsetHeight) {
-            target.style.height = target.scrollHeight + 2 + 'px';
-            target.style.minHeight = this.HEIGHT_DEFAULT;
-        } else {
-            //   that.g.wdLog(['PASSO 3');
-            target.style.height = this.HEIGHT_DEFAULT;
-            // segno sto scrivendo
-            // target.offsetHeight - 15 + 'px';
-        }
-        this.setWritingMessages(target.value);
-      } catch (e) {
-        this.g.wdLog(['> Error :' + e]);
-      }
-      // tslint:disable-next-line:max-line-length
-      //   that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-  }
 
-
-  // ========= begin:: typing ======= //
-
-  /**
-   *
-   * @param str
-   */
-  setWritingMessages(str) {
-    this.messagingService.setWritingMessages(str, this.g.channelType);
-  }
-
-  /**
-   * on subscribe Typings
-   */
-  subscriptionTyping() {
-    // console.log('subscriptionTyping');
-    this.obsTyping = this.messagingService.obsTyping
-    .subscribe(childSnapshot => {
-      if (childSnapshot) {
-        // this.isTypings = true;
-        const that = this;
-        // console.log('child_changed key', childSnapshot.key);
-        // console.log('child_changed val', childSnapshot.val());
-        this.checkMemberId(childSnapshot.key);
-        clearTimeout(this.setTimeoutWritingMessages);
-        this.setTimeoutWritingMessages = setTimeout(function () {
-            that.isTypings = false;
-            that.writingMessage = that.g.LABEL_WRITING;
-        }, 2000);
-      }
-    });
-    this.subscriptions.push(this.obsTyping);
-  }
-
-  /**
-   *
-   * @param memberID
-   */
-  checkMemberId(memberID) {
-    const that = this;
-     // && memberID.trim() !== 'system'
-    if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
-    ) {
-      if (that.isTypings === false) {
-        that.isTypings = true;
-      }
-    } else {
-      that.isTypings = false;
-    }
-  }
-  // ================================ //
 
 
   // ========= begin:: functions scroll position ======= //
@@ -1529,13 +1591,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
-    this.storageService.removeItem('activeConversation');
-    this.g.setParameter('activeConversation', null, false);
+    console.log('returnHome');
+    this.storageService.removeItem('idActiveConversation');
+    // this.storageService.removeItem('activeConversation');
+    // this.g.setParameter('activeConversation', null, false);
     this.eventClose.emit();
   }
 
   returnCloseWidget() {
-    //this.g.setParameter('activeConversation', null, false);
+    // this.g.setParameter('activeConversation', null, false);
     this.eventCloseWidget.emit();
   }
 
@@ -1571,31 +1635,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
 
-  // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
-  /**
-   * elimino tutte le sottoscrizioni
-   */
-  // tslint:disable-next-line:use-life-cycle-interface
-  ngOnDestroy() {
-    this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-    //this.storageService.removeItem('activeConversation');
-    this.unsubscribe();
-  }
-
-
-  /** */
-  unsubscribe() {
-    this.g.wdLog(['******* unsubscribe *******']);
-    this.subscriptions.forEach(function (subscription) {
-        subscription.unsubscribe();
-    });
-    this.subscriptions.length = 0;
-    this.messagingService.unsubscribeAllReferences();
-    this.g.wdLog(['this.subscriptions', this.subscriptions]);
-  }
-  // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
-
-
 
   /**
    * regola sound message:
@@ -1625,7 +1664,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   hideMenuOptions() {
-    this.g.wdLog(['hideMenuOptions']);
+    this.g.wdLog(['hideMenuOptions B']);
     this.isMenuShow  = false;
  }
 
@@ -1700,21 +1739,33 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog(['> action :']);
   }
 
+  /**
+   * 
+   */
+  private openNewConversation() {
+    this.g.wdLog(['openNewConversation']);
+    this.eventNewConversation.emit();
+  }
+
+
 
   // ========= START:: TRIGGER FUNCTIONS ============//
-  private onNewConversationComponentInit() {
-    this.g.wdLog([' ---------------- onNewConversationComponentInit -------------- ']);
-    this.setConversation();
-    // this.connectConversation();
-
-    // console.log('onNewConversationComponentInit: ' + this.conversationWith);
-    const newConvId = this.conversationWith;
+  /**
+   * triggerNewConversationEvent
+   * @param newConvId
+   */
+  private triggerNewConversationEvent(newConvId: string) {
     const default_settings = this.g.default_settings;
     const appConfigs = this.appConfigService.getConfig();
-
-    this.g.wdLog([' ---------------- triggerOnNewConversationComponentInit ---------------- ', default_settings]);
-    // tslint:disable-next-line:max-line-length
-    const onNewConversation = new CustomEvent('onNewConversationComponentInit', { detail: { global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs } });
+    this.g.wdLog([' ---------------- triggerNewConversationEvent ---------------- ', default_settings]);
+    const onNewConversation = new CustomEvent('onNewConversation', {
+      detail: {
+          global: this.g,
+          default_settings: default_settings,
+          newConvId: newConvId,
+          appConfigs: appConfigs
+        }
+      });
     const windowContext = this.g.windowContext;
     if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
         windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
@@ -1723,6 +1774,163 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.el.nativeElement.dispatchEvent(onNewConversation);
     }
   }
+
+  /**
+   * onNewConversationComponentInit
+   */
+  private onNewConversationComponentInit() {
+    this.g.wdLog([' ---------------- onNewConversationComponentInit -------------- ']);
+    this.setConversation();
+    const newConvId = this.conversationWith;
+    const default_settings = this.g.default_settings;
+    const appConfigs = this.appConfigService.getConfig();
+    this.g.wdLog([' ---------------- triggerOnNewConversationComponentInit ---------------- ', default_settings]);
+    const onNewConversation = new CustomEvent('onNewConversationComponentInit', {
+      detail: {
+          global: this.g,
+          default_settings: default_settings,
+          newConvId: newConvId,
+          appConfigs: appConfigs
+        }
+      });
+    const windowContext = this.g.windowContext;
+    if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
+        this.g.windowContext = windowContext;
+    } else {
+        this.el.nativeElement.dispatchEvent(onNewConversation);
+    }
+  }
+
+  /**
+   * triggerBeforeMessageRender
+   * @param message
+   * @param messageEl
+   * @param component
+   */
+  triggerBeforeMessageRender(message: any, messageEl: any, component: any) {
+    try {
+      const beforeMessageRender = new CustomEvent('beforeMessageRender',
+        { detail: {
+            message: message,
+            sanitizer: this.sanitizer,
+            messageEl: messageEl,
+            component: component
+          }
+        });
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
+          this.g.windowContext = windowContext;
+      } else {
+        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+      }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+  }
+
+  /**
+   * triggerAfterMessageRender
+   * @param message
+   * @param messageEl
+   * @param component
+   */
+  triggerAfterMessageRender(message: any, messageEl: any, component: any) {
+    try {
+      const afterMessageRender = new CustomEvent('afterMessageRender',
+        { detail: {
+            message: message,
+            sanitizer: this.sanitizer,
+            messageEl: messageEl,
+            component: component
+          }
+        });
+      const windowContext = this.g.windowContext;
+      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+          windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
+          this.g.windowContext = windowContext;
+      } else {
+        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+      }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+  }
+
+
+  /**
+   * triggerBeforeSendMessageEvent
+   * @param senderFullname
+   * @param text
+   * @param type
+   * @param metadata
+   * @param conversationWith
+   * @param recipientFullname
+   * @param attributes
+   * @param projectid
+   * @param channel_type
+   */
+  private triggerBeforeSendMessageEvent(
+    senderFullname: string,
+    text: string,
+    type: any,
+    metadata: any,
+    conversationWith: string,
+    recipientFullname: string,
+    attributes: any,
+    projectid: string,
+    channel_type: any
+    ) {
+    try {
+        const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend',
+        { detail: {
+            senderFullname: senderFullname,
+            text: text,
+            type: type,
+            metadata,
+            conversationWith: conversationWith,
+            recipientFullname: recipientFullname,
+            attributes: attributes,
+            projectid: projectid,
+            channelType: channel_type
+          }
+        });
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
+            this.g.windowContext = windowContext;
+        } else {
+          this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
+        }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+  }
+
+  /**
+   * triggerAfterSendMessageEvent
+   * @param message
+   */
+  private triggerAfterSendMessageEvent(message: any) {
+    try {
+        const onAfterMessageSend = new CustomEvent('onAfterMessageSend',
+        { detail: {
+            message: message
+          }
+        });
+        const windowContext = this.g.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
+            this.g.windowContext = windowContext;
+        } else {
+          this.el.nativeElement.dispatchEvent(onAfterMessageSend);
+        }
+    } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+    }
+  }
+
   // ========= END:: TRIGGER FUNCTIONS ============//
 
 
