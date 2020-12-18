@@ -1,4 +1,3 @@
-import { ConversationHandlerService } from 'src/app/services/abstract/conversation-handler.service';
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';

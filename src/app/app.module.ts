@@ -1,3 +1,4 @@
+import { UserTypingComponent } from '../../src/chat21-core/utils/user-typing/user-typing.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
@@ -82,6 +83,10 @@ import { ActivatedRoute } from '@angular/router';
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
+import { ConversationHeaderComponent } from './components/conversation-header/conversation-header.component';
+import { TypingService } from '../chat21-core/providers/abstract/typing.service';
+import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebase-typing.service';
+
 
 // FACTORIES
 export function createTranslateLoader(http: HttpClient) {
@@ -97,7 +102,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 };
 
 export function authenticationFactory(http: HttpClient, route: ActivatedRoute) {
-  console.log('authenticationFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseAuthService(http, route);
   } else {
@@ -106,7 +110,6 @@ export function authenticationFactory(http: HttpClient, route: ActivatedRoute) {
 }
 
 export function conversationsHandlerFactory() {
-  console.log('conversationsHandlerFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseConversationsHandler();
   } else {
@@ -115,7 +118,6 @@ export function conversationsHandlerFactory() {
 }
 
 export function conversationHandlerBuilderFactory() {
-  console.log('conversationHandlerBuilderFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseConversationHandlerBuilderService();
   } else {
@@ -124,11 +126,18 @@ export function conversationHandlerBuilderFactory() {
 }
 
 export function conversationHandlerFactory() {
-  console.log('conversationHandlerBuilderFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseConversationHandler();
   } else {
     return new FirebaseConversationHandler();
+  }
+}
+
+export function typingFactory() {
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseTypingService();
+  } else {
+    return new FirebaseTypingService();
   }
 }
 
@@ -153,7 +162,9 @@ export function conversationHandlerFactory() {
     MessageAttachmentComponent,
     LastMessageComponent,
     MarkedPipe,
-    ListConversationsComponent
+    ListConversationsComponent,
+    ConversationHeaderComponent,
+    UserTypingComponent
   ],
   imports: [
     BrowserModule,
@@ -216,6 +227,11 @@ export function conversationHandlerFactory() {
     {
       provide: ConversationHandlerService,
       useFactory: conversationHandlerFactory,
+      deps: []
+    },
+    {
+      provide: TypingService,
+      useFactory: typingFactory,
       deps: []
     },
     AuthService,

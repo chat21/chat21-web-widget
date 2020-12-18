@@ -37,7 +37,7 @@ export class CustomTranslateService {
         mapTranslate.set(key, res);
       });
     });
-    console.log('language', this.language, 'maptranslate', mapTranslate)
+    console.log('maptranslate', mapTranslate)
     return mapTranslate;
   }
 

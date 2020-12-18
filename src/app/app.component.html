@@ -40,8 +40,8 @@
             [conversation]="conversationSelected"
             [isOpen]="g.isOpen"
             [elRoot]="el"
-            (eventClose)="returnCloseConversation()" 
-            (eventCloseWidget)="returnCloseWidget()"
+            (onClose)="returnCloseConversation()" 
+            (onCloseWidget)="returnCloseWidget()"
             ></tiledeskwidget-conversation>
         </div>
 

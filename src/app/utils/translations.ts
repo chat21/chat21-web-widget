@@ -58,6 +58,7 @@ export const en = {
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
 export const it = {
+    'LABEL_TU': 'tu ',
     'LABEL_PLACEHOLDER': 'Scrivi la tua domanda...',
     'LABEL_START_NW_CONV': 'Nuova conversazione',
     'LABEL_FIRST_MSG': 'Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato.',

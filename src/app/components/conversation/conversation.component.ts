@@ -33,6 +33,7 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import { AppComponent } from '../../app.component';
 import { StorageService } from '../../providers/storage.service';
 import { DepartmentModel } from '../../../models/department';
+import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -47,8 +48,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
-  @Output() eventClose = new EventEmitter();
-  @Output() eventCloseWidget = new EventEmitter();
+  @Output() onClose = new EventEmitter();
+  @Output() onCloseWidget = new EventEmitter();
   @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
@@ -147,6 +148,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     'hide-delay': 200
   };
 
+  translationMap: Map<string, string>;
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -160,7 +163,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public appComponent: AppComponent,
     public storageService: StorageService,
     public conversationsService: ConversationsService,
-    public appConfigService: AppConfigService
+    public appConfigService: AppConfigService,
+    private customTranslateService: CustomTranslateService,
 
     // public cdRef: ChangeDetectorRef
     // private translate: TranslateService
@@ -182,6 +186,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.subscriptions.push(subscriptionEndRenderMessage);
     // this.attributes = this.setAttributes();
     // this.getTranslation();
+    this.translations();
+  }
+
+  public translations() {
+    const keys = [
+      'LABEL_AVAILABLE',
+      'LABEL_NOT_AVAILABLE',
+      'LABEL_TODAY',
+      'LABEL_TOMORROW',
+      'LABEL_TO',
+      'LABEL_LAST_ACCESS',
+      'ARRAY_DAYS',
+      'LABEL_ACTIVE_NOW',
+      'LABEL_IS_WRITING'
+    ];
+    this.translationMap = this.customTranslateService.translateLanguage(keys);
   }
 
 
@@ -1531,14 +1551,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   returnHome() {
-    this.storageService.removeItem('activeConversation');
-    this.g.setParameter('activeConversation', null, false);
-    this.eventClose.emit();
+    //this.storageService.removeItem('activeConversation');
+    //this.g.setParameter('activeConversation', null, false);
+    this.onClose.emit();
   }
 
   returnCloseWidget() {
     //this.g.setParameter('activeConversation', null, false);
-    this.eventCloseWidget.emit();
+    this.onCloseWidget.emit();
   }
 
   dowloadTranscript() {
