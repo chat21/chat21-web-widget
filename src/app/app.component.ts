@@ -1366,8 +1366,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * selected department
      */
     public returnDepartmentSelected($event) {
+        this.g.wdLog(['onSelectDepartment: ', $event]);
         if ($event) {
-            this.g.wdLog(['onSelectDepartment: ', $event]);
             this.g.setParameter('departmentSelected', $event);
             // this.settingsSaverService.setVariable('departmentSelected', $event);
             this.isOpenHome = true;
@@ -1375,7 +1375,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
                 this.isOpenConversation = true;
                 //this.startNwConversation();
-                this.obsOpenConversation.next();
+                this.obsOpenConversation.next(CONVERSATION_STATUS);
             }
         }
     }
@@ -1403,7 +1403,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
             this.isOpenConversation = true;
             // this.startNwConversation();
-            this.obsOpenConversation.next();
+            this.obsOpenConversation.next(CONVERSATION_STATUS);
         }
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
