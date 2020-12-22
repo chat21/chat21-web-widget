@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
-import { ConversationComponent } from '../conversation/conversation.component';
+import { ConversationComponent } from '../conversation-detail/conversation/conversation.component';
 import {
   getUrlImgProfile,
   setColorFromString,

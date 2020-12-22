@@ -1,28 +1,31 @@
+
+import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
+
 // tslint:disable-next-line:max-line-length
 import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { Globals } from '../../utils/globals';
-import { MessagingService } from '../../providers/messaging.service';
-import { ConversationsService } from '../../providers/conversations.service';
-import { AppConfigService } from '../../providers/app-config.service';
+import { Globals } from '../../../utils/globals';
+import { MessagingService } from '../../../providers/messaging.service';
+import { ConversationsService } from '../../../providers/conversations.service';
+import { AppConfigService } from '../../../providers/app-config.service';
 
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
   TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
-} from '../../utils/constants';
-import { UploadService } from '../../providers/upload.service';
-import { ContactService } from '../../providers/contact.service';
-import { AgentAvailabilityService } from '../../providers/agent-availability.service';
-import { StarRatingWidgetService } from '../../components/star-rating-widget/star-rating-widget.service';
+} from '../../../utils/constants';
+import { UploadService } from '../../../providers/upload.service';
+import { ContactService } from '../../../providers/contact.service';
+import { AgentAvailabilityService } from '../../../providers/agent-availability.service';
+import { StarRatingWidgetService } from '../../star-rating-widget/star-rating-widget.service';
 
 // models
-import { ConversationModel } from '../../../models/conversation';
-import { MessageModel } from '../../../models/message';
-import { UploadModel } from '../../../models/upload';
+import { ConversationModel } from '../../../../models/conversation';
+import { MessageModel } from '../../../../models/message';
+import { UploadModel } from '../../../../models/upload';
 
 // utils
-import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr } from '../../utils/utils';
+import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr} from '../../../utils/utils';
 
 
 // Import the resized event model
@@ -30,10 +33,11 @@ import { ResizedEvent } from 'angular-resize-event/resized-event';
 
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
-import { AppComponent } from '../../app.component';
-import { StorageService } from '../../providers/storage.service';
-import { DepartmentModel } from '../../../models/department';
-import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
+import { AppComponent } from '../../../app.component';
+import { StorageService } from '../../../providers/storage.service';
+import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
+import { ConversationHandlerService } from '../../../../chat21-core/providers/abstract/conversation-handler.service';
+import { ConversationHandlerBuilderService } from '../../../../chat21-core/providers/abstract/conversation-handler-builder.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -50,7 +54,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= begin:: Input/Output values
   @Output() onClose = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
-  @Input() recipientId: string; // uid conversazione ex: support-group-LOT8SLRhIqXtR1NO...
   @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
   @Input() isOpen: boolean;
@@ -150,19 +153,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   translationMap: Map<string, string>;
 
+  @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
+  
   constructor(
     public el: ElementRef,
     public g: Globals,
     private ngZone: NgZone,
     public messagingService: MessagingService,
-    public upSvc: UploadService,
-    public contactService: ContactService,
-    private agentAvailabilityService: AgentAvailabilityService,
+    //public upSvc: UploadService,
+    //public contactService: ContactService,
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
     public appComponent: AppComponent,
     public storageService: StorageService,
     public conversationsService: ConversationsService,
+    public conversationHandlerBuilderService: ConversationHandlerBuilderService,
+    public conversationHandlerService: ConversationHandlerService,
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
 
@@ -221,7 +227,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // after animation intro
     setTimeout(() => {
       this.initAll();
-      this.setFocusOnId('chat21-main-message-context');
+      // this.setFocusOnId('chat21-main-message-context');
       this.updateConversationBadge();
 
       this.g.currentConversationComponent = this;
@@ -229,15 +235,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.onNewConversationComponentInit();
         this.g.newConversationStart = false;
         const start_message = this.g.startMessage;
-        if (this.g.startMessage) {
-          this.sendMessage(
-            start_message.text,
-            start_message.type,
-            start_message.metadata,
-            start_message.attributes
-          );
-          // {"subtype": "info"}  //sponziello
-        }
+        // if (this.g.startMessage) {
+        //   this.sendMessage(
+        //     start_message.text,
+        //     start_message.type,
+        //     start_message.metadata,
+        //     start_message.attributes
+        //   );
+        //   // {"subtype": "info"}  //sponziello
+        // }
       }
       this.setSubscriptions();
       if (this.afConversationComponent) {
@@ -319,7 +325,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.connectConversation();
 
     this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
-    this.initializeChatManager();
+    //this.initializeChatManager();
 
     // sponziello, commentato
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
@@ -347,10 +353,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // }
   }
 
-  onResize(event) {
-    // tslint:disable-next-line:no-unused-expression
-    this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
-  }
+  // onResize(event) {
+  //   // tslint:disable-next-line:no-unused-expression
+  //   this.g.wdLog(['RESIZE ----------> ' + event.target.innerWidth]);
+  // }
 
   /**
    * OLD: mi sottoscrivo al nodo /projects/' + projectId + '/users/availables
@@ -359,38 +365,38 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * imposto il messaggio online/offline a seconda degli agenti disponibili
    * aggiungo il primo messaggio alla conversazione
    */
-  public setAvailableAgentsStatus() {
+  // public setAvailableAgentsStatus() {
 
-    const departmentDefault: DepartmentModel =  this.g.departmentDefault;
-    this.g.wdLog(['departmentDefault', departmentDefault]);
-    this.g.wdLog(['messages1: ', this.g.online_msg, this.g.offline_msg]);
-    if (!this.g.online_msg || this.g.online_msg === 'undefined' || this.g.online_msg === '') {
-      this.g.online_msg = this.g.LABEL_FIRST_MSG;
-    }
-    if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
-      this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
-    }
+  //   const departmentDefault: DepartmentModel =  this.g.departmentDefault;
+  //   this.g.wdLog(['departmentDefault', departmentDefault]);
+  //   this.g.wdLog(['messages1: ', this.g.online_msg, this.g.offline_msg]);
+  //   if (!this.g.online_msg || this.g.online_msg === 'undefined' || this.g.online_msg === '') {
+  //     this.g.online_msg = this.g.LABEL_FIRST_MSG;
+  //   }
+  //   if (!this.g.offline_msg || this.g.offline_msg === 'undefined' || this.g.offline_msg === '') {
+  //     this.g.offline_msg = this.g.LABEL_FIRST_MSG_NO_AGENTS;
+  //   }
 
-    this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
-    const availableAgentsForDep = this.g.availableAgents;
-    if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
-      this.addFirstMessage(this.g.offline_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template
-    } else {
-      this.addFirstMessage(this.g.online_msg);
-      this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
-      // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template
-    }
+  //   this.g.wdLog(['messages2: ', this.g.online_msg, this.g.offline_msg]);
+  //   const availableAgentsForDep = this.g.availableAgents;
+  //   if (availableAgentsForDep && availableAgentsForDep.length <= 0) {
+  //     this.addFirstMessage(this.g.offline_msg);
+  //     this.g.areAgentsAvailableText = this.g.AGENT_NOT_AVAILABLE;
+  //     // no more used g.areAgentsAvailableText - g.AGENT_NOT_AVAILABLE is managed in the template
+  //   } else {
+  //     this.addFirstMessage(this.g.online_msg);
+  //     this.g.areAgentsAvailableText = this.g.AGENT_AVAILABLE;
+  //     // no more used g.areAgentsAvailableText - g.AGENT_AVAILABLE is managed in the template
+  //   }
 
-    if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
-      this.g.areAgentsAvailableText = '';
-    }
-    this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
+  //   if ( this.g.recipientId.includes('_bot') || this.g.recipientId.includes('bot_') ) {
+  //     this.g.areAgentsAvailableText = '';
+  //   }
+  //   this.g.wdLog(['messages: ', this.g.online_msg, this.g.offline_msg]);
 
-    // this.getAvailableAgentsForDepartment();
+  //   // this.getAvailableAgentsForDepartment();
 
-  }
+  // }
 
     /**
    * mi sottoscrivo al nodo /departments/' + idDepartmentSelected + '/operators/';
@@ -446,34 +452,34 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //   });
   // }
 
-  addFirstMessage(text) {
-    const lang = this.g.lang;
-    const channelType = this.g.channelType;
-    const projectid = this.g.projectid;
+  // addFirstMessage(text) {
+  //   const lang = this.g.lang;
+  //   const channelType = this.g.channelType;
+  //   const projectid = this.g.projectid;
 
 
-    text = replaceBr(text);
-    const timestampSendingMessage = new Date('01/01/2000').getTime();
-    const msg = new MessageModel(
-      '000000',
-      lang,
-      this.conversationWith,
-      'Bot',
-      '', // sender
-      'Bot', // sender fullname
-      '200', // status
-      '', // metadata
-      text,
-      timestampSendingMessage,
-      '',
-      TYPE_MSG_TEXT,
-      '', // attributes
-      channelType,
-      projectid
-    );
-    this.g.wdLog(['addFirstMessage ----------> ' + text]);
-    this.messages.unshift(msg);
-  }
+  //   text = replaceBr(text);
+  //   const timestampSendingMessage = new Date('01/01/2000').getTime();
+  //   const msg = new MessageModel(
+  //     '000000',
+  //     lang,
+  //     this.conversationWith,
+  //     'Bot',
+  //     '', // sender
+  //     'Bot', // sender fullname
+  //     '200', // status
+  //     '', // metadata
+  //     text,
+  //     timestampSendingMessage,
+  //     '',
+  //     TYPE_MSG_TEXT,
+  //     '', // attributes
+  //     channelType,
+  //     projectid
+  //   );
+  //   this.g.wdLog(['addFirstMessage ----------> ' + text]);
+  //   this.messages.unshift(msg);
+  // }
 
   /**
     * this.g.recipientId:
@@ -540,7 +546,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private setChannelType() {
     let channelTypeTEMP = CHANNEL_TYPE_GROUP;
     const projectid = this.g.projectid;
-    if (this.recipientId && this.recipientId.indexOf('group') !== -1) {
+    if (this.g.recipientId && this.g.recipientId.indexOf('group') !== -1) {
       channelTypeTEMP = CHANNEL_TYPE_GROUP;
     } else if (!projectid) {
       channelTypeTEMP = CHANNEL_TYPE_DIRECT;
@@ -565,13 +571,33 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.messagingService.initWritingMessages(this.conversationWith);
       this.messagingService.getWritingMessages();
 
-      this.upSvc.initialize(senderId, tenant, this.conversationWith);
+      // this.upSvc.initialize(senderId, tenant, this.conversationWith);
       // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
       // this.scrollToBottomStart();
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
+
+
+      //NEW IMPLEMENTATION
+      // const handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
+      // console.log('DETTAGLIO CONV - handler **************', handler, this.conversationWith);
+      // if (!handler) {
+      //   this.conversationHandlerService = this.conversationHandlerBuilderService.build();
+      //   this.conversationHandlerService.initialize(
+      //     this.conversationWith,
+      //     this.conversationWithFullname,
+      //     this.loggedUser,
+      //     this.tenant,
+      //     translationMap
+      //   );
+      //   this.conversationHandlerService.connect();
+      //   console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
+      //   this.messages = this.conversationHandlerService.messages;
+
+      //   this.chatManager.addConversationHandler(this.conversationHandlerService);
+
   }
 
 
@@ -580,11 +606,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * effettuo il login anonimo su firebase
    * se il login è andato a buon fine recupero id utente
    */
-  initializeChatManager() {
-    this.arrayFilesLoad = [];
-    // this.setSubscriptions();
-    // this.checkWritingMessages();
-  }
+  // initializeChatManager() {
+  //   this.arrayFilesLoad = [];
+  //   // this.setSubscriptions();
+  //   // this.checkWritingMessages();
+  // }
 
   /**
    *
@@ -692,36 +718,36 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.subscriptions.push(obsAddedMessage);
 
-    this.subscriptionTyping();
+    //this.subscriptionTyping();
   }
 
   /**
    *
    */
-  private checkWritingMessages() {
-    const that = this;
-    const tenant = this.g.tenant;
-    try {
-      const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
-      if (messagesRef) {
-        messagesRef.on('value', function (writing) {
-          if (writing.exists()) {
-              that.writingMessage = that.g.LABEL_WRITING;
-          } else {
-              that.writingMessage = '';
-          }
-        });
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+  // private checkWritingMessages() {
+  //   const that = this;
+  //   const tenant = this.g.tenant;
+  //   try {
+  //     const messagesRef = this.messagingService.checkWritingMessages(tenant, this.conversationWith);
+  //     if (messagesRef) {
+  //       messagesRef.on('value', function (writing) {
+  //         if (writing.exists()) {
+  //             that.writingMessage = that.g.LABEL_WRITING;
+  //         } else {
+  //             that.writingMessage = '';
+  //         }
+  //       });
+  //     }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
 
 
   /**
    *
    */
-  checkListMessages() {
+    //checkListMessages() {
     // const that = this;
     // this.messagingService.checkListMessages(this.conversationWith)
     // .then(function (snapshot) {
@@ -765,161 +791,161 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // }).catch(function (error) {
     //     console.error('checkListMessages ERROR: ', error);
     // });
-  }
+    //}
 
 
 
 
-  setFocusOnId(id) {
-    setTimeout(function () {
-        const textarea = document.getElementById(id);
-        if (textarea) {
-            //   that.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
-            textarea.setAttribute('value', ' ');
-            textarea.focus();
-        }
-    }, 500);
-}
+  // setFocusOnId(id) {
+  //   setTimeout(function () {
+  //       const textarea = document.getElementById(id);
+  //       if (textarea) {
+  //           //   that.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
+  //           textarea.setAttribute('value', ' ');
+  //           textarea.focus();
+  //       }
+  //   }, 500);
+  // }
 
 
 
 
-/**
-     * quando premo un tasto richiamo questo metodo che:
-     * verifica se è stato premuto 'invio'
-     * se si azzera testo
-     * imposta altezza campo come min di default
-     * leva il focus e lo reimposta dopo pochi attimi
-     * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
-     * invio messaggio
-     * @param event
-     */
-    onkeypress(event) {
-      const keyCode = event.which || event.keyCode;
-      this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
-      if (keyCode === 13) {
-          this.performSendingMessage();
-      } else if (keyCode === 9) {
-        event.preventDefault();
-      }
-  }
+  // /**
+  //  * quando premo un tasto richiamo questo metodo che:
+  //  * verifica se è stato premuto 'invio'
+  //  * se si azzera testo
+  //  * imposta altezza campo come min di default
+  //  * leva il focus e lo reimposta dopo pochi attimi
+  //  * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
+  //  * invio messaggio
+  //  * @param event
+  //  */
+  // onkeypress(event) {
+  //   const keyCode = event.which || event.keyCode;
+  //   this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+  //   // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
+  //   if (keyCode === 13) {
+  //       this.performSendingMessage();
+  //   } else if (keyCode === 9) {
+  //     event.preventDefault();
+  //   }
+  // }
 
-  private performSendingMessage() {
-      // const msg = document.getElementsByClassName('f21textarea')[0];
-      let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      if (msg && msg.trim() !== '') {
-          //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
-          // this.resizeInputField();
-          // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.setDepartment();
-          msg = replaceBr(msg);
-          this.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.restoreTextArea();
-      }
-      // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
-      // this.textInputTextArea = '';
-      // this.restoreTextArea();
-  }
+  // private performSendingMessage() {
+  //     // const msg = document.getElementsByClassName('f21textarea')[0];
+  //     let msg = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+  //     if (msg && msg.trim() !== '') {
+  //         //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
+  //         // this.resizeInputField();
+  //         // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+  //         // this.setDepartment();
+  //         msg = replaceBr(msg);
+  //         this.sendMessage(msg, TYPE_MSG_TEXT);
+  //         // this.restoreTextArea();
+  //     }
+  //     // (<HTMLInputElement>document.getElementById('chat21-main-message-context')).value = '';
+  //     // this.textInputTextArea = '';
+  //     // this.restoreTextArea();
+  // }
 
-  private restoreTextArea() {
-    //   that.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
-    this.resizeInputField();
-    const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
-    this.textInputTextArea = ''; // clear the textarea
-    if (textArea) {
-        textArea.value = '';  // clear the textarea
-        textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
-        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
-    } else {
-          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
-    }
-    this.setFocusOnId('chat21-main-message-context');
-  }
+  // private restoreTextArea() {
+  //   //   that.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
+  //   this.resizeInputField();
+  //   const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
+  //   this.textInputTextArea = ''; // clear the textarea
+  //   if (textArea) {
+  //       textArea.value = '';  // clear the textarea
+  //       textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
+  //       this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
+  //   } else {
+  //         console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+  //   }
+  //   this.setFocusOnId('chat21-main-message-context');
+  // }
 
 
-  /**
-     * invio del messaggio
-     * @param msg
-     * @param type
-     * @param metadata
-     * @param additional_attributes
-     */
-    sendMessage(msg, type, metadata?, additional_attributes?) { // sponziello
-      (metadata) ? metadata = metadata : metadata = '';
-      this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
-      if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
-          let recipientFullname = this.g.GUEST_LABEL;
-           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
-          const g_attributes = this.g.attributes;
-          // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}'
-          const attributes = <any>{};
-          if (g_attributes) {
-            for (const [key, value] of Object.entries(g_attributes)) {
-              attributes[key] = value;
-            }
-          }
-          if (additional_attributes) {
-            for (const [key, value] of Object.entries(additional_attributes)) {
-              attributes[key] = value;
-            }
-          }
-           // fine-sponziello
-          const projectid = this.g.projectid;
-          const channelType = this.g.channelType;
-          const userFullname = this.g.userFullname;
-          const userEmail = this.g.userEmail;
-          const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
-          const widgetTitle = this.g.widgetTitle;
-          const conversationWith = this.conversationWith;
-          this.triggerBeforeSendMessageEvent(
-            recipientFullname,
-            msg,
-            type,
-            metadata,
-            conversationWith,
-            recipientFullname,
-            attributes,
-            projectid,
-            channelType
-          );
-          if (userFullname) {
-            recipientFullname = userFullname;
-          } else if (userEmail) {
-            recipientFullname = userEmail;
-          } else if (attributes && attributes['userFullname']) {
-            recipientFullname = attributes['userFullname'];
-          } else {
-            recipientFullname = this.g.GUEST_LABEL;
-          }
-          if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
-            recipientFullname += ' - ' + widgetTitle;
-          }
-          const messageSent = this.messagingService.sendMessage(
-            recipientFullname,
-            msg,
-            type,
-            metadata,
-            conversationWith,
-            recipientFullname,
-            attributes,
-            projectid,
-            channelType
-          );
-          this.triggerAfterSendMessageEvent(messageSent);
-          this.isNewConversation = false;
+  // /**
+  //    * invio del messaggio
+  //    * @param msg
+  //    * @param type
+  //    * @param metadata
+  //    * @param additional_attributes
+  //    */
+  //   sendMessage(msg, type, metadata?, additional_attributes?) { // sponziello
+  //     (metadata) ? metadata = metadata : metadata = '';
+  //     this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
+  //     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
+  //         let recipientFullname = this.g.GUEST_LABEL;
+  //          // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
+  //         const g_attributes = this.g.attributes;
+  //         // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}'
+  //         const attributes = <any>{};
+  //         if (g_attributes) {
+  //           for (const [key, value] of Object.entries(g_attributes)) {
+  //             attributes[key] = value;
+  //           }
+  //         }
+  //         if (additional_attributes) {
+  //           for (const [key, value] of Object.entries(additional_attributes)) {
+  //             attributes[key] = value;
+  //           }
+  //         }
+  //          // fine-sponziello
+  //         const projectid = this.g.projectid;
+  //         const channelType = this.g.channelType;
+  //         const userFullname = this.g.userFullname;
+  //         const userEmail = this.g.userEmail;
+  //         const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
+  //         const widgetTitle = this.g.widgetTitle;
+  //         const conversationWith = this.conversationWith;
+  //         this.triggerBeforeSendMessageEvent(
+  //           recipientFullname,
+  //           msg,
+  //           type,
+  //           metadata,
+  //           conversationWith,
+  //           recipientFullname,
+  //           attributes,
+  //           projectid,
+  //           channelType
+  //         );
+  //         if (userFullname) {
+  //           recipientFullname = userFullname;
+  //         } else if (userEmail) {
+  //           recipientFullname = userEmail;
+  //         } else if (attributes && attributes['userFullname']) {
+  //           recipientFullname = attributes['userFullname'];
+  //         } else {
+  //           recipientFullname = this.g.GUEST_LABEL;
+  //         }
+  //         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
+  //           recipientFullname += ' - ' + widgetTitle;
+  //         }
+  //         const messageSent = this.messagingService.sendMessage(
+  //           recipientFullname,
+  //           msg,
+  //           type,
+  //           metadata,
+  //           conversationWith,
+  //           recipientFullname,
+  //           attributes,
+  //           projectid,
+  //           channelType
+  //         );
+  //         this.triggerAfterSendMessageEvent(messageSent);
+  //         this.isNewConversation = false;
 
-          try {
-            const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
-            target.value = '';
-            target.style.height = this.HEIGHT_DEFAULT;
-            // console.log('target.style.height: ', target.style.height);
-          } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
-          }
-          this.restoreTextArea();
-      }
-  }
+  //         try {
+  //           const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+  //           target.value = '';
+  //           target.style.height = this.HEIGHT_DEFAULT;
+  //           // console.log('target.style.height: ', target.style.height);
+  //         } catch (e) {
+  //           this.g.wdLog(['> Error :' + e]);
+  //         }
+  //         this.restoreTextArea();
+  //     }
+  // }
 
   printMessage(message, messageEl, component) {
     this.triggerBeforeMessageRender(message, messageEl, component);
@@ -967,63 +993,63 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   // tslint:disable-next-line:max-line-length
-  private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+  // private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
 
   // tslint:disable-next-line:max-line-length
-  private triggerAfterSendMessageEvent(message) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onAfterMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+  // private triggerAfterSendMessageEvent(message) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onAfterMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
 
   /**
    *
    */
 
-  onSendPressed(event) {
-    this.g.wdLog(['onSendPressed:event', event]);
-    this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
-    if (this.isFilePendingToUpload) {
-      this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
-      // its a file
-      this.loadFile();
-      this.isFilePendingToUpload = false;
-      // disabilito pulsanti
-      this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
-    } else {
-      if ( this.textInputTextArea.length > 0 ) {
-        this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
-        // its a message
-        this.performSendingMessage();
-        // restore the text area
-        // this.restoreTextArea();
-      }
-    }
-  }
+  // onSendPressed(event) {
+  //   this.g.wdLog(['onSendPressed:event', event]);
+  //   this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+  //   if (this.isFilePendingToUpload) {
+  //     this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
+  //     // its a file
+  //     this.loadFile();
+  //     this.isFilePendingToUpload = false;
+  //     // disabilito pulsanti
+  //     this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+  //   } else {
+  //     if ( this.textInputTextArea.length > 0 ) {
+  //       this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
+  //       // its a message
+  //       this.performSendingMessage();
+  //       // restore the text area
+  //       // this.restoreTextArea();
+  //     }
+  //   }
+  // }
 
 /**
      * recupero url immagine profilo
@@ -1055,31 +1081,31 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * chiamato ogni volta che cambia il contenuto della textarea
      * imposto stato 'typing'
      */
-    resizeInputField() {
-      try {
-        const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
-        // tslint:disable-next-line:max-line-length
-        //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-        target.style.height = '100%';
-        if (target.value === '\n') {
-            target.value = '';
-            target.style.height = this.HEIGHT_DEFAULT;
-        } else if (target.scrollHeight > target.offsetHeight) {
-            target.style.height = target.scrollHeight + 2 + 'px';
-            target.style.minHeight = this.HEIGHT_DEFAULT;
-        } else {
-            //   that.g.wdLog(['PASSO 3');
-            target.style.height = this.HEIGHT_DEFAULT;
-            // segno sto scrivendo
-            // target.offsetHeight - 15 + 'px';
-        }
-        this.setWritingMessages(target.value);
-      } catch (e) {
-        this.g.wdLog(['> Error :' + e]);
-      }
-      // tslint:disable-next-line:max-line-length
-      //   that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-  }
+  //   resizeInputField() {
+  //     try {
+  //       const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
+  //       // tslint:disable-next-line:max-line-length
+  //       //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  //       target.style.height = '100%';
+  //       if (target.value === '\n') {
+  //           target.value = '';
+  //           target.style.height = this.HEIGHT_DEFAULT;
+  //       } else if (target.scrollHeight > target.offsetHeight) {
+  //           target.style.height = target.scrollHeight + 2 + 'px';
+  //           target.style.minHeight = this.HEIGHT_DEFAULT;
+  //       } else {
+  //           //   that.g.wdLog(['PASSO 3');
+  //           target.style.height = this.HEIGHT_DEFAULT;
+  //           // segno sto scrivendo
+  //           // target.offsetHeight - 15 + 'px';
+  //       }
+  //       this.setWritingMessages(target.value);
+  //     } catch (e) {
+  //       this.g.wdLog(['> Error :' + e]);
+  //     }
+  //     // tslint:disable-next-line:max-line-length
+  //     //   that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  // }
 
 
   // ========= begin:: typing ======= //
@@ -1088,32 +1114,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    *
    * @param str
    */
-  setWritingMessages(str) {
-    this.messagingService.setWritingMessages(str, this.g.channelType);
-  }
-
-  /**
-   * on subscribe Typings
-   */
-  subscriptionTyping() {
-    // console.log('subscriptionTyping');
-    this.obsTyping = this.messagingService.obsTyping
-    .subscribe(childSnapshot => {
-      if (childSnapshot) {
-        // this.isTypings = true;
-        const that = this;
-        // console.log('child_changed key', childSnapshot.key);
-        // console.log('child_changed val', childSnapshot.val());
-        this.checkMemberId(childSnapshot.key);
-        clearTimeout(this.setTimeoutWritingMessages);
-        this.setTimeoutWritingMessages = setTimeout(function () {
-            that.isTypings = false;
-            that.writingMessage = that.g.LABEL_WRITING;
-        }, 2000);
-      }
-    });
-    this.subscriptions.push(this.obsTyping);
-  }
+  // setWritingMessages(str) {
+  //   //this.messagingService.setWritingMessages(str, this.g.channelType);
+  //   this.typingService.setTyping(this.conversation.uid, str, this.g.senderId, this.getUserFUllName() )
+  // }
 
   /**
    *
@@ -1169,7 +1173,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         return false;
     }
   }
-
 
   /**
    * scrollo la lista messaggi all'ultimo
@@ -1294,148 +1297,148 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * carico in locale l'immagine selezionata e apro pop up anteprima
    */
-  detectFiles(event) {
-    this.g.wdLog(['detectFiles: ', event]);
+  // detectFiles(event) {
+  //   this.g.wdLog(['detectFiles: ', event]);
 
-    if (event) {
-        this.selectedFiles = event.target.files;
-        this.g.wdLog(['AppComponent:detectFiles::selectedFiles', this.selectedFiles]);
-        if (this.selectedFiles == null) {
-          this.isFilePendingToUpload = false;
-        } else {
-          this.isFilePendingToUpload = true;
-        }
-        this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
-        this.g.wdLog(['fileChange: ', event.target.files]);
-        if (event.target.files.length <= 0) {
-          this.isFilePendingToUpload = false;
-        } else {
-          this.isFilePendingToUpload = true;
-        }
-        const that = this;
-        if (event.target.files && event.target.files[0]) {
-            const nameFile = event.target.files[0].name;
-            const typeFile = event.target.files[0].type;
-            const reader = new FileReader();
-              that.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
-            reader.addEventListener('load', function () {
-                that.g.wdLog(['addEventListener load', reader.result]);
-              that.isFileSelected = true;
-              // se inizia con image
-              if (typeFile.startsWith('image')) {
-                const imageXLoad = new Image;
-                that.g.wdLog(['onload ', imageXLoad]);
-                imageXLoad.src = reader.result.toString();
-                imageXLoad.title = nameFile;
-                imageXLoad.onload = function () {
-                  that.g.wdLog(['onload immagine']);
-                  // that.arrayFilesLoad.push(imageXLoad);
-                  const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
-                  that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
-                  that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
-                  // INVIO MESSAGGIO
-                  that.loadFile();
-                };
-              } else {
-                that.g.wdLog(['onload file']);
-                const fileXLoad = {
-                  src: reader.result.toString(),
-                  title: nameFile
-                };
-                // that.arrayFilesLoad.push(imageXLoad);
-                const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
-                that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
-                that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
-                // INVIO MESSAGGIO
-                that.loadFile();
-              }
-            }, false);
+  //   if (event) {
+  //       this.selectedFiles = event.target.files;
+  //       this.g.wdLog(['AppComponent:detectFiles::selectedFiles', this.selectedFiles]);
+  //       if (this.selectedFiles == null) {
+  //         this.isFilePendingToUpload = false;
+  //       } else {
+  //         this.isFilePendingToUpload = true;
+  //       }
+  //       this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
+  //       this.g.wdLog(['fileChange: ', event.target.files]);
+  //       if (event.target.files.length <= 0) {
+  //         this.isFilePendingToUpload = false;
+  //       } else {
+  //         this.isFilePendingToUpload = true;
+  //       }
+  //       const that = this;
+  //       if (event.target.files && event.target.files[0]) {
+  //           const nameFile = event.target.files[0].name;
+  //           const typeFile = event.target.files[0].type;
+  //           const reader = new FileReader();
+  //             that.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
+  //           reader.addEventListener('load', function () {
+  //               that.g.wdLog(['addEventListener load', reader.result]);
+  //             that.isFileSelected = true;
+  //             // se inizia con image
+  //             if (typeFile.startsWith('image')) {
+  //               const imageXLoad = new Image;
+  //               that.g.wdLog(['onload ', imageXLoad]);
+  //               imageXLoad.src = reader.result.toString();
+  //               imageXLoad.title = nameFile;
+  //               imageXLoad.onload = function () {
+  //                 that.g.wdLog(['onload immagine']);
+  //                 // that.arrayFilesLoad.push(imageXLoad);
+  //                 const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
+  //                 that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
+  //                 that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+  //                 // INVIO MESSAGGIO
+  //                 that.loadFile();
+  //               };
+  //             } else {
+  //               that.g.wdLog(['onload file']);
+  //               const fileXLoad = {
+  //                 src: reader.result.toString(),
+  //                 title: nameFile
+  //               };
+  //               // that.arrayFilesLoad.push(imageXLoad);
+  //               const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
+  //               that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
+  //               that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+  //               // INVIO MESSAGGIO
+  //               that.loadFile();
+  //             }
+  //           }, false);
 
-            if (event.target.files[0]) {
-              reader.readAsDataURL(event.target.files[0]);
-                that.g.wdLog(['reader-result: ', event.target.files[0]]);
-            }
-        }
-    }
-  }
+  //           if (event.target.files[0]) {
+  //             reader.readAsDataURL(event.target.files[0]);
+  //               that.g.wdLog(['reader-result: ', event.target.files[0]]);
+  //           }
+  //       }
+  //   }
+  // }
 
 
-  loadFile() {
-    this.g.wdLog(['that.fileXLoad: ', this.arrayFilesLoad]);
-        // al momento gestisco solo il caricamento di un'immagine alla volta
-        if (this.arrayFilesLoad[0] && this.arrayFilesLoad[0].file) {
-            const fileXLoad = this.arrayFilesLoad[0].file;
-            const uid = this.arrayFilesLoad[0].uid;
-            const type = this.arrayFilesLoad[0].type;
-            this.g.wdLog(['that.fileXLoad: ', type]);
-            let metadata;
-            if (type.startsWith('image')) {
-                metadata = {
-                    'name': fileXLoad.title,
-                    'src': fileXLoad.src,
-                    'width': fileXLoad.width,
-                    'height': fileXLoad.height,
-                    'type': type,
-                    'uid': uid
-                };
-            } else {
-                metadata = {
-                    'name': fileXLoad.title,
-                    'src': fileXLoad.src,
-                    'type': type,
-                    'uid': uid
-                };
-            }
-            this.g.wdLog(['metadata -------> ', metadata]);
-            // this.scrollToBottom();
-            // 1 - aggiungo messaggio localmente
-            // this.addLocalMessageImage(metadata);
-            // 2 - carico immagine
-            const file = this.selectedFiles.item(0);
-            this.uploadSingle(metadata, file);
-            // this.isSelected = false;
-        }
-    }
+  // loadFile() {
+  //   this.g.wdLog(['that.fileXLoad: ', this.arrayFilesLoad]);
+  //       // al momento gestisco solo il caricamento di un'immagine alla volta
+  //       if (this.arrayFilesLoad[0] && this.arrayFilesLoad[0].file) {
+  //           const fileXLoad = this.arrayFilesLoad[0].file;
+  //           const uid = this.arrayFilesLoad[0].uid;
+  //           const type = this.arrayFilesLoad[0].type;
+  //           this.g.wdLog(['that.fileXLoad: ', type]);
+  //           let metadata;
+  //           if (type.startsWith('image')) {
+  //               metadata = {
+  //                   'name': fileXLoad.title,
+  //                   'src': fileXLoad.src,
+  //                   'width': fileXLoad.width,
+  //                   'height': fileXLoad.height,
+  //                   'type': type,
+  //                   'uid': uid
+  //               };
+  //           } else {
+  //               metadata = {
+  //                   'name': fileXLoad.title,
+  //                   'src': fileXLoad.src,
+  //                   'type': type,
+  //                   'uid': uid
+  //               };
+  //           }
+  //           this.g.wdLog(['metadata -------> ', metadata]);
+  //           // this.scrollToBottom();
+  //           // 1 - aggiungo messaggio localmente
+  //           // this.addLocalMessageImage(metadata);
+  //           // 2 - carico immagine
+  //           const file = this.selectedFiles.item(0);
+  //           this.uploadSingle(metadata, file);
+  //           // this.isSelected = false;
+  //       }
+  //   }
 
 
   /**
    *
    */
-    uploadSingle(metadata, file) {
-        const that = this;
-        const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
-        send_order_btn.disabled = true;
-        that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
-        // const file = this.selectedFiles.item(0);
-        const currentUpload = new UploadModel(file);
-        // console.log(currentUpload.file);
+    // uploadSingle(metadata, file) {
+    //     const that = this;
+    //     const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
+    //     send_order_btn.disabled = true;
+    //     that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
+    //     // const file = this.selectedFiles.item(0);
+    //     const currentUpload = new UploadModel(file);
+    //     // console.log(currentUpload.file);
 
-        const uploadTask = this.upSvc.pushUpload(currentUpload);
-        uploadTask.then(snapshot => {
-            return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
-        })
-            .then(downloadURL => {
-                  that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
-                  that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
+    //     const uploadTask = this.upSvc.pushUpload(currentUpload);
+    //     uploadTask.then(snapshot => {
+    //         return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+    //     })
+    //         .then(downloadURL => {
+    //               that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+    //               that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
-                metadata.src = downloadURL;
-                let type_message = TYPE_MSG_TEXT;
-                let message = 'File: ' + metadata.src;
-                if (metadata.type.startsWith('image')) {
-                    type_message = TYPE_MSG_IMAGE;
-                    message = ''; // 'Image: ' + metadata.src;
-                }
-                that.sendMessage(message, type_message, metadata);
-                that.isFilePendingToUpload = false;
-                // return downloadURL;
-            })
-            .catch(error => {
-                // Use to signal error if something goes wrong.
-                console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
-            });
-      // this.resetLoadImage();
-        that.g.wdLog(['reader-result: ', file]);
-    }
+    //             metadata.src = downloadURL;
+    //             let type_message = TYPE_MSG_TEXT;
+    //             let message = 'File: ' + metadata.src;
+    //             if (metadata.type.startsWith('image')) {
+    //                 type_message = TYPE_MSG_IMAGE;
+    //                 message = ''; // 'Image: ' + metadata.src;
+    //             }
+    //             that.sendMessage(message, type_message, metadata);
+    //             that.isFilePendingToUpload = false;
+    //             // return downloadURL;
+    //         })
+    //         .catch(error => {
+    //             // Use to signal error if something goes wrong.
+    //             console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+    //         });
+    //   // this.resetLoadImage();
+    //     that.g.wdLog(['reader-result: ', file]);
+    // }
 
 
     /**
@@ -1561,6 +1564,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.onCloseWidget.emit();
   }
 
+  returnSendMessage(event){
+    console.log('new message sent', event)
+  }
+
   dowloadTranscript() {
     const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
     const windowContext = this.g.windowContext;
@@ -1649,7 +1656,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   hideMenuOptions() {
     this.g.wdLog(['hideMenuOptions']);
     this.isMenuShow  = false;
- }
+  }
 
   isLastMessage(idMessage: string) {
     // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
@@ -1665,7 +1672,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const metadata = {
         'button': true
       };
-      this.sendMessage(event, TYPE_MSG_TEXT, metadata);
+      this.conversationFooter.sendMessage(event, TYPE_MSG_TEXT, metadata);
       // this.sendMessage($event, TYPE_MSG_TEXT);
     }
   }
@@ -1718,7 +1725,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       action: action,
       subtype: subtype
     };
-    this.sendMessage(message, TYPE_MSG_TEXT, null, attributes);
+    this.conversationFooter.sendMessage(message, TYPE_MSG_TEXT, null, attributes);
     this.g.wdLog(['> action :']);
   }
 

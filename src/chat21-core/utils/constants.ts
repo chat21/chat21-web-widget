@@ -39,6 +39,9 @@ export const CHANNEL_TYPE_GROUP = 'group';
 // TYPES MESSAGES
 export const TYPE_MSG_TEXT = 'text';
 export const TYPE_MSG_IMAGE = 'image';
+export const TYPE_MSG_FILE = 'file';
+export const TYPE_MSG_BUTTON = 'button';
+
 export const MAX_WIDTH_IMAGES = 300;
 export const TYPE_DIRECT = 'direct';
 export const TYPE_GROUP = 'group';

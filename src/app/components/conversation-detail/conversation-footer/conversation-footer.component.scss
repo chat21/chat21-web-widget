@@ -1,0 +1,113 @@
+@import '../../../../sass/variables';
+
+.visible-text-area {
+    pointer-events: auto;
+}
+
+.chat21-textarea-button {
+    pointer-events: auto;
+}
+.chat21-textarea-button {
+    fill: $blue;
+    pointer-events: auto;
+}
+
+
+
+/* resize and hide the text input area */
+// .hidden-text-area {
+//     display: hidden;
+//     height: 0px;
+// }
+
+// /* show and restore the text area size */
+// .visible-text-area {
+//     display: block;
+//     height: 100%;
+// }
+
+/* button scroll to bottom page */
+#chat21-buttonToBottom {
+    display: flex;
+    position: relative;
+    margin-right: 10px;
+    margin-top: -40px;
+    float: right;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    z-index: 1;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid $trasp-light-gray;
+    // -webkit-box-shadow: 0 3px 2px $trasp-light-black;
+    // box-shadow: 0 3px 2px $trasp-light-black;
+    text-align: center;
+    svg {
+        margin: auto;
+        fill: $gray;
+    }
+}
+#chat21-buttonToBottom:hover {
+    background-color: $blue;
+    opacity: 1!important;
+    transition: all .45s ease-in-out!important;
+    -moz-transition: all .45s ease-in-out!important;
+    -webkit-transition: all .45s ease-in-out!important;
+    border: 1px solid #ffffff;
+    svg {
+        fill: #ffffff;
+    }
+}
+
+#chat21-main-message-context {
+    overflow: hidden;
+    word-wrap: break-word;
+    resize: horizontal;
+    overflow-y: auto;
+    box-sizing: border-box;
+    color: $black;
+    min-width: 100%;
+    outline: 0;
+    resize: none;
+    font-size: 1.4em;
+    line-height: 1.4em;
+    font-weight: 300;
+    max-height: 110px;
+    min-height: auto;
+    height: 20px;
+    padding: 0px 40px;
+    margin: 10px 0px 10px;
+    border: none;
+}
+
+.chat21-textarea-button {
+    position: absolute;
+    display: block;
+    bottom: 22px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+    cursor: initial;
+    &.active {
+        opacity: 1;
+        cursor: pointer;
+    }
+}
+
+
+
+
+#chat21-button-send {
+    right: 8px;
+    bottom: 10px;
+}
+#chat21-file{
+    left: 8px;
+    bottom: 10px;
+}
+#chat21-start-upload-doc,
+#chat21-start-mic {
+    left: 8px;
+    top: 10px;
+}

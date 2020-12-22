@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
 import { ConversationModel } from '../../models/conversation';
-import { ConversationComponent } from '../components/conversation/conversation.component';
+import { ConversationComponent } from '../components/conversation-detail/conversation/conversation.component';
 // import { variable } from '@angular/compiler/src/output/output_ast';
 // import { storage } from 'firebase';
 

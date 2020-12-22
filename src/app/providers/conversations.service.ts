@@ -19,7 +19,7 @@ import { isJustRecived, getUrlImgProfile, getUnique, avatarPlaceholder, setColor
 
 // import { ConsoleReporter } from 'jasmine';
 import { SettingsSaverService } from '../providers/settings-saver.service';
-import { ConversationComponent } from '../components/conversation/conversation.component';
+import { ConversationComponent } from '../components/conversation-detail/conversation/conversation.component';
 
 
 

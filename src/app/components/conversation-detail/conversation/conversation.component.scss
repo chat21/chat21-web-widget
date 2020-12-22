@@ -1,7 +1,7 @@
 // $f21ico-schedule: image-url('f21ico-schedule.svg', false, false);
 // $f21ico-done: image-url('../assets/images/f21ico-done.svg', false, false);
 // $f21ico-done_all: image-url('../assets/images/f21ico-done_all.svg', false, false);
-@import '../../../sass/variables';
+@import '../../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
 
@@ -331,13 +331,13 @@
                                 overflow-x: hidden;
                             }
                             .c21-ico-schedule {
-                                background-image: url("../../../assets/images/f21ico-schedule.svg");
+                                background-image: url("../../../../assets/images/f21ico-schedule.svg");
                             }
                             .c21-ico-done {
-                                background-image: url("../../../assets/images/f21ico-done.svg");
+                                background-image: url("../../../../assets/images/f21ico-done.svg");
                             }
                             .c21-ico-done_all {
-                                background-image: url("../../../assets/images/f21ico-done_all.svg");
+                                background-image: url("../../../../assets/images/f21ico-done_all.svg");
                             }
                         }
                         

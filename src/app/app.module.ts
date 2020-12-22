@@ -66,7 +66,7 @@ import { SelectionDepartmentComponent } from './components/selection-department/
 import { HomeConversationsComponent } from './components/home-conversations/home-conversations.component';
 import { HomeComponent } from './components/home/home.component';
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
-import { ConversationComponent } from './components/conversation/conversation.component';
+import { ConversationComponent } from './components/conversation-detail/conversation/conversation.component';
 import { MessageAttachmentComponent } from './components/message-attachment/message-attachment.component';
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
@@ -83,9 +83,11 @@ import { ActivatedRoute } from '@angular/router';
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
-import { ConversationHeaderComponent } from './components/conversation-header/conversation-header.component';
 import { TypingService } from '../chat21-core/providers/abstract/typing.service';
 import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebase-typing.service';
+import { MessageTextAreaComponent } from './components/conversation-detail/conversation-footer/message-text-area/message-text-area.component';
+import { ConversationHeaderComponent } from './components/conversation-detail/conversation-header/conversation-header.component';
+import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
 
 
 // FACTORIES
@@ -164,7 +166,9 @@ export function typingFactory() {
     MarkedPipe,
     ListConversationsComponent,
     ConversationHeaderComponent,
-    UserTypingComponent
+    UserTypingComponent,
+    MessageTextAreaComponent,
+    ConversationFooterComponent
   ],
   imports: [
     BrowserModule,

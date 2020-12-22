@@ -36,7 +36,6 @@
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.modal-slide-in-right]="isOpenConversation" >
             <!-- [class.active]="true" isOpenConversation &&  [class.modal-slide-out-right]="!isOpenConversation"-->
             <tiledeskwidget-conversation 
-            [recipientId]="recipientId"
             [conversation]="conversationSelected"
             [isOpen]="g.isOpen"
             [elRoot]="el"

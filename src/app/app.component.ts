@@ -1,3 +1,4 @@
+
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
@@ -39,6 +40,7 @@ import { User } from '../models/User';
 import { CustomTranslateService } from '../chat21-core/providers/custom-translate.service';
 import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
 import { ChatManager } from '../chat21-core/providers/chat-manager';
+import { TypingService } from '../chat21-core/providers/abstract/typing.service';
 import { AuthService } from './providers/auth.service';
 
 
@@ -113,6 +115,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //public conversationsService: ConversationsService,
         public conversationsHandlerService: ConversationsHandlerService,
         public chatManager: ChatManager,
+        public typingService: TypingService
     ) {
         // that.g.wdLog(["Initializing app.component...")
         // that.g.wdLog(["THIS.G (IN CONSTRUCTOR) : " , this.g);
@@ -155,6 +158,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.authService.initialize();
         this.chatManager.initialize();
+        this.typingService.initialize();
     }
 
     // ========= begin:: SUBSCRIPTIONS ============//
@@ -267,8 +271,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 } else {
                     that.g.wdLog([' INIT obsLoggedUser']);
                     return;
-                }
-
+                }   
                 // that.triggerOnAuthStateChanged();
             // });
             this.initConversationsHandler(environment.tenant, that.g.senderId)
