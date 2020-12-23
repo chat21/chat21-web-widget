@@ -36,7 +36,7 @@ export abstract class ConversationHandlerService {
     sender: string,
     senderFullname: string,
     channelType: string
-  ): void;
+  ): MessageModel;
   abstract dispose(): void;
 
 }

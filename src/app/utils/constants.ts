@@ -31,7 +31,7 @@ export const CHANNEL_TYPE_GROUP = 'group';
 export const CHANNEL_TYPE_DIRECT = 'direct';
 
 // NODE MESSAGES
-export const UID_SUPPORT_GROUP_MESSAGES = 'support-group';
+export const UID_SUPPORT_GROUP_MESSAGES = 'support-group-';
 
 // constans messages detail
 export const MIN_HEIGHT_TEXTAREA = 24;

@@ -24,6 +24,7 @@ import {
   setHeaderDate,
   conversationMessagesRef
 } from '../../utils/utils';
+import { timestamp } from 'rxjs/operators';
 
 
 
@@ -83,7 +84,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         }
         this.tenant = tenant;
         this.translationMap = translationMap;
-
+        
         this.listSubsriptions = [];
         this.CLIENT_BROWSER = navigator.userAgent;
         this.conversationWith = recipientId;
@@ -135,7 +136,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         metadataMsg: string,
         conversationWith: string,
         conversationWithFullname: string,
-        senderMsg: string,
+        sender: string,
         senderFullname: string,
         channelType: string
     ) {
@@ -150,21 +151,38 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const recipientFullname = conversationWithFullname;
         const dateSendingMessage = setHeaderDate(this.translationMap, '');
 
+        const message = new MessageModel(
+            '',
+            lang,
+            conversationWith,
+            recipientFullname,
+            sender,
+            senderFullname,
+            0,
+            metadataMsg,
+            msg,
+            timestamp,
+            dateSendingMessage,
+            typeMsg,
+            this.attributes,
+            channelType,
+            false
+        );
         const messageRef = firebaseMessagesCustomUid.push({
-            language: lang,
-            recipient: conversationWith,
-            recipient_fullname: recipientFullname,
-            sender: senderMsg,
-            sender_fullname: senderFullname,
-            status: 0,
-            metadata: metadataMsg,
-            text: msg,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            type: typeMsg,
-            attributes: this.attributes,
-            channel_type: channelType
-            // isSender: true
-        });
+                language: lang,
+                recipient: conversationWith,
+                recipient_fullname: recipientFullname,
+                sender: sender,
+                sender_fullname: senderFullname,
+                status: 0,
+                metadata: metadataMsg,
+                text: msg,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                type: typeMsg,
+                attributes: this.attributes,
+                channel_type: channelType
+                // isSender: true
+            });
 
         // const message = new MessageModel(
         //     key,
@@ -185,7 +203,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // );
         console.log('messages: ',  this.messages);
         console.log('senderFullname: ',  senderFullname);
-        console.log('sender: ',  senderMsg);
+        console.log('sender: ',  sender);
         console.log('SEND MESSAGE: ', msg, channelType);
         console.log('timestamp: ', );
         console.log('messaggio **************', );
@@ -201,6 +219,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     // }
         //     // console.log('****** changed *****', that.messages);
         // });
+
+        
+          return message
     }
 
     /**
@@ -216,12 +237,19 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     // ---------------------------------------------------------- //
     /** */
     private setAttributes(): any {
-        const attributes = {
+        const attributes: any = {
             client: this.CLIENT_BROWSER,
             sourcePage: location.href,
-            userEmail: this.loggedUser.email,
-            userFullname: this.loggedUser.fullname
+            
         };
+
+        if(this.loggedUser && this.loggedUser.email ){
+            attributes.userEmail = this.loggedUser.email
+        }
+        if(this.loggedUser && this.loggedUser.fullname) {
+            attributes.userFullname = this.loggedUser.fullname
+        }
+        
 
         // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
         // if (!attributes || attributes === 'undefined') {

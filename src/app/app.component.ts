@@ -1,3 +1,4 @@
+import { UserModel } from '../../src/chat21-core/models/user';
 
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
 // import * as moment from 'moment';
@@ -43,7 +44,10 @@ import { ChatManager } from '../chat21-core/providers/chat-manager';
 import { TypingService } from '../chat21-core/providers/abstract/typing.service';
 import { AuthService } from './providers/auth.service';
 
-
+import { v4 as uuidv4 } from 'uuid';
+import { UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
+import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
+import { ConversationHandlerService } from '../chat21-core/providers/abstract/conversation-handler.service';
 // import { TranslationLoader } from './translation-loader';
 
 @Component({
@@ -104,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public translatorService: TranslatorService,
         private translateService: CustomTranslateService,
         public authService: AuthService,
-        public messagingService: MessagingService,
+        //public messagingService: MessagingService,
         public contactService: ContactService,
         public chatPresenceHandlerService: ChatPresenceHandlerService,
         private agentAvailabilityService: AgentAvailabilityService,
@@ -114,6 +118,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public settingsSaverService: SettingsSaverService,
         //public conversationsService: ConversationsService,
         public conversationsHandlerService: ConversationsHandlerService,
+        public conversationHandlerBuilderService: ConversationHandlerBuilderService,
         public chatManager: ChatManager,
         public typingService: TypingService
     ) {
@@ -969,6 +974,45 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+
+    initConversationHandler(conversationWith: string ): ConversationHandlerService{
+        const tenant = this.g.tenant;
+        const keys = [
+            'LABEL_AVAILABLE',
+            'LABEL_NOT_AVAILABLE',
+            'LABEL_TODAY',
+            'LABEL_TOMORROW',
+            'LABEL_TO',
+            'LABEL_LAST_ACCESS',
+            'ARRAY_DAYS',
+            'LABEL_ACTIVE_NOW',
+            'LABEL_WRITING'
+          ];
+        const translationMap = this.translateService.translateLanguage(keys);
+        //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
+        const loggedUser = { uid: this.g.senderId}
+        const conversationWithFullname = this.g.recipientFullname;
+        let handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(conversationWith);
+        console.log('DETTAGLIO CONV - handler **************', handler, conversationWith);
+        if (!handler) {
+             const conversationHandlerService = this.conversationHandlerBuilderService.build();
+             conversationHandlerService.initialize(
+                conversationWith,
+                conversationWithFullname,
+                loggedUser,
+                tenant,
+                translationMap
+            );
+
+            console.log('DETTAGLIO CONV - NEW handler **************', conversationHandlerService);
+            this.chatManager.addConversationHandler(conversationHandlerService);
+            handler = conversationHandlerService
+
+        }
+
+        return handler
+    }
+
     /** */
     private endMessageRender() {
         this.obsEndRenderMessage.next();
@@ -999,19 +1043,31 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             attributes,
             projectid,
             channel_type]);
-        const messageSent = this.messagingService
-            .sendMessageFull(
-                tenant,
-                senderId,
-                senderFullname,
-                msg,
-                type,
-                metadata,
-                conversationWith,
-                recipientFullname,
-                attributes,
-                projectid,
-                channel_type);
+
+        const messageSent = this.initConversationHandler(conversationWith)
+                                .sendMessage(
+                                        msg,
+                                        type,
+                                        metadata,
+                                        conversationWith,
+                                        recipientFullname,
+                                        senderId,
+                                        senderFullname,
+                                        channel_type
+                                )
+        // const messageSent = this.messagingService
+        //     .sendMessageFull(
+        //         tenant,
+        //         senderId,
+        //         senderFullname,
+        //         msg,
+        //         type,
+        //         metadata,
+        //         conversationWith,
+        //         recipientFullname,
+        //         attributes,
+        //         projectid,
+        //         channel_type);
             this.g.wdLog([messageSent]);
             // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
     }
@@ -1298,7 +1354,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     generateNewUidConversation() {
         this.g.wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
-        return this.messagingService.generateUidConversation(this.g.senderId);
+        return UID_SUPPORT_GROUP_MESSAGES + uuidv4()
+        //return this.messagingService.generateUidConversation(this.g.senderId);
     }
 
     /**

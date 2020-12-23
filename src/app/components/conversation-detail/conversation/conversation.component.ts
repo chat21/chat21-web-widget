@@ -1,3 +1,4 @@
+import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
 
 import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
 
@@ -12,7 +13,7 @@ import { AppConfigService } from '../../../providers/app-config.service';
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
+  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, UID_SUPPORT_GROUP_MESSAGES
 } from '../../../utils/constants';
 import { UploadService } from '../../../providers/upload.service';
 import { ContactService } from '../../../providers/contact.service';
@@ -21,11 +22,12 @@ import { StarRatingWidgetService } from '../../star-rating-widget/star-rating-wi
 
 // models
 import { ConversationModel } from '../../../../models/conversation';
-import { MessageModel } from '../../../../models/message';
+import { MessageModel } from '../../../../chat21-core/models/message';
 import { UploadModel } from '../../../../models/upload';
 
 // utils
 import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr} from '../../../utils/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 
 // Import the resized event model
@@ -74,7 +76,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= begin:: gestione scroll view messaggi ======= //
   startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
   idDivScroll = 'c21-contentScroll'; // id div da scrollare
-  showButtonToBottom = false;
+  showBadgeScroollToBottom = false;
   NUM_BADGES = 0;
   audio: any;
   // ========= end:: gestione scroll view messaggi ======= //
@@ -104,7 +106,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   conversationWith: string;
   isPopupUrl = isPopupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
-  isNewConversation = true;
+  
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
   recipient_fullname: string;
@@ -115,8 +117,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // devo inserirle nel globals
   obsTyping: Subscription;
-  subscriptions: Subscription[] = [];
-
+  subscriptions: Array<any> = [];
+  showMessageWelcome: boolean;
 
   // ========= begin::agent availability
   // public areAgentsAvailableText: string;
@@ -159,7 +161,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public el: ElementRef,
     public g: Globals,
     private ngZone: NgZone,
-    public messagingService: MessagingService,
+    //public messagingService: MessagingService,
     //public upSvc: UploadService,
     //public contactService: ContactService,
     public starRatingWidgetService: StarRatingWidgetService,
@@ -171,7 +173,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public conversationHandlerService: ConversationHandlerService,
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
-
+    private chatManager: ChatManager
     // public cdRef: ChangeDetectorRef
     // private translate: TranslateService
   ) {
@@ -183,13 +185,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
     this.colorBck = '#000000';
-    const that = this;
-    const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
-      this.ngZone.run(() => {
-        // that.scrollToBottom();
-      });
-    });
-    this.subscriptions.push(subscriptionEndRenderMessage);
+    this.showMessageWelcome = false;
+    // const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
+    //   this.ngZone.run(() => {
+    //     // that.scrollToBottom();
+    //   });
+    // });
+    // this.subscriptions.push(subscriptionEndRenderMessage);
     // this.attributes = this.setAttributes();
     // this.getTranslation();
     this.translations();
@@ -205,7 +207,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'LABEL_LAST_ACCESS',
       'ARRAY_DAYS',
       'LABEL_ACTIVE_NOW',
-      'LABEL_IS_WRITING'
+      'LABEL_WRITING'
     ];
     this.translationMap = this.customTranslateService.translateLanguage(keys);
   }
@@ -322,7 +324,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.setConversation();
 
     this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
-    this.connectConversation();
+    // this.connectConversation();
+    this.initConversationHandler();
 
     this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
     //this.initializeChatManager();
@@ -535,7 +538,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     recipientIdTEMP = this.storageService.getItem(senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
-      recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
+      recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4();
+      console.log('recipitent', recipientIdTEMP, )
+      //recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
     }
     return recipientIdTEMP;
   }
@@ -559,45 +564,79 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    *  1 - init messagingService
    *  2 - connect: recupero ultimi X messaggi
    */
-  private connectConversation() {
-      const senderId = this.g.senderId;
-      const tenant = this.g.tenant;
-      const channelType = this.g.channelType;
-      if (!this.conversationWith && this.g.recipientId) {
-        this.conversationWith = this.g.recipientId;
-      }
-      // console.log('connectConversation -- >: ', senderId, tenant, channelType, this.conversationWith, this.g.recipientId);
-      this.messagingService.initialize( senderId, tenant, channelType );
-      this.messagingService.initWritingMessages(this.conversationWith);
-      this.messagingService.getWritingMessages();
+  // private connectConversation() {
+  //     const senderId = this.g.senderId;
+  //     const tenant = this.g.tenant;
+  //     const channelType = this.g.channelType;
+  //     if (!this.conversationWith && this.g.recipientId) {
+  //       this.conversationWith = this.g.recipientId;
+  //     }
+  //     // console.log('connectConversation -- >: ', senderId, tenant, channelType, this.conversationWith, this.g.recipientId);
+  //     this.messagingService.initialize( senderId, tenant, channelType );
+  //     this.messagingService.initWritingMessages(this.conversationWith);
+  //     this.messagingService.getWritingMessages();
 
-      // this.upSvc.initialize(senderId, tenant, this.conversationWith);
-      // his.contactService.initialize(senderId, tenant, this.conversationWith);
-      this.messagingService.connect( this.conversationWith );
-      this.messages = this.messagingService.messages;
-      // this.scrollToBottomStart();
-      // this.messages.concat(this.messagingService.messages);
-      // this.messagingService.resetBadge(this.conversationWith);
+  //     // this.upSvc.initialize(senderId, tenant, this.conversationWith);
+  //     // his.contactService.initialize(senderId, tenant, this.conversationWith);
+  //     this.messagingService.connect( this.conversationWith );
+  //     this.messages = this.messagingService.messages;
+  //     // this.scrollToBottomStart();
+  //     // this.messages.concat(this.messagingService.messages);
+  //     // this.messagingService.resetBadge(this.conversationWith);
 
+  // }
 
-      //NEW IMPLEMENTATION
-      // const handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
-      // console.log('DETTAGLIO CONV - handler **************', handler, this.conversationWith);
-      // if (!handler) {
-      //   this.conversationHandlerService = this.conversationHandlerBuilderService.build();
-      //   this.conversationHandlerService.initialize(
-      //     this.conversationWith,
-      //     this.conversationWithFullname,
-      //     this.loggedUser,
-      //     this.tenant,
-      //     translationMap
-      //   );
-      //   this.conversationHandlerService.connect();
-      //   console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
-      //   this.messages = this.conversationHandlerService.messages;
+   /**
+   * recupero da chatManager l'handler
+   * se NON ESISTE creo un handler e mi connetto e lo memorizzo nel chatmanager
+   * se ESISTE mi connetto
+   * carico messaggi
+   * attendo x sec se nn arrivano messaggi visualizzo msg wellcome
+   */
+  initConversationHandler() {
+    const tenant = this.g.tenant;
+    //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
+    const loggedUser = { uid: this.g.senderId}
+    const conversationWithFullname = this.g.recipientFullname;
+    console.log('initconversation NEWWW', loggedUser, conversationWithFullname, tenant)
+    this.showMessageWelcome = false;
+    const handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
+    console.log('DETTAGLIO CONV - handler **************', handler, this.conversationWith);
+    if (!handler) {
+      this.conversationHandlerService = this.conversationHandlerBuilderService.build();
+      this.conversationHandlerService.initialize(
+        this.conversationWith,
+        conversationWithFullname,
+        loggedUser,
+        tenant,
+        this.translationMap
+      );
+      this.conversationHandlerService.connect();
+      console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
+      this.messages = this.conversationHandlerService.messages;
 
-      //   this.chatManager.addConversationHandler(this.conversationHandlerService);
+      this.chatManager.addConversationHandler(this.conversationHandlerService);
 
+      // attendo un secondo e poi visualizzo il messaggio se nn ci sono messaggi
+      const that = this;
+      setTimeout( () => {
+        if (!that.messages || that.messages.length === 0) {
+          //this.showIonContent = true;
+          that.showMessageWelcome = true;
+          console.log('setTimeout ***', that.showMessageWelcome);
+        }
+      }, 8000);
+
+    } else {
+      console.log('NON ENTRO ***', this.conversationHandlerService, handler);
+      this.conversationHandlerService = handler;
+      this.messages = this.conversationHandlerService.messages;
+      // sicuramente ci sono messaggi
+      // la conversazione l'ho già caricata precedentemente
+      // mi arriva sempre notifica dell'ultimo msg (tramite BehaviorSubject)
+      // scrollo al bottom della pagina
+    }
+    console.log('CONVERSATION MESSAGES ' + this.messages );
   }
 
 
@@ -648,20 +687,42 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   setSubscriptions() {
     const that = this;
-    this.starRatingWidgetService.setOsservable(false);
-    // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
-    // tslint:disable-next-line:max-line-length
-    that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
-    const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
-    .subscribe(isOpenStartRating => {
-      that.g.setParameter('isOpenStartRating', isOpenStartRating);
-      if (isOpenStartRating === false) {
-          that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
-      } else if (isOpenStartRating === true) {
-          that.g.wdLog(['APROOOOOOOO!!!! StartRating']);
-      }
-    });
-    this.subscriptions.push(subscriptionisOpenStartRating);
+    let subscribtion: any;
+    let subscribtionKey: string;
+
+    subscribtionKey = 'starRating';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if (!subscribtion) {
+      this.starRatingWidgetService.setOsservable(false);
+      // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
+      // tslint:disable-next-line:max-line-length
+      that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
+      subscribtion = this.starRatingWidgetService.obsCloseConversation.subscribe(isOpenStartRating => {
+        that.g.setParameter('isOpenStartRating', isOpenStartRating);
+        if (isOpenStartRating === false) {
+            that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
+        } else if (isOpenStartRating === true) {
+            that.g.wdLog(['APROOOOOOOO!!!! StartRating']);
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
+    // this.starRatingWidgetService.setOsservable(false);
+    // // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
+    // // tslint:disable-next-line:max-line-length
+    // that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
+    // const subscriptionisOpenStartRating: Subscription = this.starRatingWidgetService.obsCloseConversation
+    // .subscribe(isOpenStartRating => {
+    //   that.g.setParameter('isOpenStartRating', isOpenStartRating);
+    //   if (isOpenStartRating === false) {
+    //       that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
+    //   } else if (isOpenStartRating === true) {
+    //       that.g.wdLog(['APROOOOOOOO!!!! StartRating']);
+    //   }
+    // });
+    // this.subscriptions.push(subscriptionisOpenStartRating);
     // console.log('---------------------->', this.subscriptions);
     // NUOVO MESSAGGIO!!
     /**
@@ -670,16 +731,88 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      *  se:         sono alla fine della pagina scrollo alla fine
      *  altrimenti: aumento il badge
      */
-    const obsAddedMessage: Subscription = this.messagingService.obsAdded
-    .subscribe(newMessage => {
-      that.g.wdLog(['Subscription NEW MSG', newMessage]);
-      const senderId = that.g.senderId;
-      if ( that.startScroll || newMessage.sender === senderId) {
+    // const obsAddedMessage: Subscription = this.messagingService.obsAdded
+    // .subscribe(newMessage => {
+    //   that.g.wdLog(['Subscription NEW MSG', newMessage]);
+    //   const senderId = that.g.senderId;
+    //   if ( that.startScroll || newMessage.sender === senderId) {
+    //     that.g.wdLog(['*A 1-------']);
+    //     setTimeout(function () {
+    //       that.scrollToBottom();
+    //     }, 200);
+    //   } else if (that.scrollMe) {
+    //     const divScrollMe = that.scrollMe.nativeElement;
+    //     const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+    //     if (checkContentScrollPosition) {
+    //       that.g.wdLog(['*A2-------']);
+    //       // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
+    //       setTimeout(function () {
+    //         that.scrollToBottom();
+    //       }, 0);
+    //     } else {
+    //       that.g.wdLog(['*A3-------']);
+    //       that.NUM_BADGES++;
+    //       // that.soundMessage(newMessage.timestamp);
+    //     }
+    //   }
+
+    //   /**
+    //    *
+    //    */
+    //   if (newMessage && newMessage.text && that.lastMsg) {
+    //     setTimeout(function () {
+    //       let messaggio = '';
+    //       const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
+    //       const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
+    //       if (altTextArea && testFocus) {
+    //         setTimeout(function () {
+    //           if (newMessage.sender !== that.g.senderId) {
+    //             messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
+    //             altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
+    //             testFocus.focus();
+    //           }
+    //         }, 1000);
+    //       }
+    //     }, 1000);
+    //   }
+
+    // });
+    // this.subscriptions.push(obsAddedMessage);
+
+    subscribtionKey = 'messageAdded';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if (!subscribtion) {
+      console.log('***** add messageAdded *****',  this.conversationHandlerService);
+      subscribtion = this.conversationHandlerService.messageAdded.subscribe((msg: any) => {
+        console.log('***** DATAIL messageAdded *****', msg);
+        if (msg) {
+          that.newMessageAdded(msg);
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
+    //this.subscriptionTyping();
+  }
+
+
+  // NUOVO MESSAGGIO!!
+  /**
+   * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
+   * altrimenti:  se esiste scrollMe (div da scrollare) verifico la posizione
+   *  se:         sono alla fine della pagina scrollo alla fine
+   *  altrimenti: aumento il badge
+   */
+  newMessageAdded(msg){
+    const that = this;
+    const senderId = that.g.senderId;
+      if ( that.startScroll || msg.sender === senderId) { //caso in cui sender mamda msg
         that.g.wdLog(['*A 1-------']);
         setTimeout(function () {
           that.scrollToBottom();
         }, 200);
-      } else if (that.scrollMe) {
+      } else if (that.scrollMe) { //caso in cui operatore manda msg
         const divScrollMe = that.scrollMe.nativeElement;
         const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
         if (checkContentScrollPosition) {
@@ -694,31 +827,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           // that.soundMessage(newMessage.timestamp);
         }
       }
-
-      /**
-       *
-       */
-      if (newMessage && newMessage.text && that.lastMsg) {
-        setTimeout(function () {
-          let messaggio = '';
-          const testFocus = ((document.getElementById('testFocus') as HTMLInputElement));
-          const altTextArea = ((document.getElementById('altTextArea') as HTMLInputElement));
-          if (altTextArea && testFocus) {
-            setTimeout(function () {
-              if (newMessage.sender !== that.g.senderId) {
-                messaggio += 'messaggio ricevuto da operatore: ' + newMessage.sender_fullname;
-                altTextArea.innerHTML =  messaggio + ',  testo messaggio: ' + newMessage.text;
-                testFocus.focus();
-              }
-            }, 1000);
-          }
-        }, 1000);
-      }
-
-    });
-    this.subscriptions.push(obsAddedMessage);
-
-    //this.subscriptionTyping();
   }
 
   /**
@@ -1150,10 +1258,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       const divScrollMe = this.scrollMe.nativeElement;
       const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
       if (checkContentScrollPosition) {
-        this.showButtonToBottom = false;
+        this.showBadgeScroollToBottom = false;
         this.NUM_BADGES = 0;
       } else {
-        this.showButtonToBottom = true;
+        this.showBadgeScroollToBottom = true;
       }
     }
   }
@@ -1616,10 +1724,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   unsubscribe() {
     this.g.wdLog(['******* unsubscribe *******']);
     this.subscriptions.forEach(function (subscription) {
-        subscription.unsubscribe();
+        subscription.value.unsubscribe();
     });
+    this.subscriptions = [];
     this.subscriptions.length = 0;
-    this.messagingService.unsubscribeAllReferences();
+    //this.messagingService.unsubscribeAllReferences();
     this.g.wdLog(['this.subscriptions', this.subscriptions]);
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
