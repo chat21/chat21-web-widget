@@ -37,7 +37,6 @@ export class CustomTranslateService {
         mapTranslate.set(key, res);
       });
     });
-    console.log('maptranslate', mapTranslate)
     return mapTranslate;
   }
 

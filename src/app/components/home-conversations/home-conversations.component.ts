@@ -41,9 +41,9 @@ import { ChatManager } from '../../../chat21-core/providers/chat-manager';
 export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ============//
-  @Output() eventNewConv = new EventEmitter<string>();
-  @Output() eventSelctedConv = new EventEmitter<string>();
-  @Output() eventOpenAllConv = new EventEmitter();
+  @Output() onNewConversation = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<string>();
+  @Output() onOpenAllConvesations = new EventEmitter();
   @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ============//
 
@@ -106,7 +106,7 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
     if ( $event ) {
       // rimuovo classe animazione
       //this.removeAnimation();
-      this.eventSelctedConv.emit($event);
+      this.onConversationSelected.emit($event);
     }
   }
 
@@ -277,10 +277,10 @@ checkShowAllConversation() {
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
-    this.eventNewConv.emit();
+    this.onNewConversation.emit();
   }
   returnOpenAllConversation() {
-    this.eventOpenAllConv.emit();
+    this.onOpenAllConvesations.emit();
   }
 
   /** */
@@ -301,7 +301,7 @@ checkShowAllConversation() {
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
-      this.eventSelctedConv.emit(conversation);
+      this.onConversationSelected.emit(conversation);
     }
   }
   // ========= end:: ACTIONS ============//

@@ -30,8 +30,8 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     BSConversationDetail: BehaviorSubject<ConversationModel>;
     readAllMessages: BehaviorSubject<string>;
     conversationsAdded: BehaviorSubject<ConversationModel[]>;
-    conversationsChanged: BehaviorSubject<ConversationModel[]>;
-    conversationsRemoved: BehaviorSubject<ConversationModel[]>;
+    conversationsChanged: BehaviorSubject<ConversationModel>;
+    conversationsRemoved: BehaviorSubject<ConversationModel>;
     loadedConversationsStorage: BehaviorSubject<ConversationModel[]>;
 
     // public params
@@ -186,10 +186,10 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // }
 
 
-    /**
-     *
-     * @param childSnapshot
-     */
+    // /**  DEPRECATED
+    //  *
+    //  * @param childSnapshot
+    //  */
     private conversationGenerate(childSnapshot: any): boolean {
         console.log('conversationGenerate: ', childSnapshot.val());
         const childData: ConversationModel = childSnapshot.val();
@@ -213,6 +213,33 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             return false;
         }
     }
+     /**
+     *
+     * @param childSnapshot
+     */
+    // private conversationGenerate(childSnapshot: any): ConversationModel {
+    //     console.log('conversationGenerate: ', childSnapshot.val());
+    //     const childData: ConversationModel = childSnapshot.val();
+    //     childData.uid = childSnapshot.key;
+    //     const conversation = this.completeConversation(childData);
+    //     if (this.isValidConversation(conversation)) {
+    //         this.setClosingConversation(childSnapshot.key, false);
+    //         const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
+    //         if (index > -1) {
+    //             this.conversations.splice(index, 1, conversation);
+    //         } else {
+    //             this.conversations.splice(0, 0, conversation);
+    //         }
+    //         //this.databaseProvider.setConversation(conversation);
+    //         this.conversations.sort(compareValues('timestamp', 'desc'));
+    //         if (conversation.is_new) {
+    //             this.soundMessage();
+    //         }
+    //         return conversation;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
     /**
@@ -242,9 +269,16 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * 6 -  pubblico conversations:update
      * 7 -  attivo sound se è un msg nuovo
      */
+
+    //TODO-GAB: fare emit singola conversation e non dell'intero array di conversations
     private changed(childSnapshot: any) {
         if (this.conversationGenerate(childSnapshot)) {
-            this.conversationsChanged.next(this.conversations);
+            const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
+            if (index > -1) {
+                console.log('conversationnnnnn changed', this.conversations[index])
+                const conversationChanged = this.conversations[index]
+                this.conversationsChanged.next(conversationChanged);
+            }
         } else {
             console.error('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
         }
@@ -260,10 +294,12 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     private removed(childSnapshot: any) {
         const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
         if (index > -1) {
+            console.log('conversationnnnnn removedddd', this.conversations[index])
+            const conversationRemoved = this.conversations[index]
             this.conversations.splice(index, 1);
             // this.conversations.sort(compareValues('timestamp', 'desc'));
             //this.databaseProvider.removeConversation(childSnapshot.key);
-            this.conversationsRemoved.next(this.conversations);
+            this.conversationsRemoved.next(conversationRemoved);
         }
         // remove the conversation from the isConversationClosingMap
         this.deleteClosingConversation(childSnapshot.key);

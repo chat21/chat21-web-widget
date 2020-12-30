@@ -8,14 +8,22 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
     <!-- HEADER -->
     <tiledeskwidget-conversation-header
-        [idConversation]= "conversation.uid"
-        [translationMap]="translationMap"
-        (onClose)="returnHome()"
+        [idConversation]= "conversationWith"
+        [senderId]="senderId"
+        [isSoundActive]="g.isSoundActive"
+        [allowTranscriptDownload]="g.allowTranscriptDownload"
+        [hideHeaderCloseButton]="g.hideHeaderCloseButton"
+        [stylesMap]="styleMap"
+        [translationMap]="translationMapHeader"
+        [widgetTitle]="g.project.widgetTitle"
+        [windowContext]="g.windowContext"
+        (onBack)="returnHome()"
         (onCloseWidget)="returnCloseWidget()"
-    ></tiledeskwidget-conversation-header>
+        (onSoundChange)="returnSoundChange($event)">
+    </tiledeskwidget-conversation-header>
 
     <!-- CONTENT -->
-    <div class="c21-body" (click)="hideMenuOptions()">
+    <div class="c21-body">
 
         <div class="c21-body-container">
 
@@ -214,12 +222,11 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
                                     <!-- message type:: button &&  -->
                                     <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 
                                         <tiledeskwidget-message-attachment 
-                                        style="height: 100%; display: block;"
-                                        [message]="message"
-                                        [isLastMessage] = "isLastMessage(message.uid)"
-                                        (eventOpenAttachment)="returnOpenAttachment($event)"
-                                        (eventClickOnAttachmentButton)="returnClickOnAttachmentButton($event)"
-                                        >
+                                            style="height: 100%; display: block;"
+                                            [message]="message"
+                                            [isLastMessage] = "isLastMessage(message.uid)"
+                                            (eventOpenAttachment)="returnOpenAttachment($event)"
+                                            (eventClickOnAttachmentButton)="returnClickOnAttachmentButton($event)">
                                         </tiledeskwidget-message-attachment>
                                     </div>
 
@@ -234,7 +241,7 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
 
     <!-- FOOTER -->
-    <div id="chat21-footer" (click)="hideMenuOptions()">
+    <div id="chat21-footer">
         <div *ngIf="showBadgeScroollToBottom" id="chat21-buttonToBottom" (click)="scrollToBottom()">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
             <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
@@ -242,8 +249,21 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
 
         <tiledeskwidget-conversation-footer
             [conversationWith]="conversationWith"
-            (onSendMessage)="returnSendMessage($event)"
-        ></tiledeskwidget-conversation-footer>
+            [attributes]="g.attributes"
+            [senderId]="senderId"
+            [tenant]="g.tenant"
+            [projectid]="g.projectid"
+            [channelType]="g.channelType"
+            [userFullname]="g.userFullname"
+            [userEmail]="g.userEmail"
+            [widgetTitle]="g.widgetTitle"
+            [showAttachmentButton]="g.showAttachmentButton"
+            [showWidgetNameInConversation]="g.showWidgetNameInConversation"
+            [stylesMap]="styleMap"
+            [translationMap]="translationMapFooter"
+            (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
+            (onAfterSendMessage)="returnAfterSendMessage($event)">
+        </tiledeskwidget-conversation-footer>
 
     </div>
 

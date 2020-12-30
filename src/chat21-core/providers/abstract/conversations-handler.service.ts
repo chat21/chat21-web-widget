@@ -15,8 +15,8 @@ export abstract class ConversationsHandlerService {
   abstract BSConversationDetail: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
   abstract readAllMessages: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   abstract conversationsAdded: BehaviorSubject<ConversationModel[]> = new BehaviorSubject<ConversationModel[]>([]);
-  abstract conversationsChanged: BehaviorSubject<ConversationModel[]> = new BehaviorSubject<ConversationModel[]>([]);
-  abstract conversationsRemoved: BehaviorSubject<ConversationModel[]> = new BehaviorSubject<ConversationModel[]>([]);
+  abstract conversationsChanged: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
+  abstract conversationsRemoved: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
   abstract loadedConversationsStorage: BehaviorSubject<ConversationModel[]> = new BehaviorSubject<ConversationModel[]>([]);
 
   // params

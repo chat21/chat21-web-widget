@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 // import 'rxjs/add/operator/map';
@@ -189,7 +190,6 @@ export class ChatManager {
     this.handlers.forEach(conv => {
       // console.log('forEach ***', conversationId, this.handlers, conv);
       if (conv.conversationWith === conversationId) {
-        console.log('OKKKKKK', conversationId, conv.conversationWith);
         handler = conv;
         return;
       }
@@ -227,6 +227,7 @@ export class ChatManager {
   setConversationsHandler(handler) {
     this.conversationsHandlerService = handler;
   }
+
 
   /**
    * elimino la reference dell'handler delle conversazioni

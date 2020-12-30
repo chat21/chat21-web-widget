@@ -54,21 +54,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
-  @Output() onClose = new EventEmitter();
-  @Output() onCloseWidget = new EventEmitter();
   @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
+  @Input() styleMap: Map<string, string>;
   @Input() isOpen: boolean;
-  // @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Output() onClose = new EventEmitter();
+  @Output() onCloseWidget = new EventEmitter();
+  @Output() onSoundChange = new EventEmitter();
+  @Output() onBeforeMessageSent = new EventEmitter();
+  @Output() onAfterSendMessage = new EventEmitter();
   // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
-  writingMessage = '';    // messaggio sta scrivendo...
-  isTypings = false;
-  private setTimeoutWritingMessages;
-  isMenuShow = false;
+  // writingMessage = '';    // messaggio sta scrivendo...
+  // isTypings = false;
+  //isMenuShow = false;
   isScrolling = false;
   isButtonsDisabled = true;
   isConversationArchived = false;
@@ -99,8 +102,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   userEmail: string;
   userFullname: string;
   preChatForm = false;
-  themeColor50: string;
-  colorBck: string;
   textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
@@ -153,10 +154,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     'hide-delay': 200
   };
 
-  translationMap: Map<string, string>;
+  translationMapHeader: Map<string, string>;
+  translationMapFooter: Map<string, string>;
 
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
-  
+  conversationHandlerService: ConversationHandlerService
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -170,7 +173,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public storageService: StorageService,
     public conversationsService: ConversationsService,
     public conversationHandlerBuilderService: ConversationHandlerBuilderService,
-    public conversationHandlerService: ConversationHandlerService,
+    //public conversationHandlerService: ConversationHandlerService,
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
     private chatManager: ChatManager
@@ -183,8 +186,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {
     // this.initAll();
-    this.g.wdLog([' ngOnInit: app-conversation ', this.g]);
-    this.colorBck = '#000000';
+    this.g.wdLog([' ngOnInit: app-conversation ', this.senderId]);
     this.showMessageWelcome = false;
     // const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
     //   this.ngZone.run(() => {
@@ -198,7 +200,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public translations() {
-    const keys = [
+    const keysHeader = [
       'LABEL_AVAILABLE',
       'LABEL_NOT_AVAILABLE',
       'LABEL_TODAY',
@@ -207,9 +209,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'LABEL_LAST_ACCESS',
       'ARRAY_DAYS',
       'LABEL_ACTIVE_NOW',
-      'LABEL_WRITING'
+      'LABEL_WRITING',
+      'BUTTON_CLOSE_TO_ICON', 
+      'OPTIONS', 
+      'PREV_CONVERSATIONS',
+      'SOUND_OFF',
+      'SOUND_ON',
+      'DOWNLOAD_TRANSCRIPT'
     ];
-    this.translationMap = this.customTranslateService.translateLanguage(keys);
+
+    const keysFooter = [
+      'LABEL_PLACEHOLDER',
+      'GUEST_LABEL',
+    ];
+
+    this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
+    this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
+  
+    
   }
 
 
@@ -222,7 +239,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit--------AAAAAA ', this.g.recipientId]);
+    this.g.wdLog([' --------ngAfterViewInit: conversation-------- ']);
     // this.storageService.setItem('activeConversation', this.conversation.uid);
     
     // --------------------------- //
@@ -316,8 +333,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.conversation && this.conversation.archived) {
       this.isConversationArchived = true;
     }
-    const themeColor = this.g.themeColor;
-    this.themeColor50 = convertColorToRGBA(themeColor, 50);
     this.messages = [];
 
     this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
@@ -513,7 +528,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         '',
         recipientId,
         this.g.recipientFullname,
-        this.g.senderId,
+        this.senderId,
         this.g.userFullname,
         '0',
         0,
@@ -534,7 +549,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private setRecipientId() {
     let recipientIdTEMP: string;
-    const senderId = this.g.senderId;
+    const senderId = this.senderId;
     recipientIdTEMP = this.storageService.getItem(senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
@@ -596,8 +611,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   initConversationHandler() {
     const tenant = this.g.tenant;
     //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
-    const loggedUser = { uid: this.g.senderId}
-    const conversationWithFullname = this.g.recipientFullname;
+    const loggedUser = { uid: this.senderId}
+    const conversationWithFullname = this.g.recipientFullname; // TODO-GAB: risulta null a questo punto
     console.log('initconversation NEWWW', loggedUser, conversationWithFullname, tenant)
     this.showMessageWelcome = false;
     const handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
@@ -609,7 +624,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         conversationWithFullname,
         loggedUser,
         tenant,
-        this.translationMap
+        this.translationMapHeader
       );
       this.conversationHandlerService.connect();
       console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
@@ -793,6 +808,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(subscribe);
     }
 
+    subscribtionKey = 'conversationsRemoved';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if(!subscribtion){
+      subscribtion = this.chatManager.conversationsHandlerService.conversationsRemoved.subscribe((conversation) => {
+        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith);
+        if (conversation && conversation.recipient === this.conversationWith) {
+          this.starRatingWidgetService.setOsservable(true)
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+    
+
     //this.subscriptionTyping();
   }
 
@@ -806,7 +835,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   newMessageAdded(msg){
     const that = this;
-    const senderId = that.g.senderId;
+    const senderId = that.senderId;
       if ( that.startScroll || msg.sender === senderId) { //caso in cui sender mamda msg
         that.g.wdLog(['*A 1-------']);
         setTimeout(function () {
@@ -1231,18 +1260,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    *
    * @param memberID
    */
-  checkMemberId(memberID) {
-    const that = this;
-     // && memberID.trim() !== 'system'
-    if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
-    ) {
-      if (that.isTypings === false) {
-        that.isTypings = true;
-      }
-    } else {
-      that.isTypings = false;
-    }
-  }
+  // checkMemberId(memberID) {
+  //   const that = this;
+  //    // && memberID.trim() !== 'system'
+  //   if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
+  //   ) {
+  //     if (that.isTypings === false) {
+  //       that.isTypings = true;
+  //     }
+  //   } else {
+  //     that.isTypings = false;
+  //   }
+  // }
   // ================================ //
 
 
@@ -1661,6 +1690,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= end:: functions send image ======= //
 
+  // =========== BEGIN: event emitter function ====== //
   returnHome() {
     //this.storageService.removeItem('activeConversation');
     //this.g.setParameter('activeConversation', null, false);
@@ -1672,31 +1702,28 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.onCloseWidget.emit();
   }
 
-  returnSendMessage(event){
-    console.log('new message sent', event)
+  returnAfterSendMessage(message: MessageModel){
+    this.onAfterSendMessage.emit(message)
   }
 
-  dowloadTranscript() {
-    const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
-    const windowContext = this.g.windowContext;
-    windowContext.open(url, '_blank');
-    this.isMenuShow  = false;
+  returnSoundChange(isSoundActive){
+    this.onSoundChange.emit(isSoundActive)
   }
 
-  toggleSound() {
-    this.g.setParameter('isSoundActive', !this.g.isSoundActive);
-    this.isMenuShow  = false;
-    // this.g.isSoundActive = !this.g.isSoundActive;
-    // if ( this.g.isSoundActive === false ) {
-    //   this.storageService.setItem('isSoundActive', false);
-    // } else {
-    //   this.storageService.setItem('isSoundActive', true);
-    // }
+  returnOnBeforeMessangeSent(messageModel){
+    this.onBeforeMessageSent.emit(messageModel)
   }
 
-  toggleMenu() {
-    this.isMenuShow = !this.isMenuShow;
-  }
+  // =========== END: event emitter function ====== //
+
+
+  // dowloadTranscript() {
+  //   const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
+  //   const windowContext = this.g.windowContext;
+  //   windowContext.open(url, '_blank');
+  //   this.isMenuShow  = false;
+  // }
+
 
   openInputFiles() {
     alert('ok');
@@ -1760,11 +1787,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         that.g.wdLog(['****** soundMessage 1 *****', that.audio.src]);
       }, 1000);
     }
-  }
-
-  hideMenuOptions() {
-    this.g.wdLog(['hideMenuOptions']);
-    this.isMenuShow  = false;
   }
 
   isLastMessage(idMessage: string) {

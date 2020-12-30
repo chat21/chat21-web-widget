@@ -159,6 +159,7 @@ export class Globals {
    themeForegroundColor: string;
    themeColor50: string;
    colorGradient: string;
+   colorBck: string
    colorGradient180: string;
    showWidgetNameInConversation: boolean;
    allowTranscriptDownload: boolean;
@@ -281,6 +282,10 @@ export class Globals {
     codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101) */
     this.themeForegroundColor = convertColorToRGBA('#ffffff', 100);
     /** allows you to change text and icons' color.
+    Permitted values: Hex color codes, e.g. #425635 and RGB color
+    codes, e.g. rgb(66,86,53) */
+    this.colorBck = convertColorToRGBA('#000000', 100)
+    /** allows you to change background color.
     Permitted values: Hex color codes, e.g. #425635 and RGB color
     codes, e.g. rgb(66,86,53) */
     this.showWidgetNameInConversation = false;

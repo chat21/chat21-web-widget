@@ -40,8 +40,8 @@
     <tiledeskwidget-list-conversations
       [listConversations]="listConversations"
       [limit]="3"
-      (eventSelctedConv)=returnSelectedConversation($event)
-    ></tiledeskwidget-list-conversations>
+      (onConversationSelected)=returnSelectedConversation($event)>
+    </tiledeskwidget-list-conversations>
 
     <div *ngIf="(!listConversations || listConversations.length == 0) && g.showAvailableAgents === true" style="margin-left: 30px;"> 
       <div *ngFor="let agent of availableAgents" class="c21-pallozzo">

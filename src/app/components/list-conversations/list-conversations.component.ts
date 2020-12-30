@@ -19,7 +19,7 @@ import { Globals } from '../../utils/globals';
 export class ListConversationsComponent implements OnInit {
 
   // ========= begin:: Input/Output values ============//
-  @Output() eventSelctedConv = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<string>();
   @Input() listConversations: Array<ConversationModel>;
   @Input() limit?: number
   // ========= end:: Input/Output values ============//
@@ -31,12 +31,7 @@ export class ListConversationsComponent implements OnInit {
   getUrlImgProfile = getUrlImgProfile;
   // ========= end:: dichiarazione funzioni ========= //
 
-
-
-  constructor(
-    public g: Globals,
-  ) {
-  }
+  constructor(public g: Globals) { }
 
   ngOnInit() {
     this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
@@ -48,7 +43,7 @@ export class ListConversationsComponent implements OnInit {
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
-      this.eventSelctedConv.emit(conversation);
+      this.onConversationSelected.emit(conversation);
     }
   }
 

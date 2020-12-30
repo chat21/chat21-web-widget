@@ -1,8 +1,11 @@
+import { ConversationModel } from './../../../../models/conversation';
+import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
+import { ConversationHandlerService } from '../../../../chat21-core/providers/abstract/conversation-handler.service';
 import { MessagingService } from './../../../providers/messaging.service';
 import { TypingService } from '../../../../chat21-core/providers/abstract/typing.service';
 import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat21-core/utils/constants';
 import { Globals } from './../../../utils/globals';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
 import { UploadService } from '../../../providers/upload.service';
 import { replaceBr } from '../../../../chat21-core/utils/utils';
@@ -12,10 +15,24 @@ import { replaceBr } from '../../../../chat21-core/utils/utils';
   templateUrl: './conversation-footer.component.html',
   styleUrls: ['./conversation-footer.component.scss']
 })
-export class ConversationFooterComponent implements OnInit {
+export class ConversationFooterComponent implements OnInit, OnChanges {
 
   @Input() conversationWith: string;
-  @Output() onSendMessage = new EventEmitter();
+  @Input() attributes: string;
+  @Input() senderId: string;
+  @Input() tenant: string;
+  @Input() projectid: string;
+  @Input() channelType: string;
+  @Input() userFullname: string;
+  @Input() userEmail: string;
+  @Input() widgetTitle: string;
+  @Input() showAttachmentButton: boolean;
+  @Input() showWidgetNameInConversation: boolean
+  @Input() stylesMap: Map<string, string>
+  @Input() translationMap: Map< string, string>;
+  @Output() onBeforeMessageSent = new EventEmitter();
+  @Output() onAfterSendMessage = new EventEmitter();
+
   // ========= begin:: send image ======= //
   selectedFiles: FileList;
   isFilePendingToUpload: Boolean = false;
@@ -25,23 +42,31 @@ export class ConversationFooterComponent implements OnInit {
   // ========= end:: send image ========= //
 
   isNewConversation = true;
-
   textInputTextArea: string;
+  conversationHandlerService: ConversationHandlerService
 
   constructor(public g: Globals,
               public el: ElementRef,
               public upSvc: UploadService,
-              private messagingService: MessagingService,
+              //private messagingService: MessagingService,
+              private chatManager: ChatManager,
               private typingService: TypingService) { }
 
   ngOnInit() {
-    this.upSvc.initialize(this.g.senderId, this.g.tenant, this.conversationWith);
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    console.log('changessss', changes)
+    if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
+      this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
+    }
+    if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
+      this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
+    }
+  }
+  
   ngAfterViewInit() {
-    this.g.wdLog([' --------ngAfterViewInit: conversation-footer-------- ', this.g.recipientId]);
-
-    this.setFocusOnId('chat21-main-message-context');
+    this.g.wdLog([' --------ngAfterViewInit: conversation-footer-------- ']); 
   }
 
   // ========= begin:: functions send image ======= //
@@ -73,43 +98,43 @@ export class ConversationFooterComponent implements OnInit {
             const typeFile = event.target.files[0].type;
             const reader = new FileReader();
               that.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
-            reader.addEventListener('load', function () {
+              reader.addEventListener('load', function () {
                 that.g.wdLog(['addEventListener load', reader.result]);
-              that.isFileSelected = true;
-              // se inizia con image
-              if (typeFile.startsWith('image')) {
-                const imageXLoad = new Image;
-                that.g.wdLog(['onload ', imageXLoad]);
-                imageXLoad.src = reader.result.toString();
-                imageXLoad.title = nameFile;
-                imageXLoad.onload = function () {
-                  that.g.wdLog(['onload immagine']);
+                that.isFileSelected = true;
+                // se inizia con image
+                if (typeFile.startsWith('image')) {
+                  const imageXLoad = new Image;
+                  that.g.wdLog(['onload ', imageXLoad]);
+                  imageXLoad.src = reader.result.toString();
+                  imageXLoad.title = nameFile;
+                  imageXLoad.onload = function () {
+                    that.g.wdLog(['onload immagine']);
+                    // that.arrayFilesLoad.push(imageXLoad);
+                    const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
+                    that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
+                    that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+                    // INVIO MESSAGGIO
+                    that.loadFile();
+                  };
+                } else {
+                  that.g.wdLog(['onload file']);
+                  const fileXLoad = {
+                    src: reader.result.toString(),
+                    title: nameFile
+                  };
                   // that.arrayFilesLoad.push(imageXLoad);
                   const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
-                  that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
+                  that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
                   that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
                   // INVIO MESSAGGIO
                   that.loadFile();
-                };
-              } else {
-                that.g.wdLog(['onload file']);
-                const fileXLoad = {
-                  src: reader.result.toString(),
-                  title: nameFile
-                };
-                // that.arrayFilesLoad.push(imageXLoad);
-                const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
-                that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
-                that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
-                // INVIO MESSAGGIO
-                that.loadFile();
-              }
-            }, false);
+                }
+              }, false);
 
-            if (event.target.files[0]) {
-              reader.readAsDataURL(event.target.files[0]);
-                that.g.wdLog(['reader-result: ', event.target.files[0]]);
-            }
+              if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+                  that.g.wdLog(['reader-result: ', event.target.files[0]]);
+              }
         }
     }
   }
@@ -168,28 +193,26 @@ export class ConversationFooterComponent implements OnInit {
         const uploadTask = this.upSvc.pushUpload(currentUpload);
         uploadTask.then(snapshot => {
             return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
-        })
-            .then(downloadURL => {
-                  that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
-                  that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
+        }).then(downloadURL => {
+            that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+            that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
-                metadata.src = downloadURL;
-                let type_message = TYPE_MSG_TEXT;
-                let message = 'File: ' + metadata.src;
-                if (metadata.type.startsWith('image')) {
-                    type_message = TYPE_MSG_IMAGE;
-                    message = ''; // 'Image: ' + metadata.src;
-                }
-                that.sendMessage(message, type_message, metadata);
-                that.isFilePendingToUpload = false;
-                // return downloadURL;
-            })
-            .catch(error => {
-                // Use to signal error if something goes wrong.
-                console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
-            });
+            metadata.src = downloadURL;
+            let type_message = TYPE_MSG_TEXT;
+            let message = 'File: ' + metadata.src;
+            if (metadata.type.startsWith('image')) {
+                type_message = TYPE_MSG_IMAGE;
+                message = ''; // 'Image: ' + metadata.src;
+            }
+            that.sendMessage(message, type_message, metadata);
+            that.isFilePendingToUpload = false;
+            // return downloadURL;
+        }).catch(error => {
+          // Use to signal error if something goes wrong.
+          console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+        });
       // this.resetLoadImage();
-        that.g.wdLog(['reader-result: ', file]);
+      that.g.wdLog(['reader-result: ', file]);
     }
 
   /**
@@ -203,9 +226,9 @@ export class ConversationFooterComponent implements OnInit {
     (metadata) ? metadata = metadata : metadata = '';
     this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
-        let recipientFullname = this.g.GUEST_LABEL;
+        let recipientFullname = this.translationMap.get('GUEST_LABEL');
           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
-        const g_attributes = this.g.attributes;
+        const g_attributes = this.attributes;
         // added <any> to resolve the Error occurred during the npm installation: Property 'userFullname' does not exist on type '{}'
         const attributes = <any>{};
         if (g_attributes) {
@@ -219,13 +242,28 @@ export class ConversationFooterComponent implements OnInit {
           }
         }
           // fine-sponziello
-        const projectid = this.g.projectid;
-        const channelType = this.g.channelType;
-        const userFullname = this.g.userFullname;
-        const userEmail = this.g.userEmail;
-        const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
-        const widgetTitle = this.g.widgetTitle;
+        // console.log('this.conversationswith', this.conversationWith)
+        // this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith)
+        const senderId = this.senderId;
+        const projectid = this.projectid;
+        const channelType = this.channelType;
+        const userFullname = this.userFullname;
+        const userEmail = this.userEmail;
+        const showWidgetNameInConversation = this.showWidgetNameInConversation;
+        const widgetTitle = this.widgetTitle;
         const conversationWith = this.conversationWith;
+
+        this.onBeforeMessageSent.emit({
+          senderFullname: recipientFullname,
+          text: msg,
+          type: type,
+          metadata: metadata,
+          conversationWith: conversationWith,
+          recipientFullname: recipientFullname,
+          attributes : attributes,
+          projectid: projectid,
+          channelType: channelType
+        })
         this.triggerBeforeSendMessageEvent(
           recipientFullname,
           msg,
@@ -244,24 +282,35 @@ export class ConversationFooterComponent implements OnInit {
         } else if (attributes && attributes['userFullname']) {
           recipientFullname = attributes['userFullname'];
         } else {
-          recipientFullname = this.g.GUEST_LABEL;
+          recipientFullname = this.translationMap.get('GUEST_LABEL');
         }
         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
           recipientFullname += ' - ' + widgetTitle;
         }
-        const messageSent = this.messagingService.sendMessage(
-          recipientFullname,
+        const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,
           metadata,
           conversationWith,
           recipientFullname,
-          attributes,
-          projectid,
-          channelType
+          senderId,
+          recipientFullname,
+          channelType        
         );
+
+        // const messageSent = this.messagingService.sendMessage(
+        //   recipientFullname,
+        //   msg,
+        //   type,
+        //   metadata,
+        //   conversationWith,
+        //   recipientFullname,
+        //   attributes,
+        //   projectid,
+        //   channelType
+        // );
         this.triggerAfterSendMessageEvent(messageSent);
-        this.onSendMessage.emit(messageSent)
+        this.onAfterSendMessage.emit(messageSent)
         this.isNewConversation = false;
 
         //TODO-GAB: da rivedere
@@ -318,7 +367,7 @@ export class ConversationFooterComponent implements OnInit {
     this.textInputTextArea = ''; // clear the textarea
     if (textArea) {
         textArea.value = '';  // clear the textarea
-        textArea.placeholder = this.g.LABEL_PLACEHOLDER;  // restore the placholder
+        textArea.placeholder = this.translationMap.get('LABEL_PLACEHOLDER');  // restore the placholder
         this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
     } else {
           console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
@@ -412,15 +461,15 @@ export class ConversationFooterComponent implements OnInit {
    */
   setWritingMessages(str) {
     //this.messagingService.setWritingMessages(str, this.g.channelType);
-    this.typingService.setTyping(this.conversationWith, str, this.g.senderId, this.getUserFUllName() )
+    this.typingService.setTyping(this.conversationWith, str, this.senderId, this.getUserFUllName() )
   }
 
   getUserFUllName(): string {
-    const userFullName = this.g.userFullname
+    const userFullName = this.userFullname
     if(userFullName){
       return userFullName
     }else{
-      return this.g.GUEST_LABEL
+      return this.translationMap.get('GUEST_LABEL')
     }
   }
 

@@ -1,30 +1,43 @@
 import { TypingService } from '../../../../chat21-core/providers/abstract/typing.service';
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConversationModel } from '../../../../chat21-core/models/conversation';
 import { MessagingService } from '../../../providers/messaging.service';
 import { StorageService } from '../../../providers/storage.service';
 import { Globals } from '../../../utils/globals';
+import { AppConfigService } from '../../../providers/app-config.service';
+import { convertColorToRGBA } from '../../../../chat21-core/utils/utils';
 
 @Component({
   selector: 'tiledeskwidget-conversation-header',
   templateUrl: './conversation-header.component.html',
   styleUrls: ['./conversation-header.component.scss']
 })
-export class ConversationHeaderComponent implements OnInit {
+export class ConversationHeaderComponent implements OnInit, OnChanges {
 
   // ========= begin:: Input/Output values
-  @Input() idConversation: string
-  @Input() translationMap: Map< string, string>
-  @Output() onClose = new EventEmitter();
+  @Input() idConversation: string;
+  @Input() senderId: string;
+  @Input() isSoundActive: boolean;
+  @Input() allowTranscriptDownload: boolean;
+  @Input() hideHeaderCloseButton: boolean;
+  @Input() windowContext;
+  @Input() stylesMap: Map<string, string>
+  @Input() translationMap: Map< string, string>;
+  @Input() widgetTitle: string;
+  @Output() onBack = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
+  @Output() onSoundChange = new EventEmitter();
   // ========= end:: Input/Output values
+
+  // ============ BEGIN: SET FUNCTION BY UTILS ==============//
+  convertColorToRGBA = convertColorToRGBA;
+  // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
   
   isButtonsDisabled = true;
   isMenuShow = false;
   
-  public status = '';
   public isTypings = false;
   public isDirect = false;
   public writingMessage: string;
@@ -33,27 +46,34 @@ export class ConversationHeaderComponent implements OnInit {
 
   subscriptions = [];
   
-  colorBck: string;
-
-  idCurrentUser: string;
   membersConversation = ['SYSTEM'];
 
+  // text used within the html
+  private API_URL: string;
+  
   constructor(
     public g: Globals,
-    public storageService: StorageService,
-    public typingService: TypingService,) { }
+    public typingService: TypingService,
+    public appConfigService: AppConfigService,) {
+      this.API_URL = this.appConfigService.getConfig().apiUrl;
+     }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit: conversation-header COMPONENT ']);
-    this.colorBck = '#000000';
-    this.idCurrentUser = this.g.senderId
-    this.membersConversation.push(this.idCurrentUser)
-    this.initializeTyping();
+    this.g.wdLog([' ngOnInit: conversation-header COMPONENT ', this.stylesMap]);
+    this.membersConversation.push(this.senderId)
+    //this.initializeTyping();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes['idConversation'] && changes['idConversation'].currentValue !== undefined){
+      console.log('onChanges -- Conversation-header.component-> start initializeTyping()', this.idConversation)
+      this.initializeTyping();
+    }
   }
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit--------AAAAAA ', this.g.recipientId]);
+    this.g.wdLog([' --------ngAfterViewInit: conversation-header-------- ']);
     // this.storageService.setItem('activeConversation', this.conversation.uid);
     // --------------------------- //
     // after animation intro
@@ -89,12 +109,10 @@ export class ConversationHeaderComponent implements OnInit {
 
    // /** */
   initializeTyping() {
-    this.status = ''; // this.translationMap.get('LABEL_AVAILABLE');
     console.log('this.translationMap', this.translationMap);
-    console.log('this.status', this.status);
     console.log('membersconversation', this.membersConversation)
     this.setSubscriptions();
-    this.typingService.isTyping(this.idConversation, this.idCurrentUser, this.isDirect);
+    this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
   }
 
@@ -144,61 +162,41 @@ export class ConversationHeaderComponent implements OnInit {
   }
 
 
-
+  // =========== BEGIN: event emitter function ====== //
   returnHome() {
-    this.storageService.removeItem('activeConversation');
-    this.g.setParameter('activeConversation', null, false);
-    this.onClose.emit();
+    // this.storageService.removeItem('activeConversation');
+    // this.g.setParameter('activeConversation', null, false);
+    this.onBack.emit();
   }
 
   returnCloseWidget() {
     //this.g.setParameter('activeConversation', null, false);
     this.onCloseWidget.emit();
   }
+  // =========== END: event emitter function ====== //
 
-  // dowloadTranscript() {
-  //   const url = this.API_URL + 'public/requests/' + this.conversationWith + '/messages.html';
-  //   const windowContext = this.g.windowContext;
-  //   windowContext.open(url, '_blank');
-  //   this.isMenuShow  = false;
-  // }
-  
-
-  toggleSound() {
-    this.g.setParameter('isSoundActive', !this.g.isSoundActive);
+  dowloadTranscript() {
+    const url = this.API_URL + 'public/requests/' + this.idConversation + '/messages.html';
+    const windowContext = this.windowContext;
+    windowContext.open(url, '_blank');
     this.isMenuShow  = false;
-    // this.g.isSoundActive = !this.g.isSoundActive;
-    // if ( this.g.isSoundActive === false ) {
-    //   this.storageService.setItem('isSoundActive', false);
-    // } else {
-    //   this.storageService.setItem('isSoundActive', true);
-    // }
+  }
+  
+  toggleSound() {
+    this.isMenuShow  = false;
+    this.onSoundChange.emit(!this.isSoundActive)
   }
 
   toggleMenu() {
-    this.isMenuShow = !this.isMenuShow;
+    this.isMenuShow = !this.isMenuShow;   
   }
 
-  // ========= begin:: typing ======= //
-
-
-  /**
-   *
-   * @param memberID
-   */
-  checkMemberId(memberID) {
-    const that = this;
-     // && memberID.trim() !== 'system'
-    if ( memberID.trim() !== '' && memberID.trim() !== this.g.senderId
-    ) {
-      if (that.isTypings === false) {
-        that.isTypings = true;
-      }
-    } else {
-      that.isTypings = false;
-    }
+  onBlurMenuOption(event){
+    console.log('event', event)
+    this.isMenuShow = false;
   }
-  // ================================ //
+
+
 
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
   /**

@@ -88,6 +88,7 @@ import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebas
 import { MessageTextAreaComponent } from './components/conversation-detail/conversation-footer/message-text-area/message-text-area.component';
 import { ConversationHeaderComponent } from './components/conversation-detail/conversation-header/conversation-header.component';
 import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
+import { Triggerhandler } from './utils/triggerHandler';
 
 
 // FACTORIES
@@ -241,6 +242,7 @@ export function typingFactory() {
     AuthService,
     MessagingService,
     Globals,
+    Triggerhandler,
     GlobalSettingsService,
     SettingsSaverService,
     ConversationsService,

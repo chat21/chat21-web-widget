@@ -1,3 +1,5 @@
+import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
+import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { UserModel } from '../../src/chat21-core/models/user';
 
 import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
@@ -48,6 +50,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { ConversationHandlerService } from '../chat21-core/providers/abstract/conversation-handler.service';
+import { Triggerhandler } from './utils/triggerHandler';
 // import { TranslationLoader } from './translation-loader';
 
 @Component({
@@ -74,6 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     departments = [];
     marginBottom: number;
     conversationSelected: ConversationModel;
+    lastConversation: ConversationModel;
     // isBeingAuthenticated = false;           /** authentication is started */
     // ========= end:: parametri di stato widget ======= //
 
@@ -101,10 +105,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // isMobile: boolean;
     // ========= end:: DA SPOSTARE ========= //
 
+    styleMapConversation: Map<string, string> = new Map();
+
+    
     constructor(
         private el: ElementRef,
         private ngZone: NgZone,
         public g: Globals,
+        public triggerHandler: Triggerhandler,
         public translatorService: TranslatorService,
         private translateService: CustomTranslateService,
         public authService: AuthService,
@@ -120,13 +128,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public conversationsHandlerService: ConversationsHandlerService,
         public conversationHandlerBuilderService: ConversationHandlerBuilderService,
         public chatManager: ChatManager,
-        public typingService: TypingService
+        public typingService: TypingService,
+        private starRatingWidgetService: StarRatingWidgetService
     ) {
         // that.g.wdLog(["Initializing app.component...")
         // that.g.wdLog(["THIS.G (IN CONSTRUCTOR) : " , this.g);
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // that.g.wdLog(['appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
-
+        this.triggerHandler.setElement(this.el)
+        //TODO- fare metodo per windowscontext
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
@@ -141,6 +151,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         this.g.wdLog(' ---------------- ngOnInit ---------------- ');
         this.initWidgetParamiters();
+        this.setStyleMap()
+
     }
 
     /** */
@@ -153,13 +165,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     if ( that.g.isOpen === false && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
                         //TODO-GAB: riabilitare dpo
-                        //that.triggerOnChangedConversation(conversation);
+                        that.triggerOnChangedConversation(conversation);
                         that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
+                        if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                            return;
+                        }
+                        that.lastConversation = conversation;
+                        this.g.isOpenNewMessage = true;
+                        console.log('changeconversationnnn', that.lastConversation)
                     }
                 });
             });
             //this.authService.initialize();
             this.subscriptions.push(subChangedConversation);
+
         });
         this.authService.initialize();
         this.chatManager.initialize();
@@ -1406,6 +1425,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.f21_close();
     }
 
+    returnSoundChange(isSoundActive){
+        this.g.setParameter('isSoundActive', isSoundActive);
+    }
+
     /**
      * LAUNCHER BUTTON:
      * onClick button open/close widget
@@ -1577,8 +1600,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
-        // const isOpenHomeTEMP = this.isOpenHome;
-        // const isOpenAllConversationTEMP = this.isOpenAllConversation;
+        this.storageService.removeItem('activeConversation');
+        this.g.setParameter('activeConversation', null, false);
         this.isOpenHome = true;
         this.isOpenAllConversation = false;
         this.isOpenConversation = false;
@@ -1805,7 +1828,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.el.nativeElement.dispatchEvent(triggerChangedConversation);
             }
-            this.g.isOpenNewMessage = true;
         } catch (e) {
             this.g.wdLog(['> Error :' + e]);
         }
@@ -1910,6 +1932,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
            this.startNwConversation();
        }
    }
+
+
+   private setStyleMap(){
+    this.styleMapConversation.set('backgroundColor', this.g.colorBck)
+    this.styleMapConversation.set('foregroundColor', this.g.themeForegroundColor)
+    this.styleMapConversation.set('themeColor', this.g.themeColor)
+  }
 
 
 }

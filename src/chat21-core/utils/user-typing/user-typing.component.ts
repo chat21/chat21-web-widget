@@ -12,7 +12,6 @@ export class UserTypingComponent implements OnInit, OnDestroy {
   // @Input() isDirect: boolean;
   @Input() translationMap: Map<string, string>;
   @Input() nameUserTypingNow: string;
-  @Input() color: string;
   // @Input() membersConversation: [string];
 
   constructor( ) { }

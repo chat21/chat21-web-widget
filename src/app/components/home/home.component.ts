@@ -1,7 +1,8 @@
 import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
+import { convertColorToRGBA } from '../../../chat21-core/utils/utils';
 import { Globals } from '../../utils/globals';
-import { convertColorToRGBA } from '../../utils/utils';
+
 
 
 
@@ -14,24 +15,26 @@ import { convertColorToRGBA } from '../../utils/utils';
 export class HomeComponent implements OnInit {
   @ViewChild('homeComponent') private element: ElementRef;
   // ========= begin:: Input/Output values ===========/
-  @Output() eventNewConv = new EventEmitter<string>();
-  @Output() eventSelctedConv = new EventEmitter<string>();
-  @Output() eventClose = new EventEmitter();
-  @Output() eventSignOut = new EventEmitter();
-  @Output() eventOpenAllConv = new EventEmitter();
+  @Output() onNewConversation = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<string>();
+  @Output() onOpenAllConvesations = new EventEmitter();
+  @Output() onCloseWidget = new EventEmitter();
+  @Output() onSignOut = new EventEmitter();
   @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() styleMap: Map<string, string>
   // ========= end:: Input/Output values ===========/
 
 
   // ========= begin:: component variables ======= //
-  tenant;
   widgetTitle;
   welcomeMsg;
   welcomeTitle;
-  colorBck: string;
+
+  translationMapHeader: Map<string, string>;
+  translationMapFooter: Map<string, string>;
   // ========= end:: component variables ======= //
 
-
+  convertColorToRGBA = convertColorToRGBA
 
 
   constructor(
@@ -43,8 +46,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // get global variables
     this.g.wdLog(['ngOnInit app-home']);
-    this.tenant = this.g.tenant;
-    this.colorBck = '#000000';
 
     if (this.g.firstOpen === true) {
       this.addAnimation();
@@ -56,31 +57,51 @@ export class HomeComponent implements OnInit {
 
   }
 
+
+  public translations() {
+    const keysHeader = [
+      'BUTTON_CLOSE_TO_ICON', 
+      'WELLCOME_TITLE', 
+      'WELLCOME_MSG',
+    ];
+
+    const keysFooter = [
+      'LABEL_PLACEHOLDER',
+      'GUEST_LABEL',
+    ];
+
+    // this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
+    // this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
+  
+    
+  }
+
+
   // ========= begin:: ACTIONS ============//
   returnNewConversation() {
     // rimuovo classe animazione
     this.removeAnimation();
-    this.eventNewConv.emit();
+    this.onNewConversation.emit();
   }
 
   returnOpenAllConversation() {
     // rimuovo classe animazione
     this.removeAnimation();
-    this.eventOpenAllConv.emit();
+    this.onOpenAllConvesations.emit();
   }
 
   returnSelectedConversation($event) {
     if ( $event ) {
       // rimuovo classe animazione
       this.removeAnimation();
-      this.eventSelctedConv.emit($event);
+      this.onConversationSelected.emit($event);
     }
   }
 
   f21_close() {
     // aggiungo classe animazione
     this.addAnimation();
-    this.eventClose.emit();
+    this.onCloseWidget.emit();
   }
 
   hideMenuOptions() {
@@ -95,7 +116,7 @@ export class HomeComponent implements OnInit {
    * logout
    */
   returnSignOut() {
-    this.eventSignOut.emit();
+    this.onSignOut.emit();
   }
 
   // ========= end:: ACTIONS ============//
@@ -120,4 +141,8 @@ export class HomeComponent implements OnInit {
       this.g.wdLog(['> Error :' + error]);
     }
   }
+
+  
+
 }
+
