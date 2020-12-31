@@ -115,6 +115,9 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
               that.g.wdLog([' >3 :::: ', that.listConversations.length]);
             } else if (conversations && conversations.length > 0) {
               that.listConversations = conversations;
+
+              console.log('showConversations listConversations',  that.listConversations) 
+
             }
             that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
           });
@@ -149,6 +152,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
     this.listConversations = this.conversationsService.listConversations;
+    
     this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
     this.g.wdLog(['this.listConversations', this.listConversations]);
     if (this.g.supportMode) {
