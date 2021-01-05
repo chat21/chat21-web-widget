@@ -1,5 +1,10 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.94
+- Updated Firebase dependency to 7.24.0
+- Fixes double conversations and the presence of incorrect conversations in the conversation list
+- Code refactoring
+
 ### branch master - untagged
 - Updated Firebase dependency to 7.24.0
 - Started development to support callback for events and method (see file test-callbackbased-methods-events.html) 
