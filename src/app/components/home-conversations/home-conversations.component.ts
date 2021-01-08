@@ -1,5 +1,5 @@
 
-import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, OnInit, AfterViewInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 // services
@@ -97,9 +97,11 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit:::: ', this.listConversations]);
+    this.g.wdLog(['-------ngOnInit : home-conversations ------------ ', this.listConversations]);
     
   }
+
+  
 
   // ========= begin:: ACTIONS ============//
   returnSelectedConversation($event) {
@@ -123,36 +125,36 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
-  showConversations() {
-    this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
-    const that = this;
-    let subListConversations;
-    if (!subListConversations) {
-      // subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
-      //     that.ngZone.run(() => {
-      //       if (conversations && conversations.length > 3) {
-      //         that.listConversations = conversations.slice(0, 3);
-      //         that.g.wdLog([' >3 :::: ', that.listConversations.length]);
-      //       } else if (conversations && conversations.length > 0) {
-      //         that.listConversations = conversations;
-      //       }
-      //       that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
-      //     });
-      // });
-      // this.subscriptions.push(subListConversations);
-    }
+  // showConversations() {
+  //   this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
+  //   const that = this;
+  //   let subListConversations;
+  //   if (!subListConversations) {
+  //     subListConversations = this.conversationsService.obsListConversations.subscribe((conversations) => {
+  //         that.ngZone.run(() => {
+  //           if (conversations && conversations.length > 3) {
+  //             that.listConversations = conversations.slice(0, 3);
+  //             that.g.wdLog([' >3 :::: ', that.listConversations.length]);
+  //           } else if (conversations && conversations.length > 0) {
+  //             that.listConversations = conversations;
+  //           }
+  //           that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
+  //         });
+  //     });
+  //     this.subscriptions.push(subListConversations);
+  //   }
 
-    if (!this.subArchivedConversations) {
-      this.subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
-        that.ngZone.run(() => {
-          that.archivedConversations = conversations;
-          that.g.wdLog([' archivedConversations:::: ', that.archivedConversations]);
-        });
-      });
-      this.subscriptions.push(this.subArchivedConversations);
-    }
+  //   if (!this.subArchivedConversations) {
+  //     this.subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
+  //       that.ngZone.run(() => {
+  //         that.archivedConversations = conversations;
+  //         that.g.wdLog([' archivedConversations:::: ', that.archivedConversations]);
+  //       });
+  //     });
+  //     this.subscriptions.push(this.subArchivedConversations);
+  //   }
 
-  }
+  // }
 
   initialize() {
     this.g.wdLog(['initialize: ListConversationsComponent']);
@@ -170,7 +172,7 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.availableAgents = this.g.availableAgents.slice(0, 5);
 
     //this.g.wdLog(['senderId: ', this.senderId]);
-    this.g.wdLog(['tenant: ', this.tenant]);
+    this.g.wdLog(['tenant: ', this.tenant, this.availableAgents]);
     // this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversationsService.checkListConversations();
     // this.conversationsService.checkListArchivedConversations();
@@ -181,15 +183,13 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
     // this.listConversations = this.conversationsHandlerService.conversations;
     // 6 - save conversationHandler in chatManager
     // this.chatManager.setConversationsHandler(this.conversationsHandlerService);
-
-
     
     this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
     this.g.wdLog(['this.listConversations', this.listConversations]);
     if (this.g.supportMode) {
       this.showWaitingTime();
     }
-    this.showConversations();
+    //this.showConversations();
   }
 
   showWaitingTime() {

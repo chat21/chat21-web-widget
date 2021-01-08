@@ -88,7 +88,13 @@ import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebas
 import { MessageTextAreaComponent } from './components/conversation-detail/conversation-footer/message-text-area/message-text-area.component';
 import { ConversationHeaderComponent } from './components/conversation-detail/conversation-header/conversation-header.component';
 import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
-import { Triggerhandler } from './utils/triggerHandler';
+import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
+import { FirebasePresenceService } from '../chat21-core/providers/firebase/firebase-presence.service';
+import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
+import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
+import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
+import { FirebaseArchivedConversationsHandler } from '../chat21-core/providers/firebase/firebase-archivedconversations-handler';
+import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
 
 
 // FACTORIES
@@ -120,6 +126,14 @@ export function conversationsHandlerFactory() {
   }
 }
 
+export function archivedConversationsHandlerFactory() {
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseArchivedConversationsHandler();
+  } else {
+    return new FirebaseArchivedConversationsHandler();
+  }
+}
+
 export function conversationHandlerBuilderFactory() {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseConversationHandlerBuilderService();
@@ -141,6 +155,24 @@ export function typingFactory() {
     return new FirebaseTypingService();
   } else {
     return new FirebaseTypingService();
+  }
+}
+
+export function presenceFactory() {
+  console.log('presenceFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebasePresenceService();
+  } else {
+    return new FirebasePresenceService();
+  }
+}
+
+export function imageRepoFactory() {
+  console.log('imageRepoFactory: ');
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseImageRepoService();
+  } else {
+    return new FirebaseImageRepoService();
   }
 }
 
@@ -225,6 +257,11 @@ export function typingFactory() {
       deps: []
     },
     {
+      provide: ArchivedConversationsHandlerService,
+      useFactory: archivedConversationsHandlerFactory,
+      deps: []
+    },
+    {
       provide: ConversationHandlerBuilderService,
       useFactory: conversationHandlerBuilderFactory,
       deps: []
@@ -237,6 +274,16 @@ export function typingFactory() {
     {
       provide: TypingService,
       useFactory: typingFactory,
+      deps: []
+    },
+    {
+      provide: PresenceService,
+      useFactory: presenceFactory,
+      deps: []
+    },
+    {
+      provide: ImageRepoService,
+      useFactory: imageRepoFactory,
       deps: []
     },
     AuthService,

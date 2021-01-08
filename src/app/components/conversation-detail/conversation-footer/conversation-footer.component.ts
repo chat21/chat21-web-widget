@@ -46,7 +46,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   conversationHandlerService: ConversationHandlerService
 
   constructor(public g: Globals,
-              public el: ElementRef,
+              //public el: ElementRef,
               public upSvc: UploadService,
               //private messagingService: MessagingService,
               private chatManager: ChatManager,
@@ -264,17 +264,17 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           projectid: projectid,
           channelType: channelType
         })
-        this.triggerBeforeSendMessageEvent(
-          recipientFullname,
-          msg,
-          type,
-          metadata,
-          conversationWith,
-          recipientFullname,
-          attributes,
-          projectid,
-          channelType
-        );
+        // this.triggerBeforeSendMessageEvent(
+        //   recipientFullname,
+        //   msg,
+        //   type,
+        //   metadata,
+        //   conversationWith,
+        //   recipientFullname,
+        //   attributes,
+        //   projectid,
+        //   channelType
+        // );
         if (userFullname) {
           recipientFullname = userFullname;
         } else if (userEmail) {
@@ -298,18 +298,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           channelType        
         );
 
-        // const messageSent = this.messagingService.sendMessage(
-        //   recipientFullname,
-        //   msg,
-        //   type,
-        //   metadata,
-        //   conversationWith,
-        //   recipientFullname,
-        //   attributes,
-        //   projectid,
-        //   channelType
-        // );
-        this.triggerAfterSendMessageEvent(messageSent);
+        // this.triggerAfterSendMessageEvent(messageSent);
         this.onAfterSendMessage.emit(messageSent)
         this.isNewConversation = false;
 
@@ -326,38 +315,39 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     }
   }
 
-  private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+  //MOVED TO TRIGGERHANDLER
+  // private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
 
-  // tslint:disable-next-line:max-line-length
-  private triggerAfterSendMessageEvent(message) {
-    try {
-        // tslint:disable-next-line:max-line-length
-        const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
-            this.g.windowContext = windowContext;
-        } else {
-          this.el.nativeElement.dispatchEvent(onAfterMessageSend);
-        }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
+  //MOVED TO TRIGGERHANDLER
+  // private triggerAfterSendMessageEvent(message) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onAfterMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
 
 
   private restoreTextArea() {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, IterableDiffers, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
 import { ConversationComponent } from '../conversation-detail/conversation/conversation.component';
@@ -35,7 +35,10 @@ export class ListConversationsComponent implements OnInit {
 
   ngOnInit() {
     this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
-    console.log('limit', this.limit)
+    
+  }
+  ngOnChanges(changes: SimpleChanges){
+    console.log('cahnges list-conversation:::', changes)
   }
 
   private openConversationByID(conversation) {
@@ -48,8 +51,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    console.log('listconversation', this.listConversations)
+    this.g.wdLog([' --------ngAfterViewInit: list-conversations-------- ', this.listConversations]);
   }
 
 

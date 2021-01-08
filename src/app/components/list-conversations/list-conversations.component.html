@@ -1,6 +1,6 @@
 
 <div id='c21-app-list-conversations'>
-  <div *ngFor="let conversation of listConversations">
+  <div *ngFor="let conversation of listConversations | slice:0:limit">
     <button tabindex="1103" class="c21-item-conversation" (click)="openConversationByID(conversation)">
       <div class="c21-body-conv">
         <div class="c21-left-conv">
@@ -15,6 +15,7 @@
           <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div>
         </div>
         <div *ngIf="conversation.is_new" [ngStyle] = "{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
+        <div *ngIf="conversation.archived" class="c21-lablel-close">{{ g.CLOSED }}</div>
       </div>
       <div class="clear"></div>
     </button>

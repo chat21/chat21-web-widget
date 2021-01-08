@@ -54,7 +54,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
-  @Input() elRoot: ElementRef;
+  // @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
   @Input() styleMap: Map<string, string>;
   @Input() isOpen: boolean;
@@ -64,6 +64,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() onSoundChange = new EventEmitter();
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
+  @Output() onNewConversationInit = new EventEmitter();
+  @Output() onBeforeMessageRender = new EventEmitter();
+  @Output() onAfterMessageRender = new EventEmitter();
+  @Output() onNewMessageCreated = new EventEmitter();
   // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
 
@@ -99,10 +103,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private LABEL_PLACEHOLDER: string;
   private API_URL: string;
 
-  userEmail: string;
-  userFullname: string;
+  // userEmail: string;
+  // userFullname: string;
   preChatForm = false;
-  textInputTextArea: String;
+  //textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
   isPopupUrl = isPopupUrl;
@@ -110,7 +114,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
   messages: Array<MessageModel>;
-  recipient_fullname: string;
+  // recipient_fullname: string;
   // attributes: any;
   // GUEST_LABEL = '';
 
@@ -724,6 +728,35 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(subscribe);
     }
 
+
+    subscribtionKey = 'messageAdded';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if (!subscribtion) {
+      console.log('***** add messageAdded *****',  this.conversationHandlerService);
+      subscribtion = this.conversationHandlerService.messageAdded.subscribe((msg: MessageModel) => {
+        console.log('***** DATAIL messageAdded *****', msg);
+        if (msg) {
+          that.newMessageAdded(msg);
+          this.onNewMessageCreated.emit(msg)
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
+    subscribtionKey = 'conversationsRemoved';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if(!subscribtion){
+      subscribtion = this.chatManager.conversationsHandlerService.conversationsRemoved.subscribe((conversation) => {
+        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith);
+        if (conversation && conversation.recipient === this.conversationWith) {
+          this.starRatingWidgetService.setOsservable(true)
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
     // this.starRatingWidgetService.setOsservable(false);
     // // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
     // // tslint:disable-next-line:max-line-length
@@ -793,33 +826,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     // });
     // this.subscriptions.push(obsAddedMessage);
-
-    subscribtionKey = 'messageAdded';
-    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
-    if (!subscribtion) {
-      console.log('***** add messageAdded *****',  this.conversationHandlerService);
-      subscribtion = this.conversationHandlerService.messageAdded.subscribe((msg: any) => {
-        console.log('***** DATAIL messageAdded *****', msg);
-        if (msg) {
-          that.newMessageAdded(msg);
-        }
-      });
-      const subscribe = {key: subscribtionKey, value: subscribtion };
-      this.subscriptions.push(subscribe);
-    }
-
-    subscribtionKey = 'conversationsRemoved';
-    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
-    if(!subscribtion){
-      subscribtion = this.chatManager.conversationsHandlerService.conversationsRemoved.subscribe((conversation) => {
-        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith);
-        if (conversation && conversation.recipient === this.conversationWith) {
-          this.starRatingWidgetService.setOsservable(true)
-        }
-      });
-      const subscribe = {key: subscribtionKey, value: subscribtion };
-      this.subscriptions.push(subscribe);
-    }
     
 
     //this.subscriptionTyping();
@@ -1085,83 +1091,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   printMessage(message, messageEl, component) {
-    this.triggerBeforeMessageRender(message, messageEl, component);
+    const messageOBJ = { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component}
+    this.onBeforeMessageRender.emit(messageOBJ)
     const messageText = message.text;
-    this.triggerAfterMessageRender(message, messageEl, component);
+    this.onAfterMessageRender.emit(messageOBJ)
+    // this.triggerBeforeMessageRender(message, messageEl, component);
+    // const messageText = message.text;
+    // this.triggerAfterMessageRender(message, messageEl, component);
     return messageText;
   }
 
 
-  triggerBeforeMessageRender(message, messageEl, component) {
-    // console.log('triggerBeforeMessageRender');
-    try {
-      // tslint:disable-next-line:max-line-length
-      const beforeMessageRender = new CustomEvent('beforeMessageRender',
-        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-      const windowContext = this.g.windowContext;
-      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-          windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
-          this.g.windowContext = windowContext;
-      } else {
-        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-  triggerAfterMessageRender(message, messageEl, component) {
-    // console.log('triggerBeforeMessageRender');
-    try {
-      // tslint:disable-next-line:max-line-length
-      const afterMessageRender = new CustomEvent('afterMessageRender',
-        { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
-      const windowContext = this.g.windowContext;
-      if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-          windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
-          this.g.windowContext = windowContext;
-      } else {
-        const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
-      }
-    } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
-    }
-  }
-
-
-  // tslint:disable-next-line:max-line-length
-  // private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
-  //   try {
-  //       // tslint:disable-next-line:max-line-length
-  //       const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
-  //       const windowContext = this.g.windowContext;
-  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
-  //           this.g.windowContext = windowContext;
-  //       } else {
-  //         this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
-  //       }
-  //   } catch (e) {
-  //     this.g.wdLog(['> Error :' + e]);
-  //   }
-  // }
-
-  // tslint:disable-next-line:max-line-length
-  // private triggerAfterSendMessageEvent(message) {
-  //   try {
-  //       // tslint:disable-next-line:max-line-length
-  //       const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
-  //       const windowContext = this.g.windowContext;
-  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
-  //           this.g.windowContext = windowContext;
-  //       } else {
-  //         this.el.nativeElement.dispatchEvent(onAfterMessageSend);
-  //       }
-  //   } catch (e) {
-  //     this.g.wdLog(['> Error :' + e]);
-  //   }
-  // }
 
   /**
    *
@@ -1866,23 +1806,84 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ---------------- onNewConversationComponentInit -------------- ']);
     this.setConversation();
     // this.connectConversation();
-
-    // console.log('onNewConversationComponentInit: ' + this.conversationWith);
     const newConvId = this.conversationWith;
     const default_settings = this.g.default_settings;
     const appConfigs = this.appConfigService.getConfig();
 
-    this.g.wdLog([' ---------------- triggerOnNewConversationComponentInit ---------------- ', default_settings]);
-    // tslint:disable-next-line:max-line-length
-    const onNewConversation = new CustomEvent('onNewConversationComponentInit', { detail: { global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs } });
-    const windowContext = this.g.windowContext;
-    if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-        windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
-        this.g.windowContext = windowContext;
-    } else {
-        this.el.nativeElement.dispatchEvent(onNewConversation);
-    }
+    this.onNewConversationInit.emit({ global: this.g, default_settings: default_settings, newConvId: newConvId, appConfigs: appConfigs })
   }
+
+  // triggerBeforeMessageRender(message, messageEl, component) {
+  //   // console.log('triggerBeforeMessageRender');
+  //   try {
+  //     // tslint:disable-next-line:max-line-length
+  //     const beforeMessageRender = new CustomEvent('beforeMessageRender',
+  //       { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
+  //     const windowContext = this.g.windowContext;
+  //     if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //         windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
+  //         this.g.windowContext = windowContext;
+  //     } else {
+  //       const returnEventValue = this.elRoot.nativeElement.dispatchEvent(beforeMessageRender);
+  //     }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
+
+  // triggerAfterMessageRender(message, messageEl, component) {
+  //   // console.log('triggerBeforeMessageRender');
+  //   try {
+  //     // tslint:disable-next-line:max-line-length
+  //     const afterMessageRender = new CustomEvent('afterMessageRender',
+  //       { detail: { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component} });
+  //     const windowContext = this.g.windowContext;
+  //     if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //         windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
+  //         this.g.windowContext = windowContext;
+  //     } else {
+  //       const returnEventValue = this.elRoot.nativeElement.dispatchEvent(afterMessageRender);
+  //     }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
+
+
+  // tslint:disable-next-line:max-line-length
+  // private triggerBeforeSendMessageEvent(senderFullname, text, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { senderFullname: senderFullname, text: text, type: type, metadata, conversationWith: conversationWith, recipientFullname: recipientFullname, attributes: attributes, projectid: projectid, channelType: channel_type } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
+
+  // tslint:disable-next-line:max-line-length
+  // private triggerAfterSendMessageEvent(message) {
+  //   try {
+  //       // tslint:disable-next-line:max-line-length
+  //       const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: message } });
+  //       const windowContext = this.g.windowContext;
+  //       if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+  //           windowContext.tiledesk.tiledeskroot.dispatchEvent(onAfterMessageSend);
+  //           this.g.windowContext = windowContext;
+  //       } else {
+  //         this.el.nativeElement.dispatchEvent(onAfterMessageSend);
+  //       }
+  //   } catch (e) {
+  //     this.g.wdLog(['> Error :' + e]);
+  //   }
+  // }
+  
   // ========= END:: TRIGGER FUNCTIONS ============//
 
 

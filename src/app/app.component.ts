@@ -32,7 +32,7 @@ import { environment } from '../environments/environment';
 // utils
 // setLanguage,
 // getImageUrlThumb,
-import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage } from './utils/utils';
+import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage, getImageUrlThumb } from './utils/utils';
 import { ConversationModel } from '../chat21-core/models/conversation';
 import { AppConfigService } from './providers/app-config.service';
 
@@ -50,7 +50,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { ConversationHandlerService } from '../chat21-core/providers/abstract/conversation-handler.service';
-import { Triggerhandler } from './utils/triggerHandler';
+import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
+import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
+import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
+import { URL_SOUND } from '../chat21-core/utils/constants';
 // import { TranslationLoader } from './translation-loader';
 
 @Component({
@@ -96,6 +99,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // ========= begin:: variabili del componente ======= //
     listConversations: Array<ConversationModel>;
+    archivedConversations: Array<ConversationModel>;
+    private audio: any;
+    private setTimeoutSound: any;
     // ========= end:: variabili del componente ======== //
 
     // ========= begin:: DA SPOSTARE ======= //
@@ -118,7 +124,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public authService: AuthService,
         //public messagingService: MessagingService,
         public contactService: ContactService,
-        public chatPresenceHandlerService: ChatPresenceHandlerService,
+        //public chatPresenceHandlerService: ChatPresenceHandlerService,
+        public presenceService: PresenceService,
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
         public appConfigService: AppConfigService,
@@ -126,6 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public settingsSaverService: SettingsSaverService,
         //public conversationsService: ConversationsService,
         public conversationsHandlerService: ConversationsHandlerService,
+        public archivedConversationsService: ArchivedConversationsHandlerService,
         public conversationHandlerBuilderService: ConversationHandlerBuilderService,
         public chatManager: ChatManager,
         public typingService: TypingService,
@@ -135,8 +143,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // that.g.wdLog(["THIS.G (IN CONSTRUCTOR) : " , this.g);
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // that.g.wdLog(['appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
+        
+        //INIT TRIGGER-HANDLER
         this.triggerHandler.setElement(this.el)
-        //TODO- fare metodo per windowscontext
+        this.triggerHandler.setWindowContext(this.g.windowContext)
+
+
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             // tslint:disable-next-line:max-line-length
             throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
@@ -161,23 +173,61 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.ngZone.run(() => {
             const that = this;
             const subChangedConversation = this.conversationsHandlerService.conversationsChanged.subscribe((conversation) => {
-                that.ngZone.run(() => {
-                    if ( that.g.isOpen === false && conversation) {
+                // that.ngZone.run(() => {
+                    if ( that.g.isOpen === true && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
-                        //TODO-GAB: riabilitare dpo
-                        that.triggerOnChangedConversation(conversation);
+                        that.triggerOnConversationUpdated(conversation);
                         that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
                         if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
                             return;
                         }
+                        if (conversation.is_new) {
+                            this.soundMessage();
+                        }
                         that.lastConversation = conversation;
                         this.g.isOpenNewMessage = true;
-                        console.log('changeconversationnnn', that.lastConversation)
                     }
-                });
+                // });
+            });
+            this.subscriptions.push(subChangedConversation);
+
+            const subAddedConversation = this.conversationsHandlerService.conversationsAdded.subscribe((conversation) => {
+                // that.ngZone.run(() => {
+                    if ( that.g.isOpen === true && conversation) {
+                        that.g.setParameter('displayEyeCatcherCard', 'none');
+                        that.triggerOnConversationUpdated(conversation);
+                        that.g.wdLog([' obsAddedConversation ::: ' + conversation]);
+                        if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                            return;
+                        }
+                        if (conversation.is_new) {
+                            this.soundMessage();
+                        }
+                        that.lastConversation = conversation;
+                        this.g.isOpenNewMessage = true;
+                    }
+                // });
             });
             //this.authService.initialize();
-            this.subscriptions.push(subChangedConversation);
+            this.subscriptions.push(subAddedConversation);
+
+            const subListConversations = this.conversationsHandlerService.conversationsAdded.subscribe((conversation) => {
+                // that.ngZone.run(() => {
+                if(conversation){
+                that.triggerOnConversationUpdated(conversation);
+                }    
+                // });
+            });
+            this.subscriptions.push(subListConversations);
+              
+            const subArchivedConversations = this.archivedConversationsService.archivedConversationAdded.subscribe((conversation) => {
+                // that.ngZone.run(() => {
+                if(conversation){
+                    that.triggerOnConversationUpdated(conversation);
+                }
+                // });
+            });
+            this.subscriptions.push(subArchivedConversations);
 
         });
         this.authService.initialize();
@@ -283,7 +333,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.triggerOnAuthStateChanged(that.stateLoggedUser);
                     that.startUI();
                     that.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart]);
-                    that.chatPresenceHandlerService.setupMyPresence(user.uid);
+                    that.presenceService.setPresence(user.uid);
                     if (autoStart !== false) {
                         that.showAllWidget();
                         // that.g.setParameter('isShown', true, true);
@@ -333,6 +383,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.subscriptions.push(obsSettingsService);
         this.globalSettingsService.initWidgetParamiters(this.g, this.el);
+        // SET AUDIO
+        this.audio = new Audio();
+        this.audio.src = URL_SOUND;
+        this.audio.load();
        // ------------------------------- //
     }
     /**
@@ -388,8 +442,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.addComponentToWindow(this.ngZone); // forse dovrebbe stare prima di tutti i triggers
 
         this.initLauncherButton();
-        this.chatPresenceHandlerService.initialize();
+        this.presenceService.initialize();
         this.triggerLoadParamsEvent(); // first trigger 
+        //this.setAvailableAgentsStatus();
     }
 
     /** initLauncherButton
@@ -407,6 +462,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         ];
         const translationMap = this.translateService.translateLanguage(keys);
         this.listConversations = [];
+        this.archivedConversations = [];
         //this.availableAgents = this.g.availableAgents.slice(0, 5);
 
         this.g.wdLog(['senderId: ', senderId]);
@@ -414,13 +470,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
          // 1 - init chatConversationsHandler and  archviedConversationsHandler
          this.conversationsHandlerService.initialize(tenant,senderId, translationMap)
+         this.archivedConversationsService.initialize(tenant, senderId, translationMap)
          // 2 - get conversations from storage
         // this.chatConversationsHandler.getConversationsFromStorage();
         // 5 - connect conversationHandler and archviedConversationsHandler to firebase event (add, change, remove)
         this.conversationsHandlerService.connect();
+        this.archivedConversationsService.connect();
         this.listConversations = this.conversationsHandlerService.conversations;
+        this.archivedConversations = this.archivedConversationsService.archivedConversations;
          // 6 - save conversationHandler in chatManager
         this.chatManager.setConversationsHandler(this.conversationsHandlerService);
+        this.chatManager.setArchivedConversationsHandler(this.archivedConversationsService);
 
         this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
         this.g.wdLog(['this.listConversations', this.listConversations]);
@@ -513,9 +573,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //     const that = this;
     //     const projectid = this.g.projectid;
     //     this.g.wdLog(['projectId->', projectid]);
-    //     this.agentAvailabilityService
-    //     .getAvailableAgents(projectid)
-    //     .subscribe( (availableAgents) => {
+    //     this.agentAvailabilityService.getAvailableAgents(projectid).subscribe( (availableAgents) => {
     //         that.g.wdLog(['availableAgents->', availableAgents]);
     //         if (availableAgents.length <= 0) {
     //             that.g.setParameter('areAgentsAvailable', false);
@@ -684,7 +742,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 13 - IMPOSTO STATO CONNESSO UTENTE ']);
-            this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
+            this.presenceService.setPresence(currentUser.uid);
         } else {
             //  AUTENTICAZIONE ANONIMA
             this.g.wdLog([' ---------------- 14 ---------------- ']);
@@ -752,7 +810,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // visualizzo l'iframe!!!
         this.triggerOnViewInit();
-
+        
         // mostro il widget
         setTimeout(() => {
             const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
@@ -763,6 +821,44 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // ========= end:: START UI ============//
 
+
+    private openNewConversation() {
+        this.g.wdLog(['openNewConversation in APP COMPONENT']);
+        this.g.newConversationStart = true;
+       // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
+       // altrimenti mostro modale dipartimenti
+       const preChatForm = this.g.preChatForm;
+       const attributes = this.g.attributes;
+       const departments = this.g.departments;
+
+       // that.g.wdLog(['departments: ', departments, departments.length);
+       if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
+           // if (preChatForm && (!attributes.userFullname || !attributes.userEmail)) {
+           this.isOpenConversation = false;
+           this.g.setParameter('isOpenPrechatForm', true);
+           // this.settingsSaverService.setVariable('isOpenPrechatForm', true);
+           this.isOpenSelectionDepartment = false;
+           if (departments && departments.length > 1 && this.g.departmentID == null) {
+               this.isOpenSelectionDepartment = true;
+           }
+       } else {
+           // this.g.isOpenPrechatForm = false;
+           this.g.setParameter('isOpenPrechatForm', false);
+           // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
+           this.isOpenConversation = false;
+           this.isOpenSelectionDepartment = false;
+           if (departments && departments.length > 1 && this.g.departmentID == null) {
+               this.isOpenSelectionDepartment = true;
+           } else {
+               this.isOpenConversation = true;
+           }
+       }
+
+       this.g.wdLog(['isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment]);
+       if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+           this.startNwConversation();
+       }
+   }
 
     // ========= begin:: COMPONENT TO WINDOW ============//
     /**
@@ -1288,7 +1384,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.startNwConversation();
             this.startUI();
             this.g.wdLog([' 1 - IMPOSTO STATO CONNESSO UTENTE ']);
-            this.chatPresenceHandlerService.setupMyPresence(currentUser.uid);
+            this.presenceService.setPresence(currentUser.uid);
         });
 
     }
@@ -1345,7 +1441,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['prima ero loggato allora mi sloggo!']);
             this.g.setIsOpen(false);
             this.storageService.clear();
-            this.chatPresenceHandlerService.goOffline();
+            this.presenceService.removePresence();
             this.authService.signOut(cod);
         }
         // this.storageService.removeItem('attributes');
@@ -1366,6 +1462,27 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //     }
     //     // this.isWidgetActive = (this.storageService.getItem('isWidgetActive')) ? true : false;
     // }
+
+    /**
+     * attivo sound se è un msg nuovo
+     */
+    private soundMessage() {
+        console.log('****** soundMessage *****', this.audio);
+        const that = this;
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        clearTimeout(this.setTimeoutSound);
+        this.setTimeoutSound = setTimeout(() => {
+            that.audio.play()
+            .then(() => {
+                console.log('****** soundMessage played *****');
+            })
+            .catch((error: any) => {
+                console.log('***soundMessage error*', error);
+            });
+        }, 1000);
+    }
+
 
     /**
      * genero un nuovo conversationWith
@@ -1681,174 +1798,204 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // ========= START:: TRIGGER FUNCTIONS ============//
     private triggerOnViewInit() {
-        const default_settings = this.g.default_settings;
-        const appConfigs = this.appConfigService.getConfig();
-        // that.g.wdLog(['appConfigs', appConfigs);
-        const windowContext = this.g.windowContext;
-        this.g.wdLog([' ---------------- triggerOnInit ---------------- ', default_settings]);
-        // tslint:disable-next-line:max-line-length
-        const onInit = new CustomEvent('onInit', { detail: {  global: this.g, default_settings: default_settings, appConfigs: appConfigs  } });
+        const detailOBJ = {  global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig()  }
+        this.triggerHandler.triggerOnViewInit(detailOBJ)
 
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onInit);
-        }
+        // const default_settings = this.g.default_settings;
+        // const appConfigs = this.appConfigService.getConfig();
+        // // that.g.wdLog(['appConfigs', appConfigs);
+        // const windowContext = this.g.windowContext;
+        // this.g.wdLog([' ---------------- triggerOnInit ---------------- ', default_settings]);
+        // // tslint:disable-next-line:max-line-length
+        // const onInit = new CustomEvent('onInit', { detail: {  global: this.g, default_settings: default_settings, appConfigs: appConfigs  } });
+
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onInit);
+        // }
     }
 
     private triggerOnOpenEvent() {
-        const default_settings = this.g.default_settings;
-        this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', default_settings]);
-        const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onOpen);
-        }
+        const detailOBJ = { default_settings: this.g.default_settings}
+        this.triggerHandler.triggerOnViewInit(detailOBJ)
+
+        // const default_settings = this.g.default_settings;
+        // this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', default_settings]);
+        // const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onOpen);
+        // }
 
     }
     private triggerOnCloseEvent() {
-        const default_settings = this.g.default_settings;
-        this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', default_settings]);
-        const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onClose);
-        }
+        const detailOBJ = { default_settings: this.g.default_settings}
+        this.triggerHandler.triggerOnCloseEvent(detailOBJ)
+
+        // const default_settings = this.g.default_settings;
+        // this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', default_settings]);
+        // const onClose = new CustomEvent('onClose', { detail: { default_settings: default_settings } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onClose);
+        // }
 
     }
 
     private triggerOnOpenEyeCatcherEvent() {
-        const default_settings = this.g.default_settings;
-        this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', default_settings]);
-        const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
-        }
+        const detailOBJ = { default_settings: this.g.default_settings}
+        this.triggerHandler.triggerOnOpenEyeCatcherEvent(detailOBJ)
+
+        // const default_settings = this.g.default_settings;
+        // this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', default_settings]);
+        // const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: { default_settings: default_settings } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
+        // }
     }
 
     private triggerOnClosedEyeCatcherEvent() {
-        this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
-        const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
-        }
+        this.triggerHandler.triggerOnClosedEyeCatcherEvent()
+
+        // this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
+        // const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
+        // }
     }
 
 
 
     /** */
     private triggerOnLoggedIn() {
-        const appConfigs = this.appConfigService.getConfig();
-        const default_settings = this.g.default_settings;
+        const detailOBJ = {user_id: this.g.senderId, global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig() }
+        this.triggerHandler.triggerOnOpenEvent(detailOBJ)
 
-        this.g.wdLog([' ---------------- triggerOnLoggedIn ---------------- ', this.g.isLogged]);
-        // tslint:disable-next-line:max-line-length
-        const onLoggedIn = new CustomEvent('onLoggedIn', { detail: {user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedIn);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onLoggedIn);
-        }
+        // const appConfigs = this.appConfigService.getConfig();
+        // const default_settings = this.g.default_settings;
+
+        // this.g.wdLog([' ---------------- triggerOnLoggedIn ---------------- ', this.g.isLogged]);
+        // // tslint:disable-next-line:max-line-length
+        // const onLoggedIn = new CustomEvent('onLoggedIn', { detail: {user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedIn);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onLoggedIn);
+        // }
     }
 
      /** */
      private triggerOnLoggedOut() {
-        const appConfigs = this.appConfigService.getConfig();
-        const default_settings = this.g.default_settings;
+        const detailOBJ = { isLogged: this.g.isLogged, global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig() }
+        this.triggerHandler.triggerOnLoggedOut(detailOBJ)
+        
+        // const appConfigs = this.appConfigService.getConfig();
+        // const default_settings = this.g.default_settings;
 
-        this.g.wdLog([' ---------------- triggerOnLoggedOut ---------------- ', this.g.isLogged]);
-        // tslint:disable-next-line:max-line-length
-        const onLoggedOut = new CustomEvent('onLoggedOut', { detail: {isLogged: this.g.isLogged, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedOut);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onLoggedOut);
-        }
+        // this.g.wdLog([' ---------------- triggerOnLoggedOut ---------------- ', this.g.isLogged]);
+        // // tslint:disable-next-line:max-line-length
+        // const onLoggedOut = new CustomEvent('onLoggedOut', { detail: {isLogged: this.g.isLogged, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedOut);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onLoggedOut);
+        // }
     }
 
     /** */
     private triggerOnAuthStateChanged(event) {
-        const appConfigs = this.appConfigService.getConfig();
-        const default_settings = this.g.default_settings;
-        this.g.wdLog([' ---------------- triggerOnAuthStateChanged ---------------- ', this.g.isLogged]);
-        // tslint:disable-next-line:max-line-length
-        const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: {event: event, isLogged: this.g.isLogged, user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onAuthStateChanged);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onAuthStateChanged);
-        }
+        const detailOBJ = {event: event, isLogged: this.g.isLogged, user_id: this.g.senderId, global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig() }
+        this.triggerHandler.triggerOnAuthStateChanged(detailOBJ)
+        
+        // const appConfigs = this.appConfigService.getConfig();
+        // const default_settings = this.g.default_settings;
+        // this.g.wdLog([' ---------------- triggerOnAuthStateChanged ---------------- ', this.g.isLogged]);
+        // // tslint:disable-next-line:max-line-length
+        // const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: {event: event, isLogged: this.g.isLogged, user_id: this.g.senderId, global: this.g, default_settings: default_settings, appConfigs: appConfigs }});
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onAuthStateChanged);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onAuthStateChanged);
+        // }
     }
 
 
     /** */
     private triggerLoadParamsEvent() {
-        this.g.wdLog([' ---------------- triggerOnLoadParamsEvent ---------------- ', this.g.default_settings]);
-        const default_settings = this.g.default_settings;
-        const onLoadParams = new CustomEvent('onLoadParams', { detail: { default_settings: default_settings } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onLoadParams);
-        }
+        const detailOBJ = { default_settings: this.g.default_settings}
+        this.triggerHandler.triggerLoadParamsEvent(detailOBJ)
+        
+        // this.g.wdLog([' ---------------- triggerOnLoadParamsEvent ---------------- ', this.g.default_settings]);
+        // const default_settings = this.g.default_settings;
+        // const onLoadParams = new CustomEvent('onLoadParams', { detail: { default_settings: default_settings } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onLoadParams);
+        // }
     }
 
     /** */
-    private triggerOnChangedConversation(conversation: ConversationModel) {
-        this.g.wdLog([' ---------------- triggerOnChangedConversation ---------------- ', conversation]);
-        try {
-            const triggerChangedConversation = new CustomEvent('onChangedConversation', { detail: { conversation: conversation } });
-            const windowContext = this.g.windowContext;
-            if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-                windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerChangedConversation);
-                this.g.windowContext = windowContext;
-            } else {
-                this.el.nativeElement.dispatchEvent(triggerChangedConversation);
-            }
-        } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
-        }
+    private triggerOnConversationUpdated(conversation: ConversationModel) {
+        this.triggerHandler.triggerOnConversationUpdated(conversation)
+
+        // this.g.wdLog([' ---------------- triggerOnChangedConversation ---------------- ', conversation]);
+        // try {
+        //     const triggerChangedConversation = new CustomEvent('onChangedConversation', { detail: { conversation: conversation } });
+        //     const windowContext = this.g.windowContext;
+        //     if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //         windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerChangedConversation);
+        //         this.g.windowContext = windowContext;
+        //     } else {
+        //         this.el.nativeElement.dispatchEvent(triggerChangedConversation);
+        //     }
+        // } catch (e) {
+        //     this.g.wdLog(['> Error :' + e]);
+        // }
     }
 
     /** */
     private triggerOnCloseMessagePreview() {
-        this.g.wdLog([' ---------------- triggerOnCloseMessagePreview ---------------- ']);
-        try {
-            const triggerCloseMessagePreview = new CustomEvent('onCloseMessagePreview', { detail: { } });
-            const windowContext = this.g.windowContext;
-            if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-                windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerCloseMessagePreview);
-                this.g.windowContext = windowContext;
-            } else {
-                this.el.nativeElement.dispatchEvent(triggerCloseMessagePreview);
-            }
-            this.g.isOpenNewMessage = false;
-        } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
-        }
+        this.triggerHandler.triggerOnCloseMessagePreview();
+
+        // this.g.wdLog([' ---------------- triggerOnCloseMessagePreview ---------------- ']);
+        // try {
+        //     const triggerCloseMessagePreview = new CustomEvent('onCloseMessagePreview', { detail: { } });
+        //     const windowContext = this.g.windowContext;
+        //     if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //         windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerCloseMessagePreview);
+        //         this.g.windowContext = windowContext;
+        //     } else {
+        //         this.el.nativeElement.dispatchEvent(triggerCloseMessagePreview);
+        //     }
+        //     this.g.isOpenNewMessage = false;
+        // } catch (e) {
+        //     this.g.wdLog(['> Error :' + e]);
+        // }
     }
 
     // ========= END:: TRIGGER FUNCTIONS ============//
@@ -1894,45 +2041,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //     this.el.nativeElement.dispatchEvent(beforeMessageRender);
     // }
     // ============ end: functions pass values to external ============//
-
-    private openNewConversation() {
-        this.g.wdLog(['openNewConversation in APP COMPONENT']);
-        this.g.newConversationStart = true;
-       // controllo i dipartimenti se sono 1 o 2 seleziono dipartimento e nascondo modale dipartimento
-       // altrimenti mostro modale dipartimenti
-       const preChatForm = this.g.preChatForm;
-       const attributes = this.g.attributes;
-       const departments = this.g.departments;
-
-       // that.g.wdLog(['departments: ', departments, departments.length);
-       if (preChatForm && (!attributes || !attributes.userFullname || !attributes.userEmail)) {
-           // if (preChatForm && (!attributes.userFullname || !attributes.userEmail)) {
-           this.isOpenConversation = false;
-           this.g.setParameter('isOpenPrechatForm', true);
-           // this.settingsSaverService.setVariable('isOpenPrechatForm', true);
-           this.isOpenSelectionDepartment = false;
-           if (departments && departments.length > 1 && this.g.departmentID == null) {
-               this.isOpenSelectionDepartment = true;
-           }
-       } else {
-           // this.g.isOpenPrechatForm = false;
-           this.g.setParameter('isOpenPrechatForm', false);
-           // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
-           this.isOpenConversation = false;
-           this.isOpenSelectionDepartment = false;
-           if (departments && departments.length > 1 && this.g.departmentID == null) {
-               this.isOpenSelectionDepartment = true;
-           } else {
-               this.isOpenConversation = true;
-           }
-       }
-
-       this.g.wdLog(['isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment]);
-       if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-           this.startNwConversation();
-       }
-   }
-
 
    private setStyleMap(){
     this.styleMapConversation.set('backgroundColor', this.g.colorBck)

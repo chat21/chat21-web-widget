@@ -15,9 +15,10 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     @ViewChild('afSelectionDepartment') private afSelectionDepartment: ElementRef;
 
     // ========= begin:: Input/Output values ===========//
-    @Output() eventDepartmentSelected = new EventEmitter<any>();
-    @Output() eventClosePage = new EventEmitter();
-    @Output() eventOpenPage = new EventEmitter();
+    @Output() onDepartmentSelected = new EventEmitter<any>();
+    @Output() onClose = new EventEmitter();
+    @Output() onOpen = new EventEmitter();
+    @Output() onBeforeDepartmentsFormRender = new EventEmitter();
     // @Input() token: string;
     // ========= end:: Input/Output values ===========//
 
@@ -155,38 +156,39 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     private onSelectDepartment(department) {
         this.g.wdLog([' onSelectDepartment: ', department]);
         this.setDepartment(department);
-        this.eventDepartmentSelected.emit(department);
+        this.onDepartmentSelected.emit(department);
     }
 
     openPage() {
         this.g.wdLog([' openPage: ']);
-        this.eventOpenPage.emit();
+        this.onOpen.emit();
     }
 
     closePage() {
         this.g.wdLog([' closePage:  SelectDepartment']);
-        this.eventClosePage.emit();
+        this.onClose.emit();
     }
 
     cancelPage() {
         this.g.wdLog([' cancelPage:  SelectDepartment']);
         this.g.newConversationStart = false;
-        this.eventClosePage.emit();
+        this.onClose.emit();
     }
     // ========= end:: ACTIONS ============//
 
 
     // ========= START:: TRIGGER FUNCTIONS ============//
     private triggerOnbeforeDepartmentsFormRender() {
-        this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
-        const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: this.departments } });
-        const windowContext = this.g.windowContext;
-        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
-            this.g.windowContext = windowContext;
-        } else {
-            this.el.nativeElement.dispatchEvent(onOpen);
-        }
+        this.onBeforeDepartmentsFormRender.emit(this.departments)
+        // this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
+        // const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: this.departments } });
+        // const windowContext = this.g.windowContext;
+        // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+        //     windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
+        //     this.g.windowContext = windowContext;
+        // } else {
+        //     this.el.nativeElement.dispatchEvent(onOpen);
+        // }
     }
     // ========= END:: TRIGGER FUNCTIONS ============//
 }

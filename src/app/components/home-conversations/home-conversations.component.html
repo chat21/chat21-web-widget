@@ -6,7 +6,7 @@
         <div class="c21-title">{{g.PREV_CONVERSATIONS}}</div>
 
         <div *ngIf="g.showAllConversations == true" class="c21-button" (click)="returnOpenAllConversation()">
-          <div style="display:inline-block; line-height: 40px; margin-right: 10px;">{{g.SHOW_ALL_CONV}} </div>
+          <div style="display:inline-block; line-height: 40px; margin-right: 10px;" (click)="returnOpenAllConversation()">{{g.SHOW_ALL_CONV}} </div>
           <button tabindex="1101" aria-label=" tutte le conversazioni" class="c21-button-clean">
             <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': g.themeColor }" width="18" height="18" viewBox="0 0 24 24">
               <path fill="none" d="M0 0h24v24H0V0z" />

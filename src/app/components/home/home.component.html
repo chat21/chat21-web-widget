@@ -3,14 +3,14 @@
 <div #homeComponent id='chat21-home-component' tabindex="2002" onFocus="document.querySelector('[aflistconv]').focus()">
 
     <!-- HEADER -->
-    <div class="c21-header" (click)="hideMenuOptions()" [ngStyle]="{'background-color': styleMap.get('backgroundColor'), 'color': styleMap.get('foregroundColor'), 'background-image': 'linear-gradient(' + styleMap.get('themeColor')+','+ convertColorToRGBA(styleMap.get('themeColor'), 50)+')' }" >
+    <div class="c21-header" (click)="hideMenuOptions()" [ngStyle]="{'background-color': colorBck, 'color': g.themeForegroundColor, 'background-image': g.colorGradient }" >
 
         <div class="c21-header-container">
             <!-- ICON CLOSE CHAT -->
             <div class="c21-header-button" [ngStyle]="{'display': (g.hideHeaderCloseButton)?'none':'block'}">
                 <div class="c21-close-button">
                     <button tabindex="2001" aria-label="    chiudi chat" class="c21-close-button-body" (click)="f21_close()">
-                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': styleMap.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
+                        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
                             <title id="altIconTitle">{{g.BUTTON_CLOSE_TO_ICON}}</title>
@@ -55,7 +55,7 @@
         <!-- <div class="c21-body-container"> -->
             <div class="c21-body-content" [class.nologo]="g.project.logoChat === 'nologo'">
                 <div class="c21-cards">
-                    <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': convertColorToRGBA(styleMap.get('themeColor'), 50) }">
+                    <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <tiledeskwidget-home-conversations 
                             [listConversations]="listConversations"
                             (onNewConversation)="returnNewConversation()" 

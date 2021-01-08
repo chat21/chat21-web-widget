@@ -1,27 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-// models
 import { ConversationModel } from '../../models/conversation';
 import { ImageRepoService } from './image-repo.service';
-// import { ImageRepoService } from './image-repo.service';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
 @Injectable()
-export abstract class ConversationsHandlerService {
+export abstract class ArchivedConversationsHandlerService {
 
   // BehaviorSubject
   abstract BSConversationDetail: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
   abstract readAllMessages: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  abstract conversationsAdded: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
-  abstract conversationsChanged: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
-  abstract conversationsRemoved: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
+  abstract archivedConversationAdded: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
+  abstract archivedConversationChanged: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
+  abstract archivedConversationRemoved: BehaviorSubject<ConversationModel> = new BehaviorSubject<ConversationModel>(null);
   abstract loadedConversationsStorage: BehaviorSubject<ConversationModel[]> = new BehaviorSubject<ConversationModel[]>([]);
 
   // params
-  abstract conversations: Array<ConversationModel> = [];
+  abstract archivedConversations: Array<ConversationModel> = [];
   abstract uidConvSelected: string;
   abstract imageRepo: ImageRepoService;
 

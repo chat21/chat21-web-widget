@@ -15,6 +15,7 @@ import { ConversationsHandlerService } from './abstract/conversations-handler.se
 // import { ChatArchivedConversationsHandler } from './chat-archived-conversations-handler';
 // import { ChatContactsSynchronizer } from './chat-contacts-synchronizer';
 import { environment } from '../../environments/environment';
+import { ArchivedConversationsHandlerService } from './abstract/archivedconversations-handler.service';
 
 
 // @Injectable({ providedIn: 'root' })
@@ -36,7 +37,8 @@ export class ChatManager {
 
   constructor(
     // public chatContactsSynchronizer: ChatContactsSynchronizer,
-    public conversationsHandlerService: ConversationsHandlerService
+    public conversationsHandlerService: ConversationsHandlerService,
+    public archivedConversationsService: ArchivedConversationsHandlerService
   ) { }
   /**
    * inizializza chatmanager
@@ -226,6 +228,9 @@ export class ChatManager {
    */
   setConversationsHandler(handler) {
     this.conversationsHandlerService = handler;
+  }
+  setArchivedConversationsHandler(handler) {
+    this.archivedConversationsService = handler;
   }
 
 
