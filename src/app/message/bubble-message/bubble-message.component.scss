@@ -1,0 +1,96 @@
+@import '../../../sass/variables';
+/* ====== SET MESSAGES ====== */
+.msg_container {
+    overflow: hidden;
+    display: flex;
+    opacity: 0px;
+}
+.messages {
+    border-radius: 8px;
+    padding: 0;
+    word-wrap: break-word;
+    // padding: 14px;
+    // padding: 6px 6px 6px 6px;
+    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    // -webkit-animation: heartbeat 1.5s ease-in-out both;
+    // animation: heartbeat 1.5s ease-in-out both;
+
+    p {
+        font-size: 1.4em;
+        margin: 0;
+        padding: 14px;
+        font-style: normal;
+        letter-spacing: normal;
+        font-stretch: normal;
+        font-variant: normal;
+        font-weight: 300;
+        overflow: hidden;
+    }
+    img {
+        border-radius: 8px;
+        padding: 3px;
+        margin-bottom: 0px;
+        max-width: calc(100% - 6px);
+        width: auto;
+        height: auto;
+        object-fit: cover;
+    }
+    .message_innerhtml {
+        margin: 0px;
+        // padding: 0px 14px;
+        &.marked{
+            padding:8px;
+            margin-block-start: -1em!important;
+            margin-block-end: -1em!important;
+        }
+        
+        .text-message {
+            padding-top: 14px;
+        }
+    }
+    
+}
+
+.msg_sent {
+    background-color: $bck-msg-sent;
+    color: $col-msg-sent;
+    margin-right: 0;
+    margin-left: 4px;
+    max-width: calc(100% - 30px);
+    min-width: 14px;
+}
+.message_innerhtml {
+    padding: 8px;
+}
+.emoticon {
+    background-color: transparent!important;
+    font-size: 4em;
+    .message_innerhtml {
+        padding: 0;
+        margin: 0;
+    }
+} 
+
+
+.status-message {
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    .icon {
+        width: 13px;
+        height: 13px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+    .c21-ico-schedule {
+        background-image: url("../../../assets/images/f21ico-schedule.svg");
+    }
+    .c21-ico-done {
+        background-image: url("../../../assets/images/f21ico-done.svg");
+    }
+    .c21-ico-done_all {
+        background-image: url("../../../assets/images/f21ico-done_all.svg");
+    }
+}

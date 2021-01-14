@@ -1,4 +1,4 @@
-import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, SimpleChanges } from '@angular/core';
+import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
 import { convertColorToRGBA } from '../../../chat21-core/utils/utils';
 import { Globals } from '../../utils/globals';
@@ -12,8 +12,9 @@ import { Globals } from '../../utils/globals';
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('homeComponent') private element: ElementRef;
+  @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ===========/
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<string>();
@@ -36,7 +37,6 @@ export class HomeComponent implements OnInit {
 
   convertColorToRGBA = convertColorToRGBA
 
-
   constructor(
     public g: Globals
   ) {
@@ -58,26 +58,20 @@ export class HomeComponent implements OnInit {
 
   }
 
-  
-
-
-  public translations() {
-    const keysHeader = [
-      'BUTTON_CLOSE_TO_ICON', 
-      'WELLCOME_TITLE', 
-      'WELLCOME_MSG',
-    ];
-
-    const keysFooter = [
-      'LABEL_PLACEHOLDER',
-      'GUEST_LABEL',
-    ];
-
-    // this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
-    // this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
-  
-    
+  ngAfterViewInit(){
+    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    setTimeout(() => {
+      if (this.aflistconv) {
+        this.aflistconv.nativeElement.focus();
+      }
+    }, 1000);
   }
+
+
+  
+
+
+  
 
 
   // ========= begin:: ACTIONS ============//

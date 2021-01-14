@@ -19,9 +19,11 @@ import { Globals } from '../../utils/globals';
 export class ListConversationsComponent implements OnInit {
 
   // ========= begin:: Input/Output values ============//
-  @Output() onConversationSelected = new EventEmitter<string>();
   @Input() listConversations: Array<ConversationModel>;
   @Input() limit?: number
+  @Input() styleMap: Map<string, string>;
+  @Input() translationMap: Map< string, string>;
+  @Output() onConversationSelected = new EventEmitter<string>();
   // ========= end:: Input/Output values ============//
 
   // ========= begin:: dichiarazione funzioni ======= //
@@ -36,9 +38,6 @@ export class ListConversationsComponent implements OnInit {
   ngOnInit() {
     this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
     
-  }
-  ngOnChanges(changes: SimpleChanges){
-    console.log('cahnges list-conversation:::', changes)
   }
 
   private openConversationByID(conversation) {

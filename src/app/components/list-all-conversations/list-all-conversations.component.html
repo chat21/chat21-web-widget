@@ -86,6 +86,8 @@
 
     <tiledeskwidget-list-conversations
       [listConversations]="allConversations"
+      [styleMap]="styleMap"
+      [translationMap]="translationMapConversation"
       (onConversationSelected)=returnSelectedConversation($event)>
     </tiledeskwidget-list-conversations>
 

@@ -58,6 +58,7 @@
                     <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <tiledeskwidget-home-conversations 
                             [listConversations]="listConversations"
+                            [styleMap]="styleMap"
                             (onNewConversation)="returnNewConversation()" 
                             (onConversationSelected)="returnSelectedConversation($event)"
                             (onOpenAllConvesations)="returnOpenAllConversation()">

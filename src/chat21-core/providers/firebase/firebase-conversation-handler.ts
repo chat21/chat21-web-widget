@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // firebase
@@ -8,7 +9,7 @@ import 'firebase/database';
 import 'firebase/firestore';
 
 // models
-import { MessageModel } from '../../models/message';
+
 import { UserModel } from '../../models/user';
 import { ConversationModel } from '../../models/conversation';
 
@@ -25,6 +26,7 @@ import {
   conversationMessagesRef
 } from '../../utils/utils';
 import { timestamp } from 'rxjs/operators';
+import { MessageModel } from '../../models/message';
 
 
 
@@ -57,10 +59,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private lastDate = '';
     private ref: firebase.database.Query;
 
-
-    constructor(
-    ) {
-    super();
+    constructor(@Inject('skipMessage') private skipMessage: boolean) {
+        super();
     }
 
     /**
@@ -90,6 +90,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.conversationWith = recipientId;
         this.messages = [];
         this.attributes = this.setAttributes();
+
+
     }
 
     /**
@@ -276,9 +278,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             this.lastDate = headerDate;
             msg.headerDate = headerDate;
         }
+
+        if(this.skipMessage && msg.attributes && msg.attributes['subtype'] === 'info'){
+            return;
+        }
         // console.log('>>>>>>>>>>>>>> added headerDate: ', msg);
         this.addRepalceMessageInArray(childSnapshot.key, msg);
-        // this.messageAdded.next(msg);
         this.messageAdded.next(msg);
     }
 
@@ -287,8 +292,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const msg = this.messageGenerate(childSnapshot);
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
         // con**** DATAIL messageAdded ***sole.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
+        if(this.skipMessage && msg.attributes && msg.attributes['subtype'] === 'info'){
+            return;
+        }
         this.addRepalceMessageInArray(childSnapshot.key, msg);
         this.messageChanged.next(msg);
+        
     }
 
     /** */
@@ -303,7 +312,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
     /** */
     private messageGenerate(childSnapshot: any) {
-        const msg: MessageModel = childSnapshot.val();
+        const msg: MessageModel = childSnapshot.val();        
         msg.uid = childSnapshot.key;
         // controllo fatto per i gruppi da rifattorizzare
         if (!msg.sender_fullname || msg.sender_fullname === 'undefined') {
@@ -364,6 +373,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
                 verb = INFO_SUPPORT_USER_ADDED_YOU_VERB;
                 complement = INFO_SUPPORT_USER_ADDED_COMPLEMENT;
             } else {
+
                 if (message.attributes.messagelabel.parameters.fullname) {
                     // other user has been added to the group (and he has a fullname)
                     subject = message.attributes.messagelabel.parameters.fullname;

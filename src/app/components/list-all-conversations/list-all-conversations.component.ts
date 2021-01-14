@@ -17,6 +17,7 @@ import {
 } from '../../utils/constants';
 import { ArchivedConversationsHandlerService } from '../../../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { AmdDependency } from 'typescript';
+import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 
 
 @Component({
@@ -29,11 +30,12 @@ import { AmdDependency } from 'typescript';
 export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('afallconv') private afallconv: ElementRef;
   // ========= begin:: Input/Output values ============//
-  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
-  @Output() onCloseWidget = new EventEmitter();
   @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   @Input() listConversations: Array<ConversationModel>;
   @Input() archivedConversations: Array<ConversationModel>;
+  @Input() styleMap: Map<string, string>;
+  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
+  @Output() onCloseWidget = new EventEmitter();
   // ========= end:: Input/Output values ============//
 
 
@@ -55,18 +57,22 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   colorBck = '';
   themeForegroundColor = '';
   LABEL_START_NW_CONV: string;
-  // ========= end:: variabili del componente ======== //
-
+  translationMapConversation: Map<string, string>;
   iterableDifferListConv: any;
   iterableDifferListArchivedConv: any;
+  // ========= end:: variabili del componente ======== //
+
+  
   constructor(public g: Globals,
-              private iterableDiffers: IterableDiffers) {
-      this.iterableDifferListConv = iterableDiffers.find([]).create(null);
-      this.iterableDifferListArchivedConv = iterableDiffers.find([]).create(null);
+              private iterableDiffers: IterableDiffers,
+              private customTranslateService: CustomTranslateService,) {
+      this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
+      this.iterableDifferListArchivedConv = this.iterableDiffers.find([]).create(null);
   }
 
   ngOnInit() {
     this.initialize();
+
   }
 
   ngAfterViewInit() {
@@ -81,14 +87,22 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     let changesListConversation = this.iterableDifferListConv.diff(this.listConversations);
     let changesListArchivedConversation = this.iterableDifferListArchivedConv.diff(this.archivedConversations);
     if (changesListConversation || changesListArchivedConversation) {
-        console.log('Changes detected!');
         this.concatAndOrderArray();
     }
+  }
+
+  public initTranslations() {
+    const keysConversation = [
+      'CLOSED'
+    ];
+
+    this.translationMapConversation = this.customTranslateService.translateLanguage(keysConversation);
   }
 
 
   initialize() {
     this.g.wdLog(['initialize: ListALLConversationsComponent']);
+    this.initTranslations();
     this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV; // is used ?? LABEL_START_NW_CONV there isn't in the template
@@ -172,7 +186,6 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   // ========= begin:: ACTIONS ============//
-
   returnClosePage() {
     this.onCloseWidget.emit();
   }

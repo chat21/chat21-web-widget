@@ -95,6 +95,12 @@ import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.s
 import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseArchivedConversationsHandler } from '../chat21-core/providers/firebase/firebase-archivedconversations-handler';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
+import { ConversationContentComponent } from './components/conversation-detail/conversation-content/conversation-content.component';
+import { BubbleMessageComponent } from './message/bubble-message/bubble-message.component';
+import { TextComponent } from './components/message/text/text.component';
+import { ImageComponent } from './components/message/image/image.component';
+import { TextButtonComponent } from './components/message/buttons/text-button/text-button.component';
+import { FrameComponent } from './components/message/frame/frame.component';
 
 
 // FACTORIES
@@ -144,9 +150,9 @@ export function conversationHandlerBuilderFactory() {
 
 export function conversationHandlerFactory() {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
-    return new FirebaseConversationHandler();
+    return new FirebaseConversationHandler(true);
   } else {
-    return new FirebaseConversationHandler();
+    return new FirebaseConversationHandler(true);
   }
 }
 
@@ -201,7 +207,13 @@ export function imageRepoFactory() {
     ConversationHeaderComponent,
     UserTypingComponent,
     MessageTextAreaComponent,
-    ConversationFooterComponent
+    ConversationFooterComponent,
+    ConversationContentComponent,
+    BubbleMessageComponent,
+    TextComponent,
+    ImageComponent,
+    TextButtonComponent,
+    FrameComponent
   ],
   imports: [
     BrowserModule,

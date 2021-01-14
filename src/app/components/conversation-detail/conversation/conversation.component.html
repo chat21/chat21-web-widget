@@ -1,10 +1,10 @@
 
 <!-- tabindex="1500"-->
 <div id="chat21-conversation-component" 
-#afConversationComponent
-tabindex="1500" 
-aria-modal="true"
-onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()">
+    #afConversationComponent
+    tabindex="1500" 
+    aria-modal="true"
+    onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()">
 
     <!-- HEADER -->
     <tiledeskwidget-conversation-header
@@ -23,228 +23,23 @@ onFocus="document.querySelector('[start-focus-chat21-conversation-component]').f
     </tiledeskwidget-conversation-header>
 
     <!-- CONTENT -->
-    <div class="c21-body">
+    <tiledeskwidget-conversation-content
+        [messages]="messages"
+        [senderId]="senderId"
+        (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+        (onAfterMessageRender)="returnOnAfterMessageRender($event)"
+        (onOpenAttachment)="returnOpenAttachment($event)"
+        (onClickAttachmentButton)="returnClickOnAttachmentButton($event)"
+        (onScrollContent)="returnOnScrollContent($event)">
+    </tiledeskwidget-conversation-content>
 
-        <div class="c21-body-container">
-
-            <div class="c21-body-header">
-
-                <!-- 
-                    // nk new: simulates a higher header content -- USED ONLY FIRST MSG
-                    ??? a cosa serve ??? 
-                    -->
-                <!-- <div *ngIf="isNewConversation == true && g.projectid != null" 
-                        class="chat21-sheet-content-themable-section" 
-                        [ngClass]="{'themable-section-agent_not_available':!areAgentsAvailable}" 
-                        [ngStyle]="{'background-color': g.themeColor}">
-                    </div> -->
-                <!-- // AVATAR -->
-
-                <!-- DISPLAYS THE MSG 'ALL AGENT ARE OFFLINE' IN THE VIEW WHEN THERE IS NOT DISPLAYS WHEN THE USER DIGIT THE FIRST MSG -->
-                <!-- <div *ngIf="!areAgentsAvailable && isNewConversation && availableAgentsStatus && messages.length == 0" 
-                        class="chat21-agents-available chat21-agents-available-is-new-conversation" 
-                        [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }"
-                        >
-                        <span style="font-size:18px">🤔</span>  
-                        <span>{{ g.ALL_AGENTS_OFFLINE_LABEL }}</span>
-                    </div> -->
-
-                <!-- // nk - to edit: display the msg of welcome msg if exist && g.availableAgentsStatus -->
-                <!-- <div *ngIf="isNewConversation && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-first-msg"
-                    [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': themeColor50 }">
-                    <div *ngIf="g.areAgentsAvailable">
-                        <span> {{g.LABEL_FIRST_MSG}} </span>
-                    </div>
-                    <div *ngIf="!g.areAgentsAvailable">
-                        <span>{{g.LABEL_FIRST_MSG_NO_AGENTS}}</span>
-                    </div>
-                </div> -->
-
-                <!-- // nk - to edit: display the msg of welcome msg if exist -->
-                <!-- <div *ngIf="isNewConversation && g.areAgentsAvailable && messages.length == 0" class="chat21-header-modal-select chat21-header-modal-select-more-of-one-dept">
-                    {{g.departmentSelected.name}}
-                </div> -->
-
-            </div>
-
-            <div class="c21-body-content" tabindex="1520" aria-label=" messaggi della conversazione: ">
-
-                <!-- CONTENT !isNewConversation && [class.active]="isShowSpinner"  -->
-                <span *ngIf="messages && this.messages.length === 0">
-                    <div class="chat21-spinner active" id="chat21-spinner">
-                        <div class="chat21-bounce1"></div>
-                        <div class="chat21-bounce2"></div>
-                        <div class="chat21-bounce3"></div>
-                        <span>loading</span>
-                    </div>
-                </span>
-                
-
-                <div id="chat21-sheet-content" class="chat21-sheet-content">
-                    <div class="chat21-conversation-parts-container">
-                        <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
-
-                            <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                                <div *ngFor="let message of messages let last = last; let i = index" tabindex="1521" class="rowMsg">
-    
-                                    <!-- message sender:: -->
-                                    <div role="messaggio" *ngIf="message.sender == g.senderId;" class="msg_container base_sent slide-in-right">
-                                    
-                                        <div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'0 8px'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
-
-                                            <!-- message type:: image -->
-                                            <div>
-                                                <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
-                                                    <img class="message-contentX message-content-imageX"
-                                                    [src]="message.metadata.src" 
-                                                    />
-                                                </div>
-
-                            
-                                                <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
-                                                [src]="message.metadata.src" [width]="getSizeImg(message).width"
-                                                [height]="getSizeImg(message).height" /> -->
-                                            
-                                                <!-- message type:: text -->
-                                                <!-- <div *ngIf="message.type == 'text'"> -->
-                                                    
-                                                <div *ngIf="message.text" [tooltip]="timeTooltipLeft" [options]="tooltipOptions" placement="left" content-type="template" (click)="handleTooltipEvents($event)"> 
-                                                    <ng-template #timeTooltipLeft>
-                                                        <span>{{message.timestamp | amTimeAgo}}</span>
-                                                    </ng-template>
-                                                    <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
-                                                    <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
-                                                        is ignored</div>
-                                                    <ng-template #contentPopup>
-                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                            (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
-                                                    </ng-template>
-                                                    <ng-template #contentNewTab>
-                                                        <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
-                                                    </ng-template> -->
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <!-- icon status message -->
-                                        <div class="status-message">
-                                            <div *ngIf="!message.status" class="icon f21ico-schedule"></div>
-                                            <div *ngIf="message.status == MSG_STATUS_SENT" class="icon c21-ico-done"></div>
-                                            <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon c21-ico-done"></div>
-                                            <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon c21-ico-done_all"></div>
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- message recipient:: -->
-                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
-                                    <div role="messaggio" *ngIf="message.sender != g.senderId;" class="msg_container base_receive slide-in-left">
-        
-                                        <!-- <div class="content-avatar">
-                                            <div class="profile_image">
-                                                <img src="{{getUrlImgProfile(message.sender)}}" />
-                                            </div>
-                                        </div> -->
-
-                                        <div class="c21-icon-avatar slide-in-left">
-                                            <div class="c21-avatar-image profile_image">
-                                                 <!-- <img src="getUrlImgProfile(message.sender) {{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" /> -->
-                                                 <img src="{{message.sender_urlImage}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" />
-                                            </div> 
-                                        </div>
-
-
-                                        <div class="messages msg_receive" [class.emoticon]="message.emoticon">
-                            
-                                            <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
-
-                                            <div>
-                                                <!-- message type:: image -->
-                                                <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
-                                                    <img class="message-contentX message-content-imageX"
-                                                    [src]="message.metadata.src" 
-                                                    />
-                                                </div>
-
-                                                <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'max-width': '100%', 'width': message.metadata.width, 'height': message.metadata.height }">
-                                                    <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
-                                                </div>
-                                               
-
-                                                <!-- message type:: text -->
-                                                <!-- <div *ngIf="message.type == 'text';">  {{message.timestamp  | amTimeAgo}}-->
-                                                <div *ngIf="message.text" [tooltip]="timeTooltipRight" [options]="tooltipOptions" placement="right" content-type="template" (click)="handleTooltipEvents($event)">
-                                                    <ng-template #timeTooltipRight>
-                                                        <span>{{message.timestamp  | amTimeAgo}}</span>
-                                                    </ng-template>
-                                                    <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-
-                                                    <ng-template #contentPopup>
-                                                        <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                            (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
-                                                        </p>
-                                                    </ng-template>
-                                                    <ng-template #contentNewTab>
-
-
-                                                        <!-- old -->
-                                                        <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
-                                                        <!-- <div [innerHTML]="message.text | safeHtml"></div> 
-                                                        [innerHTML]="printMessage(message, messageEl, this) | marked"-->
-                                                        <!-- <p #messageEl class="message_innerhtml" >{{message.text}}</p> -->
-                                                        <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p>
-
-                                                        <!-- <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p> -->
-                                                        <!-- <p [innerHTML]="message.uid | linky"></p> -->
-
-                                                        <!-- <p [innerHTML]="videoUrl"></p> -->
-                                                        
-                                                        <!-- <p [innerHTML]="message.print() | linky"></p> -->
-                                                        <!-- <p [innerHTML]="message.text | linky"></p> -->
-
-                                                    </ng-template>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="time slide-in-left" [ngClass]="{'sender' : message.sender == g.senderId}">
-                                        <time #timeTooltip *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
-                                    </div>
-
-
-                                    <!-- message type:: button &&  -->
-                                    <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 
-                                        <tiledeskwidget-message-attachment 
-                                            style="height: 100%; display: block;"
-                                            [message]="message"
-                                            [isLastMessage] = "isLastMessage(message.uid)"
-                                            (eventOpenAttachment)="returnOpenAttachment($event)"
-                                            (eventClickOnAttachmentButton)="returnClickOnAttachmentButton($event)">
-                                        </tiledeskwidget-message-attachment>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <!-- FOOTER -->
     <div id="chat21-footer">
         <div *ngIf="showBadgeScroollToBottom" id="chat21-buttonToBottom" (click)="scrollToBottom()">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
-            <div *ngIf="NUM_BADGES!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
+            <div *ngIf="messagesBadgeCount!=0" id="chat21-divBudge" class="c21-divBudge">{{NUM_BADGES}}</div>
         </div>
 
         <tiledeskwidget-conversation-footer

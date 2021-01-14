@@ -3,7 +3,7 @@ import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
 import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
 
 // tslint:disable-next-line:max-line-length
-import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../../utils/globals';
 import { MessagingService } from '../../../providers/messaging.service';
@@ -40,6 +40,8 @@ import { StorageService } from '../../../providers/storage.service';
 import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
 import { ConversationHandlerService } from '../../../../chat21-core/providers/abstract/conversation-handler.service';
 import { ConversationHandlerBuilderService } from '../../../../chat21-core/providers/abstract/conversation-handler-builder.service';
+import { popupUrl } from '../../../../chat21-core/utils/utils';
+import { ConversationContentComponent } from '../conversation-content/conversation-content.component';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -76,16 +78,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // writingMessage = '';    // messaggio sta scrivendo...
   // isTypings = false;
   //isMenuShow = false;
-  isScrolling = false;
+  
   isButtonsDisabled = true;
   isConversationArchived = false;
-
+  audio: any;
   // ========= begin:: gestione scroll view messaggi ======= //
-  startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
+  //startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
+  isScrolling = false;
   idDivScroll = 'c21-contentScroll'; // id div da scrollare
   showBadgeScroollToBottom = false;
-  NUM_BADGES = 0;
-  audio: any;
+  messagesBadgeCount = 0;
   // ========= end:: gestione scroll view messaggi ======= //
 
 
@@ -110,6 +112,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   HEIGHT_DEFAULT = '20px';
   conversationWith: string;
   isPopupUrl = isPopupUrl;
+  popupUrl = popupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
@@ -162,6 +165,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   translationMapFooter: Map<string, string>;
 
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
+  @ViewChild(ConversationContentComponent) conversationContent: ConversationContentComponent
   conversationHandlerService: ConversationHandlerService
 
   constructor(
@@ -186,6 +190,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
     this.g.wdLog([' constructor conversation component ']);
+  }
+
+  onResize(event){
+    console.log('resize event', event)
   }
 
   ngOnInit() {
@@ -229,7 +237,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
     this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
-  
     
   }
 
@@ -303,7 +310,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.isOpen === true) {
       this.updateConversationBadge();
       // this.scrollToBottom();
@@ -358,7 +365,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     // this.checkListMessages();
-
 
     if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
@@ -558,7 +564,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
       recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4();
-      console.log('recipitent', recipientIdTEMP, )
+      console.log('recipitent', recipientIdTEMP )
       //recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
     }
     return recipientIdTEMP;
@@ -842,14 +848,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   newMessageAdded(msg){
     const that = this;
     const senderId = that.senderId;
-      if ( that.startScroll || msg.sender === senderId) { //caso in cui sender mamda msg
+      if (msg.sender === senderId) { //caso in cui sender manda msg
         that.g.wdLog(['*A 1-------']);
         setTimeout(function () {
           that.scrollToBottom();
         }, 200);
-      } else if (that.scrollMe) { //caso in cui operatore manda msg
-        const divScrollMe = that.scrollMe.nativeElement;
-        const checkContentScrollPosition = that.checkContentScrollPosition(divScrollMe);
+      } else if (msg.sender !== senderId) { //caso in cui operatore manda msg
+        const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
         if (checkContentScrollPosition) {
           that.g.wdLog(['*A2-------']);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
@@ -858,7 +863,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           }, 0);
         } else {
           that.g.wdLog(['*A3-------']);
-          that.NUM_BADGES++;
+          that.messagesBadgeCount++;
           // that.soundMessage(newMessage.timestamp);
         }
       }
@@ -1090,16 +1095,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //     }
   // }
 
-  printMessage(message, messageEl, component) {
-    const messageOBJ = { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component}
-    this.onBeforeMessageRender.emit(messageOBJ)
-    const messageText = message.text;
-    this.onAfterMessageRender.emit(messageOBJ)
-    // this.triggerBeforeMessageRender(message, messageEl, component);
-    // const messageText = message.text;
-    // this.triggerAfterMessageRender(message, messageEl, component);
-    return messageText;
-  }
+  // printMessage(message, messageEl, component) {
+  //   const messageOBJ = { message: message, sanitizer: this.sanitizer, messageEl: messageEl, component: component}
+  //   this.onBeforeMessageRender.emit(messageOBJ)
+  //   const messageText = message.text;
+  //   this.onAfterMessageRender.emit(messageOBJ)
+  //   // this.triggerBeforeMessageRender(message, messageEl, component);
+  //   // const messageText = message.text;
+  //   // this.triggerAfterMessageRender(message, messageEl, component);
+  //   return messageText;
+  // }
 
 
 
@@ -1220,36 +1225,36 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    *
    */
   // LISTEN TO SCROLL POSITION
-  onScroll(event: any): void {
-    // console.log('************** SCROLLLLLLLLLL *****************');
-    this.startScroll = false;
-    if (this.scrollMe) {
-      const divScrollMe = this.scrollMe.nativeElement;
-      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-      if (checkContentScrollPosition) {
-        this.showBadgeScroollToBottom = false;
-        this.NUM_BADGES = 0;
-      } else {
-        this.showBadgeScroollToBottom = true;
-      }
-    }
-  }
+  // onScroll(event: any): void {
+  //   // console.log('************** SCROLLLLLLLLLL *****************');
+  //   this.startScroll = false;
+  //   if (this.scrollMe) {
+  //     const divScrollMe = this.scrollMe.nativeElement;
+  //     const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+  //     if (checkContentScrollPosition) {
+  //       this.showBadgeScroollToBottom = false;
+  //       this.NUM_BADGES = 0;
+  //     } else {
+  //       this.showBadgeScroollToBottom = true;
+  //     }
+  //   }
+  // }
 
   /**
    *
    */
-  checkContentScrollPosition(divScrollMe): boolean {
-    //   that.g.wdLog(['checkContentScrollPosition ::', divScrollMe);
-    //   that.g.wdLog(['divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
-    //   that.g.wdLog(['divScrollMe.clientHeight ::', divScrollMe.clientHeight);
-    if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 40)) {
-      this.g.wdLog(['SONO ALLA FINE ::']);
-        return true;
-    } else {
-      this.g.wdLog([' NON SONO ALLA FINE ::']);
-        return false;
-    }
-  }
+  // checkContentScrollPosition(divScrollMe): boolean {
+  //   //   that.g.wdLog(['checkContentScrollPosition ::', divScrollMe);
+  //   //   that.g.wdLog(['divScrollMe.diff ::', divScrollMe.scrollHeight - divScrollMe.scrollTop);
+  //   //   that.g.wdLog(['divScrollMe.clientHeight ::', divScrollMe.clientHeight);
+  //   if (divScrollMe.scrollHeight - divScrollMe.scrollTop <= (divScrollMe.clientHeight + 40)) {
+  //     this.g.wdLog(['SONO ALLA FINE ::']);
+  //       return true;
+  //   } else {
+  //     this.g.wdLog([' NON SONO ALLA FINE ::']);
+  //       return true;
+  //   }
+  // }
 
   /**
    * scrollo la lista messaggi all'ultimo
@@ -1522,21 +1527,21 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      *
      * @param message
      */
-    getSizeImg(message): any {
-      const metadata = message.metadata;
-      // const MAX_WIDTH_IMAGES = 300;
-      const sizeImage = {
-          width: metadata.width,
-          height: metadata.height
-      };
-      //   that.g.wdLog(['message::: ', metadata);
-      if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
-          const rapporto = (metadata['width'] / metadata['height']);
-          sizeImage.width = MAX_WIDTH_IMAGES;
-          sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
-      }
-      return sizeImage; // h.toString();
-  }
+    // getSizeImg(message): any {
+    //   const metadata = message.metadata;
+    //   // const MAX_WIDTH_IMAGES = 300;
+    //   const sizeImage = {
+    //       width: metadata.width,
+    //       height: metadata.height
+    //   };
+    //   //   that.g.wdLog(['message::: ', metadata);
+    //   if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
+    //       const rapporto = (metadata['width'] / metadata['height']);
+    //       sizeImage.width = MAX_WIDTH_IMAGES;
+    //       sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
+    //   }
+    //   return sizeImage; // h.toString();
+    // }
 
   /**
      * aggiorno messaggio: uid, status, timestamp, headerDate
@@ -1654,6 +1659,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.onBeforeMessageSent.emit(messageModel)
   }
 
+  returnOnBeforeMessageRender(event){
+    this.onBeforeMessageRender.emit(event)
+  }
+
+  returnOnAfterMessageRender(event){
+    this.onAfterMessageRender.emit(event)
+  }
+
+  returnOnScrollContent(event: boolean){
+    this.showBadgeScroollToBottom = event;
+    
+    //se sono alla fine (showBadgeScroollBottom === false) allora imposto messageBadgeCount a 0
+    if(this.showBadgeScroollToBottom === false){
+      this.messagesBadgeCount = 0;
+    }
+    
+  }
+
   // =========== END: event emitter function ====== //
 
 
@@ -1729,13 +1752,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  isLastMessage(idMessage: string) {
-    // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
-    if (idMessage === this.messages[this.messages.length - 1].uid) {
-      return true;
-    }
-    return false;
-  }
+  // isLastMessage(idMessage: string) {
+  //   // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
+  //   if (idMessage === this.messages[this.messages.length - 1].uid) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   /** */
   returnOpenAttachment(event: String) {
@@ -1890,28 +1913,28 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * function customize tooltip
    */
-  handleTooltipEvents(event) {
-    const that = this;
-    const showDelay = this.tooltipOptions['showDelay'];
-    // console.log(this.tooltipOptions);
-    setTimeout(function () {
-      try {
-        const domRepresentation = document.getElementsByClassName('chat-tooltip');
-        if (domRepresentation) {
-          const item = domRepresentation[0] as HTMLInputElement;
-          // console.log(item);
-          if (!item.classList.contains('tooltip-show')) {
-            item.classList.add('tooltip-show');
-          }
-          setTimeout(function () {
-            if (item.classList.contains('tooltip-show')) {
-              item.classList.remove('tooltip-show');
-            }
-          }, that.tooltipOptions['hideDelayAfterClick']);
-        }
-      } catch (err) {
-          that.g.wdLog(['> Error :' + err]);
-      }
-    }, showDelay);
-  }
+  // handleTooltipEvents(event) {
+  //   const that = this;
+  //   const showDelay = this.tooltipOptions['showDelay'];
+  //   // console.log(this.tooltipOptions);
+  //   setTimeout(function () {
+  //     try {
+  //       const domRepresentation = document.getElementsByClassName('chat-tooltip');
+  //       if (domRepresentation) {
+  //         const item = domRepresentation[0] as HTMLInputElement;
+  //         // console.log(item);
+  //         if (!item.classList.contains('tooltip-show')) {
+  //           item.classList.add('tooltip-show');
+  //         }
+  //         setTimeout(function () {
+  //           if (item.classList.contains('tooltip-show')) {
+  //             item.classList.remove('tooltip-show');
+  //           }
+  //         }, that.tooltipOptions['hideDelayAfterClick']);
+  //       }
+  //     } catch (err) {
+  //         that.g.wdLog(['> Error :' + err]);
+  //     }
+  //   }, showDelay);
+  // }
 }

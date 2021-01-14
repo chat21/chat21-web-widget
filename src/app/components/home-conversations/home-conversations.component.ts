@@ -38,13 +38,14 @@ import { ChatManager } from '../../../chat21-core/providers/chat-manager';
 })
 
 
-export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('aflistconv') private aflistconv: ElementRef;
+export class HomeConversationsComponent implements OnInit, OnDestroy {
+  
   // ========= begin:: Input/Output values ============//
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<string>();
   @Output() onOpenAllConvesations = new EventEmitter();
   @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() styleMap: Map<string, string>
   // ========= end:: Input/Output values ============//
 
   // ========= begin:: sottoscrizioni ======= //
@@ -77,6 +78,7 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
   humanizer: HumanizeDuration;
   humanWaitingTime: string;
 
+  translationMapConversation: Map<string, string>;
   constructor(
     public g: Globals,
     private ngZone: NgZone,
@@ -86,7 +88,7 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
     public contactService: ContactService,
     public waitingService: WaitingService,
     public translatorService: TranslatorService,
-    private translateService: CustomTranslateService
+    private customTranslateService: CustomTranslateService,
   ) {
     // console.log(this.langService);
     // https://www.npmjs.com/package/humanize-duration-ts
@@ -101,6 +103,17 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
     
   }
 
+  public initTranslations() {
+    const keysConversation = [
+      'CLOSED'
+    ];
+    const keys = [
+      'LABEL_TU'
+    ];
+    const translationMap = this.customTranslateService.translateLanguage(keys);
+    this.translationMapConversation = this.customTranslateService.translateLanguage(keysConversation);
+  }
+
   
 
   // ========= begin:: ACTIONS ============//
@@ -113,17 +126,6 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // ========= end:: ACTIONS ============//
-
-  ngAfterViewInit() {
-    this.g.wdLog([' --------ngAfterViewInit-------- ']);
-    console.log('listconversation', this.listConversations)
-    setTimeout(() => {
-      if (this.aflistconv) {
-        this.aflistconv.nativeElement.focus();
-      }
-    }, 1000);
-  }
-
 
   // showConversations() {
   //   this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
@@ -158,10 +160,7 @@ export class HomeConversationsComponent implements OnInit, AfterViewInit, OnDest
 
   initialize() {
     this.g.wdLog(['initialize: ListConversationsComponent']);
-    const keys = [
-      'LABEL_TU'
-    ];
-    const translationMap = this.translateService.translateLanguage(keys);
+    this.initTranslations();
 
     //this.senderId = this.g.senderId;
     this.tenant = this.g.tenant;

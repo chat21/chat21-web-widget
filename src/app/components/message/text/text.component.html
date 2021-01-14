@@ -1,0 +1,3 @@
+<p  #messageEl class="message_innerhtml marked" 
+    [innerHTML]="printMessage(text, messageEl, this) | marked"
+    [ngStyle]="{'color': '$'+ color }"></p>
