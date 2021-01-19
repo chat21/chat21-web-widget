@@ -1,13 +1,9 @@
 import { Globals } from './../../../utils/globals';
-
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MessageModel } from '../../../../chat21-core/models/message';
 import { isPopupUrl, popupUrl } from '../../../../chat21-core/utils/utils';
-import { CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
-  MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, UID_SUPPORT_GROUP_MESSAGES
-} from '../../../utils/constants';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX_WIDTH_IMAGES} from '../../../utils/constants';
+import { strip_tags } from '../../../utils/utils';
 @Component({
   selector: 'tiledeskwidget-conversation-content',
   templateUrl: './conversation-content.component.html',
@@ -18,10 +14,11 @@ export class ConversationContentComponent implements OnInit {
   
   @Input() messages: MessageModel[]
   @Input() senderId: string;
+  @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
-  @Output() onOpenAttachment = new EventEmitter();
-  @Output() onClickAttachmentButton = new EventEmitter();
+  @Output() onClickTextActionButtonAttachment = new EventEmitter();
+  @Output() onClickUrlAndActionButtonAttachment = new EventEmitter();
   @Output() onScrollContent = new EventEmitter();
 
   // ========= begin:: gestione scroll view messaggi ======= //
@@ -35,6 +32,7 @@ export class ConversationContentComponent implements OnInit {
   // ========= begin:: dichiarazione funzioni ======= //
   isPopupUrl = isPopupUrl;
   popupUrl = popupUrl;
+  strip_tags = strip_tags;
   // ========= end:: dichiarazione funzioni ======= //
 
   // ========== begin:: set icon status message
@@ -52,14 +50,19 @@ export class ConversationContentComponent implements OnInit {
     'hideDelayAfterClick': 3000,
     'hide-delay': 200
   };
-  url = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'
+
+  urlBOTImage = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'
 
   constructor(private g: Globals,
-              public sanitizer: DomSanitizer,) { }
+              private cdref: ChangeDetectorRef) { }
 
   ngOnInit() {
+    console.log('metadata', this.messages)
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
 
 
 
@@ -67,8 +70,13 @@ export class ConversationContentComponent implements OnInit {
    *
    * @param message
    */
-  getSizeImg(message): any {
-    const metadata = message.metadata;
+  getMetadataSize(metadata): any {
+    if(metadata.width === undefined){
+      metadata.width= '100%'
+    }
+    if(metadata.height === undefined){
+      metadata.height = MAX_WIDTH_IMAGES
+    }
     // const MAX_WIDTH_IMAGES = 300;
     const sizeImage = {
         width: metadata.width,
@@ -87,7 +95,7 @@ export class ConversationContentComponent implements OnInit {
   // ========= begin:: functions scroll position ======= //
  
   // LISTEN TO SCROLL POSITION
-  onScroll(event: any): void {
+  onScroll(): void {
     // console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
@@ -178,7 +186,8 @@ export class ConversationContentComponent implements OnInit {
   /**
   * function customize tooltip
   */
-  handleTooltipEvents(event) {
+  handleTooltipEvents() {
+    console.log('handleToolpitEvents')
     const that = this;
     const showDelay = this.tooltipOptions['showDelay'];
     // console.log(this.tooltipOptions);
@@ -213,15 +222,15 @@ export class ConversationContentComponent implements OnInit {
 
   // ========= begin:: event emitter function ============//
 
-  returnOpenAttachment(event: String) {
-    this.onOpenAttachment.emit(event)
+  returnOnTextActionButtonClicked(event: string) {
+    this.onClickTextActionButtonAttachment.emit(event)
   }
 
   /** */
-  returnClickOnAttachmentButton(event: any) {
+  returnOnUrlAndActionButtonClicked(event: any) {
     //decommentare se in html c'è solamente component tiledesk-text
     //const messageOBJ = { message: this.message, sanitizer: this.sanitizer, messageEl: event.messageEl, component: event.component}
-    this.onClickAttachmentButton.emit(event)
+    this.onClickUrlAndActionButtonAttachment.emit(event)
   }
 
   returnOnBeforeMessageRender(event){

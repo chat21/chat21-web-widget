@@ -240,14 +240,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     
   }
 
-
-  // getTranslation() {
-  //   this.translate.get('LABEL_PLACEHOLDER')
-  //     .subscribe((text: string) => {
-  //       this._LABEL_PLACEHOLDER = text;
-  //     });
-  // }
-
   ngAfterViewInit() {
     // this.isShowSpinner();
     this.g.wdLog([' --------ngAfterViewInit: conversation-------- ']);
@@ -753,7 +745,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtionKey = 'conversationsRemoved';
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if(!subscribtion){
-      subscribtion = this.chatManager.conversationsHandlerService.conversationsRemoved.subscribe((conversation) => {
+      subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.subscribe((conversation) => {
         console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith);
         if (conversation && conversation.recipient === this.conversationWith) {
           this.starRatingWidgetService.setOsservable(true)
@@ -1761,7 +1753,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   /** */
-  returnOpenAttachment(event: String) {
+  returnOnTextActionButtonClicked(event: string) {
     if (event) {
       const metadata = {
         'button': true
@@ -1772,7 +1764,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /** */
-  returnClickOnAttachmentButton(event: any) {
+  returnOnUrlAndActionButtonClicked(event: any) {
     if (!event || !event.type) {
       return;
     }

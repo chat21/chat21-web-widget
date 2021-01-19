@@ -172,7 +172,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.triggerOnViewInit();
         this.ngZone.run(() => {
             const that = this;
-            const subChangedConversation = this.conversationsHandlerService.conversationsChanged.subscribe((conversation) => {
+            const subChangedConversation = this.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
                 // that.ngZone.run(() => {
                     if ( that.g.isOpen === true && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
@@ -191,7 +191,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             });
             this.subscriptions.push(subChangedConversation);
 
-            const subAddedConversation = this.conversationsHandlerService.conversationsAdded.subscribe((conversation) => {
+            const subAddedConversation = this.conversationsHandlerService.conversationAdded.subscribe((conversation) => {
                 // that.ngZone.run(() => {
                     if ( that.g.isOpen === true && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
@@ -202,6 +202,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                         if (conversation.is_new) {
                             this.soundMessage();
+                            this.g.setParameter('conversationsBadge', this.g.conversationsBadge++);
                         }
                         that.lastConversation = conversation;
                         this.g.isOpenNewMessage = true;
@@ -210,15 +211,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             });
             //this.authService.initialize();
             this.subscriptions.push(subAddedConversation);
-
-            const subListConversations = this.conversationsHandlerService.conversationsAdded.subscribe((conversation) => {
-                // that.ngZone.run(() => {
-                if(conversation){
-                that.triggerOnConversationUpdated(conversation);
-                }    
-                // });
-            });
-            this.subscriptions.push(subListConversations);
               
             const subArchivedConversations = this.archivedConversationsService.archivedConversationAdded.subscribe((conversation) => {
                 // that.ngZone.run(() => {

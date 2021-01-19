@@ -36,7 +36,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     public g: Globals,
-    public conversationsService: ConversationsService
+    // public conversationsService: ConversationsService
   ) {
     // this.g.wdLog([' ---------------- ngOnInit LastMessageComponent ---------------- ']);
     // const that = this;
@@ -59,7 +59,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    console.log('last-message: ',this.conversation);
+    console.log('last-message: ',changes);
   }
 
   /** */

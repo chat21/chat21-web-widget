@@ -1,0 +1,6 @@
+<div class="status-message">
+  <div *ngIf="!status" class="icon c21-ico-schedule"></div>
+  <div *ngIf="status == MSG_STATUS_SENT" class="icon c21-ico-done"></div>
+  <div *ngIf="status == MSG_STATUS_SENT_SERVER" class="icon c21-ico-done"></div>
+  <div *ngIf="status == MSG_STATUS_RETURN_RECEIPT" class="icon c21-ico-done_all"></div>
+</div>

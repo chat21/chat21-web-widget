@@ -12,7 +12,7 @@ export class TextComponent implements OnInit {
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   
-  constructor(private sanitizer: Sanitizer) { }
+  constructor() { }
 
   ngOnInit() {
   }

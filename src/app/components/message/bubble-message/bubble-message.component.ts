@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MessageModel } from '../../../chat21-core/models/message';
-import { MAX_WIDTH_IMAGES, MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER} from '../../utils/constants';
-import { Globals } from '../../utils/globals';
+import { MessageModel } from '../../../../chat21-core/models/message';
+import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
+import { Globals } from '../../../utils/globals';
 @Component({
   selector: 'tiledeskwidget-bubble-message',
   templateUrl: './bubble-message.component.html',
@@ -24,17 +24,10 @@ export class BubbleMessageComponent implements OnInit {
     'hide-delay': 200
   };
 
-  // ========== begin:: set icon status message
-  MSG_STATUS_SENT = MSG_STATUS_SENT;
-  MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
-  MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
-  // ========== end:: icon status message
-
   constructor(private g: Globals,
               public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-
   }
 
   /**

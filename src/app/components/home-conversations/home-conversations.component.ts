@@ -82,7 +82,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   constructor(
     public g: Globals,
     private ngZone: NgZone,
-    public conversationsService: ConversationsService,
+    // public conversationsService: ConversationsService,
     public conversationsHandlerService: ConversationsHandlerService,
     public chatManager: ChatManager,
     public contactService: ContactService,

@@ -1,12 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-
 @Component({
-  selector: 'tiledeskwidget-text-button-attachment',
-  templateUrl: './text-button.component.html',
-  styleUrls: ['./text-button.component.scss']
+  selector: 'tiledeskwidget-link-button-attachment',
+  templateUrl: './link-button.component.html',
+  styleUrls: ['./link-button.component.scss']
 })
-export class TextButtonComponent implements OnInit {
+export class LinkButtonComponent implements OnInit {
 
   @Input() button: any;
   @Input() themeColor: string;
@@ -19,8 +18,10 @@ export class TextButtonComponent implements OnInit {
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
-  actionButtonText(){
-    this.onButtonClicked.emit(this.button.value)
+  actionButtonUrl(){
+    if ( this.button && this.button.link && this.button.link !== '') {
+      this.onButtonClicked.emit(this.button);
+    }
   }
 
 }

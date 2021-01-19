@@ -3,7 +3,6 @@
     --foregroundColor: black;
 }
 
-
 .button-in-msg {
     padding: 8px 16px!important;
     position: relative;
@@ -26,13 +25,20 @@
     line-height: 16px;
 }
 
-.text {
-    // color: rgb(42, 106, 193);
+.url {
     transition: background-color .6s ease;
+    .icon-button-action {
+        position: absolute;
+        top: -1;
+        right: 1;
+        svg {
+            fill:var(--themeColor);
+        }
+    }
     &:focus,
     &:hover {
         color: white;
-        background: var(--themeColor);
+        background:  var(--themeColor);
         .icon-button-action {
             svg {
                 fill:var(--foregroundColor);

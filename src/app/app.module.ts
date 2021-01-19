@@ -96,11 +96,15 @@ import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/fire
 import { FirebaseArchivedConversationsHandler } from '../chat21-core/providers/firebase/firebase-archivedconversations-handler';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { ConversationContentComponent } from './components/conversation-detail/conversation-content/conversation-content.component';
-import { BubbleMessageComponent } from './message/bubble-message/bubble-message.component';
+import { BubbleMessageComponent } from './components/message/bubble-message/bubble-message.component';
 import { TextComponent } from './components/message/text/text.component';
 import { ImageComponent } from './components/message/image/image.component';
 import { TextButtonComponent } from './components/message/buttons/text-button/text-button.component';
 import { FrameComponent } from './components/message/frame/frame.component';
+import { LinkButtonComponent } from './components/message/buttons/link-button/link-button.component';
+import { ActionButtonComponent } from './components/message/buttons/action-button/action-button.component';
+import { AvatarComponent } from './components/message/avatar/avatar.component';
+import { ReturnReceiptComponent } from './components/message/return-receipt/return-receipt.component';
 
 
 // FACTORIES
@@ -213,7 +217,11 @@ export function imageRepoFactory() {
     TextComponent,
     ImageComponent,
     TextButtonComponent,
-    FrameComponent
+    FrameComponent,
+    LinkButtonComponent,
+    ActionButtonComponent,
+    AvatarComponent,
+    ReturnReceiptComponent
   ],
   imports: [
     BrowserModule,

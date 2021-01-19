@@ -1,21 +1,27 @@
 
-<div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image')?'0px':'0 8px'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
+<div [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" [ngStyle]="{'padding': (message.type == 'image' )?'1px':'0 8px'}" class="messages msg_sent primary-color"  [class.emoticon]="message.emoticon">
   
   <!-- message type:: image -->
   <div>
       <!-- <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
           <img class="message-contentX message-content-imageX" [src]="message.metadata.src" />
       </div> -->
+
+      <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
+      [src]="message.metadata.src" [width]="getSizeImg(message).width"
+      [height]="getSizeImg(message).height" /> -->
+
       <tiledeskwidget-image *ngIf="message.type == 'image' && message.metadata"
         [metadata]="message.metadata"
         [width]="message.metadata.width"
         [height]="message.metadata.height">
       </tiledeskwidget-image>
 
-
-      <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
-      [src]="message.metadata.src" [width]="getSizeImg(message).width"
-      [height]="getSizeImg(message).height" /> -->
+      <tiledeskwidget-frame *ngIf="message.metadata && message.metadata.type && message.metadata.type.includes('video')"
+        [metadata]="message.metadata"
+        [width]="message.metadata.width"
+        [height]="message.metadata.height">
+      </tiledeskwidget-frame>
   
       <!-- message type:: text -->
       <!-- <div *ngIf="message.type == 'text'"> -->     
@@ -23,7 +29,7 @@
           <ng-template #timeTooltipLeft>
               <span>{{message.timestamp | amTimeAgo}}</span>
           </ng-template>
-          
+
           <tiledeskwidget-text
             [text]="message.text"
             [color]="'col-msg-sent'"
@@ -46,14 +52,10 @@
 
 </div>
 
-
 <!-- icon status message -->
-<div class="status-message">
-    <div *ngIf="!message.status" class="icon c21-ico-schedule"></div>
-    <div *ngIf="message.status == MSG_STATUS_SENT" class="icon c21-ico-done"></div>
-    <div *ngIf="message.status == MSG_STATUS_SENT_SERVER" class="icon c21-ico-done"></div>
-    <div *ngIf="message.status == MSG_STATUS_RETURN_RECEIPT" class="icon c21-ico-done_all"></div>
-</div>
+<tiledeskwidget-return-receipt
+  [status]="message.status">
+</tiledeskwidget-return-receipt>
 
 
   

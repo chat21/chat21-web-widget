@@ -31,9 +31,9 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // BehaviorSubject
     BSConversationDetail: BehaviorSubject<ConversationModel>;
     readAllMessages: BehaviorSubject<string>;
-    conversationsAdded: BehaviorSubject<ConversationModel>;
-    conversationsChanged: BehaviorSubject<ConversationModel>;
-    conversationsRemoved: BehaviorSubject<ConversationModel>;
+    conversationAdded: BehaviorSubject<ConversationModel>;
+    conversationChanged: BehaviorSubject<ConversationModel>;
+    conversationRemoved: BehaviorSubject<ConversationModel>;
     loadedConversationsStorage: BehaviorSubject<ConversationModel[]>;
 
     // public params
@@ -260,7 +260,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             if (index > -1) {
                 console.log('conversationnnnnn added', this.conversations[index])
                 const conversationAdded = this.conversations[index]
-                this.conversationsAdded.next(conversationAdded);
+                this.conversationAdded.next(conversationAdded);
             }
         } else {
             console.error('ChatConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
@@ -284,7 +284,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             if (index > -1) {
                 console.log('conversationnnnnn changed', this.conversations[index])
                 const conversationChanged = this.conversations[index]
-                this.conversationsChanged.next(conversationChanged);
+                this.conversationChanged.next(conversationChanged);
             }
         } else {
             console.error('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
@@ -306,7 +306,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             this.conversations.splice(index, 1);
             // this.conversations.sort(compareValues('timestamp', 'desc'));
             //this.databaseProvider.removeConversation(childSnapshot.key);
-            this.conversationsRemoved.next(conversationRemoved);
+            this.conversationRemoved.next(conversationRemoved);
         }
         // remove the conversation from the isConversationClosingMap
         this.deleteClosingConversation(childSnapshot.key);
