@@ -1108,6 +1108,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** open popup conversation */
     private f21_open() {
         const senderId = this.g.senderId;
+        console.log('f21_open senderId' , senderId) 
+        console.log()
         this.g.wdLog(['f21_open senderId: ', senderId]);
         if (senderId) {
             // chiudo callout
@@ -1122,6 +1124,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+  
     /** close popup conversation */
     private f21_close() {
         this.g.setIsOpen(false);
@@ -1396,9 +1399,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnSelectedConversation($event) {
         if ($event) {
-            // if (this.g.isOpen === false) {
-            //     this.f21_open();
-            // }
+            if (this.g.isOpen === false) {
+                this._f21_open();
+            }
             this.conversationSelected = $event;
             this.g.setParameter('recipientId', $event.recipient);
             this.isOpenConversation = true;
@@ -1407,6 +1410,26 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.messages = this.messagingService.messages;
         }
     }
+
+    private _f21_open() {
+        // const senderId = this.g.senderId;
+        // console.log('f21_open senderId' , senderId) 
+        // console.log()
+        // this.g.wdLog(['f21_open senderId: ', senderId]);
+        // if (senderId) {
+            // chiudo callout
+            // this.g.setParameter('displayEyeCatcherCard', 'none');
+            // this.g.isOpen = true; // !this.isOpen;
+            this.g.setIsOpen(true);
+            // this.isInitialized = true;
+            this.storageService.setItem('isOpen', 'true');
+            // this.g.displayEyeCatcherCard = 'none';
+            this.triggerOnOpenEvent();
+            // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+        // }
+    }
+
+
 
     /**
      * MODAL HOME:
@@ -1575,6 +1598,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private triggerOnOpenEvent() {
         const default_settings = this.g.default_settings;
+        console.log('triggerOnOpenEvent') 
         this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', default_settings]);
         const onOpen = new CustomEvent('onOpen', { detail: { default_settings: default_settings } });
         const windowContext = this.g.windowContext;
@@ -1597,7 +1621,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
         }
-
     }
 
     private triggerOnOpenEyeCatcherEvent() {
