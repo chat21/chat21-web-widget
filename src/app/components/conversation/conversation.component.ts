@@ -547,6 +547,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // his.contactService.initialize(senderId, tenant, this.conversationWith);
       this.messagingService.connect( this.conversationWith );
       this.messages = this.messagingService.messages;
+
+      // console.log('CONV COMP connectConversation messages ',  this.messages) 
+
       // this.scrollToBottomStart();
       // this.messages.concat(this.messagingService.messages);
       // this.messagingService.resetBadge(this.conversationWith);
