@@ -164,28 +164,28 @@ export class ConversationsService {
 
 
   private insertOrUpdateConversation(listConversations, snapshot): ConversationModel {
-    console.log('nk - insertOrUpdateConversation QUI SI ', snapshot);
+    // console.log('nk - insertOrUpdateConversation QUI SI ', snapshot);
   
     const conversation = this.setConversation(snapshot, false);
   
-    console.log('nk - insertOrUpdateConversation snapshot ', snapshot);
-    console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
-    console.log('nk - insertOrUpdateConversation conversation 1', conversation);
+    // console.log('nk - insertOrUpdateConversation snapshot ', snapshot);
+    // console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
+    // console.log('nk - insertOrUpdateConversation conversation 1', conversation);
 
     const index = this.searchIndexInArrayForUid(listConversations, snapshot.key);
   
-    console.log('nk - insertOrUpdateConversation snapshot.key ', snapshot.key);
-    console.log('nk - insertOrUpdateConversation index ', index);
+    // console.log('nk - insertOrUpdateConversation snapshot.key ', snapshot.key);
+    // console.log('nk - insertOrUpdateConversation index ', index);
     if (index === -1) {
       // insert item top array
       listConversations.unshift(conversation);
-      console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
+      // console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
     } else {
       listConversations.splice(index, 1, conversation);
-      console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
+      // console.log('nk - insertOrUpdateConversation listConversations ', listConversations);
     }
     listConversations.sort(compareValues('timestamp', 'desc'));
-    console.log('nk - insertOrUpdateConversation conversation 2', conversation);
+    // console.log('nk - insertOrUpdateConversation conversation 2', conversation);
     return conversation;
   }
 
@@ -450,7 +450,7 @@ export class ConversationsService {
    */
   public checkIsNew(conversation) {
     if (this.g.activeConversation && this.g.activeConversation.uid === conversation.uid && this.g.isOpen === true) {
-      console.log('nk - checkIsNew conv ', conversation)
+      // console.log('nk - checkIsNew conv ', conversation)
       this.updateIsNew(conversation);
     }
   }
@@ -458,7 +458,7 @@ export class ConversationsService {
 
   /** */
   public updateIsNew(conversation) {
-    console.log('nk - updateIsNew conv ', conversation)
+    // console.log('nk - updateIsNew conv ', conversation)
 
     // if (conversation.recipient === undefined) {
     //   this.g.wdLog(['**** updateIsNew > Conversation recipient undefined ?' + conversation.recipient]);
@@ -470,16 +470,16 @@ export class ConversationsService {
     if (conversation.archived === true) {
       // urlUpdate = this.urlArchivedConversation + conversation.recipient;
       urlUpdate = this.urlArchivedConversation + conversation.uid;
-      console.log('nk - updateIsNew conversation.archived true urlUpdate 1', urlUpdate)
+      // console.log('nk - updateIsNew conversation.archived true urlUpdate 1', urlUpdate)
     } else {
       // urlUpdate = this.urlConversation + conversation.recipient;
       urlUpdate = this.urlConversation + conversation.uid;
-      console.log('nk - updateIsNew conversation.archived false urlUpdate 2', urlUpdate)
+      // console.log('nk - updateIsNew conversation.archived false urlUpdate 2', urlUpdate)
     }
     const update = {};
     update['/is_new'] = false;
     this.g.wdLog(['**** updateIsNew::' + urlUpdate]);
-    console.log('nk - updateIsNew urlUpdate 3', urlUpdate)
+    // console.log('nk - updateIsNew urlUpdate 3', urlUpdate)
     return firebase.database().ref(urlUpdate).update(update);
   }
   // ========= end:: isNew value in conversation ============//

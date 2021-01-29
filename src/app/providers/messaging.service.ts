@@ -269,6 +269,10 @@ export class MessagingService {
           emoticon
         );
         msg.sender_urlImage = that.getUrlImgProfile(message['sender']);
+        
+        // console.log(that.getUrlImgProfile(message['sender'])) 
+
+
         that.triggerGetImageUrlThumb(msg);
         if (that.messages.indexOf(message) === -1) {
           that.addMessage(msg);
