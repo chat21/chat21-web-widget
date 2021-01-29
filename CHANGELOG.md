@@ -1,6 +1,6 @@
 # chat21-web-widget ver 3.0
 
-### 4.0.96
+### 4.0.9
 - Implements dynamic reply time
 - Fixes the bug: last message callout does not open
 - Fixes bug: users profile picture is not displayed if remoteConfig = true + manages the display of the bot profile picture
