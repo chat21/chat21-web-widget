@@ -72,7 +72,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
   langService: HumanizeDurationLanguage = new HumanizeDurationLanguage();
   humanizer: HumanizeDuration;
   humanWaitingTime: string;
-
+  WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER: string
   constructor(
     public g: Globals,
     private ngZone: NgZone,
@@ -152,7 +152,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
     this.conversationsService.checkListConversations();
     this.conversationsService.checkListArchivedConversations();
     this.listConversations = this.conversationsService.listConversations;
-    
+
     this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
     this.g.wdLog(['this.listConversations', this.listConversations]);
     if (this.g.supportMode) {
@@ -178,7 +178,28 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
         const lang = that.translatorService.getLanguage();
         // console.log('lang', lang);
         that.humanWaitingTime = this.humanizer.humanize(wt, {language: lang});
-        // console.log('xxx', this.humanizer.humanize(wt));
+        // console.log('LIST CONVERSATION humanWaitingTime ', this.humanizer.humanize(wt));
+        // console.log('LIST CONVERSATION humanWaitingTime ', that.humanWaitingTime);
+        // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND ',  this.g.WAITING_TIME_FOUND)
+        // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND contains $reply_time',  this.g.WAITING_TIME_FOUND.includes("$reply_time") )
+       
+
+        // NELLA DASHBOARD AGGIUNGO $reply_time QUANDO UN UTENTE SELEZIONA UNA TRADUZIONE NEL COMPONENTE WIDGET
+        // SE L'UTENTE AGGIUNGE UNA LINGUA IN MULTILANGUAGE IL $reply_time NON VIENE AGGIUNTO
+        if (this.g.WAITING_TIME_FOUND.includes("$reply_time")) {
+          // REPLACE if exist
+          this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND.replace("$reply_time", that.humanWaitingTime);
+          // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER  REPLACE if exist',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
+        } else {
+          
+          this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND + ' ' + that.humanWaitingTime
+        }
+
+        
+        // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
+        // console.log('LIST CONVERSATION g.dynamicWaitTimeReply ',  this.g.dynamicWaitTimeReply )
+        // console.log('LIST CONVERSATION typeof g.dynamicWaitTimeReply ', typeof this.g.dynamicWaitTimeReply )
+
         // 'The team typically replies in ' + moment.duration(response[0].waiting_time_avg).format();
        }
       //  else {
@@ -266,6 +287,7 @@ checkShowAllConversation() {
 
 
   private openConversationByID(conversation) {
+    console.log('openConversationByID (list-conversation.com) conversation', conversation) 
     this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);

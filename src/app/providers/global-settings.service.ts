@@ -384,7 +384,7 @@ export class GlobalSettingsService {
         // DEPARTMENTS
         try {
             const departments = response.departments;
-            // console.log('---->departments', response.departments);
+            // console.log('GLOBAL SETTINGS ----> departments', response.departments);
             if (typeof departments !== 'undefined') {
                 // globals.setParameter('departments', response.departments);
                 this.initDepartments(departments);
@@ -422,6 +422,7 @@ export class GlobalSettingsService {
         // WIDGET
         try {
             const variables = response.project.widget;
+            // console.log('setVariablesFromService variables', variables)  
             if (typeof variables !== 'undefined') {
                 for (const key of Object.keys(variables)) {
                     if (key === 'align' && variables[key] === 'left') {
@@ -483,6 +484,7 @@ export class GlobalSettingsService {
     setVariablesFromSettings(globals: Globals) {
         // this.globals.wdLog(['setVariablesFromSettings');
         const windowContext = globals.windowContext;
+        // console.log('setVariablesFromSettings windowContext ', windowContext) 
         // this.globals.wdLog(['windowContext', globals.windowContext);
         if (!windowContext['tiledesk']) {
             return;
@@ -539,11 +541,14 @@ export class GlobalSettingsService {
             // globals.setParameter('userFullname', TEMP);
         }
         TEMP = tiledeskSettings['preChatForm'];
+        // console.log('setVariablesFromSettings preChatForm ', TEMP) 
         // this.globals.wdLog(['11 - preChatForm:: ', TEMP);
         if (TEMP !== undefined) {
             globals.preChatForm = (TEMP === true) ? true : false;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
         }
+
+       
         TEMP = tiledeskSettings['isOpen'];
         // this.globals.wdLog(['12 - isOpen:: ', TEMP);
         if (TEMP !== undefined) {
@@ -590,12 +595,14 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.calloutTimer = TEMP;
             // globals.setParameter('calloutTimer', TEMP);
+            // console.log('setVariablesFromSettings calloutTimer ', TEMP) 
         }
         TEMP = tiledeskSettings['calloutTitle'];
         // this.globals.wdLog(['19 - calloutTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutTitle = TEMP;
             // globals.setParameter('calloutTitle', TEMP);
+            // console.log('setVariablesFromSettings calloutTitle ', TEMP) 
         }
         TEMP = tiledeskSettings['calloutMsg'];
         // this.globals.wdLog(['20 - calloutMsg:: ', TEMP);
@@ -733,6 +740,12 @@ export class GlobalSettingsService {
             globals.privacyField = TEMP;
         }
 
+        TEMP = tiledeskSettings['dynamicWaitTimeReply'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['dynamicWaitTimeReply:: ', TEMP]);
+            // console.log('GLOBAL-SETTINGS setVariablesFromSettings dynamicWaitTimeReply ', TEMP)  
+            globals.dynamicWaitTimeReply = TEMP;
+        }
     }
 
     /**
@@ -875,6 +888,12 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.privacyField = TEMP;
         }
+
+        TEMP = el.nativeElement.getAttribute('dynamicWaitTimeReply');
+        if (TEMP !== null) {
+            this.globals.dynamicWaitTimeReply = TEMP;
+        }
+
 
     }
 
@@ -1118,6 +1137,12 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_customToken');
         if (TEMP) {
             globals.customToken = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_dynamicWaitTimeReply');
+        if (TEMP) {
+            globals.dynamicWaitTimeReply = stringToBoolean(TEMP);
+            console.log('GLOBAL-SETTINGS setVariablesFromUrlParameters dynamicWaitTimeReply ', TEMP)  
         }
 
     }
