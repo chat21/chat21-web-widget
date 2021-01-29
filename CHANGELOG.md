@@ -1,5 +1,10 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.95
+- Implements dynamic reply time
+- Fixes the bug: last message callout does not open
+- Fixes bug: users profile picture is not displayed if remoteConfig = true + manages the display of the bot profile picture
+
 ### 4.0.94
 - Updated Firebase dependency to 7.24.0
 - Fixes double conversations and the presence of incorrect conversations in the conversation list
