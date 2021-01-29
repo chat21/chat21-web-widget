@@ -50,7 +50,7 @@ export function setHeaderDate(timestamp): string {
 
 export function supports_html5_storage() {
   try {
-      return 'localStorage' in window && window['localStorage'] !== null;
+    return 'localStorage' in window && window['localStorage'] !== null;
   } catch (e) {
     this.g.wdLog(['> Error :' + e]);
     return false;
@@ -59,7 +59,7 @@ export function supports_html5_storage() {
 
 export function supports_html5_session() {
   try {
-      return 'sessionStorage' in window && window['sessionStorage'] !== null;
+    return 'sessionStorage' in window && window['sessionStorage'] !== null;
   } catch (e) {
     this.g.wdLog(['> Error :' + e]);
     return false;
@@ -190,7 +190,8 @@ export function strip_tags(html) {
 }
 
 export function replaceBr(text) {
-  if (text) { const newText = text.replace(/[\n\r]/g, '<br>');
+  if (text) {
+    const newText = text.replace(/[\n\r]/g, '<br>');
     return newText;
   }
   return text;
@@ -213,9 +214,9 @@ export function isEmoji(str: string) {
   // tslint:disable-next-line:max-line-length
   const ranges = ['(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])'];
   if (str.match(ranges.join('|'))) {
-      return true;
+    return true;
   } else {
-      return false;
+    return false;
   }
 }
 
@@ -248,20 +249,20 @@ export function detectIfIsMobile(windowContext) {
 export function convertColorToRGBA(color, opacity) {
   let result = color;
   // console.log('convertColorToRGBA' + color, opacity);
-  if ( color.indexOf('#') > -1 ) {
+  if (color.indexOf('#') > -1) {
     color = color.replace('#', '');
     const r = parseInt(color.substring(0, 2), 16);
     const g = parseInt(color.substring(2, 4), 16);
     const b = parseInt(color.substring(4, 6), 16);
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-  } else if ( color.indexOf('rgba') > -1 ) {
+  } else if (color.indexOf('rgba') > -1) {
     const rgb = color.split(',');
     const r = rgb[0].substring(5);
     const g = rgb[1];
     const b = rgb[2];
     // const b = rgb[2].substring(1, rgb[2].length - 1);
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-  } else if ( color.indexOf('rgb(') > -1 ) {
+  } else if (color.indexOf('rgb(') > -1) {
     const rgb = color.split(',');
     // console.log(rgb);
     const r = rgb[0].substring(4);
@@ -323,12 +324,12 @@ export function compareValues(key, order = 'asc') {
 
 export function getUrlImgProfile(uid: string) {
   const baseLocation = this.g.baseLocation;
-  if (!uid || uid === 'system' ) {
+  if (!uid || uid === 'system') {
     return baseLocation + IMG_PROFILE_BOT;
-  } else if ( uid === 'error') {
+  } else if (uid === 'error') {
     return baseLocation + IMG_PROFILE_DEFAULT;
   } else {
-      return getImageUrlThumb(uid);
+    return getImageUrlThumb(uid);
   }
 }
 
@@ -337,8 +338,20 @@ export function getUrlImgProfile(uid: string) {
  * @param uid
  */
 export function getImageUrlThumb(uid: string) {
+  // console.log('UTILS getImageUrlThumb ', uid)
+  // console.log('UTILS firebase.bucket().ref() ', firebase.storage().ref().bucket)
+ 
+  let sender_id = '';
+  if (uid.includes('bot_')) {
+    sender_id = uid.slice(4)
+  } else {
+    sender_id = uid
+  }
+
+
+  // console.log('UTILS firebase ', firebase)
   // tslint:disable-next-line:max-line-length
-  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + environment.firebase.storageBucket + '/o/' + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
+  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + firebase.storage().ref().bucket + '/o/' + 'profiles%2F' + sender_id + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }
 
@@ -348,6 +361,7 @@ export function getImageUrlThumb(uid: string) {
  * @param string
  */
 export function stringToBoolean(string: any): any {
+  // console.log('setVariablesFromService stringToBoolean ', string) 
   let val = string;
   if (typeof string !== 'string') {
     val = JSON.stringify(string);
@@ -357,20 +371,20 @@ export function stringToBoolean(string: any): any {
     return;
   }
   switch (val.toLowerCase().trim()) {
-      case 'true': case 'yes': case '1': return true;
-      case 'false': case 'no': case '0': case null: return false;
-      default: return val;
+    case 'true': case 'yes': case '1': return true;
+    case 'false': case 'no': case '0': case null: return false;
+    default: return val;
   }
 }
 
 export function getUnique(arr, comp) {
   const unique = arr
     .map(e => e[comp])
-     // store the keys of the unique objects
+    // store the keys of the unique objects
     .map((e, i, final) => final.indexOf(e) === i && i)
     // eliminate the dead keys & store unique objects
     .filter(e => arr[e]).map(e => arr[e]);
-   return unique;
+  return unique;
 }
 
 export function isJustRecived(startedAt, time) {
