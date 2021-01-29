@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, OnDestroy, AfterViewInit, NgZone, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy, AfterViewInit, NgZone, EventEmitter, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 // services
 import { Globals } from '../../utils/globals';
@@ -24,6 +24,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   // @Input() message: MessageModel;
   @Output() eventCloseMessagePreview  = new EventEmitter();
   @Output() eventSelctedConv = new EventEmitter<string>();
+  // @Output() eventOpenChat  = new EventEmitter();
   // ========= begin:: sottoscrizioni ======= //
   subscriptions: Subscription[] = []; /** */
   // ========= end:: sottoscrizioni ======= //
@@ -34,6 +35,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   strip_tags = strip_tags;
 
   constructor(
+    private el: ElementRef,
     private ngZone: NgZone,
     public g: Globals,
     public conversationsService: ConversationsService
@@ -83,16 +85,23 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** */
   private openConversationByID(conversation) {
+    // console.log('openConversationByID (last-message.comp) 1: ', conversation);
     this.g.wdLog(['openConversationByID: ', conversation]);
     this.conversation = null;
     this.g.isOpenNewMessage = false;
     // console.log('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     if ( conversation ) {
+      // console.log('openConversationByID (last-message.comp) 2: ', conversation);
       this.eventSelctedConv.emit(conversation);
+      // this.eventOpenChat.emit();
+      // this.triggerOnOpenEvent()
     }
   }
+
+
   /** */
   private closeMessagePreview() {
+    this.g.wdLog('closeMessagePreview');
     this.conversation = null;
     this.g.isOpenNewMessage = false;
     // console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
