@@ -58,21 +58,21 @@ ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=fa
 
 
 ## AZIONI per committare: 
-## 1) modificare package.json e package-lock.json aggiungendo il num di versione nuovo
+## 1) !!!!!! modificare package.json e package-lock.json aggiungendo il num di versione nuovo // !! NON è VERO - LA VERSIONE SI INCREMENTA DA SOLA
 ## 2) aggiornare il CHANGELOG
 ## 3) fare il commit tramite sourcetree
 ## 4) da terminale richiamare ./deploy_pre.sh
 
 # v5
 cd dist
-aws s3 sync . s3://tiledesk-widget-pre/v5/$version/
-aws s3 sync . s3://tiledesk-widget-pre/v5/
+aws s3 sync . s3://tiledesk-widget-pre/v4/$version/
+aws s3 sync . s3://tiledesk-widget-pre/v4/
 cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/v2 and s3://tiledesk-widget-pre/v5/$version/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v5/index.html
-echo https://widget-pre.tiledesk.com/v5/index.html
-echo https://widget-pre.tiledesk.com/v5/$version/index.html
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v4 and s3://tiledesk-widget-pre/v4/$version/
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v4/index.html
+echo https://widget-pre.tiledesk.com/v4/index.html
+echo https://widget-pre.tiledesk.com/v4/$version/index.html
 
