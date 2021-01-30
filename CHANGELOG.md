@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.97
+- Change the endpoint of the deploy
+
 ### 4.0.96
 - Implements dynamic reply time
 - Fixes the bug: last message callout does not open
