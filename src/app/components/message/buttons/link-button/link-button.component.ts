@@ -11,6 +11,7 @@ export class LinkButtonComponent implements OnInit {
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
+  public type: string = "url"
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
@@ -20,7 +21,8 @@ export class LinkButtonComponent implements OnInit {
 
   actionButtonUrl(){
     if ( this.button && this.button.link && this.button.link !== '') {
-      this.onButtonClicked.emit(this.button);
+      const event = { target: this, currentTarget: this}
+      this.onButtonClicked.emit(event);
     }
   }
 

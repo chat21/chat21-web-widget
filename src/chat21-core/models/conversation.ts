@@ -17,6 +17,7 @@ export class ConversationModel {
     public time_last_message: string,
     public selected: boolean,
     public color: string,
-    public avatar: string
+    public avatar: string,
+    public archived: boolean
   ) { }
 }

@@ -1,5 +1,5 @@
 {
-    "LABEL_TU": "toi ",
+    "LABEL_TU": "",
     "LABEL_PLACEHOLDER": "Écrivez votre question ...",
     "LABEL_START_NW_CONV": "Nouvelle conversation",
     "LABEL_FIRST_MSG": "Décrivez brièvement votre problème, nous vous mettrons en relation avec un opérateur spécialisé.",
@@ -49,5 +49,11 @@
     "SEE_PREVIOUS": "voir les conversations précédentes",
     "WAITING_TIME_FOUND": "L'équipe répond généralement en ",
     "WAITING_TIME_NOT_FOUND": "Nous vous répondrons dans les plus brefs délais",
-    "CLOSED": "FERMÉE"
+    "CLOSED": "FERMÉE",
+    "INFO_SUPPORT_USER_ADDED_SUBJECT":"toi",
+    "INFO_SUPPORT_USER_ADDED_YOU_VERB":"ont été ajoutés à ",
+    "INFO_SUPPORT_USER_ADDED_COMPLEMENT":"rejointe",
+    "INFO_SUPPORT_USER_ADDED_VERB":"la discussion",
+    "INFO_SUPPORT_CHAT_REOPENED":"Chat rouvert",
+    "INFO_SUPPORT_CHAT_CLOSED":"Chat fermé"
 }

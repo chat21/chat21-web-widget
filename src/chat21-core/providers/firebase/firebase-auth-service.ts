@@ -34,11 +34,12 @@ export class FirebaseAuthService extends AuthService {
   // firebaseSignInWithCustomToken: BehaviorSubject<any>;
 
   // piblic
-  public persistence: string;
+  // private persistence: string;
   public SERVER_BASE_URL: string;
 
   // private
   private URL_TILEDESK_SIGNIN: string;
+  private URL_TILEDESK_SIGNIN_ANONYMOUSLY: string;
   private URL_TILEDESK_CREATE_CUSTOM_TOKEN: string;
   //TODO-GAB
   // private imageRepo: ImageRepoService = new FirebaseImageRepoService();
@@ -60,11 +61,11 @@ export class FirebaseAuthService extends AuthService {
    */
   initialize() {
     this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
+    this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
     this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'chat21/firebase/auth/createCustomToken';
     this.checkIsAuth();
     this.onAuthStateChanged();
   }
-
 
   /**
    * checkIsAuth
@@ -75,7 +76,7 @@ export class FirebaseAuthService extends AuthService {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (this.tiledeskToken) {
       console.log(' ---------------- MI LOGGO CON UN TOKEN ESISTENTE NEL LOCAL STORAGE O PASSATO NEI PARAMS URL ---------------- ');
-      this.createCustomToken();
+      this.createFirebaseCustomToken();
     } else {
       console.log(' ---------------- NON sono loggato ---------------- ');
       // this.BSAuthStateChanged.next('offline');
@@ -147,11 +148,11 @@ export class FirebaseAuthService extends AuthService {
    * FIREBASE: signInWithCustomToken
    * @param token
    */
-  signInWithCustomToken(token: string): any {
+  signInFirebaseWithCustomToken(token: string): any {
     console.log('signInWithCustomToken:', token);
     const that = this;
     let firebasePersistence;
-    switch (this.persistence) {
+    switch (this.getPersistence()) {
       case 'SESSION': {
         firebasePersistence = firebase.auth.Auth.Persistence.SESSION;
         break;
@@ -206,6 +207,7 @@ export class FirebaseAuthService extends AuthService {
         return error;
     });
   }
+
 
   /**
    * FIREBASE: sendPasswordResetEmail
@@ -266,7 +268,49 @@ export class FirebaseAuthService extends AuthService {
    */
   signInWithEmailAndPassword(email: string, password: string) {
     console.log('signInWithEmailAndPassword', email, password);
-    this.signIn(this.URL_TILEDESK_SIGNIN, email, password);
+    const httpHeaders = new HttpHeaders();
+    
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('Content-Type', 'application/json' );
+    const requestOptions = { headers: httpHeaders };
+    const postData = {
+      email: email,
+      password: password
+    };
+    const that = this;
+    this.http.post(this.URL_TILEDESK_SIGNIN, postData, requestOptions).subscribe((data) => {
+        if (data['success'] && data['token']) {
+          that.tiledeskToken = data['token'];
+          this.createCompleteUser(data['user']);
+          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          that.createFirebaseCustomToken();
+        }
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  signInAnonymously(projectID: string) {
+    console.log('signInAnonymously', projectID);
+    const httpHeaders = new HttpHeaders();
+    
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('Content-Type', 'application/json' );
+    const requestOptions = { headers: httpHeaders };
+    const postData = {
+      id_project: projectID
+    };
+    const that = this;
+    this.http.post(this.URL_TILEDESK_SIGNIN_ANONYMOUSLY, postData, requestOptions).subscribe((data) => {
+        if (data['success'] && data['token']) {
+          that.tiledeskToken = data['token'];
+          this.createCompleteUser(data['user']);
+          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          that.createFirebaseCustomToken();
+        }
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   /**
@@ -275,28 +319,28 @@ export class FirebaseAuthService extends AuthService {
    * @param emailVal
    * @param pswVal
    */
-  private signIn(url: string, emailVal: string, pswVal: string) {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.append('Accept', 'application/json');
-    httpHeaders.append('Content-Type', 'application/json' );
-    const requestOptions = { headers: httpHeaders };
-    const postData = {
-      email: emailVal,
-      password: pswVal
-    };
-    const that = this;
-    this.http.post(url, postData, requestOptions)
-      .subscribe(data => {
-        if (data['success'] && data['token']) {
-          that.tiledeskToken = data['token'];
-          this.createCompleteUser(data['user']);
-          localStorage.setItem('tiledeskToken', that.tiledeskToken);
-          that.createCustomToken();
-        }
-      }, error => {
-        console.log(error);
-      });
-  }
+  // private signIn(url: string, emailVal: string, pswVal: string) {
+  //   const httpHeaders = new HttpHeaders();
+  //   httpHeaders.append('Accept', 'application/json');
+  //   httpHeaders.append('Content-Type', 'application/json' );
+  //   const requestOptions = { headers: httpHeaders };
+  //   const postData = {
+  //     email: emailVal,
+  //     password: pswVal
+  //   };
+  //   const that = this;
+  //   this.http.post(url, postData, requestOptions)
+  //     .subscribe(data => {
+  //       if (data['success'] && data['token']) {
+  //         that.tiledeskToken = data['token'];
+  //         this.createCompleteUser(data['user']);
+  //         localStorage.setItem('tiledeskToken', that.tiledeskToken);
+  //         that.createFirebaseCustomToken();
+  //       }
+  //     }, error => {
+  //       console.log(error);
+  //     });
+  // }
 
   /**
    * createCompleteUser
@@ -338,7 +382,7 @@ export class FirebaseAuthService extends AuthService {
    *
    * @param token
    */
-  private createCustomToken() {
+  private createFirebaseCustomToken() {
     const headers = new HttpHeaders({
       'Content-type': 'application/json',
       Authorization: this.tiledeskToken
@@ -346,11 +390,10 @@ export class FirebaseAuthService extends AuthService {
     const responseType = 'text';
     const postData = {};
     const that = this;
-    this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType})
-    .subscribe(data =>  {
+    this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType}).subscribe(data =>  {
       that.firebaseToken = data;
       localStorage.setItem('firebaseToken', that.firebaseToken);
-      that.signInWithCustomToken(data);
+      that.signInFirebaseWithCustomToken(data);
     }, error => {
       console.log(error);
     });

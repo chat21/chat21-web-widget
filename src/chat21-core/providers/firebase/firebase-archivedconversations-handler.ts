@@ -109,6 +109,15 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         return num;
     }
 
+    //imposto la conversazione come: letta
+    setConversationRead(conversation: ConversationModel): void {
+        const urlUpdate = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
+        const update = {};
+        update['/is_new'] = false;
+        firebase.database().ref(urlUpdate).update(update);
+    }
+
+
     /**
      * Returns the status of the conversations with conversationId from isConversationClosingMap
      * @param conversationId the conversation id
@@ -346,7 +355,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
-        conv.image = this.imageRepo.getImageThumb(conversation_with);
+        //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         conv.archived = true;
         // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
         return conv;

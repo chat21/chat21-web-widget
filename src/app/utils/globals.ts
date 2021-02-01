@@ -196,7 +196,7 @@ export class Globals {
    customToken: string;
 
    isOpenNewMessage: boolean;
-
+   dynamicWaitTimeReply: boolean; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -269,6 +269,9 @@ export class Globals {
     this.widgetTitle = '';
     /** Set the widget title label shown in the widget header. Value type : string.
     The default value is Tiledesk. */
+    this.dynamicWaitTimeReply = false;
+    /** Set dynaminc waiting replay time. Permitted values: true, false. 
+    The default value is false. */
     this.hideHeaderCloseButton = false;
     /** Hide the close button in the widget header. Permitted values: true,
     false. The default value is false. */
@@ -461,7 +464,8 @@ export class Globals {
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
-      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'customToken': this.customToken
+      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'customToken': this.customToken,
+      'dynamicWaitTimeReply': this.dynamicWaitTimeReply
     };
   }
 

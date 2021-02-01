@@ -1,10 +1,6 @@
 @import '../../../../sass/variables';
 /* ====== SET MESSAGES ====== */
-.msg_container {
-    overflow: hidden;
-    display: flex;
-    opacity: 0px;
-}
+
 .messages {
     border-radius: 8px;
     padding: 0;
@@ -49,48 +45,4 @@
         }
     }
     
-}
-
-.msg_sent {
-    background-color: $bck-msg-sent;
-    color: $col-msg-sent;
-    margin-right: 0;
-    margin-left: 4px;
-    max-width: calc(100% - 30px);
-    min-width: 14px;
-}
-.message_innerhtml {
-    padding: 8px;
-}
-.emoticon {
-    background-color: transparent!important;
-    font-size: 4em;
-    .message_innerhtml {
-        padding: 0;
-        margin: 0;
-    }
-} 
-
-
-.status-message {
-    width: 16px;
-    height: 16px;
-    margin-left: 4px;
-    .icon {
-        width: 13px;
-        height: 13px;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        overflow-x: hidden;
-    }
-    .c21-ico-schedule {
-        background-image: url("/assets/images/f21ico-schedule.svg");
-    }
-    .c21-ico-done {
-        background-image: url("/assets/images/f21ico-done.svg");
-    }
-    .c21-ico-done_all {
-        background-image: url("/assets/images/f21ico-done_all.svg");
-    }
 }

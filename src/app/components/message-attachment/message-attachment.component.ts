@@ -11,8 +11,7 @@ import { MessageModel } from '../../../models/message';
 export class MessageAttachmentComponent implements OnInit {
 
   // ========= begin:: Input/Output values ============//
-  @Output() onClickTextActionButtonAttachment = new EventEmitter<string>();
-  @Output() onClickUrlAndActionButtonAttachment = new EventEmitter<any>();
+  @Output() onAttachmentButtonClicked = new EventEmitter<any>();
   @Input() message: MessageModel;
   @Input() isLastMessage: boolean;
   @Input() stylesMap: Map<string, string>;
@@ -47,16 +46,10 @@ export class MessageAttachmentComponent implements OnInit {
     }
   }
 
-  /** */
-  returnOnTextActionButtonClicked(event: string){
-    if ( event ) {
-      this.onClickTextActionButtonAttachment.emit(event);
-    }
-  }
-
-  returnOnUrlAndActionButtonClicked(event: any){
-    if ( event ) {
-      this.onClickUrlAndActionButtonAttachment.emit(event);
+  returnOnAttachmentButtonClicked(event: any){
+    if ( event && event.target ) {
+      const ev = {target: event.target, message: this.message, currentTarget: this }
+      this.onAttachmentButtonClicked.emit(ev);
     }
   }
 

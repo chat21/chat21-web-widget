@@ -16,8 +16,34 @@ export abstract class AuthService {
   abstract BSSignOut: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   // params
-  abstract persistence = environment.authPersistence;
-  abstract SERVER_BASE_URL = environment.SERVER_BASE_URL;
+  public DEFAULT_PERSISTENCE: String = 'none';
+  public DEFAULT_URL: String = 'https://api.tiledesk.com/v2/auth/';
+
+  private persistence;
+  private baseUrl;
+
+  public setPersistence(persistence): void {
+    this.persistence = persistence;
+  }
+
+  public getPersistence(): String {
+    if (this.persistence) {
+      return this.persistence;
+    } else {
+      return this.DEFAULT_PERSISTENCE;
+    }
+  }
+
+  public setBaseUrl(baseUrl): void {
+    this.baseUrl = baseUrl;
+  }
+  public getBaseUrl(): String {
+    if (this.baseUrl) {
+      return this.baseUrl;
+    } else {
+      return this.DEFAULT_URL;
+    }
+  }
 
   // functions
   abstract initialize(): void;
@@ -27,5 +53,6 @@ export abstract class AuthService {
   abstract getToken(): string;
   abstract getTiledeskToken(): string;
   abstract signInWithEmailAndPassword(email: string, password: string): void;
+  abstract signInAnonymously(projectID: string): void;
   abstract logout(): void;
 }

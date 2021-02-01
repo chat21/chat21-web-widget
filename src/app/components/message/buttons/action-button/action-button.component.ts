@@ -11,6 +11,7 @@ export class ActionButtonComponent implements OnInit {
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
+  public type: string = "action"
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
@@ -27,7 +28,8 @@ export class ActionButtonComponent implements OnInit {
           spanCheck.classList.remove('active');
         }, 400);
       }
-      this.onButtonClicked.emit(this.button);
+      const event = { target: this, currentTarget: this}
+      this.onButtonClicked.emit(event);
     }
   }
 

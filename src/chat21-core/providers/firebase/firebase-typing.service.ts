@@ -57,19 +57,21 @@ export class FirebaseTypingService extends TypingService {
     ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
       console.log('urlTyping: child_changed ', childSnapshot.val());
+      //TODO-GAB: supportata solo da chat ionic 5
+      // this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: childSnapshot.val().user.uid, nameUserTypingNow: childSnapshot.val().user.name});
       this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name});
     });
   }
 
   /** */
-  public setTyping(idConversation: string, message: string, idCurrentUser: string, userFullname: string) {
+  public setTyping(idConversation: string, message: string, recipientId: string, userFullname: string) {
     const that = this;
     clearTimeout(this.setTimeoutWritingMessages);
     this.setTimeoutWritingMessages = setTimeout(() => {
-      const urlTyping = this.urlNodeTypings + idConversation + '/' + idCurrentUser + '/user';
+      const urlTyping = this.urlNodeTypings + idConversation + '/' + recipientId;// + '/user';
       console.log('setWritingMessages:', urlTyping, userFullname);
       const timestampData =  firebase.database.ServerValue.TIMESTAMP;
-      const precence = new TypingModel(idCurrentUser, timestampData, message, userFullname);
+      const precence = new TypingModel(recipientId, timestampData, message, userFullname);
       firebase.database().ref(urlTyping).set(precence, ( error ) => {
         if (error) {
           console.log('ERRORE', error);

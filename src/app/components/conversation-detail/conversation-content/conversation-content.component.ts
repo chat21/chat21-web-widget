@@ -17,8 +17,7 @@ export class ConversationContentComponent implements OnInit {
   @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
-  @Output() onClickTextActionButtonAttachment = new EventEmitter();
-  @Output() onClickUrlAndActionButtonAttachment = new EventEmitter();
+  @Output() onAttachmentButtonClicked = new EventEmitter();
   @Output() onScrollContent = new EventEmitter();
 
   // ========= begin:: gestione scroll view messaggi ======= //
@@ -57,7 +56,7 @@ export class ConversationContentComponent implements OnInit {
               private cdref: ChangeDetectorRef) { }
 
   ngOnInit() {
-    console.log('metadata', this.messages)
+   
   }
 
   ngAfterContentChecked() {
@@ -222,15 +221,8 @@ export class ConversationContentComponent implements OnInit {
 
   // ========= begin:: event emitter function ============//
 
-  returnOnTextActionButtonClicked(event: string) {
-    this.onClickTextActionButtonAttachment.emit(event)
-  }
-
-  /** */
-  returnOnUrlAndActionButtonClicked(event: any) {
-    //decommentare se in html c'è solamente component tiledesk-text
-    //const messageOBJ = { message: this.message, sanitizer: this.sanitizer, messageEl: event.messageEl, component: event.component}
-    this.onClickUrlAndActionButtonAttachment.emit(event)
+  returnOnAttachmentButtonClicked(event: any){
+    this.onAttachmentButtonClicked.emit(event)
   }
 
   returnOnBeforeMessageRender(event){

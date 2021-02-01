@@ -21,7 +21,7 @@ import { AgentAvailabilityService } from '../../../providers/agent-availability.
 import { StarRatingWidgetService } from '../../star-rating-widget/star-rating-widget.service';
 
 // models
-import { ConversationModel } from '../../../../models/conversation';
+
 import { MessageModel } from '../../../../chat21-core/models/message';
 import { UploadModel } from '../../../../models/upload';
 
@@ -42,6 +42,9 @@ import { ConversationHandlerService } from '../../../../chat21-core/providers/ab
 import { ConversationHandlerBuilderService } from '../../../../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { popupUrl } from '../../../../chat21-core/utils/utils';
 import { ConversationContentComponent } from '../conversation-content/conversation-content.component';
+import { ConversationsHandlerService } from '../../../../chat21-core/providers/abstract/conversations-handler.service';
+import { ArchivedConversationsHandlerService } from '../../../../chat21-core/providers/abstract/archivedconversations-handler.service';
+import { ConversationModel } from '../../../../chat21-core/models/conversation';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -163,10 +166,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   translationMapHeader: Map<string, string>;
   translationMapFooter: Map<string, string>;
+  translationMapContent: Map<string, string>;
 
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
   @ViewChild(ConversationContentComponent) conversationContent: ConversationContentComponent
   conversationHandlerService: ConversationHandlerService
+  conversationsHandlerService: ConversationsHandlerService
+  archivedConversationsHandlerService: ArchivedConversationsHandlerService
 
   constructor(
     public el: ElementRef,
@@ -213,21 +219,21 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   public translations() {
     const keysHeader = [
-      'LABEL_AVAILABLE',
-      'LABEL_NOT_AVAILABLE',
-      'LABEL_TODAY',
-      'LABEL_TOMORROW',
-      'LABEL_TO',
+      //'LABEL_AVAILABLE',
+      //'LABEL_NOT_AVAILABLE',
+      //'LABEL_TODAY',
+      //'LABEL_TOMORROW',
+      //'LABEL_TO',
       'LABEL_LAST_ACCESS',
-      'ARRAY_DAYS',
-      'LABEL_ACTIVE_NOW',
+      //'ARRAY_DAYS',
+      //'LABEL_ACTIVE_NOW',
       'LABEL_WRITING',
       'BUTTON_CLOSE_TO_ICON', 
       'OPTIONS', 
       'PREV_CONVERSATIONS',
       'SOUND_OFF',
       'SOUND_ON',
-      'DOWNLOAD_TRANSCRIPT'
+      'DOWNLOAD_TRANSCRIPT',
     ];
 
     const keysFooter = [
@@ -235,9 +241,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'GUEST_LABEL',
     ];
 
+    const keysContent = [
+      'INFO_SUPPORT_USER_ADDED_SUBJECT',
+      'INFO_SUPPORT_USER_ADDED_YOU_VERB',
+      'INFO_SUPPORT_USER_ADDED_COMPLEMENT',
+      'INFO_SUPPORT_USER_ADDED_VERB',
+      'INFO_SUPPORT_CHAT_REOPENED',
+      'INFO_SUPPORT_CHAT_CLOSED',
+      'LABEL_TODAY',
+      'LABEL_TOMORROW',
+      'LABEL_TO',
+      'ARRAY_DAYS',
+    ]
+
     this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
     this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
-    
+    this.translationMapContent = this.customTranslateService.translateLanguage(keysContent);
   }
 
   ngAfterViewInit() {
@@ -310,10 +329,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    if (this.conversation) {
-      this.conversationsService.updateIsNew(this.conversation);
-      this.conversationsService.updateConversationBadge();
+    if(this.isConversationArchived && this.conversation && this.archivedConversationsHandlerService){
+      this.archivedConversationsHandlerService.setConversationRead(this.conversation)
     }
+    if (!this.isConversationArchived && this.conversation && this.conversationsHandlerService) {
+      this.conversationsHandlerService.setConversationRead(this.conversation)
+      const badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+      this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+    }
+
   }
 
   // ngAfterViewChecked() {
@@ -522,26 +546,47 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
     if (!this.conversation) {
+      // this.conversation = new ConversationModel(
+      //   recipientId,
+      //   {},
+      //   channelType,
+      //   true,
+      //   '',
+      //   recipientId,
+      //   this.g.recipientFullname,
+      //   this.senderId,
+      //   this.g.userFullname,
+      //   '0',
+      //   0,
+      //   TYPE_MSG_TEXT,
+      //   '',
+      //   '',
+      //   '',
+      //   '',
+      //   0,
+      //   false
+      //   );
+
       this.conversation = new ConversationModel(
         recipientId,
         {},
         channelType,
-        true,
-        '',
+        this.g.recipientFullname,
         recipientId,
         this.g.recipientFullname,
+        '',
+        true,
+        '',
         this.senderId,
+        '',
         this.g.userFullname,
         '0',
-        0,
-        TYPE_MSG_TEXT,
         '',
         '',
+        true,
         '',
         '',
-        0,
-        false
-        );
+        false)
     }
   }
 
@@ -626,7 +671,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         conversationWithFullname,
         loggedUser,
         tenant,
-        this.translationMapHeader
+        this.translationMapContent
       );
       this.conversationHandlerService.connect();
       console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
@@ -654,6 +699,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // scrollo al bottom della pagina
     }
     console.log('CONVERSATION MESSAGES ' + this.messages );
+
+    //retrive active and archived conversations-handler service
+    this.conversationsHandlerService = this.chatManager.conversationsHandlerService
+    this.archivedConversationsHandlerService = this.chatManager.archivedConversationsService
   }
 
 
@@ -713,7 +762,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.starRatingWidgetService.setOsservable(false);
       // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
       // tslint:disable-next-line:max-line-length
-      that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation, this.starRatingWidgetService]);
+      that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation.value]);
       subscribtion = this.starRatingWidgetService.obsCloseConversation.subscribe(isOpenStartRating => {
         that.g.setParameter('isOpenStartRating', isOpenStartRating);
         if (isOpenStartRating === false) {
@@ -745,9 +794,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtionKey = 'conversationsRemoved';
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if(!subscribtion){
+
       subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.subscribe((conversation) => {
-        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith);
-        if (conversation && conversation.recipient === this.conversationWith) {
+        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
+        if(conversation && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
         }
       });
@@ -1753,36 +1803,45 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // }
 
   /** */
-  returnOnTextActionButtonClicked(event: string) {
-    if (event) {
-      const metadata = {
-        'button': true
-      };
-      this.conversationFooter.sendMessage(event, TYPE_MSG_TEXT, metadata);
-      // this.sendMessage($event, TYPE_MSG_TEXT);
-    }
-  }
+  // returnOnTextActionButtonClicked(event: string) {
+  //   if (event) {
+  //     const metadata = {
+  //       'button': true
+  //     };
+  //     this.conversationFooter.sendMessage(event, TYPE_MSG_TEXT, metadata);
+  //     // this.sendMessage($event, TYPE_MSG_TEXT);
+  //   }
+  // }
 
   /** */
-  returnOnUrlAndActionButtonClicked(event: any) {
-    if (!event || !event.type) {
+  returnOnAttachmentButtonClicked(event: any) {
+    console.log('eventbutton', event)
+    if (!event || !event.target.type) {
       return;
     }
-    switch (event.type) {
+    switch (event.target.type) {
       case 'url':
         try {
-          this.openLink(event);
+          this.openLink(event.target.button);
         } catch (err) {
           this.g.wdLog(['> Error :' + err]);
         }
         return;
       case 'action':
         try {
-          this.actionButton(event);
+          this.actionButton(event.target.button);
         } catch (err) {
           this.g.wdLog(['> Error :' + err]);
         }
         return false;
+      case 'text':
+        try{
+          const text = event.target.button.value
+          const metadata = { 'button': true };
+          this.conversationFooter.sendMessage(text, TYPE_MSG_TEXT, metadata);
+        }catch(err){
+          this.g.wdLog(['> Error :' + err]);
+        }
       default: return;
     }
   }

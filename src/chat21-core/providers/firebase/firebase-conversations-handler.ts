@@ -113,6 +113,14 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         return num;
     }
 
+
+    setConversationRead(conversation: ConversationModel): void {
+        const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
+        const update = {};
+        update['/is_new'] = false;
+        firebase.database().ref(urlUpdate).update(update);
+    }
+
     /**
      * Returns the status of the conversations with conversationId from isConversationClosingMap
      * @param conversationId the conversation id
@@ -188,7 +196,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // }
 
 
-    // /**  DEPRECATED
+    // /** 
     //  *
     //  * @param childSnapshot
     //  */
@@ -254,11 +262,11 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * 6 -  ordino l'array per timestamp
      * 7 -  pubblico conversations:update
      */
+    //TODO-GAB: ora emit singola conversation e non dell'intero array di conversations
     private added(childSnapshot: any) {
         if (this.conversationGenerate(childSnapshot)) {
             const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
             if (index > -1) {
-                console.log('conversationnnnnn added', this.conversations[index])
                 const conversationAdded = this.conversations[index]
                 this.conversationAdded.next(conversationAdded);
             }
@@ -277,12 +285,11 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * 7 -  attivo sound se è un msg nuovo
      */
 
-    //TODO-GAB: fare emit singola conversation e non dell'intero array di conversations
+    //TODO-GAB: ora emit singola conversation e non dell'intero array di conversations
     private changed(childSnapshot: any) {
         if (this.conversationGenerate(childSnapshot)) {
             const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
             if (index > -1) {
-                console.log('conversationnnnnn changed', this.conversations[index])
                 const conversationChanged = this.conversations[index]
                 this.conversationChanged.next(conversationChanged);
             }
@@ -298,10 +305,10 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * 4 -  pubblico conversations:update
      * 5 -  elimino conversazione dall'array delle conversazioni chiuse
      */
+    //TODO-GAB: ora emit singola conversation e non dell'intero array di conversations
     private removed(childSnapshot: any) {
         const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
         if (index > -1) {
-            console.log('conversationnnnnn removedddd', this.conversations[index])
             const conversationRemoved = this.conversations[index]
             this.conversations.splice(index, 1);
             // this.conversations.sort(compareValues('timestamp', 'desc'));
@@ -339,6 +346,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         let conversation_with_fullname = conv.sender_fullname;
         let conversation_with = conv.sender;
         if (conv.sender === this.loggedUserId) {
+            console.log('conv.sender = loggedUser', conv, conv.recipient_fullname)
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
             conv.last_message_text = LABEL_TU + conv.last_message_text;
@@ -353,7 +361,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
-        conv.image = this.imageRepo.getImageThumb(conversation_with);
+        //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
         return conv;
     }

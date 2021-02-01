@@ -11,6 +11,8 @@ import { Globals } from '../../../utils/globals';
 export class BubbleMessageComponent implements OnInit {
 
   @Input() message: MessageModel;
+  @Input() textColor: string;
+  @Input() backgroundColor: string;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
 
@@ -34,8 +36,13 @@ export class BubbleMessageComponent implements OnInit {
    *
    * @param message
    */
-  getSizeImg(message): any {
-    const metadata = message.metadata;
+  getMetadataSize(metadata): any {
+    if(metadata.width === undefined){
+      metadata.width= '100%'
+    }
+    if(metadata.height === undefined){
+      metadata.height = MAX_WIDTH_IMAGES
+    }
     // const MAX_WIDTH_IMAGES = 300;
     const sizeImage = {
         width: metadata.width,

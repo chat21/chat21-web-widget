@@ -732,6 +732,11 @@ export class GlobalSettingsService {
             this.globals.wdLog(['privacyField:: ', TEMP]);
             globals.privacyField = TEMP;
         }
+        TEMP = tiledeskSettings['dynamicWaitTimeReply'];
+        if (TEMP !== undefined) {
+            this.globals.wdLog(['dynamicWaitTimeReply:: ', TEMP]);
+            globals.dynamicWaitTimeReply = TEMP;
+        }
 
     }
 
@@ -874,6 +879,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('privacyField');
         if (TEMP !== null) {
             this.globals.privacyField = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('dynamicWaitTimeReply');
+        if (TEMP !== null) {
+            this.globals.dynamicWaitTimeReply = TEMP;
         }
 
     }
@@ -1118,6 +1127,10 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_customToken');
         if (TEMP) {
             globals.customToken = TEMP;
+        }
+        TEMP = getParameterByName(windowContext, 'tiledesk_dynamicWaitTimeReply');
+        if (TEMP) {
+            globals.dynamicWaitTimeReply = stringToBoolean(TEMP); 
         }
 
     }

@@ -57,111 +57,91 @@
               <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
     
                   <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                      <div *ngFor="let message of messages let last = last; let i = index" tabindex="1521" class="rowMsg">
+                      <div *ngFor="let message of messages; let last = last; let i = index" tabindex="1521" class="rowMsg">
     
-                          <!-- message sender:: -->
+                          <!-- message SENDER:: -->
+                          <div role="messaggio" *ngIf="message.sender == senderId;" class="msg_container base_sent">
                           
-
-                          <div role="messaggio" *ngIf="message.sender == senderId;">
-                          
-                              <tiledeskwidget-bubble-message class="msg_container base_sent slide-in-right"
+                            <!--backgroundColor non viene ancora usato -->
+                            <tiledeskwidget-bubble-message class="messages msg_sent slide-in-right"
+                                [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}"
                                 [message]="message"
+                                [textColor]="'col-msg-sent'"
+                                [backgroundColor]="'bck-msg-sent'"
                                 (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                                 (onAfterMessageRender)="returnOnAfterMessageRender($event)">
-                              </tiledeskwidget-bubble-message>
+                            </tiledeskwidget-bubble-message>
+
+                              <!-- icon status message -->
+                            <tiledeskwidget-return-receipt class="slide-in-right"
+                                [status]="message.status">
+                            </tiledeskwidget-return-receipt>
 
                           </div>
     
     
-                          <!-- message recipient:: -->
+                          <!-- message RECIPIENT:: -->
                           <div role="messaggio" *ngIf="message.sender != senderId;" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
-                          <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive slide-in-left">
-                              <!-- <div class="content-avatar">
-                                  <div class="profile_image">
-                                      <img src="{{getUrlImgProfile(message.sender)}}" />
-                                  </div>
-                              </div> -->
-    
-                              <!-- <div class="c21-icon-avatar slide-in-left">
-                                  <div class="c21-avatar-image profile_image">
-                                       <img src="{{message.sender_urlImage}}" onError="this.src = 'assets/images/avatar_bot_tiledesk.svg'" />
-                                  </div> 
-                              </div> -->
-                              <tiledeskwidget-avatar-image 
-                                [url]="message.sender_urlImage">
-                              </tiledeskwidget-avatar-image>
-    
-    
+                          <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive">
+                            
+                            <tiledeskwidget-avatar-image class="slide-in-left"  
+                                [senderID]="message.sender">
+                            </tiledeskwidget-avatar-image>
+
+                            <!--backgroundColor non viene ancora usato -->
+                            <tiledeskwidget-bubble-message class="messages msg_receive slide-in-left"
+                                [message]="message"
+                                [textColor]="'black'"  
+                                [backgroundColor]="'light-white'"
+                                (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+                                (onAfterMessageRender)="returnOnAfterMessageRender($event)">
+                            </tiledeskwidget-bubble-message>
+
+                          </div>
+                          
+                          <!-- <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive slide-in-left">
+                              
                               <div class="messages msg_receive" [class.emoticon]="message.emoticon">
                   
-                                  <!-- <div>{{triggerBeforeMessageRender(message)}}</div> -->
-    
-                                  <div>
-                                      <!-- message type:: image -->
-                                      <!-- <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
-                                          <img class="message-contentX message-content-imageX"
-                                          [src]="message.metadata.src"/>
-                                      </div> -->
-                                      <tiledeskwidget-image *ngIf="message.type == 'image' && message.metadata"
-                                        [metadata]="message.metadata"
-                                        [width]="getMetadataSize(message.metadata).width"
-                                        [height]="getMetadataSize(message.metadata).height">
-                                      </tiledeskwidget-image>
-    
-                                      <tiledeskwidget-frame *ngIf="message.type == 'frame' && message.metadata"
-                                        [metadata]="message.metadata"
-                                        [width]="getMetadataSize(message.metadata).width"
-                                        [height]="getMetadataSize(message.metadata).height">
-                                      </tiledeskwidget-frame>
+                                <div>
 
-                                      <!-- <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'max-width': '100%', 'width': message.metadata.width, 'height': message.metadata.height }">
-                                          <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
-                                      </div> -->
-                                     
+                                    <tiledeskwidget-image *ngIf="message.type == 'image' && message.metadata"
+                                      [metadata]="message.metadata"
+                                      [width]="getMetadataSize(message.metadata).width"
+                                      [height]="getMetadataSize(message.metadata).height">
+                                    </tiledeskwidget-image>
+  
+                                    <tiledeskwidget-frame *ngIf="message.type == 'frame' && message.metadata"
+                                      [metadata]="message.metadata"
+                                      [width]="getMetadataSize(message.metadata).width"
+                                      [height]="getMetadataSize(message.metadata).height">
+                                    </tiledeskwidget-frame>
+
+                                    <!- - <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'max-width': '100%', 'width': message.metadata.width, 'height': message.metadata.height }">
+                                        <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
+                                    </div> -- >
+                                   
+  
+                                    <! -- message type:: text - ->
+                                    <! -- <div *ngIf="message.type == 'text';">  {{message.timestamp  | amTimeAgo}}- ->
+                                    <div *ngIf="message.text" [tooltip]="timeTooltipRight" [options]="tooltipOptions" placement="right" content-type="template" (click)="handleTooltipEvents($event)">
+                                        <ng-template #timeTooltipRight>
+                                            <span>{{message.timestamp  | amTimeAgo}}</span>
+                                        </ng-template>
+
+                                        <tiledeskwidget-text
+                                              [text]="message.text"
+                                              [color]="'black'"
+                                              (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+                                              (onAfterMessageRender)="returnOnAfterMessageRender($event)">
+                                        </tiledeskwidget-text>
+
+                                    </div>
+                                </div>
+  
+                            </div>
     
-                                      <!-- message type:: text -->
-                                      <!-- <div *ngIf="message.type == 'text';">  {{message.timestamp  | amTimeAgo}}-->
-                                      <div *ngIf="message.text" [tooltip]="timeTooltipRight" [options]="tooltipOptions" placement="right" content-type="template" (click)="handleTooltipEvents($event)">
-                                          <ng-template #timeTooltipRight>
-                                              <span>{{message.timestamp  | amTimeAgo}}</span>
-                                          </ng-template>
-                                          <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here is ignored</div>
-    
-                                          <ng-template #contentPopup>
-                                              <p style="text-decoration: underline; padding:8px; cursor: pointer;"
-                                                  (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}
-                                              </p>
-                                          </ng-template>
-                                          <ng-template #contentNewTab>
-    
-    
-                                              <!-- old -->
-                                              <!-- <p>{{printTrustedHtml(message.text)}}</p> -->
-                                              <!-- <div [innerHTML]="message.text | safeHtml"></div> 
-                                              [innerHTML]="printMessage(message, messageEl, this) | marked"-->
-                                              <!-- <p #messageEl class="message_innerhtml" >{{message.text}}</p> -->
-                                              <!-- <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p> -->
-                                              <tiledeskwidget-text
-                                                [text]="message.text"
-                                                [color]="'black'"
-                                                (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-                                                (onAfterMessageRender)="returnOnAfterMessageRender($event)">
-                                              </tiledeskwidget-text>
-                                              <!-- <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p> -->
-                                              <!-- <p [innerHTML]="message.uid | linky"></p> -->
-    
-                                              <!-- <p [innerHTML]="videoUrl"></p> -->
-                                              
-                                              <!-- <p [innerHTML]="message.print() | linky"></p> -->
-                                              <!-- <p [innerHTML]="message.text | linky"></p> -->
-    
-                                          </ng-template>
-                                      </div>
-                                  </div>
-    
-                              </div>
-    
-                          </div>
+                          </div> -->
     
     
                           <div class="time slide-in-left" [ngClass]="{'sender' : message.sender == senderId}">
@@ -176,8 +156,7 @@
                                   [message]="message"
                                   [isLastMessage] = "isLastMessage(message.uid)"
                                   [stylesMap]="stylesMap"
-                                  (onClickTextActionButtonAttachment)="returnOnTextActionButtonClicked($event)"
-                                  (onClickUrlAndActionButtonAttachment)="returnOnUrlAndActionButtonClicked($event)">
+                                  (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)">
                               </tiledeskwidget-message-attachment>
                           </div>
     

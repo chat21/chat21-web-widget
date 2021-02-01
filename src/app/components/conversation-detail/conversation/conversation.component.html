@@ -29,8 +29,7 @@
         [stylesMap]="styleMap"
         (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
         (onAfterMessageRender)="returnOnAfterMessageRender($event)"
-        (onClickTextActionButtonAttachment)="returnOnTextActionButtonClicked($event)"
-        (onClickUrlAndActionButtonAttachment)="returnOnUrlAndActionButtonClicked($event)"
+        (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)"
         (onScrollContent)="returnOnScrollContent($event)">
     </tiledeskwidget-conversation-content>
 
@@ -55,6 +54,7 @@
             [widgetTitle]="g.widgetTitle"
             [showAttachmentButton]="g.showAttachmentButton"
             [showWidgetNameInConversation]="g.showWidgetNameInConversation"
+            [isConversationArchived]="isConversationArchived"
             [stylesMap]="styleMap"
             [translationMap]="translationMapFooter"
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"

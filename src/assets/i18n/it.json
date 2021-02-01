@@ -1,5 +1,5 @@
 {
-    "LABEL_TU": "tu: ",
+    "LABEL_TU": "",
     "LABEL_PLACEHOLDER": "Scrivi la tua domanda...",
     "LABEL_START_NW_CONV": "Nuova conversazione",
     "LABEL_FIRST_MSG": "Descrivi sinteticamente il tuo problema, ti metteremo in contatto con un operatore specializzato.",
@@ -49,5 +49,11 @@
     "SEE_PREVIOUS": "vedi precedenti",
     "WAITING_TIME_FOUND": "Il team tipicamente risponde in ",
     "WAITING_TIME_NOT_FOUND": "Vi risponderemo appena possibile",
-    "CLOSED": "CHIUSA"
+    "CLOSED": "CHIUSA",
+    "INFO_SUPPORT_USER_ADDED_SUBJECT":"tu",
+    "INFO_SUPPORT_USER_ADDED_YOU_VERB":"sei stato aggiunto ",
+    "INFO_SUPPORT_USER_ADDED_COMPLEMENT":"si è unito",
+    "INFO_SUPPORT_USER_ADDED_VERB":"alla chat",
+    "INFO_SUPPORT_CHAT_REOPENED":"Chat riaperta",
+    "INFO_SUPPORT_CHAT_CLOSED":"Chat chiusa"
 }

@@ -144,10 +144,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // firebase.initializeApp(environment.firebase);  // here shows the error
         // that.g.wdLog(['appConfigService.getConfig().firebase', appConfigService.getConfig().firebase);
         
-        //INIT TRIGGER-HANDLER
-        this.triggerHandler.setElement(this.el)
-        this.triggerHandler.setWindowContext(this.g.windowContext)
-
 
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             // tslint:disable-next-line:max-line-length
@@ -174,18 +170,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             const that = this;
             const subChangedConversation = this.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
                 // that.ngZone.run(() => {
-                    if ( that.g.isOpen === true && conversation) {
-                        that.g.setParameter('displayEyeCatcherCard', 'none');
+                    if(conversation){
                         that.triggerOnConversationUpdated(conversation);
+                    }else {
+                        console.log('oBSconversationChanged null: errorrr')
+                        return;
+                    }
+                    if ( that.g.isOpen === true ) {
+                        that.g.setParameter('displayEyeCatcherCard', 'none');
+                        
                         that.g.wdLog([' obsChangeConversation ::: ' + conversation]);
-                        if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                        if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
                             return;
                         }
                         if (conversation.is_new) {
                             this.soundMessage();
                         }
+                        
+                        
+                    }else {
+                        //widget closed
                         that.lastConversation = conversation;
                         this.g.isOpenNewMessage = true;
+
+                        let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+                        this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+                        console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
                     }
                 // });
             });
@@ -202,7 +212,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                         if (conversation.is_new) {
                             this.soundMessage();
-                            this.g.setParameter('conversationsBadge', this.g.conversationsBadge++);
+                            
                         }
                         that.lastConversation = conversation;
                         this.g.isOpenNewMessage = true;
@@ -396,6 +406,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private initAll() {
         // that.g.wdLog(['---------------- initAll ---------------- ');
         this.addComponentToWindow(this.ngZone);
+
+        //INIT TRIGGER-HANDLER
+        this.triggerHandler.setElement(this.el)
+        this.triggerHandler.setWindowContext(this.g.windowContext)
 
         /** TRANSLATION LOADER: */
         //  this.translatorService.translate(this.g);
@@ -1085,15 +1099,25 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     initConversationHandler(conversationWith: string ): ConversationHandlerService{
         const tenant = this.g.tenant;
         const keys = [
-            'LABEL_AVAILABLE',
-            'LABEL_NOT_AVAILABLE',
+            // 'LABEL_AVAILABLE',
+            // 'LABEL_NOT_AVAILABLE',
+            // 'LABEL_TODAY',
+            // 'LABEL_TOMORROW',
+            // 'LABEL_TO',
+            // 'LABEL_LAST_ACCESS',
+            // 'ARRAY_DAYS',
+            // 'LABEL_ACTIVE_NOW',
+            // 'LABEL_WRITING',
+            'INFO_SUPPORT_USER_ADDED_SUBJECT',
+            'INFO_SUPPORT_USER_ADDED_YOU_VERB',
+            'INFO_SUPPORT_USER_ADDED_COMPLEMENT',
+            'INFO_SUPPORT_USER_ADDED_VERB',
+            'INFO_SUPPORT_CHAT_REOPENED',
+            'INFO_SUPPORT_CHAT_CLOSED',
             'LABEL_TODAY',
             'LABEL_TOMORROW',
             'LABEL_TO',
-            'LABEL_LAST_ACCESS',
             'ARRAY_DAYS',
-            'LABEL_ACTIVE_NOW',
-            'LABEL_WRITING'
           ];
         const translationMap = this.translateService.translateLanguage(keys);
         //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
@@ -1187,8 +1211,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private signInWithCustomToken(token: string) {
         const that = this;
         try {
-            this.authService.signInWithCustomToken(token)
-            .subscribe(resp => {
+            this.authService.signInWithCustomToken(token).subscribe(resp => {
                 that.g.wdLog(['signInWithCustomToken token ', resp]);
                  if (resp.success === true && resp.token) {
                      if (resp.user) {
@@ -1332,8 +1355,28 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** close popup conversation */
     private f21_close() {
         this.g.setIsOpen(false);
+        this.g.isOpenNewMessage = false;
         this.storageService.setItem('isOpen', 'false');
         this.triggerOnCloseEvent();
+    }
+
+    /**open widget in conversation when is closed */
+    private _f21_open() {
+        // const senderId = this.g.senderId;
+        // console.log('f21_open senderId' , senderId) 
+        // console.log()
+        // this.g.wdLog(['f21_open senderId: ', senderId]);
+        // if (senderId) {
+            // chiudo callout
+            // this.g.setParameter('displayEyeCatcherCard', 'none');
+            // this.g.isOpen = true; // !this.isOpen;
+            this.g.setIsOpen(true);
+            // this.isInitialized = true;
+            this.storageService.setItem('isOpen', 'true');
+            // this.g.displayEyeCatcherCard = 'none';
+            this.triggerOnOpenEvent();
+            // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
+        // }
     }
 
 
@@ -1629,9 +1672,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnSelectedConversation($event) {
         if ($event) {
-            // if (this.g.isOpen === false) {
-            //     this.f21_open();
-            // }
+            if (this.g.isOpen === false) {
+                //this.f21_open();
+                this._f21_open()
+            }
             this.conversationSelected = $event;
             this.g.setParameter('recipientId', $event.recipient);
             this.isOpenConversation = true;

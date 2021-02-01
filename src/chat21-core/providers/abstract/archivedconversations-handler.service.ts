@@ -23,6 +23,7 @@ export abstract class ArchivedConversationsHandlerService {
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;
   abstract connect(): void;
   abstract countIsNew(): number;
+  abstract setConversationRead(conversation: ConversationModel)
   abstract dispose(): void;
   abstract getConversationDetail(tenant: string, userId: string, conversationId: string): void;
   abstract getClosingConversation(conversationId: string): boolean;

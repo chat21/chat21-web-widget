@@ -12,6 +12,7 @@ export class TextButtonComponent implements OnInit {
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
+  public type: string = "text"
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
@@ -20,7 +21,8 @@ export class TextButtonComponent implements OnInit {
   }
 
   actionButtonText(){
-    this.onButtonClicked.emit(this.button.value)
+    const event = { target: this, currentTarget: this}
+    this.onButtonClicked.emit(event)
   }
 
 }

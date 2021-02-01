@@ -23,24 +23,23 @@
 
 <div #div_attached>
   <label *ngIf="showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
-  <span class="v-align-center">
-      <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
-          <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
-          <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
-      </svg>
-  </span>
-  <input 
-  [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
-  tabindex="1503" 
-  type="file" 
-  aria-label="seleziona allegato" 
-  accept="image/*,.pdf,.zip" 
-  name="chat21-file"
-  id="chat21-file" 
-  class="inputfile" 
-  [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
-  (change)="detectFiles($event)" 
-  />
+    <span class="v-align-center">
+        <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
+            <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
+            <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
+        </svg>
+    </span>
+    <input 
+            [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
+            tabindex="1503" 
+            type="file" 
+            aria-label="seleziona allegato" 
+            accept="image/*,.pdf,.zip" 
+            name="chat21-file"
+            id="chat21-file" 
+            class="inputfile" 
+            [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
+            (change)="detectFiles($event)"/>
   </label>
   <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
   <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">

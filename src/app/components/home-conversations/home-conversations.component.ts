@@ -77,6 +77,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   langService: HumanizeDurationLanguage = new HumanizeDurationLanguage();
   humanizer: HumanizeDuration;
   humanWaitingTime: string;
+  WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER: string //new
 
   translationMapConversation: Map<string, string>;
   constructor(
@@ -194,8 +195,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   showWaitingTime() {
     const that = this;
     const projectid = this.g.projectid;
-    this.waitingService.getCurrent(projectid)
-    .subscribe(response => {
+    this.waitingService.getCurrent(projectid).subscribe(response => {
         that.g.wdLog(['response waiting', response]);
         // console.log('response waiting ::::', response);
        if (response && response.length > 0 && response[0].waiting_time_avg) {
@@ -208,6 +208,22 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
         const lang = that.translatorService.getLanguage();
         // console.log('lang', lang);
         that.humanWaitingTime = this.humanizer.humanize(wt, {language: lang});
+        // console.log('LIST CONVERSATION humanWaitingTime ', that.humanWaitingTime);
+        // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND ',  this.g.WAITING_TIME_FOUND)
+        // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND contains $reply_time',  this.g.WAITING_TIME_FOUND.includes("$reply_time") )
+       
+        // REPLACE
+        if (this.g.WAITING_TIME_FOUND.includes("$reply_time")) {
+          // REPLACE if exist
+          this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND.replace("$reply_time", that.humanWaitingTime);
+          console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER  REPLACE if exist',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
+        } else {
+          this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND + ' ' + that.humanWaitingTime
+        }
+        // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
+        // console.log('LIST CONVERSATION g.dynamicWaitTimeReply ',  this.g.dynamicWaitTimeReply )
+        // console.log('LIST CONVERSATION typeof g.dynamicWaitTimeReply ', typeof this.g.dynamicWaitTimeReply )
+
         // console.log('xxx', this.humanizer.humanize(wt));
         // 'The team typically replies in ' + moment.duration(response[0].waiting_time_avg).format();
        }

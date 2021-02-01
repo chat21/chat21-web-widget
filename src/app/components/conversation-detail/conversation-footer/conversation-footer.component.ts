@@ -28,6 +28,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() widgetTitle: string;
   @Input() showAttachmentButton: boolean;
   @Input() showWidgetNameInConversation: boolean
+  @Input() isConversationArchived: boolean;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();

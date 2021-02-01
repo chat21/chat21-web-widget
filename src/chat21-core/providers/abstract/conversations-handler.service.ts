@@ -1,9 +1,10 @@
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // models
-import { ConversationModel } from '../../models/conversation';
 import { ImageRepoService } from './image-repo.service';
+import { ConversationModel } from './../../models/conversation';
 // import { ImageRepoService } from './image-repo.service';
 
 // @Injectable({
@@ -29,6 +30,7 @@ export abstract class ConversationsHandlerService {
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;
   abstract connect(): void;
   abstract countIsNew(): number;
+  abstract setConversationRead(conversation: ConversationModel): void;
   abstract dispose(): void;
   abstract getConversationDetail(tenant: string, userId: string, conversationId: string): void;
   abstract getClosingConversation(conversationId: string): boolean;
