@@ -1418,7 +1418,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.g.wdLog(['f21_open senderId: ', senderId]);
         // if (senderId) {
             // chiudo callout
-            // this.g.setParameter('displayEyeCatcherCard', 'none');
+            this.g.setParameter('displayEyeCatcherCard', 'none');
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             // this.isInitialized = true;
