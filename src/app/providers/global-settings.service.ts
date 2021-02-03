@@ -422,10 +422,10 @@ export class GlobalSettingsService {
         // WIDGET
         try {
             const variables = response.project.widget;
-            console.log('setVariablesFromService variables', variables)
+            // console.log('setVariablesFromService variables', variables)
             if (typeof variables !== 'undefined') {
                 for (const key of Object.keys(variables)) {
-                    console.log('setVariablesFromService key', key, 'variables[key]', variables[key])
+                    // console.log('setVariablesFromService key', key, 'variables[key]', variables[key])
                     if (key === 'align' && variables[key] === 'left') {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.left = '0!important';
@@ -439,7 +439,7 @@ export class GlobalSettingsService {
                     // if (variables[key] && variables[key] !== null && key === 'dynamicWaitTimeReply') {
                     // if (key === 'dynamicWaitTimeReply') {
                     if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
-                        console.log('setVariablesFromService > key', key, ' > variables[key]', variables[key])
+                        // console.log('setVariablesFromService > key', key, ' > variables[key]', variables[key])
                         globals[key] = stringToBoolean(variables[key]);
                     }
 
