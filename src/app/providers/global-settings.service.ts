@@ -66,38 +66,38 @@ export class GlobalSettingsService {
         */
         // const projectid = globals.projectid;
         this.getProjectParametersById(projectid)
-        .subscribe( response => {
-            const project = response['project'];
-            // console.log('1 - setParameters ', project);
-            if (project) {
-                that.globals.project.initialize(
-                    project['id'],
-                    project['activeOperatingHours'],
-                    project['channels'],
-                    project['name'],
-                    project['createdAt'],
-                    project['createdBy'],
-                    project['isActiveSubscription'],
-                    project['profile'],
-                    project['agents'],
-                    project['trialDays'],
-                    project['type'],
-                    project['status'],
-                    project['trialDaysLeft'],
-                    project['trialExpired'],
-                    project['updatedAt'],
-                    project['versions']
-                );
-            }
-            // console.log('globals.project ----------------->', that.globals.project);
-            that.setParameters(response);
-        }, (error) => {
-            // console.log('2 - ::getProjectParametersById', error);
-            that.setParameters(null);
-        }, () => {
-            // console.log('3 - setParameters ');
-            // that.setParameters(null);
-        });
+            .subscribe(response => {
+                const project = response['project'];
+                // console.log('1 - setParameters ', project);
+                if (project) {
+                    that.globals.project.initialize(
+                        project['id'],
+                        project['activeOperatingHours'],
+                        project['channels'],
+                        project['name'],
+                        project['createdAt'],
+                        project['createdBy'],
+                        project['isActiveSubscription'],
+                        project['profile'],
+                        project['agents'],
+                        project['trialDays'],
+                        project['type'],
+                        project['status'],
+                        project['trialDaysLeft'],
+                        project['trialExpired'],
+                        project['updatedAt'],
+                        project['versions']
+                    );
+                }
+                // console.log('globals.project ----------------->', that.globals.project);
+                that.setParameters(response);
+            }, (error) => {
+                // console.log('2 - ::getProjectParametersById', error);
+                that.setParameters(null);
+            }, () => {
+                // console.log('3 - setParameters ');
+                // that.setParameters(null);
+            });
 
     }
 
@@ -322,7 +322,7 @@ export class GlobalSettingsService {
      * D: imposto i parametri recuperati da url parameters in global
      * E: imposto i parametri recuperati dallo storage in global
     */
-    setParameters(response: any ) {
+    setParameters(response: any) {
         this.globals.wdLog(['***************** setParameters *****************', response]);
         if (response !== null) {
             this.setVariablesFromService(this.globals, response);
@@ -353,15 +353,15 @@ export class GlobalSettingsService {
         }
         if (this.globals.align === 'left') {
             divTiledeskiframe.classList.add('align-left');
-            divTiledeskiframe.style.left =  this.globals.marginX;
+            divTiledeskiframe.style.left = this.globals.marginX;
         } else {
             divTiledeskiframe.classList.add('align-right');
-            divTiledeskiframe.style.right =  this.globals.marginX;
+            divTiledeskiframe.style.right = this.globals.marginX;
         }
         if (this.globals.isMobile === false) {
-            divTiledeskiframe.style.bottom =  this.globals.marginY;
+            divTiledeskiframe.style.bottom = this.globals.marginY;
         } else {
-            divTiledeskiframe.style.bottom =  '0px';
+            divTiledeskiframe.style.bottom = '0px';
         }
         // console.log('this.globals.fullscreenMode' + this.globals.fullscreenMode);
         if (this.globals.fullscreenMode === true) {
@@ -422,9 +422,10 @@ export class GlobalSettingsService {
         // WIDGET
         try {
             const variables = response.project.widget;
-            // console.log('setVariablesFromService variables', variables)  
+            console.log('setVariablesFromService variables', variables)
             if (typeof variables !== 'undefined') {
                 for (const key of Object.keys(variables)) {
+                    console.log('setVariablesFromService key', key, 'variables[key]', variables[key])
                     if (key === 'align' && variables[key] === 'left') {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.left = '0!important';
@@ -432,9 +433,16 @@ export class GlobalSettingsService {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.right = '0!important';
                     }
-                    if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
+                    if (variables[key] && variables[key] !== null && key !== 'online_msg') {
                         globals[key] = stringToBoolean(variables[key]);
                     }
+                    // if (variables[key] && variables[key] !== null && key === 'dynamicWaitTimeReply') {
+                    // if (key === 'dynamicWaitTimeReply') {
+                    if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
+                        console.log('setVariablesFromService > key', key, ' > variables[key]', variables[key])
+                        globals[key] = stringToBoolean(variables[key]);
+                    }
+
                 }
             }
         } catch (error) {
@@ -445,7 +453,7 @@ export class GlobalSettingsService {
         try {
             const strIp = response['ip'];
             const IP = strIp.split(',').shift();
-            if ( !this.globals.attributes ) {
+            if (!this.globals.attributes) {
                 this.globals.attributes = {};
             }
             this.globals.attributes['ipAddress'] = IP;
@@ -489,7 +497,7 @@ export class GlobalSettingsService {
         if (!windowContext['tiledesk']) {
             return;
         } else {
-            const baseLocation =  windowContext['tiledesk'].getBaseLocation();
+            const baseLocation = windowContext['tiledesk'].getBaseLocation();
             if (baseLocation !== undefined) {
                 // globals.setParameter('baseLocation', baseLocation);
                 globals.baseLocation = baseLocation;
@@ -548,7 +556,7 @@ export class GlobalSettingsService {
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
         }
 
-       
+
         TEMP = tiledeskSettings['isOpen'];
         // this.globals.wdLog(['12 - isOpen:: ', TEMP);
         if (TEMP !== undefined) {
@@ -568,7 +576,7 @@ export class GlobalSettingsService {
             // globals.setParameter('lang', TEMP);
         }
         TEMP = tiledeskSettings['align'];
-        this.globals.wdLog(['1 - align:: ', TEMP ]);
+        this.globals.wdLog(['1 - align:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.align = TEMP;
             const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
@@ -862,7 +870,7 @@ export class GlobalSettingsService {
         }
         TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
         if (TEMP !== null) {
-          this.globals.isLogoutEnabled = (TEMP === true) ? true : false;
+            this.globals.isLogoutEnabled = (TEMP === true) ? true : false;
         }
         TEMP = el.nativeElement.getAttribute('isLogEnabled');
         if (TEMP !== null) {
@@ -966,7 +974,7 @@ export class GlobalSettingsService {
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_align');
-        this.globals.wdLog(['2 - align:: ', TEMP ]);
+        this.globals.wdLog(['2 - align:: ', TEMP]);
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
             const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
@@ -1142,7 +1150,7 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_dynamicWaitTimeReply');
         if (TEMP) {
             globals.dynamicWaitTimeReply = stringToBoolean(TEMP);
-            console.log('GLOBAL-SETTINGS setVariablesFromUrlParameters dynamicWaitTimeReply ', TEMP)  
+            console.log('GLOBAL-SETTINGS setVariablesFromUrlParameters dynamicWaitTimeReply ', TEMP)
         }
 
     }
@@ -1167,7 +1175,7 @@ export class GlobalSettingsService {
         }
     }
 
-     // ========= begin:: GET DEPARTEMENTS ============//
+    // ========= begin:: GET DEPARTEMENTS ============//
     /**
      * INIT DEPARTMENT:
      * get departments list
@@ -1178,7 +1186,7 @@ export class GlobalSettingsService {
         this.globals.setParameter('departmentSelected', null);
         this.globals.setParameter('departmentDefault', null);
         this.globals.wdLog(['departments ::::', departments]);
-        if (departments === null ) { return; }
+        if (departments === null) { return; }
         this.globals.departments = departments;
         // console.log('departments.length', departments.length);
         if (departments.length === 1) {
@@ -1300,7 +1308,7 @@ export class GlobalSettingsService {
      */
     private setAvailableAgentsStatus(availableAgents) {
         this.globals.setParameter('availableAgentsStatus', false);
-        if ( availableAgents === null ) { return; }
+        if (availableAgents === null) { return; }
         if (availableAgents.length > 0) {
             // this.globals.areAgentsAvailable = true;
             // this.globals.setParameter('areAgentsAvailable', true);
@@ -1340,8 +1348,8 @@ export class GlobalSettingsService {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         return this.http
-          .get(url, { headers })
-          .map((response) => response.json());
+            .get(url, { headers })
+            .map((response) => response.json());
     }
 
 }

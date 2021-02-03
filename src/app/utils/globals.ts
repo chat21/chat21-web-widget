@@ -268,8 +268,11 @@ export class Globals {
     The default value is Tiledesk. */
     
     
-    this.dynamicWaitTimeReply = false;
-    /** ************** new ************** */ 
+    this.dynamicWaitTimeReply = true;  
+    /**
+     * The user can decide whether or not to share the 
+     * average response time of his team (if 'dynamicWaitTimeReply' is false the WAITING_TIME_NOT_FOUND will always be displayed) 
+     * is set to true for backward compatibility with old projects */ 
 
     this.hideHeaderCloseButton = false;
     /** Hide the close button in the widget header. Permitted values: true,

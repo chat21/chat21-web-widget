@@ -181,7 +181,7 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
         // console.log('LIST CONVERSATION humanWaitingTime ', this.humanizer.humanize(wt));
         // console.log('LIST CONVERSATION humanWaitingTime ', that.humanWaitingTime);
         // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND ',  this.g.WAITING_TIME_FOUND)
-        // console.log('LIST CONVERSATION g.WAITING_TIME_FOUND contains $reply_time',  this.g.WAITING_TIME_FOUND.includes("$reply_time") )
+        console.log('LIST CONVERSATION g.WAITING_TIME_FOUND contains $reply_time',  this.g.WAITING_TIME_FOUND.includes("$reply_time") )
        
 
         // NELLA DASHBOARD AGGIUNGO $reply_time QUANDO UN UTENTE SELEZIONA UNA TRADUZIONE NEL COMPONENTE WIDGET
@@ -191,7 +191,6 @@ export class ListConversationsComponent implements OnInit, AfterViewInit, OnDest
           this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND.replace("$reply_time", that.humanWaitingTime);
           // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER  REPLACE if exist',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
         } else {
-          
           this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND + ' ' + that.humanWaitingTime
         }
 
