@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.0.99
+- Set "dynamicWaitTimeReply" to false by default
+
 ### 4.0.98
 - bug fix: 'standard' callout remains open when "last message" callout opens
 - Changes the value of the 'remoteConfig' property to false in the pre and prod environments
