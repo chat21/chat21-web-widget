@@ -10,7 +10,7 @@ import 'firebase/database';
 import 'firebase/auth';
 
 // services
-import { AuthService } from '../abstract/auth.service';
+import { AuthService2 } from '../abstract/auth.service';
 // import { ImageRepoService } from '../abstract/image-repo.service';
 // import { FirebaseImageRepoService } from './firebase-image-repo';
 
@@ -26,14 +26,14 @@ import {
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
-export class FirebaseAuthService extends AuthService {
+export class FirebaseAuthService extends AuthService2 {
 
   // BehaviorSubject
   BSAuthStateChanged: BehaviorSubject<any>;
   BSSignOut: BehaviorSubject<any>;
   // firebaseSignInWithCustomToken: BehaviorSubject<any>;
 
-  // piblic
+  // public params
   // private persistence: string;
   public SERVER_BASE_URL: string;
 
@@ -41,6 +41,7 @@ export class FirebaseAuthService extends AuthService {
   private URL_TILEDESK_SIGNIN: string;
   private URL_TILEDESK_SIGNIN_ANONYMOUSLY: string;
   private URL_TILEDESK_CREATE_CUSTOM_TOKEN: string;
+  private URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN: string;
   //TODO-GAB
   // private imageRepo: ImageRepoService = new FirebaseImageRepoService();
 
@@ -51,7 +52,7 @@ export class FirebaseAuthService extends AuthService {
   constructor(
     // private events: EventsService,
     public http: HttpClient,
-    public route: ActivatedRoute
+    //public route: ActivatedRoute
   ) {
     super();
   }
@@ -60,9 +61,12 @@ export class FirebaseAuthService extends AuthService {
    *
    */
   initialize() {
+    this.SERVER_BASE_URL = this.getBaseUrl();
     this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
     this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
+    this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'auth/signinWithCustomToken';
     this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'chat21/firebase/auth/createCustomToken';
+    
     this.checkIsAuth();
     this.onAuthStateChanged();
   }
@@ -103,12 +107,12 @@ export class FirebaseAuthService extends AuthService {
 
   /** */
   getToken(): string {
-    console.log('UserService::getFirebaseToken', this.firebaseToken);
+    // console.log('UserService::getFirebaseToken', this.firebaseToken);
     return this.firebaseToken;
   }
 
   getTiledeskToken(): string {
-    console.log('UserService::tiledeskToken', this.tiledeskToken);
+    // console.log('UserService::tiledeskToken', this.tiledeskToken);
     return this.tiledeskToken;
   }
 
@@ -117,7 +121,6 @@ export class FirebaseAuthService extends AuthService {
    * FIREBASE: onAuthStateChanged
    */
   onAuthStateChanged() {
-    console.log('UserService::onAuthStateChanged');
     const that = this;
     firebase.auth().onAuthStateChanged(user => {
       console.log(' onAuthStateChanged', user);
@@ -126,7 +129,8 @@ export class FirebaseAuthService extends AuthService {
         that.BSAuthStateChanged.next('offline');
       } else {
         console.log(' 2 - PASSO ONLINE AL CHAT MANAGER');
-        that.BSAuthStateChanged.next(user);
+        // that.BSAuthStateChanged.next(user);
+        that.BSAuthStateChanged.next('online');
       }
     });
   }
@@ -148,8 +152,7 @@ export class FirebaseAuthService extends AuthService {
    * FIREBASE: signInWithCustomToken
    * @param token
    */
-  signInFirebaseWithCustomToken(token: string): any {
-    console.log('signInWithCustomToken:', token);
+  signInFirebaseWithCustomToken(token: string): Promise<any> {
     const that = this;
     let firebasePersistence;
     switch (this.getPersistence()) {
@@ -170,17 +173,14 @@ export class FirebaseAuthService extends AuthService {
         break;
       }
     }
-    return firebase.auth().setPersistence(firebasePersistence)
-    .then( async () => {
-      return firebase.auth().signInWithCustomToken(token)
-      .then( async (response) => {
-        // that.currentUser = response.user;
-        // that.firebaseSignInWithCustomToken.next(response);
-      })
-      .catch((error) => {
-        console.error('Error: ', error);
-        // that.firebaseSignInWithCustomToken.next(null);
-      });
+    return firebase.auth().setPersistence(firebasePersistence).then( async () => {
+      return firebase.auth().signInWithCustomToken(token).then( async (response) => {
+                // that.currentUser = response.user;
+                // that.firebaseSignInWithCustomToken.next(response);
+            }).catch((error) => {
+                console.error('Error: ', error);
+                // that.firebaseSignInWithCustomToken.next(null);
+              });
     })
     .catch((error) => {
       console.error('Error: ', error);
@@ -196,13 +196,11 @@ export class FirebaseAuthService extends AuthService {
    */
   createUserWithEmailAndPassword(email: string, password: string): any {
     const that = this;
-    return firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((response) => {
+    return firebase.auth().createUserWithEmailAndPassword(email, password).then((response) => {
       console.log('firebase-create-user-with-email-and-password');
       // that.firebaseCreateUserWithEmailAndPassword.next(response);
       return response;
-    })
-    .catch((error) => {
+    }).catch((error) => {
         console.log('error: ', error.message);
         return error;
     });
@@ -214,8 +212,7 @@ export class FirebaseAuthService extends AuthService {
    */
   sendPasswordResetEmail(email: string): any {
     const that = this;
-    return firebase.auth().sendPasswordResetEmail(email).
-    then(() => {
+    return firebase.auth().sendPasswordResetEmail(email).then(() => {
       console.log('firebase-send-password-reset-email');
       // that.firebaseSendPasswordResetEmail.next(email);
     }).catch((error) => {
@@ -228,8 +225,7 @@ export class FirebaseAuthService extends AuthService {
    */
   private signOut() {
     const that = this;
-    firebase.auth().signOut()
-    .then(() => {
+    firebase.auth().signOut().then(() => {
       console.log('firebase-sign-out');
       // cancello token
       localStorage.removeItem('tiledeskToken');
@@ -262,7 +258,6 @@ export class FirebaseAuthService extends AuthService {
 
 // ********************* TILEDESK AUTH ********************* //
   /**
-   *
    * @param email
    * @param password
    */
@@ -290,7 +285,10 @@ export class FirebaseAuthService extends AuthService {
     });
   }
 
-  signInAnonymously(projectID: string) {
+  /**
+   * @param projectID
+   */
+  signInAnonymously(projectID: string): Promise<any> {
     console.log('signInAnonymously', projectID);
     const httpHeaders = new HttpHeaders();
     
@@ -301,15 +299,46 @@ export class FirebaseAuthService extends AuthService {
       id_project: projectID
     };
     const that = this;
-    this.http.post(this.URL_TILEDESK_SIGNIN_ANONYMOUSLY, postData, requestOptions).subscribe((data) => {
+    return new Promise((resolve, reject)=> {
+      this.http.post(this.URL_TILEDESK_SIGNIN_ANONYMOUSLY, postData, requestOptions).subscribe((data) => {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
           localStorage.setItem('tiledeskToken', that.tiledeskToken);
           that.createFirebaseCustomToken();
+          resolve(this.currentUser)
         }
     }, (error) => {
       console.log(error);
+      reject(error)
+    });
+    })
+    
+  }
+
+  /**
+   * @param tiledeskToken
+   */
+  signInWithCustomToken(tiledeskToken: string): Promise<any>{
+    const headers = new HttpHeaders({
+      'Content-type': 'application/json',
+      Authorization: tiledeskToken
+    });
+    const requestOptions = { headers: headers };
+    const that = this;
+    return new Promise((resolve, reject)=> {
+      this.http.post(this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN, null, requestOptions).subscribe((data) => {
+        if (data['success'] && data['token']) {
+          that.tiledeskToken = data['token'];
+          this.createCompleteUser(data['user']);
+          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          that.createFirebaseCustomToken();
+          resolve(this.currentUser)
+        }
+      }, (error) => {
+        console.log(error);
+        reject(error)
+      });
     });
   }
 
@@ -390,13 +419,19 @@ export class FirebaseAuthService extends AuthService {
     const responseType = 'text';
     const postData = {};
     const that = this;
-    this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType}).subscribe(data =>  {
-      that.firebaseToken = data;
-      localStorage.setItem('firebaseToken', that.firebaseToken);
-      that.signInFirebaseWithCustomToken(data);
-    }, error => {
-      console.log(error);
-    });
+      this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType}).subscribe(data =>  {
+        that.firebaseToken = data;
+        localStorage.setItem('firebaseToken', that.firebaseToken);
+        that.signInFirebaseWithCustomToken(data).then(res => {
+            
+        }).catch(error => {
+          
+        });
+      }, error => {
+        console.log(error);
+        
+      });
+    
   }
 
 

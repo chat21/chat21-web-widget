@@ -1,6 +1,6 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { MAX_WIDTH_IMAGES,} from '../../../utils/constants';
+import { Component, Input, OnInit } from '@angular/core';
+
 @Component({
   selector: 'tiledeskwidget-frame',
   templateUrl: './frame.component.html',
@@ -25,8 +25,5 @@ export class FrameComponent implements OnInit {
     this.url = null;
   }
 
-  // url(path){
-  //   return this.sanitizer.bypassSecurityTrustResourceUrl(path);
-  // }
 
 }

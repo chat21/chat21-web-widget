@@ -40,7 +40,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     conversations: Array<ConversationModel> = [];
     uidConvSelected: string;
     tenant: string;
-    imageRepo: ImageRepoService = new FirebaseImageRepoService();
+    // imageRepo: ImageRepoService = new FirebaseImageRepoService();
 
     // private params
     private loggedUserId: string;
@@ -117,6 +117,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     setConversationRead(conversation: ConversationModel): void {
         const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
         const update = {};
+        console.log('connect -------> conversations update', urlUpdate);
         update['/is_new'] = false;
         firebase.database().ref(urlUpdate).update(update);
     }
@@ -335,7 +336,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      */
     private completeConversation(conv): ConversationModel {
         console.log('completeConversation', conv);
-        const LABEL_TU = this.translationMap.get('LABEL_TU');
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
             conv.sender_fullname = conv.sender;
@@ -346,17 +346,15 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         let conversation_with_fullname = conv.sender_fullname;
         let conversation_with = conv.sender;
         if (conv.sender === this.loggedUserId) {
-            console.log('conv.sender = loggedUser', conv, conv.recipient_fullname)
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
-            conv.last_message_text = LABEL_TU + conv.last_message_text;
+            // conv.last_message_text = LABEL_TU + conv.last_message_text;
         } else if (conv.channel_type === TYPE_GROUP) {
             conversation_with = conv.recipient;
-            conversation_with_fullname = conv.recipient_fullname;
-            conv.last_message_text = conv.last_message_text;
+            conversation_with_fullname = conv.sender_fullname;
+            // conv.last_message_text = conv.last_message_text;
         }
         conv.conversation_with_fullname = conversation_with_fullname;
-
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
@@ -411,6 +409,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      *  check if the conversations is valid or not
      */
     private isValidConversation(convToCheck: ConversationModel): boolean {
+        
         if (!this.isValidField(convToCheck.uid)) {
             return false;
         }

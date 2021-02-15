@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'user-typing',
@@ -11,16 +11,17 @@ export class UserTypingComponent implements OnInit, OnDestroy {
   // @Input() idCurrentUser: string;
   // @Input() isDirect: boolean;
   @Input() translationMap: Map<string, string>;
+  @Input() foregroundColor: string;
   @Input() nameUserTypingNow: string;
   // @Input() membersConversation: [string];
 
-  constructor( ) { }
+  constructor(private elementRef: ElementRef ) { }
 
   /** */
   ngOnInit() {
     console.log('UserTypingComponent - ngOnInit');
     console.log('translationMap', this.translationMap.get('LABEL_IS_WRITING'))
-    //this.initialize();
+    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
   /** */

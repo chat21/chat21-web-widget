@@ -65,8 +65,7 @@ export class GlobalSettingsService {
          * set parameters in globals
         */
         // const projectid = globals.projectid;
-        this.getProjectParametersById(projectid)
-        .subscribe( response => {
+        this.getProjectParametersById(projectid).subscribe( response => {
             const project = response['project'];
             // console.log('1 - setParameters ', project);
             if (project) {
@@ -170,18 +169,18 @@ export class GlobalSettingsService {
         } catch (error) {
             this.globals.wdLog(['> Error :' + error]);
         }
-        try {
-            const userToken = tiledeskSettings['userToken'];
-            if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
-        } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
-        }
-        try {
-            const userId = tiledeskSettings['userId'];
-            if (typeof userId !== 'undefined') { this.globals.userId = userId; }
-        } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
-        }
+        // try {
+        //     const userToken = tiledeskSettings['userToken'];
+        //     if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
+        // } catch (error) {
+        //     this.globals.wdLog(['> Error :' + error]);
+        // }
+        // try {
+        //     const userId = tiledeskSettings['userId'];
+        //     if (typeof userId !== 'undefined') { this.globals.userId = userId; }
+        // } catch (error) {
+        //     this.globals.wdLog(['> Error :' + error]);
+        // }
         try {
             const filterByRequester = tiledeskSettings['filterByRequester'];
             this.globals.wdLog(['1 > filterByRequester: ', filterByRequester]);
@@ -433,6 +432,11 @@ export class GlobalSettingsService {
                     }
                     if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
                         globals[key] = stringToBoolean(variables[key]);
+                    }
+                    if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
+                        console.log('setVariablesFromService > key', key, ' > variables[key]', variables[key])
+                        // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
+                        globals[key] = variables[key];
                     }
                 }
             }
@@ -768,10 +772,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.poweredBy = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('userId');
-        if (TEMP !== null) {
-            this.globals.userId = TEMP;
-        }
+        // TEMP = el.nativeElement.getAttribute('userId');
+        // if (TEMP !== null) {
+        //     this.globals.userId = TEMP;
+        // }
         TEMP = el.nativeElement.getAttribute('userEmail');
         if (TEMP !== null) {
             this.globals.userEmail = TEMP;
@@ -920,10 +924,10 @@ export class GlobalSettingsService {
             globals.poweredBy = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_userid');
-        if (TEMP) {
-            globals.userId = stringToBoolean(TEMP);
-        }
+        // TEMP = getParameterByName(windowContext, 'tiledesk_userid');
+        // if (TEMP) {
+        //     globals.userId = stringToBoolean(TEMP);
+        // }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_useremail');
         if (TEMP) {
@@ -1145,8 +1149,8 @@ export class GlobalSettingsService {
         this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals)]);
         for (const key of Object.keys(globals)) {
             const val = this.storageService.getItem(key);
-            this.globals.wdLog(['SET globals KEY ---------->', key]);
-            this.globals.wdLog(['SET globals VAL ---------->', val]);
+            // this.globals.wdLog(['SET globals KEY ---------->', key]);
+            // this.globals.wdLog(['SET globals VAL ---------->', val]);
             if (val && val !== null) {
                 // globals.setParameter(key, val);
                 globals[key] = stringToBoolean(val);

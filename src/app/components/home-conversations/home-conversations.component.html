@@ -32,8 +32,12 @@
   <div class="c21-waiting-time" *ngIf="g.showWaitTime === true">
     <!-- <div *ngIf="waitingTime >= 0" >{{g.WAITING_TIME_FOUND}} {{humanWaitingTime}}</div>
     <div *ngIf="waitingTime == -1" >{{g.WAITING_TIME_NOT_FOUND}}</div> -->
-    <div *ngIf="waitingTime >= 0 && g.dynamicWaitTimeReply === 'true'"> {{ WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER }}</div>
-    <div *ngIf="waitingTime >= 0 && g.dynamicWaitTimeReply === false">{{ g.WAITING_TIME_NOT_FOUND }}</div>
+    <div *ngIf="waitingTime >= 0 && g.dynamicWaitTimeReply === true || waitingTime >= 0 && g.dynamicWaitTimeReply === 'true'">
+      {{ WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER }}
+    </div>
+    <div *ngIf="waitingTime >= 0 && g.dynamicWaitTimeReply === false || waitingTime >= 0 && g.dynamicWaitTimeReply === 'false' ">
+      {{ g.WAITING_TIME_NOT_FOUND }}
+    </div>
     <div *ngIf="waitingTime == -1">{{g.WAITING_TIME_NOT_FOUND}}</div>
   </div>
   

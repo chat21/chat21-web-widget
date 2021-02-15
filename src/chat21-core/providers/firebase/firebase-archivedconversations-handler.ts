@@ -330,7 +330,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
      */
     private completeConversation(conv): ConversationModel {
         console.log('completeConversation', conv);
-        const LABEL_TU = this.translationMap.get('LABEL_TU');
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
             conv.sender_fullname = conv.sender;
@@ -343,14 +342,14 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         if (conv.sender === this.loggedUserId) {
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
-            conv.last_message_text = LABEL_TU + conv.last_message_text;
+            // conv.last_message_text = LABEL_TU + conv.last_message_text;
         } else if (conv.channel_type === TYPE_GROUP) {
             conversation_with = conv.recipient;
-            conversation_with_fullname = conv.recipient_fullname;
-            conv.last_message_text = conv.last_message_text;
+            conversation_with_fullname = conv.sender_fullname;
+            // conv.last_message_text = conv.last_message_text;
         }
+        
         conv.conversation_with_fullname = conversation_with_fullname;
-
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);

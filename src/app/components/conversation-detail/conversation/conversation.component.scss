@@ -4,6 +4,10 @@
 @import '../../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
+:root {
+    --themeColor: $bck-msg-sent;
+    --foregroundColor: $col-msg-sent;
+}
 
 #scroll-me {
     scroll-behavior: smooth;
@@ -299,8 +303,8 @@
                         padding: 2px 0px 4px 40px;
 
                         .msg_sent {
-                            background-color: $bck-msg-sent;
-                            color: $col-msg-sent;
+                            background-color: var(--themeColor);
+                            color: var(--foregroundColor);
                             margin-right: 0;
                             margin-left: 4px;
                             max-width: calc(100% - 30px);
@@ -549,7 +553,7 @@
     overflow: hidden;
     border: 1px solid #d7d7d7;
     background-color: #ffffff;
-    padding: 20px 0px 10px 0px;
+    padding: 10px 0px 10px 0px;
     .c21-header-button {
         padding: 6px 10px 6px 10px;
         display: flex;

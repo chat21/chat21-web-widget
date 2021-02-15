@@ -54,6 +54,21 @@ export class TranslatorService {
     return this._translate.getBrowserLang();
   }
 
+  initializeTransaltorService() {
+
+    this._translate.setDefaultLang('it');
+    const browserLang = this._translate.getBrowserLang();
+    console.log('!!! ===== HELLO APP.COMP ===== DEVICE LANG ', browserLang);
+    if (browserLang) {
+          if (browserLang === 'it') {
+              this._translate.use('it');
+          } else {
+              this._translate.use('en');
+          }
+      }
+  
+  }
+
 
   getTranslationFileUrl(browserLang) {
     this.remoteTranslationsUrl = environment.remoteTranslationsUrl;
@@ -152,9 +167,9 @@ export class TranslatorService {
       const remote_translation_res = JSON.parse(body);
       // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);
       // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
-      this._translate.setTranslation(lang, remote_translation_res.data);
+      this._translate.setTranslation(lang, remote_translation_res.data, true);
     } else {
-      this._translate.setTranslation(lang, JSON.parse(body));
+      this._translate.setTranslation(lang, JSON.parse(body), true);
     }
   }
 

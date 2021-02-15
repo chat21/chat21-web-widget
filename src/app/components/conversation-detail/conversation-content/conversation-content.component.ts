@@ -56,7 +56,7 @@ export class ConversationContentComponent implements OnInit {
               private cdref: ChangeDetectorRef) { }
 
   ngOnInit() {
-   
+   console.log('messages', this.messages)
   }
 
   ngAfterContentChecked() {

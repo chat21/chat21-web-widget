@@ -15,17 +15,17 @@ export class CustomTranslateService {
   constructor(
     private translateService: TranslateService
   ) {
-    this.translateService.setDefaultLang('en');
+    //this.translateService.setDefaultLang('en');
   }
 
   /** */
   public translateLanguage(keys: any, lang?: string): Map<string, string> {
-    if (!lang || lang === '') {
-        this.language = this.translateService.currentLang;
-    } else {
-      this.language = lang;
-    }
-    this.translateService.use(this.language);
+    // if (!lang || lang === '') {
+    //     this.language = this.translateService.currentLang;
+    // } else {
+    //   this.language = lang;
+    // }
+    // this.translateService.use(this.language);
     return this.initialiseTranslation(keys);
   }
 

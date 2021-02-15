@@ -20,7 +20,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Input() idConversation: string;
   @Input() senderId: string;
   @Input() isSoundActive: boolean;
-  @Input() allowTranscriptDownload: boolean;
+  @Input() isTrascriptDownloadEnabled: boolean;
   @Input() hideHeaderCloseButton: boolean;
   @Input() windowContext;
   @Input() stylesMap: Map<string, string>
@@ -59,7 +59,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
      }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit: conversation-header COMPONENT ', this.stylesMap]);
+    this.g.wdLog([' ngOnInit: conversation-header COMPONENT ', this.translationMap]);
     this.membersConversation.push(this.senderId)
     //this.initializeTyping();
   }

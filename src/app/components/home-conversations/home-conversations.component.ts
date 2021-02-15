@@ -14,6 +14,7 @@ import {
   compareValues
 } from '../../utils/utils';
 import {
+  FIREBASESTORAGE_BASE_URL_IMAGE,
   IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
 import { ContactService } from '../../providers/contact.service';
@@ -29,6 +30,7 @@ import { User } from '../../../models/User';
 import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
 import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 import { ChatManager } from '../../../chat21-core/providers/chat-manager';
+import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
 
 
 @Component({
@@ -85,6 +87,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     // public conversationsService: ConversationsService,
     public conversationsHandlerService: ConversationsHandlerService,
+    public imageRepoService: ImageRepoService,
     public chatManager: ChatManager,
     public contactService: ContactService,
     public waitingService: WaitingService,
@@ -169,7 +172,10 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     this.listConversations = [];
     this.archivedConversations = [];
     this.waitingTime = -1;
-    this.availableAgents = this.g.availableAgents.slice(0, 5);
+    this.availableAgents = this.g.availableAgents.slice(0, 5)
+    this.availableAgents.forEach(agent => {
+      agent.imageurl = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, agent.id)
+    })
 
     //this.g.wdLog(['senderId: ', this.senderId]);
     this.g.wdLog(['tenant: ', this.tenant, this.availableAgents]);
@@ -217,8 +223,6 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
           // REPLACE if exist
           this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND.replace("$reply_time", that.humanWaitingTime);
           console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER  REPLACE if exist',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
-        } else {
-          this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND + ' ' + that.humanWaitingTime
         }
         // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
         // console.log('LIST CONVERSATION g.dynamicWaitTimeReply ',  this.g.dynamicWaitTimeReply )

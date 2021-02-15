@@ -9,6 +9,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
 import { UploadModel } from '../../../../chat21-core/models/upload';
 import { UploadService } from '../../../providers/upload.service';
 import { replaceBr } from '../../../../chat21-core/utils/utils';
+import { FileDetector } from 'protractor';
 
 @Component({
   selector: 'tiledeskwidget-conversation-footer',
@@ -47,9 +48,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   conversationHandlerService: ConversationHandlerService
 
   constructor(public g: Globals,
-              //public el: ElementRef,
               public upSvc: UploadService,
-              //private messagingService: MessagingService,
               private chatManager: ChatManager,
               private typingService: TypingService) { }
 

@@ -114,7 +114,7 @@ export class Triggerhandler {
         } else {
             // this.el.nativeElement.dispatchEvent(onMessageCreated);
         }
-      }
+    }
 
     /**APP-COMPONENT.component */  
     public triggerOnViewInit(detailObj: {}) {
@@ -223,6 +223,20 @@ export class Triggerhandler {
         } else {
             this.el.nativeElement.dispatchEvent(onAuthStateChanged);
         }
+    }
+
+    public triggerNewConversationEvent(detailObj: {}) {
+        this.g.wdLog([' ---------------- triggerNewConversationEvent ---------------- ', detailObj]);
+        const onNewConversation = new CustomEvent('onNewConversation', { detail: detailObj });
+        const windowContext = this.g.windowContext;
+
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
+            this.g.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onNewConversation);
+        }
+
     }
 
 

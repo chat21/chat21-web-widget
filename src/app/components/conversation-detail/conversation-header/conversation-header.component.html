@@ -45,6 +45,7 @@
               <div class="titleText">{{widgetTitle}}</div>
           </div>
           <user-typing *ngIf="isTypings"
+            [foregroundColor]="stylesMap.get('foregroundColor')"
             [translationMap]="translationMap"
             [nameUserTypingNow]="nameUserTypingNow">
           </user-typing>
@@ -75,7 +76,7 @@
   </div>
 
   <!-- ICON TRANSCRIPT -->
-  <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1 && allowTranscriptDownload" (click)="dowloadTranscript()">
+  <div class="c21-header-button c21-right" *ngIf="isTrascriptDownloadEnabled" (click)="dowloadTranscript()">
       <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
           width="20px" height="20px" viewBox="0 0 24 24">
           <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->

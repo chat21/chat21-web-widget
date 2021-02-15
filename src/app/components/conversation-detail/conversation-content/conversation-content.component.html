@@ -67,7 +67,6 @@
                                 [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}"
                                 [message]="message"
                                 [textColor]="'col-msg-sent'"
-                                [backgroundColor]="'bck-msg-sent'"
                                 (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                                 (onAfterMessageRender)="returnOnAfterMessageRender($event)">
                             </tiledeskwidget-bubble-message>
@@ -91,8 +90,7 @@
                             <!--backgroundColor non viene ancora usato -->
                             <tiledeskwidget-bubble-message class="messages msg_receive slide-in-left"
                                 [message]="message"
-                                [textColor]="'black'"  
-                                [backgroundColor]="'light-white'"
+                                [textColor]="'black'"
                                 (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                                 (onAfterMessageRender)="returnOnAfterMessageRender($event)">
                             </tiledeskwidget-bubble-message>

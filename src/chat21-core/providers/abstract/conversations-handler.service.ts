@@ -24,7 +24,7 @@ export abstract class ConversationsHandlerService {
   // params
   abstract conversations: Array<ConversationModel> = [];
   abstract uidConvSelected: string;
-  abstract imageRepo: ImageRepoService;
+  // abstract imageRepo: ImageRepoService;
 
   // functions
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;

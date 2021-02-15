@@ -11,6 +11,9 @@ import {
 } from '../../utils/utils';
 import { User } from '../../../models/User';
 import { Globals } from '../../utils/globals';
+import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
+import {FIREBASESTORAGE_BASE_URL_IMAGE} from '../../utils/constants'
+
 @Component({
   selector: 'tiledeskwidget-list-conversations',
   templateUrl: './list-conversations.component.html',
@@ -33,7 +36,13 @@ export class ListConversationsComponent implements OnInit {
   getUrlImgProfile = getUrlImgProfile;
   // ========= end:: dichiarazione funzioni ========= //
 
-  constructor(public g: Globals) { }
+  iterableDifferListConv: any;
+
+  constructor(public g: Globals,
+              private iterableDiffers: IterableDiffers,
+              public imageRepoService: ImageRepoService) {
+      this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
+               }
 
   ngOnInit() {
     this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
@@ -51,6 +60,15 @@ export class ListConversationsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.g.wdLog([' --------ngAfterViewInit: list-conversations-------- ', this.listConversations]);
+  }
+
+  ngDoCheck() {
+    let changesListConversation = this.iterableDifferListConv.diff(this.listConversations);
+    if (changesListConversation) {
+      this.listConversations.forEach(conv => {
+        conv.image = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, conv.sender)
+      });
+    }
   }
 
 

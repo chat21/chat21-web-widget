@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { MAX_WIDTH_IMAGES,} from '../../../utils/constants';
+
 @Component({
   selector: 'tiledeskwidget-image',
   templateUrl: './image.component.html',

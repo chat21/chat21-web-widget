@@ -170,9 +170,9 @@ export class Globals {
    recipientId: string;
    newConversationStart: boolean;
    recipientFullname: string;
-   userId: string;
+  //  userId: string;
    userPassword: string;
-   userToken: string;
+  //  userToken: string;
    marginX: string;
    marginY: string;
    isLogEnabled: boolean;
@@ -269,9 +269,11 @@ export class Globals {
     this.widgetTitle = '';
     /** Set the widget title label shown in the widget header. Value type : string.
     The default value is Tiledesk. */
-    this.dynamicWaitTimeReply = false;
-    /** Set dynaminc waiting replay time. Permitted values: true, false. 
-    The default value is false. */
+    this.dynamicWaitTimeReply = true;  
+    /** The user can decide whether or not to share the 
+     * average response time of his team (if 'dynamicWaitTimeReply' is 
+     * false the WAITING_TIME_NOT_FOUND will always be displayed) 
+     * is set to true for backward compatibility with old projects */
     this.hideHeaderCloseButton = false;
     /** Hide the close button in the widget header. Permitted values: true,
     false. The default value is false. */
@@ -447,7 +449,7 @@ export class Globals {
     this.default_settings = {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
-      'poweredBy': this.poweredBy, 'userId': this.userId,
+      'poweredBy': this.poweredBy, //'userId': this.userId,
       'userEmail': this.userEmail, 'userPassword': this.userPassword,
       'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
       'isOpen': this.isOpen, 'channelType': this.channelType,
@@ -456,7 +458,7 @@ export class Globals {
       'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
-      'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
+      'allowTranscriptDownload': this.allowTranscriptDownload, //'userToken': this.userToken,
       'autoStart': this.autoStart, 'startHidden': this.startHidden, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,

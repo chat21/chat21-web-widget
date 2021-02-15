@@ -13,7 +13,6 @@ export class AvatarComponent implements OnInit {
   constructor(private imageRepoService: ImageRepoService) { }
 
   ngOnInit() {
-    console.log('senderIDDDD', this.senderID)
     if(this.senderID){
       this.url = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, this.senderID)
       if(!this.url){

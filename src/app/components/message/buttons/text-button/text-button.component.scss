@@ -1,6 +1,7 @@
+@import '../../../../../sass/variables';
 :root {
-    --themeColor: black;
-    --foregroundColor: black;
+    --themeColor: $bck-msg-sent;
+    --foregroundColor: $bck-msg-sent;
 }
 
 
@@ -10,7 +11,7 @@
     max-width: 300px;
     min-width: inherit;
     cursor: pointer;
-    border: 1px solid var(--themeColor);
+    border: 1px solid $blue;
     border-radius: 20px;
     margin: 3px;
     background: transparent;
@@ -22,7 +23,7 @@
     white-space: nowrap;
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
-    color: var(--themeColor);
+    color: $blue;
     line-height: 16px;
 }
 
@@ -32,10 +33,10 @@
     &:focus,
     &:hover {
         color: white;
-        background: var(--themeColor);
+        background: $blue;
         .icon-button-action {
             svg {
-                fill:var(--foregroundColor);
+                fill: $black;
             }
         }
     }

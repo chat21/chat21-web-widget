@@ -12,7 +12,6 @@ export class BubbleMessageComponent implements OnInit {
 
   @Input() message: MessageModel;
   @Input() textColor: string;
-  @Input() backgroundColor: string;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
 

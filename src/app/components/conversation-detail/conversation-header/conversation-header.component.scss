@@ -1,43 +1,3 @@
-.c21-title {
-    position: absolute;
-    left: 50px;
-    right: 100px;
-    display: inline-block;
-    width: auto;
-    height: 42px;
-    padding: 0px;
-    margin: 5px 0px;
-    font-size: 1.6em;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.titleText {
-    position: relative;
-    line-height: 40px;
-    text-align: left;
-    font-size: 1em;
-}
-.avatar-project {
-    position: relative;
-    padding: 0;
-    margin: 0;
-    margin: 0 10px 0 0;
-    float: left;
-    height: 42px;
-    width: 42px;
-    line-height: 42px;
-}
-.avatar-placeholder {
-    font-size: 16px;
-}
-.avatar-image {
-    max-width: 30px;
-    max-height: 30px;
-    margin: 6px;
-}
 
  /* SET SCROLLBAR */
 // ============= CSS c21-header ================= // 
@@ -58,6 +18,48 @@
                 padding: 0px;
                 font-size: 1.1em;
                 color: #ffffff;
+            }
+
+            .c21-title {
+                position: absolute;
+                left: 50px;
+                right: 100px;
+                display: inline-block;
+                width: auto;
+                height: 42px;
+                padding: 0px;
+                margin: 5px 0px;
+                font-size: 1.6em;
+                font-weight: 500;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                .titleText {
+                    position: relative;
+                    line-height: 40px;
+                    text-align: left;
+                    font-size: 1em;
+                }
+
+                .avatar-project {
+                    position: relative;
+                    padding: 0;
+                    margin: 0;
+                    margin: 0 10px 0 0;
+                    float: left;
+                    height: 42px;
+                    width: 42px;
+                    line-height: 42px;
+                }
+                .avatar-placeholder {
+                    font-size: 16px;
+                }
+                .avatar-image {
+                    max-width: 30px;
+                    max-height: 30px;
+                    margin: 6px;
+                }
             }
         }
     }
@@ -80,7 +82,7 @@
     overflow: hidden;
     border: 1px solid #d7d7d7;
     background-color: #ffffff;
-    padding: 20px 0px 10px 0px;
+    padding: 10px 0px 10px 0px;
     .c21-header-button {
         padding: 6px 10px 6px 10px;
         display: flex;

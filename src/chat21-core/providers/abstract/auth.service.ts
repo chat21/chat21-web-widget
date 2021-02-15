@@ -9,15 +9,15 @@ import { UserModel } from '../../models/user';
 //   providedIn: 'root'
 // })
 @Injectable()
-export abstract class AuthService {
+export abstract class AuthService2 {
 
   // BehaviorSubject
   abstract BSAuthStateChanged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   abstract BSSignOut: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   // params
-  public DEFAULT_PERSISTENCE: String = 'none';
-  public DEFAULT_URL: String = 'https://api.tiledesk.com/v2/auth/';
+  public DEFAULT_PERSISTENCE: string = 'none';
+  public DEFAULT_URL: string = 'https://api.tiledesk.com/v2/auth/';
 
   private persistence;
   private baseUrl;
@@ -26,7 +26,7 @@ export abstract class AuthService {
     this.persistence = persistence;
   }
 
-  public getPersistence(): String {
+  public getPersistence(): string {
     if (this.persistence) {
       return this.persistence;
     } else {
@@ -37,7 +37,7 @@ export abstract class AuthService {
   public setBaseUrl(baseUrl): void {
     this.baseUrl = baseUrl;
   }
-  public getBaseUrl(): String {
+  public getBaseUrl(): string {
     if (this.baseUrl) {
       return this.baseUrl;
     } else {
@@ -53,6 +53,7 @@ export abstract class AuthService {
   abstract getToken(): string;
   abstract getTiledeskToken(): string;
   abstract signInWithEmailAndPassword(email: string, password: string): void;
+  abstract signInWithCustomToken(tiledeskToken: string): Promise<any>;
   abstract signInAnonymously(projectID: string): void;
   abstract logout(): void;
 }

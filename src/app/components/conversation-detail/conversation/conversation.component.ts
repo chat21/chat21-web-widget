@@ -45,6 +45,7 @@ import { ConversationContentComponent } from '../conversation-content/conversati
 import { ConversationsHandlerService } from '../../../../chat21-core/providers/abstract/conversations-handler.service';
 import { ArchivedConversationsHandlerService } from '../../../../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { ConversationModel } from '../../../../chat21-core/models/conversation';
+import { stringify } from '@angular/core/src/util';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -84,6 +85,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   
   isButtonsDisabled = true;
   isConversationArchived = false;
+  isTrascriptDownloadEnabled = false;
   audio: any;
   // ========= begin:: gestione scroll view messaggi ======= //
   //startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
@@ -195,7 +197,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // private translate: TranslateService
   ) {
     this.API_URL = this.appConfigService.getConfig().apiUrl;
-    this.g.wdLog([' constructor conversation component ']);
   }
 
   onResize(event){
@@ -215,6 +216,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.attributes = this.setAttributes();
     // this.getTranslation();
     this.translations();
+    //this.initAll();
   }
 
   public translations() {
@@ -252,8 +254,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'LABEL_TOMORROW',
       'LABEL_TO',
       'ARRAY_DAYS',
-    ]
+    ];
 
+    
     this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
     this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
     this.translationMapContent = this.customTranslateService.translateLanguage(keysContent);
@@ -269,22 +272,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     setTimeout(() => {
       this.initAll();
       // this.setFocusOnId('chat21-main-message-context');
-      this.updateConversationBadge();
+      //this.updateConversationBadge();
 
       this.g.currentConversationComponent = this;
       if (this.g.newConversationStart === true) {
         this.onNewConversationComponentInit();
         this.g.newConversationStart = false;
         const start_message = this.g.startMessage;
-        // if (this.g.startMessage) {
-        //   this.sendMessage(
-        //     start_message.text,
-        //     start_message.type,
-        //     start_message.metadata,
-        //     start_message.attributes
-        //   );
-        //   // {"subtype": "info"}  //sponziello
-        // }
       }
       this.setSubscriptions();
       if (this.afConversationComponent) {
@@ -292,7 +286,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
       this.isButtonsDisabled = false;
     }, 300);
-
     // this.g.currentConversationComponent = this;
     // if (this.g.newConversationStart === true) {
     //   this.onNewConversationComponentInit();
@@ -322,13 +315,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('onchagnges conversation component', changes)
     if (this.isOpen === true) {
-      this.updateConversationBadge();
+      //this.updateConversationBadge();
       // this.scrollToBottom();
     }
   }
 
   updateConversationBadge() {
+    console.log('updateConversationBadge', this.conversationsHandlerService, this.conversation)
     if(this.isConversationArchived && this.conversation && this.archivedConversationsHandlerService){
       this.archivedConversationsHandlerService.setConversationRead(this.conversation)
     }
@@ -360,7 +355,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.conversation && this.conversation.archived) {
       this.isConversationArchived = true;
     }
-    this.messages = [];
 
     this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
@@ -375,6 +369,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // sponziello, commentato
     // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
     // this.setAvailableAgentsStatus();
+    this.g.wdLog([' ---------------- 5: updateConversationbage ---------------- ']);
+    this.updateConversationBadge();
+
     this.g.wdLog([' ---------------- 6: activeConversation ------------------- ', this.conversation]);
     if (this.conversation) {
       this.g.setParameter('activeConversation', this.conversation, true);
@@ -657,6 +654,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   initConversationHandler() {
     const tenant = this.g.tenant;
+    this.messages = [];
     //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
     const loggedUser = { uid: this.senderId}
     const conversationWithFullname = this.g.recipientFullname; // TODO-GAB: risulta null a questo punto
@@ -703,6 +701,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //retrive active and archived conversations-handler service
     this.conversationsHandlerService = this.chatManager.conversationsHandlerService
     this.archivedConversationsHandlerService = this.chatManager.archivedConversationsService
+
   }
 
 
@@ -785,6 +784,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         if (msg) {
           that.newMessageAdded(msg);
           this.onNewMessageCreated.emit(msg)
+          this.checkMessagesLegntForTranscriptDownloadMenuOption();
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
@@ -879,7 +879,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //this.subscriptionTyping();
   }
 
-
+  checkMessagesLegntForTranscriptDownloadMenuOption(){
+    if(this.messages.length > 1 && this.g.allowTranscriptDownload){
+      this.isTrascriptDownloadEnabled = true
+    }
+  }
   // NUOVO MESSAGGIO!!
   /**
    * se:          non sto già scrollando oppure il messaggio l'ho inviato io -> scrollToBottom
@@ -1715,6 +1719,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //se sono alla fine (showBadgeScroollBottom === false) allora imposto messageBadgeCount a 0
     if(this.showBadgeScroollToBottom === false){
       this.messagesBadgeCount = 0;
+      this.updateConversationBadge();
     }
     
   }

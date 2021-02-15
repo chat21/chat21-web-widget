@@ -47,13 +47,20 @@
     "START_A_CONVERSATION": "Inizia una conversazione",
     "NO_CONVERSATION": "Nessuna conversazione attiva",
     "SEE_PREVIOUS": "vedi precedenti",
-    "WAITING_TIME_FOUND": "Il team tipicamente risponde in ",
+    "WAITING_TIME_FOUND": "Il team tipicamente risponde in $reply_time",
     "WAITING_TIME_NOT_FOUND": "Vi risponderemo appena possibile",
     "CLOSED": "CHIUSA",
+
     "INFO_SUPPORT_USER_ADDED_SUBJECT":"tu",
     "INFO_SUPPORT_USER_ADDED_YOU_VERB":"sei stato aggiunto ",
     "INFO_SUPPORT_USER_ADDED_COMPLEMENT":"si è unito",
     "INFO_SUPPORT_USER_ADDED_VERB":"alla chat",
     "INFO_SUPPORT_CHAT_REOPENED":"Chat riaperta",
-    "INFO_SUPPORT_CHAT_CLOSED":"Chat chiusa"
+    "INFO_SUPPORT_CHAT_CLOSED":"Chat chiusa",
+
+    "LABEL_TODAY": "oggi",
+    "LABEL_TOMORROW": "ieri",
+    "LABEL_LAST_ACCESS": "ultimo accesso",
+    "LABEL_TO": "alle",
+    "ARRAY_DAYS": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"]
 }

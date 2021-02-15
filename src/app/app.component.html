@@ -94,9 +94,9 @@
         -->
         <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
             <tiledeskwidget-star-rating-widget 
-            (eventClosePage)="returnCloseModalRateChat()" 
-            (eventCloseRate)="returnRateChatComplete()"
-            ></tiledeskwidget-star-rating-widget>
+                (onClosePage)="returnCloseModalRateChat()" 
+                (onCloseRate)="returnRateChatComplete()">
+            </tiledeskwidget-star-rating-widget>
         </div>
 
     </div>

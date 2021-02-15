@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // services
 import { Response } from '@angular/http/src/static_response';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../providers/auth.service';
+
 
 import { Globals } from '../../utils/globals';
 import { AppConfigService } from '../../providers/app-config.service';
@@ -23,7 +23,6 @@ export class StarRatingWidgetService {
 
   constructor(
     public http: Http,
-    public auth: AuthService,
     public g: Globals,
     public appConfigService: AppConfigService
   ) {

@@ -15,8 +15,9 @@ export class ActionButtonComponent implements OnInit {
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
-    this.elementRef.nativeElement.style.setProperty('--themeColor', this.themeColor);
-    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
+    //decomment if element should have same color of themeColor and fregroundColor
+    // this.elementRef.nativeElement.style.setProperty('--themeColor', this.themeColor);
+    // this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
   actionButtonAction(){

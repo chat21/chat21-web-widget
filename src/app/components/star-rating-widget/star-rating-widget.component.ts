@@ -12,8 +12,8 @@ import { Globals } from '../../utils/globals';
 export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: Input/Output values ===========//
-  @Output() eventClosePage = new EventEmitter();
-  @Output() eventCloseRate = new EventEmitter();
+  @Output() onClosePage = new EventEmitter();
+  @Output() onCloseRate = new EventEmitter();
   // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   // ========= end:: Input/Output values ===========//
 
@@ -92,8 +92,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.g.wdLog(['sendRate!!!::', this.message]);
     const that = this;
     // chiamo servizio invio segnalazione
-    this.starRatingWidgetService.httpSendRate(this.rate, this.message)
-    .subscribe(
+    this.starRatingWidgetService.httpSendRate(this.rate, this.message).subscribe(
       response => {
         that.g.wdLog(['OK sender ::::', response]);
         // pubblico var isWidgetActive
@@ -110,11 +109,11 @@ export class StarRatingWidgetComponent implements OnInit {
     );
   }
 
-  closeRate() {
-    this.starRatingWidgetService.setOsservable(false);
-    this.step = 0;
-    this.returnClosePage();
-  }
+  // closeRate() {
+  //   this.starRatingWidgetService.setOsservable(false);
+  //   this.step = 0;
+  //   this.returnClosePage();
+  // }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
@@ -126,7 +125,7 @@ export class StarRatingWidgetComponent implements OnInit {
     this.g.wdLog([' closePage: ']);
     this.step = 0;
     this.starRatingWidgetService.setOsservable(false);
-    this.eventClosePage.emit();
+    this.onClosePage.emit();
   }
   // ========= end:: ACTIONS ============//
 

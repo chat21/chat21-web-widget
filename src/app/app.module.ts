@@ -79,7 +79,7 @@ import { LastMessageComponent } from './components/last-message/last-message.com
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MarkedPipe } from './directives/marked.pipe';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
@@ -95,6 +95,7 @@ import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.s
 import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseArchivedConversationsHandler } from '../chat21-core/providers/firebase/firebase-archivedconversations-handler';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
+import { AuthService2 } from '../chat21-core/providers/abstract/auth.service';
 import { ConversationContentComponent } from './components/conversation-detail/conversation-content/conversation-content.component';
 import { BubbleMessageComponent } from './components/message/bubble-message/bubble-message.component';
 import { TextComponent } from './components/message/text/text.component';
@@ -107,8 +108,10 @@ import { AvatarComponent } from './components/message/avatar/avatar.component';
 import { ReturnReceiptComponent } from './components/message/return-receipt/return-receipt.component';
 
 
+
 // FACTORIES
 export function createTranslateLoader(http: HttpClient) {
+  console.log('factory translateeee')
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -120,11 +123,15 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
-export function authenticationFactory(http: HttpClient, route: ActivatedRoute) {
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService ) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
-    return new FirebaseAuthService(http, route);
+    const auth= new FirebaseAuthService(http); 
+    auth.setBaseUrl(appConfig.getConfig().apiUrl)
+    return auth
   } else {
-    return new FirebaseAuthService(http, route);
+    const auth= new FirebaseAuthService(http); 
+    auth.setBaseUrl(appConfig.getConfig().apiUrl)
+    return auth
   }
 }
 
@@ -169,7 +176,6 @@ export function typingFactory() {
 }
 
 export function presenceFactory() {
-  console.log('presenceFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebasePresenceService();
   } else {
@@ -178,7 +184,6 @@ export function presenceFactory() {
 }
 
 export function imageRepoFactory() {
-  console.log('imageRepoFactory: ');
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseImageRepoService();
   } else {
@@ -244,14 +249,16 @@ export function imageRepoFactory() {
      }),
     MomentModule,
     AngularResizedEventModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    }),
-    TooltipModule
+    TranslateModule.forRoot(),
+    // {
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useFactory: (createTranslateLoader),
+    //     deps: [HttpClient]
+    //   }
+    // }), 
+    TooltipModule,
+    //RouterModule.forRoot([])
   ],
   providers: [
     AppConfigService, // https://juristr.com/blog/2018/01/ng-app-runtime-config/
@@ -261,15 +268,10 @@ export function imageRepoFactory() {
       multi: true,
       deps: [AppConfigService]
     },
-    // {
-    //   provide: AuthService,
-    //   useFactory: authenticationFactory,
-    //   deps: [HttpClient, ActivatedRoute, Chat21Service]
-    //  },
     {
-      provide: AuthService,
+      provide: AuthService2,
       useFactory: authenticationFactory,
-      deps: [HttpClient, ActivatedRoute]
+      deps: [HttpClient, AppConfigService ]
     },
     {
       provide: ConversationsHandlerService,

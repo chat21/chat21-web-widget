@@ -1,3 +1,10 @@
+@import '../../../sass/variables';
+:root {
+    --themeColor: $blue;
+    --foregroundColor: $bck-msg-sent;
+}
+
+
 .tile-typing-now {
     position: absolute;
     left: 40px;
@@ -8,7 +15,7 @@
     margin: 0px;
     padding: 0px;
     font-size: 1.1em;
-    color: #ffffff;
+    color: var(--foregroundColor);
     //display: none;
     // &.active {
     //     display: block;

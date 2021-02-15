@@ -125,7 +125,6 @@ export function setHeaderDate(translate, timestamp): string {
   // se le date sono diverse o la data di riferimento non è impostata
   // ritorna la data calcolata
   // altrimenti torna null
-  console.log('>>>>>>>>>>>>>> setHeaderDate: ', date, now, timestamp, labelDays);
   return labelDays;
 }
 
