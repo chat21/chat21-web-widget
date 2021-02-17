@@ -136,6 +136,7 @@ export class MessagingService {
     const firebaseMessages = firebase.database().ref(urlMessages);
     this.messagesRef = firebaseMessages.orderByChild('timestamp').limitToLast(1000);
     this.g.wdLog(['checkMessages *****', urlMessages]);
+    // console.log('checkMessages ', urlMessages)
     this.subscriptionsToMessages();
   }
 

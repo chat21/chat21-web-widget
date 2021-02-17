@@ -1150,7 +1150,7 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_dynamicWaitTimeReply');
         if (TEMP) {
             globals.dynamicWaitTimeReply = stringToBoolean(TEMP);
-            console.log('GLOBAL-SETTINGS setVariablesFromUrlParameters dynamicWaitTimeReply ', TEMP)
+            // console.log('GLOBAL-SETTINGS setVariablesFromUrlParameters dynamicWaitTimeReply ', TEMP)
         }
 
     }
