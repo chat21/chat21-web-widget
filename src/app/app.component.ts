@@ -1108,8 +1108,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** open popup conversation */
     private f21_open() {
         const senderId = this.g.senderId;
-        console.log('f21_open senderId' , senderId) 
-        console.log()
+        // console.log('f21_open senderId' , senderId) 
+        
         this.g.wdLog(['f21_open senderId: ', senderId]);
         if (senderId) {
             // chiudo callout
