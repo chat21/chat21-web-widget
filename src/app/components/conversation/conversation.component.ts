@@ -196,7 +196,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onHumanImgError(event) {
-    event.target.src = this.baseLocation + "/assets/images/light_avatar_placeholder.png"
+    event.target.src = this.baseLocation + "/assets/images/light_avatar_placeholder_2.svg"
     // console.log(`CONV COMP imgError ENTRO`);
   }
 
