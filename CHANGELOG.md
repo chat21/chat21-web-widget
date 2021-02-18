@@ -1,5 +1,8 @@
 # chat21-web-widget ver 3.0
 
+### 4.1.0
+Bug fixed: when the profile image is missing as a placeholder image, the bot image is always displayed
+
 ### 4.0.99
 - Set "dynamicWaitTimeReply" to false by default
 
