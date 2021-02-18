@@ -1,7 +1,10 @@
 # chat21-web-widget ver 3.0
 
+### 4.2.0
+- New agent placeholder image
+
 ### 4.1.0
-Bug fixed: when the profile image is missing as a placeholder image, the bot image is always displayed
+- Fixed bug: when the profile image is missing as a placeholder image, the placeholder image of the bot is always displayed rather than the placeholder image of the agent
 
 ### 4.0.99
 - Set "dynamicWaitTimeReply" to false by default
