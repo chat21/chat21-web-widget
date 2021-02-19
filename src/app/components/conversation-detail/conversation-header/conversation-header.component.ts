@@ -20,6 +20,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Input() idConversation: string;
   @Input() senderId: string;
   @Input() isSoundActive: boolean;
+  @Input() isMenuShow: boolean;
   @Input() isTrascriptDownloadEnabled: boolean;
   @Input() hideHeaderCloseButton: boolean;
   @Input() windowContext;
@@ -29,6 +30,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Output() onBack = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
+  @Output() onMenuOptionShow = new EventEmitter();
   // ========= end:: Input/Output values
 
   // ============ BEGIN: SET FUNCTION BY UTILS ==============//
@@ -36,7 +38,6 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
   
   isButtonsDisabled = true;
-  isMenuShow = false;
   
   public isTypings = false;
   public isDirect = false;
@@ -179,22 +180,21 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
     const url = this.API_URL + 'public/requests/' + this.idConversation + '/messages.html';
     const windowContext = this.windowContext;
     windowContext.open(url, '_blank');
-    this.isMenuShow  = false;
+    // this.isMenuShow  = false;
+    this.onMenuOptionShow.emit(false)
   }
   
   toggleSound() {
-    this.isMenuShow  = false;
+    //this.isMenuShow  = false;
+    this.onMenuOptionShow.emit(false)
     this.onSoundChange.emit(!this.isSoundActive)
   }
 
   toggleMenu() {
-    this.isMenuShow = !this.isMenuShow;   
+    this.onMenuOptionShow.emit(!this.isMenuShow)
+    // this.isMenuShow = !this.isMenuShow;   
   }
 
-  onBlurMenuOption(event){
-    console.log('event', event)
-    this.isMenuShow = false;
-  }
 
 
 

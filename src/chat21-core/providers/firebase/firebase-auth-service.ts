@@ -22,6 +22,7 @@ import {
   avatarPlaceholder,
   getColorBck,
 } from '../../utils/utils-user';
+import { resolve } from 'url';
 
 
 // @Injectable({ providedIn: 'root' })
@@ -45,6 +46,7 @@ export class FirebaseAuthService extends AuthService2 {
   //TODO-GAB
   // private imageRepo: ImageRepoService = new FirebaseImageRepoService();
 
+  private storagePrefix: string;
   private tiledeskToken: string;
   private firebaseToken: string;
   private currentUser: UserModel;
@@ -60,13 +62,13 @@ export class FirebaseAuthService extends AuthService2 {
   /**
    *
    */
-  initialize() {
+  initialize(storagePrefix: string) {
     this.SERVER_BASE_URL = this.getBaseUrl();
+    this.storagePrefix = storagePrefix;
     this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
     this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
     this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'auth/signinWithCustomToken';
     this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'chat21/firebase/auth/createCustomToken';
-    
     this.checkIsAuth();
     this.onAuthStateChanged();
   }
@@ -76,8 +78,9 @@ export class FirebaseAuthService extends AuthService2 {
    */
   checkIsAuth() {
     console.log(' ---------------- AuthService checkIsAuth ---------------- ');
-    this.tiledeskToken = localStorage.getItem('tiledeskToken');
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('stoargepreficxxx', this.storagePrefix)
+    this.tiledeskToken = localStorage.getItem(this.storagePrefix+'tiledeskToken');
+    this.currentUser = JSON.parse(localStorage.getItem(this.storagePrefix + 'currentUser'));
     if (this.tiledeskToken) {
       console.log(' ---------------- MI LOGGO CON UN TOKEN ESISTENTE NEL LOCAL STORAGE O PASSATO NEI PARAMS URL ---------------- ');
       this.createFirebaseCustomToken();
@@ -102,6 +105,11 @@ export class FirebaseAuthService extends AuthService2 {
   getCurrentUser(): UserModel {
     // return firebase.auth().currentUser;
     return this.currentUser;
+  }
+
+  setCurrentUser(user:UserModel) {
+    // return firebase.auth().currentUser;
+    this.currentUser= user;
   }
 
 
@@ -177,12 +185,12 @@ export class FirebaseAuthService extends AuthService2 {
       return firebase.auth().signInWithCustomToken(token).then( async (response) => {
                 // that.currentUser = response.user;
                 // that.firebaseSignInWithCustomToken.next(response);
-            }).catch((error) => {
-                console.error('Error: ', error);
-                // that.firebaseSignInWithCustomToken.next(null);
+              }).catch((error) => {
+                  console.error('Error: ', error);
+                  // that.firebaseSignInWithCustomToken.next(null);
               });
-    })
-    .catch((error) => {
+              
+    }).catch((error) => {
       console.error('Error: ', error);
     });
   }
@@ -228,8 +236,8 @@ export class FirebaseAuthService extends AuthService2 {
     firebase.auth().signOut().then(() => {
       console.log('firebase-sign-out');
       // cancello token
-      localStorage.removeItem('tiledeskToken');
-      localStorage.removeItem('firebaseToken');
+      localStorage.removeItem(this.storagePrefix + 'tiledeskToken');
+      //localStorage.removeItem('firebaseToken');
     }).catch((error) => {
       console.log('error: ', error);
     });
@@ -277,7 +285,7 @@ export class FirebaseAuthService extends AuthService2 {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
-          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.createFirebaseCustomToken();
         }
     }, (error) => {
@@ -304,7 +312,7 @@ export class FirebaseAuthService extends AuthService2 {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
-          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.createFirebaseCustomToken();
           resolve(this.currentUser)
         }
@@ -331,7 +339,7 @@ export class FirebaseAuthService extends AuthService2 {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
-          localStorage.setItem('tiledeskToken', that.tiledeskToken);
+          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.createFirebaseCustomToken();
           resolve(this.currentUser)
         }
@@ -403,7 +411,7 @@ export class FirebaseAuthService extends AuthService2 {
     }
     this.currentUser = member;
     // salvo nel local storage e sollevo l'evento
-    localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+    localStorage.setItem(this.storagePrefix + 'currentUser', JSON.stringify(this.currentUser));
     // this.BScurrentUser.next(this.currentUser);
   }
 
@@ -421,12 +429,8 @@ export class FirebaseAuthService extends AuthService2 {
     const that = this;
       this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType}).subscribe(data =>  {
         that.firebaseToken = data;
-        localStorage.setItem('firebaseToken', that.firebaseToken);
-        that.signInFirebaseWithCustomToken(data).then(res => {
-            
-        }).catch(error => {
-          
-        });
+        //localStorage.setItem('firebaseToken', that.firebaseToken);
+        that.signInFirebaseWithCustomToken(data)
       }, error => {
         console.log(error);
         

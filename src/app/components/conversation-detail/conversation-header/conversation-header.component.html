@@ -56,7 +56,7 @@
 
 </div>
 
-<div *ngIf="isMenuShow" id="c21-options-menu" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': convertColorToRGBA(stylesMap.get('themeColor'), 50), 'color': stylesMap.get('themeColor') }" (blur)="onBlurMenuOption()">
+<div *ngIf="isMenuShow" id="c21-options-menu" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': convertColorToRGBA(stylesMap.get('themeColor'), 50), 'color': stylesMap.get('themeColor') }">
   <!-- ICON VOLUME -->
   <div class="c21-header-button c21-right" (click)="toggleSound()">
       <svg *ngIf="!isSoundActive" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"

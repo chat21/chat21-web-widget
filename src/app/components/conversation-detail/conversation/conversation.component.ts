@@ -81,7 +81,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
   // writingMessage = '';    // messaggio sta scrivendo...
   // isTypings = false;
-  //isMenuShow = false;
+  isMenuShow = false;
   
   isButtonsDisabled = true;
   isConversationArchived = false;
@@ -1722,6 +1722,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.updateConversationBadge();
     }
     
+  }
+
+  returnOnMenuOption(event:boolean){
+      this.isMenuShow = event;
   }
 
   // =========== END: event emitter function ====== //

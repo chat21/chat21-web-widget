@@ -222,7 +222,6 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
         if (this.g.WAITING_TIME_FOUND.includes("$reply_time")) {
           // REPLACE if exist
           this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER = this.g.WAITING_TIME_FOUND.replace("$reply_time", that.humanWaitingTime);
-          console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER  REPLACE if exist',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
         }
         // console.log('LIST CONVERSATION WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER',  this.WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER)
         // console.log('LIST CONVERSATION g.dynamicWaitTimeReply ',  this.g.dynamicWaitTimeReply )

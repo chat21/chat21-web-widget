@@ -14,9 +14,11 @@ export class ConversationContentComponent implements OnInit {
   
   @Input() messages: MessageModel[]
   @Input() senderId: string;
+  @Input() baseLocation: string;
   @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
+  @Output() onMenuOptionShow = new EventEmitter();
   @Output() onAttachmentButtonClicked = new EventEmitter();
   @Output() onScrollContent = new EventEmitter();
 
@@ -94,7 +96,7 @@ export class ConversationContentComponent implements OnInit {
   // ========= begin:: functions scroll position ======= //
  
   // LISTEN TO SCROLL POSITION
-  onScroll(): void {
+  onScroll(event): void {
     // console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
@@ -157,28 +159,28 @@ export class ConversationContentComponent implements OnInit {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
- scrollToBottom(withoutAnimation?: boolean) {
-  const that = this;
-  try {
-    that.isScrolling = true;
-    const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
-    // const element = objDiv[0] as HTMLElement;
-    setTimeout(function () {
+//  scrollToBottom(withoutAnimation?: boolean) {
+//   const that = this;
+//   try {
+//     that.isScrolling = true;
+//     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+//     // const element = objDiv[0] as HTMLElement;
+//     setTimeout(function () {
 
-      if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
-        objDiv.parentElement.classList.add('withoutAnimation');
-      } else {
-        objDiv.parentElement.classList.remove('withoutAnimation');
-      }
-      objDiv.parentElement.scrollTop = objDiv.scrollHeight;
-      objDiv.style.opacity = '1';
-      that.firstScroll = false;
-    }, 0);
-  } catch (err) {
-    that.g.wdLog(['> Error :' + err]);
-  }
-  that.isScrolling = false;
- }
+//       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+//         objDiv.parentElement.classList.add('withoutAnimation');
+//       } else {
+//         objDiv.parentElement.classList.remove('withoutAnimation');
+//       }
+//       objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+//       objDiv.style.opacity = '1';
+//       that.firstScroll = false;
+//     }, 0);
+//   } catch (err) {
+//     that.g.wdLog(['> Error :' + err]);
+//   }
+//   that.isScrolling = false;
+//  }
 
   // ========= END:: functions scroll position ======= //
 
@@ -218,6 +220,11 @@ export class ConversationContentComponent implements OnInit {
     }
     return false;
   }
+
+  hideMenuOption(){
+    this.onMenuOptionShow.emit(false)
+  }
+
 
   // ========= begin:: event emitter function ============//
 

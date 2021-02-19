@@ -1,4 +1,4 @@
-<div class="c21-body">
+<div class="c21-body" (click)="hideMenuOption()">
 
   <div class="c21-body-container">
     <div class="c21-body-header">
@@ -84,7 +84,9 @@
                           <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive">
                             
                             <tiledeskwidget-avatar-image class="slide-in-left"  
-                                [senderID]="message.sender">
+                                [senderID]="message.sender"
+                                [senderFullname]="message.sender_fullname"
+                                [baseLocation]="baseLocation">
                             </tiledeskwidget-avatar-image>
 
                             <!--backgroundColor non viene ancora usato -->

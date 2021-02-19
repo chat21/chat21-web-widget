@@ -46,7 +46,7 @@ export abstract class AuthService2 {
   }
 
   // functions
-  abstract initialize(): void;
+  abstract initialize(storagePrefix: string): void;
   abstract getCurrentUser(): UserModel;
   // tslint:disable-next-line: max-line-length
   // passare usermodel e completare il dettaglio dai parametri passati da tiledesk, quindi eliminare tutte la chiamate alla classe di service current-user!!! // oppure  richiamare il servizio x completare il dettaglio prima di far scattare l'evento di connect
@@ -54,6 +54,6 @@ export abstract class AuthService2 {
   abstract getTiledeskToken(): string;
   abstract signInWithEmailAndPassword(email: string, password: string): void;
   abstract signInWithCustomToken(tiledeskToken: string): Promise<any>;
-  abstract signInAnonymously(projectID: string): void;
+  abstract signInAnonymously(projectID: string): Promise<any>;
   abstract logout(): void;
 }

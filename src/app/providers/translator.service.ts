@@ -78,8 +78,6 @@ export class TranslatorService {
       this.remoteTranslationsUrl = remoteTranslationsUrl;
     }
     // console.log(`»»»» initI18n remoteTranslationsUrl2`, this.appConfigService.getConfig());
-    this.g.wdLog([' constructor conversation component ']);
-
     // console.log(`»»»» getTranslationFileUrl `, this.remoteTranslationsUrl);
     if (environment.loadRemoteTranslations) {
       return this.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();

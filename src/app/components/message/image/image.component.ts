@@ -7,7 +7,7 @@ import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@ang
 })
 export class ImageComponent implements OnInit {
 
-  @Input() metadata: Array<any>;
+  @Input() metadata: any;
   @Input() width: string;
   @Input() height: number;
 

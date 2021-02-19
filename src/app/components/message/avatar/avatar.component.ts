@@ -9,6 +9,8 @@ import {FIREBASESTORAGE_BASE_URL_IMAGE} from '../../../utils/constants'
 export class AvatarComponent implements OnInit {
 
   @Input() senderID: string;
+  @Input() senderFullname: string;
+  @Input() baseLocation: string;
   url: string;
   constructor(private imageRepoService: ImageRepoService) { }
 
@@ -16,10 +18,24 @@ export class AvatarComponent implements OnInit {
     if(this.senderID){
       this.url = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, this.senderID)
       if(!this.url){
-        this.url = 'assets/images/avatar_bot_tiledesk.svg'
+        this.url =  this.baseLocation +'/assets/images/avatar_bot_tiledesk.svg'
       }
     }
     
   }
+
+  onBotImgError(event){
+    event.target.src = this.baseLocation +'/assets/images/avatar_bot_tiledesk.svg'
+  }
+  onHumanImgError(event) {
+    event.target.src = this.baseLocation + "/assets/images/light_avatar_placeholder.svg"
+  }
+
+  // getBaseLocationWidget(): string{
+  //   if (this.baseLocation) {
+  //     console.log('»»»» avatarComponent baseLocation', this.baseLocation);
+  //     return this.baseLocation
+  //   }
+  // }
 
 }

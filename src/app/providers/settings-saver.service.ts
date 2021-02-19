@@ -49,7 +49,7 @@ export class SettingsSaverService {
     // console.log('val: ', val);
     // console.log('========================================');
     this.storageService.setItem(key, stringToBoolean(value));
-    this.g.wdLog(['SET key: ', key, ' - VAL: ', stringToBoolean(value), ' ---------->', JSON.stringify(value) ]);
+    //this.g.wdLog(['SET key: ', key, ' - VAL: ', stringToBoolean(value), ' ---------->', JSON.stringify(value) ]);
   }
 
 }

@@ -46,7 +46,7 @@ import { TypingService } from '../chat21-core/providers/abstract/typing.service'
 import { AuthService2 } from '../chat21-core/providers/abstract/auth.service';
 import { AuthService } from './providers/auth.service';
 import { v4 as uuidv4 } from 'uuid';
-import { FIREBASESTORAGE_BASE_URL_IMAGE, UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
+import { FIREBASESTORAGE_BASE_URL_IMAGE, STORAGE_PREFIX, UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { ConversationHandlerService } from '../chat21-core/providers/abstract/conversation-handler.service';
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
@@ -227,10 +227,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         });
         // this.authService.initialize()
-        this.authService2.initialize();
+        this.authService2.initialize(this.setStorageProfix());
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
+    }
+
+    setStorageProfix(): string{
+        let prefix = STORAGE_PREFIX;
+        try {
+            const sv = 'sv' + environment.shemaVersion + '_';
+            prefix = prefix + sv;
+        } catch (e) {
+            this.g.wdLog(['> Error :' + e]);
+        }
+        return prefix + this.g.projectid + '_';
     }
 
     // ========= begin:: SUBSCRIPTIONS ============//
@@ -354,12 +365,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const subAuthStateChanged = this.authService2.BSAuthStateChanged.subscribe(state => {
 
-            // const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
-            const tiledeskTokenTEMP = this.authService2.getTiledeskToken();
+            //const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
+            const tiledeskTokenTEMP = localStorage.getItem(this.setStorageProfix() + 'tiledeskToken')
+            //const tiledeskTokenTEMP = this.authService2.getTiledeskToken();
             if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
                 that.g.tiledeskToken = tiledeskTokenTEMP;
             }
-            // const firebaseTokenTEMP = that.storageService.getItemWithoutProjectId('firebaseToken');
+            
             const firebaseTokenTEMP = this.authService2.getToken();
             if (firebaseTokenTEMP && firebaseTokenTEMP !== undefined) {
                 that.g.firebaseToken = firebaseTokenTEMP;
@@ -867,7 +879,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             //  AUTENTICAZIONE ANONIMA
             this.g.wdLog([' ---------------- 14 ---------------- ']);
             this.g.wdLog([' authenticateFirebaseAnonymously']);
-            this.authService2.signInAnonymously(this.g.projectid)
+            this.authService2.signInAnonymously(this.g.projectid);
             // this.authService.anonymousAuthentication();
             // this.g.wdLog([' authenticateFirebaseAnonymously']);
             // this.authService.authenticateFirebaseAnonymously();

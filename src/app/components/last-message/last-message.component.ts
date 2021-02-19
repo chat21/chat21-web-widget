@@ -58,10 +58,6 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    console.log('last-message: ',changes);
-  }
-
   /** */
   ngAfterViewInit() {
     // console.log('isOpenNewMessage: ' + this.g.isOpenNewMessage);

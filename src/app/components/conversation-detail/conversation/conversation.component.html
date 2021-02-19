@@ -17,20 +17,24 @@
         [translationMap]="translationMapHeader"
         [widgetTitle]="g.project.widgetTitle"
         [windowContext]="g.windowContext"
+        [isMenuShow]="isMenuShow"
         (onBack)="returnHome()"
         (onCloseWidget)="returnCloseWidget()"
-        (onSoundChange)="returnSoundChange($event)">
+        (onSoundChange)="returnSoundChange($event)"
+        (onMenuOptionShow)="returnOnMenuOption($event)">
     </tiledeskwidget-conversation-header>
 
     <!-- CONTENT -->
     <tiledeskwidget-conversation-content
         [messages]="messages"
         [senderId]="senderId"
+        [baseLocation]="g.windowContext['tiledesk'].getBaseLocation()"
         [stylesMap]="styleMap"
         (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
         (onAfterMessageRender)="returnOnAfterMessageRender($event)"
         (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)"
-        (onScrollContent)="returnOnScrollContent($event)">
+        (onScrollContent)="returnOnScrollContent($event)"
+        (onMenuOptionShow)="returnOnMenuOption($event)">
     </tiledeskwidget-conversation-content>
 
 
