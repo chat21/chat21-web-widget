@@ -1,5 +1,5 @@
 import { Globals } from './../../../utils/globals';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { MessageModel } from '../../../../chat21-core/models/message';
 import { isPopupUrl, popupUrl } from '../../../../chat21-core/utils/utils';
 import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX_WIDTH_IMAGES} from '../../../utils/constants';
@@ -58,7 +58,6 @@ export class ConversationContentComponent implements OnInit {
               private cdref: ChangeDetectorRef) { }
 
   ngOnInit() {
-   console.log('messages', this.messages)
   }
 
   ngAfterContentChecked() {
@@ -97,7 +96,7 @@ export class ConversationContentComponent implements OnInit {
  
   // LISTEN TO SCROLL POSITION
   onScroll(event): void {
-    // console.log('************** SCROLLLLLLLLLL *****************');
+    console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
@@ -159,28 +158,28 @@ export class ConversationContentComponent implements OnInit {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
-//  scrollToBottom(withoutAnimation?: boolean) {
-//   const that = this;
-//   try {
-//     that.isScrolling = true;
-//     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
-//     // const element = objDiv[0] as HTMLElement;
-//     setTimeout(function () {
+ scrollToBottom(withoutAnimation?: boolean) {
+  const that = this;
+  try {
+    that.isScrolling = true;
+    const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+    // const element = objDiv[0] as HTMLElement;
+    setTimeout(function () {
 
-//       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
-//         objDiv.parentElement.classList.add('withoutAnimation');
-//       } else {
-//         objDiv.parentElement.classList.remove('withoutAnimation');
-//       }
-//       objDiv.parentElement.scrollTop = objDiv.scrollHeight;
-//       objDiv.style.opacity = '1';
-//       that.firstScroll = false;
-//     }, 0);
-//   } catch (err) {
-//     that.g.wdLog(['> Error :' + err]);
-//   }
-//   that.isScrolling = false;
-//  }
+      if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+        objDiv.parentElement.classList.add('withoutAnimation');
+      } else {
+        objDiv.parentElement.classList.remove('withoutAnimation');
+      }
+      objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+      objDiv.style.opacity = '1';
+      that.firstScroll = false;
+    }, 0);
+  } catch (err) {
+    that.g.wdLog(['> Error :' + err]);
+  }
+  that.isScrolling = false;
+ }
 
   // ========= END:: functions scroll position ======= //
 

@@ -1,5 +1,14 @@
 # chat21-web-widget ver 3.0
 
+### 5.0.0beta2.5
+- bug-fix: typing when open conversation-detail if last message was sent by agent
+- bug-fix: if new message arrived in conversation-detail and scrollDiv is at the end -> update is_new conversation attributes
+- bug-fix: merge local with remote translations
+- change: if last message came from user, show 'YOU' label in list-conversations
+- added: info-message component for attributes.subtype message of type 'info/support'
+
+# chat21-web-widget ver 3.0
+
 ### 4.0.90
 - bug-fix: save new conversation in local storage
 

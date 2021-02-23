@@ -106,6 +106,7 @@ import { LinkButtonComponent } from './components/message/buttons/link-button/li
 import { ActionButtonComponent } from './components/message/buttons/action-button/action-button.component';
 import { AvatarComponent } from './components/message/avatar/avatar.component';
 import { ReturnReceiptComponent } from './components/message/return-receipt/return-receipt.component';
+import { InfoMessageComponent } from './components/message/info-message/info-message.component';
 
 
 
@@ -226,7 +227,8 @@ export function imageRepoFactory() {
     LinkButtonComponent,
     ActionButtonComponent,
     AvatarComponent,
-    ReturnReceiptComponent
+    ReturnReceiptComponent,
+    InfoMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -249,14 +251,14 @@ export function imageRepoFactory() {
      }),
     MomentModule,
     AngularResizedEventModule,
-    TranslateModule.forRoot(),
-    // {
-    //   loader: {
-    //     provide: TranslateLoader,
-    //     useFactory: (createTranslateLoader),
-    //     deps: [HttpClient]
-    //   }
-    // }), 
+    TranslateModule.forRoot(//),
+    {
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    }), 
     TooltipModule,
     //RouterModule.forRoot([])
   ],

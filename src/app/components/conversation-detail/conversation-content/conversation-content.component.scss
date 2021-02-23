@@ -99,6 +99,9 @@
                     display: flex;
                     //opacity: 0px;
                 }
+                .msg_info_container{
+                    text-align: center;
+                }
                 /* ====== SET MESSAGES ====== */
                 .messages {
                     border-radius: 8px;
@@ -109,7 +112,7 @@
                     // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
                     // -webkit-animation: heartbeat 1.5s ease-in-out both;
                     // animation: heartbeat 1.5s ease-in-out both;
-    
+
                     p {
                         font-size: 1.4em;
                         margin: 0;
@@ -145,6 +148,17 @@
                     }
                     
                 }
+
+                .base_info {
+                    border-radius: 8px;
+                    border: 1px solid #C9E4F6;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                    display: inline-block;
+                    background: #C9E4F6;
+                    font-size: 0.85em;
+                }
+                
                 /* send message */
                 .base_sent {
                     align-items: flex-end;

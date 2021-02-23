@@ -323,7 +323,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    console.log('updateConversationBadge', this.conversationsHandlerService, this.conversation)
+    console.log('updateConversationBadge', this.conversation)
     if(this.isConversationArchived && this.conversation && this.archivedConversationsHandlerService){
       this.archivedConversationsHandlerService.setConversationRead(this.conversation)
     }
@@ -897,7 +897,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (msg.sender === senderId) { //caso in cui sender manda msg
         that.g.wdLog(['*A 1-------']);
         setTimeout(function () {
-          that.scrollToBottom();
+          that.conversationContent.scrollToBottom();
         }, 200);
       } else if (msg.sender !== senderId) { //caso in cui operatore manda msg
         const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
@@ -905,7 +905,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.g.wdLog(['*A2-------']);
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
-            that.scrollToBottom();
+            that.conversationContent.scrollToBottom();
           }, 0);
         } else {
           that.g.wdLog(['*A3-------']);
@@ -1332,28 +1332,29 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
- scrollToBottom(withoutAnimation?: boolean) {
-  const that = this;
-   try {
-    that.isScrolling = true;
-    const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
-    // const element = objDiv[0] as HTMLElement;
-    setTimeout(function () {
+//  scrollToBottom(withoutAnimation?: boolean) {
+//   const that = this;
+//    try {
+//     that.isScrolling = true;
+//     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+//     console.log('divto scrool', objDiv);
+//     // const element = objDiv[0] as HTMLElement;
+//     setTimeout(function () {
 
-      if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
-        objDiv.parentElement.classList.add('withoutAnimation');
-      } else {
-        objDiv.parentElement.classList.remove('withoutAnimation');
-      }
-      objDiv.parentElement.scrollTop = objDiv.scrollHeight;
-      objDiv.style.opacity = '1';
-      that.firstScroll = false;
-    }, 0);
-  } catch (err) {
-    that.g.wdLog(['> Error :' + err]);
-  }
-  that.isScrolling = false;
- }
+//       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+//         objDiv.parentElement.classList.add('withoutAnimation');
+//       } else {
+//         objDiv.parentElement.classList.remove('withoutAnimation');
+//       }
+//       objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+//       objDiv.style.opacity = '1';
+//       that.firstScroll = false;
+//     }, 0);
+//   } catch (err) {
+//     that.g.wdLog(['> Error :' + err]);
+//   }
+//   that.isScrolling = false;
+//  }
 
 //  scrollToBottom_old(withoutAnimation?: boolean) {
 //   this.g.wdLog([' scrollToBottom: ', this.isScrolling]);

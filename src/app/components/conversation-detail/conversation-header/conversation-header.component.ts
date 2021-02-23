@@ -104,15 +104,14 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
       // }
       this.isButtonsDisabled = false;
     }, 300);
+    this.setSubscriptions();
 
   }
 
 
-   // /** */
   initializeTyping() {
-    console.log('this.translationMap', this.translationMap);
     console.log('membersconversation', this.membersConversation)
-    this.setSubscriptions();
+    //this.setSubscriptions();
     this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
   }
@@ -126,7 +125,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
       const subscribeBSIsTyping =  this.typingService.BSIsTyping.subscribe((data: any) => {
         console.log('***** BSIsTyping *****', data);
         if (data) {
-          const isTypingUid = data.uid;
+          const isTypingUid = data.uid; //support-group-...
           if (this.idConversation === isTypingUid) {
             that.subscribeTypings(data);
           }
@@ -141,17 +140,16 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   subscribeTypings(data: any) {
     const that = this;
     try {
-      const key = data.uidUserTypingNow; //support-gro
+      const key = data.uidUserTypingNow; 
       this.nameUserTypingNow = null;
       if (data.nameUserTypingNow) {
         this.nameUserTypingNow = data.nameUserTypingNow;
       }
-      console.log('subscribeTypings data:', data.uidUserTypingNow);
+      console.log('subscribeTypings data:', data);
       const userTyping = this.membersConversation.includes(key);
-      if ( !userTyping ) {
+      if ( !userTyping) {
         this.isTypings = true;
         console.log('child_changed key', key);
-        console.log('child_changed name', this.nameUserTypingNow);
         clearTimeout(this.setTimeoutWritingMessages);
         this.setTimeoutWritingMessages = setTimeout(() => {
             that.isTypings = false;
@@ -160,6 +158,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
     } catch (error) {
       console.log('error: ', error);
     }
+
   }
 
 
@@ -212,22 +211,13 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
 
 
   /** */
-  unsubscribe() {
-    this.g.wdLog(['******* unsubscribe *******']);
-    this.subscriptions.forEach(function (subscription) {
-        subscription.unsubscribe();
-    });
-    this.subscriptions.length = 0;
-    this.g.wdLog(['this.subscriptions', this.subscriptions]);
-  }
-
-  /** */
   private unsubescribeAll() {
     console.log('UserTypingComponent unsubescribeAll: ', this.subscriptions);
     this.subscriptions.forEach((subscription: any) => {
       console.log('unsubescribe: ', subscription);
       subscription.value.unsubscribe();
     });
+    this.subscriptions.length = 0;
     this.subscriptions = [];
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//

@@ -148,6 +148,12 @@
                               <time #timeTooltip *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
                           </div>
     
+                          <!-- message INFO/SUPPORT:: -->
+                          <!-- <div *ngIf=" message.attributes['subtype'] === 'info/support'" class="msg_info_container">
+                            <tiledeskwidget-info-message class="messages"
+                                [message]="message">
+                            </tiledeskwidget-info-message>
+                          </div> -->
     
                           <!-- message type:: button &&  -->
                           <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 

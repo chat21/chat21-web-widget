@@ -227,13 +227,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         });
         // this.authService.initialize()
-        this.authService2.initialize(this.setStorageProfix());
+        this.authService2.initialize(this.setStoragePrefix());
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
     }
 
-    setStorageProfix(): string{
+    setStoragePrefix(): string{
         let prefix = STORAGE_PREFIX;
         try {
             const sv = 'sv' + environment.shemaVersion + '_';
@@ -366,7 +366,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const subAuthStateChanged = this.authService2.BSAuthStateChanged.subscribe(state => {
 
             //const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
-            const tiledeskTokenTEMP = localStorage.getItem(this.setStorageProfix() + 'tiledeskToken')
+            const tiledeskTokenTEMP = localStorage.getItem(this.setStoragePrefix() + 'tiledeskToken')
             //const tiledeskTokenTEMP = this.authService2.getTiledeskToken();
             if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
                 that.g.tiledeskToken = tiledeskTokenTEMP;
@@ -568,9 +568,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     initConversationsHandler(tenant: string, senderId: string){
         this.g.wdLog(['initialize: ListConversationsComponent']);
         const keys = [
-        'LABEL_TU'
+        'YOU'
         ];
-        //const translationMap = this.translateService.translateLanguage(keys);
+        const translationMap = this.translateService.translateLanguage(keys);
         this.listConversations = [];
         this.archivedConversations = [];
         //this.availableAgents = this.g.availableAgents.slice(0, 5);
@@ -579,8 +579,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.wdLog(['tenant: ', tenant]);
 
         // 1 - init chatConversationsHandler and  archviedConversationsHandler
-        this.conversationsHandlerService.initialize(tenant,senderId, null)
-        this.archivedConversationsService.initialize(tenant, senderId, null)
+        this.conversationsHandlerService.initialize(tenant,senderId, translationMap)
+        this.archivedConversationsService.initialize(tenant, senderId, translationMap)
         // 2 - get conversations from storage
         // this.chatConversationsHandler.getConversationsFromStorage();
         // 5 - connect conversationHandler and archviedConversationsHandler to firebase event (add, change, remove)
@@ -907,7 +907,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.g.recipientId = null;
         if (conversationActive) {
             // console.log('77777');
-            this.g.recipientId = conversationActive.recipient;
+            // this.g.recipientId = conversationActive.recipient;
+            // this.conversationSelected = conversationActive;
+            // this.g.setParameter('recipientId', conversationActive.recipient);
             this.returnSelectedConversation(conversationActive);
         } else if (this.g.startFromHome) {
             // console.log('66666');
@@ -924,7 +926,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            // console.log('33333');
+            console.log('33333');
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
@@ -1720,7 +1722,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     openCloseWidget($event) {
         this.g.setParameter('displayEyeCatcherCard', 'none');
         const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
-        // console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
+        console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
         if ( this.g.isOpen === true ) {
             if (!conversationActive && !this.g.startFromHome) {
                 this.isOpenHome = false;
@@ -1885,6 +1887,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close conversation
      */
     private returnCloseConversation() {
+        console.log('returnCloseConversation')
         this.storageService.removeItem('activeConversation');
         this.g.setParameter('activeConversation', null, false);
         this.isOpenHome = true;
@@ -1987,7 +1990,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private triggerOnOpenEvent() {
         const detailOBJ = { default_settings: this.g.default_settings}
-        this.triggerHandler.triggerOnViewInit(detailOBJ)
+        this.triggerHandler.triggerOnOpenEvent(detailOBJ)
 
         // const default_settings = this.g.default_settings;
         // this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', default_settings]);
