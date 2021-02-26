@@ -112,8 +112,11 @@ import { InfoMessageComponent } from './components/message/info-message/info-mes
 
 // FACTORIES
 export function createTranslateLoader(http: HttpClient) {
-  console.log('factory translateeee')
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  let localUrl = './assets/i18n/';
+  if (location.pathname.includes('/assets/')) {
+    localUrl = '../i18n/';
+  }
+  return new TranslateHttpLoader(http, localUrl, '.json');
 }
 
 const appInitializerFn = (appConfig: AppConfigService) => {

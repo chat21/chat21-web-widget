@@ -78,7 +78,6 @@ export class FirebaseAuthService extends AuthService2 {
    */
   checkIsAuth() {
     console.log(' ---------------- AuthService checkIsAuth ---------------- ');
-    console.log('stoargepreficxxx', this.storagePrefix)
     this.tiledeskToken = localStorage.getItem(this.storagePrefix+'tiledeskToken');
     this.currentUser = JSON.parse(localStorage.getItem(this.storagePrefix + 'currentUser'));
     if (this.tiledeskToken) {

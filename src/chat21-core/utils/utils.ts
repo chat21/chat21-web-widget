@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 // tslint:disable-next-line:max-line-length
 import {
   MAX_WIDTH_IMAGES,
+  STORAGE_PREFIX,
   TYPE_DIRECT,
   TYPE_SUPPORT_GROUP
 } from './constants';
@@ -154,6 +155,17 @@ export function supports_html5_session() {
     this.g.wdLog(['> Error :' + e]);
     return false;
   }
+}
+
+export function setStoragePrefix(): string{
+  let prefix = STORAGE_PREFIX;
+  try {
+      const sv = 'sv' + environment.shemaVersion + '_';
+      prefix = prefix + sv;
+  } catch (e) {
+      this.g.wdLog(['> Error :' + e]);
+  }
+  return prefix + this.g.projectid + '_';
 }
 
 

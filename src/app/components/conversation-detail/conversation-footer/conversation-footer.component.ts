@@ -252,7 +252,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         const showWidgetNameInConversation = this.showWidgetNameInConversation;
         const widgetTitle = this.widgetTitle;
         const conversationWith = this.conversationWith;
-
         this.onBeforeMessageSent.emit({
           senderFullname: recipientFullname,
           text: msg,
@@ -287,7 +286,17 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
           recipientFullname += ' - ' + widgetTitle;
         }
-        const messageSent = this.conversationHandlerService.sendMessage(
+        // const messageSent = this.conversationHandlerService.sendMessage(
+        //   msg,
+        //   type,
+        //   metadata,
+        //   conversationWith,
+        //   recipientFullname,
+        //   senderId,
+        //   recipientFullname,
+        //   channelType       
+        // );
+        const messageSent = this.conversationHandlerService.sendMessage2(
           msg,
           type,
           metadata,
@@ -295,7 +304,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           recipientFullname,
           senderId,
           recipientFullname,
-          channelType        
+          channelType ,    
+          attributes
         );
 
         // this.triggerAfterSendMessageEvent(messageSent);

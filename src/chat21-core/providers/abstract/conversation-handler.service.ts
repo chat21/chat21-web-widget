@@ -37,6 +37,17 @@ export abstract class ConversationHandlerService {
     senderFullname: string,
     channelType: string
   ): MessageModel;
+  abstract sendMessage2(
+    msg: string,
+    type: string,
+    metadata: string,
+    conversationWith: string,
+    conversationWithFullname: string,
+    sender: string,
+    senderFullname: string,
+    channelType: string,
+    attributes: any
+  ): MessageModel;
   abstract dispose(): void;
 
 }

@@ -210,6 +210,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                         that.lastConversation = conversation;
                         this.g.isOpenNewMessage = true;
+                    }else {
+                        //widget closed
+
+                        let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+                        this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+                        console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
                     }
                 // });
             });
@@ -388,12 +394,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // confronto id utente tiledesk con id utente di firebase
                 // senderid deve essere == id di firebase
                 
-                const fullName = user.firstname + ' ' + user.lastname;
+                // const fullName = user.firstname + ' ' + user.lastname;
                 that.g.setParameter('senderId', user.uid);
-                this.g.setParameter('userFullname', fullName);
-                this.g.setAttributeParameter('userFullname', fullName);
-                this.g.setParameter('userEmail', user.email);
-                this.g.setAttributeParameter('userEmail', user.email);
+                // this.g.setParameter('userFullname', fullName);
+                // this.g.setAttributeParameter('userFullname', fullName);
+                // this.g.setParameter('userEmail', user.email);
+                // this.g.setAttributeParameter('userEmail', user.email);
                 that.g.setParameter('isLogged', true);
                 that.g.setParameter('attributes', that.setAttributesFromStorageService());
                 /* faccio scattare il trigger del login solo una volta */
@@ -470,6 +476,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // ------------------------------- //
                     // /** INIT  */
                     // that.initAll();
+                    // aggiungo nel local storage e mi autentico
+                    // this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
+                    // if (this.g.customToken) {
+                    //   // mi loggo con custom token passato nell'url
+                    //   this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
+                    //   this.storageService.setItem('tiledeskToken', this.g.customToken)
+                    //   this.g.tiledeskToken = this.g.customToken;
+                    // }
                     this.translatorService.initI18n().then((result) => {
                         this.g.wdLog(['»»»» APP-COMPONENT.TS initI18n result', result]);
                         this.translatorService.translate(this.g);
@@ -567,9 +581,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     initConversationsHandler(tenant: string, senderId: string){
         this.g.wdLog(['initialize: ListConversationsComponent']);
-        const keys = [
-        'YOU'
-        ];
+        const keys = [ 'YOU' ];
         const translationMap = this.translateService.translateLanguage(keys);
         this.listConversations = [];
         this.archivedConversations = [];
@@ -594,7 +606,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
         this.g.wdLog(['this.listConversations appcomponent', this.listConversations, this.archivedConversations]);
-         
+        
     }
 
     /** initChatSupportMode
@@ -633,7 +645,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         let attributes: any = {};
         try {
             attributes = JSON.parse(this.storageService.getItem('attributes'));
-            // that.g.wdLog(['> attributes: ', attributes);
+            // this.g.wdLog(['> attributes: ', attributes]);
         } catch (error) {
             this.g.wdLog(['> Error :' + error]);
         }
@@ -671,7 +683,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['> Error is handled payload: ', error]);
         }
 
-        // this.storageService.setItem('attributes', JSON.stringify(attributes));
+        this.storageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
         // that.g.wdLog([' ---------------- setAttributes ---------------- ', attributes);
         return attributes;
@@ -846,17 +858,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //     //  SONO GIA' AUTENTICATO
                this.g.wdLog([' ---------------- 13 ---------------- ']);
                this.g.wdLog([' ----------- sono già loggato ------- ']);
-        //     const currentUser = this.authService2.getCurrentUser();
+            // const currentUser = this.authService2.getCurrentUser();
         //     this.g.senderId = currentUser.uid;
         //     this.g.setParameter('senderId', currentUser.uid);
 
-        //     const fullName = currentUser.firstname + ' ' + currentUser.lastname;
-        //     this.g.setParameter('userFullname', fullName);
-        //     this.g.setAttributeParameter('userFullname', fullName);
-        //     this.g.setParameter('userEmail', currentUser.email);
-        //     this.g.setAttributeParameter('userEmail', currentUser.email);
+            // const fullName = currentUser.firstname + ' ' + currentUser.lastname;
+            // this.g.setParameter('userFullname', fullName);
+            // this.g.setAttributeParameter('userFullname', fullName);
+            // this.g.setParameter('userEmail', currentUser.email);
+            // this.g.setAttributeParameter('userEmail', currentUser.email);
 
-        //     // if(currentUser.firstname && currentUser.lastname){
+        //     // if(currentUser.firstname || currentUser.lastname){
         //     //     this.g.wdLog([' ---------------- 13 fullname ---------------- ']);
         //     //     const fullName = currentUser.firstname + ' ' + currentUser.lastname;
         //     //     this.g.setParameter('userFullname', fullName);
@@ -905,12 +917,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
         this.g.wdLog([' ============ idConversation ===============', conversationActive ]);
         // this.g.recipientId = null;
-        if (conversationActive) {
+        if (conversationActive) { //
             // console.log('77777');
-            // this.g.recipientId = conversationActive.recipient;
-            // this.conversationSelected = conversationActive;
-            // this.g.setParameter('recipientId', conversationActive.recipient);
-            this.returnSelectedConversation(conversationActive);
+            if(this.g.isOpen){
+                this.isOpenConversation = true;
+            }
+            this.g.recipientId = conversationActive.recipient;
+            this.conversationSelected = conversationActive;
+            this.g.setParameter('recipientId', conversationActive.recipient);
+            // this.returnSelectedConversation(conversationActive);
         } else if (this.g.startFromHome) {
             // console.log('66666');
             this.isOpenConversation = false;
@@ -926,10 +941,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOpenSelectionDepartment = true;
             }
         } else {
-            console.log('33333');
+            // console.log('33333');
             this.g.setParameter('isOpenPrechatForm', false);
             this.isOpenConversation = false;
             this.isOpenSelectionDepartment = false;
+
+            
             if (departments.length > 1 && !this.g.departmentID == null) {
                 // console.log('22222');
                 this.isOpenSelectionDepartment = true;
@@ -1724,15 +1741,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
         console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
         if ( this.g.isOpen === true ) {
-            if (!conversationActive && !this.g.startFromHome) {
-                this.isOpenHome = false;
-                this.isOpenConversation = true;
-                this.startNwConversation();
-            } else if (conversationActive) {
+            if(!conversationActive){
+                if(this.g.startFromHome){
+                    this.isOpenHome = true;
+                    this.isOpenConversation = false;
+                }else{
+                    this.isOpenHome = false;
+                    this.isOpenConversation = true;
+                    this.returnNewConversation()
+                    // this.startNwConversation();
+                }
+            }else { //conversation is present in localstorage
                 this.isOpenHome = false;
                 this.isOpenConversation = true;
             }
-            this.g.startFromHome = true;
+            // if (!conversationActive && !this.g.startFromHome) {
+            //     this.isOpenHome = false;
+            //     this.isOpenConversation = true;
+            //     this.startNwConversation();
+            // } else if (conversationActive) {
+            //     this.isOpenHome = false;
+            //     this.isOpenConversation = true;
+            // }
+            // this.g.startFromHome = true;
             this.triggerOnOpenEvent();
         } else {
             this.triggerOnCloseEvent();
@@ -1939,6 +1970,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
+        this.returnCloseConversation();
     }
 
     /**
@@ -1954,6 +1986,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
+        this.returnCloseConversation();
     }
 
     returneventOpenEyeCatcher($e) {

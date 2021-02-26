@@ -1,6 +1,16 @@
 # chat21-web-widget ver 3.0
 
-### 5.0.0beta2.5
+### 5.0.0-beta2.6
+- bug-fix: translation error with /assets/ pages (ex. Tiledesk visitor page)
+- bug-fix: after archived a converversation when open new conversation always show rating component
+- bug-fix: conversationBadge not show when refresh closed widget 
+- bug-fix: prechat form shown always, not only the first time
+- change: startFromHome behavior changed (now if closed, open new conversation or saved conversation from storage)
+
+- add: new sendMessage2 with attributes at runtime
+
+
+### 5.0.0-beta2.5
 - bug-fix: typing when open conversation-detail if last message was sent by agent
 - bug-fix: if new message arrived in conversation-detail and scrollDiv is at the end -> update is_new conversation attributes
 - bug-fix: merge local with remote translations

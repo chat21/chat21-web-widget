@@ -44,7 +44,7 @@
                 [conversation]="conversationSelected"
                 [isOpen]="g.isOpen"
                 [styleMap]="styleMapConversation"
-                (onClose)="returnCloseConversation()" 
+                (onBackHome)="returnCloseConversation()" 
                 (onCloseWidget)="returnCloseWidget()"
                 (onSoundChange)="returnSoundChange($event)"
                 (onBeforeMessageSent)="triggerHandler.triggerBeforeSendMessageEvent($event)"

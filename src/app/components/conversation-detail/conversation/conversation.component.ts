@@ -65,7 +65,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() styleMap: Map<string, string>;
   @Input() isOpen: boolean;
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
-  @Output() onClose = new EventEmitter();
+  @Output() onBackHome = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
   @Output() onBeforeMessageSent = new EventEmitter();
@@ -563,7 +563,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       //   0,
       //   false
       //   );
-
+      console.log('userrfullnameeee', this.g.userFullname)
       this.conversation = new ConversationModel(
         recipientId,
         {},
@@ -763,6 +763,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // tslint:disable-next-line:max-line-length
       that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation.value]);
       subscribtion = this.starRatingWidgetService.obsCloseConversation.subscribe(isOpenStartRating => {
+        console.log('startratingggg', isOpenStartRating)
         that.g.setParameter('isOpenStartRating', isOpenStartRating);
         if (isOpenStartRating === false) {
             that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
@@ -797,7 +798,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.subscribe((conversation) => {
         console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
-        if(conversation && !this.isConversationArchived){
+        if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
         }
       });
@@ -1686,7 +1687,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   returnHome() {
     //this.storageService.removeItem('activeConversation');
     //this.g.setParameter('activeConversation', null, false);
-    this.onClose.emit();
+    this.onBackHome.emit();
   }
 
   returnCloseWidget() {

@@ -153,7 +153,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const recipientFullname = conversationWithFullname;
         const dateSendingMessage = setHeaderDate(this.translationMap, '');
         const timestamp = firebase.database.ServerValue.TIMESTAMP
-        
+        console.log('ssssssssssssssssssss', senderFullname, sender)
         const message = new MessageModel(
             '',
             lang,
@@ -183,6 +183,101 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
                 type: typeMsg,
                 attributes: this.attributes,
+                channel_type: channelType
+                // isSender: true
+            });
+
+        // const message = new MessageModel(
+        //     key,
+        //     language, // language
+        //     conversationWith, // recipient
+        //     recipientFullname, // recipient_full_name
+        //     sender, // sender
+        //     senderFullname, // sender_full_name
+        //     0, // status
+        //     metadata, // metadata
+        //     msg, // text
+        //     0, // timestamp
+        //     dateSendingMessage, // headerDate
+        //     type, // type
+        //     this.attributes, // attributes
+        //     channelType, // channel_type
+        //     true // is_sender
+        // );
+        console.log('messages: ',  this.messages);
+        console.log('senderFullname: ',  senderFullname);
+        console.log('sender: ',  sender);
+        console.log('SEND MESSAGE: ', msg, channelType);
+        console.log('timestamp: ', );
+        console.log('messaggio **************', );
+        // messageRef.update({
+        //     uid: messageRef.key
+        // }, ( error ) => {
+        //     // if (error) {
+        //     //     message.status = -100;
+        //     //     console.log('ERRORE', error);
+        //     // } else {
+        //     //     message.status = 150;
+        //     //     console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+        //     // }
+        //     // console.log('****** changed *****', that.messages);
+        // });
+
+        
+          return message
+    }
+
+    sendMessage2(
+        msg: string,
+        typeMsg: string,
+        metadataMsg: string,
+        conversationWith: string,
+        conversationWithFullname: string,
+        sender: string,
+        senderFullname: string,
+        channelType: string,
+        attributes: any
+    ) {
+        const that = this;
+        if (!channelType || channelType === 'undefined') {
+            channelType = TYPE_DIRECT;
+        }
+        const firebaseMessagesCustomUid = firebase.database().ref(this.urlNodeFirebase);
+
+        // const key = messageRef.key;
+        const lang = document.documentElement.lang;
+        const recipientFullname = conversationWithFullname;
+        const dateSendingMessage = setHeaderDate(this.translationMap, '');
+        const timestamp = firebase.database.ServerValue.TIMESTAMP
+        const message = new MessageModel(
+            '',
+            lang,
+            conversationWith,
+            recipientFullname,
+            sender,
+            senderFullname,
+            0,
+            metadataMsg,
+            msg,
+            timestamp,
+            dateSendingMessage,
+            typeMsg,
+            attributes,
+            channelType,
+            false
+        );
+        const messageRef = firebaseMessagesCustomUid.push({
+                language: lang,
+                recipient: conversationWith,
+                recipient_fullname: recipientFullname,
+                sender: sender,
+                sender_fullname: senderFullname,
+                status: 0,
+                metadata: metadataMsg,
+                text: msg,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                type: typeMsg,
+                attributes: attributes,
                 channel_type: channelType
                 // isSender: true
             });
