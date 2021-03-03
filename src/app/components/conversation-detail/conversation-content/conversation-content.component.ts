@@ -96,7 +96,7 @@ export class ConversationContentComponent implements OnInit {
  
   // LISTEN TO SCROLL POSITION
   onScroll(event): void {
-    console.log('************** SCROLLLLLLLLLL *****************');
+    // console.log('************** SCROLLLLLLLLLL *****************');
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;

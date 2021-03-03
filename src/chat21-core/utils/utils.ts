@@ -101,7 +101,7 @@ export function contactsRef(tenant) {
 export function setHeaderDate(translate, timestamp): string {
   const LABEL_TODAY = translate.get('LABEL_TODAY');
   const LABEL_TOMORROW = translate.get('LABEL_TOMORROW');
- 
+
   const date = new Date(timestamp);
   const now: Date = new Date();
   let labelDays = '';
@@ -115,6 +115,7 @@ export function setHeaderDate(translate, timestamp): string {
     labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
   } else if (now.getDay() === date.getDay()) {
     // oggi: oggi
+    // console.log('moment', moment().calendar(timestamp))
     labelDays = LABEL_TODAY;
   } else if (now.getDay() - date.getDay() === 1) {
     // ieri: ieri
@@ -126,6 +127,7 @@ export function setHeaderDate(translate, timestamp): string {
   // se le date sono diverse o la data di riferimento non è impostata
   // ritorna la data calcolata
   // altrimenti torna null
+
   return labelDays;
 }
 

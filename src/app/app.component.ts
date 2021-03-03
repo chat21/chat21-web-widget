@@ -476,14 +476,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // ------------------------------- //
                     // /** INIT  */
                     // that.initAll();
-                    // aggiungo nel local storage e mi autentico
-                    // this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
-                    // if (this.g.customToken) {
-                    //   // mi loggo con custom token passato nell'url
-                    //   this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
-                    //   this.storageService.setItem('tiledeskToken', this.g.customToken)
-                    //   this.g.tiledeskToken = this.g.customToken;
-                    // }
+                    
+                    this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
+                    if (this.g.customToken) {
+                      // mi loggo con custom token passato nell'url
+                      //aggiungo nel local storage e mi autentico
+                      console.log('token passato da url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
+                      this.g.autoStart = false;
+                      this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
+                      this.storageService.setItem('tiledeskToken', this.g.customToken)
+                      this.signInWithCustomToken(this.g.customToken)
+                      this.g.tiledeskToken = this.g.customToken;
+                    }
                     this.translatorService.initI18n().then((result) => {
                         this.g.wdLog(['»»»» APP-COMPONENT.TS initI18n result', result]);
                         this.translatorService.translate(this.g);
@@ -559,13 +563,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.initialize();
         // ------------------------------- //
 
-        this.g.wdLog([' ---------------- A1 ---------------- ']);
         this.removeFirebasewebsocketFromLocalStorage();
         // this.triggerLoadParamsEvent();
         // this.addComponentToWindow(this.ngZone); // forse dovrebbe stare prima di tutti i triggers
 
         this.initLauncherButton();
-        this.triggerLoadParamsEvent(); // first trigger 
+        this.triggerLoadParamsEvent(); // first trigger
         //this.setAvailableAgentsStatus();
 
         
@@ -678,7 +681,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         try {
             // attributes['payload'] = this.g.customAttributes.payload;
-            attributes['payload'] = this.g.customAttributes;
+            attributes['payload'] = []
+            if(this.g.customAttributes){
+                attributes['payload'] = this.g.customAttributes;
+            }
         } catch (error) {
             this.g.wdLog(['> Error is handled payload: ', error]);
         }
@@ -1046,7 +1052,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             /** show all widget */
             windowContext['tiledesk'].show = function () {
                 ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.showAllWidget();
+                    windowContext['tiledesk']['angularcomponent'].component.showWidget();
                 });
             };
             /** hidden all widget */
@@ -1357,44 +1363,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private signInWithCustomToken(token: string) {
         const that = this;
-        try {
-            // this.authService.signInWithCustomToken(token).subscribe(resp => {
-            //     that.g.wdLog(['signInWithCustomToken token ', resp]);
-            //      if (resp.success === true && resp.token) {
-            //          if (resp.user) {
-            //             const fullName = resp.user.firstname + ' ' + resp.user.lastname;
-            //             that.g.setParameter('userFullname', fullName);
-            //             that.g.setParameter('userEmail', resp.user.email);
-            //             //that.g.setParameter('userId', resp.user._id);
-            //             that.g.setAttributeParameter('userEmail', resp.user.email);
-            //             that.g.setAttributeParameter('userFullname', fullName);
-            //          }
-            //         that.authService.createFirebaseToken(resp.token).subscribe(firebaseToken => {
-            //             that.g.firebaseToken = firebaseToken;
-            //             that.authService.authenticateFirebaseCustomToken(firebaseToken);
-            //         }, error => {
-            //             console.error('Error creating firebase token: ', error);
-            //             that.signOut();
-            //         });
-            //      }
-            // }, error => {
-            //     console.error('Error creating firebase token: ', error);
-            //     that.signOut();
-            // });
-            this.authService2.signInWithCustomToken(token).then(resp => {
-                this.showWidget()
-                console.log('userlogged customtoken', resp)
-                const fullName = resp.firstname + ' ' + resp.lastname;
-                that.g.setParameter('userFullname', fullName);
-                that.g.setParameter('userEmail', resp.email);
-                //that.g.setParameter('userId', resp.user._id);
-                that.g.setAttributeParameter('userEmail', resp.email);
-                that.g.setAttributeParameter('userFullname', fullName);
-            })
-        } catch (error) {
+        this.authService2.signInWithCustomToken(token).then(resp => {
+            console.log('userlogged customtoken', resp)
+            const currentUser = resp;
+            if(currentUser.firstname || currentUser.lastname){
+                const fullName = currentUser.firstname + ' ' + currentUser.lastname;
+                this.g.setParameter('userFullname', fullName);
+                this.g.setAttributeParameter('userFullname', fullName);
+            }
+            if(currentUser.email){
+                this.g.setParameter('userEmail', currentUser.email);
+                this.g.setAttributeParameter('userEmail', currentUser.email);
+            }
+            this.showWidget()
+        }).catch(error => {
             this.g.wdLog(['> Error :' + error]);
             that.signOut();
-        }
+        });
     }
 
     // UNUSED
@@ -1471,12 +1456,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** show widget */
     private showWidget() {
+        console.log('show widget--> autoStart:', this.g.autoStart, 'startHidden', this.g.startHidden, 'isShown', this.g.isShown)
         const startHidden = this.g.startHidden;
         const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
         if (divWidgetContainer && startHidden === false) {
+            console.log('-----------1 false----------------')
             divWidgetContainer.style.display = 'block';
             this.g.setParameter('isShown', true, true);
         } else {
+            console.log('-----------2 true----------------')
             this.g.startHidden = false;
             this.g.setParameter('isShown', false, true);
         }

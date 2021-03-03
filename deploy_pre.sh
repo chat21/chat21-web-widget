@@ -27,29 +27,29 @@
 
 # sed -i -e "s/$start$ver.$build/$start$NEW_VER.$NEW_BUILD/g" current_version.ts
 
-npm version patch
+# npm version patch
 version=`node -e 'console.log(require("./package.json").version)'`
 echo "version $version"
 
-if [ "$version" != "" ]; then
-    git tag -a "$version" -m "`git log -1 --format=%s`"
-    echo "Created a new tag, $version"
-    git push --tags
-    npm publish
-fi
+# if [ "$version" != "" ]; then
+#     git tag -a "$version" -m "`git log -1 --format=%s`"
+#     echo "Created a new tag, $version"
+#     git push --tags
+#     npm publish
+# fi
 
 ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=false
 cd dist
-aws s3 sync . s3://tiledesk-widget-pre/v2/$version/
-aws s3 sync . s3://tiledesk-widget-pre/v2/
+aws s3 sync . s3://tiledesk-widget-pre/v5/5.0.0-beta.2.7/
+aws s3 sync . s3://tiledesk-widget-pre/v5/
 cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/v2 and s3://tiledesk-widget-pre/v2/$version/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v2/index.html
-echo https://widget-pre.tiledesk.com/v2/index.html
-echo https://widget-pre.tiledesk.com/v2/$version/index.html
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v5 and s3://tiledesk-widget-pre/v5/$version/
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v5/index.html
+echo https://widget-pre.tiledesk.com/v5/index.html
+echo https://widget-pre.tiledesk.com/v5/$version/index.html
 
 ## AZIONI per committare: 
 ## 1) modificare package.json e package-lock.json aggiungendo il num di versione nuovo

@@ -806,6 +806,24 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(subscribe);
     }
 
+    subscribtionKey = 'conversationsChanged';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if(!subscribtion){
+
+      subscribtion = this.chatManager.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
+        console.log('***** DATAIL conversationsChanged *****', conversation, this.conversationWith, this.isConversationArchived);
+        if(conversation && conversation.sender !== this.senderId){
+          const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
+          if(checkContentScrollPosition){ //update conversation if scroolToBottom is to the end
+            that.updateConversationBadge();
+          }
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
+
     // this.starRatingWidgetService.setOsservable(false);
     // // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
     // // tslint:disable-next-line:max-line-length
@@ -1333,29 +1351,30 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
-//  scrollToBottom(withoutAnimation?: boolean) {
-//   const that = this;
-//    try {
-//     that.isScrolling = true;
-//     const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
-//     console.log('divto scrool', objDiv);
-//     // const element = objDiv[0] as HTMLElement;
-//     setTimeout(function () {
+ scrollToBottom(withoutAnimation?: boolean) {
+  this.conversationContent.scrollToBottom();
+  // const that = this;
+  //  try {
+  //   that.isScrolling = true;
+  //   const objDiv = document.getElementById(that.idDivScroll) as HTMLElement;
+  //   console.log('divto scrool', objDiv);
+  //   // const element = objDiv[0] as HTMLElement;
+  //   setTimeout(function () {
 
-//       if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
-//         objDiv.parentElement.classList.add('withoutAnimation');
-//       } else {
-//         objDiv.parentElement.classList.remove('withoutAnimation');
-//       }
-//       objDiv.parentElement.scrollTop = objDiv.scrollHeight;
-//       objDiv.style.opacity = '1';
-//       that.firstScroll = false;
-//     }, 0);
-//   } catch (err) {
-//     that.g.wdLog(['> Error :' + err]);
-//   }
-//   that.isScrolling = false;
-//  }
+  //     if (that.isIE === true || withoutAnimation === true || that.firstScroll === true) {
+  //       objDiv.parentElement.classList.add('withoutAnimation');
+  //     } else {
+  //       objDiv.parentElement.classList.remove('withoutAnimation');
+  //     }
+  //     objDiv.parentElement.scrollTop = objDiv.scrollHeight;
+  //     objDiv.style.opacity = '1';
+  //     that.firstScroll = false;
+  //   }, 0);
+  // } catch (err) {
+  //   that.g.wdLog(['> Error :' + err]);
+  // }
+  // that.isScrolling = false;
+ }
 
 //  scrollToBottom_old(withoutAnimation?: boolean) {
 //   this.g.wdLog([' scrollToBottom: ', this.isScrolling]);
@@ -1717,11 +1736,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnScrollContent(event: boolean){
     this.showBadgeScroollToBottom = event;
-    
+    console.log('scroool eventtt', event)
     //se sono alla fine (showBadgeScroollBottom === false) allora imposto messageBadgeCount a 0
     if(this.showBadgeScroollToBottom === false){
       this.messagesBadgeCount = 0;
-      this.updateConversationBadge();
+      //this.updateConversationBadge();
     }
     
   }

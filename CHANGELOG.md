@@ -1,6 +1,13 @@
 # chat21-web-widget ver 3.0
 
-### 5.0.0-beta2.6
+### 5.0.0-beta.2.7
+- bug-fix: scrollToButtom function undefined on badgeScroollToBottom in conversation component
+- bug-fix: attributes.payload undefined if customAttributes not valorized
+- bug-fix: updateConversationBadge on conversationChanged
+- bug-fix: icon sender as swg 
+
+
+### 5.0.0-beta.2.6
 - bug-fix: translation error with /assets/ pages (ex. Tiledesk visitor page)
 - bug-fix: after archived a converversation when open new conversation always show rating component
 - bug-fix: conversationBadge not show when refresh closed widget 
@@ -10,7 +17,7 @@
 - add: new sendMessage2 with attributes at runtime
 
 
-### 5.0.0-beta2.5
+### 5.0.0-beta.2.5
 - bug-fix: typing when open conversation-detail if last message was sent by agent
 - bug-fix: if new message arrived in conversation-detail and scrollDiv is at the end -> update is_new conversation attributes
 - bug-fix: merge local with remote translations

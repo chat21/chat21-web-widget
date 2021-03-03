@@ -153,7 +153,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const recipientFullname = conversationWithFullname;
         const dateSendingMessage = setHeaderDate(this.translationMap, '');
         const timestamp = firebase.database.ServerValue.TIMESTAMP
-        console.log('ssssssssssssssssssss', senderFullname, sender)
         const message = new MessageModel(
             '',
             lang,
