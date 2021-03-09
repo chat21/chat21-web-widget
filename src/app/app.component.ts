@@ -55,6 +55,7 @@ import { ArchivedConversationsHandlerService } from '../chat21-core/providers/ab
 import { URL_SOUND } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { timeout } from 'rxjs/operator/timeout';
+import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
 // import { TranslationLoader } from './translation-loader';
 
 @Component({
@@ -139,7 +140,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public conversationHandlerBuilderService: ConversationHandlerBuilderService,
         public chatManager: ChatManager,
         public typingService: TypingService,
-        public imageRepoService: ImageRepoService
+        public imageRepoService: ImageRepoService,
+        public uploadService2: UploadService2
     ) {
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
@@ -151,10 +153,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     ngOnInit() {
-        this.g.wdLog(' ---------------- ngOnInit ---------------- ');
-        this.initWidgetParamiters();
-        
-        
+        console.log(' ---------------- ngOnInit: APP.COMPONENT ---------------- ')
+        this.initWidgetParamiters();  
     }
 
     /** */
@@ -237,6 +237,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
+        this.uploadService2.initialize();
     }
 
     setStoragePrefix(): string{
@@ -389,7 +390,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                  /** sono loggato */
                 const user = that.authService2.getCurrentUser();
                 that.g.wdLog(['sono nel caso in cui sono loggato', user]);
-                that.g.wdLog([' anonymousAuthenticationInNewProject']);
+                // that.g.wdLog([' anonymousAuthenticationInNewProject']);
                 // that.authService.resigninAnonymousAuthentication();
                 // confronto id utente tiledesk con id utente di firebase
                 // senderid deve essere == id di firebase
@@ -897,7 +898,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             //  AUTENTICAZIONE ANONIMA
             this.g.wdLog([' ---------------- 14 ---------------- ']);
             this.g.wdLog([' authenticateFirebaseAnonymously']);
-            this.authService2.signInAnonymously(this.g.projectid);
+            this.authService2.signInAnonymously(this.g.projectid).then(user => {
+            
+                if(user.firstname || user.lastname){
+                const fullName = user.firstname + ' ' + user.lastname;
+                this.g.setParameter('userFullname', fullName);
+                this.g.setAttributeParameter('userFullname', fullName);
+                }
+                if(user.email){
+                    this.g.setParameter('userEmail', user.email);
+                    this.g.setAttributeParameter('userEmail', user.email);
+                }
+            });
             // this.authService.anonymousAuthentication();
             // this.g.wdLog([' authenticateFirebaseAnonymously']);
             // this.authService.authenticateFirebaseAnonymously();

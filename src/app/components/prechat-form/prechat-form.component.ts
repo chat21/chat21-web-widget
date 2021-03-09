@@ -101,6 +101,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
       this.g.setAttributeParameter('privacyApproved', this.g.privacyApproved);
       this.g.setAttributeParameter('userFullname', this.userFullname);
       this.g.setAttributeParameter('userEmail', this.userEmail);
+      this.g.setParameter('userFullname', this.userFullname);
+      this.g.setParameter('userEmail', this.userEmail);
       // attributes['userFullname'] = this.userFullname;
       // attributes['userEmail'] = this.userEmail;
       // this.g.setParameter('attributes', attributes);

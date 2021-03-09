@@ -1622,7 +1622,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           this.messages[index].uid = message.uid;
           this.messages[index].status = message.status;
           this.messages[index].timestamp = message.timestamp;
-          this.messages[index].headerDate = message.headerDate;
           this.g.wdLog(['UPDATE ok:', this.messages[index]]);
       } else {
           this.messages.push(message);

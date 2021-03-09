@@ -11,7 +11,6 @@ import 'firebase/firestore';
 // models
 
 import { UserModel } from '../../models/user';
-import { ConversationModel } from '../../models/conversation';
 
 // services
 import { ConversationHandlerService } from '../abstract/conversation-handler.service';
@@ -22,7 +21,6 @@ import {
   htmlEntities,
   compareValues,
   searchIndexInArrayForUid,
-  setHeaderDate,
   conversationMessagesRef
 } from '../../utils/utils';
 import { timestamp } from 'rxjs/operators';
@@ -151,7 +149,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // const key = messageRef.key;
         const lang = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
-        const dateSendingMessage = setHeaderDate(this.translationMap, '');
         const timestamp = firebase.database.ServerValue.TIMESTAMP
         const message = new MessageModel(
             '',
@@ -164,7 +161,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             metadataMsg,
             msg,
             timestamp,
-            dateSendingMessage,
+            //dateSendingMessage,
             typeMsg,
             this.attributes,
             channelType,
@@ -197,7 +194,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     metadata, // metadata
         //     msg, // text
         //     0, // timestamp
-        //     dateSendingMessage, // headerDate
         //     type, // type
         //     this.attributes, // attributes
         //     channelType, // channel_type
@@ -246,7 +242,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // const key = messageRef.key;
         const lang = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
-        const dateSendingMessage = setHeaderDate(this.translationMap, '');
         const timestamp = firebase.database.ServerValue.TIMESTAMP
         const message = new MessageModel(
             '',
@@ -259,7 +254,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             metadataMsg,
             msg,
             timestamp,
-            dateSendingMessage,
+            //dateSendingMessage,
             typeMsg,
             attributes,
             channelType,
@@ -292,7 +287,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     metadata, // metadata
         //     msg, // text
         //     0, // timestamp
-        //     dateSendingMessage, // headerDate
         //     type, // type
         //     this.attributes, // attributes
         //     channelType, // channel_type
@@ -365,13 +359,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     /** */
     private added(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
-        // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-        msg.headerDate = null;
-        const headerDate = setHeaderDate(this.translationMap, msg.timestamp);
-        if (headerDate !== this.lastDate) {
-            this.lastDate = headerDate;
-            msg.headerDate = headerDate;
-        }
 
         if(this.skipMessage && msg.attributes && msg.attributes['subtype'] === 'info'){
             return;
@@ -435,8 +422,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private addRepalceMessageInArray(key: string, msg: MessageModel) {
         const index = searchIndexInArrayForUid(this.messages, key);
         if (index > -1) {
-            const headerDate = this.messages[index].headerDate;
-            msg.headerDate = headerDate;
             this.messages.splice(index, 1, msg);
         } else {
             this.messages.splice(0, 0, msg);

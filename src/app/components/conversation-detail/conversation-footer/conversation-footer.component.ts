@@ -10,6 +10,7 @@ import { UploadModel } from '../../../../chat21-core/models/upload';
 import { UploadService } from '../../../providers/upload.service';
 import { replaceBr } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
+import { UploadService2 } from '../../../../chat21-core/providers/abstract/upload.service';
 
 @Component({
   selector: 'tiledeskwidget-conversation-footer',
@@ -50,7 +51,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   constructor(public g: Globals,
               public upSvc: UploadService,
               private chatManager: ChatManager,
-              private typingService: TypingService) { }
+              private typingService: TypingService,
+              private uploadService2: UploadService2) { }
 
   ngOnInit() {
   }
@@ -213,6 +215,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         });
       // this.resetLoadImage();
       that.g.wdLog(['reader-result: ', file]);
+
+      this.uploadService2.pushUploadMessage(currentUpload)
     }
 
   /**

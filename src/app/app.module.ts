@@ -107,6 +107,8 @@ import { ActionButtonComponent } from './components/message/buttons/action-butto
 import { AvatarComponent } from './components/message/avatar/avatar.component';
 import { ReturnReceiptComponent } from './components/message/return-receipt/return-receipt.component';
 import { InfoMessageComponent } from './components/message/info-message/info-message.component';
+import { FirebaseUploadService } from '../chat21-core/providers/firebase/firebase-upload.service';
+import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
 
 
 
@@ -192,6 +194,14 @@ export function imageRepoFactory() {
     return new FirebaseImageRepoService();
   } else {
     return new FirebaseImageRepoService();
+  }
+}
+
+export function uploadFactory() {
+  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    return new FirebaseUploadService();
+  } else {
+    return new FirebaseUploadService();
   }
 }
 
@@ -311,6 +321,11 @@ export function imageRepoFactory() {
     {
       provide: ImageRepoService,
       useFactory: imageRepoFactory,
+      deps: []
+    },
+    {
+      provide: UploadService2,
+      useFactory: uploadFactory,
       deps: []
     },
     AuthService,

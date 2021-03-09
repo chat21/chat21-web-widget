@@ -19,6 +19,7 @@ import {
   getColorBck,
   getImageUrlThumbFromFirebasestorage
  } from './utils-user';
+import { time } from 'console';
 /**
  * Shortest description  for phone and tablet
  * Nota: eseguendo un test su desktop in realtà lo switch avviene a 921px 767px
@@ -115,11 +116,12 @@ export function setHeaderDate(translate, timestamp): string {
     labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
   } else if (now.getDay() === date.getDay()) {
     // oggi: oggi
-    // console.log('moment', moment().calendar(timestamp))
+    labelDays = moment().calendar(timestamp).split(' ')[0].toLocaleLowerCase();
     labelDays = LABEL_TODAY;
   } else if (now.getDay() - date.getDay() === 1) {
     // ieri: ieri
-    labelDays = LABEL_TOMORROW;
+    labelDays = moment().calendar(timestamp).split(' ')[0].toLocaleLowerCase();
+    // labelDays = LABEL_TOMORROW;
   } else {
     // questa settimana: giorno
     labelDays = convertDayToString(translate, date.getDay());
@@ -127,7 +129,6 @@ export function setHeaderDate(translate, timestamp): string {
   // se le date sono diverse o la data di riferimento non è impostata
   // ritorna la data calcolata
   // altrimenti torna null
-
   return labelDays;
 }
 
