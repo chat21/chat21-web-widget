@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
-import { MessagingService } from '../../providers/messaging.service';
 import { StorageService } from '../../providers/storage.service';
 
 @Component({

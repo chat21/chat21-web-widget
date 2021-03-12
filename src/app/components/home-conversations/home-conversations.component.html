@@ -49,7 +49,8 @@
       [limit]="3"
       [styleMap]="styleMap"
       [translationMap]="translationMapConversation"
-      (onConversationSelected)=returnSelectedConversation($event)>
+      (onConversationSelected)=returnSelectedConversation($event)
+      (onImageLoad)="returnOnImageLoad($event)">
     </tiledeskwidget-list-conversations>
 
     <div *ngIf="(!listConversations || listConversations.length == 0) && g.showAvailableAgents === true" style="margin-left: 30px;"> 
