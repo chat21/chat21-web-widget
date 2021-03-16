@@ -49,7 +49,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   conversationHandlerService: ConversationHandlerService
 
   constructor(public g: Globals,
-              public upSvc: UploadService,
+              //public upSvc: UploadService,
               private chatManager: ChatManager,
               private typingService: TypingService,
               private uploadService2: UploadService2) { }
@@ -62,9 +62,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
-    if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
-      this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
-    }
+    // if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
+    //   this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
+    // }
   }
   
   ngAfterViewInit() {
@@ -192,31 +192,49 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         const currentUpload = new UploadModel(file);
         // console.log(currentUpload.file);
 
-        const uploadTask = this.upSvc.pushUpload(currentUpload);
-        uploadTask.then(snapshot => {
-            return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
-        }).then(downloadURL => {
-            that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
-            that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
+        // const uploadTask = this.upSvc.pushUpload(currentUpload);
+        // uploadTask.then(snapshot => {
+        //     return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+        // }).then(downloadURL => {
+        //     that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+        //     that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
-            metadata.src = downloadURL;
-            let type_message = TYPE_MSG_TEXT;
-            let message = 'File: ' + metadata.src;
-            if (metadata.type.startsWith('image')) {
-                type_message = TYPE_MSG_IMAGE;
-                message = ''; // 'Image: ' + metadata.src;
-            }
-            that.sendMessage(message, type_message, metadata);
-            that.isFilePendingToUpload = false;
-            // return downloadURL;
+        //     metadata.src = downloadURL;
+        //     let type_message = TYPE_MSG_TEXT;
+        //     let message = 'File: ' + metadata.src;
+        //     if (metadata.type.startsWith('image')) {
+        //         type_message = TYPE_MSG_IMAGE;
+        //         message = ''; // 'Image: ' + metadata.src;
+        //     }
+        //     that.sendMessage(message, type_message, metadata);
+        //     that.isFilePendingToUpload = false;
+        //     // return downloadURL;
+        // }).catch(error => {
+        //   // Use to signal error if something goes wrong.
+        //   console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+        // });
+      // this.resetLoadImage();
+      
+
+        this.uploadService2.pushUploadMessage(currentUpload).then(downloadURL => {
+          that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+          that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
+
+          metadata.src = downloadURL;
+          let type_message = TYPE_MSG_TEXT;
+          let message = 'File: ' + metadata.src;
+          if (metadata.type.startsWith('image')) {
+              type_message = TYPE_MSG_IMAGE;
+              message = ''; // 'Image: ' + metadata.src;
+          }
+          that.sendMessage(message, type_message, metadata);
+          that.isFilePendingToUpload = false;
+          // return downloadURL;
         }).catch(error => {
           // Use to signal error if something goes wrong.
           console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
         });
-      // this.resetLoadImage();
-      that.g.wdLog(['reader-result: ', file]);
-
-      this.uploadService2.pushUploadMessage(currentUpload)
+        that.g.wdLog(['reader-result: ', file]);
     }
 
   /**
