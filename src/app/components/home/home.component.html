@@ -62,7 +62,8 @@
                             (onNewConversation)="returnNewConversation()" 
                             (onConversationSelected)="returnSelectedConversation($event)"
                             (onOpenAllConvesations)="returnOpenAllConversation()"
-                            (onImageLoad)="returnOnImageLoad($event)">
+                            (onImageLoaded)="onImageLoadedFN($event)"
+                            (onConversationLoaded)="onConversationLoadedFN($event)">
                         </tiledeskwidget-home-conversations>
                     </div>
                     

@@ -1,5 +1,15 @@
 # chat21-web-widget ver 3.0
 
+### 5.0.0-beta.2.9
+- added: uploadService to load file on storage
+
+### 5.0.0-beta.2.8
+- bug-fix: customToken from url
+- removed: headerDate from messageModel
+- bug-fix: set userFullname e userEmail parameter on signInAnonymously
+- bug-fix: set userFullname e userEmail parameter on prechatForm
+- added: uploadService (still not working)
+
 ### 5.0.0-beta.2.7
 - bug-fix: scrollToButtom function undefined on badgeScroollToBottom in conversation component
 - bug-fix: attributes.payload undefined if customAttributes not valorized

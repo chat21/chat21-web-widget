@@ -1,10 +1,6 @@
 import { TypingService } from '../../../../chat21-core/providers/abstract/typing.service';
 
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ConversationModel } from '../../../../chat21-core/models/conversation';
-import { MessagingService } from '../../../providers/messaging.service';
-import { StorageService } from '../../../providers/storage.service';
 import { Globals } from '../../../utils/globals';
 import { AppConfigService } from '../../../providers/app-config.service';
 import { convertColorToRGBA } from '../../../../chat21-core/utils/utils';

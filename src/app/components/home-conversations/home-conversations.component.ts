@@ -46,7 +46,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<string>();
   @Output() onOpenAllConvesations = new EventEmitter();
-  @Output() onImageLoad= new EventEmitter<ConversationModel>();
+  @Output() onImageLoaded = new EventEmitter<ConversationModel>();
+  @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
   @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   @Input() styleMap: Map<string, string>
   // ========= end:: Input/Output values ============//
@@ -302,8 +303,12 @@ checkShowAllConversation() {
     this.onOpenAllConvesations.emit();
   }
 
-  returnOnImageLoad(event){
-    this.onImageLoad.emit(event)
+  onImageLoadedFN(conversation: ConversationModel){
+    this.onImageLoaded.emit(conversation)
+  }
+
+  onConversationLoadedFN(conversation: ConversationModel){
+    this.onConversationLoaded.emit(conversation)
   }
 
   /** */

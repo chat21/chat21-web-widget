@@ -55,9 +55,7 @@ export class FirebaseTypingService extends TypingService {
     const ref = firebase.database().ref(urlTyping);
     ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
-      //TODO-GAB: supportata solo da chat ionic 5
-      //this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name});
-      this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: childSnapshot.key, nameUserTypingNow: precence.name});
+      this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name});
     });
   }
 

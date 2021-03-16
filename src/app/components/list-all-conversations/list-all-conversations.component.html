@@ -88,7 +88,9 @@
       [listConversations]="allConversations"
       [styleMap]="styleMap"
       [translationMap]="translationMapConversation"
-      (onConversationSelected)=returnSelectedConversation($event)>
+      (onConversationSelected)=returnSelectedConversation($event)
+      (onImageLoaded)="onImageLoadedFN($event)"
+      (onConversationLoaded)="onConversationLoadedFN($event)">
     </tiledeskwidget-list-conversations>
 
   </div>

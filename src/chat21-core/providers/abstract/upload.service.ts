@@ -15,5 +15,5 @@ export abstract class UploadService2 {
 
   // functions
   abstract initialize(): void;
-  abstract pushUploadMessage(upload: UploadModel):Promise<any>;
+  abstract pushUploadMessage(upload: UploadModel): Promise<any>;
 }

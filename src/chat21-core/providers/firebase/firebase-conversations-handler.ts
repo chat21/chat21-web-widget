@@ -202,7 +202,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     //  * @param childSnapshot
     //  */
     private conversationGenerate(childSnapshot: any): boolean {
-        console.log('conversationGenerate: ', childSnapshot.val());
         const childData: ConversationModel = childSnapshot.val();
         childData.uid = childSnapshot.key;
         const conversation = this.completeConversation(childData);

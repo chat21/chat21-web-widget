@@ -22,7 +22,8 @@
                 (onOpenAllConvesations)="returnOpenAllConversation()"
                 (onCloseWidget)="returnCloseWidget()" 
                 (onSignOut)="returnSignOut()"
-                (onImageLoad)="returnOnImageLoad($event)">
+                (onImageLoaded)="onImageLoaded($event)"
+                (onConversationLoaded)="onConversationLoaded($event)">
             </tiledeskwidget-home>
         </div>
 

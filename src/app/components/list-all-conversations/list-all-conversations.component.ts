@@ -198,6 +198,14 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
+  onImageLoadedFN(conversation: ConversationModel){
+    console.log('onImageLoadedFN', conversation)
+  }
+
+  onConversationLoadedFN(conversation: ConversationModel){
+    console.log('onImageLoadedFN', conversation)
+  }
+
   // private openConversationByID(conversation) {
   //   this.g.wdLog(['openConversationByID: ', conversation]);
   //   if ( conversation ) {

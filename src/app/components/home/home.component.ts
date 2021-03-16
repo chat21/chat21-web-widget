@@ -21,7 +21,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @Output() onOpenAllConvesations = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSignOut = new EventEmitter();
-  @Output() onImageLoad = new EventEmitter<ConversationModel>();
+  @Output() onImageLoaded = new EventEmitter<ConversationModel>();
+  @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
   @Input() listConversations: Array<ConversationModel>;
   @Input() styleMap: Map<string, string>
   // ========= end:: Input/Output values ===========/
@@ -96,8 +97,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  returnOnImageLoad($event){
-    this.onImageLoad.emit($event)
+  onImageLoadedFN(conversation: ConversationModel){
+    this.onImageLoaded.emit(conversation)
+  }
+
+  onConversationLoadedFN(conversation: ConversationModel){
+    this.onConversationLoaded.emit(conversation)
   }
 
   f21_close() {

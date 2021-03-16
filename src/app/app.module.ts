@@ -328,24 +328,24 @@ export function uploadFactory() {
       useFactory: uploadFactory,
       deps: []
     },
-    AuthService,
-    MessagingService,
+    //AuthService,
+    //MessagingService,
     Globals,
-    Triggerhandler,
     GlobalSettingsService,
     SettingsSaverService,
     ConversationsService,
-    UploadService,
+    //UploadService,
     ContactService,
     StarRatingWidgetService,
     AgentAvailabilityService,
     TranslatorService,
-    ChatPresenceHandlerService,
+    //ChatPresenceHandlerService,
     StorageService,
     WaitingService,
-    //chat21-core
+    //********chat21-core***********//
     CustomTranslateService,
-    ChatManager
+    ChatManager,
+    Triggerhandler,
   ],
   bootstrap: [AppComponent]
 })

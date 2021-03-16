@@ -200,7 +200,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     if ( that.g.isOpen === true && conversation) {
                         that.g.setParameter('displayEyeCatcherCard', 'none');
                         that.triggerOnConversationUpdated(conversation);
-                        that.g.wdLog([' obsAddedConversation ::: ' + conversation]);
+                        that.g.wdLog([' obsAddedConversation ::: ' , conversation]);
                         if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
                             return;
                         }
@@ -1947,6 +1947,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenConversation = isOpenConversationTEMP;
             this.isOpenAllConversation = false;
         }, 200);
+    }
+
+
+    onImageLoaded(conversation: ConversationModel){
+        console.log('onLoadImage convvvv:::', conversation)
+        conversation.image = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, conversation.sender)
+    }
+
+    onConversationLoaded(conversation: ConversationModel){
+        //console.log('onConversationLoaded convvvv:::', conversation)
     }
 
     /**
