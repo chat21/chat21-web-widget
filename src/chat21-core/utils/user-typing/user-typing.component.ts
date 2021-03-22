@@ -20,7 +20,6 @@ export class UserTypingComponent implements OnInit, OnDestroy {
   /** */
   ngOnInit() {
     console.log('UserTypingComponent - ngOnInit');
-    console.log('translationMap', this.translationMap.get('LABEL_IS_WRITING'))
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
   }
 

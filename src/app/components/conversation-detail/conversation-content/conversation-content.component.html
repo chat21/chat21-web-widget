@@ -60,7 +60,7 @@
                       <div *ngFor="let message of messages; let last = last; let i = index" tabindex="1521" class="rowMsg">
     
                           <!-- message SENDER:: -->
-                          <div role="messaggio" *ngIf="message.sender == senderId;" class="msg_container base_sent">
+                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_MINE, message)" class="msg_container base_sent">
                           
                             <!--backgroundColor non viene ancora usato -->
                             <tiledeskwidget-bubble-message class="messages msg_sent slide-in-right"
@@ -80,8 +80,8 @@
     
     
                           <!-- message RECIPIENT:: -->
-                          <div role="messaggio" *ngIf="message.sender != senderId;" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
-                          <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive">
+                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
+                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">
                             
                             <tiledeskwidget-avatar-image class="slide-in-left"  
                                 [senderID]="message.sender"
@@ -98,6 +98,13 @@
                             </tiledeskwidget-bubble-message>
 
                           </div>
+
+                          <!-- message INFO/SUPPORT::   message.attributes['subtype'] === 'info/support' -->
+                          <!-- <div *ngIf="messageType(MESSAGE_TYPE_INFO, message)" class="msg_info_container">
+                            <tiledeskwidget-info-message class="messages"
+                                [message]="message">
+                            </tiledeskwidget-info-message>
+                          </div> -->
                           
                           <!-- <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive slide-in-left">
                               
@@ -148,12 +155,6 @@
                               <time #timeTooltip *ngIf="message.sender!=='' && message.timestamp !== '{.sv: timestamp}'" >{{message.timestamp  | amTimeAgo}} </time>
                           </div>
     
-                          <!-- message INFO/SUPPORT:: -->
-                          <!-- <div *ngIf=" message.attributes['subtype'] === 'info/support'" class="msg_info_container">
-                            <tiledeskwidget-info-message class="messages"
-                                [message]="message">
-                            </tiledeskwidget-info-message>
-                          </div> -->
     
                           <!-- message type:: button &&  -->
                           <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 

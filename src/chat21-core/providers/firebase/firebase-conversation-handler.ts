@@ -16,7 +16,7 @@ import { UserModel } from '../../models/user';
 import { ConversationHandlerService } from '../abstract/conversation-handler.service';
 
 // utils
-import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, TYPE_DIRECT } from '../../utils/constants';
+import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, TYPE_DIRECT, MESSAGE_TYPE_INFO } from '../../utils/constants';
 import {
   htmlEntities,
   compareValues,
@@ -25,6 +25,7 @@ import {
 } from '../../utils/utils';
 import { timestamp } from 'rxjs/operators';
 import { MessageModel } from '../../models/message';
+import { messageType } from '../../utils/utils-message';
 
 
 
@@ -149,6 +150,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // const key = messageRef.key;
         const lang = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
+         // const dateSendingMessage = setHeaderDate(this.translationMap, '');
         const timestamp = firebase.database.ServerValue.TIMESTAMP
         const message = new MessageModel(
             '',
@@ -359,8 +361,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     /** */
     private added(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
-
-        if(this.skipMessage && msg.attributes && msg.attributes['subtype'] === 'info'){
+        // msg.attributes && msg.attributes['subtype'] === 'info'
+        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
         // console.log('>>>>>>>>>>>>>> added headerDate: ', msg);
@@ -372,8 +374,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private changed(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-        // con**** DATAIL messageAdded ***sole.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
-        if(this.skipMessage && msg.attributes && msg.attributes['subtype'] === 'info'){
+        // console.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
+        // msg.attributes && msg.attributes['subtype'] === 'info'
+        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
         this.addRepalceMessageInArray(childSnapshot.key, msg);

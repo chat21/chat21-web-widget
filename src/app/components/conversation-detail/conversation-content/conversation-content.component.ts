@@ -4,6 +4,8 @@ import { MessageModel } from '../../../../chat21-core/models/message';
 import { isPopupUrl, popupUrl } from '../../../../chat21-core/utils/utils';
 import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { strip_tags } from '../../../utils/utils';
+import { isInfo, isMine, messageType } from '../../../../chat21-core/utils/utils-message';
+import { MESSAGE_TYPE_INFO, MESSAGE_TYPE_MINE, MESSAGE_TYPE_OTHERS } from '../../../../chat21-core/utils/constants';
 @Component({
   selector: 'tiledeskwidget-conversation-content',
   templateUrl: './conversation-content.component.html',
@@ -36,11 +38,22 @@ export class ConversationContentComponent implements OnInit {
   strip_tags = strip_tags;
   // ========= end:: dichiarazione funzioni ======= //
 
-  // ========== begin:: set icon status message
+  // ========== begin:: set icon status message ======= //
   MSG_STATUS_SENT = MSG_STATUS_SENT;
   MSG_STATUS_SENT_SERVER = MSG_STATUS_SENT_SERVER;
   MSG_STATUS_RETURN_RECEIPT = MSG_STATUS_RETURN_RECEIPT;
-  // ========== end:: icon status message
+  // ========== end:: icon status message ======= //
+
+
+  // ========== begin:: check message type functions ======= //
+  isMine = isMine;
+  isInfo = isInfo;
+  messageType = messageType;
+
+  MESSAGE_TYPE_INFO = MESSAGE_TYPE_INFO;
+  MESSAGE_TYPE_MINE = MESSAGE_TYPE_MINE;
+  MESSAGE_TYPE_OTHERS = MESSAGE_TYPE_OTHERS;
+  // ========== end:: check message type functions ======= //
 
   tooltipOptions = {
     'show-delay': 1500,

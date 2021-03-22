@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageModel } from '../../../../chat21-core/models/message';
+import { isFile, isImage } from '../../../../chat21-core/utils/utils-message';
 import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { Globals } from '../../../utils/globals';
 @Component({
@@ -14,6 +15,9 @@ export class BubbleMessageComponent implements OnInit {
   @Input() textColor: string;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
+
+  isImage = isImage;
+  isFile = isFile;
 
   tooltipOptions = {
     'show-delay': 1500,
@@ -37,7 +41,7 @@ export class BubbleMessageComponent implements OnInit {
    */
   getMetadataSize(metadata): any {
     if(metadata.width === undefined){
-      metadata.width= '100%'
+      metadata.width= MAX_WIDTH_IMAGES
     }
     if(metadata.height === undefined){
       metadata.height = MAX_WIDTH_IMAGES
@@ -66,6 +70,7 @@ export class BubbleMessageComponent implements OnInit {
   setTimeout(function () {
     try {
       const domRepresentation = document.getElementsByClassName('chat-tooltip');
+      console.log('dommmmmmm', document.getElementsByClassName('chat-tooltip'))
       if (domRepresentation) {
         const item = domRepresentation[0] as HTMLInputElement;
         // console.log(item);
