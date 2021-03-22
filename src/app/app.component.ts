@@ -478,16 +478,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // /** INIT  */
                     // that.initAll();
                     
-                    this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
-                    if (this.g.customToken) {
+                    this.g.wdLog(['controllo se è stato passato un token: ', this.g.jwt]);
+                    if (this.g.jwt) {
                       // mi loggo con custom token passato nell'url
                       //aggiungo nel local storage e mi autentico
                       console.log('token passato da url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
                       this.g.autoStart = false;
                       this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
-                      this.storageService.setItem('tiledeskToken', this.g.customToken)
-                      this.signInWithCustomToken(this.g.customToken)
-                      this.g.tiledeskToken = this.g.customToken;
+                      this.storageService.setItem('tiledeskToken', this.g.jwt)
+                      this.signInWithCustomToken(this.g.jwt)
+                      this.g.tiledeskToken = this.g.jwt;
                     }
                     this.translatorService.initI18n().then((result) => {
                         this.g.wdLog(['»»»» APP-COMPONENT.TS initI18n result', result]);

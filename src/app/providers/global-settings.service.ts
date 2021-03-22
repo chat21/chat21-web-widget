@@ -1128,9 +1128,9 @@ export class GlobalSettingsService {
             globals.privacyField = TEMP;
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_customToken');
+        TEMP = getParameterByName(windowContext, 'tiledesk_jwt');
         if (TEMP) {
-            globals.customToken = TEMP;
+            globals.jwt = TEMP;
         }
         TEMP = getParameterByName(windowContext, 'tiledesk_dynamicWaitTimeReply');
         if (TEMP) {
