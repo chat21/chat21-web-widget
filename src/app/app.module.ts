@@ -109,6 +109,8 @@ import { ReturnReceiptComponent } from './components/message/return-receipt/retu
 import { InfoMessageComponent } from './components/message/info-message/info-message.component';
 import { FirebaseUploadService } from '../chat21-core/providers/firebase/firebase-upload.service';
 import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
+import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
+import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
 
 
@@ -203,6 +205,10 @@ export function uploadFactory() {
   } else {
     return new FirebaseUploadService();
   }
+}
+
+export function loggerFactory() {
+  return new CustomLogger(true);
 }
 
 
@@ -326,6 +332,11 @@ export function uploadFactory() {
     {
       provide: UploadService2,
       useFactory: uploadFactory,
+      deps: []
+    },
+    {
+      provide: LoggerService,
+      useFactory: loggerFactory,
       deps: []
     },
     //AuthService,

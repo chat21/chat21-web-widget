@@ -682,13 +682,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         try {
             // attributes['payload'] = this.g.customAttributes.payload;
-            attributes['payload'] = []
+            attributes['custom_attributes'] = []
             if(this.g.customAttributes){
-                attributes['payload'] = this.g.customAttributes;
+                attributes['custom_attributes'] = this.g.customAttributes;
             }
         } catch (error) {
-            this.g.wdLog(['> Error is handled payload: ', error]);
+            this.g.wdLog(['> Error is handled attributes[custom_attributes]: ', error]);
         }
+
+        console.log('attributesssss', attributes)
 
         this.storageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);

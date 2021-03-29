@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageModel } from '../../../../chat21-core/models/message';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { isFile, isImage } from '../../../../chat21-core/utils/utils-message';
 import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { Globals } from '../../../utils/globals';
@@ -30,7 +31,8 @@ export class BubbleMessageComponent implements OnInit {
   };
 
   constructor(private g: Globals,
-              public sanitizer: DomSanitizer) { }
+              public sanitizer: DomSanitizer,
+              private logger: LoggerService) { }
 
   ngOnInit() {
   }
@@ -63,31 +65,28 @@ export class BubbleMessageComponent implements OnInit {
   /**
   * function customize tooltip
   */
- handleTooltipEvents(event) {
-  const that = this;
-  const showDelay = this.tooltipOptions['showDelay'];
-  // console.log(this.tooltipOptions);
-  setTimeout(function () {
-    try {
-      const domRepresentation = document.getElementsByClassName('chat-tooltip');
-      console.log('dommmmmmm', document.getElementsByClassName('chat-tooltip'))
-      if (domRepresentation) {
-        const item = domRepresentation[0] as HTMLInputElement;
-        // console.log(item);
-        if (!item.classList.contains('tooltip-show')) {
-          item.classList.add('tooltip-show');
-        }
-        setTimeout(function () {
-          if (item.classList.contains('tooltip-show')) {
-            item.classList.remove('tooltip-show');
+  handleTooltipEvents(event) {
+    const that = this;
+    const showDelay = this.tooltipOptions['show-delay'];
+    setTimeout(function () {
+      try {
+        const domRepresentation = document.getElementsByClassName('chat-tooltip');
+        if (domRepresentation) {
+          const item = domRepresentation[0] as HTMLInputElement;
+          if (!item.classList.contains('tooltip-show')) {
+            item.classList.add('tooltip-show');
           }
-        }, that.tooltipOptions['hideDelayAfterClick']);
+          setTimeout(function () {
+            if (item.classList.contains('tooltip-show')) {
+              item.classList.remove('tooltip-show');
+            }
+          }, that.tooltipOptions['hideDelayAfterClick']);
+        }
+      } catch (err) {
+          that.logger.printError('> Error :' + err);
       }
-    } catch (err) {
-        that.g.wdLog(['> Error :' + err]);
-    }
-  }, showDelay);
-}
+    }, showDelay);
+  }
 
   // ========= begin:: event emitter function ============//
 
