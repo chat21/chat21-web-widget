@@ -563,12 +563,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       //   0,
       //   false
       //   );
-      console.log('userrfullnameeee', this.g.userFullname)
       this.conversation = new ConversationModel(
         recipientId,
         {},
         channelType,
         this.g.recipientFullname,
+        this.conversationWith,
         recipientId,
         this.g.recipientFullname,
         '',
@@ -584,6 +584,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         '',
         '',
         false)
+
+
+      console.log('convvvvvv', this.conversation)
     }
   }
 

@@ -132,6 +132,68 @@ export function setHeaderDate(translate, timestamp): string {
   return labelDays;
 }
 
+
+
+/**
+ * calcolo il tempo trascorso tra la data passata e adesso
+ * utilizzata per calcolare data ultimo accesso utente
+ * @param timestamp 
+ */
+export function setLastDate(translate, timestamp): string {
+
+  const LABEL_TODAY = translate.get('LABEL_TODAY');
+  const LABEL_TOMORROW = translate.get('LABEL_TOMORROW');
+  const LABEL_TO = translate.get('LABEL_TO');
+  const LABEL_LAST_ACCESS = translate.get('LABEL_LAST_ACCESS');
+
+  var date = new Date(timestamp);
+  let now: Date = new Date();
+  var labelDays = '';
+  if (now.getFullYear() !== date.getFullYear()) {
+    const month = date.getMonth() + 1;
+    labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
+  } else if (now.getMonth() !== date.getMonth()) {
+    const month = date.getMonth() + 1;
+    labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
+  } else if (now.getDay() === date.getDay()) {
+    labelDays = LABEL_TODAY;
+  } else if (now.getDay() - date.getDay() === 1) {
+    labelDays = LABEL_TOMORROW;
+  } else {
+    labelDays = convertDayToString(translate, date.getDay());
+  }
+  // aggiungo orario
+  const orario = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+  return LABEL_LAST_ACCESS + ' ' + labelDays + ' ' + LABEL_TO + ' ' + orario;
+}
+
+/**
+ *
+ * @param Map
+ * @param timestamp
+ */
+export function setLastDateWithLabels(translationMap: Map<string, string>, timestamp: string): string {
+  const date = new Date(timestamp);
+  const now: Date = new Date();
+  let labelDays = '';
+  if (now.getFullYear() !== date.getFullYear()) {
+    const month = date.getMonth() + 1;
+    labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
+  } else if (now.getMonth() !== date.getMonth()) {
+    const month = date.getMonth() + 1;
+    labelDays = date.getDay() + '/' + month + '/' + date.getFullYear();
+  } else if (now.getDay() === date.getDay()) {
+    labelDays = translationMap.get('LABEL_TODAY');
+  } else if (now.getDay() - date.getDay() === 1) {
+    labelDays = translationMap.get('LABEL_TOMORROW');
+  } else {
+    const days = translationMap.get('ARRAY_DAYS');
+    labelDays =  days[date.getDay()];
+  }
+  const orario = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+  return translationMap.get('LABEL_LAST_ACCESS') + ' ' + labelDays + ' ' + translationMap.get('LABEL_TO') + ' ' + orario;
+}
+
 /**
  * 
  * @param translate 
