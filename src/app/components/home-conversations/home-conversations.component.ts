@@ -44,7 +44,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   
   // ========= begin:: Input/Output values ============//
   @Output() onNewConversation = new EventEmitter<string>();
-  @Output() onConversationSelected = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onOpenAllConvesations = new EventEmitter();
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
   @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
@@ -123,11 +123,11 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   
 
   // ========= begin:: ACTIONS ============//
-  returnSelectedConversation($event) {
-    if ( $event ) {
+  returnSelectedConversation(conversation: ConversationModel) {
+    if(conversation){
       // rimuovo classe animazione
       //this.removeAnimation();
-      this.onConversationSelected.emit($event);
+      this.onConversationSelected.emit(conversation);
     }
   }
 

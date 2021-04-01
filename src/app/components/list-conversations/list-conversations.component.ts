@@ -21,7 +21,7 @@ export class ListConversationsComponent implements OnInit {
   @Input() limit?: number
   @Input() styleMap: Map<string, string>;
   @Input() translationMap: Map< string, string>;
-  @Output() onConversationSelected = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
   @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
   // ========= end:: Input/Output values ============//

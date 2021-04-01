@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ===========/
   @Output() onNewConversation = new EventEmitter<string>();
-  @Output() onConversationSelected = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onOpenAllConvesations = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSignOut = new EventEmitter();
@@ -89,11 +89,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.onOpenAllConvesations.emit();
   }
 
-  returnSelectedConversation($event) {
-    if ( $event ) {
+  returnSelectedConversation(conversation: ConversationModel) {
+    if(conversation){
       // rimuovo classe animazione
       this.removeAnimation();
-      this.onConversationSelected.emit($event);
+      this.onConversationSelected.emit(conversation);
     }
   }
 
