@@ -22,6 +22,7 @@ import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversati
 import { ImageRepoService } from '../abstract/image-repo.service';
 import { FirebaseImageRepoService } from './firebase-image-repo';
 import { ArchivedConversationsHandlerService } from '../abstract/archivedconversations-handler.service';
+import { CustomLogger } from '../logger/customLogger';
 
 
 
@@ -42,8 +43,9 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     archivedConversations: Array<ConversationModel> = [];
     uidConvSelected: string;
     tenant: string;
-    imageRepo: ImageRepoService = new FirebaseImageRepoService();
-
+    //imageRepo: ImageRepoService = new FirebaseImageRepoService();
+    logger: CustomLogger = new CustomLogger(true);
+    
     // private params
     private loggedUserId: string;
     private translationMap: Map<string, string>;
@@ -82,7 +84,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     connect() {
         const that = this;
         const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId);
-        console.log('connect -------> conversations', urlNodeFirebase);
+        this.logger.printDebug('connect -------> conversations::ARCHIVED', urlNodeFirebase)
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -147,15 +149,14 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
 
     public getConversationDetail(tenant: string, loggedUserUid: string, conversationId: string) {
         const conversationSelected = this.archivedConversations.find(item => item.uid === conversationId);
-        console.log('>>>>>>>>>>>>>> getConversationDetail *****: ', conversationSelected);
+        this.logger.printDebug('>>>>>>>>>>>>>> getConversationDetail::ARCHIVED *****: ', conversationSelected)
         if (conversationSelected) {
             this.BSConversationDetail.next(conversationSelected);
         } else {
             const urlNodeFirebase = '/apps/' + tenant + '/users/' + loggedUserUid + '/conversations/' + conversationId;
-            console.log('urlNodeFirebase conversationDetail *****', urlNodeFirebase);
+            this.logger.printDebug('urlNodeFirebase conversationDetail::ARCHIVED *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
-                console.log('>>>>>>>>>>>>>> urlNodeFirebase conversationDetail *****: ', childSnapshot.val());
                 const conversation: ConversationModel = childSnapshot.val();
                 this.BSConversationDetail.next(conversation);
             });
@@ -171,7 +172,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        console.log('DISPOSE::: ', this.ref);
+        this.logger.printDebug('DISPOSE::: ', this.ref)
     }
 
 
@@ -198,7 +199,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     //  * @param childSnapshot
     //  */
     private conversationGenerate(childSnapshot: any): boolean {
-        console.log('conversationGenerate: ', childSnapshot.val());
         const childData: ConversationModel = childSnapshot.val();
         childData.uid = childSnapshot.key;
         const conversation = this.completeConversation(childData);
@@ -260,12 +260,11 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         if (this.conversationGenerate(childSnapshot)) {
             const index = searchIndexInArrayForUid(this.archivedConversations, childSnapshot.key);
             if (index > -1) {
-                console.log('conversationnnnnn added', this.archivedConversations[index])
                 const conversationAdded = this.archivedConversations[index]
                 this.archivedConversationAdded.next(conversationAdded);
             }
         } else {
-            console.error('ChatConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+            this.logger.printError('ChatArchivedConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -284,12 +283,11 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         if (this.conversationGenerate(childSnapshot)) {
             const index = searchIndexInArrayForUid(this.archivedConversations, childSnapshot.key);
             if (index > -1) {
-                console.log('conversationnnnnn changed', this.archivedConversations[index])
                 const conversationChanged = this.archivedConversations[index]
                 this.archivedConversationChanged.next(conversationChanged);
             }
         } else {
-            console.error('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+            this.logger.printError('ChatArchivedConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -303,7 +301,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     private removed(childSnapshot: any) {
         const index = searchIndexInArrayForUid(this.archivedConversations, childSnapshot.key);
         if (index > -1) {
-            console.log('conversationnnnnn removedddd', this.archivedConversations[index])
             const conversationRemoved = this.archivedConversations[index]
             this.archivedConversations.splice(index, 1);
             // this.conversations.sort(compareValues('timestamp', 'desc'));
@@ -329,7 +326,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
      * @param conv
      */
     private completeConversation(conv): ConversationModel {
-        console.log('completeConversation', conv);
+        this.logger.printDebug('completeConversation::ARCHIVED', conv)
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
             conv.sender_fullname = conv.sender;
@@ -355,8 +352,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
-        //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         conv.archived = true;
+        //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
         return conv;
     }

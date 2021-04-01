@@ -1,3 +1,4 @@
+import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -41,6 +42,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     uidConvSelected: string;
     tenant: string;
     // imageRepo: ImageRepoService = new FirebaseImageRepoService();
+    logger: CustomLogger = new CustomLogger(true);
 
     // private params
     private loggedUserId: string;
@@ -82,7 +84,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     connect() {
         const that = this;
         const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
-        console.log('connect -------> conversations', urlNodeFirebase);
+        this.logger.printDebug('connect -------> conversations::ACTIVE', urlNodeFirebase)
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -117,7 +119,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     setConversationRead(conversation: ConversationModel): void {
         const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
         const update = {};
-        console.log('connect -------> conversations update', urlUpdate);
         update['/is_new'] = false;
         firebase.database().ref(urlUpdate).update(update);
     }
@@ -151,15 +152,14 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
     public getConversationDetail(tenant: string, loggedUserUid: string, conversationId: string) {
         const conversationSelected = this.conversations.find(item => item.uid === conversationId);
-        console.log('>>>>>>>>>>>>>> getConversationDetail *****: ', conversationSelected);
+        this.logger.printDebug('>>>>>>>>>>>>>> getConversationDetail *****: ', conversationSelected)
         if (conversationSelected) {
             this.BSConversationDetail.next(conversationSelected);
         } else {
             const urlNodeFirebase = '/apps/' + tenant + '/users/' + loggedUserUid + '/conversations/' + conversationId;
-            console.log('urlNodeFirebase conversationDetail *****', urlNodeFirebase);
+            this.logger.printDebug('urlNodeFirebase conversationDetail *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
-                console.log('>>>>>>>>>>>>>> urlNodeFirebase conversationDetail *****: ', childSnapshot.val());
                 const conversation: ConversationModel = childSnapshot.val();
                 this.BSConversationDetail.next(conversation);
             });
@@ -175,7 +175,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        console.log('DISPOSE::: ', this.ref);
+        this.logger.printDebug('DISPOSE::: ', this.ref)
     }
 
 
@@ -215,9 +215,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             }
             //this.databaseProvider.setConversation(conversation);
             this.conversations.sort(compareValues('timestamp', 'desc'));
-            // if (conversation.is_new) {
-            //     this.soundMessage();
-            // }
             return true;
         } else {
             return false;
@@ -271,7 +268,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                 this.conversationAdded.next(conversationAdded);
             }
         } else {
-            console.error('ChatConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+            this.logger.printError('ChatConversationsHandler::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -294,7 +291,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                 this.conversationChanged.next(conversationChanged);
             }
         } else {
-            console.error('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+            this.logger.printError('ChatConversationsHandler::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -334,7 +331,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * @param conv
      */
     private completeConversation(conv): ConversationModel {
-        console.log('completeConversation', conv);
+        this.logger.printDebug('completeConversation', conv)
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
             conv.sender_fullname = conv.sender;

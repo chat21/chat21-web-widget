@@ -17,7 +17,7 @@ export abstract class ArchivedConversationsHandlerService {
   // params
   abstract archivedConversations: Array<ConversationModel> = [];
   abstract uidConvSelected: string;
-  abstract imageRepo: ImageRepoService;
+  //abstract imageRepo: ImageRepoService;
 
   // functions
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;

@@ -18,12 +18,12 @@ export class CustomLogger extends LoggerService{
     }
     printDebug(...message: any[]) {
         if(this.isLogEnabled && message && message.length > 0){
-            console.debug(message)
+            console.debug('%c' + message, ' color: #3F888F')
         }
     }
     printError(...message: any[]) {
         if(this.isLogEnabled && message && message.length > 0){
-            console.error(message)
+            console.error('%c' + message, ' color: red')
         }
     }
 
