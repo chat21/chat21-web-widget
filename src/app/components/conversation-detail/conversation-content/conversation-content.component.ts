@@ -115,11 +115,11 @@ export class ConversationContentComponent implements OnInit {
       const divScrollMe = this.scrollMe.nativeElement;
       const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
       if (checkContentScrollPosition) {
-        this.onScrollContent.emit(false)
+        this.onScrollContent.emit(true)
         //this.showBadgeScroollToBottom = false;
         //this.NUM_BADGES = 0;
       } else {
-        this.onScrollContent.emit(true)
+        this.onScrollContent.emit(false)
         //this.showBadgeScroollToBottom = true;
       }
     }

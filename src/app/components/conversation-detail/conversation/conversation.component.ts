@@ -1734,10 +1734,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   returnOnScrollContent(event: boolean){
-    this.showBadgeScroollToBottom = event;
+    this.showBadgeScroollToBottom = !event;
     console.log('scroool eventtt', event)
-    //se sono alla fine (showBadgeScroollBottom === false) allora imposto messageBadgeCount a 0
-    if(this.showBadgeScroollToBottom === false){
+    //se sono alla fine (showBadgeScroollBottom === true) allora imposto messageBadgeCount a 0
+    if(this.showBadgeScroollToBottom){
       this.messagesBadgeCount = 0;
       //this.updateConversationBadge();
     }
