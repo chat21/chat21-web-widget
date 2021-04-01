@@ -56,7 +56,6 @@ import { URL_SOUND } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { timeout } from 'rxjs/operator/timeout';
 import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
-// import { TranslationLoader } from './translation-loader';
 
 @Component({
     selector: 'tiledeskwidget-root',
