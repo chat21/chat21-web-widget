@@ -44,13 +44,14 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     uidConvSelected: string;
     tenant: string;
     //imageRepo: ImageRepoService = new FirebaseImageRepoService();
-    logger: CustomLogger = new CustomLogger(true);
+    
     
     // private params
     private loggedUserId: string;
     private translationMap: Map<string, string>;
     private isConversationClosingMap: Map<string, boolean>;
-
+    private logger: CustomLogger = new CustomLogger(true);
+    
     private ref: firebase.database.Query;
 
     constructor(

@@ -1,3 +1,4 @@
+import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -30,6 +31,7 @@ export class FirebasePresenceService extends PresenceService {
   private onlineConnectionsRef: any;
   private lastOnlineConnectionsRef: any;
   private keyConnectionRef: any;
+  private logger: CustomLogger = new CustomLogger(true)
 
   constructor() {
     super();
@@ -47,13 +49,13 @@ export class FirebasePresenceService extends PresenceService {
    * @param userid
    */
   public userIsOnline(userid: string) {
-    console.log('userIsOnline', userid);
+    this.logger.printDebug('userIsOnline', userid);
     const that = this;
     const urlNodeConnections = this.urlNodePresence + userid + '/connections';
-    console.log('userIsOnline: ', urlNodeConnections);
+    this.logger.printDebug('userIsOnline: ', urlNodeConnections);
     const connectionsRef = firebase.database().ref().child(urlNodeConnections);
     connectionsRef.on('value', (child) => {
-      console.log('is-online-' + userid);
+      this.logger.printDebug('is-online-' + userid);
       if (child.val()) {
         this.BSIsOnline.next({uid: userid, isOnline: true});
       } else {
@@ -67,7 +69,7 @@ export class FirebasePresenceService extends PresenceService {
    * @param userid
    */
   public lastOnlineForUser(userid: string) {
-    console.log('lastOnlineForUser', userid);
+    this.logger.printDebug('lastOnlineForUser', userid);
     const that = this;
     const lastOnlineRef = this.referenceLastOnlineForUser(userid);
     lastOnlineRef.on('value', (child) => {
@@ -108,7 +110,7 @@ export class FirebasePresenceService extends PresenceService {
           const timestamp = now.valueOf();
           this.lastOnlineConnectionsRef.onDisconnect().set(timestamp);
         } else {
-          console.log('This is an error. self.deviceConnectionRef already set. Cannot be set again.');
+          this.logger.printError('This is an error. self.deviceConnectionRef already set. Cannot be set again.');
         }
       }
     });
@@ -125,7 +127,7 @@ export class FirebasePresenceService extends PresenceService {
       this.lastOnlineConnectionsRef.set(timestamp);
       this.onlineConnectionsRef.off();
       this.onlineConnectionsRef.remove();
-      console.log('goOffline onlineConnectionsRef', this.onlineConnectionsRef);
+      this.logger.printDebug('goOffline onlineConnectionsRef', this.onlineConnectionsRef);
     }
   }
 

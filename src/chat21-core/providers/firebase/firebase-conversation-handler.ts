@@ -1,3 +1,4 @@
+import { CustomLogger } from './../logger/customLogger';
 
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -56,6 +57,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private listSubsriptions: any[];
     private CLIENT_BROWSER: string;
     private lastDate = '';
+    private logger: CustomLogger = new CustomLogger(true)
     private ref: firebase.database.Query;
 
     constructor(@Inject('skipMessage') private skipMessage: boolean) {
@@ -65,16 +67,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     /**
      * inizializzo conversation handler
      */
-    initialize(
-        recipientId: string,
-        recipientFullName: string,
-        loggedUser: UserModel,
-        tenant: string,
-        translationMap: Map<string, string>
-    ) {
-        console.log('initWithRecipient::: FirebaseConversationHandler',
-        recipientId, recipientFullName, loggedUser, tenant, translationMap
-        );
+    initialize(recipientId: string,recipientFullName: string,loggedUser: UserModel,tenant: string,translationMap: Map<string, string>) {
+        this.logger.printDebug('initWithRecipient::: FirebaseConversationHandler',recipientId, recipientFullName, loggedUser, tenant, translationMap)
         this.recipientId = recipientId;
         this.recipientFullname = recipientFullName;
         this.loggedUser = loggedUser;
@@ -89,8 +83,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.conversationWith = recipientId;
         this.messages = [];
         this.attributes = this.setAttributes();
-
-
     }
 
     /**
@@ -104,15 +96,15 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const that = this;
         this.urlNodeFirebase = conversationMessagesRef(this.tenant, this.loggedUser.uid);
         this.urlNodeFirebase = this.urlNodeFirebase + this.conversationWith;
-        console.log('urlNodeFirebase *****', this.urlNodeFirebase);
+        this.logger.printDebug('urlNodeFirebase *****', this.urlNodeFirebase);
         const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
         this.ref = firebaseMessages.orderByChild('timestamp').limitToLast(100);
         this.ref.on('child_added', (childSnapshot) => {
-            console.log('>>>>>>>>>>>>>> child_added: ', childSnapshot.val());
+            this.logger.printDebug('>>>>>>>>>>>>>> child_added: ', childSnapshot.val())
             that.added(childSnapshot);
         });
         this.ref.on('child_changed', (childSnapshot) => {
-            console.log('>>>>>>>>>>>>>> child_changed: ', childSnapshot.val());
+            this.logger.printDebug('>>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
             that.changed(childSnapshot);
         });
         this.ref.on('child_removed', (childSnapshot) => {
@@ -201,12 +193,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     channelType, // channel_type
         //     true // is_sender
         // );
-        console.log('messages: ',  this.messages);
-        console.log('senderFullname: ',  senderFullname);
-        console.log('sender: ',  sender);
-        console.log('SEND MESSAGE: ', msg, channelType);
-        console.log('timestamp: ', );
-        console.log('messaggio **************', );
+        this.logger.printDebug('messages: ',  this.messages);
+        this.logger.printDebug('senderFullname: ',  senderFullname);
+        this.logger.printDebug('sender: ',  sender);
+        this.logger.printDebug('SEND MESSAGE: ', msg, channelType);
+        this.logger.printDebug('timestamp: ', );
+        this.logger.printDebug('messaggio **************', );
         // messageRef.update({
         //     uid: messageRef.key
         // }, ( error ) => {
@@ -294,12 +286,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     channelType, // channel_type
         //     true // is_sender
         // );
-        console.log('messages: ',  this.messages);
-        console.log('senderFullname: ',  senderFullname);
-        console.log('sender: ',  sender);
-        console.log('SEND MESSAGE: ', msg, channelType);
-        console.log('timestamp: ', );
-        console.log('messaggio **************', );
+        this.logger.printDebug('messages: ',  this.messages);
+        this.logger.printDebug('senderFullname: ',  senderFullname);
+        this.logger.printDebug('sender: ',  sender);
+        this.logger.printDebug('SEND MESSAGE: ', msg, channelType);
+        this.logger.printDebug('timestamp: ', );
+        this.logger.printDebug('messaggio **************', );
         // messageRef.update({
         //     uid: messageRef.key
         // }, ( error ) => {
@@ -488,7 +480,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         if (msg.status < MSG_STATUS_RECEIVED) {
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
             const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + msg.uid;
-            console.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
+            this.logger.printDebug('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
             firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
             }
         }
@@ -499,7 +491,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * richiamato dalla pagina elenco messaggi della conversazione
      */
     private isSender(sender: string, currentUserId: string) {
-        console.log('isSender::::: ', sender, currentUserId);
         if (currentUserId) {
             if (sender === currentUserId) {
                 return true;
@@ -524,11 +515,11 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
 
   unsubscribe(key: string) {
-    console.log('unsubscribe: ', key);
+    this.logger.printDebug('unsubscribe: ', key);
     this.listSubsriptions.forEach(sub => {
-      console.log('unsubscribe: ', sub.uid, key);
+        this.logger.printDebug('unsubscribe: ', sub.uid, key);
       if (sub.uid === key) {
-        console.log('unsubscribe: ', sub.uid, key);
+        this.logger.printDebug('unsubscribe: ', sub.uid, key);
         sub.unsubscribe(key, null);
         return;
       }

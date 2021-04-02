@@ -1,3 +1,4 @@
+import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -34,6 +35,7 @@ export class FirebaseTypingService extends TypingService {
   // private params
   private urlNodeTypings: string;
   private setTimeoutWritingMessages: any;
+  private logger: CustomLogger= new CustomLogger(true);
 
   constructor() {
     super();
@@ -51,7 +53,7 @@ export class FirebaseTypingService extends TypingService {
     if (isDirect) {
       urlTyping = this.urlNodeTypings + idCurrentUser + '/' + idConversation;
     }
-    console.log('urlTyping: ', urlTyping);
+    this.logger.printDebug('urlTyping: ', urlTyping);
     const ref = firebase.database().ref(urlTyping);
     ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
@@ -65,12 +67,12 @@ export class FirebaseTypingService extends TypingService {
     clearTimeout(this.setTimeoutWritingMessages);
     this.setTimeoutWritingMessages = setTimeout(() => {
       const urlTyping = this.urlNodeTypings + idConversation + '/' + recipientId;// + '/user';
-      console.log('setWritingMessages:', urlTyping, userFullname);
+      this.logger.printDebug('setWritingMessages:', urlTyping, userFullname);
       const timestampData =  firebase.database.ServerValue.TIMESTAMP;
       const precence = new TypingModel(recipientId, timestampData, message, userFullname);
       firebase.database().ref(urlTyping).set(precence, ( error ) => {
         if (error) {
-          console.log('ERRORE', error);
+          this.logger.printError('ERRORE', error);
         } else {
           this.BSSetTyping.next({uid: idConversation, typing: precence});
         }

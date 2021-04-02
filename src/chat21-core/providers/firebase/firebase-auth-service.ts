@@ -23,6 +23,7 @@ import {
   getColorBck,
 } from '../../utils/utils-user';
 import { resolve } from 'url';
+import { CustomLogger } from '../logger/customLogger';
 
 
 // @Injectable({ providedIn: 'root' })
@@ -50,7 +51,8 @@ export class FirebaseAuthService extends AuthService2 {
   private tiledeskToken: string;
   private firebaseToken: string;
   private currentUser: UserModel;
-
+  private logger: CustomLogger = new CustomLogger(true);
+  
   constructor(
     // private events: EventsService,
     public http: HttpClient,
@@ -77,14 +79,14 @@ export class FirebaseAuthService extends AuthService2 {
    * checkIsAuth
    */
   checkIsAuth() {
-    console.log(' ---------------- AuthService checkIsAuth ---------------- ');
+    this.logger.printLog(' ---------------- AuthService checkIsAuth ---------------- ')
     this.tiledeskToken = localStorage.getItem(this.storagePrefix+'tiledeskToken');
     this.currentUser = JSON.parse(localStorage.getItem(this.storagePrefix + 'currentUser'));
     if (this.tiledeskToken) {
-      console.log(' ---------------- MI LOGGO CON UN TOKEN ESISTENTE NEL LOCAL STORAGE O PASSATO NEI PARAMS URL ---------------- ');
+      this.logger.printLog(' ---------------- MI LOGGO CON UN TOKEN ESISTENTE NEL LOCAL STORAGE O PASSATO NEI PARAMS URL ---------------- ')
       this.createFirebaseCustomToken();
     } else {
-      console.log(' ---------------- NON sono loggato ---------------- ');
+      this.logger.printLog(' ---------------- NON sono loggato ---------------- ')
       // this.BSAuthStateChanged.next('offline');
     }
 
@@ -130,13 +132,12 @@ export class FirebaseAuthService extends AuthService2 {
   onAuthStateChanged() {
     const that = this;
     firebase.auth().onAuthStateChanged(user => {
-      console.log(' onAuthStateChanged', user);
+      this.logger.printDebug(' onAuthStateChanged', user)
       if (!user) {
-        console.log(' 1 - PASSO OFFLINE AL CHAT MANAGER');
+        this.logger.printLog(' 1 - PASSO OFFLINE AL CHAT MANAGER')
         that.BSAuthStateChanged.next('offline');
       } else {
-        console.log(' 2 - PASSO ONLINE AL CHAT MANAGER');
-        // that.BSAuthStateChanged.next(user);
+        this.logger.printLog(' 2 - PASSO ONLINE AL CHAT MANAGER')
         that.BSAuthStateChanged.next('online');
       }
     });
@@ -146,12 +147,11 @@ export class FirebaseAuthService extends AuthService2 {
   /** */
   updateTokenOnAuthStateIsLogin() {
     const taht = this;
-    firebase.auth().currentUser.getIdToken(false)
-    .then((token) => {
-      console.log('firebaseToken.', token);
+    firebase.auth().currentUser.getIdToken(false).then((token) => {
+      this.logger.printDebug('firebaseToken.', token);
       taht.firebaseToken = token;
     }).catch((error) => {
-      console.log('idToken error: ', error);
+      this.logger.printError('idToken error: ', error);
     });
   }
 
@@ -185,12 +185,11 @@ export class FirebaseAuthService extends AuthService2 {
                 // that.currentUser = response.user;
                 // that.firebaseSignInWithCustomToken.next(response);
               }).catch((error) => {
-                  console.error('Error: ', error);
+                this.logger.printError('Error: ', error);
                   // that.firebaseSignInWithCustomToken.next(null);
               });
-              
     }).catch((error) => {
-      console.error('Error: ', error);
+      this.logger.printError('Error: ', error);
     });
   }
 
@@ -204,12 +203,12 @@ export class FirebaseAuthService extends AuthService2 {
   createUserWithEmailAndPassword(email: string, password: string): any {
     const that = this;
     return firebase.auth().createUserWithEmailAndPassword(email, password).then((response) => {
-      console.log('firebase-create-user-with-email-and-password');
+      this.logger.printLog('firebase-create-user-with-email-and-password');
       // that.firebaseCreateUserWithEmailAndPassword.next(response);
       return response;
     }).catch((error) => {
-        console.log('error: ', error.message);
-        return error;
+      this.logger.printError('error: ', error.message);
+      return error;
     });
   }
 
@@ -220,10 +219,10 @@ export class FirebaseAuthService extends AuthService2 {
   sendPasswordResetEmail(email: string): any {
     const that = this;
     return firebase.auth().sendPasswordResetEmail(email).then(() => {
-      console.log('firebase-send-password-reset-email');
+      this.logger.printLog('firebase-send-password-reset-email');
       // that.firebaseSendPasswordResetEmail.next(email);
     }).catch((error) => {
-      console.log('error: ', error);
+      this.logger.printError('error: ', error);
     });
   }
 
@@ -233,12 +232,12 @@ export class FirebaseAuthService extends AuthService2 {
   private signOut() {
     const that = this;
     firebase.auth().signOut().then(() => {
-      console.log('firebase-sign-out');
+      this.logger.printLog('firebase-sign-out');
       // cancello token
       localStorage.removeItem(this.storagePrefix + 'tiledeskToken');
       //localStorage.removeItem('firebaseToken');
     }).catch((error) => {
-      console.log('error: ', error);
+      this.logger.printError('error: ', error);
     });
   }
 
@@ -250,10 +249,10 @@ export class FirebaseAuthService extends AuthService2 {
     const that = this;
     const user = firebase.auth().currentUser;
     user.delete().then(() => {
-      console.log('firebase-current-user-delete');
+      this.logger.printLog('firebase-current-user-delete');
       // that.firebaseCurrentUserDelete.next();
     }).catch((error) => {
-      console.log('error: ', error);
+      this.logger.printError('error: ', error);
     });
   }
 
