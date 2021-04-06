@@ -9,6 +9,12 @@ import 'firebase/messaging';
 import 'firebase/database';
 import 'firebase/auth';
 
+// utils
+import {
+  avatarPlaceholder,
+  getColorBck,
+} from '../../utils/utils-user';
+
 // services
 // import { EventsService } from '../events-service';
 import { AuthService2 } from '../abstract/auth.service';
@@ -141,7 +147,7 @@ export class MQTTAuthService extends AuthService2 {
       this.http.post(this.URL_TILEDESK_SIGNIN_ANONYMOUSLY, postData, requestOptions).subscribe((data) => {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
-          // this.createCompleteUser(data['user']);
+          this.createCompleteUser(data['user']);
           localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.getCustomToken(this.tiledeskToken);
           resolve(this.currentUser)
@@ -192,7 +198,7 @@ export class MQTTAuthService extends AuthService2 {
       this.http.post(this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN, null, requestOptions).subscribe((data) => {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
-          // this.createCompleteUser(data['user']);
+          this.createCompleteUser(data['user']);
           localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.getCustomToken(this.tiledeskToken);
           resolve(this.currentUser)
@@ -302,6 +308,41 @@ export class MQTTAuthService extends AuthService2 {
     });
   }
 
+  /**
+   * createCompleteUser
+   * @param user
+   */
+  private createCompleteUser(user: any) {
+    const member = new UserModel(user._id);
+    try {
+      const uid = user._id;
+      const firstname = user.firstname ? user.firstname : '';
+      const lastname = user.lastname ? user.lastname : '';
+      const email = user.email ? user.email : '';
+      const fullname = ( firstname + ' ' + lastname ).trim();
+      const avatar = avatarPlaceholder(fullname);
+      const color = getColorBck(fullname);
+      //TODO-GAB
+      // const imageurl = this.imageRepo.getImageThumb(uid);
+
+      member.uid = uid;
+      member.email = email;
+      member.firstname = firstname;
+      member.lastname = lastname;
+      member.fullname = fullname;
+      //TODO-GAB
+      // member.imageurl = imageurl;
+      member.avatar = avatar;
+      member.color = color;
+      console.log('createCompleteUser: ', member);
+    } catch (err) {
+      console.log('createCompleteUser error:' + err);
+    }
+    this.currentUser = member;
+    // salvo nel local storage e sollevo l'evento
+    localStorage.setItem(this.storagePrefix + 'currentUser', JSON.stringify(this.currentUser));
+    // this.BScurrentUser.next(this.currentUser);
+  }
 
   // private firebaseCreateCustomToken(tiledeskToken: string) {
   //   console.log('getting firebase custom token with tiledesk token', tiledeskToken);
