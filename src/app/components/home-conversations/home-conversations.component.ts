@@ -194,9 +194,10 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     
     this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
     this.g.wdLog(['this.listConversations', this.listConversations]);
-    if (this.g.supportMode) {
-      this.showWaitingTime();
-    }
+    // if (this.g.supportMode) {
+    //   this.showWaitingTime();
+    // }
+    this.showWaitingTime();
     //this.showConversations();
   }
 

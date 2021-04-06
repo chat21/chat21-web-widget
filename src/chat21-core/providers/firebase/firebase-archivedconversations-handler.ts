@@ -355,7 +355,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         conv.color = getColorBck(conversation_with_fullname);
         conv.archived = true;
         //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
-        // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
         return conv;
     }
 

@@ -11,7 +11,6 @@ import 'firebase/storage';
 export class FirebaseImageRepoService extends ImageRepoService {
 
     // private params
-    private FIREBASESTORAGE_BASE_URL_IMAGE = environment.FIREBASESTORAGE_BASE_URL_IMAGE;
     private urlStorageBucket = environment.firebase.storageBucket + '/o/profiles%2F';
     private imageURL: string;
     

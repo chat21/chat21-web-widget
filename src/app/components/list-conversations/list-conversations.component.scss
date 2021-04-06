@@ -175,9 +175,7 @@
         display: inline-block;
     }
 
-    .c21-lablel-close{
-        border: 1px solid #e2e2e2;
-        background-color: #ececec;
+    .c21-icon-archived-chat{
         padding: 4px;
         border-radius: 4px;
         position: absolute;
@@ -186,6 +184,13 @@
         margin-right: -10px;
         color: #858585;
         font-weight: 500;
+    }
+
+    .c21-header-button {
+        padding: 6px 10px 6px 10px;
+        display: flex;
+        align-items: center;
+        color:#777777;
     }
 
 }
