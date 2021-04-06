@@ -4,6 +4,8 @@
     (c) Tiledesk 2020
 */
 
+var mqtt = require('mqtt');
+
 const _CLIENTADDED = "/clientadded"
 const _CLIENTUPDATED = "/clientupdated"
 const _CLIENTDELETED = "/clientdeleted"
@@ -94,7 +96,7 @@ class Chat21Client {
             metadata: metadata,
             channel_type: channel_type
         }
-        outgoing_message = {...outgoing_message, ...attributes }
+        // outgoing_message = {...outgoing_message, ...attributes }
         const payload = JSON.stringify(outgoing_message)
         this.client.publish(dest_topic, payload, null, (err) => {
             callback(err, outgoing_message)
@@ -560,3 +562,6 @@ class Chat21Client {
         );
     }
 }
+
+export { Chat21Client }
+// module.exports = { Chat21Client };
