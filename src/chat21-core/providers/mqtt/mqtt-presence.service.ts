@@ -28,7 +28,6 @@ export class MQTTPresenceService extends PresenceService {
   }
 
   initialize() {
-    console.log('FirebasePresenceService', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 

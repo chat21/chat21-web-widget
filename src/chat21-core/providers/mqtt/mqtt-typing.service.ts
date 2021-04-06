@@ -34,7 +34,6 @@ export class MQTTTypingService extends TypingService {
 
   /** */
   initialize() {
-    console.log('FirebaseTypingService', this.tenant);
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 
