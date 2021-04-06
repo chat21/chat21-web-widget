@@ -166,8 +166,9 @@ export function authenticationFactory(http: HttpClient, appConfig: AppConfigServ
     console.log("appConfig.getConfig().SERVER_BASE_URL", appConfig.getConfig().SERVER_BASE_URL);
     auth.setBaseUrl(appConfig.getConfig().SERVER_BASE_URL)
     console.log("auth.getBaseUrl()", auth.getBaseUrl());
+    return auth;
   } else {
-    const auth= new FirebaseAuthService(http); 
+    const auth= new FirebaseAuthService(http);
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
   }
