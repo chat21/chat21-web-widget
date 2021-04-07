@@ -96,6 +96,7 @@ class Chat21Client {
             metadata: metadata,
             channel_type: channel_type
         }
+        console.log("outgoing_message:", outgoing_message)
         // outgoing_message = {...outgoing_message, ...attributes }
         const payload = JSON.stringify(outgoing_message)
         this.client.publish(dest_topic, payload, null, (err) => {
