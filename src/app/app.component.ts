@@ -43,8 +43,8 @@ import { CustomTranslateService } from '../chat21-core/providers/custom-translat
 import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
 import { ChatManager } from '../chat21-core/providers/chat-manager';
 import { TypingService } from '../chat21-core/providers/abstract/typing.service';
-import { AuthService2 } from '../chat21-core/providers/abstract/auth.service';
-import { AuthService } from './providers/auth.service';
+import { AuthService } from '../chat21-core/providers/abstract/auth.service';
+import { AuthService_old } from './providers/auth.service';
 import { v4 as uuidv4 } from 'uuid';
 import { FIREBASESTORAGE_BASE_URL_IMAGE, STORAGE_PREFIX, UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
@@ -55,7 +55,7 @@ import { ArchivedConversationsHandlerService } from '../chat21-core/providers/ab
 import { URL_SOUND } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { timeout } from 'rxjs/operator/timeout';
-import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
+import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 
 @Component({
     selector: 'tiledeskwidget-root',
@@ -122,8 +122,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public triggerHandler: Triggerhandler,
         public translatorService: TranslatorService,
         private translateService: CustomTranslateService,
-        //public authService: AuthService,
-        public authService2: AuthService2,
+        //public authService_old: AuthService_old,
+        public authService: AuthService,
         //public messagingService: MessagingService,
         public contactService: ContactService,
         //public chatPresenceHandlerService: ChatPresenceHandlerService,
@@ -140,7 +140,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public chatManager: ChatManager,
         public typingService: TypingService,
         public imageRepoService: ImageRepoService,
-        public uploadService2: UploadService2
+        public uploadService: UploadService
     ) {
         if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
             throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
@@ -232,11 +232,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         });
         // this.authService.initialize()
-        this.authService2.initialize(this.setStoragePrefix());
+        this.authService.initialize(this.setStoragePrefix());
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
-        this.uploadService2.initialize();
+        this.uploadService.initialize();
     }
 
     setStoragePrefix(): string{
@@ -369,7 +369,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.subscriptions.push(obsLoggedUser);
         // // this.authService.onAuthStateChanged();
 
-        const subAuthStateChanged = this.authService2.BSAuthStateChanged.subscribe(state => {
+        const subAuthStateChanged = this.authService.BSAuthStateChanged.subscribe(state => {
 
             //const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
             const tiledeskTokenTEMP = localStorage.getItem(this.setStoragePrefix() + 'tiledeskToken')
@@ -378,7 +378,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.g.tiledeskToken = tiledeskTokenTEMP;
             }
             
-            const firebaseTokenTEMP = this.authService2.getToken();
+            const firebaseTokenTEMP = this.authService.getToken();
             if (firebaseTokenTEMP && firebaseTokenTEMP !== undefined) {
                 that.g.firebaseToken = firebaseTokenTEMP;
             }
@@ -387,7 +387,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             that.stateLoggedUser = state;
             if(state && state === 'online'){
                  /** sono loggato */
-                const user = that.authService2.getCurrentUser();
+                const user = that.authService.getCurrentUser();
                 that.g.wdLog(['sono nel caso in cui sono loggato', user]);
                 // that.g.wdLog([' anonymousAuthenticationInNewProject']);
                 // that.authService.resigninAnonymousAuthentication();
@@ -437,7 +437,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         
 
-        const subUserLogOut = this.authService2.BSSignOut.subscribe((state) => {
+        const subUserLogOut = this.authService.BSSignOut.subscribe((state) => {
             // that.ngZone.run(() => {
             if(state === true){ //state = true -> user has logged out
                 /** ho effettuato il logout: nascondo il widget */
@@ -840,7 +840,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (userEmail && userPassword) { //TODO:GAB deprecato ma in fase di eliminazione
              this.g.wdLog([' ---------------- 10 ---------------- ']);
             // se esistono email e psw faccio un'autenticazione firebase con email
-            this.authService2.signInWithEmailAndPassword(userEmail, userPassword)
+            this.authService.signInWithEmailAndPassword(userEmail, userPassword)
             // this.authService.authenticateFirebaseWithEmailAndPassword(userEmail, userPassword);
         // } else if (userId) {
         //     // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
@@ -860,7 +860,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //     this.g.wdLog([' ---------------- 12 ---------------- ']);
         //     this.g.wdLog(['this.g.userToken:: ', userToken]);
         //     //this.authService.authenticateFirebaseCustomToken(userToken);
-         } else if (this.authService2.getCurrentUser() && tiledeskToken) {
+         } else if (this.authService.getCurrentUser() && tiledeskToken) {
         //     //  SONO GIA' AUTENTICATO
                this.g.wdLog([' ---------------- 13 ---------------- ']);
                this.g.wdLog([' ----------- sono già loggato ------- ']);
@@ -897,7 +897,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             //  AUTENTICAZIONE ANONIMA
             this.g.wdLog([' ---------------- 14 ---------------- ']);
             this.g.wdLog([' authenticateFirebaseAnonymously']);
-            this.authService2.signInAnonymously(this.g.projectid).then(user => {
+            this.authService.signInAnonymously(this.g.projectid).then(user => {
             
                 if(user.firstname || user.lastname){
                 const fullName = user.firstname + ' ' + user.lastname;
@@ -1339,8 +1339,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             attributes,
             projectid,
             channel_type]);
-        const messageSent = this.initConversationHandler(conversationWith)
-                                .sendMessage(
+        const messageSent = this.initConversationHandler(conversationWith).sendMessage(
                                         msg,
                                         type,
                                         metadata,
@@ -1348,8 +1347,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                                         recipientFullname,
                                         senderId,
                                         senderFullname,
-                                        channel_type
-                                )
+                                        channel_type,
+                                        attributes)
         // const messageSent = this.messagingService
         //     .sendMessageFull(
         //         tenant,
@@ -1374,7 +1373,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private signInWithCustomToken(token: string) {
         const that = this;
-        this.authService2.signInWithCustomToken(token).then(resp => {
+        this.authService.signInWithCustomToken(token).then(resp => {
             console.log('userlogged customtoken', resp)
             const currentUser = resp;
             if(currentUser.firstname || currentUser.lastname){
@@ -1440,7 +1439,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     private signInAnonymous() {
         this.g.wdLog(['signInAnonymous']);
-        this.authService2.signInAnonymously(this.g.projectid)
+        this.authService.signInAnonymously(this.g.projectid)
         // this.authService.anonymousAuthentication();
         // this.authService.authenticateFirebaseAnonymously();
     }
@@ -1542,10 +1541,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private reInit() {
         // if (!firebase.auth().currentUser) {
-        if (!this.authService2.getCurrentUser()) {
+        if (!this.authService.getCurrentUser()) {
             this.g.wdLog(['reInit ma NON SONO LOGGATO!']);
         } else {
-            this.authService2.logout();
+            this.authService.logout();
             // this.authService.signOut(-2);
             /** ho fatto un reinit */
             this.g.wdLog(['sono nel caso reinit -2']);
@@ -1645,7 +1644,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setIsOpen(false);
             this.storageService.clear();
             this.presenceService.removePresence();
-            this.authService2.logout()
+            this.authService.logout()
             // this.authService.signOut(-2);
         }
         // this.storageService.removeItem('attributes');

@@ -7,10 +7,10 @@ import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat
 import { Globals } from './../../../utils/globals';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
-import { UploadService } from '../../../providers/upload.service';
+import { UploadService_old } from '../../../providers/upload.service';
 import { replaceBr } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
-import { UploadService2 } from '../../../../chat21-core/providers/abstract/upload.service';
+import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 
 @Component({
   selector: 'tiledeskwidget-conversation-footer',
@@ -52,7 +52,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
               //public upSvc: UploadService,
               private chatManager: ChatManager,
               private typingService: TypingService,
-              private uploadService2: UploadService2) { }
+              private uploadService: UploadService) { }
 
   ngOnInit() {
   }
@@ -216,7 +216,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       // this.resetLoadImage();
       
 
-        this.uploadService2.pushUploadMessage(currentUpload).then(downloadURL => {
+        this.uploadService.pushUploadMessage(currentUpload).then(downloadURL => {
           that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
           that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
@@ -308,17 +308,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
           recipientFullname += ' - ' + widgetTitle;
         }
-        // const messageSent = this.conversationHandlerService.sendMessage(
-        //   msg,
-        //   type,
-        //   metadata,
-        //   conversationWith,
-        //   recipientFullname,
-        //   senderId,
-        //   recipientFullname,
-        //   channelType       
-        // );
-        const messageSent = this.conversationHandlerService.sendMessage2(
+
+        const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,
           metadata,

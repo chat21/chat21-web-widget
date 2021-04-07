@@ -36,10 +36,10 @@ import { GlobalSettingsService } from './providers/global-settings.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
 import { StorageService } from './providers/storage.service';
 import { ChatPresenceHandlerService } from './providers/chat-presence-handler.service';
-import { AuthService } from './providers/auth.service';
+import { AuthService_old } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ConversationsService } from './providers/conversations.service';
-import { UploadService } from './providers/upload.service';
+import { UploadService_old } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 import { TranslatorService } from './providers/translator.service';
@@ -109,7 +109,7 @@ import { CustomTranslateService } from './../chat21-core/providers/custom-transl
 
 
 //ABSTRACT SERVICES
-import { AuthService2 } from '../chat21-core/providers/abstract/auth.service';
+import { AuthService } from '../chat21-core/providers/abstract/auth.service';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
@@ -117,7 +117,7 @@ import { ConversationHandlerService } from '../chat21-core/providers/abstract/co
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { TypingService } from '../chat21-core/providers/abstract/typing.service';
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
-import { UploadService2 } from '../chat21-core/providers/abstract/upload.service';
+import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 
 //FIREBASE SERVICES
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
@@ -321,7 +321,7 @@ export function loggerFactory() {
       deps: [AppConfigService]
     },
     {
-      provide: AuthService2,
+      provide: AuthService,
       useFactory: authenticationFactory,
       deps: [HttpClient, AppConfigService, Chat21Service ]
     },
@@ -361,7 +361,7 @@ export function loggerFactory() {
       deps: []
     },
     {
-      provide: UploadService2,
+      provide: UploadService,
       useFactory: uploadFactory,
       deps: []
     },

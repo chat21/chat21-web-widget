@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 // models
 import { UploadModel } from '../../models/upload';
 @Injectable()
-export abstract class UploadService2 {
+export abstract class UploadService {
 
   BehaviorSubject
   abstract BSStateUpload: BehaviorSubject<any> = new BehaviorSubject<any>(null);

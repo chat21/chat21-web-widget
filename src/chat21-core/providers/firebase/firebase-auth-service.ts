@@ -10,7 +10,7 @@ import 'firebase/database';
 import 'firebase/auth';
 
 // services
-import { AuthService2 } from '../abstract/auth.service';
+import { AuthService } from '../abstract/auth.service';
 // import { ImageRepoService } from '../abstract/image-repo.service';
 // import { FirebaseImageRepoService } from './firebase-image-repo';
 
@@ -28,7 +28,7 @@ import { CustomLogger } from '../logger/customLogger';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
-export class FirebaseAuthService extends AuthService2 {
+export class FirebaseAuthService extends AuthService {
 
   // BehaviorSubject
   BSAuthStateChanged: BehaviorSubject<any>;

@@ -10,7 +10,7 @@ import 'firebase/storage';
 import 'firebase/firestore';
 
 // services
-import { UploadService2 } from '../abstract/upload.service';
+import { UploadService } from '../abstract/upload.service';
 
 // models
 import { UploadModel } from '../../models/upload';
@@ -20,7 +20,7 @@ import { ScriptSnapshot } from 'typescript';
 //   providedIn: 'root'
 // })
 @Injectable()
-export class FirebaseUploadService extends UploadService2 {
+export class FirebaseUploadService extends UploadService {
   // BehaviorSubject
   BSStateUpload: BehaviorSubject<any>;
 

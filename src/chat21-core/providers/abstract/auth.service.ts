@@ -9,7 +9,7 @@ import { UserModel } from '../../models/user';
 //   providedIn: 'root'
 // })
 @Injectable()
-export abstract class AuthService2 {
+export abstract class AuthService {
 
   // BehaviorSubject
   abstract BSAuthStateChanged: BehaviorSubject<any> = new BehaviorSubject<any>(null);

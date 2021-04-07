@@ -17,7 +17,7 @@ import {
 
 // services
 // import { EventsService } from '../events-service';
-import { AuthService2 } from '../abstract/auth.service';
+import { AuthService } from '../abstract/auth.service';
 import { Chat21Service } from './chat-service';
 // models
 import { UserModel } from '../../models/user';
@@ -27,7 +27,7 @@ import { UserModel } from '../../models/user';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
-export class MQTTAuthService extends AuthService2 {
+export class MQTTAuthService extends AuthService {
 
   // authStateChanged: BehaviorSubject<any>; // = new BehaviorSubject<any>([]);
 

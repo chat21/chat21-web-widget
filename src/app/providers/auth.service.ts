@@ -18,7 +18,7 @@ import { StorageService } from './storage.service';
 import { componentRefresh } from '@angular/core/src/render3/instructions';
 
 @Injectable()
-export class AuthService {
+export class AuthService_old {
   // public user: Observable<firebase.User>;
   // public user: firebase.User;
   public user: any;

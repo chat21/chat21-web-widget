@@ -15,7 +15,7 @@ import {
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
   TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, UID_SUPPORT_GROUP_MESSAGES
 } from '../../../utils/constants';
-import { UploadService } from '../../../providers/upload.service';
+import { UploadService_old } from '../../../providers/upload.service';
 import { ContactService } from '../../../providers/contact.service';
 import { AgentAvailabilityService } from '../../../providers/agent-availability.service';
 import { StarRatingWidgetService } from '../../star-rating-widget/star-rating-widget.service';
