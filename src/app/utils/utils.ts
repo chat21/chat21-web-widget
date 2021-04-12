@@ -338,7 +338,7 @@ export function getUrlImgProfile(uid: string) {
  */
 export function getImageUrlThumb(uid: string) {
   // tslint:disable-next-line:max-line-length
-  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + environment.firebase.storageBucket + '/o/' + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
+  const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + environment.firebaseConfig.storageBucket + '/o/' + 'profiles%2F' + uid + '%2Fthumb_photo.jpg?alt=media';
   return imageurl;
 }
 

@@ -142,11 +142,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public imageRepoService: ImageRepoService,
         public uploadService: UploadService
     ) {
-        if (!appConfigService.getConfig().firebase || appConfigService.getConfig().firebase.apiKey === 'CHANGEIT') {
-            throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
-        }
+        // if (!appConfigService.getConfig().firebaseConfig || appConfigService.getConfig().firebaseConfig.apiKey === 'CHANGEIT') {
+        //     throw new Error('firebase config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
+        // }
        
-        firebase.initializeApp(appConfigService.getConfig().firebase);  // here shows the error
+        // firebase.initializeApp(appConfigService.getConfig().firebaseConfig);  // here shows the error
         this.obsEndRenderMessage = new BehaviorSubject(null);
     }
 
@@ -1950,7 +1950,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onImageLoaded(conversation: ConversationModel){
         console.log('onLoadImage convvvv:::', conversation)
-        conversation.image = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, conversation.sender)
+        conversation.image = this.imageRepoService.getImagePhotoUrl(conversation.sender)
     }
 
     onConversationLoaded(conversation: ConversationModel){

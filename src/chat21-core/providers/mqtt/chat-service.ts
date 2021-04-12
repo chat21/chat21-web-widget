@@ -17,8 +17,11 @@ export class Chat21Service {
   constructor() {
   }
 
-  initChat(options: any) {
-    this.chatClient = new Chat21Client(options)
+  initChat(chat21Config: any) {
+    if (!chat21Config || chat21Config.appId === 'CHANGEIT') {
+      throw new Error('chat21Config config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
+    }  
+    this.chatClient = new Chat21Client(chat21Config)
     // console.log("chatClient init. ID:", this.chatClient.client_id)
   }
 }

@@ -176,7 +176,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     this.waitingTime = -1;
     this.availableAgents = this.g.availableAgents.slice(0, 5)
     this.availableAgents.forEach(agent => {
-      agent.imageurl = this.imageRepoService.getImagePhotoUrl(FIREBASESTORAGE_BASE_URL_IMAGE, agent.id)
+      agent.imageurl = this.imageRepoService.getImagePhotoUrl(agent.id)
     })
 
     //this.g.wdLog(['senderId: ', this.senderId]);

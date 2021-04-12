@@ -66,7 +66,9 @@ export class MQTTAuthService extends AuthService {
     this.storagePrefix = storagePrefix;
     this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
     this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
-    this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = environment.chat21Config.loginServiceEndpoint;
+    // this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = environment.chat21Config.loginServiceEndpoint;
+    this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + "chat21/native/auth/createCustomToken"
+    console.log("URL_TILEDESK_CREATE_CUSTOM_TOKEN", this.URL_TILEDESK_CREATE_CUSTOM_TOKEN)
     this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'auth/signinWithCustomToken';
     console.log(' ---------------- login con token url ---------------- ');
     this.checkIsAuth();
@@ -286,8 +288,8 @@ export class MQTTAuthService extends AuthService {
     console.log('result:', result);
     const userid = result.userid;
     const chatOptions = environment.chat21Config;
-    console.log('chatOptions:', chatOptions);
-    this.chat21Service.initChat(chatOptions);
+    console.log('chatOptions:', chatOptions, this.chat21Service.chatClient);
+    //this.chat21Service.initChat(chatOptions);
     this.chat21Service.chatClient.connect(userid, result.token, () => {
       console.log('Chat connected.');
       const uid = userid;

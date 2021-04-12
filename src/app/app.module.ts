@@ -120,6 +120,7 @@ import { PresenceService } from '../chat21-core/providers/abstract/presence.serv
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 
 //FIREBASE SERVICES
+import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
 import { FirebaseConversationHandlerBuilderService } from '../chat21-core/providers/firebase/firebase-conversation-handler-builder.service';
 import { FirebaseConversationsHandler } from '../chat21-core/providers/firebase/firebase-conversations-handler';
@@ -142,6 +143,7 @@ import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
+
 // FACTORIES
 export function createTranslateLoader(http: HttpClient) {
   let localUrl = './assets/i18n/';
@@ -161,13 +163,15 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 
 export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service ) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
-    console.log("chat21Service::", chat21Service)
+    
+    chat21Service.initChat(appConfig.getConfig().chat21Config);  
+    console.log("chat21Service::", chat21Service, appConfig.getConfig().apiUrl)
     const auth = new MQTTAuthService(http, chat21Service);
-    console.log("appConfig.getConfig().SERVER_BASE_URL", appConfig.getConfig().SERVER_BASE_URL);
-    auth.setBaseUrl(appConfig.getConfig().SERVER_BASE_URL)
-    console.log("auth.getBaseUrl()", auth.getBaseUrl());
+    auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth;
   } else {
+
+    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
     const auth= new FirebaseAuthService(http);
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
@@ -222,11 +226,17 @@ export function presenceFactory() {
   }
 }
 
-export function imageRepoFactory() {
+export function imageRepoFactory(appConfig: AppConfigService) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
-    return new FirebaseImageRepoService();
+    const imageService = new FirebaseImageRepoService();
+    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
+    imageService.setImageBaseUrl(appConfig.getConfig().baseImageUrl)
+    return imageService
   } else {
-    return new FirebaseImageRepoService();
+    const imageService = new FirebaseImageRepoService();
+    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
+    imageService.setImageBaseUrl(appConfig.getConfig().baseImageUrl)
+    return imageService
   }
 }
 
@@ -358,7 +368,7 @@ export function loggerFactory() {
     {
       provide: ImageRepoService,
       useFactory: imageRepoFactory,
-      deps: []
+      deps: [AppConfigService]
     },
     {
       provide: UploadService,

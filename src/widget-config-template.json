@@ -1,6 +1,6 @@
 {
     "remoteTranslationsUrl": "${TRANSLATE_URL}",
-    "firebase": {
+    "firebaseConfig": {
         "apiKey": "${FIREBASE_APIKEY}",
         "authDomain": "${FIREBASE_AUTHDOMAIN}",
         "databaseURL": "${FIREBASE_DATABASEURL}",
@@ -8,5 +8,12 @@
         "storageBucket": "${FIREBASE_STORAGEBUCKET}",
         "messagingSenderId": "${FIREBASE_MESSAGINGSENDERID}"
     },
-    "apiUrl": "${API_URL}"
+    "chat21Config": {
+        "appId": "${MQTT_APPID}",
+        "MQTTendpoint": "${MQTT_ENDPOINT}",
+        "APIendpoint": "${MQTT_APIENDPOINT}",
+        "loginServiceEndpoint": "${MQTT_LOGINSERVICE_ENDPOINT}"
+    },
+    "apiUrl": "${API_URL}",
+    "baseImageUrl": "${API_BASEIMAGE_URL}"
 }
