@@ -39,7 +39,6 @@ import { ChatPresenceHandlerService } from './providers/chat-presence-handler.se
 import { AuthService_old } from './providers/auth.service';
 import { MessagingService } from './providers/messaging.service';
 import { ConversationsService } from './providers/conversations.service';
-import { UploadService_old } from './providers/upload.service';
 import { ContactService } from './providers/contact.service';
 import { AgentAvailabilityService } from './providers/agent-availability.service';
 import { TranslatorService } from './providers/translator.service';
@@ -120,16 +119,16 @@ import { PresenceService } from '../chat21-core/providers/abstract/presence.serv
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 
 //FIREBASE SERVICES
-import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
 import { FirebaseAuthService } from '../chat21-core/providers/firebase/firebase-auth-service';
 import { FirebaseConversationHandlerBuilderService } from '../chat21-core/providers/firebase/firebase-conversation-handler-builder.service';
 import { FirebaseConversationsHandler } from '../chat21-core/providers/firebase/firebase-conversations-handler';
 import { FirebaseArchivedConversationsHandler } from '../chat21-core/providers/firebase/firebase-archivedconversations-handler';
 import { FirebaseConversationHandler } from '../chat21-core/providers/firebase/firebase-conversation-handler';
-import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebase-typing.service';
 import { FirebasePresenceService } from '../chat21-core/providers/firebase/firebase-presence.service';
+import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseUploadService } from '../chat21-core/providers/firebase/firebase-upload.service';
+import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
 
 // MQTT
 import { Chat21Service } from '../chat21-core/providers/mqtt/chat-service';
@@ -142,6 +141,10 @@ import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence
 //LOGGER SERVICES
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
+
+
+
+
 
 
 // FACTORIES

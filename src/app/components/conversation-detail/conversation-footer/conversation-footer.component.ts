@@ -7,7 +7,6 @@ import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat
 import { Globals } from './../../../utils/globals';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
-import { UploadService_old } from '../../../providers/upload.service';
 import { replaceBr } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
