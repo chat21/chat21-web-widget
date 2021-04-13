@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
 import { ConversationModel } from '../../models/conversation';
-import { ConversationComponent } from '../components/conversation/conversation.component';
+import { ConversationComponent } from '../components/conversation-detail/conversation/conversation.component';
 // import { variable } from '@angular/compiler/src/output/output_ast';
 // import { storage } from 'firebase';
 
@@ -86,6 +86,7 @@ export class Globals {
   startedAt = new Date();
 
   // ============ BEGIN: LABELS ==============//
+  LABEL_TU: string;
   LABEL_PLACEHOLDER: string;
   LABEL_START_NW_CONV: string;
   LABEL_FIRST_MSG: string;
@@ -159,6 +160,8 @@ export class Globals {
    themeForegroundColor: string;
    themeColor50: string;
    colorGradient: string;
+   colorBck: string
+   colorGradient180: string;
    showWidgetNameInConversation: boolean;
    allowTranscriptDownload: boolean;
    poweredBy: string;
@@ -168,9 +171,9 @@ export class Globals {
    recipientId: string;
    newConversationStart: boolean;
    recipientFullname: string;
-   userId: string;
+  //  userId: string;
    userPassword: string;
-   userToken: string;
+  //  userToken: string;
    marginX: string;
    marginY: string;
    isLogEnabled: boolean;
@@ -191,10 +194,10 @@ export class Globals {
    showAttachmentButton: boolean;
    showAllConversations: boolean;
    privacyField: string;
-   customToken: string;
+   jwt: string;
 
    isOpenNewMessage: boolean;
-
+   dynamicWaitTimeReply: boolean; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -267,6 +270,11 @@ export class Globals {
     this.widgetTitle = '';
     /** Set the widget title label shown in the widget header. Value type : string.
     The default value is Tiledesk. */
+    this.dynamicWaitTimeReply = true;  
+    /** The user can decide whether or not to share the 
+     * average response time of his team (if 'dynamicWaitTimeReply' is 
+     * false the WAITING_TIME_NOT_FOUND will always be displayed) 
+     * is set to true for backward compatibility with old projects */
     this.hideHeaderCloseButton = false;
     /** Hide the close button in the widget header. Permitted values: true,
     false. The default value is false. */
@@ -280,6 +288,10 @@ export class Globals {
     codes, e.g. #87BC65 and RGB color codes, e.g. rgb(135,188,101) */
     this.themeForegroundColor = convertColorToRGBA('#ffffff', 100);
     /** allows you to change text and icons' color.
+    Permitted values: Hex color codes, e.g. #425635 and RGB color
+    codes, e.g. rgb(66,86,53) */
+    this.colorBck = convertColorToRGBA('#000000', 100)
+    /** allows you to change background color.
     Permitted values: Hex color codes, e.g. #425635 and RGB color
     codes, e.g. rgb(66,86,53) */
     this.showWidgetNameInConversation = false;
@@ -438,7 +450,7 @@ export class Globals {
     this.default_settings = {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
-      'poweredBy': this.poweredBy, 'userId': this.userId,
+      'poweredBy': this.poweredBy, //'userId': this.userId,
       'userEmail': this.userEmail, 'userPassword': this.userPassword,
       'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
       'isOpen': this.isOpen, 'channelType': this.channelType,
@@ -447,7 +459,7 @@ export class Globals {
       'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
-      'allowTranscriptDownload': this.allowTranscriptDownload, 'userToken': this.userToken,
+      'allowTranscriptDownload': this.allowTranscriptDownload, //'userToken': this.userToken,
       'autoStart': this.autoStart, 'startHidden': this.startHidden, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
@@ -455,7 +467,8 @@ export class Globals {
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
-      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'customToken': this.customToken
+      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'jwt': this.jwt,
+      'dynamicWaitTimeReply': this.dynamicWaitTimeReply
     };
   }
 
@@ -463,6 +476,7 @@ export class Globals {
   setColorWithGradient() {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
+    this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
 }
 
   /**

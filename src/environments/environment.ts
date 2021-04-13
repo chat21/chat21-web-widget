@@ -3,17 +3,15 @@
 // `ng build2 --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-// tslint:disable-next-line:max-line-length
-// import { firebaseConfig } from '../environments/firebase-config'; // please comment on this line when changing the values ​​of firebase {}
-
 export const environment = {
   production: false,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: true,
   remoteConfigUrl: '/widget-config.json',
-  remoteTranslationsUrl: 'http://localhost:3000/',
   loadRemoteTranslations: true,
-  firebase: {
+  remoteTranslationsUrl: 'http://localhost:3000/',
+  chatEngine: 'mqtt',
+  firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
     databaseURL: 'CHANGEIT',
@@ -21,8 +19,17 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT'
   },
+  chat21Config: {
+    appId: "tilechat",
+    MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
+    APIendpoint: 'http://localhost:8004/api',
+    loginServiceEndpoint: 'http://localhost:3000/chat21/native/auth/createCustomToken' // endpoint readed from apiUrl property
+  },
   apiUrl: 'http://localhost:3000/',
+  baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
   tenant: 'tilechat',
   defaultLang : 'en',
-  shemaVersion : '1'
+  shemaVersion : '1',
+  authPersistence: 'LOCAL',
+  supportMode: true,
 };

@@ -90,7 +90,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     });
 
     /** */
-    window.tiledesk.on('onChangedConversation', function(event_data) {
+    window.tiledesk.on('onConversationUpdated', function(event_data) {
         // console.log("tiledesk onChangedConversation", event_data);
         try {
             if (!window.tiledesk.angularcomponent.component.g.isOpen) {

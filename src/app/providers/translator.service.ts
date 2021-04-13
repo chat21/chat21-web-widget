@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 // import * as translations from '../utils/translations';
 import { TranslateService } from '@ngx-translate/core';
@@ -54,6 +53,21 @@ export class TranslatorService {
     return this._translate.getBrowserLang();
   }
 
+  initializeTransaltorService() {
+
+    this._translate.setDefaultLang('it');
+    const browserLang = this._translate.getBrowserLang();
+    console.log('!!! ===== HELLO APP.COMP ===== DEVICE LANG ', browserLang);
+    if (browserLang) {
+          if (browserLang === 'it') {
+              this._translate.use('it');
+          } else {
+              this._translate.use('en');
+          }
+      }
+  
+  }
+
 
   getTranslationFileUrl(browserLang) {
     this.remoteTranslationsUrl = environment.remoteTranslationsUrl;
@@ -63,8 +77,6 @@ export class TranslatorService {
       this.remoteTranslationsUrl = remoteTranslationsUrl;
     }
     // console.log(`»»»» initI18n remoteTranslationsUrl2`, this.appConfigService.getConfig());
-    this.g.wdLog([' constructor conversation component ']);
-
     // console.log(`»»»» getTranslationFileUrl `, this.remoteTranslationsUrl);
     if (environment.loadRemoteTranslations) {
       return this.remoteTranslationsUrl + this.g.projectid + '/labels/' + browserLang.toUpperCase();
@@ -152,9 +164,9 @@ export class TranslatorService {
       const remote_translation_res = JSON.parse(body);
       // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);
       // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
-      this._translate.setTranslation(lang, remote_translation_res.data);
+      this._translate.setTranslation(lang, remote_translation_res.data, true);
     } else {
-      this._translate.setTranslation(lang, JSON.parse(body));
+      this._translate.setTranslation(lang, JSON.parse(body), true);
     }
   }
 
@@ -165,6 +177,7 @@ export class TranslatorService {
     // this.setLanguage(globals.windowContext, globals.lang);
 
     const labels: string[] = [
+      'LABEL_TU',
       'LABEL_PLACEHOLDER',
       'LABEL_START_NW_CONV',
       'LABEL_FIRST_MSG',
@@ -218,6 +231,7 @@ export class TranslatorService {
 
     this._translate.get(labels).subscribe(res => {
       // console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
+      globals.LABEL_TU = res['LABEL_TU']
       globals.LABEL_PLACEHOLDER = res['LABEL_PLACEHOLDER']
       globals.LABEL_START_NW_CONV = res['LABEL_START_NW_CONV'];
       globals.LABEL_FIRST_MSG = res['LABEL_FIRST_MSG'];

@@ -18,7 +18,7 @@ import { StorageService } from './storage.service';
 import { componentRefresh } from '@angular/core/src/render3/instructions';
 
 @Injectable()
-export class AuthService {
+export class AuthService_old {
   // public user: Observable<firebase.User>;
   // public user: firebase.User;
   public user: any;
@@ -43,12 +43,12 @@ export class AuthService {
     this.g.wdLog([' ---------------- AuthService initialize ---------------- ']);
     /** SIGIN WITH JWT CUSTOM TOKEN */
     // aggiungo nel local storage e mi autentico
-    // this.g.wdLog(['controllo se è stato passato un token: ', this.g.customToken]);
-    // if (this.g.customToken) {
+    // this.g.wdLog(['controllo se è stato passato un token: ', this.g.jwt]);
+    // if (this.g.jwt) {
     //   // mi loggo con custom token passato nell'url
     //   this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
-    //   this.authenticationWithCustomToken(this.g.customToken);
-    //   this.g.tiledeskToken = this.g.customToken;
+    //   this.authenticationWithCustomToken(this.g.jwt);
+    //   this.g.tiledeskToken = this.g.jwt;
     // } else
     if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
         this.g.tiledeskToken = tiledeskTokenTEMP;

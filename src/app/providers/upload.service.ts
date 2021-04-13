@@ -24,7 +24,7 @@ class ImageSnippet {
 /**
  * DESC PROVIDER
  */
-export class UploadService {
+export class UploadService_old {
   private tenant: string;
   private recipientId: string;
   private senderId: string;

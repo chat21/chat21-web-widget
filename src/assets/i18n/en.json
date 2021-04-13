@@ -1,4 +1,5 @@
 {
+    "LABEL_TU": "",
     "LABEL_PLACEHOLDER": "type your message..",
     "LABEL_START_NW_CONV": "New conversation",
     "LABEL_FIRST_MSG": "Describe shortly your problem, you will be contacted by an agent.",
@@ -47,7 +48,21 @@
     "START_A_CONVERSATION": "Start a conversation",
     "NO_CONVERSATION": "No conversation",
     "SEE_PREVIOUS": "see previous",
-    "WAITING_TIME_FOUND": "The team typically replies in ",
+    "WAITING_TIME_FOUND": "The team typically replies in $reply_time",
     "WAITING_TIME_NOT_FOUND": "The team will reply as soon as possible",
-    "CLOSED": "CLOSED"
+    "CLOSED": "CLOSED",
+    
+    "INFO_SUPPORT_USER_ADDED_SUBJECT":"you",
+    "INFO_SUPPORT_USER_ADDED_YOU_VERB":"have been added to ",
+    "INFO_SUPPORT_USER_ADDED_COMPLEMENT":"joined",
+    "INFO_SUPPORT_USER_ADDED_VERB":"the chat",
+    "INFO_SUPPORT_CHAT_REOPENED":"Chat reopened",
+    "INFO_SUPPORT_CHAT_CLOSED":"Chat closed",
+
+    "LABEL_TODAY": "today",
+    "LABEL_TOMORROW": "yesterday",
+    "LABEL_LAST_ACCESS": "last access",
+    "LABEL_TO": "at",
+    "ARRAY_DAYS": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 }

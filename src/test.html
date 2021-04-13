@@ -8,34 +8,45 @@
       // Handler for .ready() called.
       window.tiledeskSettings = 
       {
-          // PRE:   
-          projectid: "5f914e861fe4500034d25f71",//"5f8711e0ebfd710034b9249e", //"5f4cf9efc85eca0012dcfe2a",
-          // isOpen: true, 
-          // departmentID : "5f4d026b5ef9fa0045f10586",
-          // projectid: "5f1802e79cf1b20012179257",
-          // departmentID : "5f1fd9749cf1b20012391176",  calloutTimer:0,
-          // isOpen:true,
+          // PRE: 
+          projectid: "6066e60cc3dade4e7389d182", //"5f8711e0ebfd710034b9249e",
+          preChatForm: true,
+          align:'left',
+          calloutTimer: 5,
+          // calloutTitle: 'TITOLO CALLOUT',
+          // calloutMsg: 'messaggio callout widget',
+          // welcomeTitle: 'CIAO CLIENT',
+          // welcomeMsg: 'Messaggio benvenuto widget',
+          widgetTitle: "widget Title Test",
+          //startFromHome: false,
+          // logoChat: 'https://miro.medium.com/proxy/1*8mpWApzQD5gZZlnYYUkbcA.png',
+          // lang: 'en',
+          // hideHeaderCloseButton: true,
+          // isOpen: true,
+          // fullscreenMode: true,
+          themeColor: '#ffcb05',
+          themeForegroundColor: '#000000',
+          //departmentID : "602272cb5190d500346b475b",
+          //isShown: ,
+          showWidgetNameInConversation: false,
+          allowTranscriptDownload: true,
+          marginX: "100px",
+          // marginY: "200px",
+          // startHidden: true,
           // persistence: 'session',
           // showWaitTime: false,
-          // hideHeaderCloseButton: true,
-          // lang : 'en',
-          // align:'left',
+          showAvailableAgents: true,
+          // showLogoutOption: false,
+          isLogEnabled: true,
+                
           // userFullname: " ",
           // userEmail: "",
-          // PROD: 
-          // projectid: "5ee09bf5168dc700191dfb47",
-          isLogEnabled: true,
-          marginX: "100px",
           // autoStart: false,
           // persistence: 'session'
-          startFromHome: false,
-          //preChatForm: false,
           // tenant: "tenant test",
-          // widgetTitle: "widget Title Test"
           // showAttachmentButton: false,
-          //showAllConversations: false,
           // privacyField: 'Accetto i termini della privacy <a style="text-transform: none" target="_blank" href="http://www.tiledesk.com/privacy.html">Privacy Policy</a>'
-           
+          //customAttributes: {nome: 'Andrea'}
       };
 
       (function(d, s, id) {
@@ -93,6 +104,10 @@
         });
         // window.tiledesk.on('loadParams', function(event_data) { 
         // });
+        window.tiledesk.on('onBeforeMessageSend', function (event_data) {
+          console.log('testpage event OnBeforeSendMessage', event_data)
+        });
+
       };
       function approved() {
           window.tiledesk.setPrivacyPolicy();
@@ -100,8 +115,11 @@
     </script>
   </head>
   <body>
-    <button id="isApproved" onclick="approved()">
-      SET APPROVED TRUE
-    </button>
+    <div style="height: 900px; background-color: rgb(24, 41, 78);">
+      ciao div
+      <button id="isApproved" onclick="approved()">
+        SET APPROVED TRUE
+      </button>
+    </div>
   </body>
 </html>
