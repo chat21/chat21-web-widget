@@ -19,14 +19,33 @@ class Chat21Client {
         this.reconnections = 0 // just to check how many reconnections
         this.client_id = Date.now();
         if (options && options.MQTTendpoint) {
-            this.endpoint = options.MQTTendpoint
+            if (options.MQTTendpoint.startsWith('/')) {
+                console.log("MQTTendpoint relative url");
+
+                var loc = window.location, new_uri;
+                if (loc.protocol === "https:") {
+                    // new_uri = "wss:";
+                    new_uri = "mqtt:";
+                    
+                } else {
+                    // new_uri = "ws:";
+                    new_uri = "mqtt:";
+                }
+                new_uri += "//" + loc.host;
+                // new_uri += loc.pathname + "/to/ws";
+                new_uri += options.MQTTendpoint;
+                this.endpoint = new_uri
+            } else {
+                this.endpoint = options.MQTTendpoint
+            }
+            
         }
         else {
             this.endpoint = "ws://34.253.207.0:15675/ws"
         }
         this.APIendpoint = options.APIendpoint
         this.appid = options.appId
-        // console.log("final endpoint:", this.endpoint)
+        console.log("final endpoint:", this.endpoint)
         this.user_id = null;
         this.jwt = null;
         this.last_handler = 0;
