@@ -8,7 +8,7 @@ export abstract class ImageRepoService {
 
 
   //params
-  public DEFAULT_URL: string = environment.baseImageUrl;
+  private DEFAULT_URL: string = environment.baseImageUrl;
   private baseImageUrl;
 
   public setImageBaseUrl(baseUrl): void {
