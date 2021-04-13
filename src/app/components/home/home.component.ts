@@ -1,6 +1,8 @@
-import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, SimpleChanges, AfterViewInit } from '@angular/core';
+import { ConversationModel } from '../../../chat21-core/models/conversation';
+import { convertColorToRGBA } from '../../../chat21-core/utils/utils';
 import { Globals } from '../../utils/globals';
-import { convertColorToRGBA } from '../../utils/utils';
+
 
 
 
@@ -10,28 +12,32 @@ import { convertColorToRGBA } from '../../utils/utils';
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('homeComponent') private element: ElementRef;
+  @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ===========/
-  @Output() eventNewConv = new EventEmitter<string>();
-  @Output() eventSelctedConv = new EventEmitter<string>();
-  @Output() eventClose = new EventEmitter();
-  @Output() eventSignOut = new EventEmitter();
-  @Output() eventOpenAllConv = new EventEmitter();
-  @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Output() onNewConversation = new EventEmitter<string>();
+  @Output() onConversationSelected = new EventEmitter<ConversationModel>();
+  @Output() onOpenAllConvesations = new EventEmitter();
+  @Output() onCloseWidget = new EventEmitter();
+  @Output() onSignOut = new EventEmitter();
+  @Output() onImageLoaded = new EventEmitter<ConversationModel>();
+  @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
+  @Input() listConversations: Array<ConversationModel>;
+  @Input() styleMap: Map<string, string>
   // ========= end:: Input/Output values ===========/
 
 
   // ========= begin:: component variables ======= //
-  tenant;
   widgetTitle;
   welcomeMsg;
   welcomeTitle;
-  colorBck: string;
+  colorBck;
+  translationMapHeader: Map<string, string>;
+  translationMapFooter: Map<string, string>;
   // ========= end:: component variables ======= //
 
-
-
+  convertColorToRGBA = convertColorToRGBA
 
   constructor(
     public g: Globals
@@ -42,8 +48,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // get global variables
     this.g.wdLog(['ngOnInit app-home']);
-    this.tenant = this.g.tenant;
-    this.colorBck = '#000000';
 
     if (this.g.firstOpen === true) {
       this.addAnimation();
@@ -52,37 +56,64 @@ export class HomeComponent implements OnInit {
     // https://stackoverflow.com/questions/7015302/css-hexadecimal-rgba
     // this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
     // this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
+    this.colorBck ="#000000"
+
   }
+
+  ngAfterViewInit(){
+    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    setTimeout(() => {
+      if (this.aflistconv) {
+        this.aflistconv.nativeElement.focus();
+      }
+    }, 1000);
+  }
+
+
+  
+
+
+  
+
 
   // ========= begin:: ACTIONS ============//
   returnNewConversation() {
     // rimuovo classe animazione
     this.removeAnimation();
-    this.eventNewConv.emit();
+    this.onNewConversation.emit();
   }
 
   returnOpenAllConversation() {
     // rimuovo classe animazione
     this.removeAnimation();
-    this.eventOpenAllConv.emit();
+    this.onOpenAllConvesations.emit();
   }
 
-  returnSelectedConversation($event) {
-    if ( $event ) {
+  returnSelectedConversation(conversation: ConversationModel) {
+    if(conversation){
       // rimuovo classe animazione
       this.removeAnimation();
-      this.eventSelctedConv.emit($event);
+      this.onConversationSelected.emit(conversation);
     }
+  }
+
+  onImageLoadedFN(conversation: ConversationModel){
+    this.onImageLoaded.emit(conversation)
+  }
+
+  onConversationLoadedFN(conversation: ConversationModel){
+    this.onConversationLoaded.emit(conversation)
   }
 
   f21_close() {
     // aggiungo classe animazione
     this.addAnimation();
-    this.eventClose.emit();
+    this.onCloseWidget.emit();
   }
 
   hideMenuOptions() {
-    this.g.wdLog(['hideMenuOptions A']);
+    this.g.wdLog(['hideMenuOptions']);
+    // this.g.isOpenMenuOptions = false;
     this.g.setParameter('isOpenMenuOptions', false, true);
   }
 
@@ -92,7 +123,7 @@ export class HomeComponent implements OnInit {
    * logout
    */
   returnSignOut() {
-    this.eventSignOut.emit();
+    this.onSignOut.emit();
   }
 
   // ========= end:: ACTIONS ============//
@@ -117,4 +148,8 @@ export class HomeComponent implements OnInit {
       this.g.wdLog(['> Error :' + error]);
     }
   }
+
+  
+
 }
+

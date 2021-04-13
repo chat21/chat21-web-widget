@@ -1,0 +1,22 @@
+.status-message {
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    .icon {
+        width: 13px;
+        height: 13px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+    .c21-ico-schedule {
+        background-image: url("../../../../assets/images/f21ico-schedule.svg");
+    }
+    .c21-ico-done {
+        background-image: url("../../../../assets/images/f21ico-done.svg");
+    }
+    .c21-ico-done_all {
+        background-image: url("../../../../assets/images/f21ico-done_all.svg");
+    }
+}

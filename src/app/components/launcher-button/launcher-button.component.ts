@@ -42,7 +42,6 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('aflauncherbutton') private aflauncherbutton: ElementRef;
   @Output() eventOpenCloseWidget = new EventEmitter<boolean>();
 
-  isOpen: boolean;
   constructor(
     public g: Globals,
     public storageService: StorageService

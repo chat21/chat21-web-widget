@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, OnDestroy, AfterViewInit, NgZone, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy, AfterViewInit, NgZone, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 // services
 import { Globals } from '../../utils/globals';
@@ -13,7 +13,8 @@ import {
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
   TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
-import { ConversationModel } from '../../../models/conversation';
+import { ConversationModel } from '../../../chat21-core/models/conversation';
+
 
 @Component({
   selector: 'tiledeskwidget-last-message',
@@ -21,14 +22,13 @@ import { ConversationModel } from '../../../models/conversation';
   styleUrls: ['./last-message.component.scss']
 })
 export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
-  // @Input() message: MessageModel;
+  @Input() conversation: ConversationModel
   @Output() eventCloseMessagePreview  = new EventEmitter();
   @Output() eventSelctedConv = new EventEmitter<string>();
   // ========= begin:: sottoscrizioni ======= //
   subscriptions: Subscription[] = []; /** */
   // ========= end:: sottoscrizioni ======= //
 
-  conversation: ConversationModel;
   isPopupUrl = isPopupUrl;
   popupUrl = popupUrl;
   strip_tags = strip_tags;
@@ -36,23 +36,23 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     public g: Globals,
-    public conversationsService: ConversationsService
+    // public conversationsService: ConversationsService
   ) {
-    this.g.wdLog([' ---------------- ngOnInit LastMessageComponent ---------------- ']);
-    const that = this;
-    const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
-        that.ngZone.run(() => {
-          if (that.g.isOpen === false) {
-            that.g.wdLog([' 2 - > obsChangeConversation ::: ', conversation]);
-            if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
-              return;
-            }
-            that.conversation = conversation;
-            // console.log('conv: ' + conversation);
-          }
-        });
-    });
-    this.subscriptions.push(subChangedConversation);
+    // this.g.wdLog([' ---------------- ngOnInit LastMessageComponent ---------------- ']);
+    // const that = this;
+    // const subChangedConversation = this.conversationsService.obsChangeConversation.subscribe((conversation) => {
+    //     that.ngZone.run(() => {
+    //       if (that.g.isOpen === false) {
+    //         that.g.wdLog([' 2 - > obsChangeConversation ::: ', conversation]);
+    //         if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+    //           return;
+    //         }
+    //         that.conversation = conversation;
+    //         // console.log('conv: ' + conversation);
+    //       }
+    //     });
+    // });
+    // this.subscriptions.push(subChangedConversation);
   }
 
   ngOnInit() {
@@ -103,7 +103,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
     // console.log('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
-    this.unsubscribe();
+    //this.unsubscribe();
   }
 
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//

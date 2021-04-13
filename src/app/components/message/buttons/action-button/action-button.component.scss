@@ -1,0 +1,79 @@
+@import '../../../../../sass/variables';
+
+:root {
+    --themeColor: $bck-msg-sent;
+    --foregroundColor: $col-msg-sent;
+}
+
+.button-in-msg {
+    padding: 8px 16px!important;
+    position: relative;
+    max-width: 300px;
+    min-width: inherit;
+    cursor: pointer;
+    border: 1px solid $blue;
+    border-radius: 20px;
+    margin: 3px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Muli', sans-serif;
+    font-size: 15px;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: -0.24px;
+    -webkit-font-smoothing: antialiased;
+    color: $blue;
+    line-height: 16px;
+}
+
+.action {
+    background: white;
+    transition: background-color .6s ease;
+    &:focus,
+    &:hover {
+        color: white;
+        background:  $blue;
+        .icon-button-action {
+            svg {
+                fill: white;
+            }
+        }
+    }
+    &:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: 50%;
+        left: 50%;
+        transform-style: flat;
+        transform: translate3d(-50%,-50%,0);
+        background: rgba(white,.2);
+        border-radius: 100%;
+        transition: width .5s ease, height .5s ease;
+    }
+    &.active {
+        &:after {
+            width: 200px;
+            height: 200px;
+        }
+        
+    }
+    
+    // &:focus{
+    //     color: white;
+    //     background:  rgb(42, 106, 193);
+    // }
+    // &:hover {
+    //     transition: background-color .6s ease;
+    // //     color: white;
+    // //     background:  rgb(42, 106, 193);
+    // }
+    // &:active {
+    //     &:after {
+    //         width: 200px;
+    //         height: 200px;
+    //     }
+    // }
+}

@@ -1,7 +1,7 @@
 {
   "name": "@chat21/chat21-web-widget",
   "author": "Dario De Pascalis - Frontiere21 SRL",
-  "version": "4.0.91",
+  "version": "5.0.0-beta.2.7",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiledesk.com",
   "repository": {
@@ -55,10 +55,13 @@
     "less": "^2.7.3",
     "marked": "^1.1.0",
     "material-design-icons": "^3.0.1",
+    "mqtt": "^4.2.6",
     "ng2-tooltip-directive": "^2.9.20",
     "node-sass": "^4.13.0",
     "rxjs": "^5.4.2",
     "ts-node": "~3.3.0",
+    "typescript": "^2.9.2",
+    "uuid": "^8.3.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
@@ -73,7 +76,6 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.2.0",
-    "tslint": "~5.8.0",
-    "typescript": "^2.9.2"
+    "tslint": "~5.8.0"
   }
 }

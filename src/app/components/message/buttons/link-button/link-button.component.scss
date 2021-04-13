@@ -1,0 +1,50 @@
+@import '../../../../../sass/variables';
+
+:root {
+    --themeColor: $bck-msg-sent;
+    --foregroundColor: $col-msg-sent;
+}
+
+.button-in-msg {
+    padding: 8px 16px!important;
+    position: relative;
+    max-width: 300px;
+    min-width: inherit;
+    cursor: pointer;
+    border: 1px solid $blue;
+    border-radius: 20px;
+    margin: 3px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Muli', sans-serif;
+    font-size: 15px;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: -0.24px;
+    -webkit-font-smoothing: antialiased;
+    color: $blue;
+    line-height: 16px;
+}
+
+.url {
+    transition: background-color .6s ease;
+    .icon-button-action {
+        position: absolute;
+        top: -1;
+        right: 1;
+        svg {
+            fill: $blue;
+        }
+    }
+    &:focus,
+    &:hover {
+        color: white;
+        background:  $blue;
+        .icon-button-action {
+            svg {
+                fill: rgb(10, 8, 8);
+            }
+        }
+    }
+}

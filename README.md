@@ -43,7 +43,8 @@ export const environment = {
   production: true,
   version: require('../../package.json').version,
   remoteConfig: false, // for performance don't load settings from remote
-  firebase: {
+  chatEngine: 'mqtt' //or custom engine
+  firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
     databaseURL: 'CHANGEIT',
@@ -51,7 +52,14 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT'
   },
+  chat21Config: {
+    appId: 'CHANGEIT',
+    MQTTendpoint: 'CHANGEIT',
+    APIendpoint: 'CHANGEIT',
+    loginServiceEndpoint: 'CHANGEIT'
+  },
   apiUrl: 'https://<YOUR_TILEDESK_SERVER>/',
+  baseImageUrl: 'https://<YOUR_TILEDESK_SERVER>/',
   tenant: 'tilechat',
   defaultLang : 'en',
   shemaVersion : '1'

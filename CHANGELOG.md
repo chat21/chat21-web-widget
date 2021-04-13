@@ -1,14 +1,40 @@
 # chat21-web-widget ver 3.0
 
-### 4.0.92
-- change: refactored 'send new message';
-- change: saved id conversation active in local storage;
-- change: open widget on last conversation;
-- bug fix: closed archived conversations;
-- bug-fix: startFromHome true/false management;
-- change: saved id active conversation on opening conversation detail;
-- bug-fix: changed workflow 'new conversation' button;
+### 5.0.0-beta.2.9
+- added: uploadService to load file on storage
 
+### 5.0.0-beta.2.8
+- bug-fix: customToken from url
+- removed: headerDate from messageModel
+- bug-fix: set userFullname e userEmail parameter on signInAnonymously
+- bug-fix: set userFullname e userEmail parameter on prechatForm
+- added: uploadService (still not working)
+
+### 5.0.0-beta.2.7
+- bug-fix: scrollToButtom function undefined on badgeScroollToBottom in conversation component
+- bug-fix: attributes.payload undefined if customAttributes not valorized
+- bug-fix: updateConversationBadge on conversationChanged
+- bug-fix: icon sender as swg 
+
+
+### 5.0.0-beta.2.6
+- bug-fix: translation error with /assets/ pages (ex. Tiledesk visitor page)
+- bug-fix: after archived a converversation when open new conversation always show rating component
+- bug-fix: conversationBadge not show when refresh closed widget 
+- bug-fix: prechat form shown always, not only the first time
+- change: startFromHome behavior changed (now if closed, open new conversation or saved conversation from storage)
+
+- add: new sendMessage2 with attributes at runtime
+
+
+### 5.0.0-beta.2.5
+- bug-fix: typing when open conversation-detail if last message was sent by agent
+- bug-fix: if new message arrived in conversation-detail and scrollDiv is at the end -> update is_new conversation attributes
+- bug-fix: merge local with remote translations
+- change: if last message came from user, show 'YOU' label in list-conversations
+- added: info-message component for attributes.subtype message of type 'info/support'
+
+# chat21-web-widget ver 3.0
 
 ### 4.0.90
 - bug-fix: save new conversation in local storage
@@ -27,7 +53,7 @@
 - bug-fix: css logo and favicon in assets/twp/index.html
 - change: shown callout only the first time
 
-### 4.0.85 -> Cloud Production
+### 4.0.85
 - bug-fix: width balloon message received
 
 ### 4.0.84

@@ -15,35 +15,47 @@
         <div *ngIf="isOpenHome && g.senderId" class="modal-page active">
             <!-- [class.active]="true" -->
             <tiledeskwidget-home 
-            [senderId]="senderId"
-            (eventClose)="returnCloseWidget()" 
-            (eventNewConv)="returnNewConversation()" 
-            (eventSelctedConv)="returnSelectedConversation($event)"
-            (eventSignOut)="returnSignOut()"
-            (eventOpenAllConv)="returnOpenAllConversation()"
-            ></tiledeskwidget-home>
+                [listConversations]="listConversations"
+                [styleMap]="styleMapConversation"
+                (onNewConversation)="returnNewConversation()" 
+                (onConversationSelected)="returnSelectedConversation($event)"
+                (onOpenAllConvesations)="returnOpenAllConversation()"
+                (onCloseWidget)="returnCloseWidget()" 
+                (onSignOut)="returnSignOut()"
+                (onImageLoaded)="onImageLoaded($event)"
+                (onConversationLoaded)="onConversationLoaded($event)">
+            </tiledeskwidget-home>
         </div>
 
         <div *ngIf="isOpenAllConversation && g.senderId" class="modal-page active">
             <!-- [class.active]="true" -->
-            <tiledeskwidget-list-all-conversations 
-            [senderId]="recipientId"
-            (eventClosePage)="returnCloseAllConversation()" 
-            (eventSelctedConv)="returnSelectedConversation($event)"
-            ></tiledeskwidget-list-all-conversations>
+            <tiledeskwidget-list-all-conversations
+                [listConversations]="listConversations"
+                [archivedConversations]="archivedConversations"
+                [senderId]="recipientId"
+                [styleMap]="styleMapConversation"
+                (onCloseWidget)="returnCloseAllConversation()" 
+                (onConversationSelected)="returnSelectedConversation($event)">
+            </tiledeskwidget-list-all-conversations>
         </div>
         
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.modal-slide-in-right]="isOpenConversation" >
             <!-- [class.active]="true" isOpenConversation &&  [class.modal-slide-out-right]="!isOpenConversation"-->
             <tiledeskwidget-conversation 
-            [recipientId]="recipientId"
-            [conversation]="conversationSelected"
-            [isOpen]="g.isOpen"
-            [elRoot]="el"
-            (eventNewConversation)="returnNewConversation()" 
-            (eventClose)="returnCloseConversation()" 
-            (eventCloseWidget)="returnCloseWidget()"
-            ></tiledeskwidget-conversation>
+                [senderId]="g.senderId"
+                [conversation]="conversationSelected"
+                [isOpen]="g.isOpen"
+                [styleMap]="styleMapConversation"
+                (onBackHome)="returnCloseConversation()" 
+                (onCloseWidget)="returnCloseWidget()"
+                (onSoundChange)="returnSoundChange($event)"
+                (onBeforeMessageSent)="triggerHandler.triggerBeforeSendMessageEvent($event)"
+                (onAfterSendMessage)="triggerHandler.triggerAfterSendMessageEvent($event)"
+                (onNewMessageCreated)="triggerHandler.triggerOnMessageCreated($event)"
+                (onNewConversationInit)="triggerHandler.triggerOnNewConversationInit($event)"
+                (onBeforeMessageRender)="triggerHandler.triggerBeforeMessageRender($event)"
+                (onAfterMessageRender)="triggerHandler.triggerAfterMessageRender($event)">
+            </tiledeskwidget-conversation>
         </div>
 
         
@@ -54,10 +66,11 @@
         [class.active]="isOpenSelectionDepartment"
         -->
         <div *ngIf="isOpenSelectionDepartment" class="modal-page selection-department active">
-            <tiledeskwidget-selection-department 
-            (eventClosePage)="returnCloseModalDepartment()"
-            (eventDepartmentSelected)="returnDepartmentSelected($event)" 
-            ></tiledeskwidget-selection-department>
+            <tiledeskwidget-selection-department
+                (onBeforeDepartmentsFormRender)="triggerHandler.triggerOnbeforeDepartmentsFormRender($event)" 
+                (onClose)="returnCloseModalDepartment()"
+                (onDepartmentSelected)="returnDepartmentSelected($event)">
+            </tiledeskwidget-selection-department>
         </div>
     
 
@@ -83,9 +96,9 @@
         -->
         <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
             <tiledeskwidget-star-rating-widget 
-            (eventClosePage)="returnCloseModalRateChat()" 
-            (eventCloseRate)="returnRateChatComplete()"
-            ></tiledeskwidget-star-rating-widget>
+                (onClosePage)="returnCloseModalRateChat()" 
+                (onCloseRate)="returnRateChatComplete()">
+            </tiledeskwidget-star-rating-widget>
         </div>
 
     </div>
@@ -97,9 +110,9 @@
     tabindex -> 20
     -->
     <tiledeskwidget-eyeeye-catcher-card *ngIf="g.senderId"
-    (eventOpenChat)="returnOpenChat()"
-    (eventOpenEyeCatcher)="returneventOpenEyeCatcher($event)"
-    ></tiledeskwidget-eyeeye-catcher-card>   
+        (eventOpenChat)="returnOpenChat()"
+        (eventOpenEyeCatcher)="returneventOpenEyeCatcher($event)">
+    </tiledeskwidget-eyeeye-catcher-card>   
     
     
     <!-- 
@@ -113,9 +126,10 @@
     ></tiledeskwidget-eyeeye-catcher-card>      -->
     <div *ngIf="!g.isOpen">
         <tiledeskwidget-last-message
-        (eventCloseMessagePreview)="triggerOnCloseMessagePreview()"
-        (eventSelctedConv)="returnSelectedConversation($event)"
-        ></tiledeskwidget-last-message>
+            [conversation]=lastConversation
+            (eventCloseMessagePreview)="triggerOnCloseMessagePreview()"
+            (eventSelctedConv)="returnSelectedConversation($event)">
+        </tiledeskwidget-last-message>
     </div>
     
     

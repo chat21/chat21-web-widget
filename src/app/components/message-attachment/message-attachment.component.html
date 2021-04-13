@@ -1,17 +1,39 @@
 <div id="buttons-in-message">
   
   <span *ngFor="let button of buttons" class="div-button">
-      <!-- <div class="alt">{{button.value}}</div> -->
-      <div *ngIf="button.type === 'text' && isLastMessage === true" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">
-        {{button.value}}
-      </div>
+      
+      <tiledeskwidget-text-button-attachment *ngIf="button.type === 'text' && isLastMessage === true" class="div-button"
+        [button]="button"
+        [themeColor]="stylesMap.get('themeColor')"
+        [foregroundColor]="stylesMap.get('foregroundColor')"
+        (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
+      </tiledeskwidget-text-button-attachment>
 
-      <div *ngIf="button.type === 'url'" class="button-in-msg {{button.type}}" (click)="actionButtonUrl(button)" title="{{button.value}}"> 
+      <tiledeskwidget-link-button-attachment *ngIf="button.type === 'url'" class="div-button"
+        [button]="button"
+        [themeColor]="stylesMap.get('themeColor')"
+        [foregroundColor]="stylesMap.get('foregroundColor')"
+        (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
+      </tiledeskwidget-link-button-attachment>
+
+      <tiledeskwidget-action-button-attachment *ngIf="button.type === 'action' && isLastMessage === true" class="div-button"
+        [button]="button"
+        [themeColor]="stylesMap.get('themeColor')"
+        [foregroundColor]="stylesMap.get('foregroundColor')"
+        (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
+      </tiledeskwidget-action-button-attachment>
+
+      <!-- <div class="alt">{{button.value}}</div> -->
+      <!-- <div *ngIf="button.type === 'text' && isLastMessage === true" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">
+        {{button.value}}
+      </div> -->
+
+      <!-- <div *ngIf="button.type === 'url'" class="button-in-msg {{button.type}}" (click)="actionButtonUrl(button)" title="{{button.value}}"> 
         <span *ngIf="button.target !== 'self'" class="icon-button-action">
-          <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="12px" height="12px">
+          <!- - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="12px" height="12px">
             <path d="M0 0h24v24H0z" fill="none"/>
             <path d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z"/>
-          </svg> -->
+          </svg> - ->
           <svg style="transform: rotateZ(45deg);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px">
             <path d="M0 0h24v24H0z" fill="none"/>
             <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
@@ -20,11 +42,11 @@
         
         {{button.value}} 
         <div class="clear"></div>
-      </div> 
+      </div>  -->
 
-      <div *ngIf="button.type === 'action' && isLastMessage === true" #actionButton id="actionButton" class="button-in-msg {{button.type}}" (click)="actionButtonAction(button)" title="{{button.value}}">
+      <!-- <div *ngIf="button.type === 'action' && isLastMessage === true" #actionButton id="actionButton" class="button-in-msg {{button.type}}" (click)="actionButtonAction(button)" title="{{button.value}}">
         {{button.value}}
-      </div> 
+      </div>  -->
 
       <!-- <button tabindex="1413" [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
         

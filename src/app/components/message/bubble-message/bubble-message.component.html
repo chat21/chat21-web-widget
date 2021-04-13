@@ -1,0 +1,71 @@
+<!-- [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" -->
+<div  [ngStyle]="{'padding': (isImage(message) || isFile(message))?'1px':'0 8px'}" class="messages primary-color"  [class.emoticon]="message.emoticon">
+  
+    
+    <div>
+      <!-- message type:: image -->
+      <!-- <div *ngIf="message.type == 'image' && message.metadata"  [ngStyle] = "{ 'max-width': getSizeImg(message).width, 'max-height': getSizeImg(message).height }">
+          <img class="message-contentX message-content-imageX" [src]="message.metadata.src" />
+      </div> -->
+  
+      <!-- <img *ngIf="message.type == 'image' && message.metadata" class="message-contentX message-content-imageX"
+      [src]="message.metadata.src" [width]="getSizeImg(message).width"
+      [height]="getSizeImg(message).height" /> -->
+
+      <tiledeskwidget-image *ngIf="isImage(message)"
+        [metadata]="message.metadata"
+        [width]="getMetadataSize(message.metadata).width"
+        [height]="getMetadataSize(message.metadata).height">
+      </tiledeskwidget-image>
+
+      <tiledeskwidget-frame *ngIf="isFile(message)"
+        [metadata]="message.metadata"
+        [width]="getMetadataSize(message.metadata).width"
+        [height]="getMetadataSize(message.metadata).height">
+      </tiledeskwidget-frame>
+
+      <!-- <tiledeskwidget-frame *ngIf="message.metadata && message.metadata.type && message.metadata.type.includes('video')"
+        [metadata]="message.metadata"
+        [width]="message.metadata.width"
+        [height]="message.metadata.height">
+      </tiledeskwidget-frame> -->
+    
+      <!-- message type:: text -->
+      <!-- <div *ngIf="message.type == 'text'"> -->     
+      <div *ngIf="message.text" [tooltip]="timeTooltipLeft" [options]="tooltipOptions" placement="left" content-type="template" (click)="handleTooltipEvents($event)"> 
+          <ng-template #timeTooltipLeft>
+              <span>{{message.timestamp | amTimeAgo}}</span>
+          </ng-template>
+
+          <tiledeskwidget-text
+            [text]="message.text"
+            [color]="textColor"
+            (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+            (onAfterMessageRender)="returnOnAfterMessageRender($event)">
+          </tiledeskwidget-text>
+          <!-- <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p> -->
+          <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
+              is ignored</div>
+          <ng-template #contentPopup>
+              <p style="text-decoration: underline; padding:8px; cursor: pointer;"
+                  (click)="popupUrl(g.windowContext, message.text,'windowName')">{{strip_tags(message.text)}}</p>
+          </ng-template>
+          <ng-template #contentNewTab>
+              <p #messageEl [innerHTML]="printMessage(message, messageEl, this) | linky"></p>
+          </ng-template> -->
+        </div>
+  
+    </div>
+  
+  </div>
+  
+  <!-- icon status message -->
+  <!-- <tiledeskwidget-return-receipt *ngIf="isSender"
+    [status]="message.status">
+  </tiledeskwidget-return-receipt> -->
+
+
+  
+
+
+

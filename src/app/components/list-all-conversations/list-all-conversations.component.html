@@ -2,7 +2,7 @@
 <!-- tabindex="1300"-->
 
   <!-- HEADER -->
-  <div class="c21-header" [ngStyle]="{'background-color': g.themeColor}">
+  <div class="c21-header" [ngStyle]="{'background-color': colorBck, 'color': g.themeForegroundColor, 'background-image': g.colorGradient180 }">
     <div class="c21-header-container">
       <!-- CONTENT HEADER -->
       <div class="c21-header-content">
@@ -83,37 +83,15 @@
 
   <!-- CONTENT -->
   <div class="c21-body" tabindex="1311" onFocus="document.querySelector('[start-focus]').focus()">
-    <div *ngFor="let conversation of allConversations">
-      
-      <button start-focus #afallconv tabindex="1301" class="c21-item-conversation c21-button-clean" (click)="openConversationByID(conversation)">
-        <div class="c21-body-conv">
-          <div class="c21-left-conv">
-            <div class="c21-ball" [style.background-color]="conversation.color" >
-              <span class="c21-ball-label" [innerHTML]="conversation.avatar"></span>
-              <div *ngIf="conversation.image" #avatarImage class="c21-avatar-image" [style.background-image]="'url(' + conversation.image + ')'"></div>
-            </div>
-            <!-- <div class="c21-icon-avatar">
-                <div class="profile_image">
-                  <img src="{{getUrlImgProfile(conversation.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_male_tiledesk.svg'" />
-                </div>
-            </div> -->
-            <!-- <div class="c21-icon-avatar">
-              <div #avatarPlaceholder *ngIf="!conversation.image" [style.background-color]="conversation.color" class="c21-avatar-placeholder"
-                [innerHTML]="conversation.avatar"></div>
-              <div #avatarImage *ngIf="conversation.image" class="c21-avatar-image" [style.background-image]="'url(' + conversation.image + ')'"></div>
-            </div> -->
-          </div>
-          <div class="c21-right-conv">
-            <div class="c21-last-time">{{conversation.time_last_message}}</div>
-            <div class="truncate c21-name">{{conversation.sender_fullname }}</div>
-            <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div>
-          </div>
-          <div *ngIf="conversation.is_new" [ngStyle]="{ 'background-color':g.themeColor }" class="c21-divBudge">{{conversation.badge}}</div>
-          <div *ngIf="conversation.archived" class="c21-lablel-close">{{ g.CLOSED }}</div>
-        </div>
-        <div class="clear"></div>
-      </button>
-    </div>
+
+    <tiledeskwidget-list-conversations
+      [listConversations]="allConversations"
+      [styleMap]="styleMap"
+      [translationMap]="translationMapConversation"
+      (onConversationSelected)=returnSelectedConversation($event)
+      (onImageLoaded)="onImageLoadedFN($event)"
+      (onConversationLoaded)="onConversationLoadedFN($event)">
+    </tiledeskwidget-list-conversations>
 
   </div>
 

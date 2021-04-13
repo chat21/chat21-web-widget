@@ -1,0 +1,18 @@
+<div class="status-message">
+  <!-- c21-ico-schedule -->
+  <div *ngIf="!status" class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><defs><style>.cls-1{fill:none;}</style></defs><title>ic_schedule</title><g id="Livello_2" data-name="Livello 2"><g id="Livello_1-2" data-name="Livello 1"><path d="M9,1.5A7.5,7.5,0,1,0,16.5,9,7.5,7.5,0,0,0,9,1.5ZM9,15a6,6,0,1,1,6-6A6,6,0,0,1,9,15Z"/><path class="cls-1" d="M0,0H18V18H0Z"/><path d="M9.38,5.25H8.25v4.5l3.94,2.36.56-.92-3.37-2Z"/></g></g></svg>
+  </div>
+  <!-- c21-ico-done -->
+  <div *ngIf="status == MSG_STATUS_SENT" class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><defs><style>.cls-1{fill:none;}</style></defs><title>ic_done</title><g id="Livello_2" data-name="Livello 2"><g id="Livello_1-2" data-name="Livello 1"><path class="cls-1" d="M0,0H18V18H0Z"/><path d="M6.75,12.15,3.6,9,2.55,10l4.2,4.2,9-9-1-1.05Z"/></g></g></svg>
+  </div>
+  <!-- c21-ico-done -->
+  <div *ngIf="status == MSG_STATUS_SENT_SERVER" class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><defs><style>.cls-1{fill:none;}</style></defs><title>ic_done</title><g id="Livello_2" data-name="Livello 2"><g id="Livello_1-2" data-name="Livello 1"><path class="cls-1" d="M0,0H18V18H0Z"/><path d="M6.75,12.15,3.6,9,2.55,10l4.2,4.2,9-9-1-1.05Z"/></g></g></svg>
+  </div>
+  <!-- c21-ico-done_all -->
+  <div *ngIf="status == MSG_STATUS_RETURN_RECEIPT" class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><defs><style>.cls-1{fill:none;}</style></defs><title>ic_done_all</title><g id="Livello_2" data-name="Livello 2"><g id="Livello_1-2" data-name="Livello 1"><path class="cls-1" d="M0,0H18V18H0Z"/><path d="M13.5,5.25,12.44,4.19,7.69,8.95,8.74,10Zm3.18-1.06L8.74,12.13,5.61,9,4.55,10.06l4.19,4.19,9-9ZM.31,10.06,4.5,14.25l1.06-1.06L1.37,9Z"/></g></g></svg>
+  </div>
+</div>
