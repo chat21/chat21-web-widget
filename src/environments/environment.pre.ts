@@ -32,7 +32,7 @@ export const environment = {
   apiUrl: 'http://99.80.197.164:3000/',
   tenant: 'tilechat',
   defaultLang : 'en',
-  shemaVersion : '1',
+  shemaVersion : '5',
   authPersistence: 'LOCAL',
   chatEngine: 'mqtt',
   supportMode: true,

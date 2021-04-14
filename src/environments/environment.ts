@@ -20,7 +20,7 @@ export const environment = {
     messagingSenderId: 'CHANGEIT'
   },
   chat21Config: {
-    appId: "tilechat",
+    appId: 'tilechat',
     MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
     APIendpoint: 'http://localhost:8004/api',
     loginServiceEndpoint: 'http://localhost:3000/chat21/native/auth/createCustomToken' // endpoint readed from apiUrl property
@@ -29,7 +29,7 @@ export const environment = {
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
   tenant: 'tilechat',
   defaultLang : 'en',
-  shemaVersion : '1',
+  shemaVersion : '5',
   authPersistence: 'LOCAL',
   supportMode: true,
 };

@@ -29,7 +29,7 @@ export const environment = {
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
   tenant: 'tilechat',
   defaultLang : 'en',
-  shemaVersion : '1',
+  shemaVersion : '5',
   authPersistence: 'LOCAL',
   supportMode: true,
 };
