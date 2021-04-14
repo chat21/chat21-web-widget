@@ -116,7 +116,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     /**** BEGIN EVENST ****/
     /** */
     window.tiledesk.on('onNewConversation', function(event_data) {
-        // console.log("test-custom-auth.html onNewConversation >>>",event_data);
+        console.log("test-custom-auth.html onNewConversation >>>",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log(">>>> tiledeskToken >>>> ",event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid);
         if(tiledeskToken) {
@@ -129,7 +129,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onLoggedIn', function(event_data) {
-        // console.log("test-custom-auth.html onLoggedIn",event_data);
+        console.log("test-custom-auth.html onLoggedIn",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
@@ -142,7 +142,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onAuthStateChanged', function(event_data) {
-        // console.log("test-custom-auth.html onAuthStateChanged",event_data);
+        console.log("test-custom-auth.html onAuthStateChanged",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
