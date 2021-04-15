@@ -16,8 +16,9 @@ export class StorageService {
   public getItem (key: string): any {
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
@@ -29,8 +30,9 @@ export class StorageService {
   public getItemWithoutProjectId (key) {
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
@@ -76,8 +78,9 @@ export class StorageService {
     this.removeItem(key);
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
@@ -90,8 +93,9 @@ export class StorageService {
     this.removeItem(key);
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
       
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
@@ -133,8 +137,9 @@ export class StorageService {
   public removeItem(key: string) {
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
@@ -186,8 +191,9 @@ export class StorageService {
   public clear () {
     let prefix = STORAGE_PREFIX;
     try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }

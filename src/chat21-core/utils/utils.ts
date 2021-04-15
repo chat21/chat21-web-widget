@@ -225,8 +225,9 @@ export function supports_html5_session() {
 export function setStoragePrefix(): string{
   let prefix = STORAGE_PREFIX;
   try {
-      const sv = 'sv' + environment.shemaVersion + '_';
-      prefix = prefix + sv;
+      // const sv = 'sv' + environment.shemaVersion + '_';
+      // prefix = prefix + sv;
+      prefix = environment.storage_prefix + '_';
   } catch (e) {
       this.g.wdLog(['> Error :' + e]);
   }

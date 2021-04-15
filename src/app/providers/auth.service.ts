@@ -272,7 +272,7 @@ export class AuthService_old {
       .then(function(response) {
         // console.log('-------------- signInWithCustomToken -------------------', response);
         that.g.setParameter('signInWithCustomToken', true);
-        that.storageService.setItemWithoutProjectId('shemaVersion', environment.shemaVersion);
+        that.storageService.setItemWithoutProjectId('shemaVersion', environment.storage_prefix);
         that.user = response.user;
         if (that.unsubscribe) {
           that.unsubscribe();

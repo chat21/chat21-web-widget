@@ -32,12 +32,10 @@ export const environment = {
   apiUrl: 'http://99.80.197.164:3000/',
   tenant: 'tilechat',
   defaultLang : 'en',
-  shemaVersion : '5',
+  storage_prefix : 'widget_sv5',
   authPersistence: 'LOCAL',
   chatEngine: 'mqtt',
   supportMode: true,
-  SERVER_BASE_URL: "http://99.80.197.164:3000/",
-  FIREBASESTORAGE_BASE_URL_IMAGE: 'https://firebasestorage.googleapis.com/v0/b/',
 };
 
 

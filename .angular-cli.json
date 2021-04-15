@@ -21,7 +21,8 @@
         "iframe-style.css",
         "firebase-config.json",
         "widget-config-template.json",
-        "widget-config.json"
+        "widget-config.json",
+        "widget-config-firebase.json"
       ],
       "index": "index.html",
       "main": "main.ts",
