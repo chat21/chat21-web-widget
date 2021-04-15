@@ -13,23 +13,20 @@ export const environment = {
   remoteTranslationsUrl: 'http://localhost:3000/',
   loadRemoteTranslations: true,
   firebase: {
-    apiKey: 'AIzaSyCoWXHNvP1-qOllCpTshhC6VjPXeRTK0T4',
-    authDomain: 'chat21-pre-01.firebaseapp.com',
-    databaseURL: 'https://chat21-pre-01.firebaseio.com',
-    projectId: 'chat21-pre-01',
-    storageBucket: 'chat21-pre-01.appspot.com',
-    messagingSenderId: '269505353043',
-    appId: '1:269505353043:web:b82af070572669e3707da6',
-    chat21ApiUrl: 'https://us-central1-chat21-pre-01.cloudfunctions.net'
+    apiKey: 'CHANGEIT',
+    authDomain: 'CHANGEIT',
+    databaseURL: 'CHANGEIT',
+    projectId: 'CHANGEIT',
+    storageBucket: 'CHANGEIT',
+    messagingSenderId: 'CHANGEIT',
   },
   chat21Config: {
-    appId: "tilechat",
-    MQTTendpoint: 'mqtt://99.80.197.164:15675/ws', // MQTT endpoint
-    APIendpoint: 'http://99.80.197.164:8004/api',
-    //loginServiceEndpoint: 'http://console-native.tiledesk.com/api/chat21/native/auth/createCustomToken'
-    loginServiceEndpoint: 'http://99.80.197.164:3000/chat21/native/auth/createCustomToken'
+    appId: 'tilechat',
+    MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
+    APIendpoint: 'http://localhost:8004/api',
+    loginServiceEndpoint: 'http://localhost:3000/chat21/native/auth/createCustomToken' // endpoint readed from apiUrl property
   },
-  apiUrl: 'http://99.80.197.164:3000/',
+  apiUrl: 'http://localhost:3000/',
   tenant: 'tilechat',
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',
