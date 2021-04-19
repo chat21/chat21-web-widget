@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
-import { StorageService } from '../../providers/storage.service';
 import { convertColorToRGBA } from '../../utils/utils';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 // vedi: https://angular.io/guide/animations
 
 @Component({
@@ -44,7 +44,7 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
 
   constructor(
     public g: Globals,
-    public storageService: StorageService
+    public appStorageService: AppStorageService
   ) {
   }
 
@@ -68,7 +68,7 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
     if (isLogged === true) {
       this.g.isOpen = !this.g.isOpen;
       // this.g.setIsOpen(!isOpen);
-      this.storageService.setItem('isOpen', this.g.isOpen);
+      this.appStorageService.setItem('isOpen', this.g.isOpen);
       this.eventOpenCloseWidget.emit( this.g.isOpen );
     }
   }

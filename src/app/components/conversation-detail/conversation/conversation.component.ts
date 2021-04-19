@@ -36,7 +36,6 @@ import { ResizedEvent } from 'angular-resize-event/resized-event';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 import { AppComponent } from '../../../app.component';
-import { StorageService } from '../../../providers/storage.service';
 import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
 import { ConversationHandlerService } from '../../../../chat21-core/providers/abstract/conversation-handler.service';
 import { ConversationHandlerBuilderService } from '../../../../chat21-core/providers/abstract/conversation-handler-builder.service';
@@ -45,7 +44,7 @@ import { ConversationContentComponent } from '../conversation-content/conversati
 import { ConversationsHandlerService } from '../../../../chat21-core/providers/abstract/conversations-handler.service';
 import { ArchivedConversationsHandlerService } from '../../../../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { ConversationModel } from '../../../../chat21-core/models/conversation';
-import { stringify } from '@angular/core/src/util';
+import { AppStorageService } from '../../../../chat21-core/providers/abstract/app-storage.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -186,7 +185,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
     public appComponent: AppComponent,
-    public storageService: StorageService,
+    public appStorageService: AppStorageService,
     public conversationsService: ConversationsService,
     public conversationHandlerBuilderService: ConversationHandlerBuilderService,
     //public conversationHandlerService: ConversationHandlerService,
@@ -597,7 +596,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private setRecipientId() {
     let recipientIdTEMP: string;
     const senderId = this.senderId;
-    recipientIdTEMP = this.storageService.getItem(senderId);
+    recipientIdTEMP = this.appStorageService.getItem(senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
       recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4();

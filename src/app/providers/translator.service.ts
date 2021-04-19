@@ -39,6 +39,8 @@ export class TranslatorService {
       // console.log(`»»»» initI18n baseLocation`, this.baseLocation);
     }
 
+    // this.initializeTransaltorService()
+
   }
 
   /**
@@ -61,8 +63,11 @@ export class TranslatorService {
     if (browserLang) {
           if (browserLang === 'it') {
               this._translate.use('it');
+              // this.http.get(this.baseLocation + `/assets/i18n/${browserLang}.json`).subscribe(data=> console.log('ress lang', data))
+              // this._translate.setTranslation('en', './assets/i18n/en.json')
           } else {
               this._translate.use('en');
+              // this.http.get(this.baseLocation + `/assets/i18n/${browserLang}.json`).subscribe(data=> console.log('ress lang', data))
           }
       }
   
@@ -88,10 +93,11 @@ export class TranslatorService {
   // https://github.com/ngx-translate/core/issues/282
   initI18n(): Promise<any> {
     this._translate.addLangs(['en', 'it']);
-    // console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
+    console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
 
     // Set the default language for translation strings.
     const defaultLanguage = 'en';
+    console.log(`»»»» initI18n setDefaultLang '`);
     this._translate.setDefaultLang(defaultLanguage);
     // Detect user language.
     let browserLang = this._translate.getBrowserLang();
@@ -104,7 +110,7 @@ export class TranslatorService {
 
 
     // const languageUrl = this.getTranslationFileUrl(browserLang);
-    // console.log(`»»»» browserLang `, browserLang, this.g.lang);
+    // console.log(`»»»» browserLang `, browserLang, this.g.lang, this.getTranslationFileUrl(browserLang));
 
 
     // Try to load the I18N JSON file for the detected language
@@ -132,11 +138,12 @@ export class TranslatorService {
       .subscribe((data) => {
         // I18N File loaded successfully, we can proceed
         // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
-        // console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
+        console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
+        this._translate.use(browserLang);
         if (!data._body || data._body === undefined || data._body === '') {
           browserLang = defaultLanguage;
           this.g.lang = defaultLanguage;
-          this._translate.use(defaultLanguage);
+          // this._translate.use(defaultLanguage);
           // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
           this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((defaultdata) => {
             // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, defaultdata);
@@ -158,8 +165,8 @@ export class TranslatorService {
 
 
   private translateWithBrowserLang(body: any, lang: string) {
-    this._translate.use(lang);
-    // console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
+    // this._translate.use(lang);
+    console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
     if (environment.loadRemoteTranslations) {
       const remote_translation_res = JSON.parse(body);
       // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);

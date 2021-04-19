@@ -183,7 +183,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
-export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorageService: AppStorageService ) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     
     chat21Service.initChat(appConfig.getConfig().chat21Config);  
@@ -194,7 +194,7 @@ export function authenticationFactory(http: HttpClient, appConfig: AppConfigServ
   } else {
 
     FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
-    const auth= new FirebaseAuthService(http, appSorage);
+    const auth= new FirebaseAuthService(http, appSorageService);
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
   }

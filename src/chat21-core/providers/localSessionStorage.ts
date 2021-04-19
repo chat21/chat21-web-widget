@@ -129,85 +129,85 @@ export class LocalSessionStorage extends AppStorageService{
     // ---------- PRIVATE METHODS start --------------- //
 
     private getValueForKey(key) {
-        if (this.persistence === 'local') {
-          if (supports_html5_storage()) {
-            console.log('getValueForKey: ', key);
-            return localStorage.getItem(key);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'session') {
-          if (supports_html5_session()) {
-            return sessionStorage.getItem(key);
-          } else {
-            console.warn('sessionStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'none') {
-          return null;
+      if (this.persistence === 'local' || this.persistence === 'LOCAL') {
+        if (supports_html5_storage()) {
+          console.log('getValueForKey: ', localStorage.getItem(key));
+          return localStorage.getItem(key);
         } else {
-          if (supports_html5_storage()) {
-            return localStorage.getItem(key);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
         }
-    }
+      } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
+        if (supports_html5_session()) {
+          return sessionStorage.getItem(key);
+        } else {
+          console.warn('sessionStorage is not defind. Storage disabled');
+          return null;
+        }
+      } else if (this.persistence === 'none' || this.persistence === 'NONE') {
+        return null;
+      } else {
+        if (supports_html5_storage()) {
+          return localStorage.getItem(key);
+        } else {
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
+        }
+      }
+  }
 
-    private saveValueForKey(key, value) {
-        if (this.persistence === 'local') {
-          if (supports_html5_storage()) {
-            return localStorage.setItem(key, value);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'session') {
-          if (supports_html5_session()) {
-            return sessionStorage.setItem(key, value);
-          } else {
-            console.warn('sessionStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'none') {
-          return null;
+  private saveValueForKey(key, value) {
+      if (this.persistence === 'local' || this.persistence === 'LOCAL') {
+        if (supports_html5_storage()) {
+          return localStorage.setItem(key, value);
         } else {
-          if (supports_html5_storage()) {
-            return localStorage.setItem(key, value);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
         }
-    }
+      } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
+        if (supports_html5_session()) {
+          return sessionStorage.setItem(key, value);
+        } else {
+          console.warn('sessionStorage is not defind. Storage disabled');
+          return null;
+        }
+      } else if (this.persistence === 'none' || this.persistence === 'NONE') {
+        return null;
+      } else {
+        if (supports_html5_storage()) {
+          return localStorage.setItem(key, value);
+        } else {
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
+        }
+      }
+  }
 
-    private removeItemForKey(key: string) {
-        if (this.persistence === 'local') {
-          if (supports_html5_storage()) {
-            return localStorage.removeItem(key);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'session') {
-          if (supports_html5_session()) {
-            return sessionStorage.removeItem(key);
-          } else {
-            console.warn('sessionStorage is not defind. Storage disabled');
-            return null;
-          }
-        } else if (this.persistence === 'none') {
-          return null;
+  private removeItemForKey(key: string) {
+      if (this.persistence === 'local' || this.persistence === 'LOCAL') {
+        if (supports_html5_storage()) {
+          return localStorage.removeItem(key);
         } else {
-          if (supports_html5_storage()) {
-            return localStorage.removeItem(key);
-          } else {
-            console.warn('localStorage is not defind. Storage disabled');
-            return null;
-          }
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
         }
-    }
+      } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
+        if (supports_html5_session()) {
+          return sessionStorage.removeItem(key);
+        } else {
+          console.warn('sessionStorage is not defind. Storage disabled');
+          return null;
+        }
+      } else if (this.persistence === 'none' || this.persistence === 'NONE') {
+        return null;
+      } else {
+        if (supports_html5_storage()) {
+          return localStorage.removeItem(key);
+        } else {
+          console.warn('localStorage is not defind. Storage disabled');
+          return null;
+        }
+      }
+  }
 
 }

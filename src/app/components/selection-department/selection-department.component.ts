@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterVi
 import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
-import { StorageService } from '../../providers/storage.service';
+import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 
 @Component({
     selector: 'tiledeskwidget-selection-department',
@@ -33,7 +33,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
         private el: ElementRef,
         public g: Globals,
         //public messagingService: MessagingService,
-        public storageService: StorageService,
+        public appStorageService: AppStorageService,
     ) {
     }
 
@@ -98,7 +98,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
             // attributes.departmentId = department._id;
             // attributes.departmentName = department.name;
             // this.g.setParameter('attributes', attributes);
-            this.storageService.setItem('attributes', JSON.stringify(attributes));
+            this.appStorageService.setItem('attributes', JSON.stringify(attributes));
             this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
         }
         this.closePage();

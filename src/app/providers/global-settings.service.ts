@@ -7,10 +7,10 @@ import { Globals } from '../utils/globals';
 import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
 
 import { TemplateBindingParseResult } from '@angular/compiler';
-import { StorageService } from './storage.service';
 import { AppConfigService } from './app-config.service';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { ProjectModel } from '../../models/project';
+import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 
 
 @Injectable()
@@ -21,7 +21,7 @@ export class GlobalSettingsService {
 
     constructor(
         public http: Http,
-        private storageService: StorageService,
+        private appStorageService: AppStorageService,
         // private settingsService: SettingsService,
         public appConfigService: AppConfigService
     ) {
@@ -1148,7 +1148,7 @@ export class GlobalSettingsService {
     setVariableFromStorage(globals: Globals) {
         this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals)]);
         for (const key of Object.keys(globals)) {
-            const val = this.storageService.getItem(key);
+            const val = this.appStorageService.getItem(key);
             // this.globals.wdLog(['SET globals KEY ---------->', key]);
             // this.globals.wdLog(['SET globals VAL ---------->', val]);
             if (val && val !== null) {
@@ -1258,13 +1258,13 @@ export class GlobalSettingsService {
      * SET DEPARTMENT:
      * set department selected
      * save department selected in attributes
-     * save attributes in this.storageService
+     * save attributes in this.appStorageService
     */
     setDepartment(department) {
         this.globals.wdLog(['setDepartment: ', JSON.stringify(department)]);
         this.globals.setParameter('departmentSelected', department);
         // let attributes = this.globals.attributes;
-        let attributes: any = JSON.parse(this.storageService.getItem('attributes'));
+        let attributes: any = JSON.parse(this.appStorageService.getItem('attributes'));
         if (!attributes) {
             attributes = {
                 departmentId: department._id,
@@ -1280,7 +1280,7 @@ export class GlobalSettingsService {
         this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
         this.globals.setParameter('departmentSelected', department);
         this.globals.setParameter('attributes', attributes);
-        this.storageService.setItem('attributes', JSON.stringify(attributes));
+        this.appStorageService.setItem('attributes', JSON.stringify(attributes));
 
     }
     // ========= end:: GET DEPARTEMENTS ============//

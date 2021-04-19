@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 import { Globals } from '../../utils/globals';
-import { StorageService } from '../../providers/storage.service';
 
 @Component({
   selector: 'tiledeskwidget-prechat-form',
@@ -30,7 +30,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
-    public storageService: StorageService
+    public appStorageService: AppStorageService
   ) {
 
   }
@@ -106,7 +106,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
       // attributes['userFullname'] = this.userFullname;
       // attributes['userEmail'] = this.userEmail;
       // this.g.setParameter('attributes', attributes);
-      this.storageService.setItem('attributes', JSON.stringify(attributes));
+      this.appStorageService.setItem('attributes', JSON.stringify(attributes));
       this.eventCloseForm.emit();
     } else {
       // mostro messaggio di errore

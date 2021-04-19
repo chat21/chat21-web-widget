@@ -130,7 +130,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //public chatPresenceHandlerService: ChatPresenceHandlerService,
         public presenceService: PresenceService,
         private agentAvailabilityService: AgentAvailabilityService,
-        private storageService: StorageService,
+        // private storageService: StorageService,
         private appStorageService: AppStorageService,
         public appConfigService: AppConfigService,
         public globalSettingsService: GlobalSettingsService,
@@ -235,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         // this.authService.initialize()
         this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
-        this.authService.initialize();
+        this.authService.initialize('');
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
@@ -277,13 +277,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //     // if autostart == false don't autenticate!
         //     // after called signInWithCustomToken need set autostart == true
         //     // this.ngZone.run(() => {
-        //         // const tiledeskTokenTEMP = that.storageService.getItemWithoutProjectId('tiledeskToken');
+        //         // const tiledeskTokenTEMP = that.appStorageService.getItemWithoutProjectId('tiledeskToken');
 
-        //         const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
+        //         const tiledeskTokenTEMP = that.appStorageService.getItem('tiledeskToken');
         //         if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
         //             that.g.tiledeskToken = tiledeskTokenTEMP;
         //         }
-        //         const firebaseTokenTEMP = that.storageService.getItemWithoutProjectId('firebaseToken');
+        //         const firebaseTokenTEMP = that.appStorageService.getItemWithoutProjectId('firebaseToken');
         //         if (firebaseTokenTEMP && firebaseTokenTEMP !== undefined) {
         //             that.g.firebaseToken = firebaseTokenTEMP;
         //         }
@@ -296,7 +296,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //             that.g.setParameter('isLogged', false);
         //             that.hideAllWidget();
         //             // that.g.setParameter('isShown', false, true);
-        //             that.storageService.removeItem('tiledeskToken');
+        //             that.appStorageService.removeItem('tiledeskToken');
         //             that.g.isLogout = true;
         //             // that.triggerOnAuthStateChanged(resp);
         //             if (autoStart !== false) {
@@ -312,7 +312,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //             that.g.setParameter('isLogged', false);
         //             that.hideAllWidget();
         //             // that.g.setParameter('isShown', false, true);
-        //             that.storageService.removeItem('tiledeskToken');
+        //             that.appStorageService.removeItem('tiledeskToken');
         //             that.g.isLogout = true;
         //             that.triggerOnAuthStateChanged(that.stateLoggedUser);
         //         } else if (resp === 0) {
@@ -358,7 +358,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         //             }
         //         } else if (resp >= 400) {
         //             that.g.wdLog([' ERRORE LOGIN ']);
-        //             // that.storageService.removeItem('tiledeskToken');
+        //             // that.appStorageService.removeItem('tiledeskToken');
         //             return;
         //         } else {
         //             that.g.wdLog([' INIT obsLoggedUser']);
@@ -374,8 +374,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const subAuthStateChanged = this.authService.BSAuthStateChanged.subscribe(state => {
 
-            //const tiledeskTokenTEMP = that.storageService.getItem('tiledeskToken');
-            const tiledeskTokenTEMP = localStorage.getItem(this.setStoragePrefix() + 'tiledeskToken')
+            //const tiledeskTokenTEMP = that.appStorageService.getItem('tiledeskToken');
+            const tiledeskTokenTEMP = this.appStorageService.getItem('tiledeskToken')
             //const tiledeskTokenTEMP = this.authService2.getTiledeskToken();
             if (tiledeskTokenTEMP && tiledeskTokenTEMP !== undefined) {
                 that.g.tiledeskToken = tiledeskTokenTEMP;
@@ -450,7 +450,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.g.setParameter('isLogged', false);
                 that.hideWidget();
                 // that.g.setParameter('isShown', false, true);
-                // that.storageService.removeItem('tiledeskToken'); //-> non c'è bisogno perchè lo fa il service
+                // that.appStorageService.removeItem('tiledeskToken'); //-> non c'è bisogno perchè lo fa il service
                 that.g.isLogout = true;
                 that.triggerOnAuthStateChanged(state);
             }
@@ -487,7 +487,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                       console.log('token passato da url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
                       this.g.autoStart = false;
                       this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
-                      this.storageService.setItem('tiledeskToken', this.g.jwt)
+                      this.appStorageService.setItem('tiledeskToken', this.g.jwt)
                       this.signInWithCustomToken(this.g.jwt)
                       this.g.tiledeskToken = this.g.jwt;
                     }
@@ -635,7 +635,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.wdLog([' ---------------- A1 ---------------- ']);
         // Related to https://github.com/firebase/angularfire/issues/970
         if (supports_html5_storage()) {
-            localStorage.removeItem('firebase:previous_websocket_failure');
+            this.appStorageService.removeItem('firebase:previous_websocket_failure');
         }
     }
 
@@ -650,7 +650,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const senderId = this.g.senderId;
         let attributes: any = {};
         try {
-            attributes = JSON.parse(this.storageService.getItem('attributes'));
+            attributes = JSON.parse(this.appStorageService.getItem('attributes'));
             // this.g.wdLog(['> attributes: ', attributes]);
         } catch (error) {
             this.g.wdLog(['> Error :' + error]);
@@ -692,7 +692,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.wdLog(['> Error is handled payload: ', error]);
         }
 
-        this.storageService.setItem('attributes', JSON.stringify(attributes));
+        this.appStorageService.setItem('attributes', JSON.stringify(attributes));
         // this.g.wdLog([' ---------------- setAttributes ---------------- ', attributes]);
         // that.g.wdLog([' ---------------- setAttributes ---------------- ', attributes);
         return attributes;
@@ -712,7 +712,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //             that.g.setParameter('areAgentsAvailable', false);
     //             that.g.setParameter('areAgentsAvailableText', that.g.AGENT_NOT_AVAILABLE);
     //             that.g.setParameter('availableAgents', null);
-    //             that.storageService.removeItem('availableAgents');
+    //             that.appStorageService.removeItem('availableAgents');
     //         } else {
     //             that.g.setParameter('areAgentsAvailable', true);
     //             that.g.setParameter('areAgentsAvailableText', that.g.AGENT_AVAILABLE);
@@ -793,7 +793,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * SET DEPARTMENT:
      * set department selected
      * save department selected in attributes
-     * save attributes in this.storageService
+     * save attributes in this.appStorageService
     */
     // setDepartment(department) {
     //     this.g.setParameter('departmentSelected', department);
@@ -804,7 +804,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     //         this.g.setParameter('attributes', attributes);
     //         this.g.setParameter('departmentSelected', department);
     //         this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
-    //         this.storageService.setItem('attributes', JSON.stringify(attributes));
+    //         this.appStorageService.setItem('attributes', JSON.stringify(attributes));
     //     }
     // }
     // ========= end:: GET DEPARTEMENTS ============//
@@ -934,7 +934,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
-        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
         this.g.wdLog([' ============ idConversation ===============', conversationActive ]);
         // this.g.recipientId = null;
         if (conversationActive) { //
@@ -1452,9 +1452,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (state != null) {
             this.g.setParameter('preChatForm', state);
             if ( state === true ) {
-                this.storageService.setItem('preChatForm', state);
+                this.appStorageService.setItem('preChatForm', state);
             } else {
-                this.storageService.removeItem('preChatForm');
+                this.appStorageService.removeItem('preChatForm');
             }
         }
     }
@@ -1462,9 +1462,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private setPrivacyPolicy() {
         this.g.privacyApproved = true;
         this.g.setAttributeParameter('privacyApproved', this.g.privacyApproved);
-        this.storageService.setItem('attributes', JSON.stringify(this.g.attributes));
+        this.appStorageService.setItem('attributes', JSON.stringify(this.g.attributes));
         this.g.setParameter('preChatForm', false);
-        this.storageService.removeItem('preChatForm');
+        this.appStorageService.removeItem('preChatForm');
     }
 
     /** show widget */
@@ -1502,7 +1502,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             this.isInitialized = true;
-            this.storageService.setItem('isOpen', 'true');
+            this.appStorageService.setItem('isOpen', 'true');
             // this.g.displayEyeCatcherCard = 'none';
             this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
@@ -1513,7 +1513,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private f21_close() {
         this.g.setIsOpen(false);
         this.g.isOpenNewMessage = false;
-        this.storageService.setItem('isOpen', 'false');
+        this.appStorageService.setItem('isOpen', 'false');
         this.triggerOnCloseEvent();
     }
 
@@ -1529,7 +1529,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.g.isOpen = true; // !this.isOpen;
             this.g.setIsOpen(true);
             // this.isInitialized = true;
-            this.storageService.setItem('isOpen', 'true');
+            this.appStorageService.setItem('isOpen', 'true');
             // this.g.displayEyeCatcherCard = 'none';
             this.triggerOnOpenEvent();
             // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
@@ -1554,14 +1554,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('isLogged', false);
             this.hideWidget();
             // that.g.setParameter('isShown', false, true);
-            this.storageService.removeItem('tiledeskToken');
+            this.appStorageService.removeItem('tiledeskToken');
             this.g.isLogout = true;
             // that.triggerOnAuthStateChanged(resp);
             if (this.g.autoStart !== false) {
                 this.authenticate();
                 this.initAll();
             }
-            this.storageService.clear();
+            this.appStorageService.clear();
         }
         const divWidgetRoot = this.g.windowContext.document.getElementsByTagName('tiledeskwidget-root')[0];
         const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
@@ -1573,7 +1573,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // private reInit_old() {
     //     // this.isOpenHome = false;
-    //     this.storageService.clear();
+    //     this.appStorageService.clear();
     //     let currentUser = this.authService.getCurrentUser();
     //     this.authService.reloadCurrentUser().then(() => {
     //         // location.reload();
@@ -1645,28 +1645,28 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.g.isLogged === true) {
             this.g.wdLog(['prima ero loggato allora mi sloggo!']);
             this.g.setIsOpen(false);
-            this.storageService.clear();
+            this.appStorageService.clear();
             this.presenceService.removePresence();
             this.authService.logout()
             // this.authService.signOut(-2);
         }
-        // this.storageService.removeItem('attributes');
+        // this.appStorageService.removeItem('attributes');
     }
 
     /**
-     * get status window chat from this.storageService
+     * get status window chat from this.appStorageService
      * set status window chat open/close
      */
     // SET IN LOCAL SETTINGS setVariableFromStorage IMPOSTA IL VALORE DI TUTTE LE VARIABILI
     // setIsWidgetOpenOrActive() {
-    //     if (this.storageService.getItem('isOpen') === 'true') {
+    //     if (this.appStorageService.getItem('isOpen') === 'true') {
     //         // this.g.isOpen = true;
     //         this.g.setIsOpen(true);
-    //     } else if (this.storageService.getItem('isOpen') === 'false') {
+    //     } else if (this.appStorageService.getItem('isOpen') === 'false') {
     //         // this.g.isOpen = false;
     //         this.g.setIsOpen(false);
     //     }
-    //     // this.isWidgetActive = (this.storageService.getItem('isWidgetActive')) ? true : false;
+    //     // this.isWidgetActive = (this.appStorageService.getItem('isWidgetActive')) ? true : false;
     // }
 
     /**
@@ -1739,7 +1739,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     openCloseWidget($event) {
         this.g.setParameter('displayEyeCatcherCard', 'none');
-        const conversationActive: ConversationModel = JSON.parse(this.storageService.getItem('activeConversation'));
+        const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
         console.log('openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
         if ( this.g.isOpen === true ) {
             if(!conversationActive){
@@ -1920,7 +1920,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private returnCloseConversation() {
         console.log('returnCloseConversation')
-        this.storageService.removeItem('activeConversation');
+        this.appStorageService.removeItem('activeConversation');
         this.g.setParameter('activeConversation', null, false);
         this.isOpenHome = true;
         this.isOpenAllConversation = false;
@@ -2235,9 +2235,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // ========= END:: TRIGGER FUNCTIONS ============//
 
     // setSound() {
-    //     if (this.storageService.getItem('isSoundActive')) {
-    //         this.g.setParameter('isSoundActive', this.storageService.getItem('isSoundActive'));
-    //         // this.settingsSaverService.setVariable('isSoundActive', this.storageService.getItem('isSoundActive'));
+    //     if (this.appStorageService.getItem('isSoundActive')) {
+    //         this.g.setParameter('isSoundActive', this.appStorageService.getItem('isSoundActive'));
+    //         // this.settingsSaverService.setVariable('isSoundActive', this.appStorageService.getItem('isSoundActive'));
     //       }
     // }
 

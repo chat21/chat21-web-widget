@@ -71,7 +71,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   ngAfterViewInit() {
     // this.isShowSpinner();
     this.g.wdLog([' --------ngAfterViewInit: conversation-header-------- ']);
-    // this.storageService.setItem('activeConversation', this.conversation.uid);
+    // this.appStorageService.setItem('activeConversation', this.conversation.uid);
     // --------------------------- //
     // after animation intro
     setTimeout(() => {
@@ -160,7 +160,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
 
   // =========== BEGIN: event emitter function ====== //
   returnHome() {
-    // this.storageService.removeItem('activeConversation');
+    // this.appStorageService.removeItem('activeConversation');
     // this.g.setParameter('activeConversation', null, false);
     this.onBack.emit();
   }
@@ -200,7 +200,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
-    //this.storageService.removeItem('activeConversation');
+    //this.appStorageService.removeItem('activeConversation');
     // this.unsubscribe();
     this.unsubescribeAll()
   }

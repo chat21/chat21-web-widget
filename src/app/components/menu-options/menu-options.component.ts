@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Globals } from '../../utils/globals';
 import { convertColorToRGBA } from '../../utils/utils';
-import { StorageService } from '../../providers/storage.service';
 
 
 
@@ -18,8 +17,7 @@ export class MenuOptionsComponent implements OnInit {
   hover: boolean;
 
   constructor(
-    public g: Globals,
-    public storageService: StorageService
+    public g: Globals
   ) { }
 
   ngOnInit() {

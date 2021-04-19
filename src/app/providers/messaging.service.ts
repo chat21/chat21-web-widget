@@ -23,8 +23,8 @@ import { IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, MSG_STATUS_SENT_SERVER, MSG_STATU
 // tslint:disable-next-line:max-line-length
 import { isEmoji, getUrlImgProfile, getImageUrlThumb, searchIndexInArrayForUid, setHeaderDate, replaceBr, convertMessage } from '../utils/utils';
 import { Globals } from '../utils/globals';
-import { StorageService } from '../providers/storage.service';
 import { AppConfigService } from '../providers/app-config.service';
+import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 
 @Injectable()
 export class MessagingService {
@@ -65,7 +65,7 @@ export class MessagingService {
     public starRatingWidgetService: StarRatingWidgetService,
     public http: Http,
     public g: Globals,
-    public storageService: StorageService,
+    public appStorageService: AppStorageService,
     public appConfigService: AppConfigService,
     private sanitizer: DomSanitizer,
     // private readonly dompurifySanitizer: NgDompurifySanitizer
@@ -174,7 +174,7 @@ export class MessagingService {
         // console.log("Sponziello patch")
         // console.log("saved_conversations_attributes_STRING: " , saved_conversations_attributes_STRING)
 
-        const saved_conversations_attributes_STRING = that.storageService.getItem('attributes');
+        const saved_conversations_attributes_STRING = that.appStorageService.getItem('attributes');
         let saved_conversations_attributes = {};
         if (saved_conversations_attributes_STRING != null) {
           saved_conversations_attributes = JSON.parse(saved_conversations_attributes_STRING);
@@ -186,13 +186,13 @@ export class MessagingService {
           saved_conversations_attributes['userFullname'] = userFullname;
           // console.log("new saved_conversations_attributes: " , saved_conversations_attributes)
           that.g.userFullname = userFullname;
-          that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
+          that.appStorageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
         if (message['attributes'] && message['attributes']['updateUserEmail']) {
           const userEmail = message['attributes']['updateUserEmail'];
           saved_conversations_attributes['userEmail'] = userEmail;
           that.g.userEmail = userEmail;
-          that.storageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
+          that.appStorageService.setItem('attributes', JSON.stringify(saved_conversations_attributes));
         }
 
         // TEST BUTTONS
@@ -335,7 +335,7 @@ export class MessagingService {
     this.obsAdded.next(message);
 
     // try {
-    //   this.storageService.setItem('messages', JSON.stringify(this.messages));
+    //   this.appStorageService.setItem('messages', JSON.stringify(this.messages));
     // } catch (error) {
     //   this.g.wdLog(['> Error :' + error]);
     // }
