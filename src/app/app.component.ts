@@ -1,3 +1,4 @@
+import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { UserModel } from '../../src/chat21-core/models/user';
@@ -130,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         public presenceService: PresenceService,
         private agentAvailabilityService: AgentAvailabilityService,
         private storageService: StorageService,
+        private appStorageService: AppStorageService,
         public appConfigService: AppConfigService,
         public globalSettingsService: GlobalSettingsService,
         public settingsSaverService: SettingsSaverService,
@@ -232,22 +234,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         });
         // this.authService.initialize()
-        this.authService.initialize(this.setStoragePrefix());
+        this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
+        this.authService.initialize();
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();
         this.uploadService.initialize();
+        
     }
 
-    setStoragePrefix(): string{
-        let prefix = STORAGE_PREFIX;
-        try {
-            prefix = environment.storage_prefix + '_';
-        } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
-        }
-        return prefix + this.g.projectid + '_';
-    }
+    // setStoragePrefix(): string{
+    //     let prefix = STORAGE_PREFIX;
+    //     try {
+    //         prefix = environment.storage_prefix + '_';
+    //     } catch (e) {
+    //         this.g.wdLog(['> Error :' + e]);
+    //     }
+    //     return prefix + this.g.projectid + '_';
+    // }
 
     // ========= begin:: SUBSCRIPTIONS ============//
     /** login subscription

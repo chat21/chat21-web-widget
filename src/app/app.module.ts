@@ -3,7 +3,7 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
-
+import { Observable } from 'rxjs';
 // import { AngularFireModule } from '@angular/fire';
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
 // import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -106,7 +106,6 @@ import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
 import { ChatManager } from './../chat21-core/providers/chat-manager';
 import { CustomTranslateService } from './../chat21-core/providers/custom-translate.service';
 
-
 //ABSTRACT SERVICES
 import { AuthService } from '../chat21-core/providers/abstract/auth.service';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
@@ -143,7 +142,26 @@ import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
 
+//APP_STORAGE
+import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
+import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
 
+
+
+export class TranslateHttpLoaderCustom implements TranslateLoader {
+  constructor(private http: HttpClient, 
+              public prefix: string = "/assets/i18n/", 
+              public suffix: string = ".json") {}
+
+  public getTranslation(lang: string): Observable<Object> {
+    console.log('getTranslation')
+      return this.http.get(`${this.prefix}${lang}${this.suffix}`).catch(err => {
+        console.log('err', err)
+        lang = 'en'
+        return this.http.get(`${this.prefix}${lang}${this.suffix}`);
+      }); 
+  }
+}
 
 
 
@@ -153,7 +171,8 @@ export function createTranslateLoader(http: HttpClient) {
   if (location.pathname.includes('/assets/')) {
     localUrl = '../i18n/';
   }
-  return new TranslateHttpLoader(http, localUrl, '.json');
+  console.log('translate factoryyyyyyyy APP MODULE')
+  return new TranslateHttpLoaderCustom(http, localUrl, '.json');
 }
 
 const appInitializerFn = (appConfig: AppConfigService) => {
@@ -164,7 +183,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
-export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service ) {
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     
     chat21Service.initChat(appConfig.getConfig().chat21Config);  
@@ -175,7 +194,7 @@ export function authenticationFactory(http: HttpClient, appConfig: AppConfigServ
   } else {
 
     FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
-    const auth= new FirebaseAuthService(http);
+    const auth= new FirebaseAuthService(http, appSorage);
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
   }
@@ -316,11 +335,11 @@ export function loggerFactory() {
     AngularResizedEventModule,
     TranslateModule.forRoot(//),
     {
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
+      // loader: {
+      //   provide: TranslateLoader,
+      //   useFactory: (createTranslateLoader),
+      //   deps: [HttpClient]
+      // }
     }), 
     TooltipModule,
     //RouterModule.forRoot([])
@@ -336,7 +355,7 @@ export function loggerFactory() {
     {
       provide: AuthService,
       useFactory: authenticationFactory,
-      deps: [HttpClient, AppConfigService, Chat21Service ]
+      deps: [HttpClient, AppConfigService, Chat21Service, AppStorageService ]
     },
     {
       provide: ConversationsHandlerService,
@@ -382,6 +401,10 @@ export function loggerFactory() {
       provide: LoggerService,
       useFactory: loggerFactory,
       deps: []
+    },
+    {
+      provide: AppStorageService,
+      useClass: LocalSessionStorage
     },
     //AuthService,
     //MessagingService,
