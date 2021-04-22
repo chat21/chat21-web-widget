@@ -145,6 +145,7 @@ import { LoggerService } from '../chat21-core/providers/abstract/logger.service'
 //APP_STORAGE
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
+import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
 
 
 
@@ -265,8 +266,11 @@ export function imageRepoFactory(appConfig: AppConfigService) {
   }
 }
 
-export function uploadFactory() {
+export function uploadFactory(http: HttpClient, appConfig: AppConfigService, appStorage: AppStorageService) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+    const nativeUploadService = new NativeUploadService(http, appStorage)
+    nativeUploadService.setBaseUrl(appConfig.getConfig().apiUrl)
+    // return nativeUploadService
     return new FirebaseUploadService();
   } else {
     return new FirebaseUploadService();
@@ -398,7 +402,7 @@ export function loggerFactory() {
     {
       provide: UploadService,
       useFactory: uploadFactory,
-      deps: []
+      deps: [HttpClient, AppConfigService, AppStorageService ]
     },
     {
       provide: LoggerService,

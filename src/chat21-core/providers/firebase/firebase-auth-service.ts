@@ -310,8 +310,8 @@ export class FirebaseAuthService extends AuthService {
       this.http.post(this.URL_TILEDESK_SIGNIN_ANONYMOUSLY, postData, requestOptions).subscribe((data) => {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
-          this.createCompleteUser(data['user']);
-          this.appStorage.setItem('tiledeskToken', that.tiledeskToken);
+          that.createCompleteUser(data['user']);
+          that.appStorage.setItem('tiledeskToken', that.tiledeskToken);
           // localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.createFirebaseCustomToken();
           resolve(this.currentUser)

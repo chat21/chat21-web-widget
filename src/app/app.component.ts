@@ -438,7 +438,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.subscriptions.push(subAuthStateChanged);
 
-        
 
         const subUserLogOut = this.authService.BSSignOut.subscribe((state) => {
             // that.ngZone.run(() => {

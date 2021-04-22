@@ -215,7 +215,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       // this.resetLoadImage();
       
 
-        this.uploadService.pushUploadMessage(currentUpload).then(downloadURL => {
+        this.uploadService.upload(currentUpload).then(downloadURL => {
           that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
           that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
