@@ -49,11 +49,9 @@ export class AppConfigService {
     // return this.http
     //   .get(urlConfigFile, { headers })
     //   .map((response) => response.json());
-
-    return this.http.get(urlConfigFile)
-      .toPromise()
-      .then(data => {
-        this.appConfig = data;
+    const that = this;
+    return this.http.get(urlConfigFile).toPromise().then(data => {
+      that.appConfig = data;
       }).catch(err => {
         console.log('error loadAppConfig', err);
       });

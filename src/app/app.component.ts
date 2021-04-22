@@ -235,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         // this.authService.initialize()
         this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
-        this.authService.initialize('');
+        this.authService.initialize();
         this.chatManager.initialize();
         this.typingService.initialize();
         this.presenceService.initialize();

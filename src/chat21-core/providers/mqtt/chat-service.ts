@@ -13,15 +13,24 @@ import { Chat21Client } from '../../../assets/js/chat21client';
 export class Chat21Service {
 
   public chatClient: any;
-  
+  private _config: any;
+
   constructor() {
   }
 
-  initChat(chat21Config: any) {
-    if (!chat21Config || chat21Config.appId === 'CHANGEIT') {
-      throw new Error('chat21Config config is not defined. Please create your widget-config.json. See the Chat21-Web_widget Installation Page');
-    }  
-    this.chatClient = new Chat21Client(chat21Config)
+  public set config(config: any) {
+    this._config = config;
+  }
+
+  public get config() : any {
+    return this._config;
+  }
+
+  initChat() {
+    if (!this._config || this._config.appId === 'CHANGEIT') {
+      throw new Error('chat21Config is not defined. Please setup your environment');
+    }
+    this.chatClient = new Chat21Client(this._config);
     // console.log("chatClient init. ID:", this.chatClient.client_id)
   }
 }

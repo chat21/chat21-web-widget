@@ -21,6 +21,7 @@ import { AuthService } from '../abstract/auth.service';
 import { Chat21Service } from './chat-service';
 // models
 import { UserModel } from '../../models/user';
+import { AppStorageService } from '../abstract/app-storage.service';
 
 // declare var Chat21Client: any;
 
@@ -42,7 +43,6 @@ export class MQTTAuthService extends AuthService {
   public tiledeskToken: any;
   public user: any;
   private currentUser: any;
-  private storagePrefix: string;
 
   private URL_TILEDESK_SIGNIN: string;
   private URL_TILEDESK_CREATE_CUSTOM_TOKEN: string;
@@ -51,7 +51,8 @@ export class MQTTAuthService extends AuthService {
 
   constructor(
     public http: HttpClient,
-    public chat21Service: Chat21Service
+    public chat21Service: Chat21Service,
+    public appStorage: AppStorageService
   ) {
     super();
     console.log("chat21Service:", chat21Service)
@@ -60,17 +61,12 @@ export class MQTTAuthService extends AuthService {
   /**
    *
    */
-  initialize(storagePrefix: string) {
+  initialize() {
     this.SERVER_BASE_URL = this.getBaseUrl();
-    console.log("this.SERVER_BASE_URL = this.getBaseUrl();", this.SERVER_BASE_URL)
-    this.storagePrefix = storagePrefix;
     this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
     this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
-    // this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = environment.chat21Config.loginServiceEndpoint;
     this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + "chat21/native/auth/createCustomToken"
-    console.log("URL_TILEDESK_CREATE_CUSTOM_TOKEN", this.URL_TILEDESK_CREATE_CUSTOM_TOKEN)
     this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'auth/signinWithCustomToken';
-    console.log(' ---------------- login con token url ---------------- ');
     this.checkIsAuth();
     this.onAuthStateChanged();
   }
@@ -85,8 +81,13 @@ export class MQTTAuthService extends AuthService {
   }
 
   checkIsAuth() {
-    this.tiledeskToken = localStorage.getItem('tiledeskToken');
+    console.log(' ---------------- AuthService checkIsAuth ---------------- ');
+    this.tiledeskToken = this.appStorage.getItem('tiledeskToken')
+    this.currentUser = JSON.parse(this.appStorage.getItem('currentUser'));
+    // this.tiledeskToken = localStorage.getItem(this.storagePrefix+'tiledeskToken');
+    // this.currentUser = JSON.parse(localStorage.getItem(this.storagePrefix + 'currentUser'));
     if (this.tiledeskToken && this.tiledeskToken !== undefined) {
+      console.log(' ---------------- MI LOGGO CON UN TOKEN ESISTENTE NEL LOCAL STORAGE O PASSATO NEI PARAMS URL ---------------- ')
       this.getCustomToken(this.tiledeskToken);
     } else {
       console.log(' ---------------- NON sono loggato ---------------- ');
@@ -115,14 +116,14 @@ export class MQTTAuthService extends AuthService {
    */
   onAuthStateChanged() {
     console.log('UserService::onAuthStateChanged');
-    if (localStorage.getItem('tiledeskToken') == null) {
+    if (this.appStorage.getItem('tiledeskToken') == null) {
       this.currentUser = null;
       this.BSAuthStateChanged.next('offline');
     }
     const that = this;
     window.addEventListener('storage', (e) => {
       console.log('Changed:', e.key);
-      if (localStorage.getItem('tiledeskToken') == null) {
+      if (this.appStorage.getItem('tiledeskToken') == null) {
         that.currentUser = null;
         that.BSAuthStateChanged.next('offline');
       }
@@ -150,7 +151,8 @@ export class MQTTAuthService extends AuthService {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
-          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
+          this.appStorage.setItem('tiledeskToken', that.tiledeskToken);
+          // localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.getCustomToken(this.tiledeskToken);
           resolve(this.currentUser)
         }
@@ -177,7 +179,9 @@ export class MQTTAuthService extends AuthService {
       .subscribe(data => {
         console.log("data:", JSON.stringify(data));
         if (data['token'] && data['userid']) {
-          localStorage.setItem('tiledeskToken', data['token']);
+          this.appStorage.setItem('tiledeskToken', data['token']);
+          data['_id'] = data['userid'];
+          this.createCompleteUser(data);
           that.connectMQTT(data);
           // that.firebaseCreateCustomToken(tiledeskToken);
         }
@@ -201,7 +205,8 @@ export class MQTTAuthService extends AuthService {
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
           this.createCompleteUser(data['user']);
-          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
+          this.appStorage.setItem('tiledeskToken', that.tiledeskToken);
+          // localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.getCustomToken(this.tiledeskToken);
           resolve(this.currentUser)
         }
@@ -217,13 +222,16 @@ export class MQTTAuthService extends AuthService {
     // console.log('signInWithEmailAndPassword', email, password);
     // this.signIn(this.URL_TILEDESK_SIGNIN, email, password);
 
+    console.log("this.SERVER_BASE_URL", this.SERVER_BASE_URL)
     console.log('signInWithEmailAndPassword', email, password);
-    if (this.SERVER_BASE_URL !== '__') {
+    console.log("this.chat21Service.config.loginServiceEndpoint:", this.chat21Service.config.loginServiceEndpoint)
+    if (!this.chat21Service.config.loginServiceEndpoint) {
       console.log('this.URL_TILEDESK_SIGNIN', this.URL_TILEDESK_SIGNIN);
       this.signIn(this.URL_TILEDESK_SIGNIN, email, password);
     }
     else {
-      this.signinMQTT(environment.chat21Config.loginServiceEndpoint, email, password);
+      console.log('native mqtt signin config21config.loginServiceEndpoint', this.chat21Service.config.loginServiceEndpoint);
+      this.signinMQTT(this.chat21Service.config.loginServiceEndpoint, email, password);
     }
   }
 
@@ -242,7 +250,9 @@ export class MQTTAuthService extends AuthService {
         console.log("data:", JSON.stringify(data));
         if (data['success'] && data['token']) {
           that.tiledeskToken = data['token'];
-          localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
+          this.createCompleteUser(data['user']);
+          this.appStorage.setItem('tiledeskToken', that.tiledeskToken);
+          // localStorage.setItem(this.storagePrefix + 'tiledeskToken', that.tiledeskToken);
           that.getCustomToken(this.tiledeskToken);
           // that.firebaseCreateCustomToken(tiledeskToken);
         }
@@ -275,8 +285,7 @@ export class MQTTAuthService extends AuthService {
     const responseType = 'text';
     const postData = {};
     const that = this;
-    this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType})
-    .subscribe(data =>  {
+    this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType}).subscribe(data =>  {
       const result = JSON.parse(data);
       that.connectMQTT(result);
     }, error => {
@@ -303,7 +312,7 @@ export class MQTTAuthService extends AuthService {
         firstname,
         lastname
       };
-      this.currentUser = user;
+      // this.currentUser = user;
       console.log('User signed in:', user);
       // this.BSAuthStateChanged.next(user);
       this.BSAuthStateChanged.next('online');
@@ -342,7 +351,8 @@ export class MQTTAuthService extends AuthService {
     }
     this.currentUser = member;
     // salvo nel local storage e sollevo l'evento
-    localStorage.setItem(this.storagePrefix + 'currentUser', JSON.stringify(this.currentUser));
+    this.appStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+    // localStorage.setItem(this.storagePrefix + 'currentUser', JSON.stringify(this.currentUser));
     // this.BScurrentUser.next(this.currentUser);
   }
 

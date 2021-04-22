@@ -154,7 +154,7 @@ export class TranslateHttpLoaderCustom implements TranslateLoader {
               public suffix: string = ".json") {}
 
   public getTranslation(lang: string): Observable<Object> {
-    console.log('getTranslation')
+    console.log('getTranslation', lang)
       return this.http.get(`${this.prefix}${lang}${this.suffix}`).catch(err => {
         console.log('err', err)
         lang = 'en'
@@ -183,18 +183,20 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
-export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorageService: AppStorageService ) {
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     
-    chat21Service.initChat(appConfig.getConfig().chat21Config);  
-    console.log("chat21Service::", chat21Service, appConfig.getConfig().apiUrl)
-    const auth = new MQTTAuthService(http, chat21Service);
+    chat21Service.config = appConfig.getConfig().chat21Config;
+    chat21Service.initChat();
+    console.log("appConfig.getConfig().SERVER_BASE_URL", appConfig.getConfig().apiUrl);
+    const auth = new MQTTAuthService(http, chat21Service, appSorage);
+
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth;
   } else {
 
     FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
-    const auth= new FirebaseAuthService(http, appSorageService);
+    const auth= new FirebaseAuthService(http, appSorage);
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
   }
@@ -251,6 +253,7 @@ export function presenceFactory() {
 export function imageRepoFactory(appConfig: AppConfigService) {
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     const imageService = new FirebaseImageRepoService();
+    console.log('imageRepoFactory INIT_FIREBASE')
     FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
     imageService.setImageBaseUrl(appConfig.getConfig().baseImageUrl)
     return imageService
@@ -335,11 +338,11 @@ export function loggerFactory() {
     AngularResizedEventModule,
     TranslateModule.forRoot(//),
     {
-      // loader: {
-      //   provide: TranslateLoader,
-      //   useFactory: (createTranslateLoader),
-      //   deps: [HttpClient]
-      // }
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
     }), 
     TooltipModule,
     //RouterModule.forRoot([])
