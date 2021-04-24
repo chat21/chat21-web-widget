@@ -270,8 +270,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
   if (environment.chatEngine === CHAT_ENGINE_MQTT) {
     const nativeUploadService = new NativeUploadService(http, appStorage)
     nativeUploadService.setBaseUrl(appConfig.getConfig().apiUrl)
-    // return nativeUploadService
-    return new FirebaseUploadService();
+    return nativeUploadService
+    // return new FirebaseUploadService();
   } else {
     return new FirebaseUploadService();
   }

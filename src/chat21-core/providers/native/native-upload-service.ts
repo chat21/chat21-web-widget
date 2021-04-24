@@ -55,7 +55,8 @@ export class NativeUploadService extends UploadService {
             return new Promise ((resolve, reject)=> {
                 that.http.post(url, formData, requestOptions).subscribe(data => {
                     console.log("data:", data);
-                    resolve(data['filename'])
+                    const downloadURL = this.URL_TILEDESK_IMAGES + '?path='+ data['filename']
+                    resolve(downloadURL)
                     // that.BSStateUpload.next({upload: upload});
                 }, (error) => {
                     reject(error)
@@ -67,7 +68,8 @@ export class NativeUploadService extends UploadService {
             return new Promise ((resolve, reject)=> {
                 that.http.post(url, formData, requestOptions).subscribe(data => {
                     console.log("data:", data);
-                    resolve(data['filename'])
+                    const downloadURL = this.URL_TILEDESK_FILE + '?path='+ data['filename']
+                    resolve(downloadURL)
                     // that.BSStateUpload.next({upload: upload});
                 }, (error) => {
                     reject(error)
@@ -88,24 +90,24 @@ export class NativeUploadService extends UploadService {
         if(type.startsWith('image')){
             //USE IMAGE API
             const url = this.URL_TILEDESK_IMAGES + queryString
-            this.http.get(url, requestOptions).subscribe((data: any) => {
-                console.log("data:", data);
-                // that.BSStateUpload.next({upload: upload});
-            }, (error) => {
-                console.error(error);
-            });
+            // this.http.get(url, requestOptions).subscribe((data: any) => {
+            //     console.log("data:", data);
+            //     // that.BSStateUpload.next({upload: upload});
+            // }, (error) => {
+            //     console.error(error);
+            // });
+            return url
         }else {
             //USE FILE API
             const url = this.URL_TILEDESK_FILE + queryString
-            this.http.get(url, requestOptions).subscribe(data => {
-                console.log("data:", data);
-                // that.BSStateUpload.next({upload: upload});
-            }, (error) => {
-                console.error(error);
-            });
-
+            // this.http.get(url, requestOptions).subscribe(data => {
+            //     console.log("data:", data);
+            //     // that.BSStateUpload.next({upload: upload});
+            // }, (error) => {
+            //     console.error(error);
+            // });
+            return url
         }
-
-        return 
+ 
     }
 }
