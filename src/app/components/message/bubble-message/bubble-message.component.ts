@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageModel } from '../../../../chat21-core/models/message';
-import { isFile, isImage } from '../../../../chat21-core/utils/utils-message';
+import { isFile, isFrame, isImage } from '../../../../chat21-core/utils/utils-message';
 import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { Globals } from '../../../utils/globals';
 @Component({
@@ -18,6 +18,7 @@ export class BubbleMessageComponent implements OnInit {
 
   isImage = isImage;
   isFile = isFile;
+  isFrame = isFrame;
 
   tooltipOptions = {
     'show-delay': 1500,
