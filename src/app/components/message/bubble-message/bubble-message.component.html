@@ -1,5 +1,5 @@
 <!-- [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" -->
-<div  [ngStyle]="{'padding': (isImage(message) || isFile(message))?'1px':'0 8px'}" class="messages primary-color"  [class.emoticon]="message.emoticon">
+<div  [ngStyle]="{'padding': (isImage(message) || isFrame(message))?'1px':'0 8px'}" class="messages primary-color"  [class.emoticon]="message.emoticon">
   
     
     <div>
@@ -18,7 +18,7 @@
         [height]="getMetadataSize(message.metadata).height">
       </tiledeskwidget-image>
 
-      <tiledeskwidget-frame *ngIf="isFile(message)"
+      <tiledeskwidget-frame *ngIf="isFrame(message)"
         [metadata]="message.metadata"
         [width]="getMetadataSize(message.metadata).width"
         [height]="getMetadataSize(message.metadata).height">

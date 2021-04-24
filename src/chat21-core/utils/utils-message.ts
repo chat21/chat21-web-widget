@@ -32,6 +32,13 @@ export function isImage(message: any) {
     return false;
 }
 
+export function isFrame(message: any) {
+  if (message && message.type && message.metadata && message.metadata.src && message.type === 'frame') {
+    return true;
+  }
+  return false;
+}
+
 /** */
 export function isFile(message: any) {
     if (message && message.type && message.metadata && message.metadata.src && message.type === 'file') {
