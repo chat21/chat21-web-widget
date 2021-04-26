@@ -6,6 +6,7 @@
 // CHAT ENGINE
 export const CHAT_ENGINE_MQTT = 'mqtt';
 export const CHAT_ENGINE_FIREBASE = 'firebase';
+export const UPLOAD_ENGINE_NATIVE = 'native';
 
 // AUTH
 export const AUTH_STATE_OFFLINE = 'offline';

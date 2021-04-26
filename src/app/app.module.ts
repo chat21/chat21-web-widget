@@ -96,7 +96,7 @@ import { InfoMessageComponent } from './components/message/info-message/info-mes
 import { UserTypingComponent } from '../../src/chat21-core/utils/user-typing/user-typing.component';
 
 //CONSTANTS
-import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE } from '../../src/chat21-core/utils/constants';
+import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE } from '../../src/chat21-core/utils/constants';
 
 //TRIGGER-HANDLER
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
@@ -185,66 +185,73 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 };
 
 export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     
-    chat21Service.config = appConfig.getConfig().chat21Config;
+    chat21Service.config = config.chat21Config;
     chat21Service.initChat();
-    console.log("appConfig.getConfig().SERVER_BASE_URL", appConfig.getConfig().apiUrl);
+    console.log("appConfig.getConfig().SERVER_BASE_URL", config.apiUrl);
     const auth = new MQTTAuthService(http, chat21Service, appSorage);
-
+    
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
-    return auth;
+    return auth
   } else {
 
-    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
+    FirebaseInitService.initFirebase(config.firebaseConfig)
     const auth= new FirebaseAuthService(http, appSorage);
-    auth.setBaseUrl(appConfig.getConfig().apiUrl)
+    auth.setBaseUrl(config.apiUrl)
     return auth
   }
 }
 
-export function conversationsHandlerFactory(chat21Service: Chat21Service) {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function conversationsHandlerFactory(chat21Service: Chat21Service, httpClient: HttpClient, appConfig: AppConfigService ) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new MQTTConversationsHandler(chat21Service);
   } else {
-    return new FirebaseConversationsHandler();
+    return new FirebaseConversationsHandler(httpClient, appConfig);
   }
 }
 
-export function archivedConversationsHandlerFactory() {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function archivedConversationsHandlerFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseArchivedConversationsHandler();
   } else {
     return new FirebaseArchivedConversationsHandler();
   }
 }
 
-export function conversationHandlerBuilderFactory(chat21Service: Chat21Service) {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function conversationHandlerBuilderFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new MQTTConversationHandlerBuilderService(chat21Service);
   } else {
     return new FirebaseConversationHandlerBuilderService();
   }
 }
 
-export function conversationHandlerFactory() {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function conversationHandlerFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new FirebaseConversationHandler(true);
   } else {
     return new FirebaseConversationHandler(true);
   }
 }
 
-export function typingFactory() {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function typingFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new MQTTTypingService();
   } else {
     return new FirebaseTypingService();
   }
 }
 
-export function presenceFactory() {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+export function presenceFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     return new MQTTPresenceService();
   } else {
     return new FirebasePresenceService();
@@ -252,24 +259,25 @@ export function presenceFactory() {
 }
 
 export function imageRepoFactory(appConfig: AppConfigService) {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
     const imageService = new FirebaseImageRepoService();
-    console.log('imageRepoFactory INIT_FIREBASE')
-    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
-    imageService.setImageBaseUrl(appConfig.getConfig().baseImageUrl)
+    FirebaseInitService.initFirebase(config.firebaseConfig)
+    imageService.setImageBaseUrl(config.baseImageUrl)
     return imageService
   } else {
     const imageService = new FirebaseImageRepoService();
-    FirebaseInitService.initFirebase(appConfig.getConfig().firebaseConfig)
-    imageService.setImageBaseUrl(appConfig.getConfig().baseImageUrl)
+    FirebaseInitService.initFirebase(config.firebaseConfig)
+    imageService.setImageBaseUrl(config.baseImageUrl)
     return imageService
   }
 }
 
 export function uploadFactory(http: HttpClient, appConfig: AppConfigService, appStorage: AppStorageService) {
-  if (environment.chatEngine === CHAT_ENGINE_MQTT) {
+  const config = appConfig.getConfig()
+  if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
     const nativeUploadService = new NativeUploadService(http, appStorage)
-    nativeUploadService.setBaseUrl(appConfig.getConfig().apiUrl)
+    nativeUploadService.setBaseUrl(config.apiUrl)
     return nativeUploadService
     // return new FirebaseUploadService();
   } else {
@@ -342,11 +350,11 @@ export function loggerFactory() {
     AngularResizedEventModule,
     TranslateModule.forRoot(//),
     {
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
+      // loader: {
+      //   provide: TranslateLoader,
+      //   useFactory: (createTranslateLoader),
+      //   deps: [HttpClient]
+      // }
     }), 
     TooltipModule,
     //RouterModule.forRoot([])
@@ -367,37 +375,37 @@ export function loggerFactory() {
     {
       provide: ConversationsHandlerService,
       useFactory: conversationsHandlerFactory,
-      deps: [Chat21Service]
+      deps: [Chat21Service, HttpClient, AppConfigService]
     },
     {
       provide: ArchivedConversationsHandlerService,
       useFactory: archivedConversationsHandlerFactory,
-      deps: []
+      deps: [AppConfigService]
     },
     {
       provide: ConversationHandlerBuilderService,
       useFactory: conversationHandlerBuilderFactory,
-      deps: [Chat21Service]
+      deps: [Chat21Service, AppConfigService]
     },
     {
       provide: ConversationHandlerService,
       useFactory: conversationHandlerFactory,
-      deps: []
+      deps: [AppConfigService]
     },
     {
       provide: TypingService,
       useFactory: typingFactory,
-      deps: []
+      deps: [AppConfigService]
     },
     {
       provide: PresenceService,
       useFactory: presenceFactory,
-      deps: []
+      deps: [AppConfigService]
     },
     {
       provide: ImageRepoService,
       useFactory: imageRepoFactory,
-      deps: [AppConfigService]
+      deps: [AppConfigService, AppConfigService]
     },
     {
       provide: UploadService,
