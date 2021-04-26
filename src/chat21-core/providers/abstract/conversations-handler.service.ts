@@ -29,10 +29,12 @@ export abstract class ConversationsHandlerService {
   // functions
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;
   abstract connect(): void;
+  abstract subscribeToConversations(callback: any): void;
   abstract countIsNew(): number;
-  abstract setConversationRead(conversation: ConversationModel): void;
+  abstract setConversationRead(conversationId: string): void;
   abstract dispose(): void;
-  abstract getConversationDetail(tenant: string, userId: string, conversationId: string): void;
+  abstract archiveConversation(conversationId: string): void;
+  abstract getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void): void;
   abstract getClosingConversation(conversationId: string): boolean;
   abstract setClosingConversation(conversationId: string, status: boolean): void;
   abstract deleteClosingConversation(conversationId: string): void;

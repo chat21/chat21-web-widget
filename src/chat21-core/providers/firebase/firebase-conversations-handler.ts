@@ -1,3 +1,4 @@
+import { AppConfigService } from './../../../app/providers/app-config.service';
 import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -22,6 +23,7 @@ import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, archivedConversationsPathForUserId } from '../../utils/utils';
 import { ImageRepoService } from '../abstract/image-repo.service';
 import { FirebaseImageRepoService } from './firebase-image-repo';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -50,11 +52,14 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     private isConversationClosingMap: Map<string, boolean>;
     private logger: CustomLogger = new CustomLogger(true);
     private ref: firebase.database.Query;
+    private BASE_URL: string;
     // private audio: any;
     // private setTimeoutSound: any;
 
     constructor(
         //public databaseProvider: DatabaseProvider
+        public http: HttpClient,
+        public appConfig: AppConfigService
     ) {
         super();
     }
@@ -74,6 +79,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         this.isConversationClosingMap = new Map();
         //this.databaseProvider.initialize(userId, this.tenant);
         //this.getConversationsFromStorage();
+        this.BASE_URL = this.appConfig.getConfig().firebaseConfig.chat21ApiUrl;
     }
 
     /**
@@ -102,6 +108,36 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         
     }
 
+    // ---------------------------------------------------------------------------------
+     // New connect - renamed subscribeToConversation
+     //----------------------------------------------------------------------------------
+     subscribeToConversations(callback) {
+        const that = this;
+        const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
+        this.logger.printDebug('SubscribeToConversations (firebase-convs-handler) - conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
+        this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
+        this.ref.on('child_changed', (childSnapshot) => {
+            that.changed(childSnapshot);
+        });
+        this.ref.on('child_removed', (childSnapshot) => {
+            that.removed(childSnapshot);
+        });
+        this.ref.on('child_added', (childSnapshot) => {
+            that.added(childSnapshot);
+        });
+
+        console.log('SubscribeToConversations (firebase-convs-handler) - conversations' , that.conversations )
+
+        setTimeout(() => {
+            callback() 
+          }, 2000);
+        // SET AUDIO
+        // this.audio = new Audio();
+        // this.audio.src = URL_SOUND;
+        // this.audio.load();
+
+    }
+
     /**
      * restituisce il numero di conversazioni nuove
      */
@@ -116,8 +152,8 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     }
 
 
-    setConversationRead(conversation: ConversationModel): void {
-        const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
+    setConversationRead(conversationrecipient): void {
+        const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationrecipient;
         const update = {};
         update['/is_new'] = false;
         firebase.database().ref(urlUpdate).update(update);
@@ -149,21 +185,114 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     this.isConversationClosingMap.delete(conversationId);
     }
 
+    // -------->>>> ARCHIVE CONVERSATION SECTION START <<<<---------------//
+    archiveConversation(conversationId: string) {
+        const that = this
+        this.setClosingConversation(conversationId, true);
+        const index = searchIndexInArrayForUid(this.conversations, conversationId);
+        // if (index > -1) {
+        //     this.conversations.splice(index, 1);
+        // fare chiamata delete per rimuoverle la conversazione da remoto
+        this.deleteConversation(conversationId, function (response) {
+            console.log('FIREBASE-CONVERSATION-HANDLER ARCHIVE-CONV response', response)
+           
+            if (response === 'success') {
+                if (index > -1) {
+                    that.conversations.splice(index, 1);
+                }
+            } else if (response === 'error') {
+                that.setClosingConversation(conversationId, false);
+            }
 
-    public getConversationDetail(tenant: string, loggedUserUid: string, conversationId: string) {
-        const conversationSelected = this.conversations.find(item => item.uid === conversationId);
-        this.logger.printDebug('>>>>>>>>>>>>>> getConversationDetail *****: ', conversationSelected)
-        if (conversationSelected) {
-            this.BSConversationDetail.next(conversationSelected);
+        })
+        // }
+    }
+
+    deleteConversation(conversationId, callback) {
+        console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV conversationId', conversationId)
+        let queryString = ''
+        let isSupportConversation = conversationId.startsWith("support-group");
+        if (isSupportConversation) {
+            queryString = '?forall=true'
+        }
+
+        this.getFirebaseToken((error, idToken) => {
+            console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV idToken', idToken)
+            console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV error', error)
+            if (idToken) {
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + idToken,
+                    })
+                }
+                const url = this.BASE_URL + '/api/' + this.tenant + '/conversations/' + conversationId + queryString;
+                console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV - URL:', url);
+
+                this.http.delete(url, httpOptions).subscribe(res => {
+                        console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV - RES', res);
+                        callback('success')
+                }, (error) => {
+                        console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV ERROR ', error);
+                        callback('error')
+                }, () => {
+                        console.log('FIREBASE-CONVERSATION-HANDLER DELETE CONV * COMPLETE *');
+
+                });
+            } else {
+                callback('error')
+            }
+        });
+    }
+
+
+    getFirebaseToken(callback) {
+        const firebase_currentUser = firebase.auth().currentUser;
+        console.log(' // firebase current user ', firebase_currentUser);
+        if (firebase_currentUser) {
+            firebase_currentUser.getIdToken(/* forceRefresh */ true)
+                .then(function (idToken) {
+                    // qui richiama la callback
+                    callback(null, idToken);
+
+                }).catch(function (error) {
+                    // Handle error
+                    console.log('idToken.', error);
+                    callback(error, null);
+                });
+        }
+    }
+    // -------->>>> ARCHIVE CONVERSATION SECTION END <<<<---------------//
+
+
+    public getConversationDetail(conversationId: string, callback: (conv: ConversationModel)=>void): void {
+        // fare promise o callback ??
+        const conversation = this.conversations.find(item => item.uid === conversationId);
+        this.logger.printDebug('SubscribeToConversations >>>>>>>>>>>>>> conversations *****: ', this.conversations)
+        this.logger.printDebug('SubscribeToConversations >>>>>>>>>>>>>> getConversationDetail *****: ', conversation)
+        if (conversation) {
+            callback(conversation)
+            // return conversationSelected
+            // this.BSConversationDetail.next(conversationSelected);
         } else {
-            const urlNodeFirebase = '/apps/' + tenant + '/users/' + loggedUserUid + '/conversations/' + conversationId;
+            // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/conversations/' + conversationId;
+            const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
             this.logger.printDebug('urlNodeFirebase conversationDetail *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
-                const conversation: ConversationModel = childSnapshot.val();
-                this.BSConversationDetail.next(conversation);
+                const childData: ConversationModel = childSnapshot.val();
+                childData.uid = childSnapshot.key;
+                const conversation = this.completeConversation(childData);
+                if(conversation){
+                    callback(conversation)
+                }else {
+                    callback(null)
+                }
+                // this.BSConversationDetail.next(conversation);
             });
         }
+
     }
     /**
      * dispose reference di conversations

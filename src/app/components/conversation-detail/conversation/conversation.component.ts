@@ -327,7 +327,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.archivedConversationsHandlerService.setConversationRead(this.conversation)
     }
     if (!this.isConversationArchived && this.conversation && this.conversationsHandlerService) {
-      this.conversationsHandlerService.setConversationRead(this.conversation)
+      this.conversationsHandlerService.setConversationRead(this.conversation.uid)
       const badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
       this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
     }

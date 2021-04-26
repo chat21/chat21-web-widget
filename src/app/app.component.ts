@@ -601,7 +601,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // 2 - get conversations from storage
         // this.chatConversationsHandler.getConversationsFromStorage();
         // 5 - connect conversationHandler and archviedConversationsHandler to firebase event (add, change, remove)
-        this.conversationsHandlerService.connect();
+        this.conversationsHandlerService.subscribeToConversations(()=> {})
         this.archivedConversationsService.connect();
         this.listConversations = this.conversationsHandlerService.conversations;
         this.archivedConversations = this.archivedConversationsService.archivedConversations;
