@@ -12,6 +12,8 @@ export const environment = {
   remoteConfigUrl: '/widget-config.json',
   remoteTranslationsUrl: 'http://localhost:3000/',
   loadRemoteTranslations: true,
+  chatEngine: 'CHANGEIT',
+  updateEngine: 'CHANGEIT',
   firebase: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -23,15 +25,13 @@ export const environment = {
   chat21Config: {
     appId: 'tilechat',
     MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
-    APIendpoint: 'http://localhost:8004/api',
-    loginServiceEndpoint: 'http://localhost:3000/chat21/native/auth/createCustomToken' // endpoint readed from apiUrl property
+    APIendpoint: 'http://localhost:8004/api'
   },
   apiUrl: 'http://localhost:3000/',
   tenant: 'tilechat',
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',
   authPersistence: 'LOCAL',
-  chatEngine: 'mqtt',
   supportMode: true,
 };
 

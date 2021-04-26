@@ -11,6 +11,7 @@ export const environment = {
   loadRemoteTranslations: true,
   remoteTranslationsUrl: 'http://localhost:3000/',
   chatEngine: 'mqtt',
+  updateEngine: 'native',
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -22,8 +23,7 @@ export const environment = {
   chat21Config: {
     appId: 'tilechat',
     MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
-    APIendpoint: 'http://localhost:8004/api',
-    loginServiceEndpoint: 'http://localhost:3000/chat21/native/auth/createCustomToken' // endpoint readed from apiUrl property
+    APIendpoint: 'http://localhost:8004/api'
   },
   apiUrl: 'http://localhost:3000/',
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',

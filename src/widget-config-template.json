@@ -1,4 +1,6 @@
 {
+    "chatEngine": "${CHAT21_ENGINE}",
+    "updateEngine": "${UPDATE_ENGINE}",
     "remoteTranslationsUrl": "${TRANSLATE_URL}",
     "firebaseConfig": {
         "apiKey": "${FIREBASE_APIKEY}",
@@ -11,8 +13,7 @@
     "chat21Config": {
         "appId": "${MQTT_APPID}",
         "MQTTendpoint": "${MQTT_ENDPOINT}",
-        "APIendpoint": "${MQTT_APIENDPOINT}",
-        "loginServiceEndpoint": "${MQTT_LOGINSERVICE_ENDPOINT}"
+        "APIendpoint": "${MQTT_APIENDPOINT}"
     },
     "apiUrl": "${API_URL}",
     "baseImageUrl": "${API_BASEIMAGE_URL}"
