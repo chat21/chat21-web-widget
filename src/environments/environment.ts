@@ -11,7 +11,7 @@ export const environment = {
   loadRemoteTranslations: true,
   remoteTranslationsUrl: 'http://localhost:3000/',
   chatEngine: 'mqtt',
-  updateEngine: 'native',
+  uploadEngine: 'native',
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',

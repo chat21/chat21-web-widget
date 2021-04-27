@@ -4,12 +4,6 @@ import { HttpModule, Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { Observable } from 'rxjs';
-// import { AngularFireModule } from '@angular/fire';
-// import { AngularFirestoreModule } from '@angular/fire/firestore';
-// import { AngularFireDatabaseModule } from '@angular/fire/database';
-// import { AngularFireAuthModule } from '@angular/fire/auth';
-// import * as firebase from 'firebase';
-
 
 // Directives
 import { TooltipModule } from 'ng2-tooltip-directive';
@@ -23,6 +17,9 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { LinkyModule } from 'angular-linky';
 import { AngularResizedEventModule } from 'angular-resize-event';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
+import { MarkedPipe } from './directives/marked.pipe';
 
 // utils
 import { Globals } from './utils/globals';
@@ -46,37 +43,34 @@ import { WaitingService } from './providers/waiting.service';
 import { AppConfigService } from './providers/app-config.service';
 
 
-// components
-import { SelectionDepartmentComponent } from './components/selection-department/selection-department.component';
-import { HomeConversationsComponent } from './components/home-conversations/home-conversations.component';
+//------------------------>>>>> COMPONENTS <<<<<------------------------//
+//  ______________ HOME ________________ //
 import { HomeComponent } from './components/home/home.component';
+import { HomeConversationsComponent } from './components/home-conversations/home-conversations.component';
+
+// ___________DEPARTMENT______________//
+import { SelectionDepartmentComponent } from './components/selection-department/selection-department.component';
+
 import { LauncherButtonComponent } from './components/launcher-button/launcher-button.component';
-import { ConversationComponent } from './components/conversation-detail/conversation/conversation.component';
 import { MessageAttachmentComponent } from './components/message-attachment/message-attachment.component';
 import { PrechatFormComponent } from './components/prechat-form/prechat-form.component';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { PreviewLoadingFilesComponent } from './components/preview-loading-files/preview-loading-files.component';
 import { MenuOptionsComponent } from './components/menu-options/menu-options.component';
-import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { LastMessageComponent } from './components/last-message/last-message.component';
 
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { MarkedPipe } from './directives/marked.pipe';
-import { ActivatedRoute, RouterModule } from '@angular/router';
 
-import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
+// ___________ CONVERSATIONS LIST ______________//
+import { ListAllConversationsComponent } from './components/list-all-conversations/list-all-conversations.component';
 import { ListConversationsComponent } from './components/list-conversations/list-conversations.component';
-import { MessageTextAreaComponent } from './components/conversation-detail/conversation-footer/message-text-area/message-text-area.component';
+
+// ___________ CONVERSATIONS ELEMENT ______________//
+import { ConversationComponent } from './components/conversation-detail/conversation/conversation.component';
 import { ConversationHeaderComponent } from './components/conversation-detail/conversation-header/conversation-header.component';
-import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
-
-
-
-
-
 import { ConversationContentComponent } from './components/conversation-detail/conversation-content/conversation-content.component';
+import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
 import { BubbleMessageComponent } from './components/message/bubble-message/bubble-message.component';
 import { TextComponent } from './components/message/text/text.component';
 import { ImageComponent } from './components/message/image/image.component';
@@ -137,16 +131,16 @@ import { MQTTConversationHandlerBuilderService } from '../chat21-core/providers/
 import { MQTTTypingService } from '../chat21-core/providers/mqtt/mqtt-typing.service';
 import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence.service';
 
+//UPLOAD SERVICE
+import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
+
 //LOGGER SERVICES
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
-
 //APP_STORAGE
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
-import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
-
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -185,6 +179,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 };
 
 export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
+  console.log('AUTH FACTORY - app.module')
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
     
@@ -313,7 +308,6 @@ export function loggerFactory() {
     ListConversationsComponent,
     ConversationHeaderComponent,
     UserTypingComponent,
-    MessageTextAreaComponent,
     ConversationFooterComponent,
     ConversationContentComponent,
     BubbleMessageComponent,

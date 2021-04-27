@@ -1,6 +1,6 @@
 {
     "chatEngine": "${CHAT21_ENGINE}",
-    "updateEngine": "${UPDATE_ENGINE}",
+    "uploadEngine": "${UPLOAD_ENGINE}",
     "remoteTranslationsUrl": "${TRANSLATE_URL}",
     "firebaseConfig": {
         "apiKey": "${FIREBASE_APIKEY}",
