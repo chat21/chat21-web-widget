@@ -15,7 +15,7 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
 import { getImageUrlThumbFromFirebasestorage, avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid } from '../../utils/utils';
-import { ImageRepoService } from '../abstract/image-repo.service';
+// import { ImageRepoService } from '../abstract/image-repo.service';
 // import { ConsoleReporter } from 'jasmine';
 
 // @Injectable({ providedIn: 'root' })
@@ -126,33 +126,32 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     /**
      * connecting to conversations
      */
-    connect() {
-        console.log('connecting MQTT conversations handler');
-        const handlerConversationAdded = this.chat21Service.chatClient.onConversationAdded( (conv) => {
-            console.log('conversation added:', conv.text);
-            this.added(conv);
-        });
-        const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv) => {
-            console.log('conversation updated:', conv.text);
-            this.changed(conv);
-        });
-        const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv) => {
-            console.log('conversation deleted:', conv.text);
-            this.removed(conv);
-        });
-        this.chat21Service.chatClient.lastConversations( (err, conversations) => {
-            console.log('Last conversations', conversations, 'err', err);
-            if (!err) {
-                conversations.forEach(conv => {
-                    this.added(conv);
-                });
-            }
-        });
-        // SET AUDIO
-        this.audio = new Audio();
-        this.audio.src = URL_SOUND;
-        this.audio.load();
-    }
+    // connect() {
+    //     console.log('connecting MQTT conversations handler');
+    //     const handlerConversationAdded = this.chat21Service.chatClient.onConversationAdded( (conv) => {
+    //         console.log('conversation added:', conv.text);
+    //         this.added(conv);
+    //     });
+    //     const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv) => {
+    //         console.log('conversation updated:', conv.text);
+    //         this.changed(conv);
+    //     });
+    //     const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv) => {
+    //         console.log('conversation deleted:', conv.text);
+    //         this.removed(conv);
+    //     });
+    //     this.chat21Service.chatClient.lastConversations( (err, conversations) => {
+    //         console.log('Last conversations', conversations, 'err', err);
+    //         if (!err) {
+    //             conversations.forEach(conv => {
+    //                 this.added(conv);
+    //             });
+    //         }
+    //     });
+    //     // SET AUDIO
+    //     this.audio = new Audio();
+    //     this.audio.src = URL_SOUND;
+    //     this.audio.load();
 
 
     // ---------------------------------------------------------------------------------

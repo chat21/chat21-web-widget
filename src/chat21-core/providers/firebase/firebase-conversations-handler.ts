@@ -87,26 +87,26 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * creo la reference
      * mi sottoscrivo a change, removed, added
      */
-    connect() {
-        const that = this;
-        const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
-        this.logger.printDebug('connect -------> conversations::ACTIVE', urlNodeFirebase)
-        this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
-        this.ref.on('child_changed', (childSnapshot) => {
-            that.changed(childSnapshot);
-        });
-        this.ref.on('child_removed', (childSnapshot) => {
-            that.removed(childSnapshot);
-        });
-        this.ref.on('child_added', (childSnapshot) => {
-            that.added(childSnapshot);
-        });
-        // SET AUDIO
-        // this.audio = new Audio();
-        // this.audio.src = URL_SOUND;
-        // this.audio.load();
+    // connect() {
+    //     const that = this;
+    //     const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
+    //     this.logger.printDebug('connect -------> conversations::ACTIVE', urlNodeFirebase)
+    //     this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
+    //     this.ref.on('child_changed', (childSnapshot) => {
+    //         that.changed(childSnapshot);
+    //     });
+    //     this.ref.on('child_removed', (childSnapshot) => {
+    //         that.removed(childSnapshot);
+    //     });
+    //     this.ref.on('child_added', (childSnapshot) => {
+    //         that.added(childSnapshot);
+    //     });
+    //     // SET AUDIO
+    //     // this.audio = new Audio();
+    //     // this.audio.src = URL_SOUND;
+    //     // this.audio.load();
         
-    }
+    // }
 
     // ---------------------------------------------------------------------------------
      // New connect - renamed subscribeToConversation
@@ -130,7 +130,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
         setTimeout(() => {
             callback() 
-          }, 2000);
+        }, 2000);
         // SET AUDIO
         // this.audio = new Audio();
         // this.audio.src = URL_SOUND;

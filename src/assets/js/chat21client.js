@@ -15,6 +15,8 @@ const CALLBACK_TYPE_ON_MESSAGE_ADDED_FOR_CONVERSATION = "onMessageAddedForConver
 class Chat21Client {
     
     constructor(options) {
+
+        console.log('CHAT21-CLIENT.JS  HELLO ', mqtt)
         this.client = null;
         this.reconnections = 0 // just to check how many reconnections
         this.client_id = Date.now();
@@ -233,6 +235,7 @@ class Chat21Client {
     }
 
     onMessageAdded(callback) {
+        console.log("onMessageAdded(callback)")
         this.last_handler++
         this.onMessageAddedCallbacks.set(this.last_handler, callback)
         return this.last_handler;
@@ -326,7 +329,7 @@ class Chat21Client {
                     if (topic.includes("/conversations/") && topic.endsWith(_CLIENTUPDATED)) {
                         // map.forEach((value, key, map) =>)
                         this.onConversationUpdatedCallbacks.forEach((callback, handler, map) => {
-                            callback(message_json, _topic)
+                            callback(JSON.parse(message.toString()), _topic)
                         });
                     }
                 }
@@ -335,38 +338,45 @@ class Chat21Client {
                     if (topic.includes("/conversations/") && topic.endsWith(_CLIENTDELETED)) {
                         // map.forEach((value, key, map) =>)
                         this.onConversationDeletedCallbacks.forEach((callback, handler, map) => {
-                            callback(message_json, _topic)
+                            callback(JSON.parse(message.toString()), _topic)
                         });
                     }
                 }
 
-                if (this.onMessageAddedCallbacks) {
-                    if (topic.includes("/messages/") && topic.endsWith(_CLIENTADDED)) {
+                // *********************************************************
+                // This snippet is important to get all messages and notify
+                // conversation > added (to create a conversation entry)
+                // *********************************************************
+                // if (this.onMessageAddedCallbacks) {
+                //     console.log("ttttttttt")
+                if (topic.includes("/messages/") && topic.endsWith(_CLIENTADDED)) {
+                    if (this.onMessageAddedCallbacks) {
                         this.onMessageAddedCallbacks.forEach((callback, handler, map) => {
-                            callback(message_json, _topic)
+                            callback(JSON.parse(message.toString()), _topic)
                         });
-                        // Observing conversations added from messages
-                        console.log("Observing conversations added from messages", message_json);
-                        if (this.onConversationAddedCallbacks) {
-                            console.log("callbacks ok........");
-                            let update_conversation = true;
-                            if (message_json.attributes && message_json.attributes.updateconversation == false) {
-                              update_conversation = false
-                            }
-                            console.log("update_conversation........", update_conversation);
-                            if (update_conversation) {
-                                this.onConversationAddedCallbacks.forEach((callback, handler, map) => {
-                                    callback(message_json, _topic)
-                                });
-                            }
-                        }
                     }
+                    // Observing conversations added from messages
+                    // console.log("Observing conversations added from messages", message_json);
+                    // if (this.onConversationAddedCallbacks) {
+                    // console.log("callbacks ok........");
+                    let update_conversation = true;
+                    if (message_json.attributes && message_json.attributes.updateconversation == false) {
+                        update_conversation = false
+                    }
+                    console.log("update_conversation........", update_conversation);
+                    if (update_conversation && this.onConversationAddedCallbacks) {
+                        this.onConversationAddedCallbacks.forEach((callback, handler, map) => {
+                            callback(JSON.parse(message.toString()), _topic)
+                        });
+                    }
+                    // }
                 }
+                // }
 
                 if (this.onMessageUpdatedCallbacks) {
                     if (topic.includes("/messages/") && topic.endsWith(_CLIENTUPDATED)) {
                         this.onMessageUpdatedCallbacks.forEach((callback, handler, map) => {
-                            callback(message_json, _topic)
+                            callback(JSON.parse(message.toString()), _topic)
                         });
                     }
                 }
@@ -374,7 +384,7 @@ class Chat21Client {
                 if (this.onGroupUpdatedCallbacks) {
                     if (topic.includes("/groups/") && topic.endsWith(_CLIENTUPDATED)) {
                         this.onGroupUpdatedCallbacks.forEach((callback, handler, map) => {
-                            callback(message_json, _topic)
+                            callback(JSON.parse(message.toString()), _topic)
                         });
                     }
                 }
@@ -393,7 +403,7 @@ class Chat21Client {
                         if (type === CALLBACK_TYPE_ON_MESSAGE_ADDED_FOR_CONVERSATION) {
                             if (conversWith === callback_obj.conversWith) {
                                 console.log("/messages/_CLIENTADDED on: ", conversWith)
-                                callback_obj.callback(message_json, _topic)
+                                callback_obj.callback(JSON.parse(message.toString()), _topic)
                             }
                         }
                     }
@@ -402,7 +412,7 @@ class Chat21Client {
                         if (type === CALLBACK_TYPE_ON_MESSAGE_UPDATED_FOR_CONVERSATION) {
                             if (conversWith === callback_obj.conversWith) {
                                 console.log("/messages/_CLIENTUPDATED on: ", conversWith)
-                                callback_obj.callback(message_json, _topic)
+                                callback_obj.callback(JSON.parse(message.toString()), _topic)
                             }
                         }
                     }
@@ -488,6 +498,29 @@ class Chat21Client {
         xmlhttp.send(null);
     }
 
+    conversationDetail(conversWith, callback) {
+        // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations/CONVERS_WITH
+        const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/conversations/${conversWith}`
+        console.log("getting conversation detail:", URL)
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", URL, true);
+        xmlhttp.setRequestHeader("authorization", this.jwt);
+        xmlhttp.onreadystatechange = function() {
+            console.log("onreadystatechange!")
+            if (callback && xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText) {
+                try {
+                    const json = JSON.parse(xmlhttp.responseText);
+                    callback(null, json.result);
+                }
+                catch (err) {
+                    console.log("parsing json ERROR", err);
+                    callback(err, null);
+                }
+            }
+        };
+        xmlhttp.send(null);
+    }
+
     getGroup(group_id, callback) {
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
         const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}`
@@ -514,7 +547,7 @@ class Chat21Client {
         // console.log("START: ", this.user_id)
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
         const URL = this.APIendpoint + "/" + this.appid + "/" + this.user_id + "/conversations/" + convers_with + "/messages"
-        // console.log("getting last messages", URL)
+        console.log("getting last messages", URL, this.jwt)
         // console.log("END")
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, true);

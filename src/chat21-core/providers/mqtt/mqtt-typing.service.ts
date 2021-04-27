@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 
-// firebase
-import * as firebase from 'firebase/app';
-import 'firebase/messaging';
-import 'firebase/database';
-
 // services
 import { TypingService } from '../abstract/typing.service';
-
 
 export class TypingModel {
   constructor(
@@ -34,6 +28,7 @@ export class MQTTTypingService extends TypingService {
 
   /** */
   initialize() {
+    console.log('FirebaseTypingService', this.tenant);
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 

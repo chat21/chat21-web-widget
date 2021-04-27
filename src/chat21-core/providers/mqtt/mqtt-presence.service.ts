@@ -10,6 +10,9 @@ import 'firebase/database';
 // import { EventsService } from '../events-service';
 import { PresenceService } from '../abstract/presence.service';
 
+// utils
+import { setLastDate } from '../../utils/utils';
+import { environment } from '../../../environments/environment';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -28,6 +31,7 @@ export class MQTTPresenceService extends PresenceService {
   }
 
   initialize() {
+    console.log('FirebasePresenceService', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 

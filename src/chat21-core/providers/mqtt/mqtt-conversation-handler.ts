@@ -26,6 +26,7 @@ import {
   conversationMessagesRef
 } from '../../utils/utils';
 
+
 // @Injectable({ providedIn: 'root' })
 @Injectable()
 export class MQTTConversationHandler extends ConversationHandlerService {
@@ -189,7 +190,6 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         channelType: string,
         attributes: any
     ) {
-        console.log("attributes:::", attributes)
         const that = this;
         if (!channelType || channelType === 'undefined') {
             channelType = TYPE_DIRECT;
@@ -199,14 +199,16 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         const language = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
         const recipientId = conversationWith;
-        attributes.lang = language;
         this.chat21Service.chatClient.sendMessage(
             msg,
             typeMsg,
             recipientId,
             recipientFullname,
             senderFullname,
-            attributes,
+            {
+                lang: language,
+                attributes: attributes
+            },
             // attributes: attributes? TODO
             metadataMsg,
             channelType,
