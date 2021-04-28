@@ -307,7 +307,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
           recipientFullname += ' - ' + widgetTitle;
         }
-
+        console.log('messageeeeeeeee', attributes, this.attributes, additional_attributes)
         const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,

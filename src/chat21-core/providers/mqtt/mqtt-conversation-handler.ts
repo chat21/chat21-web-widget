@@ -87,7 +87,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         this.CLIENT_BROWSER = navigator.userAgent;
         this.conversationWith = recipientId;
         this.messages = [];
-        this.attributes = this.setAttributes();
+        // this.attributes = this.setAttributes();
     }
 
     /**
@@ -199,17 +199,14 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         const language = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
         const recipientId = conversationWith;
+        attributes.lang = language;
         this.chat21Service.chatClient.sendMessage(
             msg,
             typeMsg,
             recipientId,
             recipientFullname,
             senderFullname,
-            {
-                lang: language,
-                attributes: attributes
-            },
-            // attributes: attributes? TODO
+            attributes,
             metadataMsg,
             channelType,
             // language,
@@ -255,20 +252,20 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     // BEGIN PRIVATE FUNCTIONS
     // ---------------------------------------------------------- //
     /** */
-    private setAttributes(): any {
-        let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
-        if (!attributes || attributes === 'undefined') {
-            attributes = {
-                client: this.CLIENT_BROWSER,
-                sourcePage: location.href,
-                userEmail: this.loggedUser.email,
-                userFullname: this.loggedUser.fullname
-            };
-            console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
-            sessionStorage.setItem('attributes', JSON.stringify(attributes));
-        }
-        return attributes;
-    }
+    // private setAttributes(): any {
+    //     let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
+    //     if (!attributes || attributes === 'undefined') {
+    //         attributes = {
+    //             client: this.CLIENT_BROWSER,
+    //             sourcePage: location.href,
+    //             userEmail: this.loggedUser.email,
+    //             userFullname: this.loggedUser.fullname
+    //         };
+    //         console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
+    //         sessionStorage.setItem('attributes', JSON.stringify(attributes));
+    //     }
+    //     return attributes;
+    // }
 
     /** */
     private addedMessage(messageSnapshot: any) {

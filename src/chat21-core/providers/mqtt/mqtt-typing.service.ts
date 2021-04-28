@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 
+// firebase
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import 'firebase/database';
+
 // services
+// import { EventsService } from './abstract/events-service';
+import { PresenceService } from '../abstract/presence.service';
+
+// utils
+import { setLastDate } from '../../utils/utils';
+import { environment } from '../../../environments/environment';
 import { TypingService } from '../abstract/typing.service';
 
 export class TypingModel {

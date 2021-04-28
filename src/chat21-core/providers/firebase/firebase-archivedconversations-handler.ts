@@ -82,10 +82,30 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
      * creo la reference
      * mi sottoscrivo a change, removed, added
      */
-    connect() {
+    // connect() {
+    //     const that = this;
+    //     const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId);
+    //     this.logger.printDebug('connect -------> conversations::ARCHIVED', urlNodeFirebase)
+    //     this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
+    //     this.ref.on('child_changed', (childSnapshot) => {
+    //         that.changed(childSnapshot);
+    //     });
+    //     this.ref.on('child_removed', (childSnapshot) => {
+    //         that.removed(childSnapshot);
+    //     });
+    //     this.ref.on('child_added', (childSnapshot) => {
+    //         that.added(childSnapshot);
+    //     });
+        
+    // }
+
+     // ---------------------------------------------------------------------------------
+     // New connect - renamed subscribeToConversation
+     //----------------------------------------------------------------------------------
+     subscribeToConversations(callback: any) {
         const that = this;
         const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId);
-        this.logger.printDebug('connect -------> conversations::ARCHIVED', urlNodeFirebase)
+        this.logger.printDebug('SubscribeToConversations (firebase-convs-handler) - conversations::ARCHIVED urlNodeFirebase', urlNodeFirebase)
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -96,7 +116,17 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         this.ref.on('child_added', (childSnapshot) => {
             that.added(childSnapshot);
         });
-        
+
+        console.log('SubscribeToConversations (firebase-convs-handler) - archivedConversations' , that.archivedConversations )
+
+        setTimeout(() => {
+            callback() 
+          }, 2000);
+        // SET AUDIO
+        // this.audio = new Audio();
+        // this.audio.src = URL_SOUND;
+        // this.audio.load();
+
     }
 
     /**

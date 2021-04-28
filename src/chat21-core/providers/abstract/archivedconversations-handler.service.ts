@@ -21,7 +21,8 @@ export abstract class ArchivedConversationsHandlerService {
 
   // functions
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;
-  abstract connect(): void;
+  // abstract connect(): void;
+  abstract subscribeToConversations(callback: any): void;
   abstract countIsNew(): number;
   abstract setConversationRead(conversation: ConversationModel)
   abstract dispose(): void;
