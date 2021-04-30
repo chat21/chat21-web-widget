@@ -599,8 +599,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     recipientIdTEMP = this.appStorageService.getItem(senderId);
     if (!recipientIdTEMP) {
       // questa deve essere sincrona!!!!
-      recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4();
-      console.log('recipitent', recipientIdTEMP )
+      // recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4(); >>>>>OLD 
+      recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + this.g.projectid + uuidv4();
+      console.log('recipitent', recipientIdTEMP)
       //recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
     }
     return recipientIdTEMP;
