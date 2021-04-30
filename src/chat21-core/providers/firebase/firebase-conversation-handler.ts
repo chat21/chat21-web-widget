@@ -313,10 +313,11 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
                 this.translateInfoSupportMessages(msg);
             }
         }
-        if (msg.attributes && msg.attributes.projectId) {
-            this.attributes.projectId = msg.attributes.projectId;
-            // sessionStorage.setItem('attributes', JSON.stringify(attributes));
-        }
+         /// commented because NOW ATTRIBUTES COMES FROM OUTSIDE 
+        // if (msg.attributes && msg.attributes.projectId) {
+        //     this.attributes.projectId = msg.attributes.projectId;
+        //     // sessionStorage.setItem('attributes', JSON.stringify(attributes));
+        // }
         return msg;
     }
 

@@ -3,7 +3,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { UserModel } from '../../src/chat21-core/models/user';
 
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation, HostListener } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -158,6 +158,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initWidgetParamiters();  
     }
 
+    // @HostListener('document:visibilitychange', ['$event'])
+    // visibilitychange() {
+    //     console.log("document TITLE", document.title);
+    //     if (document.hidden) { 
+    //         console.log("document is hidden");
+    //         document.title = "HIDDEN"
+    //     }else{
+    //         console.log("document is showing");
+    //         document.title = "SHOWING"
+    //     }
+    // }
+          
     /** */
     ngAfterViewInit() {
         // this.triggerOnViewInit();
