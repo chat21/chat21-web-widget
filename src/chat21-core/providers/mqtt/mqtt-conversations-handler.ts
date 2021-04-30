@@ -101,11 +101,15 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     }
 
     setConversationRead(conversationrecipient): void {
-        // const urlUpdate = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
-        // const update = {};
-        // console.log('connect -------> conversations update', urlUpdate);
-        // update['/is_new'] = false;
-        // firebase.database().ref(urlUpdate).update(update);
+        console.log("setConversationRead...")
+        this.chat21Service.chatClient.updateConversationIsNew(conversationrecipient, false, (err) => {
+            if (err) {
+                console.error("setConversationRead: false. An error occurred", err);
+            }
+            else {
+                console.log("setConversationRead: false. Ok");
+            }
+        });
     }
 
     /**
@@ -164,11 +168,11 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
                 this.added(conv);
             });
             const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv) => {
-                console.log('conversation updated:', conv.text);
+                console.log('conversation updated:', conv.last_message_text);
                 this.changed(conv);
             });
             const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv) => {
-                console.log('conversation deleted:', conv.text);
+                console.log('conversation deleted:', conv.last_message_text);
                 this.removed(conv);
             });
             this.chat21Service.chatClient.lastConversations( false, (err, conversations) => {
@@ -283,29 +287,52 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      * 7 -  attivo sound se è un msg nuovo
      */
     private changed(childSnapshot: any) {
-        const childData: ConversationModel = childSnapshot.val();
-        childData.uid = childSnapshot.key;
-        console.log('changed conversation: ', childData);
-        const conversation = this.completeConversation(childData);
-        if (this.isValidConversation(conversation)) {
-            this.setClosingConversation(childSnapshot.key, false);
-            const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
-            if (index > -1) {
-                this.conversations.splice(index, 1, conversation);
-            }
-            // this.databaseProvider.setConversation(conversation);
-            this.conversations.sort(compareValues('timestamp', 'desc'));
-            this.conversationChanged.next(conversation);
-            // this.events.publish('conversationsChanged', this.conversations);
-            this.conversationChanged.next(conversation);
-        } else {
-            console.error('ChatConversationsHandler::changed::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+        // const childData: ConversationModel = childSnapshot;
+        // childData.uid = childSnapshot.key;
+        // console.log('changed conversation: ', childData);
+        // const conversation = this.completeConversation(childData);
+        console.log("Conversation changed:", childSnapshot)
+        childSnapshot.uid = childSnapshot.conversWith;
+        // let conversation = this.completeConversation(childSnapshot);
+        // console.log("Conversation completed:", conversation);
+        // conversation.uid = conversation.conversation_with;
+        // console.log("conversation.uid" + conversation.uid)
+        // console.log("conversation.uid", conversation.uid)
+        // if (this.isValidConversation(conversation)) {
+        this.setClosingConversation(childSnapshot.uid, false);
+        const index = searchIndexInArrayForUid(this.conversations, childSnapshot.uid);
+        if (index > -1) {
+            const conversation = this.conversations[index];
+            console.log("Conversation to update found", conversation);
+            this.updateConversationWithSnapshot(this.conversations[index], childSnapshot);
+            // this.conversations.sort(compareValues('timestamp', 'desc'));
+            // this.conversationChanged.next(conversation);
+            // this.conversations.splice(index, 1, conversation');
         }
-        if (conversation.is_new) {
-            this.soundMessage();
-        }
+        // this.databaseProvider.setConversation(conversation);
+        // this.conversations.sort(compareValues('timestamp', 'desc'));
+        // this.conversationChanged.next(conversation);
+        // this.events.publish('conversationsChanged', this.conversations);
+        // this.conversationChanged.next(conversation);
+        // } else {
+        //     console.error('ChatConversationsHandler::changed::conversations with conversationId: ', childSnapshot.key, 'is not valid');
+        // }
+        // if (conversation.is_new) {
+        //     this.soundMessage();
+        // }
     }
 
+    private updateConversationWithSnapshot(conv: ConversationModel, snap: any) {
+        console.log("updating conv", conv, "with snap", snap)
+        console.log("print snap keys/values")
+        Object.keys(snap).forEach(k => {
+            console.log("key:" + k);
+            if (k === 'is_new') {
+                const value = snap[k];
+                conv.is_new = snap[k]; //(value == 'true' ? true : false);
+            }
+        })
+    }
     /**
      * 1 -  cerco indice conversazione da eliminare
      * 2 -  elimino conversazione da array conversations
@@ -343,13 +370,9 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      * dispose reference di conversations
      */
     dispose() {
+        this.conversations.length = 0;
         this.conversations = [];
         this.uidConvSelected = '';
-        // this.ref.off();
-        // this.ref.off("child_changed");
-        // this.ref.off("child_removed");
-        // this.ref.off("child_added");
-        // console.log('DISPOSE::: ', this.ref);
     }
 
     getClosingConversation(conversationId: string) {
@@ -658,7 +681,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     private isValidConversation(convToCheck: ConversationModel) : boolean {
         //console.log("[BEGIN] ChatConversationsHandler:: convToCheck with uid: ", convToCheckId);
         console.log("checking uid of", convToCheck)
-        console.log("uid is:", convToCheck.uid)
+        console.log("conversation.uid", convToCheck.uid)
         console.log("channel_type is:", convToCheck.channel_type)
         
         if (!this.isValidField(convToCheck.uid)) {

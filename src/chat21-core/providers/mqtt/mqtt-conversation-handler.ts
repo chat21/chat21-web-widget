@@ -279,9 +279,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             msg.headerDate = headerDate;
         }
         console.log('adding message:' + JSON.stringify(msg));
-        console.log('childSnapshot.message_id:' + msg.message_id);
-        console.log('childSnapshot.key:' + msg.key);
-        console.log('childSnapshot.uid:' + msg.uid);
+        // console.log('childSnapshot.message_id:' + msg.message_id);
+        // console.log('childSnapshot.key:' + msg.key);
+        // console.log('childSnapshot.uid:' + msg.uid);
         this.addReplaceMessageInArray(msg.uid, msg);
         this.updateMessageStatusReceived(msg);
         this.messageAdded.next(msg);
