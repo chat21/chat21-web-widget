@@ -1707,7 +1707,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     generateNewUidConversation() {
         this.g.wdLog(['generateUidConversation **************: senderId= ', this.g.senderId]);
-        return UID_SUPPORT_GROUP_MESSAGES + this.g.projectid + uuidv4();
+        return UID_SUPPORT_GROUP_MESSAGES + this.g.projectid + '-' + uuidv4();
         // return UID_SUPPORT_GROUP_MESSAGES + uuidv4(); >>>>>OLD 
     }
 

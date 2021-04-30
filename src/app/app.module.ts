@@ -383,7 +383,7 @@ export function loggerFactory() {
     {
       provide: ConversationHandlerService,
       useFactory: conversationHandlerFactory,
-      deps: [AppConfigService]
+      deps: [Chat21Service, AppConfigService]
     },
     {
       provide: TypingService,
