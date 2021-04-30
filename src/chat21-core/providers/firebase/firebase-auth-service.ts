@@ -412,7 +412,7 @@ export class FirebaseAuthService extends AuthService {
     }
     this.currentUser = member;
     // salvo nel local storage e sollevo l'evento
-    this.appStorage.setItem('currentUser', this.tiledeskToken);
+    this.appStorage.setItem('currentUser', JSON.stringify(this.currentUser));
     // localStorage.setItem(this.storagePrefix + 'currentUser', JSON.stringify(this.currentUser));
     // this.BScurrentUser.next(this.currentUser);
   }
