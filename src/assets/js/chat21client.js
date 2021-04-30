@@ -53,31 +53,19 @@ class Chat21Client {
         this.last_handler = 0;
         
         // this.onMessageCallbacks = new Map();
-        this.onConnectCallbacks = new Map();
+        // this.onConnectCallbacks = new Map();
         
         this.onConversationAddedCallbacks = new Map();
         this.onConversationUpdatedCallbacks = new Map();
         this.onConversationDeletedCallbacks = new Map();
+        this.onArchivedConversationAddedCallbacks = new Map();
+        this.onArchivedConversationDeletedCallbacks = new Map();
         this.onMessageAddedCallbacks = new Map();
         this.onMessageUpdatedCallbacks = new Map();
-        // this.onMessageAddedInConversationCallbacks = new Map();
-        // this.onMessageUpdatedInConversationCallbacks = new Map();
         this.onGroupUpdatedCallbacks = new Map();
-
         this.callbackHandlers = new Map();
-        // key: handler_id
-        // value: {
-        //     "type": "messageAddedInConversation",
-        //     "conversWith": "ID",
-        //     "callback": callback
-        // }
-        // key: conversWith
-        // value: {
-        //     "handler_id": true
-        // }
-
-        this.on_message_handler = null
-        this.on_connect_handler = null
+        this.on_message_handler = null;
+        this.topic_inbox = null;
         this.connected = false
     }
 
@@ -234,6 +222,18 @@ class Chat21Client {
         return this.last_handler;
     }
 
+    onArchivedConversationAdded(callback) {
+        this.last_handler++
+        this.onArchivedConversationAddedCallbacks.set(this.last_handler, callback)
+        return this.last_handler;
+    }
+
+    onArchivedConversationDeleted(callback) {
+        this.last_handler++
+        this.onArchivedConversationDeletedCallbacks.set(this.last_handler, callback)
+        return this.last_handler;
+    }
+
     onMessageAdded(callback) {
         console.log("onMessageAdded(callback)")
         this.last_handler++
@@ -314,7 +314,7 @@ class Chat21Client {
                 const message_json = JSON.parse(message.toString())
                 
 
-                // TEMPORARILY DISABLED, CONVERSATIONS OBSERVED BY NEW MESSAGES.
+                // TEMPORARILY DISABLED, ADDED-CONVERSATIONS ARE OBSERVED BY NEW MESSAGES.
                 // MOVED TO: this.onMessageAddedCallbacks
                 // if (this.onConversationAddedCallbacks) {
                 //     if (topic.includes("/conversations/") && topic.endsWith(_CLIENTADDED)) {
@@ -327,6 +327,7 @@ class Chat21Client {
 
                 if (this.onConversationUpdatedCallbacks) {
                     if (topic.includes("/conversations/") && topic.endsWith(_CLIENTUPDATED)) {
+                        console.log("conversation updated! /conversations/, topic:", topic)
                         // map.forEach((value, key, map) =>)
                         this.onConversationUpdatedCallbacks.forEach((callback, handler, map) => {
                             callback(JSON.parse(message.toString()), _topic)
@@ -338,6 +339,24 @@ class Chat21Client {
                     if (topic.includes("/conversations/") && topic.endsWith(_CLIENTDELETED)) {
                         // map.forEach((value, key, map) =>)
                         this.onConversationDeletedCallbacks.forEach((callback, handler, map) => {
+                            callback(JSON.parse(message.toString()), _topic)
+                        });
+                    }
+                }
+
+                if (this.onArchivedConversationAddedCallbacks) {
+                    if (topic.includes("/archived_conversations/") && topic.endsWith(_CLIENTADDED)) {
+                        // map.forEach((value, key, map) =>)
+                        this.onArchivedConversationAddedCallbacks.forEach((callback, handler, map) => {
+                            callback(JSON.parse(message.toString()), _topic)
+                        });
+                    }
+                }
+
+                if (this.onArchivedConversationDeletedCallbacks) {
+                    if (topic.includes("/archived_conversations/") && topic.endsWith(_CLIENTDELETED)) {
+                        // map.forEach((value, key, map) =>)
+                        this.onArchivedConversationDeletedCallbacks.forEach((callback, handler, map) => {
                             callback(JSON.parse(message.toString()), _topic)
                         });
                     }
@@ -366,7 +385,9 @@ class Chat21Client {
                     console.log("update_conversation........", update_conversation);
                     if (update_conversation && this.onConversationAddedCallbacks) {
                         this.onConversationAddedCallbacks.forEach((callback, handler, map) => {
-                            callback(JSON.parse(message.toString()), _topic)
+                            message_json.is_new = true;
+                            const message_for_conv_string = JSON.stringify(message_json);
+                            callback(JSON.parse(message_for_conv_string), _topic)
                         });
                     }
                     // }
@@ -475,10 +496,11 @@ class Chat21Client {
         xmlhttp.send(null);
     }
 
-    lastConversations(callback) {
+    lastConversations(archived, callback) {
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
-        const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/conversations`
-        console.log("getting last convs...", URL)
+        const archived_url_part = archived ? '/archived' : '';
+        const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/conversations` + archived_url_part;
+        console.log("getting last convs...", URL);
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, true);
         xmlhttp.setRequestHeader("authorization", this.jwt);
@@ -547,7 +569,7 @@ class Chat21Client {
         // console.log("START: ", this.user_id)
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
         const URL = this.APIendpoint + "/" + this.appid + "/" + this.user_id + "/conversations/" + convers_with + "/messages"
-        console.log("getting last messages", URL, this.jwt)
+        // console.log("getting last messages", URL)
         // console.log("END")
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, true);
@@ -594,7 +616,7 @@ class Chat21Client {
                 qos: 1,
                 retain: true
             },
-            username: 'JWT',
+            username: 'WT',
             password: jwt,
             rejectUnauthorized: false
         }
@@ -613,6 +635,52 @@ class Chat21Client {
                 }
             }
         );
+        this.client.on('reconnect',
+            () => {
+                console.log("chat client reconnect event");
+            }
+        );
+        this.client.on('close',
+            () => {
+                console.log("chat client close event");
+            }
+        );
+        this.client.on('offline',
+            () => {
+                console.log("chat client offline event");
+            }
+        );
+        this.client.on('error',
+            (error) => {
+                console.log("chat client error event", error);
+            }
+        );
+    }
+
+    close(callback) {
+        if (this.topic_inbox) {
+            this.client.unsubscribe(this.topic_inbox, (err)  => {
+                console.error("unsubscribed from", this.topic_inbox);
+                this.client.end(() => {
+                    this.connected = false
+                    // reset all subscriptions
+                    this.onConversationAddedCallbacks = new Map();
+                    this.onConversationUpdatedCallbacks = new Map();
+                    this.onConversationDeletedCallbacks = new Map();
+                    this.onArchivedConversationAddedCallbacks = new Map();
+                    this.onArchivedConversationDeletedCallbacks = new Map();
+                    this.onMessageAddedCallbacks = new Map();
+                    this.onMessageUpdatedCallbacks = new Map();
+                    this.onGroupUpdatedCallbacks = new Map();
+                    this.callbackHandlers = new Map();
+                    this.on_message_handler = null
+                    this.topic_inbox = null;
+                    if (callback) {
+                        callback();
+                    }
+                })
+            });
+        }
     }
 }
 
