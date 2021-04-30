@@ -1,3 +1,4 @@
+import { MQTTImageRepoService } from './../chat21-core/providers/mqtt/mqtt-image-repo';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
@@ -141,6 +142,8 @@ import { LoggerService } from '../chat21-core/providers/abstract/logger.service'
 //APP_STORAGE
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
+import { MQTTArchivedConversationsHandler } from '../chat21-core/providers/mqtt/mqtt-archivedconversations-handler';
+import { MQTTConversationHandler } from '../chat21-core/providers/mqtt/mqtt-conversation-handler';
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -208,10 +211,10 @@ export function conversationsHandlerFactory(chat21Service: Chat21Service, httpCl
   }
 }
 
-export function archivedConversationsHandlerFactory(appConfig: AppConfigService) {
+export function archivedConversationsHandlerFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    return new FirebaseArchivedConversationsHandler();
+    return new MQTTArchivedConversationsHandler(chat21Service);
   } else {
     return new FirebaseArchivedConversationsHandler();
   }
@@ -226,10 +229,10 @@ export function conversationHandlerBuilderFactory(chat21Service: Chat21Service, 
   }
 }
 
-export function conversationHandlerFactory(appConfig: AppConfigService) {
+export function conversationHandlerFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    return new FirebaseConversationHandler(true);
+    return new MQTTConversationHandler(chat21Service);
   } else {
     return new FirebaseConversationHandler(true);
   }
@@ -256,10 +259,7 @@ export function presenceFactory(appConfig: AppConfigService) {
 export function imageRepoFactory(appConfig: AppConfigService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    const imageService = new FirebaseImageRepoService();
-    FirebaseInitService.initFirebase(config.firebaseConfig)
-    imageService.setImageBaseUrl(config.baseImageUrl)
-    return imageService
+    return new MQTTImageRepoService()
   } else {
     const imageService = new FirebaseImageRepoService();
     FirebaseInitService.initFirebase(config.firebaseConfig)
@@ -274,7 +274,6 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     const nativeUploadService = new NativeUploadService(http, appStorage)
     nativeUploadService.setBaseUrl(config.apiUrl)
     return nativeUploadService
-    // return new FirebaseUploadService();
   } else {
     return new FirebaseUploadService();
   }
@@ -374,7 +373,7 @@ export function loggerFactory() {
     {
       provide: ArchivedConversationsHandlerService,
       useFactory: archivedConversationsHandlerFactory,
-      deps: [AppConfigService]
+      deps: [Chat21Service, AppConfigService]
     },
     {
       provide: ConversationHandlerBuilderService,
