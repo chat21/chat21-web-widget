@@ -20,7 +20,7 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 // utils
 import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
-import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, archivedConversationsPathForUserId } from '../../utils/utils';
+import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup } from '../../utils/utils';
 import { ImageRepoService } from '../abstract/image-repo.service';
 import { FirebaseImageRepoService } from './firebase-image-repo';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -475,9 +475,10 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             conversation_with_fullname = conv.recipient_fullname;
             conv.sender_fullname = this.translationMap.get('YOU')
             // conv.last_message_text = LABEL_TU + conv.last_message_text;
-        } else if (conv.channel_type === TYPE_GROUP) {
+        } else if (isGroup(conv)) {
             conversation_with = conv.recipient;
-            conversation_with_fullname = conv.sender_fullname;
+            conversation_with_fullname = conv.recipient_fullname;
+            // conversation_with_fullname = conv.sender_fullname;
             // conv.last_message_text = conv.last_message_text;
         }
         conv.conversation_with_fullname = conversation_with_fullname;

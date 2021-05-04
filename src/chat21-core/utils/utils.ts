@@ -20,6 +20,7 @@ import {
   getImageUrlThumbFromFirebasestorage
  } from './utils-user';
 import { time } from 'console';
+import { ConversationModel } from '../models/conversation';
 /**
  * Shortest description  for phone and tablet
  * Nota: eseguendo un test su desktop in realtà lo switch avviene a 921px 767px
@@ -594,4 +595,11 @@ export function isJustRecived(startedAt, time) {
     return true;
   }
   return false;
+}
+
+export function isGroup(conv: ConversationModel) {
+  if (conv.uid.startsWith('group-') || conv.uid.startsWith('support-group')) {
+      return true
+  };
+  return false
 }
