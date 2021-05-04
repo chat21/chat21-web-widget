@@ -932,7 +932,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         } else {
           that.g.wdLog(['*A3-------']);
           that.messagesBadgeCount++;
-          // that.soundMessage(newMessage.timestamp);
+          that.soundMessage(msg.timestamp);
         }
       }
   }
@@ -1742,7 +1742,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //se sono alla fine (showBadgeScroollBottom === true) allora imposto messageBadgeCount a 0
     if(this.showBadgeScroollToBottom){
       this.messagesBadgeCount = 0;
-      //this.updateConversationBadge();
+      this.updateConversationBadge();
     }
     
   }
