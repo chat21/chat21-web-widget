@@ -139,11 +139,10 @@ export class TranslatorService {
         // I18N File loaded successfully, we can proceed
         // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
         console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
-        this._translate.use(browserLang);
         if (!data._body || data._body === undefined || data._body === '') {
           browserLang = defaultLanguage;
           this.g.lang = defaultLanguage;
-          // this._translate.use(defaultLanguage);
+          this._translate.use(defaultLanguage);
           // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
           this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((defaultdata) => {
             // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, defaultdata);
@@ -165,7 +164,7 @@ export class TranslatorService {
 
 
   private translateWithBrowserLang(body: any, lang: string) {
-    // this._translate.use(lang);
+    this._translate.use(lang);
     console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
     if (environment.loadRemoteTranslations) {
       const remote_translation_res = JSON.parse(body);
