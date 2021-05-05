@@ -18,7 +18,7 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 // utils
 import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
-import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId } from '../../utils/utils';
+import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup } from '../../utils/utils';
 import { ImageRepoService } from '../abstract/image-repo.service';
 import { FirebaseImageRepoService } from './firebase-image-repo';
 import { ArchivedConversationsHandlerService } from '../abstract/archivedconversations-handler.service';
@@ -372,9 +372,10 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             conversation_with_fullname = conv.recipient_fullname;
             conv.sender_fullname = this.translationMap.get('YOU')
             // conv.last_message_text = LABEL_TU + conv.last_message_text;
-        } else if (conv.channel_type === TYPE_GROUP) {
+        }  else if (isGroup(conv)) {
             conversation_with = conv.recipient;
-            conversation_with_fullname = conv.sender_fullname;
+            // conversation_with_fullname = conv.sender_fullname;
+            conversation_with_fullname = conv.recipient_fullname;
             // conv.last_message_text = conv.last_message_text;
         }
         
