@@ -598,7 +598,7 @@ export function isJustRecived(startedAt, time) {
 }
 
 export function isGroup(conv: ConversationModel) {
-  if (conv.recipient.startsWith('group-') || conv.recipient.startsWith('support-group')) {
+  if (conv && conv.recipient && (conv.recipient.startsWith('group-') || conv.recipient.startsWith('support-group'))) {
       return true
   };
   return false
