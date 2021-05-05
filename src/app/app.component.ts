@@ -190,7 +190,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
                             return;
                         }
-                        if (conversation.is_new) {
+                        if (conversation.is_new && !this.isOpenConversation) {
                             this.soundMessage();
                         }
                         
