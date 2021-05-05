@@ -1,14 +1,23 @@
-# chat21-web-widget ver 3.0
+# chat21-web-widget ver 5.0
+
+### 5.0.0-beta.3.0
+- bug-fix: startWith of undefined in utils in chat21-core
+- bug-fix: isInfo of undefined in utils-message in chat21-core
 
 ### 5.0.0-beta.2.9
-- added: uploadService to load file on storage
+- changed: enabled sound on New message and on conversationChanged
+- changed: uuid is now whitout '-' 
+- added: image icon if conv.type is image in list-conversations
 
 ### 5.0.0-beta.2.8
 - bug-fix: customToken from url
 - removed: headerDate from messageModel
 - bug-fix: set userFullname e userEmail parameter on signInAnonymously
 - bug-fix: set userFullname e userEmail parameter on prechatForm
-- added: uploadService (still not working)
+- added: uploadService, native-UploadService, groupsHandlerService, appStorageService
+- changed: uid for new conversation -> now is 'support-group-' + projectId + uuid()
+- updated: MQTT and FIREBASE services classes
+- removed: deleted sendMessage2 and references of AuthService2 
 
 ### 5.0.0-beta.2.7
 - bug-fix: scrollToButtom function undefined on badgeScroollToBottom in conversation component
@@ -34,7 +43,7 @@
 - change: if last message came from user, show 'YOU' label in list-conversations
 - added: info-message component for attributes.subtype message of type 'info/support'
 
-# chat21-web-widget ver 3.0
+# chat21-web-widget ver 4.0
 
 ### 4.0.90
 - bug-fix: save new conversation in local storage
