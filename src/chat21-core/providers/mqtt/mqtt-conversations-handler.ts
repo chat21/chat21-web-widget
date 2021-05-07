@@ -12,7 +12,7 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 // import { DatabaseProvider } from 'src/app/services/database';
 
 // utils
-import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
+import { TYPE_GROUP } from '../../utils/constants';
 import { getImageUrlThumbFromFirebasestorage, avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid } from '../../utils/utils';
 // import { ImageRepoService } from '../abstract/image-repo.service';

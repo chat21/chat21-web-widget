@@ -11,7 +11,7 @@ import { ConversationModel } from '../../models/conversation';
 import { ConversationsHandlerService } from '../abstract/conversations-handler.service';
 
 // utils
-import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
+import { TYPE_GROUP } from '../../utils/constants';
 import { getImageUrlThumbFromFirebasestorage, avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid } from '../../utils/utils';
 import { ArchivedConversationsHandlerService } from '../abstract/archivedconversations-handler.service';
@@ -345,11 +345,6 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
         this.archivedConversations = [];
         this.archivedConversations.length = 0;
         this.uidConvSelected = '';
-        // this.ref.off();
-        // this.ref.off("child_changed");
-        // this.ref.off("child_removed");
-        // this.ref.off("child_added");
-        // console.log('DISPOSE::: ', this.ref);
     }
 
     getClosingConversation(conversationId: string) {

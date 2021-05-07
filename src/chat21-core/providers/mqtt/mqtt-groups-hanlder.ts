@@ -62,17 +62,24 @@ export class MQTTGroupsHanlder extends GroupsHandlerService {
         return this.SgroupDetail
     }
 
-    leave(groupId: string, callback?: () => void): Promise<any> {
-        //throw new Error('Method not implemented.');
+    create(groupName: string, members: [string], callback?: (res: any, error: any) => void): Promise<any> {
+        // throw new Error('Method not implemented.');
         console.log('Method not implemented.');
         return;
     }
 
-    create(groupId: string, callback?: () => void): Promise<any> {
-        //throw new Error('Method not implemented.');
+    leave(groupId: string, callback?: (res: any, error: any) => void): Promise<any> {
+        // throw new Error('Method not implemented.');
         console.log('Method not implemented.');
         return;
     }
+
+    join(groupId: string, member: string, callback?: (res: any, error: any) => void) {
+        // throw new Error('Method not implemented.');
+        console.log('Method not implemented.');
+        return;
+    }
+
 
     dispose(): void {
         //throw new Error('Method not implemented.');
