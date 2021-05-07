@@ -62,7 +62,9 @@ export const CHAT_CLOSED = 'CHAT_CLOSED';
 export const MEMBER_JOINED_GROUP = 'MEMBER_JOINED_GROUP';
 
 // URLS
-export const URL_SOUND = 'assets/sounds/pling.mp3';
+// export const URL_SOUND = 'assets/sounds/pling.mp3';
+export const URL_SOUND_LIST_CONVERSATION = '/assets/sounds/pling.mp3';
+export const URL_SOUND_CONVERSATION_DETAIL = '/assets/sounds/justsaying.mp3';
 // export const CHAT_SEND_BY_EMAIL_LINK =
 // 'mailto:?subject=Transcript Chat Conversation&body=Salve,%0D%0A%0D%0Adi
 // seguito potrà scaricare il transcript della conversazione intercorsa con il nostro servizio di
