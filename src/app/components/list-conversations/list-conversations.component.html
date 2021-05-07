@@ -22,7 +22,7 @@
             </div>
             <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div>
           </div>
-          <div *ngIf="conversation.type !=='image'" [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div>
+          <div *ngIf="conversation.type !=='image'" [class.not-read]="conversation.is_new" [class.archived]="conversation.archived" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div>
         </div>
         <div *ngIf="conversation.is_new" [ngStyle] = "{ 'background-color': styleMap.get('themeColor') }" class="c21-divBudge">{{conversation.badge}}</div>
         <div  class="c21-icon-archived-chat" *ngIf="conversation.archived">
