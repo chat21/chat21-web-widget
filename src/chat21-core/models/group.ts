@@ -6,6 +6,8 @@ export class GroupModel {
         public members: any[],
         public membersinfo: any[],
         public name: string,
-        public owner: string
+        public owner: string,
+        public color: string,
+        public avatar: string
     ) { }
 }

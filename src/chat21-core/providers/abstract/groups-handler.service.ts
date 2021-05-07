@@ -18,7 +18,8 @@ export abstract class GroupsHandlerService {
   abstract connect(): void;
   abstract getDetail(groupId: string, callback?:(group: GroupModel)=>void): Promise<GroupModel>;
   abstract onGroupChange(groupId: string): Observable<GroupModel>;
-  abstract leave(groupId: string, callback?:()=>void): Promise<any>;
-  abstract create(groupId: string, callback?:()=>void): Promise<any>;
+  abstract create(groupName: string, members: [string], callback?:(res: any, error: any)=>void): Promise<any>;
+  abstract leave(groupId: string, callback?:(res: any, error: any)=>void): Promise<any>;
+  abstract join(groupId: string, member: string, callback?:(res: any, error: any)=>void)
   abstract dispose(): void;
 }

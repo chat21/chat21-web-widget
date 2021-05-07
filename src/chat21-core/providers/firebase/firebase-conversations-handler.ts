@@ -18,7 +18,6 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 //import { DatabaseProvider } from '../database';
 
 // utils
-import { TYPE_GROUP, URL_SOUND } from '../../utils/constants';
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup } from '../../utils/utils';
 import { ImageRepoService } from '../abstract/image-repo.service';
@@ -476,10 +475,10 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             conv.sender_fullname = this.translationMap.get('YOU')
             // conv.last_message_text = LABEL_TU + conv.last_message_text;
         } else if (isGroup(conv)) {
-            conversation_with = conv.recipient;
-            conversation_with_fullname = conv.recipient_fullname;
             // conversation_with_fullname = conv.sender_fullname;
             // conv.last_message_text = conv.last_message_text;
+            conversation_with = conv.recipient;
+            conversation_with_fullname = conv.recipient_fullname;
         }
         conv.conversation_with_fullname = conversation_with_fullname;
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
