@@ -108,9 +108,14 @@
                     font-size: 1.3em;
                     line-height: 1.7;
                     max-height: 21px;
+                    
                 }
                 .not-read.c21-msg {
                     font-weight: 500;
+                }
+
+                .archived.c21-msg {
+                    margin-right: 20px;
                 }
             }
         }
@@ -180,7 +185,7 @@
         border-radius: 4px;
         position: absolute;
         right: 0px;
-        bottom: 2px;
+        bottom: 10px;
         margin-right: -10px;
         color: #858585;
         font-weight: 500;

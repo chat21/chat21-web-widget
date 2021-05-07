@@ -932,7 +932,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         } else {
           that.g.wdLog(['*A3-------']);
           that.messagesBadgeCount++;
-          that.soundMessage(msg.timestamp);
+          // that.soundMessage(msg.timestamp);
         }
       }
   }

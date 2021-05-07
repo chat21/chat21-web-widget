@@ -53,9 +53,8 @@ import { ConversationHandlerService } from '../chat21-core/providers/abstract/co
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
-import { URL_SOUND } from '../chat21-core/utils/constants';
+import { URL_SOUND_LIST_CONVERSATION } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
-import { timeout } from 'rxjs/operator/timeout';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 
 @Component({
@@ -104,6 +103,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     archivedConversations: Array<ConversationModel>;
     private audio: any;
     private setTimeoutSound: any;
+    private setIntervalTime: any;
+    private isTabVisible: boolean = true;
+    private tabTitle: string; 
     // ========= end:: variabili del componente ======== //
 
     // ========= begin:: DA SPOSTARE ======= //
@@ -155,20 +157,50 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** */
     ngOnInit() {
         console.log(' ---------------- ngOnInit: APP.COMPONENT ---------------- ')
-        this.initWidgetParamiters();  
+        this.initWidgetParamiters();
+        
     }
 
-    // @HostListener('document:visibilitychange', ['$event'])
-    // visibilitychange() {
-    //     console.log("document TITLE", document.title);
-    //     if (document.hidden) { 
-    //         console.log("document is hidden");
-    //         document.title = "HIDDEN"
-    //     }else{
-    //         console.log("document is showing");
-    //         document.title = "SHOWING"
-    //     }
-    // }
+    @HostListener('document:visibilitychange', ['$event'])
+    visibilitychange() {
+        console.log("document TITLE", document.hidden, document.title, this.g.windowContext, this.g.windowContext.parent.title);
+        if (document.hidden) { 
+            console.log("document is hidden");
+            this.isTabVisible = false
+            this.g.windowContext.window.document.title = this.tabTitle
+        }else{
+            // TAB IS ACTIVE --> restore title and DO NOT SOUND
+            clearInterval(this.setIntervalTime)
+            console.log("document is showing", this.tabTitle);
+            this.isTabVisible = true;
+            this.g.windowContext.parent.title = "SHOWING"
+            this.g.windowContext.title = "SHOWING2"
+            this.g.windowContext.window.document.title =this.tabTitle;
+        }
+    }
+
+    private manageTabNotification(){
+        if(!this.isTabVisible){
+            // TAB IS HIDDEN --> manage title and SOUND 
+            this.g.windowContext.parent.title = "HIDDEN"
+            this.g.windowContext.title = "HIDDEN2"
+
+            let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+            this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
+            // setInterval( ()=>{
+            //     console.log('456')
+            //     setInterval(()=> {
+            //         console.log('789')
+            //         this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
+            //     }, 1000)
+            //     this.g.windowContext.window.document.title = this.tabTitle
+            // }, 5000);
+            const that = this
+            this.setIntervalTime = setInterval(function(){ that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + that.tabTitle;}, 1000);
+            this.soundMessage()
+        }
+    }
+
           
     /** */
     ngAfterViewInit() {
@@ -191,7 +223,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                             return;
                         }
                         if (conversation.is_new && !this.isOpenConversation) {
-                            this.soundMessage();
+                            // this.soundMessage();
                         }
                         
                         
@@ -204,6 +236,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
                         console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
                     }
+                    this.manageTabNotification();
                 // });
             });
             this.subscriptions.push(subChangedConversation);
@@ -229,6 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
                         console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
                     }
+                    this.manageTabNotification()
                 // });
             });
             //this.authService.initialize();
@@ -489,7 +523,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // ------------------------------- //
                     // /** INIT  */
                     // that.initAll();
-                    
+                    this.tabTitle = this.g.windowContext.window.document.title
                     this.g.wdLog(['controllo se è stato passato un token: ', this.g.jwt]);
                     if (this.g.jwt) {
                       // mi loggo con custom token passato nell'url
@@ -520,7 +554,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         
         // SET AUDIO
         this.audio = new Audio();
-        this.audio.src = URL_SOUND;
+        this.audio.src = this.g.baseLocation + URL_SOUND_LIST_CONVERSATION;
         this.audio.load();
        // ------------------------------- //
     }
@@ -1689,15 +1723,30 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.audio.currentTime = 0;
         clearTimeout(this.setTimeoutSound);
         this.setTimeoutSound = setTimeout(() => {
-            that.audio.play()
-            .then(() => {
+            that.audio.play().then(() => {
                 console.log('****** soundMessage played *****');
-            })
-            .catch((error: any) => {
+            }).catch((error: any) => {
                 console.log('***soundMessage error*', error);
             });
         }, 1000);
     }
+
+    // soundMessage() {
+    //     const isSoundActive = this.g.isSoundActive;
+    //     const baseLocation = this.g.baseLocation;
+    //     if (isSoundActive) {
+    //       const that = this;
+    //       this.audio = new Audio();
+    //       this.audio.src = baseLocation + '/assets/sounds/justsaying.mp3';
+    //       this.audio.load();
+    //       // console.log('conversation play');
+    //       clearTimeout(this.setTimeoutSound);
+    //       this.setTimeoutSound = setTimeout(function () {
+    //         that.audio.play();
+    //         that.g.wdLog(['****** soundMessage 1 *****', that.audio.src]);
+    //       }, 1000);
+    //     }
+    // }
 
 
     /**
@@ -1734,6 +1783,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     returnCloseWidget() {
         this.isOpenConversation = false;
+        let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+        this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+        console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
         // this.g.isOpen = false;
         // this.g.setIsOpen(false);
         this.f21_close();
