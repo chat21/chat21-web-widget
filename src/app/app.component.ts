@@ -187,16 +187,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
             let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
             this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
-            // setInterval( ()=>{
-            //     console.log('456')
-            //     setInterval(()=> {
-            //         console.log('789')
-            //         this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
-            //     }, 1000)
-            //     this.g.windowContext.window.document.title = this.tabTitle
-            // }, 5000);
+
             const that = this
-            this.setIntervalTime = setInterval(function(){ that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + that.tabTitle;}, 1000);
+            this.setIntervalTime = setInterval(function(){
+                console.log('check titleee', that.g.windowContext.window.document.title.charAt(0)==='(')
+                if(that.g.windowContext.window.document.title.charAt(0)==='('){
+                    that.g.windowContext.window.document.title = that.tabTitle
+                }else{
+                    that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + that.tabTitle;
+                }
+            }, 1000);
+
             this.soundMessage()
         }
     }
@@ -1719,16 +1720,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private soundMessage() {
         console.log('****** soundMessage *****', this.audio);
         const that = this;
-        this.audio.pause();
-        this.audio.currentTime = 0;
-        clearTimeout(this.setTimeoutSound);
-        this.setTimeoutSound = setTimeout(() => {
-            that.audio.play().then(() => {
-                console.log('****** soundMessage played *****');
-            }).catch((error: any) => {
-                console.log('***soundMessage error*', error);
-            });
-        }, 1000);
+        const isSoundActive = this.g.isSoundActive;
+        if(isSoundActive){
+            this.audio.pause();
+            this.audio.currentTime = 0;
+            clearTimeout(this.setTimeoutSound);
+            this.setTimeoutSound = setTimeout(() => {
+                that.audio.play().then(() => {
+                    console.log('****** soundMessage played *****');
+                }).catch((error: any) => {
+                    console.log('***soundMessage error*', error);
+                });
+            }, 1000);
+        }
     }
 
     // soundMessage() {
