@@ -1,12 +1,18 @@
 # chat21-web-widget ver 5.0
 
-### 5.0.0-beta.3.0
+### 5.0.0-beta.3.1 - NATIVE-MQTT
+- updated: MQTT and FIREBASE services classes
+- added: visibilityChange method to manage title and sound
+- removed: old implementation of sound
+- bug fixed: wrong number of badge shown when widget is closed
+
+### 5.0.0-beta.3.0 - FIREBASE 
 - bug-fix: startWith of undefined in utils in chat21-core
 - bug-fix: isInfo of undefined in utils-message in chat21-core
 
 ### 5.0.0-beta.2.9
 - changed: enabled sound on New message and on conversationChanged
-- changed: uuid is now whitout '-' 
+- changed: uuid is now without '-' 
 - added: image icon if conv.type is image in list-conversations
 
 ### 5.0.0-beta.2.8
