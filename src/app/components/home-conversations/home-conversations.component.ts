@@ -110,12 +110,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   }
 
   public initTranslations() {
-    const keysConversation = [
-      'CLOSED'
-    ];
-    const keys = [
-      'LABEL_TU'
-    ];
+    const keysConversation = ['CLOSED'];
+    const keys = ['YOU'];
     const translationMap = this.customTranslateService.translateLanguage(keys);
     this.translationMapConversation = this.customTranslateService.translateLanguage(keysConversation);
   }
