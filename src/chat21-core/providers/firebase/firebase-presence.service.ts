@@ -1,6 +1,6 @@
 import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 // firebase
 import * as firebase from 'firebase/app';
@@ -48,20 +48,50 @@ export class FirebasePresenceService extends PresenceService {
    * userIsOnline
    * @param userid
    */
-  public userIsOnline(userid: string) {
+  // public userIsOnline(userid: string) {
+  //   this.logger.printDebug('userIsOnline', userid);
+  //   console.log('CONVERSATION-DETAIL group detail userIsOnline', userid);
+  //   const that = this;
+  //   const urlNodeConnections = this.urlNodePresence + userid + '/connections';
+  //   this.logger.printDebug('userIsOnline: ', urlNodeConnections);
+  //   const connectionsRef = firebase.database().ref().child(urlNodeConnections);
+  //   connectionsRef.on('value', (child) => {
+  //     this.logger.printDebug('is-online-' + userid);
+  //     if (child.val()) {
+  //       console.log('CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
+  //       this.BSIsOnline.next({uid: userid, isOnline: true});
+  //       console.log('CONVERSATION-DETAIL group detail userIsOnline 1', userid);
+  //     } else {
+  //       this.BSIsOnline.next({uid: userid, isOnline: false});
+  //       console.log('CONVERSATION-DETAIL group detail userIsOnline 2', userid);
+  //     }
+  //   });
+  // }
+
+  public userIsOnline(userid: string): Observable<any> {
+    let local_BSIsOnline = new BehaviorSubject<any>(null);
     this.logger.printDebug('userIsOnline', userid);
+    console.log('CONVERSATION-DETAIL group detail userIsOnline', userid);
     const that = this;
     const urlNodeConnections = this.urlNodePresence + userid + '/connections';
     this.logger.printDebug('userIsOnline: ', urlNodeConnections);
     const connectionsRef = firebase.database().ref().child(urlNodeConnections);
+    connectionsRef.off()
     connectionsRef.on('value', (child) => {
       this.logger.printDebug('is-online-' + userid);
       if (child.val()) {
-        this.BSIsOnline.next({uid: userid, isOnline: true});
+        console.log('CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
+        this.BSIsOnline.next({ uid: userid, isOnline: true });
+        local_BSIsOnline.next({ uid: userid, isOnline: true });
+        console.log('CONVERSATION-DETAIL group detail userIsOnline 1', userid);
       } else {
-        this.BSIsOnline.next({uid: userid, isOnline: false});
+        this.BSIsOnline.next({ uid: userid, isOnline: false });
+        local_BSIsOnline.next({ uid: userid, isOnline: false });
+        console.log('CONVERSATION-DETAIL group detail userIsOnline 2', userid);
       }
     });
+
+    return local_BSIsOnline
   }
 
   /**

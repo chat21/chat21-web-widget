@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 // firebase
 import * as firebase from 'firebase/app';
@@ -35,7 +35,7 @@ export class MQTTPresenceService extends PresenceService {
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 
-  userIsOnline(userid: string) {
+  userIsOnline(userid: string): Observable<any> {
     // console.log('userIsOnline', userid);
     // const that = this;
     // const urlNodeConnections = this.urlNodePresence + userid + '/connections';
@@ -49,6 +49,7 @@ export class MQTTPresenceService extends PresenceService {
     //     that.events.publish('is-online-' + userid, userid, false);
     //   }
     // });
+    return this.BSIsOnline
   }
 
   lastOnlineForUser(userid: string) {

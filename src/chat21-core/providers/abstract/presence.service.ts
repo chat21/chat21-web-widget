@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 // @Injectable({
@@ -17,7 +17,7 @@ export abstract class PresenceService {
 
   // functions
   abstract initialize(): void;
-  abstract userIsOnline(userid: string): void;
+  abstract userIsOnline(userid: string): Observable<any>
   abstract lastOnlineForUser(userid: string): void;
   abstract setPresence(userid: string): void;
   abstract removePresence(): void;
