@@ -101,8 +101,8 @@ export function contactsRef(tenant) {
 // }
 
 export function setHeaderDate(translate, timestamp): string {
-  const LABEL_TODAY = translate.get('LABEL_TODAY');
-  const LABEL_TOMORROW = translate.get('LABEL_TOMORROW');
+  // const LABEL_TODAY = translate.get('LABEL_TODAY');
+  // const LABEL_TOMORROW = translate.get('LABEL_TOMORROW');
 
   const date = new Date(timestamp);
   const now: Date = new Date();
@@ -118,7 +118,7 @@ export function setHeaderDate(translate, timestamp): string {
   } else if (now.getDay() === date.getDay()) {
     // oggi: oggi
     labelDays = moment().calendar(timestamp).split(' ')[0].toLocaleLowerCase();
-    labelDays = LABEL_TODAY;
+    // labelDays = LABEL_TODAY;
   } else if (now.getDay() - date.getDay() === 1) {
     // ieri: ieri
     labelDays = moment().calendar(timestamp).split(' ')[0].toLocaleLowerCase();
