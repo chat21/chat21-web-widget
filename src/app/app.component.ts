@@ -163,34 +163,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @HostListener('document:visibilitychange', ['$event'])
     visibilitychange() {
-        console.log("document TITLE", document.hidden, document.title, this.g.windowContext, this.g.windowContext.parent.title);
+        console.log("document TITLE", this.g.windowContext.window.document.title);
+        console.log("document hidden?", document.hidden, "isTabVisible?", this.isTabVisible);
         if (document.hidden) { 
-            console.log("document is hidden");
             this.isTabVisible = false
-            this.g.windowContext.window.document.title = this.tabTitle
-        }else{
+            console.log("document is hidden. isTabVisible", this.isTabVisible);
+            // this.g.windowContext.window.document.title = this.tabTitle
+        } else {
             // TAB IS ACTIVE --> restore title and DO NOT SOUND
             clearInterval(this.setIntervalTime)
-            console.log("document is showing", this.tabTitle);
             this.isTabVisible = true;
-            this.g.windowContext.parent.title = "SHOWING"
-            this.g.windowContext.title = "SHOWING2"
+            console.log("document is showing. isTabVisible", this.isTabVisible, this.tabTitle);
             this.g.windowContext.window.document.title =this.tabTitle;
+            // this.g.windowContext.parent.title = "SHOWING"
+            // this.g.windowContext.title = "SHOWING2"
         }
     }
 
     private manageTabNotification(){
         if(!this.isTabVisible){
             // TAB IS HIDDEN --> manage title and SOUND 
-            this.g.windowContext.parent.title = "HIDDEN"
-            this.g.windowContext.title = "HIDDEN2"
+            // this.g.windowContext.parent.title = "HIDDEN"
+            // this.g.windowContext.title = "HIDDEN2"
 
             let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
-            this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
+            // this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
 
             const that = this
             this.setIntervalTime = setInterval(function(){
-                console.log('check titleee', that.g.windowContext.window.document.title.charAt(0)==='(')
                 if(that.g.windowContext.window.document.title.charAt(0)==='('){
                     that.g.windowContext.window.document.title = that.tabTitle
                 }else{
