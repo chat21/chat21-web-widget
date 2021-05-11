@@ -80,7 +80,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
           this.eventOpenEyeCatcher.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
           this.g.setParameter('displayEyeCatcherCard', 'block');
-          this.g.setParameter('calloutStaus', false, true);
+          // this.g.setParameter('calloutStaus', false, true);
           this.displayEyeCatcherCardCloseBtnWrapper = 'block';
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           // this.rotateCalloutEmoticon();
@@ -150,6 +150,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
       this.eventOpenEyeCatcher.emit(false);
       // this.g.displayEyeCatcherCard = 'none';
       this.g.setParameter('displayEyeCatcherCard', 'none');
+      this.g.setParameter('calloutStaus', false, true);
       this.displayEyeCatcherCardCloseBtnWrapper = 'none';
   }
 
