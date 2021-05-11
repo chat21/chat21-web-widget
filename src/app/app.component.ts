@@ -160,8 +160,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initWidgetParamiters();
         
     }
-
-    @HostListener('document:visibilitychange', ['$event'])
+    // @HostListener('document:visibilitychange', ['$event'])
+    @HostListener('document:visibilitychange')
     visibilitychange() {
         console.log("document TITLE", this.g.windowContext.window.document.title);
         console.log("document hidden?", document.hidden, "isTabVisible?", this.isTabVisible);
@@ -171,7 +171,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.g.windowContext.window.document.title = this.tabTitle
         } else {
             // TAB IS ACTIVE --> restore title and DO NOT SOUND
-            clearInterval(this.setIntervalTime)
+            // clearInterval(this.setIntervalTime)
             this.isTabVisible = true;
             console.log("document is showing. isTabVisible", this.isTabVisible, this.tabTitle);
             this.g.windowContext.window.document.title =this.tabTitle;
@@ -181,22 +181,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private manageTabNotification(){
+        console.log('manageTabNotification:::isTabVisible? ', this.isTabVisible)
+        clearInterval(this.setIntervalTime)
         if(!this.isTabVisible){
             // TAB IS HIDDEN --> manage title and SOUND 
             // this.g.windowContext.parent.title = "HIDDEN"
             // this.g.windowContext.title = "HIDDEN2"
 
             let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
-            // this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + this.tabTitle
+            this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + this.tabTitle
 
             const that = this
-            this.setIntervalTime = setInterval(function(){
-                if(that.g.windowContext.window.document.title.charAt(0)==='('){
-                    that.g.windowContext.window.document.title = that.tabTitle
-                }else{
-                    that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ")" + that.tabTitle;
-                }
-            }, 1000);
+            // this.setIntervalTime = setInterval(function(){
+            //     if(that.g.windowContext.window.document.title.charAt(0)==='('){
+            //         that.g.windowContext.window.document.title = that.tabTitle
+            //     }else{
+            //         that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + that.tabTitle;
+            //     }
+            // }, 1000);
 
             this.soundMessage()
         }
@@ -280,7 +282,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         });
         // this.authService.initialize()
-        this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
         this.authService.initialize();
         this.chatManager.initialize();
         this.typingService.initialize();
@@ -525,6 +526,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // /** INIT  */
                     // that.initAll();
                     this.tabTitle = this.g.windowContext.window.document.title
+                    this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
                     this.g.wdLog(['controllo se è stato passato un token: ', this.g.jwt]);
                     if (this.g.jwt) {
                       // mi loggo con custom token passato nell'url
@@ -2346,7 +2348,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('backgroundColor', this.g.colorBck)
         this.styleMapConversation.set('foregroundColor', this.g.themeForegroundColor)
         this.styleMapConversation.set('themeColor', this.g.themeColor)  
-  }
+    }
 
 
 }
