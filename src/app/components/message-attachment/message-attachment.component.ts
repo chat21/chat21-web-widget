@@ -38,7 +38,6 @@ export class MessageAttachmentComponent implements OnInit {
       }
       try {
         this.buttons = this.message.attributes.attachment.buttons;
-        // console.log(this.buttons);
       } catch (error) {
         // this.g.wdLog(['> Error :' + error]);
         return;
