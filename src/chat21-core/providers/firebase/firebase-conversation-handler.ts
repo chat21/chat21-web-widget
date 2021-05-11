@@ -10,7 +10,6 @@ import 'firebase/database';
 import 'firebase/firestore';
 
 // models
-
 import { UserModel } from '../../models/user';
 
 // services
@@ -60,7 +59,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private logger: CustomLogger = new CustomLogger(true)
     private ref: firebase.database.Query;
 
-    constructor(@Inject('skipMessage') private skipMessage: boolean) {
+    constructor(@Inject('skipMessage') private skipInfoMessage: boolean) {
         super();
     }
 
@@ -261,7 +260,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private added(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
         // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
         // console.log('>>>>>>>>>>>>>> added headerDate: ', msg);
@@ -275,7 +274,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
         // console.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
         // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
         this.addRepalceMessageInArray(childSnapshot.key, msg);

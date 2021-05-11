@@ -1,4 +1,4 @@
-import { Injectable, ɵConsole } from '@angular/core';
+import { Inject, Injectable, ɵConsole } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // // firebase
@@ -17,7 +17,7 @@ import { UserModel } from '../../models/user';
 import { ConversationHandlerService } from '../abstract/conversation-handler.service';
 
 // utils
-import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, TYPE_DIRECT } from '../../utils/constants';
+import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, TYPE_DIRECT, MESSAGE_TYPE_INFO } from '../../utils/constants';
 import {
   htmlEntities,
   compareValues,
@@ -25,6 +25,7 @@ import {
   setHeaderDate,
   conversationMessagesRef
 } from '../../utils/utils';
+import { messageType } from '../../utils/utils-message';
 
 
 // @Injectable({ providedIn: 'root' })
@@ -57,7 +58,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
 
 
     constructor(
-        public chat21Service: Chat21Service
+        public chat21Service: Chat21Service,
+        @Inject('skipMessage') private skipInfoMessage: boolean
+        
     ) {
         super();
         console.log('contructor MQTTConversationHandler');
@@ -271,6 +274,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     private addedMessage(messageSnapshot: any) {
         const msg = this.messageGenerate(messageSnapshot);
         msg.uid = msg.message_id;
+        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+            return;
+        }
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
         msg.headerDate = null;
         const headerDate = setHeaderDate(this.translationMap, msg.timestamp);
@@ -300,6 +306,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     /** */
     private updatedMessageStatus(patch: any) {
         // const msg = this.messageGenerate(message);
+        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, patch) ){
+            return;
+        }
         console.log('updating message with patch', patch);
         const index = searchIndexInArrayForUid(this.messages, patch.message_id);
         if (index > -1) {

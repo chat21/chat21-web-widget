@@ -16,7 +16,8 @@ export class MQTTConversationHandlerBuilderService extends ConversationHandlerBu
 
   public build(): any {
     const conversationHandlerService = new MQTTConversationHandler(
-      this.chat21Service
+      this.chat21Service,
+      true
     );
     return conversationHandlerService;
   }
