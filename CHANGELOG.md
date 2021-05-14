@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.2
+- bug-fix: eyeeye-catcher card called once
+- added: skipInfoMessage parameter for MQTTConversationHanlderService
+- added: placeholder while image loading
+- added: native-image-repo Service
+
+
 ### 5.0.0-beta.3.1 - NATIVE-MQTT
 - updated: MQTT and FIREBASE services classes
 - added: visibilityChange method to manage title and sound
