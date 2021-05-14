@@ -111,6 +111,8 @@ import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.s
 import { TypingService } from '../chat21-core/providers/abstract/typing.service';
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
+import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
+import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
 //FIREBASE SERVICES
 import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
@@ -133,17 +135,15 @@ import { MQTTArchivedConversationsHandler } from '../chat21-core/providers/mqtt/
 import { MQTTConversationHandler } from '../chat21-core/providers/mqtt/mqtt-conversation-handler';
 import { MQTTTypingService } from '../chat21-core/providers/mqtt/mqtt-typing.service';
 import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence.service';
-import { MQTTImageRepoService } from './../chat21-core/providers/mqtt/mqtt-image-repo';
 
-//UPLOAD SERVICE
+//NATIVE
 import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
+import { NativeImageRepoService } from '../chat21-core/providers/native/native-image-repo';
 
 //LOGGER SERVICES
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
-import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 
 //APP_STORAGE
-import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
 
 
@@ -260,8 +260,10 @@ export function presenceFactory(appConfig: AppConfigService) {
 
 export function imageRepoFactory(appConfig: AppConfigService) {
   const config = appConfig.getConfig()
-  if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    return new MQTTImageRepoService()
+  if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
+    const imageService = new NativeImageRepoService()
+    imageService.setImageBaseUrl(config.baseImageUrl)
+    return imageService
   } else {
     const imageService = new FirebaseImageRepoService();
     FirebaseInitService.initFirebase(config.firebaseConfig)
