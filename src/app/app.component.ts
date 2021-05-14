@@ -171,7 +171,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.g.windowContext.window.document.title = this.tabTitle
         } else {
             // TAB IS ACTIVE --> restore title and DO NOT SOUND
-            // clearInterval(this.setIntervalTime)
+            clearInterval(this.setIntervalTime)
+            this.setIntervalTime = null;
             this.isTabVisible = true;
             console.log("document is showing. isTabVisible", this.isTabVisible, this.tabTitle);
             this.g.windowContext.window.document.title =this.tabTitle;
@@ -182,7 +183,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private manageTabNotification(){
         console.log('manageTabNotification:::isTabVisible? ', this.isTabVisible)
-        clearInterval(this.setIntervalTime)
         if(!this.isTabVisible){
             // TAB IS HIDDEN --> manage title and SOUND 
             // this.g.windowContext.parent.title = "HIDDEN"
@@ -190,15 +190,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
             let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
             this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + this.tabTitle
-
+            clearInterval(this.setIntervalTime)
             const that = this
-            // this.setIntervalTime = setInterval(function(){
-            //     if(that.g.windowContext.window.document.title.charAt(0)==='('){
-            //         that.g.windowContext.window.document.title = that.tabTitle
-            //     }else{
-            //         that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + that.tabTitle;
-            //     }
-            // }, 1000);
+            this.setIntervalTime = window.setInterval(function(){
+                if(that.g.windowContext.window.document.title.charAt(0)==='('){
+                    that.g.windowContext.window.document.title = that.tabTitle
+                }else{
+                    that.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + that.tabTitle;
+                }
+            }, 1000);
 
             this.soundMessage()
         }
@@ -230,14 +230,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                         
                         
-                    }else {
-                        //widget closed
-                        that.lastConversation = conversation;
-                        this.g.isOpenNewMessage = true;
+                    }else  {
+                        if(conversation.is_new){
+                            //widget closed
+                            that.lastConversation = conversation;
+                            this.g.isOpenNewMessage = true;
 
-                        let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
-                        this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
-                        console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
+                            let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
+                            this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+                            console.log('widgetclosed:::', this.g.conversationsBadge, this.conversationsHandlerService.countIsNew())
+                        }
+                        
                     }
                     this.manageTabNotification();
                 // });
@@ -533,7 +536,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                       // mi loggo con custom token passato nell'url
                       //aggiungo nel local storage e mi autentico
                       console.log('token passato da url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
-                      this.g.autoStart = false;
+                    //   this.g.autoStart = false;
                       this.g.wdLog([' ----------------  mi loggo con custom token passato nell url  ---------------- ']);
                       this.appStorageService.setItem('tiledeskToken', this.g.jwt)
                       this.signInWithCustomToken(this.g.jwt)
