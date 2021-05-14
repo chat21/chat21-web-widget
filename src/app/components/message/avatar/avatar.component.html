@@ -2,9 +2,9 @@
   <div class="c21-avatar-image profile_image">
       <!-- <img src="getUrlImgProfile(message.sender) {{getUrlImgProfile(message.sender)}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/v2/assets/images/line_avatar_male_tiledesk.svg'" /> -->
       <!-- <img [src]="url" (error)="onBotImgError($event)" /> -->
-      <img *ngIf="senderID.indexOf('bot_') !== -1 || senderFullname === 'Bot'" [src]="url" (error)="onBotImgError($event)"/>
+      <img *ngIf="senderID.indexOf('bot_') !== -1 || senderFullname === 'Bot'" [src]="url" (error)="onBotImgError($event)" (load)="onLoadedBot($event)"/>
       <!-- is a HUMAN -->
-      <img *ngIf="senderID.indexOf('bot_') === -1" [src]="url" (error)="onHumanImgError($event)" />
+      <img *ngIf="senderID.indexOf('bot_') === -1" [src]="url" (error)="onHumanImgError($event)" (load)="onLoadedHuman($event)"/>
   </div> 
 </div>
 
