@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.3
+- bug-fix: rating page not shown while archive mqtt conv
+- bug-fix: last message shown on refresh for mqtt engine
+- added. avatar-image, message-attachment components inside last-message component
+ 
 ### 5.0.0-beta.3.2
 - bug-fix: eyeeye-catcher card called once
 - added: skipInfoMessage parameter for MQTTConversationHanlderService
