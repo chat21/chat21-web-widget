@@ -32,7 +32,7 @@ import { environment } from '../environments/environment';
 // utils
 // setLanguage,
 // getImageUrlThumb,
-import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage, getImageUrlThumb } from './utils/utils';
+import { strip_tags, isPopupUrl, popupUrl, detectIfIsMobile, supports_html5_storage, getImageUrlThumb, isJustRecived } from './utils/utils';
 import { ConversationModel } from '../chat21-core/models/conversation';
 import { AppConfigService } from './providers/app-config.service';
 
@@ -231,7 +231,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         
                         
                     }else  {
-                        if(conversation.is_new){
+                        if(conversation.is_new && isJustRecived(this.g.startedAt.getTime(), conversation.timestamp)){
                             //widget closed
                             that.lastConversation = conversation;
                             this.g.isOpenNewMessage = true;
