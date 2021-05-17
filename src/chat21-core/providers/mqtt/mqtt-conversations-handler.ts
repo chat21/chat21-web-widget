@@ -164,16 +164,26 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      subscribeToConversations(loaded) {
             console.log('connecting MQTT conversations handler');
             const handlerConversationAdded = this.chat21Service.chatClient.onConversationAdded( (conv) => {
-                console.log('conversation added:', conv.text);
+                console.log('conversation added:', conv);
                 this.added(conv);
             });
-            const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv) => {
-                console.log('conversation updated:', conv.last_message_text);
+            const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv, topic) => {
+                console.log('conversation updated:', conv);
                 this.changed(conv);
             });
-            const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv) => {
-                console.log('conversation deleted:', conv.last_message_text);
-                this.removed(conv);
+            const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv, topic) => {
+                console.log('conversation deleted:', conv, topic);
+                // example topic: apps.tilechat.users.ME.conversations.CONVERS-WITH.clientdeleted
+                const topic_parts = topic.split("/")
+                console.debug("topic and parts", topic_parts)
+                if (topic_parts.length < 7) {
+                    console.error("Error. Not a conversation-deleted topic:", topic);
+                    return
+                }
+                const convers_with = topic_parts[5];
+                this.removed({
+                    uid: convers_with
+                });
             });
             this.chat21Service.chatClient.lastConversations( false, (err, conversations) => {
                 console.log('Last conversations', conversations, 'err', err);
@@ -240,7 +250,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         // }
         // let childData: ConversationModel = childSnapshot;
         let conversation = this.completeConversation(childSnapshot);
-        conversation.uid = conversation.conversation_with;
         // console.log("NUOVA CONVER;" + conversation.uid)
         console.log("NUOVA CONVER;.uid" + conversation.uid)
         if (this.isValidConversation(conversation)) {
@@ -341,29 +350,17 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      * 5 -  elimino conversazione dall'array delle conversazioni chiuse
      */
     private removed(childSnapshot) {
-        const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
+        const index = searchIndexInArrayForUid(this.conversations, childSnapshot.uid);
         if (index > -1) {
             const conversationRemoved = this.conversations[index]
             this.conversations.splice(index, 1);
             // this.conversations.sort(compareValues('timestamp', 'desc'));
             // this.databaseProvider.removeConversation(childSnapshot.key);
+            console.debug("conversationRemoved::", conversationRemoved)
             this.conversationRemoved.next(conversationRemoved);
         }
         // remove the conversation from the isConversationClosingMap
-        this.deleteClosingConversation(childSnapshot.key);
-
-        // const index = searchIndexInArrayForUid(this.conversations, childSnapshot.key);
-        // if (index > -1) {
-        //     // 2
-        //     this.conversations.splice(index, 1);
-        //     // this.conversations.sort(compareValues('timestamp', 'desc'));
-        //     // 3
-        //     this.databaseProvider.removeConversation(childSnapshot.key);
-        //     // 4
-        //     // this.conversationsChanged.next(this.conversations);
-        //     this.conversationsRemoved.next(this.conversations);
-        //     // this.events.publish('conversationsChanged', this.conversations);
-        // }
+        this.deleteClosingConversation(childSnapshot.uid);
     }
 
     /**
@@ -388,103 +385,10 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     }
 
     archiveConversation(conversationId: string) { 
-        // da implementare
+        this.chat21Service.chatClient.archiveConversation(conversationId);
     }
-    
-    // ---------------------------------------------------------- //
-    // BEGIN FUNCTIONS 
-    // ---------------------------------------------------------- //
-    /**
-     * Completo conversazione aggiungendo:
-     * 1 -  nel caso in cui sender_fullname e recipient_fullname sono vuoti, imposto i rispettivi id come fullname,
-     *      in modo da avere sempre il campo fullname popolato
-     * 2 -  imposto conversation_with e conversation_with_fullname con i valori del sender o al recipient,
-     *      a seconda che il sender corrisponda o meno all'utente loggato. Aggiungo 'tu:' se il sender coincide con il loggedUser
-     *      Se il sender NON è l'utente loggato, ma è una conversazione di tipo GROUP, il conversation_with_fullname
-     *      sarà uguale al recipient_fullname
-     * 3 -  imposto stato conversazione, che indica se ci sono messaggi non letti nella conversazione
-     * 4 -  imposto il tempo trascorso tra l'ora attuale e l'invio dell'ultimo messaggio
-     * 5 -  imposto avatar, colore e immagine
-     * @param conv
-     */
-    // public completeConversation(conv: any): ConversationModel {
-    //     const conversation: ConversationModel = conv;
-    //     // console.log('completeConversation', conv);
-    //     if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
-    //         conversation.sender_fullname = conv.sender;
-    //     } else {
-    //         conversation.sender_fullname = conv.sender_fullname;
-    //     }
-    //     if (!conv.recipient_fullname || conv.recipient_fullname === 'undefined' || conv.recipient_fullname.trim() === ''){
-    //         conversation.recipient_fullname = conv.recipient;
-    //     } else {
-    //         conversation.recipient_fullname = conv.recipient_fullname;
-    //     }
-    //     let LABEL_TU: string;
-    //     this.translate.get('LABEL_TU').subscribe((res: string) => {
-    //         LABEL_TU = res;
-    //     });
-    //     let conversationWithFullname = conv.sender_fullname;
-    //     let conversationWith = conv.sender;
-    //     conversation.last_message_text = conv.last_message_text;
-    //     if (conv.sender === this.loggedUser.uid) {
-    //         conversationWith = conv.recipient;
-    //         conversationWithFullname = conv.recipient_fullname;
-    //         conversation.last_message_text = LABEL_TU + conv.last_message_text;
-    //     } else if (conv.channel_type === TYPE_GROUP) {
-    //         conversationWith = conv.recipient;
-    //         conversationWithFullname = conv.recipient_fullname;
-    //         conversation.last_message_text = conv.last_message_text;
-    //     }
-    //     conversation.conversation_with_fullname = conversationWithFullname;
-
-    //     conversation.selected = false;
-    //     console.log('conv.uid', conv.uid);
-    //     conversation.status = this.setStatusConversation(conv.sender, conv.uid);
-
-    //     conversation.time_last_message = this.getTimeLastMessage(conv.timestamp);
-
-    //     conversation.avatar = avatarPlaceholder(conversationWithFullname);
-    //     conversation.color = getColorBck(conversationWithFullname);
-    //     conversation.image = this.getImageUrlThumbFromFirebasestorage(conv.uid);
-    //     // try {
-    //     //     const FIREBASESTORAGE_BASE_URL_IMAGE = this.appConfig.getConfig().FIREBASESTORAGE_BASE_URL_IMAGE;
-    //     //     conversation.image = getImageUrlThumb(FIREBASESTORAGE_BASE_URL_IMAGE, conversationWith);
-    //     // } catch (err) {
-    //     //     console.log(err);
-    //     // }
-    //     // console.log('completeConversation fine', conversation);
-    //     return conversation;
-    // }
 
     private completeConversation(conv): ConversationModel {
-        // console.log('completeConversation', conv);
-        // const LABEL_TU = this.translationMap.get('LABEL_TU');
-        // conv.selected = false;
-        // if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
-        //     conv.sender_fullname = conv.sender;
-        // }
-        // if (!conv.recipient_fullname || conv.recipient_fullname === 'undefined' || conv.recipient_fullname.trim() === '') {
-        //     conv.recipient_fullname = conv.recipient;
-        // }
-        // let conversation_with_fullname = conv.sender_fullname;
-        // let conversation_with = conv.sender;
-        // if (conv.sender === this.loggedUserId) {
-        //     conversation_with = conv.recipient;
-        //     conversation_with_fullname = conv.recipient_fullname;
-        //     conv.last_message_text = LABEL_TU + conv.last_message_text;
-        // } else if (conv.channel_type === TYPE_GROUP) {
-        //     conversation_with = conv.recipient;
-        //     conversation_with_fullname = conv.recipient_fullname;
-        //     conv.last_message_text = conv.last_message_text;
-        // }
-        // conv.conversation_with_fullname = conversation_with_fullname;
-
-        // conv.status = this.setStatusConversation(conv.sender, conv.uid);
-        // conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
-        // conv.avatar = avatarPlaceholder(conversation_with_fullname);
-        // conv.color = getColorBck(conversation_with_fullname);
-        // return conv;
         console.log('completeConversation', conv);
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
@@ -499,7 +403,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
             conv.last_message_text = conv.last_message_text;
-        } else if (conv.channel_type === TYPE_GROUP) {
+        } else if (this.isGroup(conv)) {
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
             conv.last_message_text = conv.last_message_text;
@@ -513,32 +417,16 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         if (!conv.last_message_text) {
             conv.last_message_text = conv.text; // building conv with a message
         }
+        conv.uid = conv.conversation_with;
         return conv;
     }
 
-    // /**
-    //  *
-    //  * @param uid
-    //  */
-    // private getImageUrlThumbFromFirebasestorage(uid: string) {
-    //     const FIREBASESTORAGE_BASE_URL_IMAGE = this.appConfig.getConfig().FIREBASESTORAGE_BASE_URL_IMAGE;
-    //     const urlStorageBucket = this.appConfig.getConfig().firebaseConfig.storageBucket + '/o/profiles%2F';
-    //     const imageurl = FIREBASESTORAGE_BASE_URL_IMAGE + urlStorageBucket + uid + '%2Fthumb_photo.jpg?alt=media';
-    //     return imageurl;
-    // }
-
-    /** */
-    // set the remote conversation as read
-    // setConversationRead(conversationUid) {
-    //     var conversationRef = this.ref.ref.child(conversationUid);
-    //     conversationRef.update ({"is_new" : false});
-    // }
-
-    /** */
-    // getConversationByUid(conversationUid) {
-    //     const index = searchIndexInArrayForUid(this.conversations, conversationUid);
-    //     return this.conversations[index];
-    // }
+    private isGroup(conv: ConversationModel) {
+        if (conv.recipient.startsWith('group-') || conv.recipient.startsWith('support-group')) {
+            return true;
+        };
+        return false;
+    }
 
     /** */
     private setStatusConversation(sender, uid): string {
@@ -560,29 +448,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         const time = getFromNow(timestampNumber);
         return time;
     }
-
-    // removeByUid(uid) {
-    //     const index = searchIndexInArrayForUid(this.conversations, uid);
-    //     if (index > -1) {
-    //         this.conversations.splice(index, 1);
-    //         // this.events.publish('conversationsChanged', this.conversations);
-    //         this.conversationsChanged.next(this.conversations);
-    //     }
-    // }
-
-    // addConversationListener(uidUser, conversationId) {
-    //     var that = this;
-    //     this.tenant = environment.tenant;
-    //     // const tenant = this.chatManager.getTenant();
-    //     const url = '/apps/' + this.tenant + '/users/' + uidUser + '/conversations/' + conversationId;
-    //     const reference = firebase.database().ref(url);
-    //     console.log("ChatConversationsHandler::addConversationListener::reference:",url, reference.toString());
-    //     reference.on('value', function (snapshot) {
-    //         setTimeout(function () {
-    //             // that.events.publish(conversationId + '-listener', snapshot);
-    //         }, 100);
-    //     });
-    // }
 
     /**
      * restituisce il numero di conversazioni nuove
