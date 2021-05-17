@@ -126,7 +126,9 @@
     ></tiledeskwidget-eyeeye-catcher-card>      -->
     <div *ngIf="!g.isOpen">
         <tiledeskwidget-last-message
-            [conversation]=lastConversation
+            [conversation]="lastConversation"
+            [baseLocation]="g.windowContext['tiledesk'].getBaseLocation()"
+            [stylesMap]="styleMapConversation"
             (eventCloseMessagePreview)="triggerOnCloseMessagePreview()"
             (eventSelctedConv)="returnSelectedConversation($event)">
         </tiledeskwidget-last-message>

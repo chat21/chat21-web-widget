@@ -1,3 +1,13 @@
+:host  .c21-avatar-image ::ng-deep > tiledeskwidget-avatar-image {
+    // display: none !important;
+    .c21-icon-avatar { 
+        height: 32px;
+        width: 32px;
+        min-width: 32px;
+        min-height: 32px;
+    }  
+}
+
 #messagePreview {
     position: relative;
     width: 320px;
@@ -66,7 +76,7 @@
 }
 
 .c21-box-text {
-    max-height: 82;
+    max-height: 110;
     overflow-y: auto;
 }
 
@@ -74,9 +84,15 @@
     font-size: 14px;
     color: black;
     padding: 0 10; 
-    margin: 4 0;
+    margin: 0 0;// margin: 4 0;
     line-height: 1.4;
     word-break: break-word;
+}
+
+.c21-img{
+    margin-left: 5px;
+    width: 120px;
+    // height: 100px;
 }
 
 .c21-text.c21-time {
@@ -99,7 +115,7 @@
     bottom: 0px;
     left: -40px;
     box-shadow: rgba(35, 47, 53, 0.09) 0px 2px 8px 0px;
-    border-radius: 100%;
+    border-radius: 100%; //GAB
     border: 1px solid #eee;
     overflow: hidden;
 }
@@ -118,7 +134,7 @@
 
 .headerPreviewMessage {
     position: relative;
-    height: 50;
+    height: 40;// height: 50;
     margin: 10 0 0 50;
 }
 

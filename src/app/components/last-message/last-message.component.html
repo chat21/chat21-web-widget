@@ -25,9 +25,17 @@
     
     <div class="previewNewMessagge" (click)="openConversationByID(conversation)">
         <div role="messaggio" class="c21-text message_sender_fullname">{{conversation.sender_fullname}}</div>
-        <img *ngIf="conversation.type == 'image' && conversation.metadata" class="message-content message-content-image"
+        <!-- <img *ngIf="conversation.type == 'image' && conversation.metadata" class="message-content message-content-image"
             [src]="conversation.metadata.src" [width]="getSizeImg(conversation).width"
-            [height]="getSizeImg(conversation).height" />
+            [height]="getSizeImg(conversation).height" /> -->
+          
+        <div *ngIf="isImage(conversation)" class="c21-img">
+          <tiledeskwidget-image *ngIf="isImage(conversation)"
+          [metadata]="conversation.metadata"
+          [width]="getMetadataSize(conversation.metadata).width"
+          [height]="getMetadataSize(conversation.metadata).height">
+        </tiledeskwidget-image>
+        </div>
 
 
         <div *ngIf="conversation.type == 'text'" class="c21-box-text">
@@ -41,6 +49,16 @@
             <ng-template #contentNewTab>
                 <p class="c21-text" [innerHTML]="conversation.last_message_text | marked"></p>
             </ng-template>
+
+            <div *ngIf="conversation.attributes && conversation.attributes.attachment " class="slide-in-left" > 
+              <tiledeskwidget-message-attachment 
+                  style="height: 100%; display: block;"
+                  [message]="conversation"
+                  [isLastMessage] = "true"
+                  [stylesMap]="stylesMap"
+                  (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)">
+              </tiledeskwidget-message-attachment>
+            </div>  
         </div>
 
         <div class="c21-time c21-text">
@@ -49,7 +67,12 @@
 
         <div class="c21-icon-avatar">
             <div class="c21-avatar-image profile_image">
-              <img src="{{conversation.image}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" />
+              <tiledeskwidget-avatar-image class="slide-in-left"  
+                [senderID]="conversation.sender"
+                [senderFullname]="conversation.sender_fullname"
+                [baseLocation]="baseLocation">
+               </tiledeskwidget-avatar-image>
+              <!-- <img src="{{conversation.image}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" /> -->
             </div> 
         </div>
     </div>

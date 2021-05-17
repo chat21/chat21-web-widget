@@ -14,6 +14,8 @@ import {
   TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
+import { isImage } from '../../../chat21-core/utils/utils-message';
+import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
 
 
 @Component({
@@ -23,6 +25,8 @@ import { ConversationModel } from '../../../chat21-core/models/conversation';
 })
 export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() conversation: ConversationModel
+  @Input() baseLocation: string;
+  @Input() stylesMap: Map<string, string>;
   @Output() eventCloseMessagePreview  = new EventEmitter();
   @Output() eventSelctedConv = new EventEmitter<string>();
   // ========= begin:: sottoscrizioni ======= //
@@ -33,8 +37,10 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   popupUrl = popupUrl;
   strip_tags = strip_tags;
 
+  isImage = isImage;
+  
   constructor(
-    private ngZone: NgZone,
+    private imageRepoService: ImageRepoService,
     public g: Globals,
     // public conversationsService: ConversationsService
   ) {
@@ -65,26 +71,44 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('onchagnges last-message component', changes)
+    if(this.conversation){
+      this.conversation.image = this.imageRepoService.getImagePhotoUrl(this.conversation.sender)
+    }
   }
 
   /**
    *
    * @param message
    */
-  getSizeImg(message): any {
-    const metadata = message.metadata;
-    const sizeImage = {
-      width: metadata.width,
-      height: metadata.height
-    };
-    if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
-      const rapporto = (metadata['width'] / metadata['height']);
-      sizeImage.width = MAX_WIDTH_IMAGES;
-      sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
+  getMetadataSize(metadata): any {
+    if(metadata.width === undefined){
+      metadata.width= MAX_WIDTH_IMAGES
     }
-    return sizeImage;
+    if(metadata.height === undefined){
+      metadata.height = MAX_WIDTH_IMAGES
+    }
+    // const MAX_WIDTH_IMAGES = 300;
+    const sizeImage = {
+        width: metadata.width,
+        height: metadata.height
+    };
+    //   that.g.wdLog(['message::: ', metadata);
+    if (metadata.width && metadata.width > (MAX_WIDTH_IMAGES)) {
+        const rapporto = (metadata['width'] / metadata['height']);
+        sizeImage.width = MAX_WIDTH_IMAGES;
+        sizeImage.height = (MAX_WIDTH_IMAGES) / rapporto;
+    }
+    return sizeImage; // h.toString();
   }
 
+
+
+// ========= begin:: event emitter function ============//
+
+  returnOnAttachmentButtonClicked(event: any){
+    // this.onAttachmentButtonClicked.emit(event)
+    console.log('ButtonClicked', event)
+  }
   /** */
   private openConversationByID(conversation) {
     this.g.wdLog(['openConversationByID: ', conversation]);
@@ -102,6 +126,9 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     this.eventCloseMessagePreview.emit();
   }
+  // ========= begin:: event emitter function ============//
+
+
   /** */
   ngOnDestroy() {
     this.conversation = null;
