@@ -1,4 +1,4 @@
-# chat21-web-widget ver 3.0
+# chat21-web-widget ver 4.0
 
 ### 4.2.1
 - Fixes the bug: the callout opens only the first time the site is accessed
