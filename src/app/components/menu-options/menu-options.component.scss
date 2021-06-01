@@ -41,14 +41,17 @@
 
 .c21-button{
     cursor: pointer;
-    margin: 10px 0;
-    padding: 0 10px;
+    margin: 5px 5px;
+    padding: 5px 10px;
+    // margin: 10px 0;
+    // padding: 0 10px;
     color:#777777;
     display: flex;
     // font-weight: bold;
 }
 .c21-button:hover {
     background-color: whitesmoke;
+    border-radius: 6px;
     cursor: pointer;
 }
 

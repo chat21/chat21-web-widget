@@ -4,7 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MessageModel } from '../../../models/message';
 
 @Component({
-  selector: 'tiledeskwidget-message-attachment',
+  selector: 'chat-message-attachment',
   templateUrl: './message-attachment.component.html',
   styleUrls: ['./message-attachment.component.scss']
 })

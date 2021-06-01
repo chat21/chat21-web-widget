@@ -34,7 +34,7 @@ import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-
 
 
 @Component({
-  selector: 'tiledeskwidget-home-conversations',
+  selector: 'chat-home-conversations',
   templateUrl: './home-conversations.component.html',
   styleUrls: ['./home-conversations.component.scss']
 })
@@ -88,7 +88,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     public g: Globals,
     private ngZone: NgZone,
     // public conversationsService: ConversationsService,
-    public conversationsHandlerService: ConversationsHandlerService,
+    // public conversationsHandlerService: ConversationsHandlerService,
     public imageRepoService: ImageRepoService,
     public chatManager: ChatManager,
     public contactService: ContactService,
@@ -119,7 +119,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   
 
   // ========= begin:: ACTIONS ============//
-  returnSelectedConversation(conversation: ConversationModel) {
+  onConversationSelectedFN(conversation: ConversationModel) {
     if(conversation){
       // rimuovo classe animazione
       //this.removeAnimation();

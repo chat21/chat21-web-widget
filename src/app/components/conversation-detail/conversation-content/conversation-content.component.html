@@ -63,18 +63,19 @@
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_MINE, message)" class="msg_container base_sent">
                           
                             <!--backgroundColor non viene ancora usato -->
-                            <tiledeskwidget-bubble-message class="messages msg_sent slide-in-right"
+                            <chat-bubble-message class="messages msg_sent slide-in-right"
                                 [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}"
                                 [message]="message"
                                 [textColor]="'col-msg-sent'"
                                 (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-                                (onAfterMessageRender)="returnOnAfterMessageRender($event)">
-                            </tiledeskwidget-bubble-message>
+                                (onAfterMessageRender)="returnOnAfterMessageRender($event)"
+                                (onImageRendered)="onImageRenderedFN($event)">
+                            </chat-bubble-message>
 
                               <!-- icon status message -->
-                            <tiledeskwidget-return-receipt class="slide-in-right"
+                            <chat-return-receipt class="slide-in-right"
                                 [status]="message.status">
-                            </tiledeskwidget-return-receipt>
+                            </chat-return-receipt>
 
                           </div>
     
@@ -83,28 +84,29 @@
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="message_sender_fullname slide-in-left">{{message.sender_fullname}}</div>
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">
                             
-                            <tiledeskwidget-avatar-image class="slide-in-left"  
+                            <chat-avatar-image class="slide-in-left"  
                                 [senderID]="message.sender"
                                 [senderFullname]="message.sender_fullname"
                                 [baseLocation]="baseLocation">
-                            </tiledeskwidget-avatar-image>
+                            </chat-avatar-image>
 
                             <!--backgroundColor non viene ancora usato -->
-                            <tiledeskwidget-bubble-message class="messages msg_receive slide-in-left"
+                            <chat-bubble-message class="messages msg_receive slide-in-left"
                                 [message]="message"
                                 [textColor]="'black'"
                                 (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-                                (onAfterMessageRender)="returnOnAfterMessageRender($event)">
-                            </tiledeskwidget-bubble-message>
+                                (onAfterMessageRender)="returnOnAfterMessageRender($event)"
+                                (onImageRendered)="onImageRenderedFN($event)">
+                            </chat-bubble-message>
 
                           </div>
 
                           <!-- message INFO/SUPPORT::   message.attributes['subtype'] === 'info/support' -->
-                          <!-- <div *ngIf="messageType(MESSAGE_TYPE_INFO, message)" class="msg_info_container">
-                            <tiledeskwidget-info-message class="messages"
+                          <div *ngIf="messageType(MESSAGE_TYPE_INFO, message)" class="msg_info_container">
+                            <chat-info-message class="messages"
                                 [message]="message">
-                            </tiledeskwidget-info-message>
-                          </div> -->
+                            </chat-info-message>
+                          </div>
                           
                           <!-- <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive slide-in-left">
                               
@@ -112,17 +114,17 @@
                   
                                 <div>
 
-                                    <tiledeskwidget-image *ngIf="message.type == 'image' && message.metadata"
+                                    <chat-image *ngIf="message.type == 'image' && message.metadata"
                                       [metadata]="message.metadata"
                                       [width]="getMetadataSize(message.metadata).width"
                                       [height]="getMetadataSize(message.metadata).height">
-                                    </tiledeskwidget-image>
+                                    </chat-image>
   
-                                    <tiledeskwidget-frame *ngIf="message.type == 'frame' && message.metadata"
+                                    <chat-frame *ngIf="message.type == 'frame' && message.metadata"
                                       [metadata]="message.metadata"
                                       [width]="getMetadataSize(message.metadata).width"
                                       [height]="getMetadataSize(message.metadata).height">
-                                    </tiledeskwidget-frame>
+                                    </chat-frame>
 
                                     <!- - <div *ngIf="message.type == 'frame' && message.metadata"   [ngStyle] = "{ 'max-width': '100%', 'width': message.metadata.width, 'height': message.metadata.height }">
                                         <iframe width = "100%" height = "100%" style= "border:none;" [src] = "message.metadata.src" ></iframe>
@@ -136,12 +138,12 @@
                                             <span>{{message.timestamp  | amTimeAgo}}</span>
                                         </ng-template>
 
-                                        <tiledeskwidget-text
+                                        <chat-text
                                               [text]="message.text"
                                               [color]="'black'"
                                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                                               (onAfterMessageRender)="returnOnAfterMessageRender($event)">
-                                        </tiledeskwidget-text>
+                                        </chat-text>
 
                                     </div>
                                 </div>
@@ -158,13 +160,13 @@
     
                           <!-- message type:: button &&  -->
                           <div *ngIf="message.attributes && message.attributes.attachment " class="slide-in-left" > 
-                              <tiledeskwidget-message-attachment 
+                              <chat-message-attachment 
                                   style="height: 100%; display: block;"
                                   [message]="message"
                                   [isLastMessage] = "isLastMessage(message.uid)"
                                   [stylesMap]="stylesMap"
                                   (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)">
-                              </tiledeskwidget-message-attachment>
+                              </chat-message-attachment>
                           </div>
     
                       </div>

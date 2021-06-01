@@ -84,14 +84,14 @@
   <!-- CONTENT -->
   <div class="c21-body" tabindex="1311" onFocus="document.querySelector('[start-focus]').focus()">
 
-    <tiledeskwidget-list-conversations
+    <chat-list-conversations
       [listConversations]="allConversations"
       [styleMap]="styleMap"
       [translationMap]="translationMapConversation"
-      (onConversationSelected)=returnSelectedConversation($event)
+      (onConversationSelected)=onConversationSelectedFN($event)
       (onImageLoaded)="onImageLoadedFN($event)"
       (onConversationLoaded)="onConversationLoadedFN($event)">
-    </tiledeskwidget-list-conversations>
+    </chat-list-conversations>
 
   </div>
 

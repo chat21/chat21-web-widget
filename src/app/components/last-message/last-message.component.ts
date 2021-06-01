@@ -19,7 +19,7 @@ import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-
 
 
 @Component({
-  selector: 'tiledeskwidget-last-message',
+  selector: 'chat-last-message',
   templateUrl: './last-message.component.html',
   styleUrls: ['./last-message.component.scss']
 })
@@ -27,8 +27,8 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() conversation: ConversationModel
   @Input() baseLocation: string;
   @Input() stylesMap: Map<string, string>;
-  @Output() eventCloseMessagePreview  = new EventEmitter();
-  @Output() eventSelctedConv = new EventEmitter<string>();
+  @Output() onCloseMessagePreview  = new EventEmitter();
+  @Output() onSelectedConversation = new EventEmitter<string>();
   // ========= begin:: sottoscrizioni ======= //
   subscriptions: Subscription[] = []; /** */
   // ========= end:: sottoscrizioni ======= //
@@ -105,26 +105,26 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
 // ========= begin:: event emitter function ============//
 
-  returnOnAttachmentButtonClicked(event: any){
+  onAttachmentButtonClicked(event: any){
     // this.onAttachmentButtonClicked.emit(event)
     console.log('ButtonClicked', event)
   }
   /** */
-  private openConversationByID(conversation) {
+  openConversationByID(conversation) {
     this.g.wdLog(['openConversationByID: ', conversation]);
     this.conversation = null;
     this.g.isOpenNewMessage = false;
     // console.log('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     if ( conversation ) {
-      this.eventSelctedConv.emit(conversation);
+      this.onSelectedConversation.emit(conversation);
     }
   }
   /** */
-  private closeMessagePreview() {
+  closeMessagePreview() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
     // console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
-    this.eventCloseMessagePreview.emit();
+    this.onCloseMessagePreview.emit();
   }
   // ========= begin:: event emitter function ============//
 

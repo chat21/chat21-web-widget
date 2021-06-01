@@ -5,13 +5,13 @@ import { convertColorToRGBA } from '../../utils/utils';
 
 
 @Component({
-  selector: 'tiledeskwidget-menu-options',
+  selector: 'chat-menu-options',
   templateUrl: './menu-options.component.html',
   styleUrls: ['./menu-options.component.scss']
 })
 export class MenuOptionsComponent implements OnInit {
    // ========= begin:: Input/Output values ============//
-   @Output() eventSignOut = new EventEmitter();
+   @Output() onSignOut = new EventEmitter();
    // ========= end:: Input/Output values ============//
   themeColor50: string;
   hover: boolean;
@@ -43,7 +43,7 @@ export class MenuOptionsComponent implements OnInit {
 
   signOut() {
     this.g.setParameter('isOpenMenuOptions', false, true);
-    this.eventSignOut.emit();
+    this.onSignOut.emit();
   }
 
 }

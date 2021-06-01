@@ -7,7 +7,7 @@
     onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()">
 
     <!-- HEADER -->
-    <tiledeskwidget-conversation-header
+    <chat-conversation-header
         [idConversation]= "conversationWith"
         [senderId]="senderId"
         [isSoundActive]="g.isSoundActive"
@@ -22,10 +22,10 @@
         (onCloseWidget)="returnCloseWidget()"
         (onSoundChange)="returnSoundChange($event)"
         (onMenuOptionShow)="returnOnMenuOption($event)">
-    </tiledeskwidget-conversation-header>
+    </chat-conversation-header>
 
     <!-- CONTENT -->
-    <tiledeskwidget-conversation-content
+    <chat-conversation-content
         [messages]="messages"
         [senderId]="senderId"
         [baseLocation]="g.windowContext['tiledesk'].getBaseLocation()"
@@ -35,7 +35,15 @@
         (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)"
         (onScrollContent)="returnOnScrollContent($event)"
         (onMenuOptionShow)="returnOnMenuOption($event)">
-    </tiledeskwidget-conversation-content>
+    </chat-conversation-content>
+
+    <chat-interlal-frame *ngIf="isButtonUrl"
+        [url]="buttonUrl"
+        [translationMap]="translationMapHeader"
+        [styleMap]="styleMap"
+        (onBack)="onBackInternalFrame($event)"
+        (onClose)="onCloseInternalFrame($event)">
+    </chat-interlal-frame>
 
 
 
@@ -46,7 +54,7 @@
             <div *ngIf="messagesBadgeCount!=0" id="chat21-divBudge" class="c21-divBudge">{{messagesBadgeCount}}</div>
         </div>
 
-        <tiledeskwidget-conversation-footer
+        <chat-conversation-footer
             [conversationWith]="conversationWith"
             [attributes]="g.attributes"
             [senderId]="senderId"
@@ -59,11 +67,12 @@
             [showAttachmentButton]="g.showAttachmentButton"
             [showWidgetNameInConversation]="g.showWidgetNameInConversation"
             [isConversationArchived]="isConversationArchived"
+            [hideTextReply]="hideFooterTextReply"
             [stylesMap]="styleMap"
             [translationMap]="translationMapFooter"
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
             (onAfterSendMessage)="returnAfterSendMessage($event)">
-        </tiledeskwidget-conversation-footer>
+        </chat-conversation-footer>
 
     </div>
 

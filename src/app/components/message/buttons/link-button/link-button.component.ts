@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'tiledeskwidget-link-button-attachment',
+  selector: 'chat-link-button-attachment',
   templateUrl: './link-button.component.html',
   styleUrls: ['./link-button.component.scss']
 })

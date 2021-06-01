@@ -6,7 +6,7 @@ import { isEmoji } from '../../utils/utils';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
-  selector: 'tiledeskwidget-eyeeye-catcher-card',
+  selector: 'chat-eyeeye-catcher-card',
   templateUrl: './eyeeye-catcher-card.component.html',
   styleUrls: ['./eyeeye-catcher-card.component.scss'],
   animations: [
@@ -21,8 +21,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class EyeeyeCatcherCardComponent implements OnInit {
 
    // ========= begin:: Input/Output values ============//
-   @Output()   eventOpenChat  = new EventEmitter();
-   @Output()   eventOpenEyeCatcher = new EventEmitter();
+   @Output()   onOpenChat  = new EventEmitter<boolean>();
+   @Output()   onCloseEyeCatcherCard = new EventEmitter<boolean>();
    // ========= end:: Input/Output values ============//
 
   // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
@@ -77,7 +77,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
        console.log('calloutStaus ---------> ', this.g.calloutStaus);
       // console.log('this.g.isMobile', this.g.isMobile);
       if (isOpen === false && this.g.calloutStaus) { // && this.g.isMobile === false
-          this.eventOpenEyeCatcher.emit(true);
+          this.onCloseEyeCatcherCard.emit(true);
           // this.g.displayEyeCatcherCard = 'block';
           this.g.setParameter('displayEyeCatcherCard', 'block');
           // this.g.setParameter('calloutStaus', false, true);
@@ -123,7 +123,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   openChatFromEyeCatcherCard() {
       // this.g.displayEyeCatcherCard = 'none';
       this.g.setParameter('displayEyeCatcherCard', 'none');
-      this.eventOpenChat.emit();
+      this.onOpenChat.emit();
   }
 
   /**
@@ -147,7 +147,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   /**
    * EYE-CATCHER CARD CLOSE BTN */
   closeEyeCatcherCard() {
-      this.eventOpenEyeCatcher.emit(false);
+      this.onCloseEyeCatcherCard.emit(false);
       // this.g.displayEyeCatcherCard = 'none';
       this.g.setParameter('displayEyeCatcherCard', 'none');
       this.g.setParameter('calloutStaus', false, true);

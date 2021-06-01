@@ -5,14 +5,14 @@ import { MessagingService } from './../../../providers/messaging.service';
 import { TypingService } from '../../../../chat21-core/providers/abstract/typing.service';
 import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat21-core/utils/constants';
 import { Globals } from './../../../utils/globals';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
-import { replaceBr } from '../../../../chat21-core/utils/utils';
+import { convertColorToRGBA, replaceBr } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 
 @Component({
-  selector: 'tiledeskwidget-conversation-footer',
+  selector: 'chat-conversation-footer',
   templateUrl: './conversation-footer.component.html',
   styleUrls: ['./conversation-footer.component.scss']
 })
@@ -30,10 +30,13 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() showAttachmentButton: boolean;
   @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
+  @Input() hideTextReply: boolean;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
+
+  @ViewChild('chat21_file') public chat21_file: ElementRef;
 
   // ========= begin:: send image ======= //
   selectedFiles: FileList;
@@ -47,6 +50,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   textInputTextArea: string;
   conversationHandlerService: ConversationHandlerService
 
+  convertColorToRGBA = convertColorToRGBA;
   constructor(public g: Globals,
               //public upSvc: UploadService,
               private chatManager: ChatManager,
@@ -57,7 +61,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    console.log('changessss', changes)
+    console.log('ConversationFooterComponent::changessss', changes)
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
@@ -227,11 +231,13 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
               message = ''; // 'Image: ' + metadata.src;
           }
           that.sendMessage(message, type_message, metadata);
+          that.chat21_file.nativeElement.value = '';
           that.isFilePendingToUpload = false;
           // return downloadURL;
         }).catch(error => {
           // Use to signal error if something goes wrong.
           console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+          that.isFilePendingToUpload = false;
         });
         that.g.wdLog(['reader-result: ', file]);
     }
@@ -442,7 +448,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           // this.setDepartment();
-          this.textInputTextArea = replaceBr(this.textInputTextArea);
+          // this.textInputTextArea = replaceBr(this.textInputTextArea);
           this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT);
           // this.restoreTextArea();
         }
@@ -505,7 +511,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           // this.setDepartment();
-          this.textInputTextArea = replaceBr(this.textInputTextArea);
+          // this.textInputTextArea = replaceBr(this.textInputTextArea);
           this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT);
           // this.restoreTextArea();
         }

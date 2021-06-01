@@ -7,7 +7,7 @@ import { AppStorageService } from '../../../chat21-core/providers/abstract/app-s
 // vedi: https://angular.io/guide/animations
 
 @Component({
-  selector: 'tiledeskwidget-launcher-button',
+  selector: 'chat-launcher-button',
   templateUrl: './launcher-button.component.html',
   styleUrls: ['./launcher-button.component.scss'],
   animations: [
@@ -40,7 +40,7 @@ import { AppStorageService } from '../../../chat21-core/providers/abstract/app-s
 
 export class LauncherButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('aflauncherbutton') private aflauncherbutton: ElementRef;
-  @Output() eventOpenCloseWidget = new EventEmitter<boolean>();
+  @Output() onButtonClicked = new EventEmitter<boolean>();
 
   constructor(
     public g: Globals,
@@ -49,7 +49,6 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.g.wdLog(['open_close_handler BUTTON 1: ', this.g.isOpen]);
   }
 
   ngAfterViewInit() {
@@ -69,7 +68,7 @@ export class LauncherButtonComponent implements OnInit, AfterViewInit {
       this.g.isOpen = !this.g.isOpen;
       // this.g.setIsOpen(!isOpen);
       this.appStorageService.setItem('isOpen', this.g.isOpen);
-      this.eventOpenCloseWidget.emit( this.g.isOpen );
+      this.onButtonClicked.emit( this.g.isOpen );
     }
   }
 

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'tiledeskwidget-action-button-attachment',
+  selector: 'chat-action-button-attachment',
   templateUrl: './action-button.component.html',
   styleUrls: ['./action-button.component.scss']
 })

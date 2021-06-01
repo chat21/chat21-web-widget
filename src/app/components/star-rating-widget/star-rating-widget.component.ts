@@ -5,7 +5,7 @@ import { Globals } from '../../utils/globals';
 
 
 @Component({
-  selector: 'tiledeskwidget-star-rating-widget',
+  selector: 'chat-star-rating-widget',
   templateUrl: './star-rating-widget.component.html',
   styleUrls: ['./star-rating-widget.component.scss']
 })

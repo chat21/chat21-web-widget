@@ -44,15 +44,15 @@
 
   <div class="c21-body">
     
-    <tiledeskwidget-list-conversations
+    <chat-list-conversations
       [listConversations]="listConversations"
       [limit]="3"
       [styleMap]="styleMap"
       [translationMap]="translationMapConversation"
-      (onConversationSelected)=returnSelectedConversation($event)
+      (onConversationSelected)=onConversationSelectedFN($event)
       (onImageLoaded)="onImageLoadedFN($event)"
       (onConversationLoaded)="onConversationLoadedFN($event)">
-    </tiledeskwidget-list-conversations>
+    </chat-list-conversations>
 
     <div *ngIf="(!listConversations || listConversations.length == 0) && g.showAvailableAgents === true" style="margin-left: 30px;"> 
       <div *ngFor="let agent of availableAgents" class="c21-pallozzo">

@@ -2,26 +2,26 @@
   
   <span *ngFor="let button of buttons" class="div-button">
       
-      <tiledeskwidget-text-button-attachment *ngIf="button.type === 'text' && isLastMessage === true" class="div-button"
+      <chat-text-button-attachment *ngIf="button.type === 'text' && isLastMessage === true" class="div-button"
         [button]="button"
         [themeColor]="stylesMap.get('themeColor')"
         [foregroundColor]="stylesMap.get('foregroundColor')"
         (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
-      </tiledeskwidget-text-button-attachment>
+      </chat-text-button-attachment>
 
-      <tiledeskwidget-link-button-attachment *ngIf="button.type === 'url'" class="div-button"
+      <chat-link-button-attachment *ngIf="button.type === 'url'" class="div-button"
         [button]="button"
         [themeColor]="stylesMap.get('themeColor')"
         [foregroundColor]="stylesMap.get('foregroundColor')"
         (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
-      </tiledeskwidget-link-button-attachment>
+      </chat-link-button-attachment>
 
-      <tiledeskwidget-action-button-attachment *ngIf="button.type === 'action' && isLastMessage === true" class="div-button"
+      <chat-action-button-attachment *ngIf="button.type === 'action' && isLastMessage === true" class="div-button"
         [button]="button"
         [themeColor]="stylesMap.get('themeColor')"
         [foregroundColor]="stylesMap.get('foregroundColor')"
         (onButtonClicked)="returnOnAttachmentButtonClicked($event)">
-      </tiledeskwidget-action-button-attachment>
+      </chat-action-button-attachment>
 
       <!-- <div class="alt">{{button.value}}</div> -->
       <!-- <div *ngIf="button.type === 'text' && isLastMessage === true" class="button-in-msg {{button.type}}" (click)="actionButtonText(button)" title="{{button.value}}">

@@ -1,6 +1,6 @@
 <div class="visible-text-area">
   <textarea 
-      [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
+      [attr.disabled] = "(isFilePendingToUpload || isConversationArchived || hideTextReply)? true : null"
       start-focus-chat21-conversation-component
       inputTextArea 
       #textbox 
@@ -15,14 +15,14 @@
       placeholder="{{ translationMap.get('LABEL_PLACEHOLDER') }}">
   </textarea>
 
-  <!-- <tiledeskwidget-message-text-area
+  <!-- <chat-message-text-area
     [text]="textInputTextArea"
     (onChangeTextArea)="returnText($event)"
-  ></tiledeskwidget-message-text-area> -->
+  ></chat-message-text-area> -->
 </div>
 
 <div #div_attached>
-  <label *ngIf="showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived" id="chat21-start-upload-doc">
+  <label *ngIf="showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && !hideTextReply" id="chat21-start-upload-doc">
     <span class="v-align-center">
         <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
             <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
@@ -30,19 +30,20 @@
         </svg>
     </span>
     <input 
-            [attr.disabled] = "(isFilePendingToUpload || isConversationArchived)? true : null"
+            [attr.disabled] = "(isFilePendingToUpload || isConversationArchived || hideTextReply)? true : null"
             tabindex="1503" 
             type="file" 
             aria-label="seleziona allegato" 
             accept="image/*,.pdf,.zip" 
             name="chat21-file"
-            id="chat21-file" 
+            id="chat21-file"
+            #chat21_file
             class="inputfile" 
             [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
             (change)="detectFiles($event)"/>
   </label>
   <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
-  <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea" id="chat21-button-send" (click)="onSendPressed($event)">
+  <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea && !hideTextReply" id="chat21-button-send" (click)="onSendPressed($event)">
       <span class="v-align-center">
           <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
@@ -50,6 +51,14 @@
       </span>
   </div>
 </div>
+<!-- <div id="button" data-testid="widgetButton" class="chat-open">
+    <button type="button" id="button-body" tabindex="0" [ngStyle]="{'background':  'linear-gradient( 180grad,' + stylesMap.get('themeColor')+','+ convertColorToRGBA(stylesMap.get('themeColor'), 50)+')'}">
+        <svg fill="#FFFFFF" height="20" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+    </button>
+</div> -->
 
 
 <!-- <div #div_mic *ngIf="g.showMicButton" id="playbutton">

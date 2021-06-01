@@ -18,7 +18,7 @@ function appendJs(url) {
 }
 
   function initWidget() {
-    var tiledeskroot = document.createElement('tiledeskwidget-root');
+    var tiledeskroot = document.createElement('chat-root');
 
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     // console.log("tiledeskScriptLocation", tiledeskScriptLocation);

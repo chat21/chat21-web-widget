@@ -5,7 +5,7 @@ import { AppStorageService } from '../../../chat21-core/providers/abstract/app-s
 import { Globals } from '../../utils/globals';
 
 @Component({
-  selector: 'tiledeskwidget-prechat-form',
+  selector: 'chat-prechat-form',
   templateUrl: './prechat-form.component.html',
   styleUrls: ['./prechat-form.component.scss']
 })
@@ -14,8 +14,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   @ViewChild('afPrechatFormComponent') private afPrechatFormComponent: ElementRef;
   @ViewChild('privacyInputField') private privacyInputField: ElementRef;
   // ========= begin:: Input/Output values ===========//
-  @Output() eventClosePage = new EventEmitter();
-  @Output() eventCloseForm = new EventEmitter();
+  @Output() onClosePage = new EventEmitter();
+  @Output() onCloseForm = new EventEmitter();
   // ========= end:: Input/Output values ===========//
 
 
@@ -107,7 +107,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
       // attributes['userEmail'] = this.userEmail;
       // this.g.setParameter('attributes', attributes);
       this.appStorageService.setItem('attributes', JSON.stringify(attributes));
-      this.eventCloseForm.emit();
+      this.onCloseForm.emit();
     } else {
       // mostro messaggio di errore
     }
@@ -124,7 +124,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   }
 
   returnClosePage() {
-    this.eventClosePage.emit();
+    this.onClosePage.emit();
   }
   // ========= end:: ACTIONS ============//
 

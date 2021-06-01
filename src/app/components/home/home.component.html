@@ -56,15 +56,15 @@
             <div class="c21-body-content" [class.nologo]="g.project.logoChat === 'nologo'">
                 <div class="c21-cards">
                     <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
-                        <tiledeskwidget-home-conversations 
+                        <chat-home-conversations 
                             [listConversations]="listConversations"
                             [styleMap]="styleMap"
-                            (onNewConversation)="returnNewConversation()" 
-                            (onConversationSelected)="returnSelectedConversation($event)"
-                            (onOpenAllConvesations)="returnOpenAllConversation()"
+                            (onNewConversation)="onNewConversationFN()" 
+                            (onConversationSelected)="onConversationSelectedFN($event)"
+                            (onOpenAllConvesations)="onOpenAllConversation()"
                             (onImageLoaded)="onImageLoadedFN($event)"
                             (onConversationLoaded)="onConversationLoadedFN($event)">
-                        </tiledeskwidget-home-conversations>
+                        </chat-home-conversations>
                     </div>
                     
                 </div>
@@ -77,9 +77,9 @@
 
     <!-- FOOTER -->
     <div class="c21-footer fade-in-bottom-footer">
-        <tiledeskwidget-menu-options
-        (eventSignOut)="returnSignOut()" 
-        ></tiledeskwidget-menu-options>
+        <chat-menu-options
+            (onSignOut)="onSignOutFN()">
+        </chat-menu-options>
         <div id="c21-powered-by">
             <div tabindex="-1" class="c21-powered-by" [innerHTML]="g.poweredBy"></div>
             <div class="build_version">{{g.BUILD_VERSION}}</div>

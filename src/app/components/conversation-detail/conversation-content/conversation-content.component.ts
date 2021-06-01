@@ -7,7 +7,7 @@ import { strip_tags } from '../../../utils/utils';
 import { isInfo, isMine, messageType } from '../../../../chat21-core/utils/utils-message';
 import { MESSAGE_TYPE_INFO, MESSAGE_TYPE_MINE, MESSAGE_TYPE_OTHERS } from '../../../../chat21-core/utils/constants';
 @Component({
-  selector: 'tiledeskwidget-conversation-content',
+  selector: 'chat-conversation-content',
   templateUrl: './conversation-content.component.html',
   styleUrls: ['./conversation-content.component.scss']
 })
@@ -77,8 +77,6 @@ export class ConversationContentComponent implements OnInit {
     this.cdref.detectChanges();
   }
 
-
-
   /**
    *
    * @param message
@@ -113,8 +111,8 @@ export class ConversationContentComponent implements OnInit {
     this.startScroll = false;
     if (this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
-      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-      if (checkContentScrollPosition) {
+      const checkContentScrollPositionIsEnd = this.checkContentScrollPosition(divScrollMe);
+      if (checkContentScrollPositionIsEnd) {
         this.onScrollContent.emit(true)
         //this.showBadgeScroollToBottom = false;
         //this.NUM_BADGES = 0;
@@ -252,6 +250,18 @@ export class ConversationContentComponent implements OnInit {
 
   returnOnAfterMessageRender(event){
     this.onAfterMessageRender.emit(event)
+  }
+
+  onImageRenderedFN(event){
+    const imageRendered = event;
+    if (imageRendered && this.scrollMe) {
+      const divScrollMe = this.scrollMe.nativeElement;
+      const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
+      if (!checkContentScrollPosition) { // SE NON SONO ALLA FINE, SCROLLO CONTENT
+        this.scrollToBottom()
+      }
+ 
+    }
   }
 
   // printMessage(message, messageEl, component) {

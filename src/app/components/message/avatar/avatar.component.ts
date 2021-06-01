@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ImageRepoService } from '../../../../chat21-core/providers/abstract/image-repo.service';
 @Component({
-  selector: 'tiledeskwidget-avatar-image',
+  selector: 'chat-avatar-image',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })
@@ -33,11 +33,11 @@ export class AvatarComponent implements OnInit {
   }
 
   onLoadedBot(event){
-    console.log('LOADED Bot avatar image...')
+    // console.log('LOADED Bot avatar image...')
   }
 
   onLoadedHuman(event){
-    console.log('LOADED Bot human image...')
+    // console.log('LOADED Bot human image...')
   }
 
   // getBaseLocationWidget(): string{

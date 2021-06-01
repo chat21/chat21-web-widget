@@ -30,11 +30,11 @@
             [height]="getSizeImg(conversation).height" /> -->
           
         <div *ngIf="isImage(conversation)" class="c21-img">
-          <tiledeskwidget-image *ngIf="isImage(conversation)"
-          [metadata]="conversation.metadata"
-          [width]="getMetadataSize(conversation.metadata).width"
-          [height]="getMetadataSize(conversation.metadata).height">
-        </tiledeskwidget-image>
+          <chat-image *ngIf="isImage(conversation)"
+            [metadata]="conversation.metadata"
+            [width]="getMetadataSize(conversation.metadata).width"
+            [height]="getMetadataSize(conversation.metadata).height">
+          </chat-image>
         </div>
 
 
@@ -51,13 +51,13 @@
             </ng-template>
 
             <div *ngIf="conversation.attributes && conversation.attributes.attachment " class="slide-in-left" > 
-              <tiledeskwidget-message-attachment 
+              <chat-message-attachment 
                   style="height: 100%; display: block;"
                   [message]="conversation"
                   [isLastMessage] = "true"
                   [stylesMap]="stylesMap"
-                  (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)">
-              </tiledeskwidget-message-attachment>
+                  (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)">
+              </chat-message-attachment>
             </div>  
         </div>
 
@@ -67,11 +67,11 @@
 
         <div class="c21-icon-avatar">
             <div class="c21-avatar-image profile_image">
-              <tiledeskwidget-avatar-image class="slide-in-left"  
+              <chat-avatar-image class="slide-in-left"  
                 [senderID]="conversation.sender"
                 [senderFullname]="conversation.sender_fullname"
                 [baseLocation]="baseLocation">
-               </tiledeskwidget-avatar-image>
+               </chat-avatar-image>
               <!-- <img src="{{conversation.image}}" onError="this.src = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'" /> -->
             </div> 
         </div>

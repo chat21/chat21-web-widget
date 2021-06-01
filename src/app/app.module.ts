@@ -1,3 +1,4 @@
+import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
@@ -91,7 +92,7 @@ import { InfoMessageComponent } from './components/message/info-message/info-mes
 import { UserTypingComponent } from '../../src/chat21-core/utils/user-typing/user-typing.component';
 
 //CONSTANTS
-import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE } from '../../src/chat21-core/utils/constants';
+import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE, LogLevel } from '../../src/chat21-core/utils/constants';
 
 //TRIGGER-HANDLER
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
@@ -102,7 +103,7 @@ import { ChatManager } from './../chat21-core/providers/chat-manager';
 import { CustomTranslateService } from './../chat21-core/providers/custom-translate.service';
 
 //ABSTRACT SERVICES
-import { AuthService } from '../chat21-core/providers/abstract/auth.service';
+import { MessagingAuthService } from '../chat21-core/providers/abstract/messagingAuth.service';
 import { ConversationHandlerBuilderService } from '../chat21-core/providers/abstract/conversation-handler-builder.service';
 import { ConversationsHandlerService } from '../chat21-core/providers/abstract/conversations-handler.service';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
@@ -145,6 +146,8 @@ import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 
 //APP_STORAGE
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
+import { LoggerInstance } from '../chat21-core/providers/logger/loggerInstance';
+import { InterlalFrameComponent } from './components/conversation-detail/interlal-frame/interlal-frame.component';
 
 
 
@@ -177,6 +180,8 @@ export function createTranslateLoader(http: HttpClient) {
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
+    let customLogger = new CustomLogger(true, LogLevel.All)
+    LoggerInstance.setInstance(customLogger)
     if (environment.remoteConfig) {
       return appConfig.loadAppConfig();
     }
@@ -198,7 +203,7 @@ export function authenticationFactory(http: HttpClient, appConfig: AppConfigServ
   } else {
 
     FirebaseInitService.initFirebase(config.firebaseConfig)
-    const auth= new FirebaseAuthService(http, appSorage);
+    const auth= new FirebaseAuthService(http);
     auth.setBaseUrl(config.apiUrl)
     return auth
   }
@@ -284,7 +289,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
 }
 
 export function loggerFactory() {
-  return new CustomLogger(true);
+  return new CustomLogger(true, LogLevel.All);
 }
 
 
@@ -322,7 +327,8 @@ export function loggerFactory() {
     ActionButtonComponent,
     AvatarComponent,
     ReturnReceiptComponent,
-    InfoMessageComponent
+    InfoMessageComponent,
+    InterlalFrameComponent
   ],
   imports: [
     BrowserModule,
@@ -365,7 +371,7 @@ export function loggerFactory() {
       deps: [AppConfigService]
     },
     {
-      provide: AuthService,
+      provide: MessagingAuthService,
       useFactory: authenticationFactory,
       deps: [HttpClient, AppConfigService, Chat21Service, AppStorageService ]
     },
@@ -410,11 +416,6 @@ export function loggerFactory() {
       deps: [HttpClient, AppConfigService, AppStorageService ]
     },
     {
-      provide: LoggerService,
-      useFactory: loggerFactory,
-      deps: []
-    },
-    {
       provide: AppStorageService,
       useClass: LocalSessionStorage
     },
@@ -436,7 +437,8 @@ export function loggerFactory() {
     CustomTranslateService,
     ChatManager,
     Triggerhandler,
-    Chat21Service
+    Chat21Service,
+    TiledeskAuthService,
   ],
   bootstrap: [AppComponent]
 })

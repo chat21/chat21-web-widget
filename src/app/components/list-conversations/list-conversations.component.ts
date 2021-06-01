@@ -9,7 +9,7 @@ import { Globals } from '../../utils/globals';
 import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
 
 @Component({
-  selector: 'tiledeskwidget-list-conversations',
+  selector: 'chat-list-conversations',
   templateUrl: './list-conversations.component.html',
   styleUrls: ['./list-conversations.component.scss']
 })
@@ -44,7 +44,7 @@ export class ListConversationsComponent implements OnInit {
     this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
   }
 
-  private openConversationByID(conversation) {
+  public openConversationByID(conversation) {
     this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);

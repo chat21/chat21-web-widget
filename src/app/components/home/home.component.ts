@@ -7,7 +7,7 @@ import { Globals } from '../../utils/globals';
 
 
 @Component({
-  selector: 'tiledeskwidget-home',
+  selector: 'chat-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
@@ -77,19 +77,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 
   // ========= begin:: ACTIONS ============//
-  returnNewConversation() {
+  onNewConversationFN() {
     // rimuovo classe animazione
     this.removeAnimation();
     this.onNewConversation.emit();
   }
 
-  returnOpenAllConversation() {
+  onOpenAllConversation() {
     // rimuovo classe animazione
     this.removeAnimation();
     this.onOpenAllConvesations.emit();
   }
 
-  returnSelectedConversation(conversation: ConversationModel) {
+  onConversationSelectedFN(conversation: ConversationModel) {
     if(conversation){
       // rimuovo classe animazione
       this.removeAnimation();
@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * MODAL MENU SETTINGS:
    * logout
    */
-  returnSignOut() {
+  onSignOutFN() {
     this.onSignOut.emit();
   }
 

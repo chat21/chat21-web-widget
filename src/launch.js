@@ -38,7 +38,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '<link rel="icon" type="image/x-icon" href="favicon.ico">';
     srcTileDesk += '</head>';
     srcTileDesk += '<body>';
-    srcTileDesk += '<tiledeskwidget-root></tiledeskwidget-root>';
+    srcTileDesk += '<chat-root></chat-root>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/inline.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/polyfills.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
@@ -167,7 +167,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
  * 
  */
 function initWidget() {
-    var tiledeskroot = document.createElement('tiledeskwidget-root');
+    var tiledeskroot = document.createElement('chat-root');
     var tiledeskScriptLocation = document.getElementById("tiledesk-jssdk").src;
     //var currentScript = document.currentScript;
     //var tiledeskScriptLocation = '';

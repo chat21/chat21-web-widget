@@ -21,7 +21,7 @@ import { CustomTranslateService } from '../../../chat21-core/providers/custom-tr
 
 
 @Component({
-  selector: 'tiledeskwidget-list-all-conversations',
+  selector: 'chat-list-all-conversations',
   templateUrl: './list-all-conversations.component.html',
   styleUrls: ['./list-all-conversations.component.scss']
 })
@@ -190,7 +190,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     this.onCloseWidget.emit();
   }
 
-  returnSelectedConversation(conversation: ConversationModel){
+  onConversationSelectedFN(conversation: ConversationModel){
     this.g.wdLog(['openConversationByID: ', conversation]);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);

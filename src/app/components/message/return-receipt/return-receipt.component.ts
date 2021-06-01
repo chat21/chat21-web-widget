@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT, MSG_STATUS_SENT_SERVER } from '../../../utils/constants';
 
 @Component({
-  selector: 'tiledeskwidget-return-receipt',
+  selector: 'chat-return-receipt',
   templateUrl: './return-receipt.component.html',
   styleUrls: ['./return-receipt.component.scss']
 })

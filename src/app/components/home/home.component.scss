@@ -148,8 +148,8 @@
             position: absolute;
             color: $gray;
             top: 0;
-            left: 80px;
-            right: 80px;
+            left: 30px;
+            right: 30px;
             cursor: pointer;
             a {
                 text-decoration: none;
@@ -157,6 +157,15 @@
                 font-size: 1.1em;
                 font-weight: 500;
                 line-height: 22px;
+
+                font-family: Mulish, sans-serif;
+                letter-spacing: -0.24px;
+                -webkit-font-smoothing: antialiased;
+    
+                img { 
+                    max-width: 18%;
+                    vertical-align: top;
+                }
             }
             b{
                 font-weight: bolder;

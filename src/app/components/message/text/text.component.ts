@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, Sanitizer } from '@angular/core';
 
 @Component({
-  selector: 'tiledeskwidget-text',
+  selector: 'chat-text',
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.scss']
 })

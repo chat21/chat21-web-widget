@@ -2,7 +2,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'tiledeskwidget-frame',
+  selector: 'chat-frame',
   templateUrl: './frame.component.html',
   styleUrls: ['./frame.component.scss']
 })

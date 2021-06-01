@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MessageModel } from '../../../../chat21-core/models/message';
 
 @Component({
-  selector: 'tiledeskwidget-info-message',
+  selector: 'chat-info-message',
   templateUrl: './info-message.component.html',
   styleUrls: ['./info-message.component.scss']
 })

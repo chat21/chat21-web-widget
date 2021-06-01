@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@ang
 
 
 @Component({
-  selector: 'tiledeskwidget-text-button-attachment',
+  selector: 'chat-text-button-attachment',
   templateUrl: './text-button.component.html',
   styleUrls: ['./text-button.component.scss']
 })

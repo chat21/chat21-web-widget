@@ -48,7 +48,7 @@ import { AppStorageService } from '../../../../chat21-core/providers/abstract/ap
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'tiledeskwidget-conversation',
+  selector: 'chat-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss'],
   // tslint:disable-next-line:use-host-property-decorator
@@ -84,6 +84,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   
   isButtonsDisabled = true;
   isConversationArchived = false;
+  hideFooterTextReply: boolean = false;
   isTrascriptDownloadEnabled = false;
   audio: any;
   // ========= begin:: gestione scroll view messaggi ======= //
@@ -175,6 +176,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   conversationsHandlerService: ConversationsHandlerService
   archivedConversationsHandlerService: ArchivedConversationsHandlerService
 
+  public isButtonUrl: boolean = false;
+  public buttonUrl: any;
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -324,7 +327,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   updateConversationBadge() {
     console.log('updateConversationBadge', this.conversation)
     if(this.isConversationArchived && this.conversation && this.archivedConversationsHandlerService){
-      this.archivedConversationsHandlerService.setConversationRead(this.conversation)
+      this.archivedConversationsHandlerService.setConversationRead(this.conversation.uid)
     }
     if (!this.isConversationArchived && this.conversation && this.conversationsHandlerService) {
       this.conversationsHandlerService.setConversationRead(this.conversation.uid)
@@ -818,6 +821,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         if(conversation && conversation.sender !== this.senderId){
           const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
           if(checkContentScrollPosition){ //update conversation if scroolToBottom is to the end
+            console.log('updateConversationBadge...')
             that.updateConversationBadge();
           }
         }
@@ -934,7 +938,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.messagesBadgeCount++;
           // that.soundMessage(msg.timestamp);
         }
+
+        // check if sender can reply --> set footer active/disabled
+        if(msg.attributes && msg.attributes.hideTextReply){
+          this.hideFooterTextReply = msg.attributes.hideTextReply
+        }
       }
+
   }
 
   /**
@@ -1740,7 +1750,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.showBadgeScroollToBottom = !event;
     console.log('scroool eventtt', event)
     //se sono alla fine (showBadgeScroollBottom === true) allora imposto messageBadgeCount a 0
-    if(this.showBadgeScroollToBottom){
+    if(!this.showBadgeScroollToBottom){
       this.messagesBadgeCount = 0;
       this.updateConversationBadge();
     }
@@ -1854,7 +1864,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     switch (event.target.type) {
       case 'url':
         try {
-          this.openLink(event.target.button);
+          this.isButtonUrl= true;
+          this.buttonUrl = event.target.button.link
+          // this.openLink(event.target.button);
         } catch (err) {
           this.g.wdLog(['> Error :' + err]);
         }
@@ -1876,6 +1888,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
       default: return;
     }
+  }
+
+  onBackInternalFrame(event){
+
+  }
+
+  onCloseInternalFrame(event){
+    this.isButtonUrl = false
+    this.buttonUrl = null;
   }
 
   /** */

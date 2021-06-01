@@ -5,7 +5,7 @@ import { DepartmentModel } from '../../../models/department';
 import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 
 @Component({
-    selector: 'tiledeskwidget-selection-department',
+    selector: 'chat-selection-department',
     templateUrl: './selection-department.component.html',
     styleUrls: ['./selection-department.component.scss']
 })
