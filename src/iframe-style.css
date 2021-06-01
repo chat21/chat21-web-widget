@@ -35,7 +35,7 @@
     /* width: 400px;
     height: 100px;
     min-width: 400px; */
-    width: 100%;
+    width: 100% !important;
     min-width: 400px;
     max-width: 400px;
 }
