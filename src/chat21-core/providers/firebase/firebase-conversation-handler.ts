@@ -26,6 +26,8 @@ import {
 import { timestamp } from 'rxjs/operators';
 import { MessageModel } from '../../models/message';
 import { messageType } from '../../utils/utils-message';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 
 
@@ -56,10 +58,10 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private listSubsriptions: any[];
     private CLIENT_BROWSER: string;
     private lastDate = '';
-    private logger: CustomLogger = new CustomLogger(true)
+    private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
 
-    constructor(@Inject('skipMessage') private skipInfoMessage: boolean) {
+    constructor(@Inject('skipMessage') private skipMessage: boolean) {
         super();
     }
 
@@ -81,7 +83,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.CLIENT_BROWSER = navigator.userAgent;
         this.conversationWith = recipientId;
         this.messages = [];
-        this.attributes = this.setAttributes();
+        // this.attributes = this.setAttributes();
     }
 
     /**
@@ -196,23 +198,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.logger.printDebug('senderFullname: ',  senderFullname);
         this.logger.printDebug('sender: ',  sender);
         this.logger.printDebug('SEND MESSAGE: ', msg, channelType);
-        this.logger.printDebug('timestamp: ', );
-        this.logger.printDebug('messaggio **************', );
-        // messageRef.update({
-        //     uid: messageRef.key
-        // }, ( error ) => {
-        //     // if (error) {
-        //     //     message.status = -100;
-        //     //     console.log('ERRORE', error);
-        //     // } else {
-        //     //     message.status = 150;
-        //     //     console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
-        //     // }
-        //     // console.log('****** changed *****', that.messages);
-        // });
-
-        
-          return message
+        return message
     }
 
     /**
@@ -227,43 +213,42 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     // BEGIN PRIVATE FUNCTIONS
     // ---------------------------------------------------------- //
     /** */
-    private setAttributes(): any {
-        const attributes: any = {
-            client: this.CLIENT_BROWSER,
-            sourcePage: location.href,
+    // private setAttributes(): any {
+    //     const attributes: any = {
+    //         client: this.CLIENT_BROWSER,
+    //         sourcePage: location.href,
             
-        };
+    //     };
 
-        if(this.loggedUser && this.loggedUser.email ){
-            attributes.userEmail = this.loggedUser.email
-        }
-        if(this.loggedUser && this.loggedUser.fullname) {
-            attributes.userFullname = this.loggedUser.fullname
-        }
+    //     if(this.loggedUser && this.loggedUser.email ){
+    //         attributes.userEmail = this.loggedUser.email
+    //     }
+    //     if(this.loggedUser && this.loggedUser.fullname) {
+    //         attributes.userFullname = this.loggedUser.fullname
+    //     }
         
 
-        // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
-        // if (!attributes || attributes === 'undefined') {
-        //     attributes = {
-        //         client: this.CLIENT_BROWSER,
-        //         sourcePage: location.href,
-        //         userEmail: this.loggedUser.email,
-        //         userFullname: this.loggedUser.fullname
-        //     };
-        //     console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
-        //     sessionStorage.setItem('attributes', JSON.stringify(attributes));
-        // }
-        return attributes;
-    }
+    //     // let attributes: any = JSON.parse(sessionStorage.getItem('attributes'));
+    //     // if (!attributes || attributes === 'undefined') {
+    //     //     attributes = {
+    //     //         client: this.CLIENT_BROWSER,
+    //     //         sourcePage: location.href,
+    //     //         userEmail: this.loggedUser.email,
+    //     //         userFullname: this.loggedUser.fullname
+    //     //     };
+    //     //     this.logger.printLog('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
+    //     //     sessionStorage.setItem('attributes', JSON.stringify(attributes));
+    //     // }
+    //     return attributes;
+    // }
 
     /** */
     private added(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
         // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
             return;
         }
-        // console.log('>>>>>>>>>>>>>> added headerDate: ', msg);
         this.addRepalceMessageInArray(childSnapshot.key, msg);
         this.messageAdded.next(msg);
     }
@@ -272,9 +257,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private changed(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-        // console.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
         // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
         this.addRepalceMessageInArray(childSnapshot.key, msg);
@@ -302,7 +286,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         }
         // bonifico messaggio da url
         if (msg.type === 'text') {
-            // msg.text = htmlEntities(msg.text);
+            msg.text = htmlEntities(msg.text);
         }
         // verifico che il sender è il logged user
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
@@ -312,7 +296,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
                 this.translateInfoSupportMessages(msg);
             }
         }
-         /// commented because NOW ATTRIBUTES COMES FROM OUTSIDE 
+        /// commented because NOW ATTRIBUTES COMES FROM OUTSIDE 
         // if (msg.attributes && msg.attributes.projectId) {
         //     this.attributes.projectId = msg.attributes.projectId;
         //     // sessionStorage.setItem('attributes', JSON.stringify(attributes));
@@ -425,11 +409,11 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     this.logger.printDebug('unsubscribe: ', key);
     this.listSubsriptions.forEach(sub => {
         this.logger.printDebug('unsubscribe: ', sub.uid, key);
-      if (sub.uid === key) {
-        this.logger.printDebug('unsubscribe: ', sub.uid, key);
-        sub.unsubscribe(key, null);
-        return;
-      }
+    	if (sub.uid === key) {
+			this.logger.printDebug('unsubscribe: ', sub.uid, key);
+			sub.unsubscribe(key, null);
+			return;
+      	}
     });
   }
 

@@ -17,11 +17,13 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 
 // utils
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
-import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup } from '../../utils/utils';
+import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup, htmlEntities } from '../../utils/utils';
 import { ImageRepoService } from '../abstract/image-repo.service';
 import { FirebaseImageRepoService } from './firebase-image-repo';
 import { ArchivedConversationsHandlerService } from '../abstract/archivedconversations-handler.service';
 import { CustomLogger } from '../logger/customLogger';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 
 
@@ -42,15 +44,13 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     archivedConversations: Array<ConversationModel> = [];
     uidConvSelected: string;
     tenant: string;
-    //imageRepo: ImageRepoService = new FirebaseImageRepoService();
-    
-    
+    // imageRepo: ImageRepoService = new FirebaseImageRepoService();
+
     // private params
     private loggedUserId: string;
     private translationMap: Map<string, string>;
     private isConversationClosingMap: Map<string, boolean>;
-    private logger: CustomLogger = new CustomLogger(true);
-    
+    private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
 
     constructor(
@@ -116,8 +116,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             that.added(childSnapshot);
         });
 
-        console.log('SubscribeToConversations (firebase-convs-handler) - archivedConversations' , that.archivedConversations )
-
         setTimeout(() => {
             callback() 
           }, 2000);
@@ -125,8 +123,9 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         // this.audio = new Audio();
         // this.audio.src = URL_SOUND;
         // this.audio.load();
-
     }
+
+
 
     /**
      * restituisce il numero di conversazioni nuove
@@ -142,8 +141,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     }
 
     //imposto la conversazione come: letta
-    setConversationRead(conversation: ConversationModel): void {
-        const urlUpdate = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversation.recipient;
+    setConversationRead(conversationrecipient): void {
+        const urlUpdate = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationrecipient;
         const update = {};
         update['/is_new'] = false;
         firebase.database().ref(urlUpdate).update(update);
@@ -173,22 +172,31 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
      * @param conversationId the id of the conversation of which is wants to delete
      */
     deleteClosingConversation(conversationId: string) {
-    this.isConversationClosingMap.delete(conversationId);
+        this.isConversationClosingMap.delete(conversationId);
     }
 
 
-    public getConversationDetail(tenant: string, loggedUserUid: string, conversationId: string) {
-        const conversationSelected = this.archivedConversations.find(item => item.uid === conversationId);
-        this.logger.printDebug('>>>>>>>>>>>>>> getConversationDetail::ARCHIVED *****: ', conversationSelected)
-        if (conversationSelected) {
-            this.BSConversationDetail.next(conversationSelected);
+    getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
+        const conversation = this.archivedConversations.find(item => item.uid === conversationId);
+        this.logger.printDebug('SubscribeToConversations  (firebase-archivded-convs-handler) getConversationDetail::ARCHIVED *****: ', conversation)
+        if (conversation) {
+            callback(conversation)
+            // this.BSConversationDetail.next(conversationSelected);
         } else {
-            const urlNodeFirebase = '/apps/' + tenant + '/users/' + loggedUserUid + '/conversations/' + conversationId;
-            this.logger.printDebug('urlNodeFirebase conversationDetail::ARCHIVED *****', urlNodeFirebase)
+            // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/archived_conversations/' + conversationId;
+            const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
+            this.logger.printDebug('urlNodeFirebase conversationDetail *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
-                const conversation: ConversationModel = childSnapshot.val();
-                this.BSConversationDetail.next(conversation);
+                const childData: ConversationModel = childSnapshot.val();
+                childData.uid = childSnapshot.key;
+                const conversation = this.completeConversation(childData);
+                if(conversation){
+                    callback(conversation)
+                }else {
+                    callback(null)
+                }
+                // this.BSConversationDetail.next(conversation);
             });
         }
     }
@@ -371,6 +379,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             conversation_with_fullname = conv.recipient_fullname;
             conv.sender_fullname = this.translationMap.get('YOU')
             // conv.last_message_text = YOU + conv.last_message_text;
+        // } else if (conv.channel_type === TYPE_GROUP) {
         } else if (isGroup(conv)) {
             // conversation_with_fullname = conv.sender_fullname;
             // conv.last_message_text = conv.last_message_text;
@@ -382,6 +391,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
+        conv.last_message_text = htmlEntities(conv.last_message_text)
         conv.archived = true;
         //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         return conv;

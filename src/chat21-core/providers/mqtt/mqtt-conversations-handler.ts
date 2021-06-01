@@ -272,7 +272,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             this.conversations.sort(compareValues('timestamp', 'desc'));
             console.log("NUOVA CONVER;.uid4" + conversation.uid)
             console.log("TUTTE:", this.conversations)
-            this.conversationChanged.next(conversation);
+            // this.conversationChanged.next(conversation);
             console.log("NUOVA CONVER;.uid5" + conversation.uid)
             this.conversationAdded.next(conversation);
             console.log("NUOVA CONVER;.uid6" + conversation.uid)
@@ -314,8 +314,8 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             const conversation = this.conversations[index];
             console.log("Conversation to update found", conversation);
             this.updateConversationWithSnapshot(this.conversations[index], childSnapshot);
-            // this.conversations.sort(compareValues('timestamp', 'desc'));
-            // this.conversationChanged.next(conversation);
+            this.conversations.sort(compareValues('timestamp', 'desc'));
+            this.conversationChanged.next(conversation);
             // this.conversations.splice(index, 1, conversation');
         }
         // this.databaseProvider.setConversation(conversation);

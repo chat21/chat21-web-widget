@@ -32,5 +32,4 @@ export abstract class UploadService {
   // functions
   abstract initialize(): void;
   abstract upload(upload: UploadModel): Promise<any>;
-  abstract get(filename: string, type: string): string;
 }

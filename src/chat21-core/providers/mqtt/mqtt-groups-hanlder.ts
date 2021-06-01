@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { GroupModel } from '../../models/group';
 import { GroupsHandlerService } from '../../providers/abstract/groups-handler.service';
+import { LoggerService } from '../abstract/logger.service';
 import { CustomLogger } from '../logger/customLogger';
+import { LoggerInstance } from '../logger/loggerInstance';
 import { Chat21Service } from './chat-service';
 
 // @Injectable({ providedIn: 'root' })
@@ -19,7 +21,7 @@ export class MQTTGroupsHanlder extends GroupsHandlerService {
     // private params
     private tenant: string;
     private loggedUserId: string;
-    private logger: CustomLogger = new CustomLogger(true);
+    private logger: LoggerService = LoggerInstance.getInstance();
     
     constructor(
         public chat21Service: Chat21Service

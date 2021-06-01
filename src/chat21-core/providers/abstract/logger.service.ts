@@ -10,5 +10,7 @@ export abstract class LoggerService {
 
   abstract printLog(...message: any[])
   abstract printDebug(...message: any[])
+  abstract printWarn(...message: any[])
+  abstract printInfo(...message: any[])
   abstract printError(...message: any[])
 }

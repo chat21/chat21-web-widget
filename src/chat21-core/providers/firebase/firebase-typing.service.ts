@@ -9,6 +9,8 @@ import 'firebase/database';
 
 // services
 import { TypingService } from '../abstract/typing.service';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 export class TypingModel {
   constructor(
@@ -35,7 +37,7 @@ export class FirebaseTypingService extends TypingService {
   // private params
   private urlNodeTypings: string;
   private setTimeoutWritingMessages: any;
-  private logger: CustomLogger= new CustomLogger(true);
+  private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor() {
     super();
