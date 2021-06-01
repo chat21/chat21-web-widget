@@ -9,7 +9,7 @@ import { UserModel } from '../../models/user';
 //   providedIn: 'root'
 // })
 @Injectable()
-export abstract class AuthService {
+export abstract class MessagingAuthService {
 
   // BehaviorSubject
   abstract BSAuthStateChanged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -48,12 +48,13 @@ export abstract class AuthService {
   // functions
   abstract initialize(): void;
   abstract getCurrentUser(): UserModel;
-  // tslint:disable-next-line: max-line-length
-  // passare usermodel e completare il dettaglio dai parametri passati da tiledesk, quindi eliminare tutte la chiamate alla classe di service current-user!!! // oppure  richiamare il servizio x completare il dettaglio prima di far scattare l'evento di connect
   abstract getToken(): string;
   abstract getTiledeskToken(): string;
   abstract signInWithEmailAndPassword(email: string, password: string): void;
   abstract signInWithCustomToken(tiledeskToken: string): Promise<any>;
   abstract signInAnonymously(projectID: string): Promise<any>;
+  
+  
+  abstract createCustomToken(tiledeskToken): void;
   abstract logout(): void;
 }
