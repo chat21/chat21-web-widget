@@ -359,9 +359,11 @@ export function htmlEntities(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/\n/g, '<br>');
 }
 
+//NOT IN USE
 export function replaceBr(text) {
   if (text) { const newText = text.replace(/[\n\r]/g, '<br>');
     return newText;
