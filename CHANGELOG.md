@@ -1,5 +1,8 @@
 # chat21-web-widget ver 4.0
 
+### 4.2.2
+- Sets in enviroments the value of the key remoteConfig to true
+
 ### 4.2.1
 - Fixes the bug: the callout opens only the first time the site is accessed
 
