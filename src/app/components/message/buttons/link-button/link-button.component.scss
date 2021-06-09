@@ -37,13 +37,20 @@
             fill: $blue;
         }
     }
+    .icon-button-action-self{
+        position: absolute;
+        right: 1;
+        svg {
+            fill: $blue;
+        }
+    }
     &:focus,
     &:hover {
         color: white;
         background:  $blue;
-        .icon-button-action {
+        .icon-button-action, .icon-button-action-self {
             svg {
-                fill: rgb(10, 8, 8);
+                fill: white;
             }
         }
     }

@@ -6,6 +6,7 @@ import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX
 import { strip_tags } from '../../../utils/utils';
 import { isInfo, isMine, messageType } from '../../../../chat21-core/utils/utils-message';
 import { MESSAGE_TYPE_INFO, MESSAGE_TYPE_MINE, MESSAGE_TYPE_OTHERS } from '../../../../chat21-core/utils/constants';
+import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 @Component({
   selector: 'chat-conversation-content',
   templateUrl: './conversation-content.component.html',
@@ -66,16 +67,21 @@ export class ConversationContentComponent implements OnInit {
   };
 
   urlBOTImage = 'https://s3.eu-west-1.amazonaws.com/tiledesk-widget/dev/2.0.4-beta.7/assets/images/avatar_bot_tiledesk.svg'
-
+  uploadProgress: number;
+  showUploadProgress: boolean = false;
+  fileType: string;
   constructor(private g: Globals,
-              private cdref: ChangeDetectorRef) { }
+              private cdref: ChangeDetectorRef,
+              private uploadService: UploadService) { }
 
   ngOnInit() {
+    this.listenToUploadFileProgress()
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
+
 
   /**
    *
@@ -100,6 +106,20 @@ export class ConversationContentComponent implements OnInit {
         sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
     }
     return sizeImage; // h.toString();
+  }
+
+
+  // ENABLE HTML SECTION 'FILE PENDING UPLOAD'
+  listenToUploadFileProgress() {
+    this.uploadService.BSStateUpload.subscribe((data: any) => {
+      console.log('ION-CONVERSATION-DETAIL BSStateUpload', data);
+      if (data && data.type.startsWith("application")) {
+          data.upload === 100? this.showUploadProgress = false : this.showUploadProgress = true
+          this.uploadProgress = data.upload
+          this.fileType = 'file'
+          this.scrollToBottom()
+        }
+    });
   }
 
 
@@ -257,9 +277,9 @@ export class ConversationContentComponent implements OnInit {
     if (imageRendered && this.scrollMe) {
       const divScrollMe = this.scrollMe.nativeElement;
       const checkContentScrollPosition = this.checkContentScrollPosition(divScrollMe);
-      if (!checkContentScrollPosition) { // SE NON SONO ALLA FINE, SCROLLO CONTENT
-        this.scrollToBottom()
-      }
+      this.scrollToBottom() // SCROLLO SEMPRE
+      // if (!checkContentScrollPosition) { // SE NON SONO ALLA FINE, SCROLLO CONTENT
+      // }
  
     }
   }

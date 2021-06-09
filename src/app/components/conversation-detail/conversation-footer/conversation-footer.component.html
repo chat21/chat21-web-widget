@@ -1,6 +1,7 @@
 <div class="visible-text-area">
+    <!-- isFilePendingToUpload || -->
   <textarea 
-      [attr.disabled] = "(isFilePendingToUpload || isConversationArchived || hideTextReply)? true : null"
+      [attr.disabled] = "( isConversationArchived || hideTextReply)? true : null"
       start-focus-chat21-conversation-component
       inputTextArea 
       #textbox 
@@ -42,8 +43,8 @@
             [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
             (change)="detectFiles($event)"/>
   </label>
-  <!-- <div [class.active]="isFileSelected" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
-  <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && textInputTextArea && !hideTextReply" id="chat21-button-send" (click)="onSendPressed($event)">
+  <!-- <div [class.active]="isFileSelected && !isFilePendingToUpload &&" class="chat21-textarea-button" id="chat21-button-reset" (click)="resetLoadImage()"></div> -->
+  <div tabindex="-1" class="chat21-textarea-button" [class.active]="!isConversationArchived && textInputTextArea && !hideTextReply" id="chat21-button-send" (click)="onSendPressed($event)">
       <span class="v-align-center">
           <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

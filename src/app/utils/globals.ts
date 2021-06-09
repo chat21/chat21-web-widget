@@ -48,7 +48,7 @@ export class Globals {
   default_settings: any;
   isMobile: boolean;
   isLogged: boolean;
-  isSoundActive: boolean;
+  soundEnabled: boolean;
   isLogoutEnabled: boolean;
   BUILD_VERSION: String;
   filterSystemMsg: boolean; /** se è true i messaggi inviati da system non vengono visualizzati */
@@ -174,6 +174,10 @@ export class Globals {
   //  userToken: string;
    marginX: string;
    marginY: string;
+   launcherWidth: string;
+   launcherHeight: string;
+   baloonImage: string;
+   baloonShape: string;
    isLogEnabled: boolean;
    filterByRequester: boolean;
    persistence;
@@ -309,6 +313,14 @@ export class Globals {
     /** set margin left or rigth widget  */
     this.marginY = '20px';
     /** set margin bottom widget */
+    this.launcherWidth = '60px'
+    /** set launcher width widget  */
+    this.launcherHeight = '60px'
+    /** set launcher height widget  */
+    this.baloonImage='';
+    /** set launcher baloon widget image: require SVG url  */
+    this.baloonShape = '50%';
+    /** set launcher balon widget shape: can set corner by corner   */
     this.isLogEnabled = false;
     // this.parameters['isLogEnabled'] = false;
 
@@ -380,9 +392,9 @@ export class Globals {
     // this.parameters['filterSystemMsg'] = true;
     // this.parameters.push({'filterSystemMsg': true});
 
-    this.isSoundActive = true;
-    // this.parameters['isSoundActive'] = true;
-    // this.parameters.push({'isSoundActive': true});
+    this.soundEnabled = true;
+    // this.parameters['soundEnabled'] = true;
+    // this.parameters.push({'soundEnabled': true});
 
     this.conversationsBadge = 0;
     // this.parameters['conversationsBadge'] = 0;
@@ -461,12 +473,13 @@ export class Globals {
       'autoStart': this.autoStart, 'startHidden': this.startHidden, 'isShown': this.isShown,
       'startFromHome': this.startFromHome, 'logoChat': this.logoChat,
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
-      'marginY': this.marginY, 'isLogEnabled': this.isLogEnabled,
+      'marginY': this.marginY, 'lancherWidth': this.launcherWidth, 'lancherHeight': this.launcherHeight,
+      'baloonImage': this.baloonImage, 'baloonShape': this.baloonShape, 'isLogEnabled': this.isLogEnabled,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
       'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
       'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'jwt': this.jwt,
-      'dynamicWaitTimeReply': this.dynamicWaitTimeReply
+      'dynamicWaitTimeReply': this.dynamicWaitTimeReply, 'soundEnabled': this.soundEnabled
     };
   }
 

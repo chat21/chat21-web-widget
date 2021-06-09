@@ -15,7 +15,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   // ========= begin:: Input/Output values
   @Input() idConversation: string;
   @Input() senderId: string;
-  @Input() isSoundActive: boolean;
+  @Input() soundEnabled: boolean;
   @Input() isMenuShow: boolean;
   @Input() isTrascriptDownloadEnabled: boolean;
   @Input() hideHeaderCloseButton: boolean;
@@ -182,7 +182,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   toggleSound() {
     //this.isMenuShow  = false;
     this.onMenuOptionShow.emit(false)
-    this.onSoundChange.emit(!this.isSoundActive)
+    this.onSoundChange.emit(!this.soundEnabled)
   }
 
   toggleMenu() {

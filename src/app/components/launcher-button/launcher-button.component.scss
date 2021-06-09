@@ -1,9 +1,9 @@
 #c21-launcher-button {
-    border-radius: 50%;
+    // border-radius: 50%; //--> now retrived from settings
     position: fixed;
     bottom: 0px;
-    width: 60px;
-    height: 60px;
+    // width: 60px; //--> now retrived from settings
+    // height: 60px; //--> now retrived from settings
     cursor: pointer;
     display: block;
     margin: 20px;

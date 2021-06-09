@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.4
+- added: soundEnabled, launcherWidth, launcherHeight, baloonImage, baloonShape tiledeskSettings property
+- changed: behavior of footer while loading image/file --> not is ever active also while uploading
+- added: fake bubble message while loading: NOT ACTIVE YET
+- added: internal-frame component for self button url
+- bug fixed: markdown behavior externalied from service classes
+
 ### 5.0.0-beta.3.3
 - bug-fix: rating page not shown while archive mqtt conv
 - bug-fix: last message shown on refresh for mqtt engine

@@ -7,7 +7,7 @@ import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat
 import { Globals } from './../../../utils/globals';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
-import { convertColorToRGBA, replaceBr } from '../../../../chat21-core/utils/utils';
+import { convertColorToRGBA, htmlEntities, replaceBr, replaceEndOfLine } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 
@@ -225,7 +225,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
           metadata.src = downloadURL;
           let type_message = TYPE_MSG_TEXT;
-          let message = 'File: ' + metadata.src;
+          // let message = 'File: ' + metadata.src;
+          let message = `[${metadata.name}](${metadata.src})`
           if (metadata.type.startsWith('image')) {
               type_message = TYPE_MSG_IMAGE;
               message = ''; // 'Image: ' + metadata.src;
@@ -253,6 +254,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     (metadata) ? metadata = metadata : metadata = '';
     this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
+        msg = htmlEntities(msg)
+        msg = replaceEndOfLine(msg)
+
         let recipientFullname = this.translationMap.get('GUEST_LABEL');
           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
         const g_attributes = this.attributes;
@@ -313,7 +317,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
           recipientFullname += ' - ' + widgetTitle;
         }
-        console.log('messageeeeeeeee', attributes, this.attributes, additional_attributes)
         const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,

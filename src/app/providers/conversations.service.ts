@@ -505,7 +505,7 @@ export class ConversationsService {
     if (!isJustRecived(this.g.startedAt.getTime(), timestamp)) {
       return;
     }
-    if (this.g.isSoundActive === true)  {
+    if (this.g.soundEnabled === true)  {
       const that = this;
       this.audio = new Audio();
       this.audio.src = this.g.baseLocation + '/assets/sounds/justsaying.mp3';

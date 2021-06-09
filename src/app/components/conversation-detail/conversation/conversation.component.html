@@ -10,7 +10,7 @@
     <chat-conversation-header
         [idConversation]= "conversationWith"
         [senderId]="senderId"
-        [isSoundActive]="g.isSoundActive"
+        [soundEnabled]="g.soundEnabled"
         [isTrascriptDownloadEnabled]="isTrascriptDownloadEnabled"
         [hideHeaderCloseButton]="g.hideHeaderCloseButton"
         [stylesMap]="styleMap"
@@ -38,10 +38,10 @@
     </chat-conversation-content>
 
     <chat-interlal-frame *ngIf="isButtonUrl"
-        [url]="buttonUrl"
+        [button]="buttonClicked"
         [translationMap]="translationMapHeader"
         [styleMap]="styleMap"
-        (onBack)="onBackInternalFrame($event)"
+        (onOpenExternal)="onOpenExternalFrame($event)"
         (onClose)="onCloseInternalFrame($event)">
     </chat-interlal-frame>
 

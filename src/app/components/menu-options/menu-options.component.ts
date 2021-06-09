@@ -31,13 +31,13 @@ export class MenuOptionsComponent implements OnInit {
   }
 
   toggleSound() {
-    this.g.setParameter('isSoundActive', !this.g.isSoundActive, true);
+    this.g.setParameter('soundEnabled', !this.g.soundEnabled, true);
     this.g.setParameter('isOpenMenuOptions', false, true);
-    // this.g.isSoundActive = !this.g.isSoundActive;
-    // if ( this.g.isSoundActive === false ) {
-    //   this.storageService.setItem('isSoundActive', false);
+    // this.g.soundEnabled = !this.g.soundEnabled;
+    // if ( this.g.soundEnabled === false ) {
+    //   this.storageService.setItem('soundEnabled', false);
     // } else {
-    //   this.storageService.setItem('isSoundActive', true);
+    //   this.storageService.setItem('soundEnabled', true);
     // }
   }
 

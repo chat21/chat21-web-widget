@@ -108,7 +108,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // text used within the html
   private LABEL_PLACEHOLDER: string;
-  private API_URL: string;
 
   // userEmail: string;
   // userFullname: string;
@@ -121,7 +120,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
   
   // availableAgentsStatus = false; // indica quando è impostato lo stato degli agenti nel subscribe
-  messages: Array<MessageModel>;
+  messages: Array<MessageModel> = [];
   // recipient_fullname: string;
   // attributes: any;
   // GUEST_LABEL = '';
@@ -177,29 +176,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   archivedConversationsHandlerService: ArchivedConversationsHandlerService
 
   public isButtonUrl: boolean = false;
-  public buttonUrl: any;
+  public buttonClicked: any;
   constructor(
     public el: ElementRef,
     public g: Globals,
-    private ngZone: NgZone,
-    //public messagingService: MessagingService,
-    //public upSvc: UploadService,
-    //public contactService: ContactService,
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
     public appComponent: AppComponent,
     public appStorageService: AppStorageService,
     public conversationsService: ConversationsService,
     public conversationHandlerBuilderService: ConversationHandlerBuilderService,
-    //public conversationHandlerService: ConversationHandlerService,
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
     private chatManager: ChatManager
-    // public cdRef: ChangeDetectorRef
-    // private translate: TranslateService
-  ) {
-    this.API_URL = this.appConfigService.getConfig().apiUrl;
-  }
+  ) { }
 
   onResize(event){
     console.log('resize event', event)
@@ -238,6 +228,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'SOUND_OFF',
       'SOUND_ON',
       'DOWNLOAD_TRANSCRIPT',
+      'BACK',
+      'CLOSE'
     ];
 
     const keysFooter = [
@@ -1730,8 +1722,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.onAfterSendMessage.emit(message)
   }
 
-  returnSoundChange(isSoundActive){
-    this.onSoundChange.emit(isSoundActive)
+  returnSoundChange(soundEnabled){
+    this.onSoundChange.emit(soundEnabled)
   }
 
   returnOnBeforeMessangeSent(messageModel){
@@ -1820,9 +1812,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (!isJustRecived(this.g.startedAt.getTime(), timestamp)) {
       return;
     }
-    const isSoundActive = this.g.isSoundActive;
+    const soundEnabled = this.g.soundEnabled;
     const baseLocation = this.g.baseLocation;
-    if ( isSoundActive ) {
+    if ( soundEnabled ) {
       const that = this;
       this.audio = new Audio();
       this.audio.src = baseLocation + '/assets/sounds/justsaying.mp3';
@@ -1864,9 +1856,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     switch (event.target.type) {
       case 'url':
         try {
-          this.isButtonUrl= true;
-          this.buttonUrl = event.target.button.link
-          // this.openLink(event.target.button);
+          this.openLink(event.target.button);
         } catch (err) {
           this.g.wdLog(['> Error :' + err]);
         }
@@ -1890,13 +1880,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  onBackInternalFrame(event){
-
+  onOpenExternalFrame(event){
+    window.open(event.link, '_blank');
   }
 
   onCloseInternalFrame(event){
     this.isButtonUrl = false
-    this.buttonUrl = null;
+    this.buttonClicked = null;
   }
 
   /** */
@@ -1904,7 +1894,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const link = event.link ? event.link : '';
     const target = event.target ? event.target : '';
     if (target === 'self') {
-      window.open(link, '_self');
+      // window.open(link, '_self');
+      this.isButtonUrl= true;
+      this.buttonClicked = event
     } else if (target === 'parent') {
       window.open(link, '_parent');
     } else {
