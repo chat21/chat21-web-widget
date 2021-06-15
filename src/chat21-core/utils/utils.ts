@@ -361,7 +361,13 @@ export function htmlEntities(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     // .replace(/\n/g, '<br>')
+}
 
+export function htmlEntitiesDecode(str) {
+  return String(str)
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    // .replace(/\n/g, '<br>')
 }
 
 export function  replaceEndOfLine(text) {
@@ -369,7 +375,6 @@ export function  replaceEndOfLine(text) {
   const newText = text.replace(/[\n\r]/g, '<br>');
   // const newText = text.replace(/<br\s*[\/]?>/gi, '\n')
   return newText;
- 
 }
 
 //NOT IN USE

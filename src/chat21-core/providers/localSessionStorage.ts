@@ -120,7 +120,6 @@ export class LocalSessionStorage extends AppStorageService{
       }
   
       for (let i = 0; i < arrayKey.length; i++) {
-        // this.logger.printDebug('CLAER KEY: ', arrayKey[i]);
         // localStorage.removeItem(arrayKey[i]);
         this.removeItemForKey(arrayKey[i]);
       }
