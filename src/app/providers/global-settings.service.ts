@@ -378,7 +378,7 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        this.globals.wdLog(['> setVariablesFromService :' + response]);
+        this.globals.wdLog(['> setVariablesFromService :' , response]);
         this.globals = globals;
         // DEPARTMENTS
         try {
@@ -543,7 +543,7 @@ export class GlobalSettingsService {
             // globals.setParameter('userFullname', TEMP);
         }
         TEMP = tiledeskSettings['preChatForm'];
-        // this.globals.wdLog(['11 - preChatForm:: ', TEMP);
+                // this.globals.wdLog(['11 - preChatForm:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.preChatForm = (TEMP === true) ? true : false;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
@@ -726,12 +726,6 @@ export class GlobalSettingsService {
             globals.showLogoutOption = (TEMP === true) ? true : false;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
-        TEMP = tiledeskSettings['showWidgetNameInConversation'];
-        // this.globals.wdLog(['38 - showWidgetNameInConversation:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.showWidgetNameInConversation = (TEMP === true) ? true : false;
-            // globals.setParameter('showWidgetNameInConversation', (TEMP === false) ? false : true);
-        }
         TEMP = tiledeskSettings['customAttributes'];
         // this.globals.wdLog(['39 - customAttributes:: ', TEMP]);
         if (TEMP !== undefined) {
@@ -767,6 +761,12 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.soundEnabled = TEMP;
         }
+        TEMP = tiledeskSettings['openExternalLinkButton'];
+        // this.globals.wdLog(['46 - openExternalLinkButton:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.openExternalLinkButton = TEMP;
+        }
+        
 
     }
 
@@ -934,7 +934,11 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.soundEnabled = TEMP;
         }
-
+        TEMP = el.nativeElement.getAttribute('openExternalLinkButton');
+        if (TEMP !== null) {
+            this.globals.openExternalLinkButton = TEMP;
+        }
+        
     }
 
 
@@ -1146,11 +1150,6 @@ export class GlobalSettingsService {
             globals.allowTranscriptDownload = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_showWidgetNameInConversation');
-        if (TEMP) {
-            globals.showWidgetNameInConversation = stringToBoolean(TEMP);
-        }
-
         TEMP = getParameterByName(windowContext, 'tiledesk_startFromHome');
         if (TEMP) {
             globals.startFromHome = stringToBoolean(TEMP);
@@ -1206,6 +1205,12 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.soundEnabled = stringToBoolean(TEMP); 
         }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_openExternalLinkButton');
+        if (TEMP) {
+            globals.openExternalLinkButton = stringToBoolean(TEMP); 
+        }
+        
     }
 
     /**

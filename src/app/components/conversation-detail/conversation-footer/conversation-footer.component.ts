@@ -28,7 +28,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() userEmail: string;
   @Input() widgetTitle: string;
   @Input() showAttachmentButton: boolean;
-  @Input() showWidgetNameInConversation: boolean
+  // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
   @Input() stylesMap: Map<string, string>
@@ -97,6 +97,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         } else {
           this.isFilePendingToUpload = true;
         }
+        
         const that = this;
         if (event.target.files && event.target.files[0]) {
             const nameFile = event.target.files[0].name;
@@ -107,7 +108,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
                 that.g.wdLog(['addEventListener load', reader.result]);
                 that.isFileSelected = true;
                 // se inizia con image
-                if (typeFile.startsWith('image')) {
+                if (typeFile.startsWith('image') && !typeFile.includes('svg')) {
                   const imageXLoad = new Image;
                   that.g.wdLog(['onload ', imageXLoad]);
                   imageXLoad.src = reader.result.toString();
@@ -154,7 +155,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             const type = this.arrayFilesLoad[0].type;
             this.g.wdLog(['that.fileXLoad: ', type]);
             let metadata;
-            if (type.startsWith('image')) {
+            if (type.startsWith('image') && !type.includes('svg')) {
                 metadata = {
                     'name': fileXLoad.title,
                     'src': fileXLoad.src,
@@ -227,7 +228,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           let type_message = TYPE_MSG_TEXT;
           // let message = 'File: ' + metadata.src;
           let message = `[${metadata.name}](${metadata.src})`
-          if (metadata.type.startsWith('image')) {
+          if (metadata.type.startsWith('image') && !metadata.type.includes('svg')) {
               type_message = TYPE_MSG_IMAGE;
               message = ''; // 'Image: ' + metadata.src;
           }
@@ -254,8 +255,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     (metadata) ? metadata = metadata : metadata = '';
     this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
-        msg = htmlEntities(msg)
-        msg = replaceEndOfLine(msg)
+
+      msg = htmlEntities(msg);
+      msg = replaceEndOfLine(msg);
+      msg = msg.trim();
 
         let recipientFullname = this.translationMap.get('GUEST_LABEL');
           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
@@ -280,7 +283,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         const channelType = this.channelType;
         const userFullname = this.userFullname;
         const userEmail = this.userEmail;
-        const showWidgetNameInConversation = this.showWidgetNameInConversation;
+        // const showWidgetNameInConversation = this.showWidgetNameInConversation;
         const widgetTitle = this.widgetTitle;
         const conversationWith = this.conversationWith;
         this.onBeforeMessageSent.emit({
@@ -314,9 +317,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         } else {
           recipientFullname = this.translationMap.get('GUEST_LABEL');
         }
-        if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
-          recipientFullname += ' - ' + widgetTitle;
-        }
+        // if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
+        //   recipientFullname += ' - ' + widgetTitle;
+        // }
         const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,
