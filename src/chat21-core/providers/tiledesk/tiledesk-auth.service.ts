@@ -123,6 +123,7 @@ export class TiledeskAuthService {
   }
 
   logOut(){
+    console.log('TiledeskAUTHSERVICE::: logOut()')
     this.appStorage.removeItem('tiledeskToken')
     this.appStorage.removeItem('currentUser')
   }
@@ -150,13 +151,13 @@ export class TiledeskAuthService {
       member.fullname = fullname;
       member.avatar = avatar;
       member.color = color;
-      this.logger.printDebug('TILEDESK-AUTH - createCompleteUser member ', member) 
+      this.currentUser = member; 
+      this.logger.printDebug('TILEDESK-AUTH - createCompleteUser member ', member)
+      this.appStorage.setItem('currentUser', JSON.stringify(this.currentUser));
     } catch (err) {
       this.logger.printError('TILEDESK-AUTH- createCompleteUser ERR ', err) 
     }
-    this.currentUser = member;
-    // salvo nel local storage e sollevo l'evento
-    this.appStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+    
   }
 
 

@@ -202,6 +202,7 @@ export class FirebaseAuthService extends MessagingAuthService {
       // cancello token
       // this.appStorage.removeItem('tiledeskToken');
       //localStorage.removeItem('firebaseToken');
+      this.BSSignOut.next(true);
     }).catch((error) => {
       this.logger.printError('error: ', error);
     });
@@ -251,7 +252,6 @@ export class FirebaseAuthService extends MessagingAuthService {
     this.logger.printDebug('FIREBASE-AUTH-SERV logout');
     // cancello token firebase dal local storage e da firebase
     // dovrebbe scattare l'evento authchangeStat
-    this.BSSignOut.next(true);
     this.signOut();
   }
 

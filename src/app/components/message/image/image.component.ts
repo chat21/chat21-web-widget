@@ -19,9 +19,7 @@ export class ImageComponent implements OnInit {
   }
 
   onLoaded(){
-    setTimeout(() => {
-      this.loading = false
-    }, 0);
+    this.loading = false
     this.onImageRendered.emit(true)
   }
 
