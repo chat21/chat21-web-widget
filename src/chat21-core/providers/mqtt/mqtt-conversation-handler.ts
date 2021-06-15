@@ -345,9 +345,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             msg.sender_fullname = msg.sender;
         }
         // bonifico messaggio da url
-        if (msg.type === 'text') {
-            msg.text = htmlEntities(msg.text);
-        }
+        // if (msg.type === 'text') {
+        //     msg.text = htmlEntities(msg.text);
+        // }
         // verifico che il sender è il logged user
         console.log("****>msg.sender:" + msg.sender);
         console.log("****>this.loggedUser.uid:" + this.loggedUser.uid);
