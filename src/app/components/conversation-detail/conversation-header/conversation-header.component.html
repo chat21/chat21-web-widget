@@ -1,4 +1,5 @@
-<div class="c21-header"  [ngStyle]="{'background-color': stylesMap.get('backgroundColor'), 'color': stylesMap.get('foregroundColor'), 'background-image': 'linear-gradient( 180grad,' + stylesMap.get('themeColor')+','+ convertColorToRGBA(stylesMap.get('themeColor'), 50)+')' }">
+<!-- 'background-color': stylesMap.get('backgroundColor'), 'color': stylesMap.get('foregroundColor'), 'background-image': stylesMap.get('themeColor')+','+ convertColorToRGBA(stylesMap.get('themeColor'), 50)+')' -->
+<div class="c21-header"  [ngStyle]="{'background-image': stylesMap.get('colorGradient') }">
 
   <div class="c21-header-container">
 
