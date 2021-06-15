@@ -160,7 +160,6 @@ export class Globals {
    colorGradient: string;
    colorBck: string
    colorGradient180: string;
-   showWidgetNameInConversation: boolean;
    allowTranscriptDownload: boolean;
    poweredBy: string;
    logoChat: string;
@@ -179,6 +178,7 @@ export class Globals {
    baloonImage: string;
    baloonShape: string;
    isLogEnabled: boolean;
+   openExternalLinkButton: boolean;
    filterByRequester: boolean;
    persistence;
    windowContext;
@@ -296,11 +296,6 @@ export class Globals {
     /** allows you to change background color.
     Permitted values: Hex color codes, e.g. #425635 and RGB color
     codes, e.g. rgb(66,86,53) */
-    this.showWidgetNameInConversation = false;
-    /** If you want to display the widget title in the conversations,
-    set the showWidgetNameInConversation field to true. It is advisable
-    if you need to manage multiple projects. Value type : boolean.
-    The default value is false. */
     this.allowTranscriptDownload = false;
     /** allows the user to download the chat transcript. The download button appears
     when the chat is closed by the operator. Permitter values: true, false.
@@ -335,6 +330,8 @@ export class Globals {
 
     /** startMessage: The message to start a support conversation. */
 
+    this.openExternalLinkButton = true;
+    /** enable to open URL in  self action link button in external page from widget */
     this.filterByRequester = false;
     /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
@@ -465,8 +462,7 @@ export class Globals {
       'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
       'isOpen': this.isOpen, 'channelType': this.channelType,
       'lang': this.lang, 'calloutTimer': this.calloutTimer, 'calloutStaus': this.calloutStaus,
-      'align': this.align, 'showWidgetNameInConversation': this.showWidgetNameInConversation,
-      'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
+      'align': this.align,'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
       'calloutMsg': this.calloutMsg, 'fullscreenMode': this.fullscreenMode, 'hideHeaderCloseButton': this.hideHeaderCloseButton,
       'themeColor': this.themeColor, 'themeForegroundColor': this.themeForegroundColor,
       'allowTranscriptDownload': this.allowTranscriptDownload, //'userToken': this.userToken,
@@ -475,8 +471,8 @@ export class Globals {
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
       'marginY': this.marginY, 'lancherWidth': this.launcherWidth, 'lancherHeight': this.launcherHeight,
       'baloonImage': this.baloonImage, 'baloonShape': this.baloonShape, 'isLogEnabled': this.isLogEnabled,
-      'filterByRequester': this.filterByRequester, 'persistence': this.persistence,
-      'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
+      'openExternalLinkButton': this.openExternalLinkButton,'filterByRequester': this.filterByRequester, 
+      'persistence': this.persistence,'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
       'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'jwt': this.jwt,
       'dynamicWaitTimeReply': this.dynamicWaitTimeReply, 'soundEnabled': this.soundEnabled
@@ -485,7 +481,7 @@ export class Globals {
 
 
   setColorWithGradient() {
-    this.themeColor50 = convertColorToRGBA(this.themeColor, 30); // this.g.themeColor + 'CC';
+    this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
 }
