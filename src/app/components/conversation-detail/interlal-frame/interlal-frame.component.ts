@@ -51,6 +51,7 @@ export class InterlalFrameComponent implements OnInit {
   @ViewChild('iframe') iframe: ElementRef;
 
   @Input() button: any;
+  @Input() openExternalLinkButton: boolean;
   @Input() styleMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
   @Output() onOpenExternal = new EventEmitter<any>();

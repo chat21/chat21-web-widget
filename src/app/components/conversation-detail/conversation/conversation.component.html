@@ -39,6 +39,7 @@
 
     <chat-interlal-frame *ngIf="isButtonUrl"
         [button]="buttonClicked"
+        [openExternalLinkButton]="g.openExternalLinkButton"
         [translationMap]="translationMapHeader"
         [styleMap]="styleMap"
         (onOpenExternal)="onOpenExternalFrame($event)"
@@ -65,7 +66,6 @@
             [userEmail]="g.userEmail"
             [widgetTitle]="g.widgetTitle"
             [showAttachmentButton]="g.showAttachmentButton"
-            [showWidgetNameInConversation]="g.showWidgetNameInConversation"
             [isConversationArchived]="isConversationArchived"
             [hideTextReply]="hideFooterTextReply"
             [stylesMap]="styleMap"

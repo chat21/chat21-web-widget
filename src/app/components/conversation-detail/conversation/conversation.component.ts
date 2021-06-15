@@ -648,7 +648,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * se NON ESISTE creo un handler e mi connetto e lo memorizzo nel chatmanager
    * se ESISTE mi connetto
    * carico messaggi
-   * attendo x sec se nn arrivano messaggi visualizzo msg wellcome
+   * attendo x sec se nn arrivano messaggi visualizzo msg welcome
    */
   initConversationHandler() {
     const tenant = this.g.tenant;
@@ -812,7 +812,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         console.log('***** DATAIL conversationsChanged *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.sender !== this.senderId){
           const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
-          if(checkContentScrollPosition){ //update conversation if scroolToBottom is to the end
+          if(checkContentScrollPosition && conversation.is_new){ //update conversation if scroolToBottom is to the end
             console.log('updateConversationBadge...')
             that.updateConversationBadge();
           }
@@ -1113,7 +1113,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //         const channelType = this.g.channelType;
   //         const userFullname = this.g.userFullname;
   //         const userEmail = this.g.userEmail;
-  //         const showWidgetNameInConversation = this.g.showWidgetNameInConversation;
   //         const widgetTitle = this.g.widgetTitle;
   //         const conversationWith = this.conversationWith;
   //         this.triggerBeforeSendMessageEvent(
@@ -1135,9 +1134,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //           recipientFullname = attributes['userFullname'];
   //         } else {
   //           recipientFullname = this.g.GUEST_LABEL;
-  //         }
-  //         if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
-  //           recipientFullname += ' - ' + widgetTitle;
   //         }
   //         const messageSent = this.messagingService.sendMessage(
   //           recipientFullname,
@@ -1674,9 +1670,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //         recipientFullname = this.GUEST_LABEL;
   //     }
   //     // const projectname = (this.projectname) ? this.projectname : this.projectid;
-  //     if (this.showWidgetNameInConversation && this.showWidgetNameInConversation === true) {
-  //         recipientFullname += ' - ' + this.widgetTitle;
-  //     }
 
   //     // set senderFullname
   //     const senderFullname = recipientFullname;
