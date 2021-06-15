@@ -43,7 +43,7 @@ export class NativeUploadService extends UploadService {
 
 
     upload(upload: UploadModel): Promise<any>  {
-        this.logger.printDebug('NATIVE UPLOAD - upload new image/file ... upload', upload )
+        this.logger.printDebug('NATIVE UPLOAD - upload new image/file ... upload', upload)
         const headers = new HttpHeaders({
             Authorization: this.tiledeskToken,
             //'Content-Type': 'multipart/form-data',
@@ -51,26 +51,28 @@ export class NativeUploadService extends UploadService {
         const requestOptions = { headers: headers };
         const formData = new FormData();
         formData.append('file', upload.file);
- 
+
         const that = this;
-        if(upload.file.type.startsWith('image')){
+        if ((upload.file.type.startsWith('image') && (!upload.file.type.includes('svg')))) {
+            this.logger.printDebug('NATIVE UPLOAD - upload new image')
             //USE IMAGE API
             const url = this.URL_TILEDESK_IMAGES + '/users'
-            return new Promise ((resolve, reject)=> {
+            return new Promise((resolve, reject) => {
                 that.http.post(url, formData, requestOptions).subscribe(data => {
-                    const downloadURL = this.URL_TILEDESK_IMAGES + '?path='+ data['filename'];
+                    const downloadURL = this.URL_TILEDESK_IMAGES + '?path=' + encodeURI(data['filename']);
                     resolve(downloadURL)
                     // that.BSStateUpload.next({upload: upload});
                 }, (error) => {
                     reject(error)
                 });
             });
-        }else {
+        } else {
+            this.logger.printDebug('NATIVE UPLOAD - upload new file')
             //USE FILE API
             const url = this.URL_TILEDESK_FILE + '/users'
-            return new Promise ((resolve, reject)=> {
+            return new Promise((resolve, reject) => {
                 that.http.post(url, formData, requestOptions).subscribe(data => {
-                    const downloadURL = this.URL_TILEDESK_FILE + '?path='+ data['filename']
+                    const downloadURL = this.URL_TILEDESK_FILE + '?path=' + encodeURI(data['filename']);
                     resolve(downloadURL)
                     // that.BSStateUpload.next({upload: upload});
                 }, (error) => {
