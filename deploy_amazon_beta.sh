@@ -23,16 +23,16 @@ ng build --prod --env=pre --base-href --output-hashing none --build-optimizer=fa
 
 # ########## --->>>> FIREBASE folder START <<<<<------ ########## #
 cd dist
-aws s3 sync . s3://tiledesk-widget-pre/widget5/$version/
-aws s3 sync . s3://tiledesk-widget-pre/widget5/
+aws s3 sync . s3://tiledesk-widget-pre/$version/
+aws s3 sync . s3://tiledesk-widget-pre/
 cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/widget5/ and s3://tiledesk-widget-pre/widget5/$version/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/widget5/index.html
-echo https://widget-pre.tiledesk.com/widget5/index.html
-echo https://widget-pre.tiledesk.com/widget5/$version/index.html
+echo new version deployed $version/ on s3://tiledesk-widget-pre/ and s3://tiledesk-widget-pre/$version/
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/index.html
+echo https://widget-pre.tiledesk.com/index.html
+echo https://widget-pre.tiledesk.com/$version/index.html
 
 # ########## --->>>> FIREBASE folder END <<<<<------ ########## #
 
