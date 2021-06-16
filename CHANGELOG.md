@@ -1,5 +1,15 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.5
+- bug-fix: mgs trimmed on sendMessage method when user send a message
+- bug-fix: removed black color from components header and used 'colorGradient' from globals settings
+- bug-fix: native-upload when load files tha contains white space in their name--> encodeUri fixed bug
+- bug-fix: on signOut, authenticate the same user --> clean g.tiledeskToken
+- bug-fix: on signOut, prechatForm not shown --> clan userFullname and userEmail from globals.attributes and globals.userFullname, globals.userEmail
+- changed: now load svg file as a file, not as an image type
+-removed: showWidgetNameInConversation from tiledeskSetting (used in chat-conversation-footer to set recipientFullname += '-' + widgetTitle)
+- added: openExternalLinkButton tiledeskSettings property to manage self action link button from bot
+
 ### 5.0.0-beta.3.4
 - added: soundEnabled, launcherWidth, launcherHeight, baloonImage, baloonShape tiledeskSettings property
 - changed: behavior of footer while loading image/file --> not is ever active also while uploading
