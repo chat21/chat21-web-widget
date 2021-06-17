@@ -334,7 +334,6 @@ export class TranslatorService {
     // globals.RATE_CHAT = this.translateForKey('RATE_CHAT'); // done
     // globals.WELLCOME_TITLE = this.translateForKey('WELLCOME_TITLE');  // done
     // globals.WELLCOME_MSG = this.translateForKey('WELLCOME_MSG'); // done
-    // globals.WELLCOME = this.translateForKey('WELLCOME'); // done
     // globals.OPTIONS = this.translateForKey('OPTIONS'); // done
     // globals.SOUND_ON = this.translateForKey('SOUND_ON'); // done
     // globals.SOUND_OFF = this.translateForKey('SOUND_OFF'); // done
