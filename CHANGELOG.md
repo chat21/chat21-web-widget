@@ -1,5 +1,15 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.7
+- bug-fixed: tiledesk-container showed with short dimension for ms on refresh --> removed showWidget() from signInWithCustomToken()
+- added: css for chat-department component in list on hover
+- changed: print of logger in firebase services to better understand source log component/service
+
+### 5.0.0-beta.3.6 - NATIVE-MQTT
+- removed: WELCOME translate property --> only used in chat-menu-option
+- updated: mqtt services
+- bug-fixed: native upload service --> removed encodeUri when load image
+
 ### 5.0.0-beta.3.5
 - bug-fix: mgs trimmed on sendMessage method when user send a message
 - bug-fix: removed black color from components header and used 'colorGradient' from globals settings
@@ -27,7 +37,6 @@
 - added: skipInfoMessage parameter for MQTTConversationHanlderService
 - added: placeholder while image loading
 - added: native-image-repo Service
-
 
 ### 5.0.0-beta.3.1 - NATIVE-MQTT
 - updated: MQTT and FIREBASE services classes
