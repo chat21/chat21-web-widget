@@ -88,8 +88,8 @@
 .chat21-content-modal-select > li {
     cursor: pointer;
     position: relative;
-    margin: 15px 0;
-    padding: 4px 20px;
+    margin: 7px 14px;//15px 0;
+    padding: 7px 4px; //4px 20px;
     font-size: 1.4em;
     text-align: left;
     color: $black;
@@ -98,6 +98,7 @@
 }
 .chat21-content-modal-select > li:hover {
     background-color: $trasp-light-gray;
+    border-radius: 10px;
 }
 .chat21-content-modal-select li.selected:hover {
     /* background-color: #BBD8DC !important;
