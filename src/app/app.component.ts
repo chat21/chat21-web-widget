@@ -895,7 +895,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // se esistono email e psw faccio un'autenticazione firebase con email
             this.tiledeskAuthService.signInWithEmailAndPassword(userEmail, userPassword).then(tiledeskToken => {
                 this.messagingAuthService.createCustomToken(tiledeskToken)
-            }).catch(error => { console.error('SIGNINWITHEMAILANDPASSWORD error::' + error) })
+            }).catch(error => { this.logger.printError('APPCOMP::signInWithEmailAndPassword ERR ',error); })
             // this.authService.authenticateFirebaseWithEmailAndPassword(userEmail, userPassword);
             // } else if (userId) {
             //     // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
@@ -1439,9 +1439,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.g.setParameter('userEmail', currentUser.email);
                 this.g.setAttributeParameter('userEmail', currentUser.email);
             }
-            this.showWidget()
+            // this.showWidget()
         }).catch(error => {
-            this.logger.printDebug('> Error :' + error);
+            this.logger.printError('APPCOMP::signInWithCustomToken ERR ',error);
             that.signOut();
         });
     }
