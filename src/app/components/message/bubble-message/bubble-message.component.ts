@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageModel } from '../../../../chat21-core/models/message';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { isFile, isFrame, isImage } from '../../../../chat21-core/utils/utils-message';
 import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { Globals } from '../../../utils/globals';
@@ -29,9 +31,9 @@ export class BubbleMessageComponent implements OnInit {
     'hideDelayAfterClick': 3000,
     'hide-delay': 200
   };
-
-  constructor(private g: Globals,
-              public sanitizer: DomSanitizer) { }
+  
+  private logger: LoggerService = LoggerInstance.getInstance()
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
@@ -85,7 +87,7 @@ export class BubbleMessageComponent implements OnInit {
         }, that.tooltipOptions['hideDelayAfterClick']);
       }
     } catch (err) {
-        that.g.wdLog(['> Error :' + err]);
+        that.logger.printError('BUBBLE MESSAGE handleTooltipEvents >>>> Error :' + err);
     }
   }, showDelay);
 }
