@@ -44,7 +44,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     private translationMap: Map<string, string>;
     private isConversationClosingMap: Map<string, boolean>;
 
-    private ref: firebase.database.Query;
     private audio: any;
     private setTimeoutSound: any;
 

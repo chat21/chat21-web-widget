@@ -26,9 +26,6 @@ export abstract class UploadService {
   //BehaviorSubject
   abstract BSStateUpload: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  // params
-  // abstract tenant = environment.tenant;
-
   // functions
   abstract initialize(): void;
   abstract upload(upload: UploadModel): Promise<any>;
