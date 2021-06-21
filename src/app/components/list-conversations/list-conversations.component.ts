@@ -5,8 +5,9 @@ import {
   setColorFromString,
   avatarPlaceholder,
   convertMessage} from '../../utils/utils';
-import { Globals } from '../../utils/globals';
 import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-list-conversations',
@@ -18,7 +19,7 @@ export class ListConversationsComponent implements OnInit {
   // ========= begin:: Input/Output values ============//
   @Input() listConversations: Array<ConversationModel>;
   @Input() limit?: number
-  @Input() styleMap: Map<string, string>;
+  @Input() stylesMap: Map<string, string>;
   @Input() translationMap: Map< string, string>;
   @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
@@ -33,19 +34,19 @@ export class ListConversationsComponent implements OnInit {
   // ========= end:: dichiarazione funzioni ========= //
 
   iterableDifferListConv: any;
+  private logger: LoggerService = LoggerInstance.getInstance();
 
-  constructor(public g: Globals,
-              private iterableDiffers: IterableDiffers,
+  constructor(private iterableDiffers: IterableDiffers,
               public imageRepoService: ImageRepoService) {
       this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
                }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit::::list-conversations ', this.listConversations]);
+    this.logger.printDebug('LISTCONVERSATIONS:: ngOnInit', this.listConversations);
   }
 
   public openConversationByID(conversation) {
-    this.g.wdLog(['openConversationByID: ', conversation]);
+    this.logger.printDebug('LISTCONVERSATIONS:: openConversationByID: ', conversation);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
@@ -54,7 +55,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.g.wdLog([' --------ngAfterViewInit: list-conversations-------- ', this.listConversations]);
+    this.logger.printDebug('LISTCONVERSATIONS:: ---ngAfterViewInit---: listConversations ', this.listConversations);
   }
 
   ngDoCheck() {

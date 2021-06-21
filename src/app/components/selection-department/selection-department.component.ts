@@ -1,8 +1,10 @@
+import { LoggerInstance } from './../../../chat21-core/providers/logger/loggerInstance';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Globals } from '../../utils/globals';
 
 import { DepartmentModel } from '../../../models/department';
 import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
 
 @Component({
     selector: 'chat-selection-department',
@@ -23,6 +25,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     // ========= begin:: component variables ======= //
     departments: DepartmentModel[];
+    private logger: LoggerService = LoggerInstance.getInstance();
     // isLogged: boolean;
     // projectid: string;
     // ========= end:: component variables ======= //
@@ -38,7 +41,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.g.wdLog(['ngOnInit :::: SelectionDepartmentComponent']);
+        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: ngOnInit');
         this.colorBck = '#000000';
         if ( this.g.departments && this.g.departments.length > 0 ) {
             if (this.g.windowContext && this.g.windowContext.tiledesk && this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
@@ -99,7 +102,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
             // attributes.departmentName = department.name;
             // this.g.setParameter('attributes', attributes);
             this.appStorageService.setItem('attributes', JSON.stringify(attributes));
-            this.g.wdLog(['setAttributes setDepartment: ', JSON.stringify(attributes)]);
+            this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: setDepartment: attributes', JSON.stringify(attributes));
         }
         this.closePage();
     }
@@ -153,23 +156,23 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     // ========= begin:: ACTIONS ============//
     private onSelectDepartment(department) {
-        this.g.wdLog([' onSelectDepartment: ', department]);
+        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: onSelectDepartment: ', department);
         this.setDepartment(department);
         this.onDepartmentSelected.emit(department);
     }
 
     openPage() {
-        this.g.wdLog([' openPage: ']);
+        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: openPage ');
         this.onOpen.emit();
     }
 
     closePage() {
-        this.g.wdLog([' closePage:  SelectDepartment']);
+        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: closePage');
         this.onClose.emit();
     }
 
     cancelPage() {
-        this.g.wdLog([' cancelPage:  SelectDepartment']);
+        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: cancelPage');
         this.g.newConversationStart = false;
         this.onClose.emit();
     }
@@ -179,7 +182,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     // ========= START:: TRIGGER FUNCTIONS ============//
     private triggerOnbeforeDepartmentsFormRender() {
         this.onBeforeDepartmentsFormRender.emit(this.departments)
-        // this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
+        // this.logger.printDebug(' ---------------- beforeDepartmentsFormRender ---------------- ', this.departments]);
         // const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: this.departments } });
         // const windowContext = this.g.windowContext;
         // if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {

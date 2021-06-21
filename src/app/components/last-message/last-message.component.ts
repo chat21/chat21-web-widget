@@ -16,6 +16,8 @@ import {
 import { ConversationModel } from '../../../chat21-core/models/conversation';
 import { isImage } from '../../../chat21-core/utils/utils-message';
 import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
 
 
 @Component({
@@ -24,6 +26,7 @@ import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-
   styleUrls: ['./last-message.component.scss']
 })
 export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
+
   @Input() conversation: ConversationModel
   @Input() baseLocation: string;
   @Input() stylesMap: Map<string, string>;
@@ -36,8 +39,9 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   isPopupUrl = isPopupUrl;
   popupUrl = popupUrl;
   strip_tags = strip_tags;
-
   isImage = isImage;
+
+  private logger: LoggerService = LoggerInstance.getInstance();
   
   constructor(
     private imageRepoService: ImageRepoService,
@@ -54,7 +58,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     //           return;
     //         }
     //         that.conversation = conversation;
-    //         // console.log('conv: ' + conversation);
+    //         // this.logger.printDebug('conv: ' + conversation);
     //       }
     //     });
     // });
@@ -66,11 +70,11 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** */
   ngAfterViewInit() {
-    // console.log('isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.printDebug('isOpenNewMessage: ' + this.g.isOpenNewMessage);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('onchagnges last-message component', changes)
+    this.logger.printDebug('LASTMESSAGE:: onchagnges', changes)
     if(this.conversation){
       this.conversation.image = this.imageRepoService.getImagePhotoUrl(this.conversation.sender)
     }
@@ -107,14 +111,14 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onAttachmentButtonClicked(event: any){
     // this.onAttachmentButtonClicked.emit(event)
-    console.log('ButtonClicked', event)
+    this.logger.printDebug('LASTMESSAGE:: onAttachmentButtonClicked', event)
   }
   /** */
   openConversationByID(conversation) {
-    this.g.wdLog(['openConversationByID: ', conversation]);
+    this.logger.printDebug('LASTMESSAGE:: openConversationByID: ', conversation);
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // console.log('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.printDebug('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     if ( conversation ) {
       this.onSelectedConversation.emit(conversation);
     }
@@ -123,7 +127,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   closeMessagePreview() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // console.log('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.printDebug('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     this.onCloseMessagePreview.emit();
   }
   // ========= begin:: event emitter function ============//
@@ -133,7 +137,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // console.log('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.printDebug('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     //this.unsubscribe();
   }
 
@@ -144,7 +148,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         subscription.unsubscribe();
     });
     this.subscriptions = [];
-    this.g.wdLog(['this.subscriptions', this.subscriptions]);
+    this.logger.printDebug('LASTMESSAGE:: this.subscriptions', this.subscriptions);
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

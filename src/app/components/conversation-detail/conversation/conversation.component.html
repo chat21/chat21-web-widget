@@ -13,7 +13,7 @@
         [soundEnabled]="g.soundEnabled"
         [isTrascriptDownloadEnabled]="isTrascriptDownloadEnabled"
         [hideHeaderCloseButton]="g.hideHeaderCloseButton"
-        [stylesMap]="styleMap"
+        [stylesMap]="stylesMap"
         [translationMap]="translationMapHeader"
         [widgetTitle]="g.project.widgetTitle"
         [windowContext]="g.windowContext"
@@ -29,7 +29,7 @@
         [messages]="messages"
         [senderId]="senderId"
         [baseLocation]="g.windowContext['tiledesk'].getBaseLocation()"
-        [stylesMap]="styleMap"
+        [stylesMap]="stylesMap"
         (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
         (onAfterMessageRender)="returnOnAfterMessageRender($event)"
         (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)"
@@ -41,7 +41,7 @@
         [button]="buttonClicked"
         [openExternalLinkButton]="g.openExternalLinkButton"
         [translationMap]="translationMapHeader"
-        [styleMap]="styleMap"
+        [stylesMap]="stylesMap"
         (onOpenExternal)="onOpenExternalFrame($event)"
         (onClose)="onCloseInternalFrame($event)">
     </chat-interlal-frame>
@@ -68,7 +68,7 @@
             [showAttachmentButton]="g.showAttachmentButton"
             [isConversationArchived]="isConversationArchived"
             [hideTextReply]="hideFooterTextReply"
-            [stylesMap]="styleMap"
+            [stylesMap]="stylesMap"
             [translationMap]="translationMapFooter"
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
             (onAfterSendMessage)="returnAfterSendMessage($event)">

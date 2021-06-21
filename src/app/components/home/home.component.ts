@@ -1,5 +1,7 @@
 import { ElementRef, ViewChild, Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 import { convertColorToRGBA } from '../../../chat21-core/utils/utils';
 import { Globals } from '../../utils/globals';
 
@@ -24,7 +26,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
   @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
   @Input() listConversations: Array<ConversationModel>;
-  @Input() styleMap: Map<string, string>
+  @Input() stylesMap: Map<string, string>
   // ========= end:: Input/Output values ===========/
 
 
@@ -38,7 +40,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========= end:: component variables ======= //
 
   convertColorToRGBA = convertColorToRGBA
-
+  
+  private logger: LoggerService = LoggerInstance.getInstance();
+  
   constructor(
     public g: Globals
   ) {
@@ -47,7 +51,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // get global variables
-    this.g.wdLog(['ngOnInit app-home']);
+    this.logger.printDebug('HOME:: ngOnInit');
 
     if (this.g.firstOpen === true) {
       this.addAnimation();
@@ -61,7 +65,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.g.wdLog([' --------ngAfterViewInit-------- ']);
+    this.logger.printDebug('HOME::---ngAfterViewInit--- ');
     setTimeout(() => {
       if (this.aflistconv) {
         this.aflistconv.nativeElement.focus();
@@ -112,7 +116,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   hideMenuOptions() {
-    this.g.wdLog(['hideMenuOptions']);
+    this.logger.printDebug('HOME:: hideMenuOptions');
     // this.g.isOpenMenuOptions = false;
     this.g.setParameter('isOpenMenuOptions', false, true);
   }
@@ -135,7 +139,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         mainDiv.classList.add('start-animation');
       }
     } catch (error) {
-        this.g.wdLog(['> Error :' + error]);
+        this.logger.printError('HOME:: addAnimation > Error :' + error);
     }
   }
   removeAnimation() {
@@ -145,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         mainDiv.classList.remove('start-animation');
       }
     } catch (error) {
-      this.g.wdLog(['> Error :' + error]);
+      this.logger.printError('HOME:: removeAnimation > Error :' + error);
     }
   }
 

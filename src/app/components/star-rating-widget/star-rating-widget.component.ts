@@ -1,7 +1,9 @@
+import { LoggerInstance } from './../../../chat21-core/providers/logger/loggerInstance';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StarRatingWidgetService } from './star-rating-widget.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../utils/globals';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
 
 
 @Component({
@@ -12,6 +14,7 @@ import { Globals } from '../../utils/globals';
 export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: Input/Output values ===========//
+  @Input() recipientId: string;
   @Output() onClosePage = new EventEmitter();
   @Output() onCloseRate = new EventEmitter();
   // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
@@ -36,6 +39,7 @@ export class StarRatingWidgetComponent implements OnInit {
   // ========= end:: component variables ======= //
 
   private rate: number;
+  private logger: LoggerService = LoggerInstance.getInstance();
   mouseRate: number;
   step: number;
   message: string;
@@ -63,7 +67,7 @@ export class StarRatingWidgetComponent implements OnInit {
   }
 
   dowloadTranscript() {
-    this.starRatingWidgetService._dowloadTranscript(this.g.recipientId);
+    this.starRatingWidgetService._dowloadTranscript(this.recipientId);
   }
 
   openRate(e) {
@@ -89,12 +93,12 @@ export class StarRatingWidgetComponent implements OnInit {
 
   sendRate() {
     this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-    this.g.wdLog(['sendRate!!!::', this.message]);
+    this.logger.printDebug('STARRATINGCOMPONENT:: sendRate!!!::', this.message);
     const that = this;
     // chiamo servizio invio segnalazione
     this.starRatingWidgetService.httpSendRate(this.rate, this.message).subscribe(
       response => {
-        that.g.wdLog(['OK sender ::::', response]);
+        that.logger.printDebug('STARRATINGCOMPONENT: OK sender', response);
         // pubblico var isWidgetActive
         that.nextStep();
       },
@@ -104,7 +108,7 @@ export class StarRatingWidgetComponent implements OnInit {
         that.nextStep();
       },
       () => {
-        //  that.g.wdLog(['API ERROR NESSUNO');
+        //  that.logger.printDebug('API ERROR NESSUNO');
       }
     );
   }
@@ -122,7 +126,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-    this.g.wdLog([' closePage: ']);
+    this.logger.printDebug('STARRATINGCOMPONENT: closePage: ');
     this.step = 0;
     this.starRatingWidgetService.setOsservable(false);
     this.onClosePage.emit();

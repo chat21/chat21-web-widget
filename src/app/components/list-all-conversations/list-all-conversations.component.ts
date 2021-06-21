@@ -18,6 +18,8 @@ import {
 import { ArchivedConversationsHandlerService } from '../../../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { AmdDependency } from 'typescript';
 import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 
 @Component({
@@ -30,10 +32,9 @@ import { CustomTranslateService } from '../../../chat21-core/providers/custom-tr
 export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('afallconv') private afallconv: ElementRef;
   // ========= begin:: Input/Output values ============//
-  @Input() senderId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   @Input() listConversations: Array<ConversationModel>;
   @Input() archivedConversations: Array<ConversationModel>;
-  @Input() styleMap: Map<string, string>;
+  @Input() stylesMap: Map<string, string>;
   @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onCloseWidget = new EventEmitter();
   // ========= end:: Input/Output values ============//
@@ -52,7 +53,6 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   allConversations: Array<ConversationModel>;
 
 
-  tenant = '';
   themeColor = '';
   colorBck = '';
   themeForegroundColor = '';
@@ -61,7 +61,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   iterableDifferListConv: any;
   iterableDifferListArchivedConv: any;
   // ========= end:: variabili del componente ======== //
-
+  private logger: LoggerService = LoggerInstance.getInstance();
   
   constructor(public g: Globals,
               private iterableDiffers: IterableDiffers,
@@ -92,27 +92,20 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public initTranslations() {
-    const keysConversation = [
-      'CLOSED'
-    ];
-
+    const keysConversation = ['CLOSED'];
     this.translationMapConversation = this.customTranslateService.translateLanguage(keysConversation);
   }
 
 
   initialize() {
-    this.g.wdLog(['initialize: ListALLConversationsComponent']);
+    this.logger.printDebug('LISTALLCONVERSATIONS:: initialize');
     this.initTranslations();
-    this.senderId = this.g.senderId;
-    this.tenant = this.g.tenant;
     this.LABEL_START_NW_CONV = this.g.LABEL_START_NW_CONV; // is used ?? LABEL_START_NW_CONV there isn't in the template
     // this.subscriptions = [];
     this.allConversations = [];
 
     this.colorBck = '#000000';
 
-    this.g.wdLog(['senderId: ', this.senderId]);
-    this.g.wdLog(['tenant: ', this.tenant]);
 
     //this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversations = this.conversationsService.allConversations;
@@ -122,7 +115,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     // this.archivedConversations = this.archivedConversationsService.archivedConversations;
     // this.conversationsService.checkListConversations();
     // this.conversationsService.checkListArchivedConversations();
-    console.log('listconversations', this.listConversations, this.archivedConversations)
+    this.logger.printDebug('LISTALLCONVERSATIONS:: listconversations', this.listConversations, this.archivedConversations)
     this.concatAndOrderArray();
   }
 
@@ -133,7 +126,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   //       if(conversation){
   //         that.listConversations.push(conversation);
   //         that.concatAndOrderArray();
-  //         that.g.wdLog([' ListAllConversationsComponent conversations:::: ', that.listConversations]);
+  //         that.logger.printDebug(' ListAllConversationsComponent conversations:::: ', that.listConversations]);
   //       }
         
   //     });
@@ -147,7 +140,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   //         that.archivedConversations.push(conversation);
   //         that.concatAndOrderArray();
   //       }
-  //       that.g.wdLog([' ListAllConversationsComponent archivedConversations:::: ', that.allConversations]);
+  //       that.logger.printDebug(' ListAllConversationsComponent archivedConversations:::: ', that.allConversations]);
   //     });
   //   });
   //   this.subscriptions.push(subArchivedConversations);
@@ -181,7 +174,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
     }
     this.allConversations = result;
     this.allConversations.sort(compareValues('timestamp', 'desc'));
-    this.g.wdLog([' concatAndOrderArray:::: ', this.allConversations]);
+    this.logger.printDebug('LISTALLCONVERSATIONS:: concatAndOrderArray ', this.allConversations);
     // this.obsAllConversations.next(this.allConversations);
   }
 
@@ -191,7 +184,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   onConversationSelectedFN(conversation: ConversationModel){
-    this.g.wdLog(['openConversationByID: ', conversation]);
+    this.logger.printDebug('LISTALLCONVERSATIONS:: openConversationByID: ', conversation);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       this.onConversationSelected.emit(conversation);
@@ -199,15 +192,15 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   onImageLoadedFN(conversation: ConversationModel){
-    console.log('onImageLoadedFN', conversation)
+    this.logger.printDebug('LISTALLCONVERSATIONS:: onImageLoadedFN', conversation)
   }
 
   onConversationLoadedFN(conversation: ConversationModel){
-    console.log('onImageLoadedFN', conversation)
+    this.logger.printDebug('LISTALLCONVERSATIONS:: onImageLoadedFN', conversation)
   }
 
   // private openConversationByID(conversation) {
-  //   this.g.wdLog(['openConversationByID: ', conversation]);
+  //   this.logger.printDebug('openConversationByID: ', conversation]);
   //   if ( conversation ) {
   //     // this.conversationsService.updateIsNew(conversation);
   //     this.onConversationSelected.emit(conversation);
@@ -231,7 +224,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
     ngOnDestroy() {
-      this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+      this.logger.printDebug('LISTALLCONVERSATIONS:: ngOnDestroy ->list conv subscriptions', this.subscriptions);
       //this.unsubscribe();
     }
 
@@ -244,7 +237,6 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
        this.allConversations = [];
        this.listConversations = [];
        this.archivedConversations = [];
-       this.g.wdLog(['this.subscriptions', this.subscriptions]);
    }
    // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

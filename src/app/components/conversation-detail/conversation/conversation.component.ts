@@ -61,7 +61,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= begin:: Input/Output values
   // @Input() elRoot: ElementRef;
   @Input() conversation: ConversationModel;
-  @Input() styleMap: Map<string, string>;
+  @Input() stylesMap: Map<string, string>;
   @Input() isOpen: boolean;
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   @Output() onBackHome = new EventEmitter();

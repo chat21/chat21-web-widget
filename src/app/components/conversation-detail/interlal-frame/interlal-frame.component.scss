@@ -12,6 +12,29 @@
         left: 0px;
         right: 0px;
 
+        .c21-title {
+          position: absolute;
+          left: 50px;
+          right: 100px;
+          display: inline-block;
+          width: auto;
+          height: 42px;
+          padding: 0px;
+          margin: 5px 0px;
+          font-size: 1.6em;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          .titleText {
+              position: relative;
+              line-height: 40px;
+              text-align: left;
+              font-size: 1em;
+          }
+        }
+
         .c21-header-button{
             height: 100%;
             display: block;

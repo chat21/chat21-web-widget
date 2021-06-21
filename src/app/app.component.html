@@ -16,7 +16,7 @@
             <!-- [class.active]="true" -->
             <chat-home 
                 [listConversations]="listConversations"
-                [styleMap]="styleMapConversation"
+                [stylesMap]="styleMapConversation"
                 (onNewConversation)="onNewConversation()" 
                 (onConversationSelected)="onSelectedConversation($event)"
                 (onOpenAllConvesations)="onOpenAllConversation()"
@@ -32,8 +32,7 @@
             <chat-list-all-conversations
                 [listConversations]="listConversations"
                 [archivedConversations]="archivedConversations"
-                [senderId]="recipientId"
-                [styleMap]="styleMapConversation"
+                [stylesMap]="styleMapConversation"
                 (onCloseWidget)="onCloseAllConversation()" 
                 (onConversationSelected)="onSelectedConversation($event)">
             </chat-list-all-conversations>
@@ -45,7 +44,7 @@
                 [senderId]="g.senderId"
                 [conversation]="conversationSelected"
                 [isOpen]="g.isOpen"
-                [styleMap]="styleMapConversation"
+                [stylesMap]="styleMapConversation"
                 (onBackHome)="onCloseConversation()" 
                 (onCloseWidget)="onCloseWidget()"
                 (onSoundChange)="onSoundChange($event)"
@@ -95,7 +94,8 @@
         [class.active]="g.isOpenStartRating === true"
         -->
         <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
-            <chat-star-rating-widget 
+            <chat-star-rating-widget
+                [recipientId]="g.recipientId"
                 (onClosePage)="onCloseModalRateChat()" 
                 (onCloseRate)="onRateChatComplete()">
             </chat-star-rating-widget>

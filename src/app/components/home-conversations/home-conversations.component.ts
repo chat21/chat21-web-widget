@@ -31,6 +31,8 @@ import {HumanizeDurationLanguage, HumanizeDuration} from 'humanize-duration-ts';
 import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 import { ChatManager } from '../../../chat21-core/providers/chat-manager';
 import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 
 @Component({
@@ -43,13 +45,14 @@ import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-
 export class HomeConversationsComponent implements OnInit, OnDestroy {
   
   // ========= begin:: Input/Output values ============//
+  @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() stylesMap: Map<string, string>
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onOpenAllConvesations = new EventEmitter();
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
   @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
-  @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
-  @Input() styleMap: Map<string, string>
+  
   // ========= end:: Input/Output values ============//
 
   // ========= begin:: sottoscrizioni ======= //
@@ -84,6 +87,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   WAITING_TIME_FOUND_WITH_REPLYTIME_PLACEHOLDER: string //new
 
   translationMapConversation: Map<string, string>;
+  private logger: LoggerService = LoggerInstance.getInstance();
+  
   constructor(
     public g: Globals,
     private ngZone: NgZone,
@@ -105,7 +110,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.g.wdLog(['-------ngOnInit : home-conversations ------------ ', this.listConversations]);
+    this.logger.printDebug('HOMECONVERSATIONS::---ngOnInit--- ', this.listConversations);
     
   }
 
@@ -130,7 +135,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   // ========= end:: ACTIONS ============//
 
   // showConversations() {
-  //   this.g.wdLog([' showConversations:::: ', this.listConversations.length]);
+  //   this.logger.printDebug(' showConversations:::: ', this.listConversations.length]);
   //   const that = this;
   //   let subListConversations;
   //   if (!subListConversations) {
@@ -138,11 +143,11 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   //         that.ngZone.run(() => {
   //           if (conversations && conversations.length > 3) {
   //             that.listConversations = conversations.slice(0, 3);
-  //             that.g.wdLog([' >3 :::: ', that.listConversations.length]);
+  //             that.logger.printDebug(' >3 :::: ', that.listConversations.length]);
   //           } else if (conversations && conversations.length > 0) {
   //             that.listConversations = conversations;
   //           }
-  //           that.g.wdLog([' conversations = 0 :::: ', that.listConversations]);
+  //           that.logger.printDebug(' conversations = 0 :::: ', that.listConversations]);
   //         });
   //     });
   //     this.subscriptions.push(subListConversations);
@@ -152,7 +157,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   //     this.subArchivedConversations = this.conversationsService.obsArchivedConversations.subscribe((conversations) => {
   //       that.ngZone.run(() => {
   //         that.archivedConversations = conversations;
-  //         that.g.wdLog([' archivedConversations:::: ', that.archivedConversations]);
+  //         that.logger.printDebug(' archivedConversations:::: ', that.archivedConversations]);
   //       });
   //     });
   //     this.subscriptions.push(this.subArchivedConversations);
@@ -161,7 +166,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   // }
 
   initialize() {
-    this.g.wdLog(['initialize: ListConversationsComponent']);
+    this.logger.printDebug('initialize: ListConversationsComponent');
     this.initTranslations();
 
     //this.senderId = this.g.senderId;
@@ -175,8 +180,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
       agent.imageurl = this.imageRepoService.getImagePhotoUrl(agent.id)
     })
 
-    //this.g.wdLog(['senderId: ', this.senderId]);
-    this.g.wdLog(['tenant: ', this.tenant, this.availableAgents]);
+    //this.logger.printDebug('senderId: ', this.senderId]);
+    this.logger.printDebug('HOMECONVERSATIONS:: tenant: ', this.tenant, this.availableAgents);
     // this.conversationsService.initialize(this.senderId, this.tenant);
     // this.conversationsService.checkListConversations();
     // this.conversationsService.checkListArchivedConversations();
@@ -188,8 +193,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     // 6 - save conversationHandler in chatManager
     // this.chatManager.setConversationsHandler(this.conversationsHandlerService);
     
-    this.g.wdLog(['this.listConversations.length', this.listConversations.length]);
-    this.g.wdLog(['this.listConversations', this.listConversations]);
+    this.logger.printDebug('HOMECONVERSATIONS:: this.listConversations.length', this.listConversations.length);
+    this.logger.printDebug('HOMECONVERSATIONS:: this.listConversations', this.listConversations);
     // if (this.g.supportMode) {
     //   this.showWaitingTime();
     // }
@@ -201,13 +206,13 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     const that = this;
     const projectid = this.g.projectid;
     this.waitingService.getCurrent(projectid).subscribe(response => {
-        that.g.wdLog(['response waiting', response]);
+        that.logger.printDebug('HOMECONVERSATIONS:: response waiting', response);
         // console.log('response waiting ::::', response);
        if (response && response.length > 0 && response[0].waiting_time_avg) {
         const wt = response[0].waiting_time_avg;
 
         that.waitingTime = wt;
-        that.g.wdLog([' that.waitingTime',  that.waitingTime]);
+        that.logger.printDebug('HOMECONVERSATIONS:: that.waitingTime',  that.waitingTime);
         // console.log('that.waitingTime', that.waitingTime);
 
         const lang = that.translatorService.getLanguage();
@@ -322,7 +327,7 @@ checkShowAllConversation() {
 
 
   private openConversationByID(conversation) {
-    this.g.wdLog(['openConversationByID: ', conversation]);
+    this.logger.printDebug('HOMECONVERSATIONS:: openConversationByID: ', conversation);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
@@ -335,7 +340,7 @@ checkShowAllConversation() {
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
     /** elimino tutte le sottoscrizioni */
   ngOnDestroy() {
-    this.g.wdLog(['list conv destroy subscriptions', this.subscriptions]);
+    this.logger.printDebug('HOMECONVERSATIONS:: ngOnDestroy list conv subscriptions', this.subscriptions);
     this.unsubscribe();
   }
 
@@ -348,7 +353,7 @@ checkShowAllConversation() {
     // this.subOpenConversations = null;
     this.subListConversations = null;
     this.subArchivedConversations = null;
-    this.g.wdLog(['this.subscriptions', this.subscriptions]);
+    this.logger.printDebug('HOMECONVERSATIONS:: this.subscriptions', this.subscriptions);
  }
  // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
