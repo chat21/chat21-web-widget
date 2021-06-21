@@ -65,16 +65,16 @@ export class FirebaseUploadService extends UploadService {
         // Observe state change events such as progress, pause, and resume
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.logger.printDebug('Upload is ' + progress + '% done');
+        that.logger.printDebug('Upload is ' + progress + '% done');
 
         that.BSStateUpload.next({ upload: progress, type: upload.file.type });
 
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED: // or 'paused'
-            this.logger.printDebug('Upload is paused');
+            that.logger.printDebug('Upload is paused');
             break;
           case firebase.storage.TaskState.RUNNING: // or 'running'
-            this.logger.printDebug('Upload is running');
+            that.logger.printDebug('Upload is running');
             break;
         }
       }, function error(error) {
@@ -82,7 +82,7 @@ export class FirebaseUploadService extends UploadService {
         reject(error)
       }, function complete() {
         // Handle successful uploads on complete
-        this.logger.printDebug('Upload is complete', upload);
+        that.logger.printDebug('Upload is complete', upload);
         resolve(uploadTask.snapshot.ref.getDownloadURL())
         // that.BSStateUpload.next({upload: upload});
 
