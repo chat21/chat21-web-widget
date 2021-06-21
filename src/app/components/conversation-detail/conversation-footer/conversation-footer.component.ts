@@ -7,7 +7,7 @@ import { TYPE_MSG_TEXT, TYPE_MSG_IMAGE, TYPE_MSG_FILE } from './../../../../chat
 import { Globals } from './../../../utils/globals';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
 import { UploadModel } from '../../../../chat21-core/models/upload';
-import { convertColorToRGBA, htmlEntities, replaceBr, replaceEndOfLine } from '../../../../chat21-core/utils/utils';
+import { convertColorToRGBA, htmlEntities, replaceEndOfLine } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 
@@ -256,9 +256,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
 
-      msg = htmlEntities(msg);
-      msg = replaceEndOfLine(msg);
-      msg = msg.trim();
+      // msg = htmlEntities(msg);
+      // msg = replaceEndOfLine(msg);
+      // msg = msg.trim();
 
         let recipientFullname = this.translationMap.get('GUEST_LABEL');
           // sponziello: adds ADDITIONAL ATTRIBUTES TO THE MESSAGE
