@@ -1,5 +1,16 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.9
+- added: fade-in animation when open chat-internal-frame component for self action button
+- added: title in chat-internal-frame header component
+- bug-fixed: markdown rendering moved from sender to receiver --> added htmlEntitiesEncode pipe to chat-text component
+- bug-fixed: chat-list-conversations last_message_text --> now not used innerHTML to render message in list
+- added: LoggerService used in component (not conversationDetail component yet)
+- added: new test file with async tiledesk init (call test-new.html) -> in progress 
+
+### 5.0.0-beta.3.8
+- bug-fix: logger is undefined while load image in firebase-upload service 
+
 ### 5.0.0-beta.3.7
 - bug-fixed: tiledesk-container showed with short dimension for ms on refresh --> removed showWidget() from signInWithCustomToken()
 - added: css for chat-department component in list on hover
