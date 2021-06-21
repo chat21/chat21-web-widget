@@ -1,11 +1,19 @@
 :host  .c21-avatar-image ::ng-deep > chat-avatar-image {
-    // display: none !important;
+
     .c21-icon-avatar { 
         height: 32px;
         width: 32px;
         min-width: 32px;
         min-height: 32px;
     }  
+}
+
+:host .slide-in-left ::ng-deep > chat-message-attachment > #buttons-in-message > span  > chat-text-button-attachment{
+    
+    .button-in-msg {
+        font-size: 13px;
+        padding: 5px 10px !important;
+    }
 }
 
 #messagePreview {
@@ -87,6 +95,14 @@
     margin: 0 0;// margin: 4 0;
     line-height: 1.4;
     word-break: break-word;
+}
+
+.overflow4Lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 
 .c21-img{
