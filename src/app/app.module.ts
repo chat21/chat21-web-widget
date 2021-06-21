@@ -21,8 +21,10 @@ import { LinkyModule } from 'angular-linky';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader';
-import { MarkedPipe } from './directives/marked.pipe';
 
+//pipe
+import { MarkedPipe } from './directives/marked.pipe';
+import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
 // utils
 import { Globals } from './utils/globals';
 
@@ -151,6 +153,8 @@ import { InterlalFrameComponent } from './components/conversation-detail/interla
 
 
 
+
+
 export class TranslateHttpLoaderCustom implements TranslateLoader {
   constructor(private http: HttpClient, 
               public prefix: string = "/assets/i18n/", 
@@ -189,8 +193,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 };
 
 export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
-  console.log('AUTH FACTORY - app.module')
   const config = appConfig.getConfig()
+  console.log('AUTH FACTORY - app.module', config)
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
     
     chat21Service.config = config.chat21Config;
@@ -313,6 +317,7 @@ export function loggerFactory() {
     MessageAttachmentComponent,
     LastMessageComponent,
     MarkedPipe,
+    HtmlEntitiesEncodePipe,
     ListConversationsComponent,
     ConversationHeaderComponent,
     UserTypingComponent,
@@ -328,7 +333,8 @@ export function loggerFactory() {
     AvatarComponent,
     ReturnReceiptComponent,
     InfoMessageComponent,
-    InterlalFrameComponent
+    InterlalFrameComponent,
+    
   ],
   imports: [
     BrowserModule,
