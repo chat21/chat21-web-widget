@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="./">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page - NEW</title>
+  <script type="application/javascript">
+    console.log("testNEW ------"); 
+    window.tiledeskSettings = 
+      {
+        projectid: "6013ec749b32000045be650e",
+        autoStart: true
+      };
+
+      (function(d, s, id) {
+
+        var w=window;
+        // var ic=w.Tiledesk;
+        // if(typeof ic==="function"){
+        //   ic('reattach_activator');
+        //   ic('update',w.intercomSettings);
+        // }else{ 
+        var d=document;
+        var i=function() {                 //crea una function
+          i.c(arguments);
+        };
+        console.log("i",i);
+        i.q=[];                   //q->queue
+        i.c=function(args){       //c-> call
+          console.log("i.c0",i.c);
+          i.q.push(args);
+        };
+        console.log("i.c cccc",i.c, i.q);
+
+        w.Tiledesk=i;
+      
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); 
+        js.id = id; 
+        js.async = true;
+        js.src = "./launch.js";
+        // js.src = "https://widget.tiledesk.com/v4/launch.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'tiledesk-jssdk'));
+
+
+      
+      window.Tiledesk('onOpen', function(event_data) {
+            console.log("onOpen",event_data);
+      });
+
+      window.Tiledesk('onClose', function(event_data) {
+            console.log("onClose",event_data);
+      });
+
+      window.Tiledesk('onInit', function(event_data) {
+            console.log("onInit", event_data); 
+      });
+
+      window.Tiledesk('onLoadParams', function(event_data) {
+            console.log("onLoadParams", event_data); 
+      });
+
+      window.Tiledesk('onNewConversationComponentInit', function(event_data) {
+            console.log("onNewConversationComponentInit", event_data);
+      });
+      
+
+      // window.tiledesk.open();
+      window.Tiledesk('open');
+      
+      setTimeout(function() { 
+        console.log("window.Tiledesk", window.Tiledesk);
+        window.Tiledesk('close') 
+      },10000);
+      
+
+      
+      window.tileDeskAsyncInit = function() {  
+        // window.tiledesk.on('onOpen', function(event_data) {
+        //   console.log("onOpen test");
+        // });
+        console.log('tileddesk aysnccccc')
+        window.tiledesk.on('onLoadParams', function(event_data) {
+          // console.log("loadParams0");
+          if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
+            window.Tiledesk.q.forEach(f => {
+               console.log("onLoadParams w.q", f);
+              if (f.length>=1) {
+                var functionName = f[0];
+                // console.log("functionName", functionName);
+                if (functionName==="onLoadParams") {
+                  if (f.length==2) {
+                    var functionCallback = f[1];
+                    // console.log("functionCallback", functionCallback);
+                    if(typeof functionCallback === "function") {
+                      // console.log("functionName", functionName, "functionCallback", functionCallback);
+                      window.tiledesk.on(functionName, functionCallback); 
+                      functionCallback(event_data);
+                    } 
+                    else {
+                      console.error("functionCallback is not a function.");
+                    }
+                  }   
+                }
+              }
+            });
+          }
+        });
+
+        window.tiledesk.on('onInit', function(event_data) {
+          console.log("w.q", window.Tiledesk.q);
+          if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
+            window.Tiledesk.q.forEach(f => {
+              // console.log("w.q", f);
+              if (f.length>=1) {
+                var functionName = f[0];
+                // console.log("functionName", functionName);
+
+
+                if (functionName==="loadParams") {
+                  console.log("loadParams skip");
+                }
+                
+                else if (functionName.startsWith("on")) {
+                  if (f.length==2) {
+                    var functionCallback = f[1];
+                    // console.log("functionCallback", functionCallback);
+                    if(typeof functionCallback === "function"){
+                      // console.log("functionCallback", functionCallback);
+                      window.tiledesk.on(functionName, functionCallback); 
+
+                      if (functionName==="onInit") {
+                          console.log("onInit exec");
+                          functionCallback(event_data)
+                      }
+                    } 
+                    else {
+                      console.error("functionCallback is not a function.");
+                    }
+                  }   
+                } 
+              
+                else {
+                  console.log("calling method", functionName);
+                  window.tiledesk[functionName](); 
+                }
+
+              }   
+            });
+
+
+            window.Tiledesk = function() {
+              if (arguments.length>=1) {
+                var functionName = arguments[0];
+                if (arguments.length==2) {
+                    var functionCallback = arguments[1];
+                }
+                var methodOrProperty = window.tiledesk[functionName];
+
+                if(typeof methodOrProperty==="function"){     
+                  console.log("method", functionName, functionCallback);            
+                  return window.tiledesk[functionName](functionCallback);            
+                }else { //property
+                  console.log("property", functionName, functionCallback);
+                  return window.tiledesk[functionName];
+                }
+              }
+            };             
+            console.log("ovverrided");
+  
+
+          }
+        });
+      }
+      
+          
+      //    window.tiledesk.on('onLoggedIn', function(event_data) {
+        
+      //      		var islogged = window.tiledesk.angularcomponent.component.g.isLogged;
+                  
+      //      console.log("onLoggedIn called", event_data);
+      //    });
+        
+      //     window.tiledesk.on('loadParams', 			          function(event_data) {
+      //              console.log("loadParams called ");
+
+      //      		var islogged = window.tiledesk.angularcomponent.component.g.isLogged;
+                  
+      //      console.log("loadParams islogged", islogged);
+          
+      //     });
+          
+      //      window.tiledesk.on('onInit', 			          function(event_data) {
+      //              console.log("onInit called ");
+
+      //     });
+          
+      //       window.tiledesk.on('onOpen', 			          function(event_data) {
+      //              console.log("onOpen called ");
+
+      //     });
+          
+        
+          
+      //   }
+        
+  </script>
+
+</head>
+<body>
+<h1>The display Property</h1>
+
+<h2>display: none:</h2>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. <p class="ex1">HELLO WORLD!</p> Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut.
+</div>
+
+<h2>display: inline:</h2>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. <p class="ex2">HELLO WORLD!</p> Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut.
+</div>
+
+<h2>display: block:</h2>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. <p class="ex3">HELLO WORLD!</p> Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut.
+</div>
+
+<h2>display: inline-block:</h2>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. <p class="ex4">HELLO WORLD!</p> Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut.
+</div>
+
+</body>
+</html>
