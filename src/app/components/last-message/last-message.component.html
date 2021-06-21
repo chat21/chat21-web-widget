@@ -47,7 +47,7 @@
                 </p>
             </ng-template>
             <ng-template #contentNewTab>
-                <p class="c21-text" [innerHTML]="conversation.last_message_text | marked"></p>
+                <p class="c21-text overflow4Lines" [innerHTML]="conversation.last_message_text | htmlEntitiesEncode  | marked"></p>
             </ng-template>
 
             <div *ngIf="conversation.attributes && conversation.attributes.attachment " class="slide-in-left" > 
