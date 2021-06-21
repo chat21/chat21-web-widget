@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'chat-image',
@@ -13,7 +13,7 @@ export class ImageComponent implements OnInit {
   @Output() onImageRendered = new EventEmitter<boolean>();
   loading: boolean = true
   
-  constructor(private cdref: ChangeDetectorRef) { }
+  constructor() { }
 
   ngOnInit() {
   }

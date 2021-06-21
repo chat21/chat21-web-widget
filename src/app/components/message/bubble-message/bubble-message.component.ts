@@ -73,7 +73,6 @@ export class BubbleMessageComponent implements OnInit {
   setTimeout(function () {
     try {
       const domRepresentation = document.getElementsByClassName('chat-tooltip');
-      console.log('dommmmmmm', document.getElementsByClassName('chat-tooltip'))
       if (domRepresentation) {
         const item = domRepresentation[0] as HTMLInputElement;
         // console.log(item);

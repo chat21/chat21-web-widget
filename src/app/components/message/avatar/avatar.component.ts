@@ -40,11 +40,4 @@ export class AvatarComponent implements OnInit {
     // console.log('LOADED Bot human image...')
   }
 
-  // getBaseLocationWidget(): string{
-  //   if (this.baseLocation) {
-  //     console.log('»»»» avatarComponent baseLocation', this.baseLocation);
-  //     return this.baseLocation
-  //   }
-  // }
-
 }
