@@ -101,11 +101,11 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
         this.ref = firebaseMessages.orderByChild('timestamp').limitToLast(100);
         this.ref.on('child_added', (childSnapshot) => {
-            this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
+            that.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
             that.added(childSnapshot);
         });
         this.ref.on('child_changed', (childSnapshot) => {
-            this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
+            that.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
             that.changed(childSnapshot);
         });
         this.ref.on('child_removed', (childSnapshot) => {
@@ -417,5 +417,4 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
       	}
     });
   }
-
 }
