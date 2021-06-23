@@ -75,19 +75,20 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
      * mi sottoscrivo a change, removed, added
      */
     connect() {
+        const that = this;
         const urlNodeGroups = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups';
         this.logger.printDebug('FIREBASEGroupHandlerSERVICE::connect -------> groups::', urlNodeGroups)
         this.ref = firebase.database().ref(urlNodeGroups)
         this.ref.on('child_added', (childSnapshot) => {
-            this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_added ------->', childSnapshot.val())
+            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_added ------->', childSnapshot.val())
             // that.added(childSnapshot);
         });
         this.ref.on('child_changed', (childSnapshot) => {
-            this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_changed ------->', childSnapshot.val())
+            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_changed ------->', childSnapshot.val())
             // that.changed(childSnapshot);
         });
         this.ref.on('child_removed', (childSnapshot) => {
-            this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_removed ------->', childSnapshot.val())
+            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_removed ------->', childSnapshot.val())
             // that.removed(childSnapshot);
         });
     }

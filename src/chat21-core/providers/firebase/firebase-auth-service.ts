@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 
 // firebase
 import * as firebase from 'firebase/app';
@@ -11,21 +10,8 @@ import 'firebase/auth';
 
 // services
 import { MessagingAuthService } from '../abstract/messagingAuth.service';
-import { AppStorageService } from '../abstract/app-storage.service';
-
-// import { ImageRepoService } from '../abstract/image-repo.service';
-// import { FirebaseImageRepoService } from './firebase-image-repo';
-
-// models
-import { UserModel } from '../../models/user';
 
 // utils
-import {
-  avatarPlaceholder,
-  getColorBck,
-} from '../../utils/utils-user';
-import { resolve } from 'url';
-import { CustomLogger } from '../logger/customLogger';
 import { LoggerService } from '../abstract/logger.service';
 import { LoggerInstance } from '../logger/loggerInstance';
 
@@ -44,11 +30,7 @@ export class FirebaseAuthService extends MessagingAuthService {
   // private persistence: string;
   public SERVER_BASE_URL: string;
 
-  // private
-  private URL_TILEDESK_SIGNIN: string;
-  private URL_TILEDESK_SIGNIN_ANONYMOUSLY: string;
   private URL_TILEDESK_CREATE_CUSTOM_TOKEN: string;
-  private URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN: string;
   //TODO-GAB
   // private imageRepo: ImageRepoService = new FirebaseImageRepoService();
 
@@ -148,14 +130,14 @@ export class FirebaseAuthService extends MessagingAuthService {
       }
     }
     return firebase.auth().setPersistence(firebasePersistence).then( async () => {
-      return firebase.auth().signInWithCustomToken(token).then( async (response) => {
+      return firebase.auth().signInWithCustomToken(token).then( async () => {
                 // that.firebaseSignInWithCustomToken.next(response);
               }).catch((error) => {
-                this.logger.printError('c signInFirebaseWithCustomToken Error: ', error);
+                that.logger.printError('c signInFirebaseWithCustomToken Error: ', error);
                   // that.firebaseSignInWithCustomToken.next(null);
               });
     }).catch((error) => {
-      this.logger.printError('FIREBASEAuthSERVICE:: signInFirebaseWithCustomToken Error: ', error);
+      that.logger.printError('FIREBASEAuthSERVICE:: signInFirebaseWithCustomToken Error: ', error);
     });
   }
 
@@ -169,11 +151,11 @@ export class FirebaseAuthService extends MessagingAuthService {
   createUserWithEmailAndPassword(email: string, password: string): any {
     const that = this;
     return firebase.auth().createUserWithEmailAndPassword(email, password).then((response) => {
-      this.logger.printDebug('FIREBASEAuthSERVICE:: CRATE USER WITH EMAIL: ', email, ' & PSW: ', password);
+      that.logger.printDebug('FIREBASEAuthSERVICE:: CRATE USER WITH EMAIL: ', email, ' & PSW: ', password);
       // that.firebaseCreateUserWithEmailAndPassword.next(response);
       return response;
     }).catch((error) => {
-      this.logger.printError('FIREBASEAuthSERVICE:: createUserWithEmailAndPassword error: ', error.message);
+      that.logger.printError('FIREBASEAuthSERVICE:: createUserWithEmailAndPassword error: ', error.message);
       return error;
     });
   }
@@ -185,10 +167,10 @@ export class FirebaseAuthService extends MessagingAuthService {
   sendPasswordResetEmail(email: string): any {
     const that = this;
     return firebase.auth().sendPasswordResetEmail(email).then(() => {
-      this.logger.printDebug('FIREBASEAuthSERVICE:: firebase-send-password-reset-email');
+      that.logger.printDebug('FIREBASEAuthSERVICE:: firebase-send-password-reset-email');
       // that.firebaseSendPasswordResetEmail.next(email);
     }).catch((error) => {
-      this.logger.printError('FIREBASEAuthSERVICE:: sendPasswordResetEmail error: ', error);
+      that.logger.printError('FIREBASEAuthSERVICE:: sendPasswordResetEmail error: ', error);
     });
   }
 
@@ -198,13 +180,13 @@ export class FirebaseAuthService extends MessagingAuthService {
   private signOut() {
     const that = this;
     firebase.auth().signOut().then(() => {
-      this.logger.printDebug('FIREBASEAuthSERVICE:: firebase-sign-out');
+      that.logger.printDebug('FIREBASEAuthSERVICE:: firebase-sign-out');
       // cancello token
       // this.appStorage.removeItem('tiledeskToken');
       //localStorage.removeItem('firebaseToken');
-      this.BSSignOut.next(true);
+      that.BSSignOut.next(true);
     }).catch((error) => {
-      this.logger.printError('FIREBASEAuthSERVICE:: signOut error: ', error);
+      that.logger.printError('FIREBASEAuthSERVICE:: signOut error: ', error);
     });
   }
 
@@ -214,12 +196,11 @@ export class FirebaseAuthService extends MessagingAuthService {
    */
   delete() {
     const that = this;
-    const user = firebase.auth().currentUser;
-    user.delete().then(() => {
-      this.logger.printDebug('FIREBASEAuthSERVICE:: firebase-current-user-delete');
+    firebase.auth().currentUser.delete().then(() => {
+      that.logger.printDebug('FIREBASEAuthSERVICE:: firebase-current-user-delete');
       // that.firebaseCurrentUserDelete.next();
     }).catch((error) => {
-      this.logger.printError('FIREBASEAuthSERVICE:: delete error: ', error);
+      that.logger.printError('FIREBASEAuthSERVICE:: delete error: ', error);
     });
   }
 
@@ -243,9 +224,8 @@ export class FirebaseAuthService extends MessagingAuthService {
       //localStorage.setItem('firebaseToken', that.firebaseToken);
       that.signInFirebaseWithCustomToken(data)
     }, error => {
-      this.logger.printError('FIREBASEAuthSERVICE:: createFirebaseCustomToken ERR ', error) 
+      that.logger.printError('FIREBASEAuthSERVICE:: createFirebaseCustomToken ERR ', error) 
     });
-
   }
 
   logout() {

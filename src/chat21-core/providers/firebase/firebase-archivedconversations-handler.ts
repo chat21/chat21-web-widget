@@ -200,6 +200,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             });
         }
     }
+    
     /**
      * dispose reference di conversations
      */

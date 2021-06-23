@@ -45,6 +45,7 @@ export class FirebasePresenceService extends PresenceService {
    *
    */
   public initialize() {
+    this.logger.printDebug('FIREBASEPRESENCE:: this.tenant', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 

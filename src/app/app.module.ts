@@ -85,7 +85,7 @@ import { ActionButtonComponent } from './components/message/buttons/action-butto
 import { AvatarComponent } from './components/message/avatar/avatar.component';
 import { ReturnReceiptComponent } from './components/message/return-receipt/return-receipt.component';
 import { InfoMessageComponent } from './components/message/info-message/info-message.component';
-
+import { InterlalFrameComponent } from './components/conversation-detail/interlal-frame/interlal-frame.component';
 
 
 
@@ -94,7 +94,7 @@ import { InfoMessageComponent } from './components/message/info-message/info-mes
 import { UserTypingComponent } from '../../src/chat21-core/utils/user-typing/user-typing.component';
 
 //CONSTANTS
-import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE, LogLevel } from '../../src/chat21-core/utils/constants';
+import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE, LogLevel, PUSH_ENGINE_NATIVE } from '../../src/chat21-core/utils/constants';
 
 //TRIGGER-HANDLER
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
@@ -115,7 +115,7 @@ import { TypingService } from '../chat21-core/providers/abstract/typing.service'
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
-import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
+import { NotificationsService } from '../chat21-core/providers/abstract/notifications.service';
 
 //FIREBASE SERVICES
 import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
@@ -128,6 +128,7 @@ import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebas
 import { FirebasePresenceService } from '../chat21-core/providers/firebase/firebase-presence.service';
 import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseUploadService } from '../chat21-core/providers/firebase/firebase-upload.service';
+import { FirebaseNotifications } from '../chat21-core/providers/firebase/firebase-notifications';
 
 // MQTT
 import { Chat21Service } from '../chat21-core/providers/mqtt/chat-service';
@@ -138,6 +139,7 @@ import { MQTTArchivedConversationsHandler } from '../chat21-core/providers/mqtt/
 import { MQTTConversationHandler } from '../chat21-core/providers/mqtt/mqtt-conversation-handler';
 import { MQTTTypingService } from '../chat21-core/providers/mqtt/mqtt-typing.service';
 import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence.service';
+import { MQTTNotifications } from '../chat21-core/providers/mqtt/mqtt-notifications';
 
 //NATIVE
 import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
@@ -145,14 +147,8 @@ import { NativeImageRepoService } from '../chat21-core/providers/native/native-i
 
 //LOGGER SERVICES
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
-
-//APP_STORAGE
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
 import { LoggerInstance } from '../chat21-core/providers/logger/loggerInstance';
-import { InterlalFrameComponent } from './components/conversation-detail/interlal-frame/interlal-frame.component';
-
-
-
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -184,7 +180,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
-    let customLogger = new CustomLogger(true, LogLevel.All)
+    let customLogger = new CustomLogger(true)
     LoggerInstance.setInstance(customLogger)
     if (environment.remoteConfig) {
       return appConfig.loadAppConfig();
@@ -291,12 +287,6 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     return new FirebaseUploadService();
   }
 }
-
-export function loggerFactory() {
-  return new CustomLogger(true, LogLevel.All);
-}
-
-
 
 @NgModule({
   declarations: [

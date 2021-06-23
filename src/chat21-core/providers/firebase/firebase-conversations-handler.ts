@@ -1,5 +1,4 @@
 import { AppConfigService } from './../../../app/providers/app-config.service';
-import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,9 +18,7 @@ import { ConversationsHandlerService } from '../abstract/conversations-handler.s
 
 // utils
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
-import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup, htmlEntities } from '../../utils/utils';
-import { ImageRepoService } from '../abstract/image-repo.service';
-import { FirebaseImageRepoService } from './firebase-image-repo';
+import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, isGroup } from '../../utils/utils';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoggerService } from '../abstract/logger.service';
 import { LoggerInstance } from '../logger/loggerInstance';
