@@ -31,5 +31,6 @@ export const environment = {
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',
   authPersistence: 'LOCAL',
+  logLevel: 0,
   supportMode: true,
 };
