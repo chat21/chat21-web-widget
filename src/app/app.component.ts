@@ -159,6 +159,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     ngOnInit() {
+        this.g.logLevel? this.logger.setLoglevel(this.g.logLevel) : this.logger.setLoglevel(this.appConfigService.getConfig().logLevel)
         this.logger.printDebug('APPCOMP:: ---------------- ngOnInit: APP.COMPONENT ---------------- ')
         this.initWidgetParamiters();
     }
@@ -529,7 +530,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
             this.ngZone.run(() => {
                 if (resp) {
-    
+
                     // /** INIT  */
                     // that.initAll();
                     this.tabTitle = this.g.windowContext.window.document.title

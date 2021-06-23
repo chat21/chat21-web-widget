@@ -16,5 +16,6 @@
         "APIendpoint": "${MQTT_APIENDPOINT}"
     },
     "apiUrl": "${API_URL}",
-    "baseImageUrl": "${API_BASEIMAGE_URL}"
+    "baseImageUrl": "${API_BASEIMAGE_URL}",
+    "logLevel": "${LOG_LEVEL}"    
 }

@@ -15,6 +15,7 @@ export class LoggerInstance  {
 
     static setInstance(loggerService: LoggerService) {
         LoggerInstance.instance = loggerService
+        
     }
 
 }

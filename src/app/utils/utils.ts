@@ -363,6 +363,10 @@ export function stringToBoolean(string: any): any {
   }
 }
 
+export function stringToNumber(string: any): number {
+  return +string;
+}
+
 export function getUnique(arr, comp) {
   const unique = arr
     .map(e => e[comp])

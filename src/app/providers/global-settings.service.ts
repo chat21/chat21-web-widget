@@ -4,7 +4,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 // services
 import { Globals } from '../utils/globals';
-import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName } from '../utils/utils';
+import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName, stringToNumber } from '../utils/utils';
 
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { AppConfigService } from './app-config.service';
@@ -766,6 +766,11 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.openExternalLinkButton = TEMP;
         }
+        TEMP = tiledeskSettings['logLevel'];
+        // this.globals.wdLog(['47 - logLevel:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.logLevel = TEMP;
+        }
         
 
     }
@@ -937,6 +942,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('openExternalLinkButton');
         if (TEMP !== null) {
             this.globals.openExternalLinkButton = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('logLevel');
+        if (TEMP !== null) {
+            this.globals.logLevel = TEMP;
         }
         
     }
@@ -1209,6 +1218,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_openExternalLinkButton');
         if (TEMP) {
             globals.openExternalLinkButton = stringToBoolean(TEMP); 
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
+        if (TEMP) {
+            globals.logLevel = stringToNumber(TEMP); 
         }
         
     }

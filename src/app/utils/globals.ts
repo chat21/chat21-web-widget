@@ -1,3 +1,4 @@
+import { LogLevel } from './../../chat21-core/utils/constants';
 import { Injectable } from '@angular/core';
 // import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
@@ -200,6 +201,7 @@ export class Globals {
 
    isOpenNewMessage: boolean;
    dynamicWaitTimeReply: boolean; // *******  new ********
+   logLevel: number; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');

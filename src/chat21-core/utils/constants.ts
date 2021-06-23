@@ -7,6 +7,7 @@
 export const CHAT_ENGINE_MQTT = 'mqtt';
 export const CHAT_ENGINE_FIREBASE = 'firebase';
 export const UPLOAD_ENGINE_NATIVE = 'native';
+export const PUSH_ENGINE_NATIVE = 'native'
 
 // AUTH
 export const AUTH_STATE_OFFLINE = 'offline';
@@ -95,11 +96,11 @@ export const IMG_PROFILE_DEFAULT = '/assets/images/avatar_male_tiledesk.svg';
 
 //LOG LEVEL
 export enum LogLevel {
-    All = 0,
+    Info = 0,
     Debug = 1,
-    Info = 2,
-    Warn = 3,
-    Error = 4,
-    Fatal = 5,
+    Warn = 2,
+    Error = 3,
+    Fatal = 4,
+    All = 5,
     Off = 6
 }
