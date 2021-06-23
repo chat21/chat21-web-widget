@@ -20,7 +20,7 @@
                 <!-- <title id="altIconTitle">{{ translationMap.get('CLOSED') }}</title> -->
               </svg>
             </div>
-            <div [class.not-read]="conversation.is_new" class="truncate c21-msg">{{conversation.last_message_text}}</div>
+            <div [class.not-read]="conversation.is_new" [class.archived]="conversation.archived" class="truncate c21-msg">{{conversation.last_message_text}}</div>
             <!-- <div [class.not-read]="conversation.is_new" class="truncate c21-msg" [innerHTML]="conversation.last_message_text"></div> -->
           </div>
           <div *ngIf="conversation.type !=='image'" [class.not-read]="conversation.is_new" [class.archived]="conversation.archived" class="truncate c21-msg">{{conversation.last_message_text}}</div>
