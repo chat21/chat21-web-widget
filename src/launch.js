@@ -1,6 +1,7 @@
 /** */
 ready(function() {
     // console.log('DOM is ready, call initWidget');
+    initAysncEvents();
     initWidget();
 });
 
@@ -152,7 +153,6 @@ function loadIframe(tiledeskScriptBaseLocation) {
             httpRequest.send(JSON.stringify({"name":"auth_state_changed","attributes": {"user_id":event_data.detail.global.senderId, "isLogged":event_data.detail.global.isLogged, "event":event_data.detail.event, "subtype":"info", "fullname":event_data.detail.global.attributes.userFullname, "email":event_data.detail.global.attributes.userEmail, "language":event_data.detail.global.lang, "attributes":event_data.detail.global.attributes}}));
         }
     });
-    
     /**** END EVENST ****/
 
     iDiv.appendChild(ifrm);  
@@ -160,6 +160,95 @@ function loadIframe(tiledeskScriptBaseLocation) {
     ifrm.contentWindow.document.write(srcTileDesk);
     ifrm.contentWindow.document.close();
 
+}
+
+
+function initAysncEvents() {
+    console.log('INIT ASYNC EVENTS')
+
+    window.tileDeskAsyncInit = function() {  
+        window.tiledesk.on('onLoadParams', function(event_data) {
+          if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
+            window.Tiledesk.q.forEach(f => {
+              if (f.length>=1) {
+                var functionName = f[0];
+                console.log("functionName", functionName);
+                if (functionName==="onLoadParams") {
+                  if (f.length==2) {
+                    var functionCallback = f[1];
+                    // console.log("functionCallback", functionCallback);
+                    if(typeof functionCallback === "function") {
+                      // console.log("functionName", functionName, "functionCallback", functionCallback);
+                      window.tiledesk.on(functionName, functionCallback); 
+                      functionCallback(event_data);
+                    } else {
+                      console.error("functionCallback is not a function.");
+                    }
+                  }   
+                }
+              }
+            });
+          }
+        });
+
+        window.tiledesk.on('onInit', function(event_data) {
+          if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
+            console.log("w.q", window.Tiledesk.q);
+            window.Tiledesk.q.forEach(f => {
+              // console.log("w.q", f);
+              if (f.length>=1) {
+                var functionName = f[0];
+                // console.log("functionName", functionName);
+
+                if (functionName==="onLoadParams") {
+                  console.log("loadParams skip");
+                } else if (functionName.startsWith("on")) {
+                  if (f.length==2) {
+                    var functionCallback = f[1];
+                    // console.log("functionCallback", functionCallback);
+                    if(typeof functionCallback === "function"){
+                      // console.log("functionCallback", functionCallback);
+                      window.tiledesk.on(functionName, functionCallback); //potrei usare window.Tiledesk ?!?
+
+                      if (functionName==="onInit") {
+                          console.log("onInit exec");
+                          functionCallback(event_data)
+                      }
+                    } else {
+                      console.error("functionCallback is not a function.");
+                    }
+                  }   
+                } else {
+                  console.log("calling method", functionName);
+                  window.tiledesk[functionName](); 
+                }
+
+              }   
+            });
+
+            // RICHIAMATO DOPO L'INIT DEL WIDGET
+            window.Tiledesk = function() {
+              console.log('window.Tiledesk::', arguments)
+              if (arguments.length>=1) {
+                var functionName = arguments[0];
+                if (arguments.length==2) {
+                    var functionCallback = arguments[1];
+                }
+                var methodOrProperty = window.tiledesk[functionName];
+                if(typeof methodOrProperty==="function"){     
+                  console.log("method", functionName, functionCallback);            
+                  return window.tiledesk[functionName](functionCallback);            
+                }else { //property
+                  console.log("property", functionName, functionCallback);
+                  return window.tiledesk[functionName];
+                }
+              }
+            };             
+            console.log("ovverrided");
+  
+          }
+        });
+      }
 }
 
 
