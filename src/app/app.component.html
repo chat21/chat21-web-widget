@@ -40,9 +40,10 @@
         
         <div *ngIf="isOpenConversation && g.senderId" class="modal-page" [class.modal-slide-in-right]="isOpenConversation" >
             <!-- [class.active]="true" isOpenConversation &&  [class.modal-slide-out-right]="!isOpenConversation"-->
+            <!-- [conversation]="conversationSelected" -->
             <chat-conversation 
                 [senderId]="g.senderId"
-                [conversation]="conversationSelected"
+                [conversationId]="g.recipientId"
                 [isOpen]="g.isOpen"
                 [stylesMap]="styleMapConversation"
                 (onBackHome)="onCloseConversation()" 

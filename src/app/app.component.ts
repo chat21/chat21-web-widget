@@ -159,7 +159,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** */
     ngOnInit() {
-        this.g.logLevel? this.logger.setLoglevel(this.g.logLevel) : this.logger.setLoglevel(this.appConfigService.getConfig().logLevel)
         this.logger.printDebug('APPCOMP:: ---------------- ngOnInit: APP.COMPONENT ---------------- ')
         this.initWidgetParamiters();
     }
@@ -533,6 +532,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
                     // /** INIT  */
                     // that.initAll();
+                    this.g.logLevel? this.logger.setLoglevel(this.g.logLevel) : this.logger.setLoglevel(this.appConfigService.getConfig().logLevel)
                     this.tabTitle = this.g.windowContext.window.document.title
                     this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
                     this.logger.printDebug('controllo se è stato passato un token: ', this.g.jwt);
@@ -994,17 +994,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         this.isOpenSelectionDepartment = false;
         this.isOpenAllConversation = false;
-        const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
-        this.logger.printDebug(' ============ idConversation ===============', conversationActive);
+        // const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
+        const recipientId : string = this.appStorageService.getItem('recipientId')
+        this.logger.printDebug(' ============ idConversation ===============', recipientId);
         // this.g.recipientId = null;
-        if (conversationActive) { //
-            // this.logger.printDebug('APPCOMP::77777');
+        if(this.g.recipientId){
+            this.logger.printDebug('APPCOMP:: conv da urll', this.g.recipientId)
             if (this.g.isOpen) {
                 this.isOpenConversation = true;
             }
-            this.g.recipientId = conversationActive.recipient;
-            this.conversationSelected = conversationActive;
-            this.g.setParameter('recipientId', conversationActive.recipient);
+            this.g.setParameter('recipientId', this.g.recipientId);
+            this.appStorageService.setItem('recipientId', this.g.recipientId)
+        }else if(recipientId){ 
+            this.logger.printDebug('APPCOMP:: conv da storagee', recipientId)
+            if (this.g.isOpen) {
+                this.isOpenConversation = true;
+            }
+            this.g.recipientId = recipientId;
+            this.g.setParameter('recipientId', recipientId);
             // this.returnSelectedConversation(conversationActive);
         } else if (this.g.startFromHome) {
             // this.logger.printDebug('APPCOMP::66666');
@@ -1817,10 +1824,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     onOpenCloseWidget($event) {
         this.g.setParameter('displayEyeCatcherCard', 'none');
-        const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
-        this.logger.printDebug('APPCOMP::openCloseWidget', conversationActive, this.g.isOpen, this.g.startFromHome);
+        // const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
+        const recipientId : string = this.appStorageService.getItem('recipientId')
+        this.logger.printDebug('APPCOMP::openCloseWidget', recipientId, this.g.isOpen, this.g.startFromHome);
         if (this.g.isOpen === true) {
-            if (!conversationActive) {
+            if (!recipientId) {
                 if (this.g.startFromHome) {
                     this.isOpenHome = true;
                     this.isOpenConversation = false;
@@ -1912,16 +1920,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * MODAL HOME:
      * @param $event
-     * return conversation selected
+     * return conversation selected from chat-last-message output event
      */
-    public onSelectedConversation($event) {
+    public onSelectedConversation($event: ConversationModel) {
         if ($event) {
             if (this.g.isOpen === false) {
                 //this.f21_open();
                 this._f21_open()
             }
-            this.conversationSelected = $event;
+            // this.conversationSelected = $event;
             this.g.setParameter('recipientId', $event.recipient);
+            this.appStorageService.setItem('recipientId', $event.recipient)
             this.isOpenConversation = true;
             this.logger.printDebug('onSelectConversation in APP COMPONENT: ', $event);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
@@ -2011,8 +2020,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     onCloseConversation() {
         this.logger.printDebug('APPCOMP::onCloseConversation')
-        this.appStorageService.removeItem('activeConversation');
-        this.g.setParameter('activeConversation', null, false);
+        this.appStorageService.removeItem('recipientId');
+        this.g.setParameter('recipientId', null, false)
+        // this.g.setParameter('activeConversation', null, false);
         this.isOpenHome = true;
         this.isOpenAllConversation = false;
         this.isOpenConversation = false;

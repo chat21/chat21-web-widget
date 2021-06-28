@@ -1222,7 +1222,7 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
         if (TEMP) {
-            globals.logLevel = stringToNumber(TEMP); 
+            globals.logLevel = stringToNumber(TEMP);
         }
         
     }

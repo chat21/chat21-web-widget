@@ -60,7 +60,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
   // @Input() elRoot: ElementRef;
-  @Input() conversation: ConversationModel;
+  @Input() conversationId: string;
   @Input() stylesMap: Map<string, string>;
   @Input() isOpen: boolean;
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
@@ -73,13 +73,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onNewMessageCreated = new EventEmitter();
-  // @Input() departmentSelected: string;
   // ========= end:: Input/Output values
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
   // channelType: string; // tipo di conversazione ( group / direct ) a seconda che recipientId contenga o meno 'group'
   // writingMessage = '';    // messaggio sta scrivendo...
   // isTypings = false;
+  conversation: ConversationModel
+  conversationWith: string;
   isMenuShow = false;
   
   isButtonsDisabled = true;
@@ -114,7 +115,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   preChatForm = false;
   //textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
-  conversationWith: string;
+  
   isPopupUrl = isPopupUrl;
   popupUrl = popupUrl;
   IMG_PROFILE_SUPPORT = 'https://user-images.githubusercontent.com/32448495/39111365-214552a0-46d5-11e8-9878-e5c804adfe6a.png';
@@ -317,12 +318,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    console.log('updateConversationBadge', this.conversation)
-    if(this.isConversationArchived && this.conversation && this.archivedConversationsHandlerService){
-      this.archivedConversationsHandlerService.setConversationRead(this.conversation.uid)
+    console.log('updateConversationBadge', this.conversationId)
+    if(this.isConversationArchived && this.conversationId && this.archivedConversationsHandlerService){
+      this.archivedConversationsHandlerService.setConversationRead(this.conversationId)
     }
-    if (!this.isConversationArchived && this.conversation && this.conversationsHandlerService) {
-      this.conversationsHandlerService.setConversationRead(this.conversation.uid)
+    if (!this.isConversationArchived && this.conversationId && this.conversationsHandlerService) {
+      this.conversationsHandlerService.setConversationRead(this.conversationId)
       const badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
       this.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
     }
@@ -346,9 +347,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * do per scontato che this.userId esiste!!!
    */
   initAll() {
-    if (this.conversation && this.conversation.archived) {
-      this.isConversationArchived = true;
-    }
 
     this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
     this.setConversation();
@@ -366,10 +364,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.g.wdLog([' ---------------- 5: updateConversationbage ---------------- ']);
     this.updateConversationBadge();
 
-    this.g.wdLog([' ---------------- 6: activeConversation ------------------- ', this.conversation]);
-    if (this.conversation) {
-      this.g.setParameter('activeConversation', this.conversation, true);
-    }
+    this.g.wdLog([' ---------------- 6: getConversationDetail ------------------- ', this.conversationId]);
+    this.getConversationDetail() //check if conv is archived or not
 
     // this.checkListMessages();
 
@@ -386,6 +382,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // } catch (error) {
     //     this.g.wdLog(['> Error :' + error]);
     // }
+  }
+
+  getConversationDetail(){
+    this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+      console.log('convsss', this.conversationId, conv)
+      this.conversation = conv;    
+      if (this.conversation && this.conversation.archived) {
+        this.isConversationArchived = true;
+      }
+    })
   }
 
   // onResize(event) {
@@ -699,6 +705,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //retrive active and archived conversations-handler service
     this.conversationsHandlerService = this.chatManager.conversationsHandlerService
     this.archivedConversationsHandlerService = this.chatManager.archivedConversationsService
+
 
   }
 
