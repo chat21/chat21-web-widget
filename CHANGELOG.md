@@ -1,12 +1,18 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.10
+- added: logLevel tiledeskSetting property to manage log 
+- added: enabled chance to open widget into a specific conv by url with tiledesk_recipientid
+- changed: removed activeConversation json from storage and saved only uid with 'PREFIX_recipientId' key
+- bug-fixed: window.Tiledesk.q undefined in launch.js
+
 ### 5.0.0-beta.3.9
 - added: fade-in animation when open chat-internal-frame component for self action button
 - added: title in chat-internal-frame header component
 - bug-fixed: markdown rendering moved from sender to receiver --> added htmlEntitiesEncode pipe to chat-text component
 - bug-fixed: chat-list-conversations last_message_text --> now not used innerHTML to render message in list
 - added: LoggerService used in component (not conversationDetail component yet)
-- added: new test file with async tiledesk init (call test-new.html) -> in progress 
+- added: async methods and events invocation of the Widget (call test-new.html) -> in progress 
 
 ### 5.0.0-beta.3.8
 - bug-fix: logger is undefined while load image in firebase-upload service 
