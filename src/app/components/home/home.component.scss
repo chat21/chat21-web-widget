@@ -150,9 +150,11 @@
             top: 0;
             left: 60px;
             right: 60px;
-            cursor: pointer;
+            
             a {
                 text-decoration: none;
+                cursor: pointer;
+                display: inline-block;
                 color: $gray;
                 font-size: 1.1em;
                 font-weight: 500;
@@ -162,8 +164,15 @@
                 letter-spacing: -0.24px;
                 -webkit-font-smoothing: antialiased;
     
-                img { 
-                    max-width: 26%;
+                span {
+                    display: inline-block;
+                    position: relative;
+                    top: 2px;
+                }
+
+                img {
+                    display: inline-block;
+                    max-width: 30%;
                     vertical-align: top;
                 }
             }
