@@ -1,5 +1,5 @@
-import { AppConfigService } from './../../../app/providers/app-config.service';
-import { GroupsHandlerService } from './../abstract/groups-handler.service';
+import { AppConfigService } from '../../../app/providers/app-config.service';
+import { GroupsHandlerService } from '../abstract/groups-handler.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
@@ -75,6 +75,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
      * mi sottoscrivo a change, removed, added
      */
     connect() {
+        //********* NOT IN USE ********** */
         const that = this;
         const urlNodeGroups = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups';
         this.logger.printDebug('FIREBASEGroupHandlerSERVICE::connect -------> groups::', urlNodeGroups)
