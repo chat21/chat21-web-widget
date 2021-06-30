@@ -31,12 +31,10 @@ export class FirebaseTypingService extends TypingService {
   BSIsTyping: BehaviorSubject<any>;
   BSSetTyping: BehaviorSubject<any>;
 
-  // public params
-  public tenant: string;
-
   // private params
   private urlNodeTypings: string;
   private setTimeoutWritingMessages: any;
+  private tenant: string;
   private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor() {
@@ -45,6 +43,8 @@ export class FirebaseTypingService extends TypingService {
 
   /** */
   public initialize() {
+    this.tenant = this.getTenant();
+    this.logger.printLog('FIREBASETypingSERVICE::initialize - tenant ', this.tenant)
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 

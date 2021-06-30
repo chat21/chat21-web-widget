@@ -13,6 +13,8 @@ import { PresenceService } from '../abstract/presence.service';
 // utils
 import { setLastDate } from '../../utils/utils';
 import { environment } from '../../../environments/environment';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -21,8 +23,10 @@ export class MQTTPresenceService extends PresenceService {
   BSIsOnline: BehaviorSubject<any>;
   BSLastOnline: BehaviorSubject<any>;
 
-  tenant: string;
+  // private params
+  private tenant: string;
   private urlNodePresence: string;
+  private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor(
     // private events: EventsService
@@ -31,7 +35,8 @@ export class MQTTPresenceService extends PresenceService {
   }
 
   initialize() {
-    console.log('FirebasePresenceService', this.tenant);
+    this.tenant = this.getTenant();
+    this.logger.printLog('MQTTPRESENCE::initialize this.tenant', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 

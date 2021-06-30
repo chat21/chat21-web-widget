@@ -13,6 +13,8 @@ import { PresenceService } from '../abstract/presence.service';
 import { setLastDate } from '../../utils/utils';
 import { environment } from '../../../environments/environment';
 import { TypingService } from '../abstract/typing.service';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 export class TypingModel {
   constructor(
@@ -26,10 +28,11 @@ export class TypingModel {
 @Injectable()
 export class MQTTTypingService extends TypingService {
 
-  tenant: string;
-
+  // private params
+  private tenant: string;
   private urlNodeTypings: string;
   private setTimeoutWritingMessages: any;
+  private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor(
     // private events: EventsService
@@ -39,7 +42,8 @@ export class MQTTTypingService extends TypingService {
 
   /** */
   initialize() {
-    console.log('FirebaseTypingService', this.tenant);
+    this.tenant = this.getTenant();
+    this.logger.printLog('MQTTTYPING::initialize this.tenant', this.tenant);
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 

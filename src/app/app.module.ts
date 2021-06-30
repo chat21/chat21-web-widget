@@ -248,18 +248,26 @@ export function conversationHandlerFactory(chat21Service: Chat21Service, appConf
 export function typingFactory(appConfig: AppConfigService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    return new MQTTTypingService();
-  } else {
-    return new FirebaseTypingService();
+    const typing = new MQTTTypingService();
+    typing.setTenant(config.tenant)
+    return typing
+  } else {  
+    const typing = new FirebaseTypingService();
+    typing.setTenant(config.tenant)
+    return typing 
   }
 }
 
 export function presenceFactory(appConfig: AppConfigService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    return new MQTTPresenceService();
+    const presence = new MQTTPresenceService();
+    presence.setTenant(config.tenant)
+    return presence
   } else {
-    return new FirebasePresenceService();
+    const presence = new FirebasePresenceService();
+    presence.setTenant(config.tenant);
+    return presence
   }
 }
 
