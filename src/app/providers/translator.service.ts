@@ -211,12 +211,13 @@ export class TranslatorService {
       'SEE_PREVIOUS',
       'WAITING_TIME_FOUND',
       'WAITING_TIME_NOT_FOUND',
-      'CLOSED'
+      'CLOSED',
+      'LABEL_LOADING'
     ];
 
 
     this._translate.get(labels).subscribe(res => {
-      // console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
+      console.log('»»»» initI18n »»»»»» »»»»»» GET TRANSLATED LABELS RES ', res);
       globals.LABEL_PLACEHOLDER = res['LABEL_PLACEHOLDER']
       globals.LABEL_START_NW_CONV = res['LABEL_START_NW_CONV'];
       globals.LABEL_FIRST_MSG = res['LABEL_FIRST_MSG'];
@@ -264,6 +265,7 @@ export class TranslatorService {
       globals.WAITING_TIME_FOUND = res['WAITING_TIME_FOUND'];
       globals.WAITING_TIME_NOT_FOUND = res['WAITING_TIME_NOT_FOUND'];
       globals.CLOSED = res['CLOSED'];
+      globals.LABEL_LOADING = res['LABEL_LOADING'];
 
       if (!globals.welcomeTitle) {
         globals.welcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
