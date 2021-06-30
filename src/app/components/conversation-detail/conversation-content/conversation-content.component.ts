@@ -18,6 +18,7 @@ export class ConversationContentComponent implements OnInit {
   @Input() messages: MessageModel[]
   @Input() senderId: string;
   @Input() baseLocation: string;
+  @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
@@ -114,7 +115,7 @@ export class ConversationContentComponent implements OnInit {
     this.uploadService.BSStateUpload.subscribe((data: any) => {
       console.log('ION-CONVERSATION-DETAIL BSStateUpload', data);
       if (data && data.type.startsWith("application")) {
-          data.upload === 100? this.showUploadProgress = false : this.showUploadProgress = true
+          data.upload === 100 || isNaN(data.upload)? this.showUploadProgress = false : this.showUploadProgress = true
           this.uploadProgress = data.upload
           this.fileType = 'file'
           this.scrollToBottom()

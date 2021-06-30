@@ -766,8 +766,13 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.openExternalLinkButton = TEMP;
         }
+        TEMP = tiledeskSettings['hideConversationOptionsMenu'];
+        // this.globals.wdLog(['47 - hideConversationOptionsMenu:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.hideConversationOptionsMenu = TEMP;
+        }
         TEMP = tiledeskSettings['logLevel'];
-        // this.globals.wdLog(['47 - logLevel:: ', TEMP]);
+        // this.globals.wdLog(['48 - logLevel:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.logLevel = TEMP;
         }
@@ -942,6 +947,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('openExternalLinkButton');
         if (TEMP !== null) {
             this.globals.openExternalLinkButton = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('hideConversationOptionsMenu');
+        if (TEMP !== null) {
+            this.globals.hideConversationOptionsMenu = TEMP;
         }
         TEMP = el.nativeElement.getAttribute('logLevel');
         if (TEMP !== null) {
@@ -1149,7 +1158,7 @@ export class GlobalSettingsService {
             // this.globals.wdLog(['globals.preChatForm: ' + globals.preChatForm);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_isopen');
+        TEMP = getParameterByName(windowContext, 'tiledesk_isOpen');
         if (TEMP) {
             globals.isOpen = stringToBoolean(TEMP);
         }
@@ -1220,7 +1229,13 @@ export class GlobalSettingsService {
             globals.openExternalLinkButton = stringToBoolean(TEMP); 
         }
 
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideConversationOptionsMenu');
+        if (TEMP) {
+            globals.hideConversationOptionsMenu = stringToBoolean(TEMP); 
+        }
+
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
+        console.log('logLevelll', TEMP)
         if (TEMP) {
             globals.logLevel = stringToNumber(TEMP);
         }

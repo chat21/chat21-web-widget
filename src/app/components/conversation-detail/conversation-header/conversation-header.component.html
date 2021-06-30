@@ -17,7 +17,7 @@
           </button>
 
           <!-- ICON MENU OPTION -->
-          <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-button-clean" (click)="toggleMenu()" > <!--(blur)="onBlurMenuOption($event)"-->
+          <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-button-clean" [ngStyle]="{'display': (hideConversationOptionsMenu)?'none':'flex'}" (click)="toggleMenu()" > <!--(blur)="onBlurMenuOption($event)"-->
               <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
                   width="24" height="24" viewBox="0 0 24 24">
                   <path fill="none" d="M0 0h24v24H0V0z" />
