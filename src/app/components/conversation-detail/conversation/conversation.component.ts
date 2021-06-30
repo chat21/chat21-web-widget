@@ -247,6 +247,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'INFO_SUPPORT_CHAT_CLOSED',
       'LABEL_TODAY',
       'LABEL_TOMORROW',
+      'LABEL_LOADING',
       'LABEL_TO',
       'ARRAY_DAYS',
     ];

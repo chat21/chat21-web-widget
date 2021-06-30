@@ -44,10 +44,10 @@
       <!-- CONTENT !isNewConversation && [class.active]="isShowSpinner"  -->
       <span *ngIf="messages && this.messages.length === 0">
           <div class="chat21-spinner active" id="chat21-spinner">
-              <div class="chat21-bounce1"></div>
-              <div class="chat21-bounce2"></div>
-              <div class="chat21-bounce3"></div>
-              <span>loading</span>
+              <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+              <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+              <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+              <span>{{translationMap.get('LABEL_LOADING')}}</span>
           </div>
       </span>
       
@@ -63,7 +63,8 @@
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_MINE, message)" class="msg_container base_sent">
                           
                             <!--backgroundColor non viene ancora usato -->
-                            <chat-bubble-message class="messages msg_sent slide-in-right"
+                            <!-- class="messages msg_sent slide-in-right" -->
+                            <chat-bubble-message class="messages msg_sent"
                                 [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}"
                                 [message]="message"
                                 [textColor]="'col-msg-sent'"
@@ -73,7 +74,8 @@
                             </chat-bubble-message>
 
                               <!-- icon status message -->
-                            <chat-return-receipt class="slide-in-right"
+                              <!-- class="slide-in-right" -->
+                            <chat-return-receipt 
                                 [status]="message.status">
                             </chat-return-receipt>
 
@@ -173,7 +175,8 @@
 
                       <!-- FILE PENDING UPLOAD -->
                       <div *ngIf="showUploadProgress" class="msg_container base_sent" style="margin-right: 24px;">
-                        <div class="messages msg_sent slide-in-right">
+                        <!-- class="slide-in-right" -->
+                        <div class="messages msg_sent ">
                           <div class="spinner">
                             <div class="bounce1"></div>
                             <div class="bounce2"></div>
