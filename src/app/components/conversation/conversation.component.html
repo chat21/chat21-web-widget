@@ -23,7 +23,7 @@
                     </svg>
                 </button>
 
-                <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1"
+                <button id="c21-header-option-button" [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1"
                     class="c21-header-button c21-right c21-button-clean" (click)="toggleMenu()">
                     <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': g.themeForegroundColor }"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -112,10 +112,10 @@
                 <!-- CONTENT !isNewConversation && [class.active]="isShowSpinner"  -->
                 <span *ngIf="messages && this.messages.length === 0">
                     <div class="chat21-spinner active" id="chat21-spinner">
-                        <div class="chat21-bounce1"></div>
-                        <div class="chat21-bounce2"></div>
-                        <div class="chat21-bounce3"></div>
-                        <span>loading</span>
+                        <div class="chat21-bounce1" [ngStyle]="{'background-color': g.themeColor}"></div>
+                        <div class="chat21-bounce2" [ngStyle]="{'background-color': g.themeColor}"></div>
+                        <div class="chat21-bounce3" [ngStyle]="{'background-color': g.themeColor}"></div>
+                        <span [ngStyle]="{'color': g.themeColor}">{{g.LABEL_LOADING}}</span>
                     </div>
                 </span>
 
