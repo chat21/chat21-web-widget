@@ -1,5 +1,9 @@
 # chat21-web-widget ver 4.0
 
+### 4.2.3
+- Fixes the bug: the 'Loading' label is not translated
+- Adds a variable color for the 'Loading' label and of for the spinner based on the primary color of the widget selected in the dashboard
+
 ### 4.2.2
 - Sets in enviroments the value of the key remoteConfig to true
 
