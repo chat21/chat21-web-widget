@@ -23,7 +23,7 @@ export class BubbleMessageComponent implements OnInit {
   isFrame = isFrame;
 
   tooltipOptions = {
-    'show-delay': 1500,
+    'show-delay': 500,
     'tooltip-class': 'chat-tooltip',
     'theme': 'light',
     'shadow': false,
@@ -69,7 +69,6 @@ export class BubbleMessageComponent implements OnInit {
  handleTooltipEvents(event) {
   const that = this;
   const showDelay = this.tooltipOptions['showDelay'];
-  // console.log(this.tooltipOptions);
   setTimeout(function () {
     try {
       const domRepresentation = document.getElementsByClassName('chat-tooltip');
