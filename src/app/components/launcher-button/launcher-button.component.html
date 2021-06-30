@@ -12,8 +12,8 @@
     <div *ngIf="g.conversationsBadge>0 && g.conversationsBadge != 'true'" class="c21-divBudge">{{g.conversationsBadge}}</div>
 
     <!-- OPEN ICON -->
-    <div *ngIf="!g.isOpen" class="launcher-button rotate-center" [@enterBubbleAnimation]
-    [ngStyle]="{ 'background-image': 'url('+ g.baloonImage +')', 'background-repeat': 'no-repeat'}">
+    <div *ngIf="!g.isOpen" class="launcher-button rotate-center" [@enterBubbleAnimation]>
+        <img *ngIf="g.baloonImage !== '' " [src]="g.baloonImage" [ngStyle]="{'width': '100%', 'height': '100%', 'margin': 'auto'}">
         <svg role="img" [ngStyle]="{'fill': g.themeForegroundColor, 'display': (g.baloonImage==='')?'':'none' }" xmlns="http://www.w3.org/2000/svg" width="100%"
             height="100%" viewBox="0 0 90 90">
             <path fill="none" d="M0 0h24v24H0V0z" />
