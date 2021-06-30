@@ -31,6 +31,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
+  @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();
@@ -220,7 +221,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       // this.resetLoadImage();
       
 
-        this.uploadService.upload(currentUpload).then(downloadURL => {
+        this.uploadService.upload(this.senderId, currentUpload).then(downloadURL => {
           that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
           that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
