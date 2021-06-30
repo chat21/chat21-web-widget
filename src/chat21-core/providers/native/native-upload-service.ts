@@ -35,7 +35,7 @@ export class NativeUploadService extends UploadService {
     }
 
 
-    upload(upload: UploadModel): Promise<any>  {
+    upload(userId: string, upload: UploadModel): Promise<any>  {
         this.logger.printDebug('NATIVE UPLOAD - upload new image/file ... upload', upload)
         const headers = new HttpHeaders({
             Authorization: this.tiledeskToken,
