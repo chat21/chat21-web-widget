@@ -163,11 +163,19 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      subscribeToConversations(loaded) {
             console.log('connecting MQTT conversations handler');
             const handlerConversationAdded = this.chat21Service.chatClient.onConversationAdded( (conv) => {
-                console.log('conversation added:', conv);
-                this.added(conv);
+                let conversation = this.completeConversation(conv); // needed to get the "conversation_with", and find the conv in the conv-history
+                const index = this.searchIndexInArrayForConversationWith(this.conversations, conversation.conversation_with);
+                if (index > -1) {
+                    console.log("Added conv -> Changed!")
+                    this.changed(conversation);
+                }
+                else {
+                    console.log("Added conv -> Added!")
+                    this.added(conversation);
+                }
             });
             const handlerConversationUpdated = this.chat21Service.chatClient.onConversationUpdated( (conv, topic) => {
-                console.log('conversation updated:', conv);
+                console.log('conversation updated:', JSON.stringify(conv));
                 this.changed(conv);
             });
             const handlerConversationDeleted = this.chat21Service.chatClient.onConversationDeleted( (conv, topic) => {
@@ -193,23 +201,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
                     loaded();
                 }
             });
-            // SET AUDIO
-            // this.audio = new Audio();
-            // this.audio.src = URL_SOUND;
-            // this.audio.load();
-        // const that = this;
-        // const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
-        // console.log('connect -------> conversations', urlNodeFirebase);
-        // this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
-        // this.ref.on('child_changed', (childSnapshot) => {
-        //     that.changed(childSnapshot);
-        // });
-        // this.ref.on('child_removed', (childSnapshot) => {
-        //     that.removed(childSnapshot);
-        // });
-        // this.ref.on('child_added', (childSnapshot) => {
-        //     that.added(childSnapshot);
-        // });
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
@@ -223,39 +214,13 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      * 6 -  ordino l'array per timestamp
      * 7 -  pubblico conversations:update
      */
-    private added(childSnapshot: any) {
-        console.log("NEW CONV:::", childSnapshot)
-        // const childData: ConversationModel = childSnapshot;
-        // childData.uid = childSnapshot.key;
-        // const conversation = this.completeConversation(childData);
-        // if (this.isValidConversation(childSnapshot.key, conversation)) {
-        //     this.setClosingConversation(childSnapshot.key, false);
-        //     // da verificare l'utilità e spostare in questa classe
-        //     // this.tiledeskConversationsProvider.setClosingConversation(childSnapshot.key, false);
-        //     const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
-        //     if (index > -1) {
-        //         this.conversations.splice(index, 1, conversation);
-        //     } else {
-        //         this.conversations.splice(0, 0, conversation);
-        //         // this.databaseProvider.setConversation(conversation);
-        //     }
-        //     this.conversations.sort(compareValues('timestamp', 'desc'));
-        //     console.log("ALL CONVS:", this.conversations)
-        //     this.conversationChanged.next(conversation);
-        //     this.conversationAdded.next(conversation);
-        //     // this.events.publish('conversationsChanged', this.conversations);
-        // } else {
-        //     console.error('ChatConversationsHandler::added::conversations with conversationId: ', childSnapshot.key, 'is not valid');
-        // }
-        // let childData: ConversationModel = childSnapshot;
-        let conversation = this.completeConversation(childSnapshot);
-        // console.log("NUOVA CONVER;" + conversation.uid)
-        console.log("NUOVA CONVER;.uid" + conversation.uid)
+    private added(conv: any) {
+        console.log("NEW CONV childSnapshot", conv)
+        let conversation = this.completeConversation(conv);
         if (this.isValidConversation(conversation)) {
             this.setClosingConversation(conversation.conversation_with, false);
-            console.log("NUOVA CONVER;.uid1" + conversation.uid)
-            console.log("conversations:", this.conversations)
-            console.log("cerco: ", conversation.uid)
+            console.log("new conv.uid" + conversation.uid);
+            console.log("conversations:", this.conversations);
             const index = this.searchIndexInArrayForConversationWith(this.conversations, conversation.conversation_with);
             console.log("found index:", index)
             console.log("NUOVA CONVER;.uid2" + conversation.uid)
@@ -294,40 +259,29 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
      * 6 -  pubblico conversations:update
      * 7 -  attivo sound se è un msg nuovo
      */
-    private changed(childSnapshot: any) {
+    private changed(conversation: any) {
         // const childData: ConversationModel = childSnapshot;
         // childData.uid = childSnapshot.key;
         // console.log('changed conversation: ', childData);
         // const conversation = this.completeConversation(childData);
-        console.log("Conversation changed:", childSnapshot)
-        childSnapshot.uid = childSnapshot.conversWith;
+        console.log("Conversation changed:", conversation)
+        // let conversation = this.completeConversation(childSnapshot);
+        // childSnapshot.uid = childSnapshot.conversation_with;
         // let conversation = this.completeConversation(childSnapshot);
         // console.log("Conversation completed:", conversation);
         // conversation.uid = conversation.conversation_with;
         // console.log("conversation.uid" + conversation.uid)
         // console.log("conversation.uid", conversation.uid)
         // if (this.isValidConversation(conversation)) {
-        this.setClosingConversation(childSnapshot.uid, false);
-        const index = searchIndexInArrayForUid(this.conversations, childSnapshot.uid);
+        // this.setClosingConversation(conversation.uid, false);
+        const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
         if (index > -1) {
-            const conversation = this.conversations[index];
-            console.log("Conversation to update found", conversation);
-            this.updateConversationWithSnapshot(this.conversations[index], childSnapshot);
+            const conv = this.conversations[index];
+            console.log("Conversation to update found", conv);
+            this.updateConversationWithSnapshot(this.conversations[index], conversation);
             this.conversations.sort(compareValues('timestamp', 'desc'));
             this.conversationChanged.next(conversation);
-            // this.conversations.splice(index, 1, conversation');
         }
-        // this.databaseProvider.setConversation(conversation);
-        // this.conversations.sort(compareValues('timestamp', 'desc'));
-        // this.conversationChanged.next(conversation);
-        // this.events.publish('conversationsChanged', this.conversations);
-        // this.conversationChanged.next(conversation);
-        // } else {
-        //     console.error('ChatConversationsHandler::changed::conversations with conversationId: ', childSnapshot.key, 'is not valid');
-        // }
-        // if (conversation.is_new) {
-        //     this.soundMessage();
-        // }
     }
 
     private updateConversationWithSnapshot(conv: ConversationModel, snap: any) {
@@ -336,11 +290,66 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         Object.keys(snap).forEach(k => {
             console.log("key:" + k);
             if (k === 'is_new') {
-                const value = snap[k];
-                conv.is_new = snap[k]; //(value == 'true' ? true : false);
+                console.log("aggiorno key:" + k);
+                conv.is_new = snap[k];
             }
-        })
+            if (k === 'text') {
+                console.log("aggiorno key:" + k);
+                conv.last_message_text = snap[k];
+            }
+            if (k === 'recipient') {
+                console.log("aggiorno key:" + k);
+                conv.recipient = snap[k];
+            }
+            if (k === 'recipient_fullname') {
+                console.log("aggiorno key:" + k);
+                conv.recipient_fullname = snap[k];
+            }
+            if (k === 'sender') {
+                console.log("aggiorno key:" + k);
+                conv.sender = snap[k];
+            }
+            if (k === 'sender_fullname') {
+                console.log("aggiorno key:" + k);
+                conv.sender_fullname = snap[k];
+            }
+            if (k === 'attributes') {
+                console.log("aggiorno key:" + k);
+                conv.attributes = snap[k];
+            }
+            if (k === 'timestamp') {
+                console.log("aggiorno key:" + k);
+                conv.timestamp = this.getTimeLastMessage(snap[k]);
+            }
+            if (k === 'status') {
+                console.log("aggiorno key:" + k);
+                conv.status = this.setStatusConversation(conv.sender, conv.uid);
+            }
+        });
+        // SCHEMA ConversationModel
+        // public uid: string,
+        // public attributes: any,
+        // public channel_type: string,
+        // public conversation_with_fullname: string,
+        // public conversation_with: string,
+        // public recipient: string,
+        // public recipient_fullname: string,
+        // public image: string,
+        // public is_new: boolean,
+        // public last_message_text: string,
+        // public sender: string,
+        // public senderAuthInfo: any,
+        // public sender_fullname: string,
+        // public status: string,
+        // public timestamp: string,
+        // public time_last_message: string,
+        // public selected: boolean,
+        // public color: string,
+        // public avatar: string,
+        // public archived: boolean
     }
+
+    
     /**
      * 1 -  cerco indice conversazione da eliminare
      * 2 -  elimino conversazione da array conversations

@@ -100,6 +100,11 @@ export class MQTTConversationHandler extends ConversationHandlerService {
      * mi sottoscrivo a change, removed, added
      */
     connect() {
+        console.log('connecting conversation handler...');
+        if (this.conversationWith == null) {
+            console.error('cant connect invalid this.conversationWith', this.conversationWith);
+            return;
+        }
         this.chat21Service.chatClient.lastMessages(this.conversationWith, (err, messages) => {
             if (!err) {
                 messages.forEach(msg => {
@@ -107,11 +112,6 @@ export class MQTTConversationHandler extends ConversationHandlerService {
                 });
             }
         });
-        console.log('connecting conversation handler...');
-        if (this.conversationWith == null) {
-            console.error('cant connect invalid this.conversationWith', this.conversationWith);
-            return;
-        }
         const handler_message_added = this.chat21Service.chatClient.onMessageAddedInConversation(
             this.conversationWith, (message, topic) => {
                 console.log('message added:', message, 'on topic:', topic);
@@ -123,36 +123,17 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             this.updatedMessageStatus(message);
         });
         console.log("this.conversationWith,", this.conversationWith);
-        if (this.isGroup(this.conversationWith)) {
-            this.chat21Service.chatClient.getGroup(this.conversationWith, (err, group) => {
-                console.log('got group:', group)
-                console.log('subscribing to group updates...');
-                const handler_group_updated = this.chat21Service.chatClient.onGroupUpdated( (group, topic) => {
-                    if (topic.conversWith === this.conversationWith) {
-                        console.log('group updated:', group);
-                    }
-                });
-            });
-        }
-
-        // this.lastDate = '';
-        // const that = this;
-        // this.urlNodeFirebase = conversationMessagesRef(this.tenant, this.loggedUser.uid);
-        // this.urlNodeFirebase = this.urlNodeFirebase + this.conversationWith;
-        // console.log('urlNodeFirebase *****', this.urlNodeFirebase);
-        // const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
-        // this.ref = firebaseMessages.orderByChild('timestamp').limitToLast(100);
-        // this.ref.on('child_added', (childSnapshot) => {
-        //     console.log('>>>>>>>>>>>>>> child_added: ', childSnapshot.val());
-        //     that.added(childSnapshot);
-        // });
-        // this.ref.on('child_changed', (childSnapshot) => {
-        //     console.log('>>>>>>>>>>>>>> child_changed: ', childSnapshot.val());
-        //     that.changed(childSnapshot);
-        // });
-        // this.ref.on('child_removed', (childSnapshot) => {
-        //     that.removed(childSnapshot);
-        // });
+        // if (this.isGroup(this.conversationWith)) {
+        //     this.chat21Service.chatClient.getGroup(this.conversationWith, (err, group) => {
+        //         console.log('got group:', group)
+        //         console.log('subscribing to group updates...');
+        //         const handler_group_updated = this.chat21Service.chatClient.onGroupUpdated( (group, topic) => {
+        //             if (topic.conversWith === this.conversationWith) {
+        //                 console.log('group updated:', group);
+        //             }
+        //         });
+        //     });
+        // }
     }
 
     isGroup(groupId) {
@@ -305,7 +286,6 @@ export class MQTTConversationHandler extends ConversationHandlerService {
 
     /** */
     private updatedMessageStatus(patch: any) {
-        // const msg = this.messageGenerate(message);
         if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, patch) ){
             return;
         }
