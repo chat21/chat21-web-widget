@@ -1,5 +1,19 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.12 - NATIVE-MQTT
+- updated: mqtt.min.js lib to 2.4.8
+- updated: mqtt service classes
+
+### 5.0.0-beta.3.11
+- added: hideConversationOptionsMenu tiledeskSetting property to manage options menu in conversation header
+- added: fileUploadAccept property in env to manage type of file attachment to upload in conversation-footer
+- added: type property in conversation model
+- changed: set themeColor for bounce in conversation-content while load data
+- changed: set label loagind for bounce in conversation-content while load data
+- bug-fixed: flashing of message when changes status--> removed slide-in-right and slide-in-left class style animation
+- bug-fixed: custom baloonImage moved from div to img tag
+- bug-fixed: text message in conversation-footer obscure the content if text is more than 1 line
+
 ### 5.0.0-beta.3.10
 - added: logLevel tiledeskSetting property to manage log 
 - added: enabled chance to open widget into a specific conv by url with tiledesk_recipientid
