@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+
+    <title>Widget test page </title>
+    <style>
+
+        @-moz-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Firefox */
+        @-webkit-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Webkit */
+        @-ms-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* IE */
+        @keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Opera and prob css3 final iteration */
+
+        #preloader {
+            background: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 999999;
+            opacity: 1;
+            filter: alpha(opacity=100);
+            -webkit-transition: opacity 500ms ease;
+            transition: opacity 500ms ease, display 500ms;
+        }
+
+        #preloader .logo {
+            display: block;
+            width: 109px;
+            height: 39px;
+            background-repeat: no-repeat;
+            background-image: url(./tiledesk_widget_files/logo@2x-black.png);      
+            background-size: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -20px 0 0 -55px;
+            -moz-transition:all 1s ease-in-out;
+            -webkit-transition:all 1s ease-in-out;
+            -o-transition:all 1s ease-in-out;
+            -ms-transition:all 1s ease-in-out;
+            transition:all 1s ease-in-out;
+            /* order: name, direction, duration, iteration-count, timing-function */
+            -moz-animation:blink normal 2s infinite ease-in-out; /* Firefox */
+            -webkit-animation:blink normal 2s infinite ease-in-out; /* Webkit */
+            -ms-animation:blink normal 2s infinite ease-in-out; /* IE */
+            animation:blink normal 2s infinite ease-in-out; /* Opera and prob css3 final iteration */
+        }
+
+        #deferred-styles {
+            display: none;
+        }
+
+        body {
+            background-color: #f4f5f5 !important;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            font-weight: 300;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-weight: 300;
+            padding: 0;
+        }
+
+        #main h2 {
+            margin-top: 25px;
+            font-size: 14px;
+            font-weight: 300;
+            padding: 0;
+            display: block; /* Fallback for non-webkit */
+            display: -webkit-box;
+            max-height: 258px; /* Fallback for non-webkit */
+            line-height: 2.3;
+            -webkit-line-clamp: 8;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #wrapper {
+            /* display: block!important; */
+            min-height: 100%;
+            margin-bottom: auto;
+        }
+
+        #main {
+            padding-bottom:100px;
+            margin: 20px auto 0 auto;
+        }
+
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .btn:hover{
+            border: 1px solid darkgrey
+        }
+
+        .b_frame {
+            -webkit-box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            box-shadow: 0px 19px 147px -41px rgba(0,0,0,0.75);
+            border: 0;
+            width: 400px;
+            height: 530px;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+        .col-md-6 {
+            margin-top: 30px;
+            padding: 0;
+        }
+
+        .col-md-7 {
+            margin-top: 30px;
+            padding: 0; 
+        }
+
+
+        .b_integrations_agent_links {
+            margin-top: 50px;
+        }
+        .b_integrations_agent_links a {
+            color: black;
+            margin-right: 30px;
+        }
+        .b_integrations_agent_links a i {
+            color: gray;
+            margin-right: 10px;
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+        }
+
+        #shareModal .modal-body {
+            text-align: center;
+        }
+
+        footer#footer {
+            background-color: white;
+            text-align: center;
+
+            position: relative;
+            margin-top: -81px; /* negative value of footer height */
+            height: 80px;
+            clear:both;
+        }
+
+        .b-agent-demo_powered_by a {
+            display: inline-block;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            text-decoration: none;
+        }
+
+        .b-agent-demo_powered_by span {
+            display: inline-block;
+            color: #B7BBC4;
+            text-transform: uppercase;
+            line-height: 20px;
+        }
+        .b-agent-demo_powered_by img {
+            display: inline-block;
+            height: 20px;
+            margin-left: 20px;
+        }
+
+        input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+
+            border: 2px solid #999;
+            transition: 0.2s all linear;
+            margin-right: 5px;
+
+            position: relative;
+            top: 4px;
+        }
+
+        input:checked {
+            border: 6px solid black;
+        }
+
+        button:hover,button:focus {
+            color: #999;
+            background-color: darkgrey;
+            border: 1px solid black;
+        }
+
+        button {
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 0;
+            font-size: 14px;
+        }
+
+        div.row.section {
+            border: 1px solid grey;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 5px 0px;
+        }
+
+        div.row.section {
+            overflow-x: hidden;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        div.row label{
+            margin-left: 5px;
+        }
+        div.row button[type=submit]{
+            margin-left: 15px;
+        }
+        
+
+    </style>
+
+    <!-- <script type="text/javascript">
+
+        // redirect to mobile version
+
+        /**
+         * definitely not the best way to findout if there is a mobile browser
+         * @returns {any}
+         */
+        function deviceOS() {
+            var useragent = navigator.userAgent;
+            if(useragent.match(/Android/i)) {
+                return 'android';
+            } else if(useragent.match(/webOS/i)) {
+                return 'webos';
+            } else if(useragent.match(/iPhone/i)) {
+                return 'iphone';
+            } else if(useragent.match(/iPod/i)) {
+                return 'ipod';
+            } else if(useragent.match(/iPad/i)) {
+                return 'ipad';
+            } else if(useragent.match(/Windows Phone/i)) {
+                return 'windows phone';
+            } else if(useragent.match(/SymbianOS/i)) {
+                return 'symbian';
+            } else if(useragent.match(/RIM/i) || useragent.match(/BB/i)) {
+                return 'blackberry';
+            } else {
+                return false;
+            }
+        }
+
+        if (deviceOS()) {
+            var frameEl = document.getElementById('frame');
+            location.href = "";
+        }
+    </script> -->
+
+    <meta property="og:title" content="Widget test page">
+    <meta property="og:description" content="">
+    <meta property="og:locale" content="en">
+    <meta property="og:image" content="">
+    
+    <link rel="icon" type="image/png" href="https://tiledesk.com/wp-content/uploads/2020/07/tiledesk-favicon.png">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script defer="" src="./tiledesk_widget_files/jquery.min.js"></script>
+    <script defer="" src="./tiledesk_widget_files/bootstrap.min.js"></script>
+
+    <script type="application/javascript">
+        window.tiledeskSettings = {
+            marginX: "100px",
+            marginY: "50px"
+        };
+        // (function(d, s, id) {
+        // var js, fjs = d.getElementsByTagName(s)[0];
+        // if (d.getElementById(id)) return;
+        // js = d.createElement(s); js.id = id; //js.async=!0;
+        // js.src = "../../launch.js"; 
+        // fjs.parentNode.insertBefore(js, fjs);
+        // }(document, 'script', 'tiledesk-jssdk'));
+
+        (function(d, s, id) {
+
+            var w=window;
+            // var ic=w.Tiledesk;
+            // if(typeof ic==="function"){
+            //   ic('reattach_activator');
+            //   ic('update',w.intercomSettings);
+            // }else{ 
+            var d=document;
+            var i=function() {                 //crea una function
+                i.c(arguments);
+            };
+            console.log("i",i);
+            i.q=[];                   //q->queue
+            i.c=function(args){       //c-> call
+                console.log("i.c0",i.c);
+                i.q.push(args);
+            };
+            console.log("i.c cccc",i.c, i.q);
+
+            w.Tiledesk=i;
+
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); 
+            js.id = id; 
+            js.async = true;
+            js.src = "../../launch.js";
+            // js.src = "https://widget.tiledesk.com/v4/launch.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'tiledesk-jssdk'));
+        
+        window.Tiledesk('onInit', function(event_data) {
+            console.log("onInit Tiledesk FN", event_data); 
+            setTimeout(() => {
+                    document.getElementById("preloader").style.display = "none";
+            }, 1000);
+        });
+
+        window.Tiledesk('onLoadParams', function(event_data) {
+                console.log("onLoadParams Tiledesk FN", event_data);
+                window.tiledesk.open();
+        });
+
+    </script>
+
+    <script type="application/javascript">
+        var baseUrlConsole = "https://console.tiledesk.com/v2/dashboard/";
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var urlToConsole = urlParams.get('goToConsole');
+        if(urlToConsole){
+            baseUrlConsole = urlToConsole;
+        }
+  
+        var currentUrl = window.location.href
+        function shareOnFacebook() {
+            var fbShareUrl = "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(currentUrl);
+            window.open(
+                fbShareUrl,
+                '_blank' 
+            );
+        }
+
+        function shareOnTwitter() {
+            var TwShareUrl = "https://twitter.com/share?url=" + encodeURIComponent(currentUrl);
+            window.open(
+                TwShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnLinkedin() {
+            var LinkedinShareUrl = "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(currentUrl);
+            window.open(
+                LinkedinShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnTelegram() {                                    
+            var TelegramShareUrl = "tg://msg_url?url=" + encodeURIComponent(currentUrl) ;
+            // console.log('TelegramShareUrl ', TelegramShareUrl ) 
+            window.open(
+                TelegramShareUrl,
+                '_blank' 
+            );
+         }
+
+         function shareOnWhatsapp() {            
+            var WhatsappShareUrl = "whatsapp://send?text=" + currentUrl;
+            window.open(
+                WhatsappShareUrl,
+                '_blank' 
+            );
+        }
+
+        function goToConsole(){
+            var url = new URL(currentUrl);
+            var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+            var project_name = url.searchParams.get("project_name");
+           
+            var urlConsole = baseUrlConsole + "#/project/"+tiledesk_projectid+"/home";
+            //var urlConsole = "dashboard/#/project/"+tiledesk_projectid+"/home";
+            window.open(
+                urlConsole,
+                '_blank' 
+            );
+        }
+
+        function onClickTestButton(event){
+            console.log('onClickTestButton: event-->',event)
+            if(event ==='hide'){
+                window.tiledesk.hide()
+            }else{
+                window.Tiledesk(event);
+            }
+        }
+
+        function onClickCustomToken(){
+            let jwt = document.getElementById('jwt').value
+            console.log('onClickCustomToken: event-->',jwt)
+            window.Tiledesk('signInWithCustomToken', jwt)
+        }
+
+        function onClickParameter(elementName){
+            console.log('onClickParameter: ',elementName)
+            const radios = document.getElementsByName(elementName)
+            let radioValue;
+            for (var i = 0, length = radios.length; i < length; i++) {
+                if (radios[i].checked) {
+                    // do whatever you want with the checked radio
+                    radioValue = radios[i].value;
+                    console.log('valueeeee', elementName, radioValue)
+                    window.tiledeskSettings[elementName] = radioValue
+                    console.log('settingss', window.tiledeskSettings)
+                    window.Tiledesk('restart')
+                    // only one radio can be logically checked, don't check the rest
+                    break;
+                }
+            }
+        }
+    
+        function onClickStartFromHome(){
+            let status = document.getElementById('startFromHome').checked
+            console.log('onClickStartFromHome: status-->',status)
+            window.tiledeskSettings['startFromHome'] = status
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickPreChatForm(){
+            let status = document.getElementById('preChatForm').checked
+            console.log('onClickPreChatForm: status-->',status)
+            window.tiledeskSettings['preChatForm'] = status
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickAlign(){
+            let radios = document.getElementsByName('align')
+            let value;
+            for(var i=0; i < radios.length; i++){
+                if(radios[i].checked){
+                    value= radios[i].value
+                    break;
+                }
+            }
+            console.log('onClickAlign: status-->',value)
+            window.tiledeskSettings['align'] = value
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickCalloutTimer(){
+            let radios = document.getElementsByName('calloutTimer')
+            let value;
+            for(var i=0; i < radios.length; i++){
+                if(radios[i].checked){
+                    value= radios[i].value
+                    break;
+                }
+            }
+            if(!value){
+                value = document.getElementById('calloutTimerText').value
+            }
+            console.log('onClickCalloutTimer: status-->',value)
+            window.tiledeskSettings['calloutTimer'] = value
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickCalloutTitle(){
+            let title = document.getElementById('calloutTitle').value
+            console.log('onClickCalloutTitle: status-->',title)
+            window.tiledeskSettings['callouttitle'] = title
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickCalloutMsg(){
+            let msg = document.getElementById('calloutMsg').value
+            console.log('onClickCalloutMsg: status-->',msg)
+            window.tiledeskSettings['calloutmsg'] = msg
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickWelcomeTitle(){
+            let title = document.getElementById('welcomeTitle').value
+            console.log('onClickWelcomeTitle: status-->',title)
+            window.tiledeskSettings['welcomeTitle'] = title
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickWelcomeMsg(){
+            let msg = document.getElementById('welcomeMsg').value
+            console.log('onClickWelcomeMsg: status-->',msg)
+            window.tiledeskSettings['welcomeMsg'] = msg
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickWidgetTitle(){
+            let title = document.getElementById('widgetTitle').value
+            console.log('onClickWidgetTitle: status-->',title)
+            window.tiledeskSettings['widgetTitle'] = title
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickLogoChat(){
+            let url = document.getElementById('logoChat').value
+            console.log('onClickLogoChat: status-->',url)
+            window.tiledeskSettings['logoChat'] = url
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickLang(){
+            let lang = document.getElementById('lang').value
+            console.log('onClickLang: status-->',lang)
+        }
+
+        function onClickHideHeaderCloseButton(){
+            let url = document.getElementById('hideHeaderCloseButton').value
+            console.log('onClickHideHeaderCloseButton: status-->',url)
+            window.tiledeskSettings['hideHeaderCloseButton'] = url
+            console.log('settingss', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickIsOpen(){
+            
+        }
+
+        function onClickFullScreenMode(){
+            
+        }
+
+        function onClickThemeColor(){
+            
+        }
+
+        function onClickThemeForegroundColor(){
+            
+        }
+
+
+
+                        
+        var url = new URL(currentUrl);
+        var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+        var project_name = url.searchParams.get("project_name");
+        var urlConsole = baseUrlConsole + "#/projects/"+tiledesk_projectid+"/home";
+        // console.log('tiledesk_projectid: ', tiledesk_projectid);
+        // console.log('project_name: ', project_name);
+        
+        window.onload = function() {
+            document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
+            document.getElementById("project_name").innerHTML = project_name;
+        }
+
+        
+        var isOpen = getQueryVariable("isOpen");
+        //var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
+
+        // console.log('isOpen >: ', isOpen);
+        if(isOpen == 'true') {
+            // console.log('QUI ENTRO isOpen >: ', isOpen);
+            localStorage.setItem("widget_sv5_"+ tiledesk_projectid +"_isOpen", true);
+        }
+
+
+        function getQueryVariable(variable)     {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+    </script>
+    
+</head>
+
+<body class="website white" >
+    <div id="preloader">
+        <div class="logo"></div>
+    </div>
+
+    <div id="wrapper">
+        <header id="header">
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="https://console.tiledesk.com/"></a>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="https://developer.tiledesk.com/widget/web-sdk" target="_blank">WEB SDK &amp; Docs<span></span></a></li>
+                            <li><a href="https://www.tiledesk.com/pricing-cloud/" target="_blank">Pricing<span></span></a></li>
+                            <li><a href="https://www.tiledesk.com/blog/" target="_blank">Blog<span></span></a></li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="sign-up"><a onclick="goToConsole()" href="#">GO TO CONSOLE</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div id="main" class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 style="min-height: 39px;">TEST ACTIONS</h1>
+                    <div class="row">
+                       <button class="btn btn-light" onclick="onClickTestButton('open')">Open <i class="fa-arrow-up fa"></i></button>
+                       <button class="btn btn-light" onclick="onClickTestButton('close')">Close <i class="fa fa-arrow-down"></i></button>
+                       <button class="btn btn-light" onclick="onClickTestButton('hide')">Hide</button>
+                       <button class="btn btn-light" onclick="onClickTestButton('show')">Show</button>
+                       <button class="btn btn-light" onclick="onClickTestButton('reInit')">ReInit</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('logout')">LogOut</button>
+                    </div>
+                    <div class="row section">
+                        <form>
+                            <div>Insert a custon <i><b>JWT Token</b></i> here </div>
+                            <div>
+                                <textarea class="form-control" id="jwt" placeholder="JWT ..." rows="4" cols="60"></textarea>
+                                <button type="submit" class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row section c21-parameters">
+                        <div>Select an option for Tiledesk settings parameter</div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>startFromHome</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" id="startFromHome" name="startFromHome" value="true" checked><label class="form-check-label" for="startFromHome">True</label>
+                                <input class="form-check-input" type="radio" id="startFromHome" name="startFromHome" value="false"><label class="form-check-label" for="startFromHome">False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickStartFromHome()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>prechatForm</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" id="preChatForm" name="preChatForm" value="true"><label class="form-check-label" for="preChatForm">True</label>
+                                <input class="form-check-input" type="radio" id="preChatForm" name="preChatForm" value="false"checked><label class="form-check-label" for="preChatForm">False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickPreChatForm()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>align</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" id="align" name="align" value="left"><label class="form-check-label" for="preChatForm">Left</label>
+                                <input class="form-check-input" type="radio" id="align" name="align" value="right" checked><label class="form-check-label" for="preChatForm">Right</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickAlign()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>calloutTimer</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" id="calloutTimer" name="calloutTimer" value="-1"><label class="form-check-label" for="preChatForm">-1(disabled)</label>
+                                <input class="form-check-input" type="radio" id="calloutTimer" name="calloutTimer" value="0"><label class="form-check-label" for="preChatForm">0(Immediatly)</label>
+                                <input class="form-control" type="text" id="calloutTimerText" name="calloutMsg" style="width: 40px;"> s
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickCalloutTimer()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>calloutTitle</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="calloutTitle" name="calloutTitle">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickCalloutTitle()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>calloutMsg</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="calloutMsg" name="calloutMsg">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickCalloutMsg()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>welcomeTitle</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="welcomeTitle" name="welcomeTitle">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickWelcomeTitle()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>welcomeMsg</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="welcomeMsg" name="welcomeMsg">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickWelcomeMsg()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>widgetTitle</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="widgetTitle" name="widgetTitle">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickWidgetTitle()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>logoChat</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="logoChat" name="logoChat">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickLogoChat()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>lang</b></i></span></div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="lang" name="lang">
+                                    <option selected value="it">ITA</option>
+                                    <option value="en">ENG</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                  </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickLang()">Test this setting</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"><span><i><b>hideHeaderCloseButton</b></i></span></div>
+                            <div class="col-md-4">
+                                <input type="radio" id="hideHeaderCloseButton" name="hideHeaderCloseButton" value="true"><label for="preChatForm">True</label>
+                                <input type="radio" id="hideHeaderCloseButton" name="hideHeaderCloseButton" value="false" checked><label for="preChatForm">False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickHideHeaderCloseButton()">Test this setting</button>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-light" onclick="onClickTestAll()">Test all</button>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 id="project_name" style="min-height: 39px;"></h1>
+                    <h2></h2>
+                    <div class="b_integrations_agent_links">
+                        <a href="" data-toggle="modal" data-target="#embedModal"><i class="fa-code fa"></i>Embed</a>
+                        <!-- <a href="mailto:?subject=Tiledesk%20widget%20test%20page"><i class="fa-envelope-o fa" target="_blank"></i>Email</a> -->
+                        <a href="" data-toggle="modal" data-target="#shareModal"><i class="fa-reply fa"></i>Share</a>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            
+
+            <div class="modal fade" tabindex="-1" id="embedModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Use following code to integrate the widget into your site:</h4>
+                        </div>
+                        <div class="modal-body" style="font-family: monospace;font-size: 12px;">
+                            <span style="margin-bottom: 0px; border:none !important">
+                                &lt;script type=&quot;application/javascript&quot;&gt; <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;window.tiledeskSettings = <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;projectid: </span> 
+                                <span id="project_id"> </span> 
+                                <span style="border:none !important">
+                                <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }; <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;        (function(d, s, id) { <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs = d.getElementsByTagName(s)[0];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js = d.createElement(s); js.id = id; //js.async=!0;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.src = &quot;https://widget.tiledesk.com/v4/launch.js&quot;;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
+                                &lt;/script&gt;
+                            </span>
+
+                            <!-- <pre id="preid"> </pre> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" id="shareModal" role="dialog" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Share this page via social networks:</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <a onclick="shareOnFacebook()" style="cursor: pointer;text-decoration: none;">    
+                                
+                                <img src="./tiledesk_widget_files/facebook.png" alt="Facebook">
+                            </a>
+
+                            <!-- Twitter -->
+                            <a onclick="shareOnTwitter()" style="cursor: pointer;text-decoration: none;">     
+                                <img src="./tiledesk_widget_files/twitter.png" alt="Twitter">
+                            </a>
+
+                            <!-- LinkedIn -->
+                            <a onclick="shareOnLinkedin()" style="cursor: pointer;text-decoration: none;">
+                                <img src="./tiledesk_widget_files/linkedin.png" alt="LinkedIn">
+                            </a>
+
+                            <!-- telegram -->
+                            <a onclick="shareOnTelegram()" style="cursor: pointer;text-decoration: none;">
+                                <img src="./tiledesk_widget_files/telegram.png" alt="Telegram">
+                            </a>
+
+                            <!-- whatsapp -->
+                            <!-- <a onclick="shareOnWhatsapp()" style="cursor: pointer">
+                                <img src="./tiledesk_widget_files/whatsapp.png" alt="Whatsapp">
+                            </a> -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="b-agent-demo_powered_by">
+            <a href="https://console.tiledesk.com/" target="_blank" style="cursor: pointer;text-decoration: none;">
+                <span style="position: relative; top: 2px;">Powered by</span>
+                <img src="./tiledesk_widget_files/logo@2x-black.png">
+            </a>
+        </div>
+    </footer>
+
+
+<!-- <script>
+    // non-blocking CSS delivery
+    var loadDeferredStyles = function() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        console.log('addStylesNode ', addStylesNode)
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement);
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) {
+        raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+    } else {
+        window.addEventListener('load', loadDeferredStyles);
+    }
+</script> -->
+
+<!-- Google Analytics -->
+
+
+
+
+<div>
+    <link href="./tiledesk_widget_files/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="./tiledesk_widget_files/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link href="./tiledesk_widget_files/website-poly.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="./tiledesk_widget_files/css" rel="stylesheet" type="text/css"> -->
+</div>
+</body>
+</html>
