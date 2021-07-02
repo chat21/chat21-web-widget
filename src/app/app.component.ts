@@ -1311,6 +1311,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
+            /** set state reStart */
+            windowContext['tiledesk'].restart = function () {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.restart();
+                });
+            };
+
             /** set logout */
             windowContext['tiledesk'].logout = function () {
                 ngZone.run(() => {
@@ -1584,7 +1591,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.g.wdLog(['f21_open senderId: ', senderId]);
         // if (senderId) {
         // chiudo callout
-        // this.g.setParameter('displayEyeCatcherCard', 'none');
+        this.g.setParameter('displayEyeCatcherCard', 'none');
         // this.g.isOpen = true; // !this.isOpen;
         this.g.setIsOpen(true);
         // this.isInitialized = true;
@@ -1603,6 +1610,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private reInit() {
         // if (!firebase.auth().currentUser) {
+            console.log('reInit:: getCurrentUser', this.tiledeskAuthService.getCurrentUser())
         if (!this.tiledeskAuthService.getCurrentUser()) {
             this.logger.printDebug('reInit ma NON SONO LOGGATO!');
         } else {
@@ -1629,6 +1637,27 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         divWidgetRoot.remove();
         this.g.windowContext.initWidget();
     }
+
+    /**
+     * 1 - cleare local storage
+     * 2 - remove div iframe widget
+     * 3 - reinit widget
+    */
+   private restart() {
+    // if (!firebase.auth().currentUser) {
+    
+    this.hideWidget();
+    // that.triggerOnAuthStateChanged(resp);
+    if (this.g.autoStart !== false) {
+        this.authenticate();
+        this.initAll();
+    }
+    const divWidgetRoot = this.g.windowContext.document.getElementsByTagName('chat-root')[0];
+    const divWidgetContainer = this.g.windowContext.document.getElementById('tiledesk-container');
+    divWidgetContainer.remove();
+    divWidgetRoot.remove();
+    this.g.windowContext.initWidget();
+}
 
 
     // private reInit_old() {
