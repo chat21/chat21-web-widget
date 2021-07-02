@@ -12,6 +12,9 @@ export const environment = {
   remoteTranslationsUrl: 'http://localhost:3000/',
   chatEngine: 'CHANGEIT',
   uploadEngine: 'CHANGEIT',
+  tenant: 'CHANGEIT',
+  fileUploadAccept:"*/*",
+  logLevel: 5,
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -27,10 +30,8 @@ export const environment = {
   },
   apiUrl: 'http://localhost:3000/',
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
-  tenant: 'tilechat',
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',
   authPersistence: 'LOCAL',
-  logLevel: 0,
   supportMode: true,
 };

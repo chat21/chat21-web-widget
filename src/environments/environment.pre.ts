@@ -9,11 +9,14 @@ export const environment = {
   production: true,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: true,
-  remoteConfigUrl: '/widget-config-firebase.json',
+  remoteConfigUrl: '/widget-config.json',
   remoteTranslationsUrl: 'http://localhost:3000/',
   loadRemoteTranslations: true,
   chatEngine: 'mqtt',
   uploadEngine: 'native',
+  tenant: 'tilechat',
+  fileUploadAccept:"*/*",
+  logLevel: 5,
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -29,11 +32,9 @@ export const environment = {
   },
   apiUrl: 'http://localhost:3000/',
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
-  tenant: 'tilechat',
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',
   authPersistence: 'LOCAL',
-  logLevel: 0,
   supportMode: true,
 };
 
