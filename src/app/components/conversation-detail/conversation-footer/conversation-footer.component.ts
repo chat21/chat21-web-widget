@@ -36,6 +36,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
+  @Output() onChangeTextArea = new EventEmitter<any>()
 
   @ViewChild('chat21_file') public chat21_file: ElementRef;
 
@@ -424,6 +425,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           // target.offsetHeight - 15 + 'px';
       }
       //this.setWritingMessages(target.value);
+      this.onChangeTextArea.emit({textAreaEl: target, minHeightDefault: this.HEIGHT_DEFAULT})
     } catch (e) {
       this.g.wdLog(['> Error :' + e]);
     }
@@ -511,7 +513,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      // this.g.wdLog(['onkeypress **************', this.textInputTextArea]);
+      // this.g.wdLog(['onkeypress **************', this.textInputTextArea, keyCode]);
       if (keyCode === 13) {
         if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
           //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
@@ -523,8 +525,31 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           // this.restoreTextArea();
         }
       } else if (keyCode === 9) {
+        // console.log('TAB pressedddd')
         event.preventDefault();
       }
+  }
+
+  
+  onPaste(event){
+    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    let file = null;
+    console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste items ", items);
+    console.log('eventttt onPaste', event, items)
+    for (const item of items) {
+      console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item ", item);
+      console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item.type ", item.type);
+      if (item.type.startsWith("image")) {
+      
+
+        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item.type  ", item.type);
+        file = item.getAsFile();
+        const data = new ClipboardEvent('').clipboardData || new DataTransfer();
+        data.items.add(new File([file], file.name, { type: file.type }));
+        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste data ", data);
+        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste file ", file);
+      }
+    }
   }
 
 }

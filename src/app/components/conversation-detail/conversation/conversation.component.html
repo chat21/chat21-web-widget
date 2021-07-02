@@ -74,7 +74,8 @@
             [stylesMap]="stylesMap"
             [translationMap]="translationMapFooter"
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
-            (onAfterSendMessage)="returnAfterSendMessage($event)">
+            (onAfterSendMessage)="returnAfterSendMessage($event)"
+            (onChangeTextArea)="returnChangeTextArea($event)">
         </chat-conversation-footer>
 
     </div>

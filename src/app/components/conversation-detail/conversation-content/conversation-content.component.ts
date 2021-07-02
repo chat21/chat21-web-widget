@@ -13,7 +13,7 @@ import { UploadService } from '../../../../chat21-core/providers/abstract/upload
   styleUrls: ['./conversation-content.component.scss']
 })
 export class ConversationContentComponent implements OnInit {
-  @ViewChild('scrollMe') private scrollMe: ElementRef;
+  @ViewChild('scrollMe') public scrollMe: ElementRef;
   
   @Input() messages: MessageModel[]
   @Input() senderId: string;
