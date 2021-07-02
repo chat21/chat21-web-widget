@@ -1,6 +1,10 @@
 {
     "chatEngine": "${CHAT21_ENGINE}",
     "uploadEngine": "${UPLOAD_ENGINE}",
+    "pushEngine": "${PUSH_ENGINE}",
+    "tenant": "${TENANT}",
+    "fileUploadAccept":"${FILE_UPLOAD_ACCEPT}",
+    "logLevel": "${LOG_LEVEL}"    ,
     "remoteTranslationsUrl": "${TRANSLATE_URL}",
     "firebaseConfig": {
         "apiKey": "${FIREBASE_APIKEY}",
@@ -16,6 +20,6 @@
         "APIendpoint": "${MQTT_APIENDPOINT}"
     },
     "apiUrl": "${API_URL}",
-    "baseImageUrl": "${API_BASEIMAGE_URL}",
-    "logLevel": "${LOG_LEVEL}"    
+    "baseImageUrl": "${API_BASEIMAGE_URL}"
+    
 }
