@@ -1,3 +1,5 @@
+import { style } from '@angular/animations';
+import { MAX_HEIGHT_TEXTAREA } from './../../../../chat21-core/utils/constants';
 import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
 
 import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
@@ -584,7 +586,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         true,
         '',
         '',
-        false)
+        false,
+        'text')
 
 
       console.log('convvvvvv', this.conversation)
@@ -1752,6 +1755,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnMenuOption(event:boolean){
       this.isMenuShow = event;
+  }
+
+  returnChangeTextArea(event){
+    const scrollDiv = this.conversationContent.scrollMe
+    const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
+    if(height > 20 && height < 110){
+      scrollDiv.nativeElement.style.height = 'calc(100% - ' + (height - 20)+'px'
+      this.scrollToBottom()
+    } else if(height <= 20) {
+      scrollDiv.nativeElement.style.height = '100%'
+    }
   }
 
   // =========== END: event emitter function ====== //

@@ -19,6 +19,7 @@ export class ConversationModel {
     public selected: boolean,
     public color: string,
     public avatar: string,
-    public archived: boolean
+    public archived: boolean,
+    public type: string,
   ) { }
 }
