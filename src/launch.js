@@ -1,7 +1,9 @@
 /** */
 ready(function() {
     // console.log('DOM is ready, call initWidget');
-    initAysncEvents();
+    if(!window.tileDeskAsyncInit){
+      initAysncEvents();
+    }
     initWidget();
 });
 
@@ -167,6 +169,7 @@ function initAysncEvents() {
     console.log('INIT ASYNC EVENTS')
 
     window.tileDeskAsyncInit = function() {  
+      console.log('launch tiledeskAsyncInit:::')
         window.tiledesk.on('onLoadParams', function(event_data) {
           if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
             window.Tiledesk.q.forEach(f => {
