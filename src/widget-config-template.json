@@ -5,13 +5,14 @@
     "tenant": "${TENANT}",
     "fileUploadAccept":"${FILE_UPLOAD_ACCEPT}",
     "logLevel": "${LOG_LEVEL}"    ,
-    "remoteTranslationsUrl": "${TRANSLATE_URL}",
+    "remoteTranslationsUrl": "${TRANSLATIONS_URL}",
     "firebaseConfig": {
         "apiKey": "${FIREBASE_APIKEY}",
         "authDomain": "${FIREBASE_AUTHDOMAIN}",
         "databaseURL": "${FIREBASE_DATABASEURL}",
         "projectId": "${FIREBASE_PROJECT_ID}",
         "storageBucket": "${FIREBASE_STORAGEBUCKET}",
+        "appId": "${FIREBASE_APP_ID}",
         "messagingSenderId": "${FIREBASE_MESSAGINGSENDERID}"
     },
     "chat21Config": {

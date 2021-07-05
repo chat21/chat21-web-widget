@@ -1,0 +1,26 @@
+{
+    "chatEngine": "mqtt",
+    "uploadEngine": "native",
+    "pushEngine":"none",
+    "tenant": "tilechat",
+    "fileUploadAccept":"*/*",
+    "logLevel":1,
+    "remoteTranslationsUrl": "http://localhost:3000/",
+    "firebaseConfig": {
+        "apiKey": "CHANGEIT",
+        "authDomain": "CHANGEIT",
+        "databaseURL": "CHANGEIT",
+        "projectId": "CHANGEIT",
+        "storageBucket": "CHANGEIT",
+        "appId": "CHANGEIT",
+        "messagingSenderId": "CHANGEIT"
+    },
+    "chat21Config": {
+        "appId": "tilechat",
+        "MQTTendpoint": "ws://localhost:15675/ws",
+        "APIendpoint": "http://localhost:8004/api"
+    },
+    "apiUrl": "http://localhost:3000/",
+    "baseImageUrl": "http://localhost:3000/"
+    
+}
