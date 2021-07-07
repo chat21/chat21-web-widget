@@ -972,7 +972,7 @@ export class GlobalSettingsService {
             globals.tenant = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_recipientid');
+        TEMP = getParameterByName(windowContext, 'tiledesk_recipientId');
         if (TEMP) {
             globals.recipientId = stringToBoolean(TEMP);
         }
@@ -987,7 +987,7 @@ export class GlobalSettingsService {
             globals.widgetTitle = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_poweredby');
+        TEMP = getParameterByName(windowContext, 'tiledesk_poweredBy');
         if (TEMP) {
             globals.poweredBy = stringToBoolean(TEMP);
         }
@@ -997,22 +997,22 @@ export class GlobalSettingsService {
         //     globals.userId = stringToBoolean(TEMP);
         // }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_useremail');
+        TEMP = getParameterByName(windowContext, 'tiledesk_userEmail');
         if (TEMP) {
             globals.userEmail = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_userpassword');
+        TEMP = getParameterByName(windowContext, 'tiledesk_userPassword');
         if (TEMP) {
             globals.userPassword = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_userfullname');
+        TEMP = getParameterByName(windowContext, 'tiledesk_userFullname');
         if (TEMP) {
             globals.userFullname = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_channeltype');
+        TEMP = getParameterByName(windowContext, 'tiledesk_channelType');
         if (TEMP) {
             globals.channelType = stringToBoolean(TEMP);
         }
@@ -1022,7 +1022,7 @@ export class GlobalSettingsService {
             globals.lang = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_callouttimer');
+        TEMP = getParameterByName(windowContext, 'tiledesk_calloutTimer');
         if (TEMP) {
             globals.calloutTimer = Number(TEMP);
         }
@@ -1074,12 +1074,12 @@ export class GlobalSettingsService {
             globals.welcomeMsg = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_callouttitle');
+        TEMP = getParameterByName(windowContext, 'tiledesk_calloutTitle');
         if (TEMP) {
             globals.calloutTitle = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_calloutmsg');
+        TEMP = getParameterByName(windowContext, 'tiledesk_calloutMsg');
         if (TEMP) {
             globals.calloutMsg = stringToBoolean(TEMP);
         }
@@ -1089,13 +1089,14 @@ export class GlobalSettingsService {
             globals.hideHeaderCloseButton = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_themecolor');
+        TEMP = getParameterByName(windowContext, 'tiledesk_themeColor');
         if (TEMP) {
             const themecolor = stringToBoolean(TEMP);
+            console.log('themeeeeee', themecolor)
             globals.themeColor = convertColorToRGBA(themecolor, 100);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_themeforegroundcolor');
+        TEMP = getParameterByName(windowContext, 'tiledesk_themeForegroundColor');
         if (TEMP) {
             const themeforegroundcolor = stringToBoolean(TEMP);
             globals.themeForegroundColor = convertColorToRGBA(themeforegroundcolor, 100);
@@ -1152,7 +1153,7 @@ export class GlobalSettingsService {
             globals.showLogoutOption = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_prechatform');
+        TEMP = getParameterByName(windowContext, 'tiledesk_preChatForm');
         if (TEMP) {
             globals.preChatForm = stringToBoolean(TEMP);
             // this.globals.wdLog(['globals.preChatForm: ' + globals.preChatForm);
@@ -1163,7 +1164,7 @@ export class GlobalSettingsService {
             globals.isOpen = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_allowtranscriptdownload');
+        TEMP = getParameterByName(windowContext, 'tiledesk_allowTranscriptDownload');
         if (TEMP) {
             globals.allowTranscriptDownload = stringToBoolean(TEMP);
         }
