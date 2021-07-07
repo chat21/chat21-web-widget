@@ -24,7 +24,7 @@
         "widget-config-template.json",
         "widget-config.json",
         "widget-config-firebase.json",
-        "widget-config-mqtt.json"
+        "widget-config-mqtt-localhost.json"
       ],
       "index": "index.html",
       "main": "main.ts",
