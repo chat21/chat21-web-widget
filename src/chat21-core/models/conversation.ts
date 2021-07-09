@@ -10,6 +10,7 @@ export class ConversationModel {
     public image: string,
     public is_new: boolean,
     public last_message_text: string,
+    public text: string,
     public sender: string,
     public senderAuthInfo: any,
     public sender_fullname: string,
