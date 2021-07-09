@@ -766,10 +766,10 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.openExternalLinkButton = TEMP;
         }
-        TEMP = tiledeskSettings['hideConversationOptionsMenu'];
-        // this.globals.wdLog(['47 - hideConversationOptionsMenu:: ', TEMP]);
+        TEMP = tiledeskSettings['hideHeaderConversationOptionsMenu'];
+        // this.globals.wdLog(['47 - hideHeaderConversationOptionsMenu:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.hideConversationOptionsMenu = TEMP;
+            globals.hideHeaderConversationOptionsMenu = TEMP;
         }
         TEMP = tiledeskSettings['logLevel'];
         // this.globals.wdLog(['48 - logLevel:: ', TEMP]);
@@ -948,9 +948,9 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.openExternalLinkButton = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('hideConversationOptionsMenu');
+        TEMP = el.nativeElement.getAttribute('hideHeaderConversationOptionsMenu');
         if (TEMP !== null) {
-            this.globals.hideConversationOptionsMenu = TEMP;
+            this.globals.hideHeaderConversationOptionsMenu = TEMP;
         }
         TEMP = el.nativeElement.getAttribute('logLevel');
         if (TEMP !== null) {
@@ -1230,13 +1230,12 @@ export class GlobalSettingsService {
             globals.openExternalLinkButton = stringToBoolean(TEMP); 
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_hideConversationOptionsMenu');
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideHeaderConversationOptionsMenu');
         if (TEMP) {
-            globals.hideConversationOptionsMenu = stringToBoolean(TEMP); 
+            globals.hideHeaderConversationOptionsMenu = stringToBoolean(TEMP); 
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
-        console.log('logLevelll', TEMP)
         if (TEMP) {
             globals.logLevel = stringToNumber(TEMP);
         }
