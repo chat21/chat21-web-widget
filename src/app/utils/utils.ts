@@ -364,6 +364,9 @@ export function stringToBoolean(string: any): any {
 }
 
 export function stringToNumber(string: any): number {
+  if(string === 'false'){
+    return 0;
+  }
   return +string;
 }
 
