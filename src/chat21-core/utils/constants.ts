@@ -102,5 +102,5 @@ export enum LogLevel {
     Error = 4,
     Fatal = 5,
     All = 6,
-    Off = 7
+    Off = 0
 }

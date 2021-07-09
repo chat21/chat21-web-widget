@@ -8,7 +8,7 @@ export abstract class LoggerService {
 
   constructor() { }
 
-  abstract setLoglevel(logLevel: number);
+  abstract setLoggerConfig(isLogEnabled: boolean, logLevel: number);
   abstract printLog(...message: any[])
   abstract printDebug(...message: any[])
   abstract printWarn(...message: any[])

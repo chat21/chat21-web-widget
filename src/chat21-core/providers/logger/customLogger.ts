@@ -13,12 +13,14 @@ export class CustomLogger extends LoggerService{
         super();
     }
 
-    setLoglevel(logLevel: number){
+    setLoggerConfig(isLogEnabled: boolean, logLevel: number){
+        this.isLogEnabled = isLogEnabled;
         this.logLevel = logLevel;
+        console.log('levellllll', this.logLevel, this.isLogEnabled)
     }
 
     
-    printInfo(...message: any[]) {
+    printInfo(...message) {
         if (this.isLogEnabled && this.logLevel >= LogLevel.Info) {
             console.info(message)
         }
