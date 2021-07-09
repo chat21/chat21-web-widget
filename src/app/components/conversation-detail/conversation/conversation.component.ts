@@ -577,6 +577,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         '',
         true,
         '',
+        '',
         this.senderId,
         '',
         this.g.userFullname,
@@ -588,9 +589,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         '',
         false,
         'text')
-
-
-      console.log('convvvvvv', this.conversation)
     }
   }
 
