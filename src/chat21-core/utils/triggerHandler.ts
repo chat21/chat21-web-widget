@@ -3,14 +3,17 @@ import { MessageModel } from '../../models/message';
 import { Injectable, ElementRef } from '@angular/core';
 import { Globals } from '../../app/utils/globals';
 import { ConversationModel } from '../models/conversation';
+import { LoggerInstance } from '../providers/logger/loggerInstance';
+import { LoggerService } from '../providers/abstract/logger.service';
 
 @Injectable()
 export class Triggerhandler {
 
-    el: ElementRef;
-    windowContext;
-
-    constructor(private g: Globals) { }
+    private el: ElementRef;
+    private windowContext;
+    private logger: LoggerService = LoggerInstance.getInstance()
+    
+    constructor() { }
 
     public setElement(el: ElementRef){
         this.el = el
@@ -22,7 +25,7 @@ export class Triggerhandler {
 
     /**CONVERSATION-FOOTER.component */
     public triggerBeforeSendMessageEvent(messageModel){
-        this.g.wdLog([' ---------------- triggerBeforeSendMessageEvent ---------------- ', messageModel]);
+        this.logger.printInfo(' ---------------- triggerBeforeSendMessageEvent ---------------- ', messageModel);
         try {
             const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { messageModel } });
             const windowContext = this.windowContext;
@@ -33,13 +36,13 @@ export class Triggerhandler {
               this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
             }
         } catch (e) {
-          this.g.wdLog(['> Error :' + e]);
+          this.logger.printError('> Error:' + e);
         }
     }
 
     /**CONVERSATION-FOOTER.component */
     public triggerAfterSendMessageEvent(messageSent: MessageModel){
-        this.g.wdLog([' ---------------- triggerAfterSendMessageEvent ---------------- ', messageSent]);
+        this.logger.printInfo(' ---------------- triggerAfterSendMessageEvent ---------------- ', messageSent);
         try {
             const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: messageSent } });
             const windowContext = this.windowContext;
@@ -50,18 +53,18 @@ export class Triggerhandler {
               this.el.nativeElement.dispatchEvent(onAfterMessageSend);
             }
         } catch (e) {
-          this.g.wdLog(['> Error :' + e]);
+          this.logger.printError('> Error:' + e);
         }
     }
 
     /**CONVERSATION.component */
     public triggerOnNewConversationInit(detailObj: {}){
-        this.g.wdLog([' ---------------- triggerOnNewConversationComponentInit ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnNewConversationComponentInit ---------------- ', detailObj);
         const onNewConversation = new CustomEvent('onNewConversationComponentInit', { detail: detailObj });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onNewConversation);
         }
@@ -69,62 +72,59 @@ export class Triggerhandler {
 
     /**CONVERSATION.component */
     public triggerBeforeMessageRender(detailObj: {}) {
-        //this.g.wdLog([' ---------------- triggerBeforeMessageRender ---------------- ', detailObj]);
+        //this.logger.printInfo(' ---------------- triggerBeforeMessageRender ---------------- ', detailObj]);
         try {
-          const beforeMessageRender = new CustomEvent('beforeMessageRender',
-            { detail: detailObj });
-          const windowContext = this.g.windowContext;
+          const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: detailObj });
+          const windowContext = this.windowContext;
           if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-              windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
-              this.g.windowContext = windowContext;
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(beforeMessageRender);
+            this.windowContext = windowContext;
           } else {
-            const returnEventValue = this.el.nativeElement.dispatchEvent(beforeMessageRender);
+            this.el.nativeElement.dispatchEvent(beforeMessageRender);
           }
         } catch (e) {
-          this.g.wdLog(['> Error :' + e]);
+          this.logger.printError('> Error:' + e);
         }
       }
 
     /**CONVERSATION.component */
     public triggerAfterMessageRender(detailObj: {}) {
-        //this.g.wdLog([' ---------------- triggerAfterMessageRender ---------------- ', detailObj]);
+        //this.logger.printInfo(' ---------------- triggerAfterMessageRender ---------------- ', detailObj]);
         try {
-            const afterMessageRender = new CustomEvent('afterMessageRender',
-            { detail: detailObj });
-            const windowContext = this.g.windowContext;
+            const afterMessageRender = new CustomEvent('afterMessageRender', { detail: detailObj });
+            const windowContext = this.windowContext;
             if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
                 windowContext.tiledesk.tiledeskroot.dispatchEvent(afterMessageRender);
-                this.g.windowContext = windowContext;
+                this.windowContext = windowContext;
             } else {
-            const returnEventValue = this.el.nativeElement.dispatchEvent(afterMessageRender);
+                this.el.nativeElement.dispatchEvent(afterMessageRender);
             }
         } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
+            this.logger.printError('> Error:' + e);
         }
     }
 
     /**CONVERSATION.component */
     public triggerOnMessageCreated(message: MessageModel) {
-        this.g.wdLog([' ---------------- triggerOnMessageCreated ---------------- ', message]);
+        this.logger.printInfo(' ---------------- triggerOnMessageCreated ---------------- ', message);
         const onMessageCreated = new CustomEvent('onMessageCreated', { detail: { message: message } });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onMessageCreated);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
-            // this.el.nativeElement.dispatchEvent(onMessageCreated);
+            this.el.nativeElement.dispatchEvent(onMessageCreated);
         }
     }
 
     /**APP-COMPONENT.component */  
     public triggerOnViewInit(detailObj: {}) {
-        const windowContext = this.g.windowContext;
-        this.g.wdLog([' ---------------- triggerOnInit ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnInit ---------------- ', detailObj);
         const onInit = new CustomEvent('onInit', { detail: detailObj });
-
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onInit);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onInit);
         }
@@ -132,40 +132,38 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnOpenEvent(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnOpenEvent ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnOpenEvent ---------------- ', detailObj);
         const onOpen = new CustomEvent('onOpen', { detail: detailObj });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
-
     }
 
     /**APP-COMPONENT.component */
     public triggerOnCloseEvent(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnCloseEvent ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnCloseEvent ---------------- ', detailObj);
         const onClose = new CustomEvent('onClose', { detail: detailObj });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onClose);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onClose);
         }
-
     }
 
     /**APP-COMPONENT.component */
     public triggerOnOpenEyeCatcherEvent(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', detailObj);
         const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: detailObj });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpenEyeCatcher);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onOpenEyeCatcher);
         }
@@ -173,12 +171,12 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnClosedEyeCatcherEvent() {
-        this.g.wdLog([' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ']);
+        this.logger.printInfo(' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ');
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onClosedEyeCatcher);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onClosedEyeCatcher);
         }
@@ -188,12 +186,12 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnLoggedIn(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnLoggedIn ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnLoggedIn ---------------- ', detailObj);
         const onLoggedIn = new CustomEvent('onLoggedIn', { detail: detailObj});
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedIn);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onLoggedIn);
         }
@@ -201,12 +199,12 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnLoggedOut(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnLoggedOut ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnLoggedOut ---------------- ', detailObj);
         const onLoggedOut = new CustomEvent('onLoggedOut', { detail: detailObj});
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoggedOut);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onLoggedOut);
         }
@@ -214,25 +212,24 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnAuthStateChanged(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnAuthStateChanged ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnAuthStateChanged ---------------- ', detailObj);
         const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: detailObj});
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onAuthStateChanged);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onAuthStateChanged);
         }
     }
 
     public triggerNewConversationEvent(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerNewConversationEvent ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerNewConversationEvent ---------------- ', detailObj);
         const onNewConversation = new CustomEvent('onNewConversation', { detail: detailObj });
-        const windowContext = this.g.windowContext;
-
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onNewConversation);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onNewConversation);
         }
@@ -242,12 +239,12 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerLoadParamsEvent(detailObj: {}) {
-        this.g.wdLog([' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj]);
+        this.logger.printInfo(' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj);
         const onLoadParams = new CustomEvent('onLoadParams', { detail: detailObj });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onLoadParams);
         }
@@ -255,47 +252,46 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnConversationUpdated(conversation: ConversationModel) {
-        this.g.wdLog([' ---------------- triggerOnConversationUpdated ---------------- ', conversation]);
+        this.logger.printInfo(' ---------------- triggerOnConversationUpdated ---------------- ', conversation);
         try {
             const triggerConversationUpdated = new CustomEvent('onConversationUpdated', { detail: { conversation: conversation } });
-            const windowContext = this.g.windowContext;
+            const windowContext = this.windowContext;
             if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
                 windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerConversationUpdated);
-                this.g.windowContext = windowContext;
+                this.windowContext = windowContext;
             } else {
                 this.el.nativeElement.dispatchEvent(triggerConversationUpdated);
             }
         } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
+            this.logger.printError('> Error:' + e);
         }
     }
 
     /**APP-COMPONENT.component */
     public triggerOnCloseMessagePreview() {
-        this.g.wdLog([' ---------------- triggerOnCloseMessagePreview ---------------- ']);
+        this.logger.printInfo(' ---------------- triggerOnCloseMessagePreview ---------------- ');
         try {
             const triggerCloseMessagePreview = new CustomEvent('onCloseMessagePreview', { detail: { } });
-            const windowContext = this.g.windowContext;
+            const windowContext = this.windowContext;
             if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
                 windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerCloseMessagePreview);
-                this.g.windowContext = windowContext;
+                this.windowContext = windowContext;
             } else {
                 this.el.nativeElement.dispatchEvent(triggerCloseMessagePreview);
             }
-            this.g.isOpenNewMessage = false;
         } catch (e) {
-            this.g.wdLog(['> Error :' + e]);
+            this.logger.printError('> Error:' + e);
         }
     }
 
     /**SELECTION-DEPARTMENT.component */
     public triggerOnbeforeDepartmentsFormRender(departments: DepartmentModel[]) {
-        this.g.wdLog([' ---------------- beforeDepartmentsFormRender ---------------- ']);
+        this.logger.printInfo(' ---------------- triggerOnbeforeDepartmentsFormRender ---------------- ');
         const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: departments } });
-        const windowContext = this.g.windowContext;
+        const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
             windowContext.tiledesk.tiledeskroot.dispatchEvent(onOpen);
-            this.g.windowContext = windowContext;
+            this.windowContext = windowContext;
         } else {
             this.el.nativeElement.dispatchEvent(onOpen);
         }
@@ -303,16 +299,17 @@ export class Triggerhandler {
 
     /** */
     public triggerGetImageUrlThumb(message: MessageModel) {
+        this.logger.printInfo(' ---------------- getImageUrlThumb ---------------- ');
         try {
-          const windowContext = this.g.windowContext;
-          const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
-          if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerGetImageUrlThumb);
-          } else {
-            // this.el.nativeElement.dispatchEvent(triggerGetImageUrlThumb);
-          }
+            const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
+            const windowContext = this.windowContext;
+            if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+                windowContext.tiledesk.tiledeskroot.dispatchEvent(triggerGetImageUrlThumb);
+            } else {
+                // this.el.nativeElement.dispatchEvent(triggerGetImageUrlThumb);
+            }
         } catch (e) {
-          this.g.wdLog(['> Error :' + e]);
+          this.logger.printError('> Error:' + e);
         }
       }
 
