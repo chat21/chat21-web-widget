@@ -181,7 +181,7 @@ export class Globals {
    baloonShape: string;
    isLogEnabled: boolean;
    openExternalLinkButton: boolean;
-   hideConversationOptionsMenu: boolean;
+   hideHeaderConversationOptionsMenu: boolean;
    filterByRequester: boolean;
    persistence;
    windowContext;
@@ -336,7 +336,7 @@ export class Globals {
 
     this.openExternalLinkButton = true;
     /** enable to open URL in  self action link button in external page from widget */
-    this.hideConversationOptionsMenu = false;
+    this.hideHeaderConversationOptionsMenu = false;
     /** enable to hide/show options menu in conversation detail header */
     this.filterByRequester = false;
     /** show conversations with conversation.attributes.requester_id == user.uid */
@@ -477,7 +477,7 @@ export class Globals {
       'welcomeTitle': this.welcomeTitle, 'marginX': this.marginX,
       'marginY': this.marginY, 'lancherWidth': this.launcherWidth, 'lancherHeight': this.launcherHeight,
       'baloonImage': this.baloonImage, 'baloonShape': this.baloonShape, 'isLogEnabled': this.isLogEnabled,
-      'openExternalLinkButton': this.openExternalLinkButton, 'hideConversationOptionsMenu': this.hideConversationOptionsMenu,
+      'openExternalLinkButton': this.openExternalLinkButton, 'hideHeaderConversationOptionsMenu': this.hideHeaderConversationOptionsMenu,
       'filterByRequester': this.filterByRequester, 'persistence': this.persistence,'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
       'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'jwt': this.jwt,
