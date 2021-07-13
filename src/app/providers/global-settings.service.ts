@@ -567,7 +567,6 @@ export class GlobalSettingsService {
             // globals.setParameter('lang', TEMP);
         }
         TEMP = tiledeskSettings['align'];
-        this.globals.wdLog(['1 - align:: ', TEMP ]);
         if (TEMP !== undefined) {
             globals.align = TEMP;
             const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
@@ -1028,7 +1027,6 @@ export class GlobalSettingsService {
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_align');
-        this.globals.wdLog(['2 - align:: ', TEMP ]);
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
             const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
