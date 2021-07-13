@@ -91,9 +91,26 @@
             margin-bottom: auto;
         }
 
+        header#header {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            overflow: hidden;
+            height: 80px;
+        }
+
         #main {
             padding-bottom:100px;
-            margin: 20px auto 0 auto;
+            margin: 20px;
+
+            position: absolute;
+            overflow: auto;
+            top: 80px;
+            bottom: 100px;
+            left: 0px;
+            right: 0px;
+            width: 100%;
         }
 
         .row {
@@ -196,6 +213,28 @@
             border: 6px solid black;
         }
 
+        input[type=color] {
+            width: 50px;
+            overflow: hidden;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            padding: 0px
+        }
+
+        input[type=color]::-webkit-color-swatch {
+            -webkit-appearance: none;
+            border: none;
+            padding: 0;
+        }
+
+        input[type=color]::-webkit-color-swatch-wrapper {
+            -webkit-appearance: none;
+            border: none;
+            padding: 0;
+        }
+
+        input[type=color] > .form-group
+
         button:hover,button:focus {
             color: #999;
             background-color: darkgrey;
@@ -214,20 +253,46 @@
             border-radius: 10px;
             padding: 15px;
             margin: 5px 0px;
-        }
-
-        div.row.section {
             overflow-x: hidden;
-            max-height: 400px;
             overflow-y: auto;
+        }
+        div.row.section > div.row {
+            margin-bottom: 5px
         }
 
         div.row label{
             margin-left: 5px;
+            font-size: 12px;
         }
         div.row button[type=submit]{
             margin-left: 15px;
         }
+        .formElement {
+            display: flex;
+            align-items: center;
+            height: 30px;
+        }
+
+        div.row > .shapeElement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px
+        }
+        div.row > .shapeElement > div.col-form-label {
+            width: 100px;
+        }
+
+        div.row.testAllBtn {
+            margin: 10px;
+            text-align: right;
+        }
+
+        .testAllBtn > button {
+            background-color: grey;
+            color: rgb(0, 0, 0);
+            width: 200px;
+        }
+
         
 
     </style>
@@ -282,7 +347,8 @@
     <script type="application/javascript">
         window.tiledeskSettings = {
             marginX: "100px",
-            marginY: "50px"
+            marginY: "50px",
+            calloutTimer: 5,
         };
         // (function(d, s, id) {
         // var js, fjs = d.getElementsByTagName(s)[0];
@@ -328,12 +394,87 @@
             console.log("onInit Tiledesk FN", event_data); 
             setTimeout(() => {
                     document.getElementById("preloader").style.display = "none";
+                    initLang();
+                    document.getElementById('events').value += 'onInit --> FIRED!' + '\n' 
+                    document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
             }, 1000);
         });
 
         window.Tiledesk('onLoadParams', function(event_data) {
-                console.log("onLoadParams Tiledesk FN", event_data);
-                window.tiledesk.open();
+            console.log("onLoadParams Tiledesk FN", event_data);
+            window.tiledesk.open();
+            document.getElementById('events').value +=  'onLoadParams --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            });
+
+        window.Tiledesk('onBeforeMessageSend', function(event_data) {
+            document.getElementById('events').value +=  'onBeforeMessageSend --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onAfterMessageSend', function(event_data) {
+            document.getElementById('events').value +=  'onAfterMessageSend --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onMessageCreated', function(event_data) {
+            document.getElementById('events').value +=  'onMessageCreated --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            });
+
+        window.Tiledesk('onOpen', function(event_data) {
+            document.getElementById('events').value +=  'onOpen --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onClose', function(event_data) {
+            document.getElementById('events').value +=  'onClose --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onOpenEyeCatcher', function(event_data) {
+            document.getElementById('events').value +=  'onOpenEyeCatcher --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onClosedEyeCatcher', function(event_data) {
+            document.getElementById('events').value +=  'onClosedEyeCatcher --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onLoggedIn', function(event_data) {
+            document.getElementById('events').value +=  'onLoggedIn --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onLoggedOut', function(event_data) {
+            document.getElementById('events').value +=  'onLoggedOut --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onAuthStateChanged', function(event_data) {
+            document.getElementById('events').value +=  'onAuthStateChanged --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onNewConversation', function(event_data) {
+            document.getElementById('events').value +=  'onNewConversation --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onConversationUpdated', function(event_data) {
+            document.getElementById('events').value +=  'onConversationUpdated --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onCloseMessagePreview', function(event_data) {
+            document.getElementById('events').value +=  'onCloseMessagePreview --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+        });
+
+        window.Tiledesk('onBeforeDepartmentsFormRender', function(event_data) {
+            document.getElementById('events').value +=  'onBeforeDepartmentsFormRender --> FIRED!' + '\n' 
+            document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
         });
 
     </script>
@@ -343,6 +484,8 @@
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
         var urlToConsole = urlParams.get('goToConsole');
+        
+        var textAreaEvents = document.getElementById('events')
         if(urlToConsole){
             baseUrlConsole = urlToConsole;
         }
@@ -417,150 +560,408 @@
             window.Tiledesk('signInWithCustomToken', jwt)
         }
 
-        function onClickParameter(elementName){
-            console.log('onClickParameter: ',elementName)
-            const radios = document.getElementsByName(elementName)
-            let radioValue;
-            for (var i = 0, length = radios.length; i < length; i++) {
-                if (radios[i].checked) {
-                    // do whatever you want with the checked radio
-                    radioValue = radios[i].value;
-                    console.log('valueeeee', elementName, radioValue)
-                    window.tiledeskSettings[elementName] = radioValue
-                    console.log('settingss', window.tiledeskSettings)
-                    window.Tiledesk('restart')
-                    // only one radio can be logically checked, don't check the rest
-                    break;
-                }
+        // function onClickParameter(elementName){
+        //     console.log('onClickParameter: ',elementName)
+        //     const radios = document.getElementsByName(elementName)
+        //     let radioValue;
+        //     for (var i = 0, length = radios.length; i < length; i++) {
+        //         if (radios[i].checked) {
+        //             // do whatever you want with the checked radio
+        //             radioValue = radios[i].value;
+        //             console.log('valueeeee', elementName, radioValue)
+        //             window.tiledeskSettings[elementName] = radioValue
+        //             console.log('settingss', window.tiledeskSettings)
+        //             window.Tiledesk('restart')
+        //             // only one radio can be logically checked, don't check the rest
+        //             break;
+        //         }
+        //     }
+        // }
+        stringToBoolean =  function(string){
+            switch(string.toLowerCase().trim()){
+                case "true": case "yes": case "1": return true;
+                case "false": case "no": case "0": case null: return false;
+                default: return string;
             }
         }
     
         function onClickStartFromHome(){
-            let status = document.getElementById('startFromHome').checked
-            console.log('onClickStartFromHome: status-->',status)
-            window.tiledeskSettings['startFromHome'] = status
-            console.log('settingss', window.tiledeskSettings)
+            let status = document.querySelector('input[name="startFromHome"]:checked').value
+            window.tiledeskSettings['startFromHome'] = stringToBoolean(status)
+            console.log('onClickStartFromHome: status-->',window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
         function onClickPreChatForm(){
-            let status = document.getElementById('preChatForm').checked
-            console.log('onClickPreChatForm: status-->',status)
-            window.tiledeskSettings['preChatForm'] = status
-            console.log('settingss', window.tiledeskSettings)
+            let status = document.querySelector('input[name="preChatForm"]:checked').value
+            window.tiledeskSettings['preChatForm'] = stringToBoolean(status)
+            console.log('onClickPreChatForm: status-->',window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
         function onClickAlign(){
-            let radios = document.getElementsByName('align')
-            let value;
-            for(var i=0; i < radios.length; i++){
-                if(radios[i].checked){
-                    value= radios[i].value
-                    break;
-                }
-            }
-            console.log('onClickAlign: status-->',value)
+            let status = document.querySelector('input[name="align"]:checked').value
             window.tiledeskSettings['align'] = value
-            console.log('settingss', window.tiledeskSettings)
+            console.log('onClickAlign: status-->',window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
         function onClickCalloutTimer(){
-            let radios = document.getElementsByName('calloutTimer')
+            let status = document.querySelector('input[name="calloutTimer"]:checked');
             let value;
-            for(var i=0; i < radios.length; i++){
-                if(radios[i].checked){
-                    value= radios[i].value
-                    break;
-                }
-            }
+            status? value = status.value : '';
             if(!value){
-                value = document.getElementById('calloutTimerText').value
+                value = document.getElementById('calloutTimerText').value;
             }
-            console.log('onClickCalloutTimer: status-->',value)
-            window.tiledeskSettings['calloutTimer'] = value
-            console.log('settingss', window.tiledeskSettings)
+            !value? value = -1 : '';
+            window.tiledeskSettings['calloutTimer'] = +value
+            console.log('onClickCalloutTimer: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickCalloutTitle(){
             let title = document.getElementById('calloutTitle').value
-            console.log('onClickCalloutTitle: status-->',title)
-            window.tiledeskSettings['callouttitle'] = title
-            console.log('settingss', window.tiledeskSettings)
+            window.tiledeskSettings['calloutTitle'] = title
+            console.log('onClickCalloutTitle: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickCalloutMsg(){
             let msg = document.getElementById('calloutMsg').value
-            console.log('onClickCalloutMsg: status-->',msg)
-            window.tiledeskSettings['calloutmsg'] = msg
-            console.log('settingss', window.tiledeskSettings)
+            window.tiledeskSettings['calloutMsg'] = msg
+            console.log('onClickCalloutMsg: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickWelcomeTitle(){
             let title = document.getElementById('welcomeTitle').value
-            console.log('onClickWelcomeTitle: status-->',title)
             window.tiledeskSettings['welcomeTitle'] = title
-            console.log('settingss', window.tiledeskSettings)
+            console.log('onClickWelcomeTitle: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickWelcomeMsg(){
             let msg = document.getElementById('welcomeMsg').value
-            console.log('onClickWelcomeMsg: status-->',msg)
             window.tiledeskSettings['welcomeMsg'] = msg
-            console.log('settingss', window.tiledeskSettings)
+            console.log('onClickWelcomeMsg: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickWidgetTitle(){
             let title = document.getElementById('widgetTitle').value
-            console.log('onClickWidgetTitle: status-->',title)
             window.tiledeskSettings['widgetTitle'] = title
-            console.log('settingss', window.tiledeskSettings)
+            console.log('onClickWidgetTitle: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickLogoChat(){
             let url = document.getElementById('logoChat').value
-            console.log('onClickLogoChat: status-->',url)
             window.tiledeskSettings['logoChat'] = url
-            console.log('settingss', window.tiledeskSettings)
+            console.log('onClickLogoChat: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
         function onClickLang(){
             let lang = document.getElementById('lang').value
-            console.log('onClickLang: status-->',lang)
-        }
-
-        function onClickHideHeaderCloseButton(){
-            let url = document.getElementById('hideHeaderCloseButton').value
-            console.log('onClickHideHeaderCloseButton: status-->',url)
-            window.tiledeskSettings['hideHeaderCloseButton'] = url
-            console.log('settingss', window.tiledeskSettings)
+            // if lang in not pre-translated, use English
+            const selectedLanguage = languages.find(el => el.code === lang)
+            selectedLanguage.type === '--- Needs own translation ---'? lang = 'en': ''
+            window.tiledeskSettings['lang'] = lang
+            console.log('onClickLang: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
-        function onClickIsOpen(){
-            
+        function onClickHideHeaderCloseButton(){
+            let status = document.querySelector('input[name="hideHeaderCloseButton"]:checked').value
+            window.tiledeskSettings['hideHeaderCloseButton'] = stringToBoolean(status)
+            console.log('onClickHideHeaderCloseButton: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
         }
 
         function onClickFullScreenMode(){
-            
+            let status = document.querySelector('input[name="fullscreenMode"]:checked').value
+            window.tiledeskSettings['fullscreenMode'] = stringToBoolean(status)
+            console.log('onClickFullScreenMode: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
         }
 
         function onClickThemeColor(){
-            
+            let color = document.getElementById('themeColor').value
+            document.getElementById('themeColorText').value = color
+            window.tiledeskSettings['themeColor'] = color
+            console.log('onClickThemeColor: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onChangeThemeColor(){
+            let color = document.getElementById('themeColor').value
+            document.getElementById('themeColorText').value = color
+        }
+
+        function onChangeThemeColorText(){
+            let color = document.getElementById('themeColorText').value
+            document.getElementById('themeColor').value = color
+        }
+
+        function onChangeThemeForegroundColor(){
+            let color = document.getElementById('themeForegroundColor').value
+            document.getElementById('themeForegroundColorText').value = color
+        }
+
+        function onChangeThemeForegroundColorText(){
+            let color = document.getElementById('themeForegroundColorText').value
+            document.getElementById('themeForegroundColor').value = color
         }
 
         function onClickThemeForegroundColor(){
-            
+            let color = document.getElementById('themeForegroundColor').value
+            document.getElementById('themeForegroundColorText').value = color
+            window.tiledeskSettings['themeForegroundColor'] = color
+            console.log('onClickThemeForegroundColor:',window.tiledeskSettings);
+            window.Tiledesk('restart')
         }
 
+        function onClickDepartmentId(){
+            let text = document.getElementById('departmentID').value
+            window.tiledeskSettings['departmentID'] = text
+            console.log('onClickDepartmentId:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickAllowTranscriptDownload(){
+            let status = document.querySelector('input[name="allowTranscriptDownload"]:checked').value
+            window.tiledeskSettings['allowTranscriptDownload'] = stringToBoolean(status)
+            console.log('onClickAllowTranscriptDownload:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickMarginX(){
+            let text = document.getElementById('marginX').value
+            text === ""? text= '100px': text
+            window.tiledeskSettings['marginX'] = text
+            console.log('onClickMarginX:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickMarginY(){
+            let text = document.getElementById('marginY').value
+            text === ""? text= '50px' : text //set default value if user not write a value
+            window.tiledeskSettings['marginY'] = text
+            console.log('onClickMarginY:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickAutoStart(){
+            let status = document.querySelector('input[name="autoStart"]:checked').value
+            window.tiledeskSettings['autoStart'] = stringToBoolean(status)
+            console.log('onClickAutoStart:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickStartHidden(){
+            let status = document.querySelector('input[name="startHidden"]:checked').value
+            window.tiledeskSettings['startHidden'] = stringToBoolean(status)
+            console.log('onClickStartHidden:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickPersistence(){
+            let status = document.querySelector('input[name="persistence"]:checked').value
+            window.tiledeskSettings['persistence'] = status
+            console.log('onClickPersistence:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickShowWaitTime(){
+            let status = document.querySelector('input[name="showWaitTime"]:checked').value
+            window.tiledeskSettings['showWaitTime'] = stringToBoolean(status)
+            console.log('onClickShowWaitTime:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickShowAvailableAgents(){
+            let status = document.querySelector('input[name="showAvailableAgents"]:checked').value
+            window.tiledeskSettings['showAvailableAgents'] = stringToBoolean(status)
+            console.log('onClickShowAvailableAgents', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickShowLogoutOption(){
+            let status = document.querySelector('input[name="showLogoutOption"]:checked').value
+            window.tiledeskSettings['showLogoutOption'] = stringToBoolean(status)
+            console.log('onClickShowLogoutOption:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickLauncherWidth(){
+            let text = document.getElementById('launcherWidth').value
+            text === ""? text= 60 : text //set default value if user not write a value
+            window.tiledeskSettings['launcherWidth'] = text + 'px'
+            console.log('onClickLauncherWidth:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onChangeLauncherWidth(){
+            let value = document.getElementById('launcherWidth').value
+            document.getElementById('launcherWidthText').innerText = value + ' px'
+        }
+
+        function onChangeLauncherHeight(){
+            let value = document.getElementById('launcherheight').value
+            document.getElementById('launcherheightText').innerText = value + ' px'
+        }
+
+        function onClickLauncherHeight(){
+            let text = document.getElementById('launcherHeight').value
+            text === ""? text= 60 : text //set default value if user not write a value
+            window.tiledeskSettings['launcherHeight'] = text + 'px'
+            console.log('onClickLauncherHeight', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickBaloonImage(){
+            let url = document.getElementById('baloonImage').value
+            window.tiledeskSettings['baloonImage'] = url
+            console.log('onClickMarginY', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickBaloonShape(){
+            let top = document.getElementById('top').value
+            let bottom = document.getElementById('bottom').value
+            let left = document.getElementById('left').value
+            let right = document.getElementById('right').value
+            let percentage = document.getElementById('percentage').value
+            let value = '50%'
+            if(top || bottom || left || right){
+                top? top : top='0px';
+                bottom? bottom : bottom='0px';
+                left? left : left='0px';
+                right? right : right='0px';
+                value = top+' ' + bottom+' '+left+' '+right
+            } else if (percentage){
+                value = percentage
+            }
+            window.tiledeskSettings['baloonShape'] = value
+            console.log('onClickBaloonShape', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onBallonShapeInput(){
+            const top = document.getElementById('top')
+            const bottom = document.getElementById('bottom')
+            const left = document.getElementById('left')
+            const right = document.getElementById('right')
+            const percentage = document.getElementById('percentage')
+            if(top.value || bottom.value || left.value || right.value){
+                percentage.disabled = true
+            } else if (percentage.value){
+                top.disabled = true
+                bottom.disabled = true
+                left.disabled = true
+                right.disabled = true
+            }else {
+                percentage.disabled = false
+                top.disabled = false
+                bottom.disabled = false
+                left.disabled = false
+                right.disabled = false
+            }
+        }
+
+        function onClickDynamicWaitTimeReply(){
+            let status = document.querySelector('input[name="dynamicWaitTimeReply"]:checked').value
+            window.tiledeskSettings['dynamicWaitTimeReply'] = stringToBoolean(status)
+            console.log('onClickDynamicWaitTimeReply:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickSoundEnabled(){
+            let status = document.querySelector('input[name="soundEnabled"]:checked').value
+            window.tiledeskSettings['soundEnabled'] = stringToBoolean(status)
+            console.log('onClickSoundEnabled:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickOpenExternalLinkButton(){
+            let status = document.querySelector('input[name="openExternalLinkButton"]:checked').value
+            window.tiledeskSettings['openExternalLinkButton'] = stringToBoolean(status)
+            console.log('onClickOpenExternalLinkButton:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickIsLogEnabled(){
+            let status = document.querySelector('input[name="isLogEnabled"]:checked').value
+            window.tiledeskSettings['isLogEnabled'] = stringToBoolean(status)
+            console.log('onClickIsLogEnabled:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickLogLevel(){
+            let status = document.getElementById('logLevel').value
+            window.tiledeskSettings['logLevel'] = +status
+            console.log('onClickLogLevel:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickHideHeaderConversationOptionsMenu(){
+            let status = document.querySelector('input[name="hideHeaderConversationOptionsMenu"]:checked').value
+            window.tiledeskSettings['hideHeaderConversationOptionsMenu'] = stringToBoolean(status)
+            console.log('onClickHideHeaderConversationOptionsMenu:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickTestAll(){
+            inputs = document.getElementsByTagName('input');
+            for (index = 0; index < inputs.length; ++index) {
+                // deal with inputs[index] element.
+                const elementType = inputs[index].type
+                const elementName = inputs[index].name
+                if(elementType === 'radio'){
+                    let element =  document.querySelector('input[name="'+elementName+ '"]:checked');
+                    if (element){
+                        window.tiledeskSettings[elementName] = stringToBoolean(element.value)
+                    }
+                } else if(elementType === 'text'){
+                    let element = document.getElementById(elementName)
+                    if(element && element.value && elementName !== 'baloonShape'){
+                        window.tiledeskSettings[elementName] = element.value
+                        console.log('111111', elementName, element.value)
+                    } else if (elementName === 'baloonShape') {
+                        let top = document.getElementById('top').value
+                        let bottom = document.getElementById('bottom').value
+                        let left = document.getElementById('left').value
+                        let right = document.getElementById('right').value
+                        let percentage = document.getElementById('percentage').value
+                        let value = '50%'
+                        if(top || bottom || left || right){
+                            top? top : top='0px';
+                            bottom? bottom : bottom='0px';
+                            left? left : left='0px';
+                            right? right : right='0px';
+                            value = top+' ' + bottom+' '+left+' '+right
+                        } else if (percentage) {
+                            value = percentage
+                        }
+                        window.tiledeskSettings[elementName] = value
+                    }else if(elementName === 'calloutTimer'){
+                        let element = document.getElementById('calloutTimerText')
+                        window.tiledeskSettings[elementName] = element.value
+                    }
+                    
+                } else if (elementType === 'range'){
+                    let element = document.getElementById(elementName)
+                    window.tiledeskSettings[elementName] = element.value + 'px'
+                }
+            }
+            inputs = document.getElementsByClassName('select');
+            for(index = 0; index < inputs.length; ++index){
+                const elementName = inputs[index].name
+                const element = document.getElementById(elementName)
+                elementName === 'logLevel'? window.tiledeskSettings[elementName] = +element.value : window.tiledeskSettings[elementName] = element.value
+            }
+            window.Tiledesk('restart')
+        }
 
 
                         
@@ -596,6 +997,202 @@
             }
             return(false);
         }
+
+        function initLang(){
+            var languages = [
+                { code: 'en', name: 'English', type: '--- Pre-translated ---' },
+                { code: 'fr', name: 'French', type: '--- Pre-translated ---' },
+                { code: 'de', name: 'German', type: '--- Pre-translated ---' },
+                { code: 'it', name: 'Italian', type: '--- Pre-translated ---' },
+                { code: 'pt', name: 'Portuguese', type: '--- Pre-translated ---' },
+                { code: 'ru', name: 'Russian', type: '--- Pre-translated ---' },
+                { code: 'es', name: 'Spanish, Castilian', type: '--- Pre-translated ---' },
+                { code: 'tr', name: 'Turkish', type: '--- Pre-translated ---' },
+                { code: 'ab', name: 'Abkhazian', type: '--- Needs own translation ---' },
+                { code: 'aa', name: 'Afar', type: '--- Needs own translation ---' },
+                { code: 'af', name: 'Afrikaans', type: '--- Needs own translation ---' },
+                { code: 'ak', name: 'Akan', type: '--- Needs own translation ---' },
+                { code: 'sq', name: 'Albanian', type: '--- Needs own translation ---' },
+                { code: 'am', name: 'Amharic', type: '--- Needs own translation ---' },
+                { code: 'ar', name: 'Arabic', type: '--- Needs own translation ---' },
+                { code: 'an', name: 'Aragonese', type: '--- Needs own translation ---' },
+                { code: 'hy', name: 'Armenian', type: '--- Needs own translation ---' },
+                { code: 'as', name: 'Assamese', type: '--- Needs own translation ---' },
+                { code: 'av', name: 'Avaric', type: '--- Needs own translation ---' },
+                { code: 'ae', name: 'Avestan', type: '--- Needs own translation ---' },
+                { code: 'ay', name: 'Aymara', type: '--- Needs own translation ---' },
+                { code: 'az', name: 'Azerbaijani', type: '--- Needs own translation ---' },
+                { code: 'bm', name: 'Bambara', type: '--- Needs own translation ---' },
+                { code: 'ba', name: 'Bashkir', type: '--- Needs own translation ---' },
+                { code: 'eu', name: 'Basque', type: '--- Needs own translation ---' },
+                { code: 'be', name: 'Belarusian', type: '--- Needs own translation ---' },
+                { code: 'bn', name: 'Bengali', type: '--- Needs own translation ---' },
+                { code: 'bh', name: 'Bihari languages', type: '--- Needs own translation ---' },
+                { code: 'bi', name: 'Bislama', type: '--- Needs own translation ---' },
+                { code: 'bs', name: 'Bosnian', type: '--- Needs own translation ---' },
+                { code: 'br', name: 'Breton', type: '--- Needs own translation ---' },
+                { code: 'bg', name: 'Bulgarian', type: '--- Needs own translation ---' },
+                { code: 'my', name: 'Burmese', type: '--- Needs own translation ---' },
+                { code: 'ca', name: 'Catalan, Valencian', type: '--- Needs own translation ---' },
+                { code: 'km', name: 'Central Khmer', type: '--- Needs own translation ---' },
+                { code: 'ch', name: 'Chamorro', type: '--- Needs own translation ---' },
+                { code: 'ce', name: 'Chechen', type: '--- Needs own translation ---' },
+                { code: 'ny', name: 'Chichewa, Chewa, Nyanja', type: '--- Needs own translation ---' },
+                { code: 'zh', name: 'Chinese', type: '--- Needs own translation ---' },
+                { code: 'cu', name: 'Church Slavonic, Old Bulgarian, Old Church Slavonic', type: '--- Needs own translation ---' },
+                { code: 'cv', name: 'Chuvash', type: '--- Needs own translation ---' },
+                { code: 'kw', name: 'Cornish', type: '--- Needs own translation ---' },
+                { code: 'co', name: 'Corsican', type: '--- Needs own translation ---' },
+                { code: 'cr', name: 'Cree', type: '--- Needs own translation ---' },
+                { code: 'hr', name: 'Croatian', type: '--- Needs own translation ---' },
+                { code: 'cs', name: 'Czech', type: '--- Needs own translation ---' },
+                { code: 'da', name: 'Danish', type: '--- Needs own translation ---' },
+                { code: 'dv', name: 'Divehi, Dhivehi, Maldivian', type: '--- Needs own translation ---' },
+                { code: 'nl', name: 'Dutch, Flemish', type: '--- Needs own translation ---' },
+                { code: 'dz', name: 'Dzongkha', type: '--- Needs own translation ---' },
+                { code: 'eo', name: 'Esperanto', type: '--- Needs own translation ---' },
+                { code: 'et', name: 'Estonian', type: '--- Needs own translation ---' },
+                { code: 'ee', name: 'Ewe', type: '--- Needs own translation ---' },
+                { code: 'fo', name: 'Faroese', type: '--- Needs own translation ---' },
+                { code: 'fj', name: 'Fijian', type: '--- Needs own translation ---' },
+                { code: 'fi', name: 'Finnish', type: '--- Needs own translation ---' },
+                { code: 'ff', name: 'Fulah', type: '--- Needs own translation ---' },
+                { code: 'gd', name: 'Gaelic, Scottish Gaelic', type: '--- Needs own translation ---' },
+                { code: 'gl', name: 'Galician', type: '--- Needs own translation ---' },
+                { code: 'lg', name: 'Ganda', type: '--- Needs own translation ---' },
+                { code: 'ka', name: 'Georgian', type: '--- Needs own translation ---' },
+                { code: 'ki', name: 'Gikuyu, Kikuyu', type: '--- Needs own translation ---' },
+                { code: 'el', name: 'Greek (Modern)', type: '--- Needs own translation ---' },
+                { code: 'kl', name: 'Greenlandic, Kalaallisut', type: '--- Needs own translation ---' },
+                { code: 'gn', name: 'Guarani', type: '--- Needs own translation ---' },
+                { code: 'gu', name: 'Gujarati', type: '--- Needs own translation ---' },
+                { code: 'ht', name: 'Haitian, Haitian Creole', type: '--- Needs own translation ---' },
+                { code: 'ha', name: 'Hausa', type: '--- Needs own translation ---' },
+                { code: 'he', name: 'Hebrew', type: '--- Needs own translation ---' },
+                { code: 'hz', name: 'Herero', type: '--- Needs own translation ---' },
+                { code: 'hi', name: 'Hindi', type: '--- Needs own translation ---' },
+                { code: 'ho', name: 'Hiri Motu', type: '--- Needs own translation ---' },
+                { code: 'hu', name: 'Hungarian', type: '--- Needs own translation ---' },
+                { code: 'is', name: 'Icelandic', type: '--- Needs own translation ---' },
+                { code: 'io', name: 'Ido', type: '--- Needs own translation ---' },
+                { code: 'ig', name: 'Igbo', type: '--- Needs own translation ---' },
+                { code: 'id', name: 'Indonesian', type: '--- Needs own translation ---' },
+                { code: 'ia', name: 'Interlingua (International Auxiliary Language Association)', type: '--- Needs own translation ---' },
+                { code: 'ie', name: 'Interlingue', type: '--- Needs own translation ---' },
+                { code: 'iu', name: 'Inuktitut', type: '--- Needs own translation ---' },
+                { code: 'ik', name: 'Inupiaq', type: '--- Needs own translation ---' },
+                { code: 'ga', name: 'Irish', type: '--- Needs own translation ---' },
+                { code: 'ja', name: 'Japanese', type: '--- Needs own translation ---' },
+                { code: 'jv', name: 'Javanese', type: '--- Needs own translation ---' },
+                { code: 'kn', name: 'Kannada', type: '--- Needs own translation ---' },
+                { code: 'kr', name: 'Kanuri', type: '--- Needs own translation ---' },
+                { code: 'ks', name: 'Kashmiri', type: '--- Needs own translation ---' },
+                { code: 'kk', name: 'Kazakh', type: '--- Needs own translation ---' },
+                { code: 'rw', name: 'Kinyarwanda', type: '--- Needs own translation ---' },
+                { code: 'kv', name: 'Komi', type: '--- Needs own translation ---' },
+                { code: 'kg', name: 'Kongo', type: '--- Needs own translation ---' },
+                { code: 'ko', name: 'Korean', type: '--- Needs own translation ---' },
+                { code: 'kj', name: 'Kwanyama, Kuanyama', type: '--- Needs own translation ---' },
+                { code: 'ku', name: 'Kurdish', type: '--- Needs own translation ---' },
+                { code: 'ky', name: 'Kyrgyz', type: '--- Needs own translation ---' },
+                { code: 'lo', name: 'Lao', type: '--- Needs own translation ---' },
+                { code: 'la', name: 'Latin', type: '--- Needs own translation ---' },
+                { code: 'lv', name: 'Latvian', type: '--- Needs own translation ---' },
+                { code: 'lb', name: 'Letzeburgesch, Luxembourgish', type: '--- Needs own translation ---' },
+                { code: 'li', name: 'Limburgish, Limburgan, Limburger', type: '--- Needs own translation ---' },
+                { code: 'ln', name: 'Lingala', type: '--- Needs own translation ---' },
+                { code: 'lt', name: 'Lithuanian', type: '--- Needs own translation ---' },
+                { code: 'lu', name: 'Luba-Katanga', type: '--- Needs own translation ---' },
+                { code: 'mk', name: 'Macedonian', type: '--- Needs own translation ---' },
+                { code: 'mg', name: 'Malagasy', type: '--- Needs own translation ---' },
+                { code: 'ms', name: 'Malay', type: '--- Needs own translation ---' },
+                { code: 'ml', name: 'Malayalam', type: '--- Needs own translation ---' },
+                { code: 'mt', name: 'Maltese', type: '--- Needs own translation ---' },
+                { code: 'gv', name: 'Manx', type: '--- Needs own translation ---' },
+                { code: 'mi', name: 'Maori', type: '--- Needs own translation ---' },
+                { code: 'mr', name: 'Marathi', type: '--- Needs own translation ---' },
+                { code: 'mh', name: 'Marshallese', type: '--- Needs own translation ---' },
+                { code: 'ro', name: 'Moldovan, Moldavian, Romanian', type: '--- Needs own translation ---' },
+                { code: 'mn', name: 'Mongolian', type: '--- Needs own translation ---' },
+                { code: 'na', name: 'Nauru', type: '--- Needs own translation ---' },
+                { code: 'nv', name: 'Navajo, Navaho', type: '--- Needs own translation ---' },
+                { code: 'nd', name: 'Northern Ndebele', type: '--- Needs own translation ---' },
+                { code: 'ng', name: 'Ndonga', type: '--- Needs own translation ---' },
+                { code: 'ne', name: 'Nepali', type: '--- Needs own translation ---' },
+                { code: 'se', name: 'Northern Sami', type: '--- Needs own translation ---' },
+                { code: 'no', name: 'Norwegian', type: '--- Needs own translation ---' },
+                { code: 'nb', name: 'Norwegian Bokmål', type: '--- Needs own translation ---' },
+                { code: 'nn', name: 'Norwegian Nynorsk', type: '--- Needs own translation ---' },
+                { code: 'ii', name: 'Nuosu, Sichuan Yi', type: '--- Needs own translation ---' },
+                { code: 'oc', name: 'Occitan (post 1500)', type: '--- Needs own translation ---' },
+                { code: 'oj', name: 'Ojibwa', type: '--- Needs own translation ---' },
+                { code: 'or', name: 'Oriya', type: '--- Needs own translation ---' },
+                { code: 'om', name: 'Oromo', type: '--- Needs own translation ---' },
+                { code: 'os', name: 'Ossetian, Ossetic', type: '--- Needs own translation ---' },
+                { code: 'pi', name: 'Pali', type: '--- Needs own translation ---' },
+                { code: 'pa', name: 'Panjabi, Punjabi', type: '--- Needs own translation ---' },
+                { code: 'ps', name: 'Pashto, Pushto', type: '--- Needs own translation ---' },
+                { code: 'fa', name: 'Persian', type: '--- Needs own translation ---' },
+                { code: 'pl', name: 'Polish', type: '--- Needs own translation ---' },
+                { code: 'qu', name: 'Quechua', type: '--- Needs own translation ---' },
+                { code: 'rm', name: 'Romansh', type: '--- Needs own translation ---' },
+                { code: 'rn', name: 'Rundi', type: '--- Needs own translation ---' },
+                { code: 'sm', name: 'Samoan', type: '--- Needs own translation ---' },
+                { code: 'sg', name: 'Sango', type: '--- Needs own translation ---' },
+                { code: 'sa', name: 'Sanskrit', type: '--- Needs own translation ---' },
+                { code: 'sc', name: 'Sardinian', type: '--- Needs own translation ---' },
+                { code: 'sr', name: 'Serbian', type: '--- Needs own translation ---' },
+                { code: 'sn', name: 'Shona', type: '--- Needs own translation ---' },
+                { code: 'sd', name: 'Sindhi', type: '--- Needs own translation ---' },
+                { code: 'si', name: 'Sinhala, Sinhalese', type: '--- Needs own translation ---' },
+                { code: 'sk', name: 'Slovak', type: '--- Needs own translation ---' },
+                { code: 'sl', name: 'Slovenian', type: '--- Needs own translation ---' },
+                { code: 'so', name: 'Somali', type: '--- Needs own translation ---' },
+                { code: 'st', name: 'Sotho, Southern', type: '--- Needs own translation ---' },
+                { code: 'nr', name: 'South Ndebele', type: '--- Needs own translation ---' },
+                { code: 'su', name: 'Sundanese', type: '--- Needs own translation ---' },
+                { code: 'sw', name: 'Swahili', type: '--- Needs own translation ---' },
+                { code: 'ss', name: 'Swati', type: '--- Needs own translation ---' },
+                { code: 'sv', name: 'Swedish', type: '--- Needs own translation ---' },
+                { code: 'tl', name: 'Tagalog', type: '--- Needs own translation ---' },
+                { code: 'ty', name: 'Tahitian', type: '--- Needs own translation ---' },
+                { code: 'tg', name: 'Tajik', type: '--- Needs own translation ---' },
+                { code: 'ta', name: 'Tamil', type: '--- Needs own translation ---' },
+                { code: 'tt', name: 'Tatar', type: '--- Needs own translation ---' },
+                { code: 'te', name: 'Telugu', type: '--- Needs own translation ---' },
+                { code: 'th', name: 'Thai', type: '--- Needs own translation ---' },
+                { code: 'bo', name: 'Tibetan', type: '--- Needs own translation ---' },
+                { code: 'ti', name: 'Tigrinya', type: '--- Needs own translation ---' },
+                { code: 'to', name: 'Tonga (Tonga Islands)', type: '--- Needs own translation ---' },
+                { code: 'ts', name: 'Tsonga', type: '--- Needs own translation ---' },
+                { code: 'tn', name: 'Tswana', type: '--- Needs own translation ---' },
+                { code: 'tk', name: 'Turkmen', type: '--- Needs own translation ---' },
+                { code: 'tw', name: 'Twi', type: '--- Needs own translation ---' },
+                { code: 'ug', name: 'Uighur, Uyghur', type: '--- Needs own translation ---' },
+                { code: 'uk', name: 'Ukrainian', type: '--- Needs own translation ---' },
+                { code: 'ur', name: 'Urdu', type: '--- Needs own translation ---' },
+                { code: 'uz', name: 'Uzbek', type: '--- Needs own translation ---' },
+                { code: 've', name: 'Venda', type: '--- Needs own translation ---' },
+                { code: 'vi', name: 'Vietnamese', type: '--- Needs own translation ---' },
+                { code: 'vo', name: 'Volap_k', type: '--- Needs own translation ---' },
+                { code: 'wa', name: 'Walloon', type: '--- Needs own translation ---' },
+                { code: 'cy', name: 'Welsh', type: '--- Needs own translation ---' },
+                { code: 'fy', name: 'Western Frisian', type: '--- Needs own translation ---' },
+                { code: 'wo', name: 'Wolof', type: '--- Needs own translation ---' },
+                { code: 'xh', name: 'Xhosa', type: '--- Needs own translation ---' },
+                { code: 'yi', name: 'Yiddish', type: '--- Needs own translation ---' },
+                { code: 'yo', name: 'Yoruba', type: '--- Needs own translation ---' },
+                { code: 'za', name: 'Zhuang, Chuang', type: '--- Needs own translation ---' },
+                { code: 'zu', name: 'Zulu', type: '--- Needs own translation--'}
+            ]  
+            let optionList = document.getElementById('lang')
+            languages.forEach(option => {
+                optionList.add(
+                    new Option(option.name, option.code, option.selected)
+                )
+            });
+        }
+
     </script>
     
 </head>
@@ -640,151 +1237,413 @@
                 <div class="col-md-7">
                     <h1 style="min-height: 39px;">TEST ACTIONS</h1>
                     <div class="row">
-                       <button class="btn btn-light" onclick="onClickTestButton('open')">Open <i class="fa-arrow-up fa"></i></button>
-                       <button class="btn btn-light" onclick="onClickTestButton('close')">Close <i class="fa fa-arrow-down"></i></button>
-                       <button class="btn btn-light" onclick="onClickTestButton('hide')">Hide</button>
-                       <button class="btn btn-light" onclick="onClickTestButton('show')">Show</button>
-                       <button class="btn btn-light" onclick="onClickTestButton('reInit')">ReInit</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('open')">Open <i class="fa-arrow-up fa"></i></button>
+                        <button class="btn btn-light" onclick="onClickTestButton('close')">Close <i class="fa fa-arrow-down"></i></button>
+                        <button class="btn btn-light" onclick="onClickTestButton('hide')">Hide</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('show')">Show</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('showCallout')">Show callout</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('reInit')">ReInit</button>
                         <button class="btn btn-light" onclick="onClickTestButton('logout')">LogOut</button>
                     </div>
                     <div class="row section">
-                        <form>
                             <div>Insert a custon <i><b>JWT Token</b></i> here </div>
-                            <div>
+                            <div class="row" style="margin: 0">
                                 <textarea class="form-control" id="jwt" placeholder="JWT ..." rows="4" cols="60"></textarea>
-                                <button type="submit" class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                             </div>
-                        </form>
+                            <div class="row" style="text-align: right; margin:0">
+                                <button class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            </div>
                     </div>
                     <div class="row section c21-parameters">
                         <div>Select an option for Tiledesk settings parameter</div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>startFromHome</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>startFromHome</b></i></span></div>
                             <div class="col-md-4">
-                                <input class="form-check-input" type="radio" id="startFromHome" name="startFromHome" value="true" checked><label class="form-check-label" for="startFromHome">True</label>
-                                <input class="form-check-input" type="radio" id="startFromHome" name="startFromHome" value="false"><label class="form-check-label" for="startFromHome">False</label>
+                                <input class="form-check-input" type="radio" name="startFromHome" value="true" checked><label class="form-check-label" for="startFromHome">True</label>
+                                <input class="form-check-input" type="radio" name="startFromHome" value="false"><label class="form-check-label" for="startFromHome">False</label>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickStartFromHome()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickStartFromHome()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>prechatForm</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>prechatForm</b></i></span></div>
                             <div class="col-md-4">
-                                <input class="form-check-input" type="radio" id="preChatForm" name="preChatForm" value="true"><label class="form-check-label" for="preChatForm">True</label>
-                                <input class="form-check-input" type="radio" id="preChatForm" name="preChatForm" value="false"checked><label class="form-check-label" for="preChatForm">False</label>
+                                <input class="form-check-input" type="radio" name="preChatForm" value="true"><label class="form-check-label" for="preChatForm">True</label>
+                                <input class="form-check-input" type="radio" name="preChatForm" value="false"checked><label class="form-check-label" for="preChatForm">False</label>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickPreChatForm()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickPreChatForm()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>align</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>align</b></i></span></div>
                             <div class="col-md-4">
-                                <input class="form-check-input" type="radio" id="align" name="align" value="left"><label class="form-check-label" for="preChatForm">Left</label>
-                                <input class="form-check-input" type="radio" id="align" name="align" value="right" checked><label class="form-check-label" for="preChatForm">Right</label>
+                                <input class="form-check-input" type="radio" name="align" value="left"><label class="form-check-label" for="preChatForm">Left</label>
+                                <input class="form-check-input" type="radio" name="align" value="right" checked><label class="form-check-label" for="preChatForm">Right</label>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickAlign()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickAlign()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>calloutTimer</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>calloutTimer</b></i></span></div>
                             <div class="col-md-4">
-                                <input class="form-check-input" type="radio" id="calloutTimer" name="calloutTimer" value="-1"><label class="form-check-label" for="preChatForm">-1(disabled)</label>
-                                <input class="form-check-input" type="radio" id="calloutTimer" name="calloutTimer" value="0"><label class="form-check-label" for="preChatForm">0(Immediatly)</label>
-                                <input class="form-control" type="text" id="calloutTimerText" name="calloutMsg" style="width: 40px;"> s
+                                <input class="form-check-input" type="radio" name="calloutTimer" value="-1"><label class="form-check-label" for="preChatForm">-1(disabled)</label>
+                                <input class="form-check-input" type="radio" name="calloutTimer" value="0"><label class="form-check-label" for="preChatForm">0(Immediatly)</label>
+                                <div class="formElement" >
+                                    <div class="col-form-label" style="width: 90px">Time (s):</div>
+                                    <input class="form-control col-sm-2" type="text" id="calloutTimerText" name="calloutTimer" placeholder="Ex. 10">
+                                </div>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickCalloutTimer()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickCalloutTimer()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>calloutTitle</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>calloutTitle</b></i></span></div>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" id="calloutTitle" name="calloutTitle">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickCalloutTitle()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickCalloutTitle()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>calloutMsg</b></i></span></div>
-                            <div class="col-md-4">
+                            <div class="col-md-5 formElement"><span><i><b>calloutMsg</b></i></span></div>
+                            <div class="col-md-4 ">
                                 <input class="form-control" type="text" id="calloutMsg" name="calloutMsg">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickCalloutMsg()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickCalloutMsg()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>welcomeTitle</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>welcomeTitle</b></i></span></div>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" id="welcomeTitle" name="welcomeTitle">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickWelcomeTitle()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickWelcomeTitle()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>welcomeMsg</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>welcomeMsg</b></i></span></div>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" id="welcomeMsg" name="welcomeMsg">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickWelcomeMsg()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickWelcomeMsg()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>widgetTitle</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>widgetTitle</b></i></span></div>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" id="widgetTitle" name="widgetTitle">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickWidgetTitle()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickWidgetTitle()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>logoChat</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>logoChat</b></i></span></div>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" id="logoChat" name="logoChat">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickLogoChat()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickLogoChat()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>lang</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>lang</b></i></span></div>
                             <div class="col-md-4">
-                                <select class="form-control" id="lang" name="lang">
-                                    <option selected value="it">ITA</option>
-                                    <option value="en">ENG</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                  </select>
+                                <select class="form-control select" id="lang" name="lang"></select>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickLang()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickLang()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5"><span><i><b>hideHeaderCloseButton</b></i></span></div>
+                            <div class="col-md-5 formElement"><span><i><b>hideHeaderCloseButton</b></i></span></div>
                             <div class="col-md-4">
-                                <input type="radio" id="hideHeaderCloseButton" name="hideHeaderCloseButton" value="true"><label for="preChatForm">True</label>
-                                <input type="radio" id="hideHeaderCloseButton" name="hideHeaderCloseButton" value="false" checked><label for="preChatForm">False</label>
+                                <input class="form-check-input" type="radio" name="hideHeaderCloseButton" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="hideHeaderCloseButton" value="false" checked><label>False</label>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickHideHeaderCloseButton()">Test this setting</button>
+                                <button class="btn btn-light" onclick="onClickHideHeaderCloseButton()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-light" onclick="onClickTestAll()">Test all</button>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>fullscreenMode</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="fullscreenMode" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="fullscreenMode" value="false" checked ><label>False</label>
                             </div>
-                        </div> -->
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickFullscreenMode()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>themeColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="themeColor" name="themeColor" value="#2a6ac1" oninput="onChangeThemeColor()">
+                                <input class="form-control" type="text" id="themeColorText" name="themeColor" value="#2a6ac1" oninput="onChangeThemeColorText()">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickThemeColor()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>themeForegroundColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="themeForegroundColor" name="themeForegroundColor" value="#000000" oninput="onChangeThemeForegroundColor()">
+                                <input class="form-control" type="text" id="themeForegroundColorText" name="themeForegroundColor" value="#000000" oninput="onChangeThemeForegroundColorText()">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickThemeForegroundColor()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>departmentID</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="departmentID" name="departmentID">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickDepartmentId()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>allowTranscriptDownload</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="allowTranscriptDownload" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="allowTranscriptDownload" value="false" checked><label >False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickAllowTranscriptDownload()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>marginX</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control col-sm-2" type="text" id="marginX" name="marginX" placeholder="Ex. 100px, 1em">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickMarginX()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>marginY</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control col-sm-2" type="text" id="marginY" name="marginY" placeholder="Ex. 100px, 1em">
+                            </div>
+                            <div class="col-md-3 ">
+                                <button class="btn btn-light" onclick="onClickMarginY()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>autoStart</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="autoStart" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="autoStart" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickAutoStart()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>startHidden</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="startHidden" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="startHidden" value="false" checked><label >False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickStartHidden()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>persistence</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="persistence" value="local" checked><label>Local</label>
+                                <input class="form-check-input" type="radio" name="persistence" value="session"><label>Session</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickPersistence()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>showWaitTime</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio"  name="showWaitTime" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio"  name="showWaitTime" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickShowWaitTime()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>showAvailableAgents</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="showAvailableAgents" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="showAvailableAgents" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickShowAvailableAgents()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>showLogoutOption</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="showLogoutOption" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="showLogoutOption" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickShowLogoutOption()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>launcherWidth</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-range" type="range" id="launcherWidth" name="launcherWidth" min="0" max="80" value="60" style="width: 80%;" oninput="onChangeLauncherWidth()"><label class="col-form-label" id=launcherWidthText>60 px</label>
+                            </div>
+                            <div class="col-md-3 ">
+                                <button class="btn btn-light" onclick="onClickLauncherWidth()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>launcherHeight</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-range" type="range" type="text" id="launcherHeight" name="launcherHeight" min="0" max="80" value="60" style="width: 80%;" oninput="onChangeLauncherHeight()"><label class="col-form-label" id=launcherHeightText>60 px</label>
+                            </div>
+                            <div class="col-md-3 ">
+                                <button class="btn btn-light" onclick="onClickLauncherHeight()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>baloonImage</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <div class="row" style="width: 100%;"><input class="form-control" type="text" id="baloonImage" name="baloonImage"></div>
+                            </div>
+                            <div class="col-md-3 ">
+                                <button class="btn btn-light" onclick="onClickBaloonImage()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-5 formElement"><span><i><b>baloonShape</b></i></span></div>
+                            <div class="col-md-4" >
+                                <div class="row ">
+                                    <div class="col-md shapeElement">
+                                        <div class="col-form-label">Top:</div>
+                                        <input class="form-control col-sm-2" type="text" id="top" name="baloonShape" style="width: 150px" oninput="onBallonShapeInput()" placeholder="Ex. 12px, 0.12em">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md shapeElement">
+                                        <div class="col-form-label">Bottom:</div>
+                                        <input class="form-control col-sm-2" type="text" id="bottom" name="baloonShape" style="width: 150px" oninput="onBallonShapeInput()" placeholder="Ex. 12px, 0.12em">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md shapeElement">
+                                        <div class="col-form-label">Left:</div>
+                                        <input class="form-control col-sm-2" type="text" id="left" name="baloonShape" style="width: 150px" oninput="onBallonShapeInput()" placeholder="Ex. 12px, 0.12em">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md shapeElement">
+                                        <div class="col-form-label">Right:</div>
+                                        <input class="form-control col-sm-2" type="text" id="right" name="baloonShape" style="width: 150px" oninput="onBallonShapeInput()" placeholder="Ex. 12px, 0.12em">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md shapeElement">
+                                        <div class="col-form-label">Percentage:</div>
+                                        <input class="form-control col-sm-2" type="text" id="percentage" name="baloonShape" style="width: 150px" oninput="onBallonShapeInput()" placeholder="Ex. 50%">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickBaloonShape()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>dynamicWaitTimeReply</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="dynamicWaitTimeReply" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="dynamicWaitTimeReply" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickDynamicWaitTimeReply()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>soundEnabled</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="soundEnabled" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="soundEnabled" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickSoundEnabled()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>openExternalLinkButton</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="openExternalLinkButton" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="openExternalLinkButton" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickOpenExternalLinkButton()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>isLogEnabled</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="isLogEnabled" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="isLogEnabled" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickIsLogEnabled()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>logLevel</b></i></span></div>
+                            <div class="col-md-4">
+                                <select class="form-control select" id="logLevel" name="logLevel">
+                                    <option value=1>Info</option>
+                                    <option value="2">Debug</option>
+                                    <option value="3">Warn</option>
+                                    <option value="4">All</option>
+                                    <option value="5">Fatal</option>
+                                    <option value="6">All</option>
+                                    <option value="0">Off</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickLogLevel()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>hideHeaderConversationOptionsMenu</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="false" checked><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickHideHeaderConversationOptionsMenu()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row testAllBtn">
+                                <button class="btn btn-light" onclick="onClickTestAll()">TEST ALL</button>
+                        </div>
+                    </div>
+                    <div class="row section">
+                        <div>Events history </div>
+                        <div>
+                            <textarea class="form-control" id="events" placeholder="Events history here" rows="4" cols="60"></textarea>
+                        </div>
                     </div>
                 </div>
+
                 <div class="col-md-6"></div>
             </div>
             
