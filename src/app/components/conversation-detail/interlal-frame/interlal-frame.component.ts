@@ -74,7 +74,7 @@ export class InterlalFrameComponent implements OnInit {
   
   ngAfterViewInit(){
     let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
-    this.logger.printDebug('INTERNALFRAME:: ngAfterViewInit', doc, this.iframe.nativeElement.contentWindow, this.iframe.nativeElement.contentWindow.history)
+    this.logger.debug('[INTERNALFRAME] ngAfterViewInit', doc, this.iframe.nativeElement.contentWindow, this.iframe.nativeElement.contentWindow.history)
 
   }
 
@@ -97,7 +97,7 @@ export class InterlalFrameComponent implements OnInit {
   }
 
   onError(event){
-    this.logger.printError('INTERNALFRAME:: onError ', event)
+    this.logger.error('[INTERNALFRAME] onError ', event)
   }
 
 }

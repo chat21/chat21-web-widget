@@ -69,7 +69,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * inizializzo conversation handler
      */
     initialize(recipientId: string,recipientFullName: string,loggedUser: UserModel,tenant: string,translationMap: Map<string, string>) {
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: initWithRecipient',recipientId, recipientFullName, loggedUser, tenant, translationMap)
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] initWithRecipient',recipientId, recipientFullName, loggedUser, tenant, translationMap)
         this.recipientId = recipientId;
         this.recipientFullname = recipientFullName;
         this.loggedUser = loggedUser;
@@ -97,15 +97,15 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const that = this;
         this.urlNodeFirebase = conversationMessagesRef(this.tenant, this.loggedUser.uid);
         this.urlNodeFirebase = this.urlNodeFirebase + this.conversationWith;
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: urlNodeFirebase *****', this.urlNodeFirebase);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] urlNodeFirebase *****', this.urlNodeFirebase);
         const firebaseMessages = firebase.database().ref(this.urlNodeFirebase);
         this.ref = firebaseMessages.orderByChild('timestamp').limitToLast(100);
         this.ref.on('child_added', (childSnapshot) => {
-            that.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
             that.added(childSnapshot);
         });
         this.ref.on('child_changed', (childSnapshot) => {
-            that.logger.printDebug('FIREBASEConversationHandlerSERVICE:: >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
             that.changed(childSnapshot);
         });
         this.ref.on('child_removed', (childSnapshot) => {
@@ -194,10 +194,10 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         //     channelType, // channel_type
         //     true // is_sender
         // );
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: sendMessage --> messages: ',  this.messages);
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: sendMessage --> senderFullname: ',  senderFullname);
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: sendMessage --> sender: ',  sender);
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: sendMessage --> SEND MESSAGE: ', msg, channelType);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] sendMessage --> messages: ',  this.messages);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] sendMessage --> senderFullname: ',  senderFullname);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] sendMessage --> sender: ',  sender);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] sendMessage --> SEND MESSAGE: ', msg, channelType);
         return message
     }
 
@@ -373,7 +373,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         if (msg.status < MSG_STATUS_RECEIVED) {
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
             const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + msg.uid;
-            this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: update message status', urlNodeMessagesUpdate);
+            this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
             firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
             }
         }
@@ -409,9 +409,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
   unsubscribe(key: string) {
     this.listSubsriptions.forEach(sub => {
-        this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: unsubscribe: ', sub.uid, key);
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] unsubscribe: ', sub.uid, key);
     	if (sub.uid === key) {
-			this.logger.printDebug('FIREBASEConversationHandlerSERVICE:: unsubscribe: ', sub.uid, key);
+			this.logger.debug('[FIREBASEConversationHandlerSERVICE] unsubscribe: ', sub.uid, key);
 			sub.unsubscribe(key, null);
 			return;
       	}

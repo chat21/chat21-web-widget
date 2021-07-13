@@ -43,7 +43,7 @@ export class MQTTTypingService extends TypingService {
   /** */
   initialize() {
     this.tenant = this.getTenant();
-    this.logger.printLog('MQTTTYPING::initialize this.tenant', this.tenant);
+    this.logger.info('[MQTT-TYPING] initialize this.tenant', this.tenant);
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 

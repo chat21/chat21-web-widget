@@ -17,7 +17,7 @@ export class LocalSessionStorage extends AppStorageService{
       this.storagePrefix = storagePrefix;
       this.projectID = projectID;
       this.persistence = persistence;
-      this.logger.printDebug('****** initialize APPSTORAGE *******', this.storagePrefix, this.persistence, this.projectID)
+      this.logger.info('[LocalSessionStorage] ****** initialize *******', this.storagePrefix, this.persistence, this.projectID)
   }
 
   /** GET item in local/session storage from key value
@@ -30,7 +30,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::getItem >Error :' + e);
+          this.logger.error('[LocalSessionStorage] getItem >Error :' + e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       return this.getValueForKey(newKey);
@@ -48,7 +48,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::setItem > Error :' + e);
+          this.logger.error('[LocalSessionStorage] setItem > Error :' + e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       this.saveValueForKey(newKey, value);
@@ -64,7 +64,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::getItemWithoutProjectID > Error :' + e);
+          this.logger.error('[LocalSessionStorage] getItemWithoutProjectID > Error :' + e);
       }
       const newKey = prefix + key;
       return this.getValueForKey(newKey);
@@ -82,7 +82,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::setItemWithoutProjectID > Error :' + e);
+          this.logger.error('[LocalSessionStorage] setItemWithoutProjectID > Error :' + e);
       }
       const newKey = prefix + key;
       this.saveValueForKey(newKey, value);
@@ -95,7 +95,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::removeItem > Error :' + e);
+          this.logger.error('[LocalSessionStorage] removeItem > Error :' + e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       return this.removeItemForKey(newKey);
@@ -108,7 +108,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.printError('LocalSessionStorage::clear > Error :' + e);
+          this.logger.error('[LocalSessionStorage] clear > Error :' + e);
       }
       const prefixKey = prefix + this.projectID
       const arrayKey: Array<string>  = [];
@@ -132,17 +132,16 @@ export class LocalSessionStorage extends AppStorageService{
   private getValueForKey(key) {
       if (this.persistence === 'local' || this.persistence === 'LOCAL') {
         if (supports_html5_storage()) {
-          this.logger.printDebug('getValueForKey: ', localStorage.getItem(key));
           return localStorage.getItem(key);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
         if (supports_html5_session()) {
           return sessionStorage.getItem(key);
         } else {
-          this.logger.printWarn('sessionStorage is not defind. Storage disabled');
+          this.logger.warn('sessionStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'none' || this.persistence === 'NONE') {
@@ -151,7 +150,7 @@ export class LocalSessionStorage extends AppStorageService{
         if (supports_html5_storage()) {
           return localStorage.getItem(key);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       }
@@ -162,14 +161,14 @@ export class LocalSessionStorage extends AppStorageService{
         if (supports_html5_storage()) {
           return localStorage.setItem(key, value);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
         if (supports_html5_session()) {
           return sessionStorage.setItem(key, value);
         } else {
-          this.logger.printWarn('sessionStorage is not defind. Storage disabled');
+          this.logger.warn('sessionStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'none' || this.persistence === 'NONE') {
@@ -178,7 +177,7 @@ export class LocalSessionStorage extends AppStorageService{
         if (supports_html5_storage()) {
           return localStorage.setItem(key, value);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       }
@@ -189,14 +188,14 @@ export class LocalSessionStorage extends AppStorageService{
         if (supports_html5_storage()) {
           return localStorage.removeItem(key);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'session' || this.persistence === 'SESSION') {
         if (supports_html5_session()) {
           return sessionStorage.removeItem(key);
         } else {
-          this.logger.printWarn('sessionStorage is not defind. Storage disabled');
+          this.logger.warn('sessionStorage is not defind. Storage disabled');
           return null;
         }
       } else if (this.persistence === 'none' || this.persistence === 'NONE') {
@@ -205,7 +204,7 @@ export class LocalSessionStorage extends AppStorageService{
         if (supports_html5_storage()) {
           return localStorage.removeItem(key);
         } else {
-          this.logger.printWarn('localStorage is not defind. Storage disabled');
+          this.logger.warn('localStorage is not defind. Storage disabled');
           return null;
         }
       }

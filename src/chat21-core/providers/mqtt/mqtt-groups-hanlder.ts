@@ -34,7 +34,7 @@ export class MQTTGroupsHanlder extends GroupsHandlerService {
      * inizializzo groups handler
      */
     initialize(tenant: string, loggedUserId: string): void {
-        this.logger.printLog('initialize GROUP-HANDLER MQTT');
+        this.logger.info('[MQTT-GROUPS-HANDLER] initialize');
         this.tenant = tenant;
         this.loggedUserId = loggedUserId;
 
@@ -67,7 +67,7 @@ export class MQTTGroupsHanlder extends GroupsHandlerService {
                 console.log('subscribing to group updates...', group);
                 const handler_group_updated = this.chat21Service.chatClient.onGroupUpdated( (group, topic) => {
                     if (topic.conversWith === groupId) {
-                        console.log('group updated:', group);
+                        this.logger.debug('[MQTT-GROUPS-SERV] group updated:', group);
                         //this.groupValue(group);
                     }
                 });
@@ -85,9 +85,9 @@ export class MQTTGroupsHanlder extends GroupsHandlerService {
 
     private groupValue(childSnapshot: any){
         const that = this;
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::group detail::', childSnapshot.val(), childSnapshot)
+        this.logger.debug('[MQTT-GROUPS-SERV] group detail::', childSnapshot.val(), childSnapshot)
         const group: GroupModel = childSnapshot.val();
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: groupValue ', group)
+        this.logger.debug('[MQTT-GROUPS-SERV] groupValue ', group)
         if (group) {
             group.uid = childSnapshot.key
             // that.BSgroupDetail.next(group)

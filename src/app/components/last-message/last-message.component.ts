@@ -58,7 +58,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     //           return;
     //         }
     //         that.conversation = conversation;
-    //         // this.logger.printDebug('conv: ' + conversation);
+    //         // this.logger.debug('conv: ' + conversation);
     //       }
     //     });
     // });
@@ -70,11 +70,11 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** */
   ngAfterViewInit() {
-    // this.logger.printDebug('isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.debug('isOpenNewMessage: ' + this.g.isOpenNewMessage);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.logger.printDebug('LASTMESSAGE:: onchagnges', changes)
+    this.logger.debug('[LASTMESSAGE] onchagnges', changes)
     if(this.conversation){
       this.conversation.image = this.imageRepoService.getImagePhotoUrl(this.conversation.sender)
     }
@@ -111,14 +111,14 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onAttachmentButtonClicked(event: any){
     // this.onAttachmentButtonClicked.emit(event)
-    this.logger.printDebug('LASTMESSAGE:: onAttachmentButtonClicked', event)
+    this.logger.debug('[LASTMESSAGE] onAttachmentButtonClicked', event)
   }
   /** */
   openConversationByID(conversation) {
-    this.logger.printDebug('LASTMESSAGE:: openConversationByID: ', conversation);
+    this.logger.debug('[LASTMESSAGE] openConversationByID: ', conversation);
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // this.logger.printDebug('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.debug('2 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     if ( conversation ) {
       this.onSelectedConversation.emit(conversation);
     }
@@ -127,7 +127,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   closeMessagePreview() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // this.logger.printDebug('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.debug('3 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     this.onCloseMessagePreview.emit();
   }
   // ========= begin:: event emitter function ============//
@@ -137,7 +137,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.conversation = null;
     this.g.isOpenNewMessage = false;
-    // this.logger.printDebug('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
+    // this.logger.debug('4 isOpenNewMessage: ' + this.g.isOpenNewMessage);
     //this.unsubscribe();
   }
 
@@ -148,7 +148,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         subscription.unsubscribe();
     });
     this.subscriptions = [];
-    this.logger.printDebug('LASTMESSAGE:: this.subscriptions', this.subscriptions);
+    this.logger.debug('[LASTMESSAGE] this.subscriptions', this.subscriptions);
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 

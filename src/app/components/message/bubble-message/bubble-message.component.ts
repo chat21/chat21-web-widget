@@ -85,7 +85,7 @@ export class BubbleMessageComponent implements OnInit {
         }, that.tooltipOptions['hideDelayAfterClick']);
       }
     } catch (err) {
-        that.logger.printError('BUBBLE MESSAGE handleTooltipEvents >>>> Error :' + err);
+        that.logger.error('[BUBBLE-MESSAGE] handleTooltipEvents >>>> Error :' + err);
     }
   }, showDelay);
 }

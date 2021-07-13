@@ -47,6 +47,8 @@ import { ConversationsHandlerService } from '../../../../chat21-core/providers/a
 import { ArchivedConversationsHandlerService } from '../../../../chat21-core/providers/abstract/archivedconversations-handler.service';
 import { ConversationModel } from '../../../../chat21-core/models/conversation';
 import { AppStorageService } from '../../../../chat21-core/providers/abstract/app-storage.service';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -180,6 +182,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   public isButtonUrl: boolean = false;
   public buttonClicked: any;
+  private logger: LoggerService = LoggerInstance.getInstance()
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -195,12 +198,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ) { }
 
   onResize(event){
-    console.log('resize event', event)
+    this.logger.debug('[CONV-COMP] resize event', event)
   }
 
   ngOnInit() {
     // this.initAll();
-    this.g.wdLog([' ngOnInit: app-conversation ', this.senderId]);
+    this.logger.debug('[CONV-COMP] ngOnInit: ', this.senderId);
     this.showMessageWelcome = false;
     // const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
     //   this.ngZone.run(() => {
@@ -262,7 +265,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit: conversation-------- ']);
+    this.logger.debug('[CONV-COMP] --------ngAfterViewInit: conversation-------- ');
     // this.storageService.setItem('activeConversation', this.conversation.uid);
     
     // --------------------------- //
@@ -313,7 +316,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('onchagnges conversation component', changes)
+    this.logger.debug('[CONV-COMP] onChagnges', changes)
     if (this.isOpen === true) {
       //this.updateConversationBadge();
       // this.scrollToBottom();
@@ -321,7 +324,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    console.log('updateConversationBadge', this.conversationId)
+    this.logger.debug('[CONV-COMP] updateConversationBadge', this.conversationId)
     if(this.isConversationArchived && this.conversationId && this.archivedConversationsHandlerService){
       this.archivedConversationsHandlerService.setConversationRead(this.conversationId)
     }
@@ -351,23 +354,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   initAll() {
 
-    this.g.wdLog([' ---------------- 2: setConversation ---------------------- ']);
+    this.logger.debug('[CONV-COMP] ------ 2: setConversation ------ ');
     this.setConversation();
 
-    this.g.wdLog([' ---------------- 3: connectConversation ---------------------- ']);
+    this.logger.debug('[CONV-COMP] ------ 3: connectConversation ------ ');
     // this.connectConversation();
     this.initConversationHandler();
 
-    this.g.wdLog([' ---------------- 4: initializeChatManager ------------------- ']);
+    this.logger.debug('[CONV-COMP] ------ 4: initializeChatManager ------ ');
     //this.initializeChatManager();
 
     // sponziello, commentato
-    // this.g.wdLog([' ---------------- 5: setAvailableAgentsStatus ---------------- ']);
+    // this.logger.debug('[CONV-COMP] ------ 5: setAvailableAgentsStatus ------ ');
     // this.setAvailableAgentsStatus();
-    this.g.wdLog([' ---------------- 5: updateConversationbage ---------------- ']);
+    this.logger.debug('[CONV-COMP] ------ 5: updateConversationbage ------ ');
     this.updateConversationBadge();
 
-    this.g.wdLog([' ---------------- 6: getConversationDetail ------------------- ', this.conversationId]);
+    this.logger.debug('[CONV-COMP] ------ 6: getConversationDetail ------ ', this.conversationId);
     this.getConversationDetail() //check if conv is archived or not
 
     // this.checkListMessages();
@@ -389,7 +392,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   getConversationDetail(){
     this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-      console.log('convsss', this.conversationId, conv)
+      this.logger.debug('[CONV-COMP] getConversationDetail', this.conversationId, conv)
       this.conversation = conv;    
       if (this.conversation && this.conversation.archived) {
         this.isConversationArchived = true;
@@ -541,7 +544,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private setConversation() {
     const recipientId = this.g.recipientId;
     const channelType = this.g.channelType;
-    this.g.wdLog(['setConversation recipientId::: ', recipientId, channelType]);
+    this.logger.debug('[CONV-COMP] setConversation recipientId::: ', recipientId, channelType);
     if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
     if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
@@ -604,7 +607,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // questa deve essere sincrona!!!!
       // recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + uuidv4(); >>>>>OLD 
       recipientIdTEMP = UID_SUPPORT_GROUP_MESSAGES + this.g.projectid + '-' + uuidv4().replace(/-/g, '');
-      console.log('recipitent', recipientIdTEMP)
+      this.logger.debug('[CONV-COMP] recipitent', recipientIdTEMP)
       //recipientIdTEMP = this.messagingService.generateUidConversation(senderId);
     }
     return recipientIdTEMP;
@@ -664,10 +667,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //TODO-GAB: da sistemare loggedUser in firebase-conversation-handler.service
     const loggedUser = { uid: this.senderId}
     const conversationWithFullname = this.g.recipientFullname; // TODO-GAB: risulta null a questo punto
-    console.log('initconversation NEWWW', loggedUser, conversationWithFullname, tenant)
+    this.logger.debug('[CONV-COMP] initconversation NEWWW', loggedUser, conversationWithFullname, tenant)
     this.showMessageWelcome = false;
     const handler: ConversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
-    console.log('DETTAGLIO CONV - handler **************', handler, this.conversationWith);
+    this.logger.debug('[CONV-COMP] DETTAGLIO CONV - handler **************', handler, this.conversationWith);
     if (!handler) {
       this.conversationHandlerService = this.conversationHandlerBuilderService.build();
       this.conversationHandlerService.initialize(
@@ -678,7 +681,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.translationMapContent
       );
       this.conversationHandlerService.connect();
-      console.log('DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
+      this.logger.debug('[CONV-COMP] DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
       this.messages = this.conversationHandlerService.messages;
 
       this.chatManager.addConversationHandler(this.conversationHandlerService);
@@ -689,12 +692,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         if (!that.messages || that.messages.length === 0) {
           //this.showIonContent = true;
           that.showMessageWelcome = true;
-          console.log('setTimeout ***', that.showMessageWelcome);
+          that.logger.debug('[CONV-COMP] setTimeout ***', that.showMessageWelcome);
         }
       }, 8000);
 
     } else {
-      console.log('NON ENTRO ***', this.conversationHandlerService, handler);
+      this.logger.debug('[CONV-COMP] NON ENTRO ***', this.conversationHandlerService, handler);
       this.conversationHandlerService = handler;
       this.messages = this.conversationHandlerService.messages;
       // sicuramente ci sono messaggi
@@ -702,7 +705,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // mi arriva sempre notifica dell'ultimo msg (tramite BehaviorSubject)
       // scrollo al bottom della pagina
     }
-    console.log('CONVERSATION MESSAGES ' + this.messages );
+    this.logger.debug('[CONV-COMP] CONVERSATION MESSAGES ' + this.messages );
 
     //retrive active and archived conversations-handler service
     this.conversationsHandlerService = this.chatManager.conversationsHandlerService
@@ -768,14 +771,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.starRatingWidgetService.setOsservable(false);
       // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
       // tslint:disable-next-line:max-line-length
-      that.g.wdLog(['setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation.value]);
+      this.logger.debug('[CONV-COMP] setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation.value);
       subscribtion = this.starRatingWidgetService.obsCloseConversation.subscribe(isOpenStartRating => {
-        console.log('startratingggg', isOpenStartRating)
+        this.logger.debug('[CONV-COMP] startratingggg', isOpenStartRating)
         that.g.setParameter('isOpenStartRating', isOpenStartRating);
         if (isOpenStartRating === false) {
-            that.g.wdLog(['CHIUDOOOOO!!!! StartRating']);
+          this.logger.debug('[CONV-COMP] CHIUDOOOOO!!!! StartRating');
         } else if (isOpenStartRating === true) {
-            that.g.wdLog(['APROOOOOOOO!!!! StartRating']);
+          this.logger.debug('[CONV-COMP] APROOOOOOOO!!!! StartRating');
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
@@ -786,9 +789,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtionKey = 'messageAdded';
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if (!subscribtion) {
-      console.log('***** add messageAdded *****',  this.conversationHandlerService);
+      this.logger.debug('[CONV-COMP] ***** add messageAdded *****',  this.conversationHandlerService);
       subscribtion = this.conversationHandlerService.messageAdded.subscribe((msg: MessageModel) => {
-        console.log('***** DATAIL messageAdded *****', msg);
+        this.logger.debug('[CONV-COMP] ***** DATAIL messageAdded *****', msg);
         if (msg) {
           that.newMessageAdded(msg);
           this.onNewMessageCreated.emit(msg)
@@ -804,7 +807,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if(!subscribtion){
 
       subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.subscribe((conversation) => {
-        console.log('***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
+        this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
         }
@@ -818,11 +821,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if(!subscribtion){
 
       subscribtion = this.chatManager.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
-        console.log('***** DATAIL conversationsChanged *****', conversation, this.conversationWith, this.isConversationArchived);
+        this.logger.debug('[CONV-COMP] ***** DATAIL conversationsChanged *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.sender !== this.senderId){
           const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
           if(checkContentScrollPosition && conversation.is_new){ //update conversation if scroolToBottom is to the end
-            console.log('updateConversationBadge...')
+            this.logger.debug('[CONV-COMP] updateConversationBadge...')
             that.updateConversationBadge();
           }
         }
@@ -922,20 +925,20 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     const senderId = that.senderId;
       if (msg.sender === senderId) { //caso in cui sender manda msg
-        that.g.wdLog(['*A 1-------']);
+        that.logger.debug('[CONV-COMP] *A 1-------');
         setTimeout(function () {
           that.conversationContent.scrollToBottom();
         }, 200);
       } else if (msg.sender !== senderId) { //caso in cui operatore manda msg
         const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
         if (checkContentScrollPosition) {
-          that.g.wdLog(['*A2-------']);
+          that.logger.debug('[CONV-COMP] *A2-------');
           // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
           setTimeout(function () {
             that.conversationContent.scrollToBottom();
           }, 0);
         } else {
-          that.g.wdLog(['*A3-------']);
+          that.logger.debug('[CONV-COMP] *A3-------');
           that.messagesBadgeCount++;
           // that.soundMessage(msg.timestamp);
         }
@@ -1626,13 +1629,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * in caso in cui il messaggio è un'immagine ed è stata inviata dall'utente
      */
     updateMessage(message) {
-      this.g.wdLog(['UPDATE MSG:', message.metadata.uid]);
+      this.logger.debug('[CONV-COMP] UPDATE MSG:', message.metadata.uid);
       const index = searchIndexInArrayForUid(this.messages, message.metadata.uid);
       if (index > -1) {
           this.messages[index].uid = message.uid;
           this.messages[index].status = message.status;
           this.messages[index].timestamp = message.timestamp;
-          this.g.wdLog(['UPDATE ok:', this.messages[index]]);
+          this.logger.debug('[CONV-COMP] UPDATE ok:', this.messages[index]);
       } else {
           this.messages.push(message);
       }
@@ -1742,7 +1745,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnScrollContent(event: boolean){
     this.showBadgeScroollToBottom = !event;
-    console.log('scroool eventtt', event)
+    this.logger.debug('[CONV-COMP] scroool eventtt', event)
     //se sono alla fine (showBadgeScroollBottom === true) allora imposto messageBadgeCount a 0
     if(!this.showBadgeScroollToBottom){
       this.messagesBadgeCount = 0;
@@ -1793,7 +1796,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    */
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
+    this.logger.debug('[CONV-COMP] ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
     //this.storageService.removeItem('activeConversation');
     this.unsubscribe();
   }
@@ -1801,14 +1804,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** */
   unsubscribe() {
-    this.g.wdLog(['******* unsubscribe *******']);
+    this.logger.debug('[CONV-COMP] ******* unsubscribe *******');
     this.subscriptions.forEach(function (subscription) {
         subscription.value.unsubscribe();
     });
     this.subscriptions = [];
     this.subscriptions.length = 0;
     //this.messagingService.unsubscribeAllReferences();
-    this.g.wdLog(['this.subscriptions', this.subscriptions]);
+    this.logger.debug('[CONV-COMP]this.subscriptions', this.subscriptions);
   }
   // ========= end:: DESTROY ALL SUBSCRIPTIONS ============//
 
@@ -1836,7 +1839,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       clearTimeout(this.setTimeoutSound);
       this.setTimeoutSound = setTimeout(function () {
         that.audio.play();
-        that.g.wdLog(['****** soundMessage 1 *****', that.audio.src]);
+        that.logger.debug('[CONV-COMP] ****** soundMessage 1 *****', that.audio.src);
       }, 1000);
     }
   }
@@ -1862,7 +1865,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** */
   returnOnAttachmentButtonClicked(event: any) {
-    console.log('eventbutton', event)
+    this.logger.debug('[CONV-COMP] eventbutton', event)
     if (!event || !event.target.type) {
       return;
     }
@@ -1871,14 +1874,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         try {
           this.openLink(event.target.button);
         } catch (err) {
-          this.g.wdLog(['> Error :' + err]);
+          this.logger.error('[CONV-COMP] url > Error :' + err);
         }
         return;
       case 'action':
         try {
           this.actionButton(event.target.button);
         } catch (err) {
-          this.g.wdLog(['> Error :' + err]);
+          this.logger.error('[CONV-COMP] action > Error :' + err);
         }
         return false;
       case 'text':
@@ -1887,7 +1890,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           const metadata = { 'button': true };
           this.conversationFooter.sendMessage(text, TYPE_MSG_TEXT, metadata);
         }catch(err){
-          this.g.wdLog(['> Error :' + err]);
+          this.logger.error('[CONV-COMP] text > Error :' + err);
         }
       default: return;
     }
@@ -1929,13 +1932,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       subtype: subtype
     };
     this.conversationFooter.sendMessage(message, TYPE_MSG_TEXT, null, attributes);
-    this.g.wdLog(['> action :']);
+    this.logger.debug('[CONV-COMP] > action :');
   }
 
 
   // ========= START:: TRIGGER FUNCTIONS ============//
   private onNewConversationComponentInit() {
-    this.g.wdLog([' ---------------- onNewConversationComponentInit -------------- ']);
+    this.logger.debug('[CONV-COMP] ------- onNewConversationComponentInit ------- ');
     this.setConversation();
     // this.connectConversation();
     const newConvId = this.conversationWith;

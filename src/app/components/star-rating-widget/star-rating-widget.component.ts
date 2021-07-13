@@ -93,12 +93,12 @@ export class StarRatingWidgetComponent implements OnInit {
 
   sendRate() {
     this.message = (document.getElementById('chat21-message-rate-context') as HTMLInputElement).value;
-    this.logger.printDebug('STARRATINGCOMPONENT:: sendRate!!!::', this.message);
+    this.logger.debug('[STAR-RATING_COMP] sendRate!!!::', this.message);
     const that = this;
     // chiamo servizio invio segnalazione
     this.starRatingWidgetService.httpSendRate(this.rate, this.message).subscribe(
       response => {
-        that.logger.printDebug('STARRATINGCOMPONENT: OK sender', response);
+        that.logger.debug('[STAR-RATING_COMP] OK sender', response);
         // pubblico var isWidgetActive
         that.nextStep();
       },
@@ -126,7 +126,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-    this.logger.printDebug('STARRATINGCOMPONENT: closePage: ');
+    this.logger.debug('[STAR-RATING_COMP] closePage: ');
     this.step = 0;
     this.starRatingWidgetService.setOsservable(false);
     this.onClosePage.emit();

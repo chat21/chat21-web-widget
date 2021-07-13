@@ -87,7 +87,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // connect() {
     //     const that = this;
     //     const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
-    //     this.logger.printDebug('connect -------> conversations::ACTIVE', urlNodeFirebase)
+    //     this.logger.debug('connect -------> conversations::ACTIVE', urlNodeFirebase)
     //     this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
     //     this.ref.on('child_changed', (childSnapshot) => {
     //         that.changed(childSnapshot);
@@ -116,7 +116,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     subscribeToConversations(callback) {
         const that = this;
         const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
-        this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: SubscribeToConversations conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE] SubscribeToConversations conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -193,7 +193,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         //     this.conversations.splice(index, 1);
         // fare chiamata delete per rimuoverle la conversazione da remoto
         this.deleteConversation(conversationId, function (response) {
-            that.logger.printDebug('FIREBASEConversationsHandlerSERVICE::  ARCHIVE-CONV', response)
+            that.logger.debug('[FIREBASEConversationsHandlerSERVICE]  ARCHIVE-CONV', response)
             if (response === 'success') {
                 if (index > -1) {
                     that.conversations.splice(index, 1);
@@ -207,7 +207,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     }
 
     deleteConversation(conversationId, callback) {
-        this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: DELETE CONV conversationId', conversationId)
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV conversationId', conversationId)
         // let queryString = ''
         // let isSupportConversation = conversationId.startsWith("support-group");
         // if (isSupportConversation) {
@@ -215,8 +215,8 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         // }
 
         this.getFirebaseToken((error, idToken) => {
-            this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: DELETE CONV idToken', idToken)
-            this.logger.printError('FFIREBASEConversationsHandlerSERVICE:: DELETE CONV error', error)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV idToken', idToken)
+            this.logger.error('F[FIREBASEConversationsHandlerSERVICE] DELETE CONV error', error)
             if (idToken) {
                 const httpOptions = {
                     headers: new HttpHeaders({
@@ -227,13 +227,13 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                 }
                 const url = this.BASE_URL + '/api/' + this.tenant + '/conversations/' + conversationId // + queryString;
                 this.http.delete(url, httpOptions).subscribe(res => {
-                    this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: DELETE CONV - RES', res);
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV - RES', res);
                     callback('success')
                 }, (error) => {
-                    this.logger.printError('FIREBASEConversationsHandlerSERVICE:: DELETE CONV ERROR ', error);
+                    this.logger.error('[FIREBASEConversationsHandlerSERVICE] DELETE CONV ERROR ', error);
                     callback('error')
                 }, () => {
-                    this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: DELETE CONV * COMPLETE *');
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV * COMPLETE *');
 
                 });
             } else {
@@ -245,7 +245,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
     getFirebaseToken(callback) {
         const firebase_currentUser = firebase.auth().currentUser;
-        this.logger.printDebug(' // firebase current user ', firebase_currentUser);
+        this.logger.debug(' // firebase current user ', firebase_currentUser);
         if (firebase_currentUser) {
             firebase_currentUser.getIdToken(/* forceRefresh */ true)
                 .then(function (idToken) {
@@ -263,8 +263,8 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     public getConversationDetail(conversationId: string, callback: (conv: ConversationModel) => void): void {
         // fare promise o callback ??
         const conversation = this.conversations.find(item => item.uid === conversationId);
-        this.logger.printDebug('FIREBASEConversationsHandlerSERVICE::  conversations *****: ', this.conversations)
-        this.logger.printDebug('FIREBASEConversationsHandlerSERVICE::  getConversationDetail *****: ', conversation)
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE]  conversations *****: ', this.conversations)
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE]  getConversationDetail *****: ', conversation)
         if (conversation) {
             callback(conversation)
             // return conversationSelected
@@ -272,7 +272,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/conversations/' + conversationId;
             const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
-            this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: conversationDetail urlNodeFirebase *****', urlNodeFirebase)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail urlNodeFirebase *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
@@ -300,7 +300,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        this.logger.printDebug('FIREBASEConversationsHandlerSERVICE:: DISPOSE::: ', this.ref)
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DISPOSE::: ', this.ref)
     }
 
 
@@ -317,7 +317,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     //         that.loadedConversationsStorage.next(conversations);
     //     })
     //     .catch((e) => {
-    //         this.logger.printError('error: ', e);
+    //         this.logger.error('error: ', e);
     //     });
     // }
 
@@ -350,7 +350,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     * @param childSnapshot
     */
     // private conversationGenerate(childSnapshot: any): ConversationModel {
-    //     this.logger.printDebug('conversationGenerate: ', childSnapshot.val());
+    //     this.logger.debug('conversationGenerate: ', childSnapshot.val());
     //     const childData: ConversationModel = childSnapshot.val();
     //     childData.uid = childSnapshot.key;
     //     const conversation = this.completeConversation(childData);
@@ -393,7 +393,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                 this.conversationAdded.next(conversationAdded);
             }
         } else {
-            this.logger.printError('FIREBASEConversationsHandlerSERVICE::ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
+            this.logger.error('[FIREBASEConversationsHandlerSERVICE]ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -416,7 +416,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                 this.conversationChanged.next(conversationChanged);
             }
         } else {
-            this.logger.printError('FIREBASEConversationsHandlerSERVICE::CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
+            this.logger.error('[FIREBASEConversationsHandlerSERVICE]CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 

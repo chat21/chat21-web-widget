@@ -1,3 +1,4 @@
+import { LoggerInstance } from './../logger/loggerInstance';
 import { Injectable } from '@angular/core';
 // services
 import { NotificationsService } from '../abstract/notifications.service';
@@ -6,6 +7,7 @@ import { NotificationsService } from '../abstract/notifications.service';
 import * as firebase from 'firebase/app';
 import 'firebase/messaging';
 import 'firebase/auth';
+import { LoggerService } from '../abstract/logger.service';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -15,33 +17,33 @@ export class FirebaseNotifications extends NotificationsService {
     private FCMcurrentToken: string;
     private userId: string;
     private tenant: string;
-
+    private logger: LoggerService = LoggerInstance.getInstance()
     constructor() {
         super();
-        console.log('builddddd', this.BUILD_VERSION)
+        this.logger.debug('builddddd', this.BUILD_VERSION)
     }
 
     getNotificationPermissionAndSaveToken(currentUserUid) {
         this.tenant = this.getTenant();
-        console.log('FIREBASE-NOTIFICATIONS calling requestPermission - tenant ', this.tenant)
-        console.log('FIREBASE-NOTIFICATIONS calling requestPermission - currentUserUid ', currentUserUid)
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] calling requestPermission - tenant ', this.tenant)
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] calling requestPermission - currentUserUid ', currentUserUid)
         this.userId = currentUserUid;
         const messaging = firebase.messaging();
         if (firebase.messaging.isSupported()) {
             // messaging.requestPermission()
             Notification.requestPermission()
                 .then(() => {
-                    console.log('FIREBASE-NOTIFICATIONS >>>> requestPermission Notification permission granted.');
+                    this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> requestPermission Notification permission granted.');
                     return messaging.getToken()
                 })
                 .then(FCMtoken => {
-                    console.log('FIREBASE-NOTIFICATIONS >>>> requestPermission FCMtoken', FCMtoken)
+                    this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> requestPermission FCMtoken', FCMtoken)
                     // Save FCM Token in Firebase
                     this.FCMcurrentToken = FCMtoken;
                     this.updateToken(FCMtoken, currentUserUid)
                 })
                 .catch((err) => {
-                    console.log('FIREBASE-NOTIFICATION >>>> requestPermission ERR: Unable to get permission to notify.', err);
+                    this.logger.error('FIREBASE-NOTIFICATION >>>> requestPermission ERR: Unable to get permission to notify.', err);
                 });
         }
     }
@@ -49,15 +51,15 @@ export class FirebaseNotifications extends NotificationsService {
     removeNotificationsInstance(callback: (string) => void) {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                console.log('FIREBASE-NOTIFICATION - User is signed in. ', user)
+                this.logger.debug('FIREBASE-NOTIFICATION - User is signed in. ', user)
 
             } else {
-                console.log('FIREBASE-NOTIFICATION - No user is signed in. ', user)
+                this.logger.debug('FIREBASE-NOTIFICATION - No user is signed in. ', user)
             }
         });
 
-        console.log('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > this.userId', this.userId);
-        console.log('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > FCMcurrentToken', this.FCMcurrentToken);
+        this.logger.debug('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > this.userId', this.userId);
+        this.logger.debug('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > FCMcurrentToken', this.FCMcurrentToken);
 
         const urlNodeFirebase = '/apps/' + this.tenant
         const connectionsRefinstancesId = urlNodeFirebase + '/users/' + this.userId + '/instances/'
@@ -69,13 +71,13 @@ export class FirebaseNotifications extends NotificationsService {
             
             connectionsRef.remove()
                 .then(() => {
-                    console.log("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > Remove succeeded.")
+                    this.logger.debug("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > Remove succeeded.")
                     callback('success')
                 }).catch((error) => {
-                    console.log("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance Remove failed: " + error.message)
+                    this.logger.error("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance Remove failed: " + error.message)
                     callback('error')
                 }).finally(() => {
-                    console.log('FIREBASE-NOTIFICATION COMPLETED');
+                    this.logger.debug('FIREBASE-NOTIFICATION COMPLETED');
                 })
         }
     }

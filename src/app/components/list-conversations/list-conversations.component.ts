@@ -42,11 +42,11 @@ export class ListConversationsComponent implements OnInit {
                }
 
   ngOnInit() {
-    this.logger.printDebug('LISTCONVERSATIONS:: ngOnInit', this.listConversations);
+    this.logger.debug('[LISTCONVERSATIONS] ngOnInit', this.listConversations);
   }
 
   public openConversationByID(conversation) {
-    this.logger.printDebug('LISTCONVERSATIONS:: openConversationByID: ', conversation);
+    this.logger.debug('[LISTCONVERSATIONS] openConversationByID: ', conversation);
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
@@ -55,7 +55,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.logger.printDebug('LISTCONVERSATIONS:: ---ngAfterViewInit---: listConversations ', this.listConversations);
+    this.logger.debug('[LISTCONVERSATIONS] ---ngAfterViewInit---: listConversations ', this.listConversations);
   }
 
   ngDoCheck() {

@@ -10,6 +10,8 @@ import { UploadModel } from '../../../../chat21-core/models/upload';
 import { convertColorToRGBA, htmlEntities, replaceEndOfLine } from '../../../../chat21-core/utils/utils';
 import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-conversation-footer',
@@ -53,6 +55,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   conversationHandlerService: ConversationHandlerService
 
   convertColorToRGBA = convertColorToRGBA;
+  private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public g: Globals,
               //public upSvc: UploadService,
               private chatManager: ChatManager,
@@ -63,7 +66,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    console.log('ConversationFooterComponent::changessss', changes)
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
@@ -73,7 +75,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
   
   ngAfterViewInit() {
-    this.g.wdLog([' --------ngAfterViewInit: conversation-footer-------- ']); 
+    this.logger.debug('[CONV-FOOTER] --------ngAfterViewInit: conversation-footer-------- '); 
   }
 
   // ========= begin:: functions send image ======= //
@@ -82,18 +84,18 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
    * carico in locale l'immagine selezionata e apro pop up anteprima
    */
   detectFiles(event) {
-    this.g.wdLog(['detectFiles: ', event]);
+    this.logger.debug('[CONV-FOOTER] detectFiles: ', event);
 
     if (event) {
         this.selectedFiles = event.target.files;
-        this.g.wdLog(['AppComponent:detectFiles::selectedFiles', this.selectedFiles]);
+        this.logger.debug('[CONV-FOOTER] AppComponent:detectFiles::selectedFiles', this.selectedFiles);
         if (this.selectedFiles == null) {
           this.isFilePendingToUpload = false;
         } else {
           this.isFilePendingToUpload = true;
         }
-        this.g.wdLog(['AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload]);
-        this.g.wdLog(['fileChange: ', event.target.files]);
+        this.logger.debug('[CONV-FOOTER] AppComponent:detectFiles::selectedFiles::isFilePendingToUpload', this.isFilePendingToUpload);
+        this.logger.debug('[CONV-FOOTER] fileChange: ', event.target.files);
         if (event.target.files.length <= 0) {
           this.isFilePendingToUpload = false;
         } else {
@@ -105,27 +107,27 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             const nameFile = event.target.files[0].name;
             const typeFile = event.target.files[0].type;
             const reader = new FileReader();
-              that.g.wdLog(['OK preload: ', nameFile, typeFile, reader]);
+              that.logger.debug('[CONV-FOOTER] OK preload: ', nameFile, typeFile, reader);
               reader.addEventListener('load', function () {
-                that.g.wdLog(['addEventListener load', reader.result]);
+                that.logger.debug('[CONV-FOOTER] addEventListener load', reader.result);
                 that.isFileSelected = true;
                 // se inizia con image
                 if (typeFile.startsWith('image') && !typeFile.includes('svg')) {
                   const imageXLoad = new Image;
-                  that.g.wdLog(['onload ', imageXLoad]);
+                  that.logger.debug('[CONV-FOOTER] onload ', imageXLoad);
                   imageXLoad.src = reader.result.toString();
                   imageXLoad.title = nameFile;
                   imageXLoad.onload = function () {
-                    that.g.wdLog(['onload immagine']);
+                    that.logger.debug('[CONV-FOOTER] onload immagine');
                     // that.arrayFilesLoad.push(imageXLoad);
                     const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
                     that.arrayFilesLoad[0] = { uid: uid, file: imageXLoad, type: typeFile };
-                    that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+                    that.logger.debug('[CONV-FOOTER] OK: ', that.arrayFilesLoad[0]);
                     // INVIO MESSAGGIO
                     that.loadFile();
                   };
                 } else {
-                  that.g.wdLog(['onload file']);
+                  that.logger.debug('[CONV-FOOTER] onload file');
                   const fileXLoad = {
                     src: reader.result.toString(),
                     title: nameFile
@@ -133,7 +135,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
                   // that.arrayFilesLoad.push(imageXLoad);
                   const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
                   that.arrayFilesLoad[0] = { uid: uid, file: fileXLoad, type: typeFile };
-                  that.g.wdLog(['OK: ', that.arrayFilesLoad[0]]);
+                  that.logger.debug('[CONV-FOOTER] OK: ', that.arrayFilesLoad[0]);
                   // INVIO MESSAGGIO
                   that.loadFile();
                 }
@@ -141,7 +143,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
               if (event.target.files[0]) {
                 reader.readAsDataURL(event.target.files[0]);
-                  that.g.wdLog(['reader-result: ', event.target.files[0]]);
+                  that.logger.debug('[CONV-FOOTER] reader-result: ', event.target.files[0]);
               }
         }
     }
@@ -149,13 +151,13 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
 
   loadFile() {
-    this.g.wdLog(['that.fileXLoad: ', this.arrayFilesLoad]);
+    this.logger.debug('[CONV-FOOTER] that.fileXLoad: ', this.arrayFilesLoad);
         // al momento gestisco solo il caricamento di un'immagine alla volta
         if (this.arrayFilesLoad[0] && this.arrayFilesLoad[0].file) {
             const fileXLoad = this.arrayFilesLoad[0].file;
             const uid = this.arrayFilesLoad[0].uid;
             const type = this.arrayFilesLoad[0].type;
-            this.g.wdLog(['that.fileXLoad: ', type]);
+            this.logger.debug('[CONV-FOOTER] that.fileXLoad: ', type);
             let metadata;
             if (type.startsWith('image') && !type.includes('svg')) {
                 metadata = {
@@ -174,7 +176,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
                     'uid': uid
                 };
             }
-            this.g.wdLog(['metadata -------> ', metadata]);
+            this.logger.debug('[CONV-FOOTER] metadata -------> ', metadata);
             // this.scrollToBottom();
             // 1 - aggiungo messaggio localmente
             // this.addLocalMessageImage(metadata);
@@ -193,7 +195,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         const that = this;
         const send_order_btn = <HTMLInputElement>document.getElementById('chat21-start-upload-doc');
         send_order_btn.disabled = true;
-        that.g.wdLog(['AppComponent::uploadSingle::', metadata, file]);
+        that.logger.debug('[CONV-FOOTER] AppComponent::uploadSingle::', metadata, file);
         // const file = this.selectedFiles.item(0);
         const currentUpload = new UploadModel(file);
         // console.log(currentUpload.file);
@@ -202,7 +204,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         // uploadTask.then(snapshot => {
         //     return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
         // }).then(downloadURL => {
-        //     that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
+        //     that.logger.debug('[CONV-FOOTER] AppComponent::uploadSingle:: downloadURL', downloadURL]);
         //     that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
 
         //     metadata.src = downloadURL;
@@ -223,8 +225,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       
 
         this.uploadService.upload(this.senderId, currentUpload).then(downloadURL => {
-          that.g.wdLog(['AppComponent::uploadSingle:: downloadURL', downloadURL]);
-          that.g.wdLog([`Successfully uploaded file and got download link - ${downloadURL}`]);
+          that.logger.debug('[CONV-FOOTER] AppComponent::uploadSingle:: downloadURL', downloadURL);
+          that.logger.debug(`[CONV-FOOTER] Successfully uploaded file and got download link - ${downloadURL}`);
 
           metadata.src = downloadURL;
           let type_message = TYPE_MSG_TEXT;
@@ -240,10 +242,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           // return downloadURL;
         }).catch(error => {
           // Use to signal error if something goes wrong.
-          console.error(`AppComponent::uploadSingle:: Failed to upload file and get link - ${error}`);
+          that.logger.error(`[CONV-FOOTER] uploadSingle:: Failed to upload file and get link - ${error}`);
           that.isFilePendingToUpload = false;
         });
-        that.g.wdLog(['reader-result: ', file]);
+        that.logger.debug('[CONV-FOOTER] reader-result: ', file);
     }
 
   /**
@@ -255,7 +257,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
    */
   sendMessage(msg, type, metadata?, additional_attributes?) { // sponziello
     (metadata) ? metadata = metadata : metadata = '';
-    this.g.wdLog(['SEND MESSAGE: ', msg, type, metadata, additional_attributes]);
+    this.logger.debug('[CONV-FOOTER] SEND MESSAGE: ', msg, type, metadata, additional_attributes);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
 
       // msg = htmlEntities(msg);
@@ -345,7 +347,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           target.style.height = this.HEIGHT_DEFAULT;
           // console.log('target.style.height: ', target.style.height);
         } catch (e) {
-          this.g.wdLog(['> Error :' + e]);
+          this.logger.error('[CONV-FOOTER] > Error :' + e);
         }
         this.restoreTextArea();
     }
@@ -364,7 +366,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   //         this.el.nativeElement.dispatchEvent(onBeforeMessageSend);
   //       }
   //   } catch (e) {
-  //     this.g.wdLog(['> Error :' + e]);
+  //     this.logger.debug('[CONV-FOOTER] > Error :' + e]);
   //   }
   // }
 
@@ -381,22 +383,22 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   //         this.el.nativeElement.dispatchEvent(onAfterMessageSend);
   //       }
   //   } catch (e) {
-  //     this.g.wdLog(['> Error :' + e]);
+  //     this.logger.debug('[CONV-FOOTER] > Error :' + e]);
   //   }
   // }
 
 
   private restoreTextArea() {
-    //   that.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea');
+    //   that.logger.debug('[CONV-FOOTER] AppComponent:restoreTextArea::restoreTextArea');
     this.resizeInputField();
     const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context'));
     this.textInputTextArea = ''; // clear the textarea
     if (textArea) {
-        textArea.value = '';  // clear the textarea
-        textArea.placeholder = this.translationMap.get('LABEL_PLACEHOLDER');  // restore the placholder
-        this.g.wdLog(['AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored']);
+      textArea.value = '';  // clear the textarea
+      textArea.placeholder = this.translationMap.get('LABEL_PLACEHOLDER');  // restore the placholder
+      this.logger.debug('[CONV-FOOTER] AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
     } else {
-          console.error('AppComponent:restoreTextArea::restoreTextArea::textArea:', 'not restored');
+      this.logger.error('[CONV-FOOTER] restoreTextArea::textArea:', 'not restored');
     }
     this.setFocusOnId('chat21-main-message-context');
   }
@@ -410,7 +412,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     try {
       const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
       // tslint:disable-next-line:max-line-length
-      //   that.g.wdLog(['H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+      //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
       target.style.height = '100%';
       if (target.value === '\n') {
           target.value = '';
@@ -419,7 +421,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           target.style.height = target.scrollHeight + 2 + 'px';
           target.style.minHeight = this.HEIGHT_DEFAULT;
       } else {
-          //   that.g.wdLog(['PASSO 3');
+          //   that.logger.debug('[CONV-FOOTER] PASSO 3');
           target.style.height = this.HEIGHT_DEFAULT;
           // segno sto scrivendo
           // target.offsetHeight - 15 + 'px';
@@ -427,10 +429,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       //this.setWritingMessages(target.value);
       this.onChangeTextArea.emit({textAreaEl: target, minHeightDefault: this.HEIGHT_DEFAULT})
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[CONV-FOOTER] > Error :' + e);
     }
     // tslint:disable-next-line:max-line-length
-    //   that.g.wdLog(['H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+    //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
   }
 
   onTextAreaChange(){
@@ -439,21 +441,21 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   onSendPressed(event) {
-    this.g.wdLog(['onSendPressed:event', event]);
-    this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+    this.logger.debug('[CONV-FOOTER] onSendPressed:event', event);
+    this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
     if (this.isFilePendingToUpload) {
-      this.g.wdLog(['AppComponent::onSendPressed', 'is a file']);
+      this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed', 'is a file');
       // its a file
       this.loadFile();
       this.isFilePendingToUpload = false;
       // disabilito pulsanti
-      this.g.wdLog(['AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload]);
+      this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
     } else {
       if ( this.textInputTextArea.length > 0 ) {
-        this.g.wdLog(['AppComponent::onSendPressed', 'is a message']);
+        this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed', 'is a message');
         // its a message
         if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
-          //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
+          //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
           // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           // this.setDepartment();
@@ -475,7 +477,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     setTimeout(function () {
         const textarea = document.getElementById(id);
         if (textarea) {
-            //   that.g.wdLog(['1--------> FOCUSSSSSS : ', textarea);
+            //   that.logger.debug('[CONV-FOOTER] 1--------> FOCUSSSSSS : ', textarea);
             textarea.setAttribute('value', ' ');
             textarea.focus();
         }
@@ -513,10 +515,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     onkeypress(event) {
       const keyCode = event.which || event.keyCode;
       this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      // this.g.wdLog(['onkeypress **************', this.textInputTextArea, keyCode]);
+      // this.logger.debug('[CONV-FOOTER] onkeypress **************', this.textInputTextArea, keyCode]);
       if (keyCode === 13) {
         if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
-          //   that.g.wdLog(['sendMessage -> ', this.textInputTextArea);
+          //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
           // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
           // this.setDepartment();
@@ -534,20 +536,19 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   onPaste(event){
     const items = (event.clipboardData || event.originalEvent.clipboardData).items;
     let file = null;
-    console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste items ", items);
+    this.logger.debug('[CONV-FOOTER] onPaste items ', items);
     console.log('eventttt onPaste', event, items)
     for (const item of items) {
-      console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item ", item);
-      console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item.type ", item.type);
+      this.logger.debug('[CONV-FOOTER] onPaste item ', item);
+      this.logger.debug('[CONV-FOOTER] onPaste item.type ', item.type);
       if (item.type.startsWith("image")) {
-      
 
-        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste item.type  ", item.type);
+        this.logger.debug('[CONV-FOOTER] onPaste item.type', item.type);
         file = item.getAsFile();
         const data = new ClipboardEvent('').clipboardData || new DataTransfer();
         data.items.add(new File([file], file.name, { type: file.type }));
-        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste data ", data);
-        console.log("CONVERSATION-DETAIL (MESSAGE-TEXT-AREA) onPaste file ", file);
+        this.logger.debug('[CONV-FOOTER] onPaste data', data);
+        this.logger.debug('[CONV-FOOTER] onPaste file ', file);
       }
     }
   }

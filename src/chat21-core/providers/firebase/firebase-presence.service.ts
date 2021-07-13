@@ -43,7 +43,7 @@ export class FirebasePresenceService extends PresenceService {
    */
   public initialize() {
     this.tenant = this.getTenant();
-    this.logger.printDebug('FIREBASEPRESENCE::initialize this.tenant', this.tenant);
+    this.logger.debug('FIREBASEPRESENCE::initialize this.tenant', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }
 
@@ -52,21 +52,21 @@ export class FirebasePresenceService extends PresenceService {
    * @param userid
    */
   // public userIsOnline(userid: string) {
-  //   this.logger.printDebug('FIREBASEPresenceSERVICE::userIsOnline', userid);
-  //   console.log('CONVERSATION-DETAIL group detail userIsOnline', userid);
+  //   this.logger.debug('[FIREBASEPresenceSERVICE] userIsOnline', userid);
+  //   this.logger.debug('CONVERSATION-DETAIL group detail userIsOnline', userid);
   //   const that = this;
   //   const urlNodeConnections = this.urlNodePresence + userid + '/connections';
-  //   this.logger.printDebug('FIREBASEPresenceSERVICE::userIsOnline: ', urlNodeConnections);
+  //   this.logger.debug('[FIREBASEPresenceSERVICE] userIsOnline: ', urlNodeConnections);
   //   const connectionsRef = firebase.database().ref().child(urlNodeConnections);
   //   connectionsRef.on('value', (child) => {
-  //     this.logger.printDebug('FIREBASEPresenceSERVICE::is-online-' + userid);
+  //     this.logger.debug('[FIREBASEPresenceSERVICE] is-online-' + userid);
   //     if (child.val()) {
-  //       console.log('CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
+  //       this.logger.debug('CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
   //       this.BSIsOnline.next({uid: userid, isOnline: true});
-  //       console.log('CONVERSATION-DETAIL group detail userIsOnline 1', userid);
+  //       this.logger.debug('CONVERSATION-DETAIL group detail userIsOnline 1', userid);
   //     } else {
   //       this.BSIsOnline.next({uid: userid, isOnline: false});
-  //       console.log('CONVERSATION-DETAIL group detail userIsOnline 2', userid);
+  //       this.logger.debug('CONVERSATION-DETAIL group detail userIsOnline 2', userid);
   //     }
   //   });
   // }
@@ -75,11 +75,11 @@ export class FirebasePresenceService extends PresenceService {
     const that = this;
     let local_BSIsOnline = new BehaviorSubject<any>(null);
     const urlNodeConnections = this.urlNodePresence + userid + '/connections';
-    this.logger.printDebug('FIREBASEPresenceSERVICE::userIsOnline: ', urlNodeConnections);
+    this.logger.debug('[FIREBASEPresenceSERVICE] userIsOnline: ', urlNodeConnections);
     const connectionsRef = firebase.database().ref().child(urlNodeConnections);
     connectionsRef.off()
     connectionsRef.on('value', (child) => {
-      that.logger.printDebug('FIREBASEPresenceSERVICE::CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
+      that.logger.debug('[FIREBASEPresenceSERVICE] CONVERSATION-DETAIL group detail userIsOnline id user', userid, '- child.val: ', child.val());
       if (child.val()) {
         that.BSIsOnline.next({ uid: userid, isOnline: true });
         local_BSIsOnline.next({ uid: userid, isOnline: true });
@@ -97,7 +97,7 @@ export class FirebasePresenceService extends PresenceService {
    * @param userid
    */
   public lastOnlineForUser(userid: string) {
-    this.logger.printDebug('FIREBASEPresenceSERVICE::lastOnlineForUser', userid);
+    this.logger.debug('[FIREBASEPresenceSERVICE] lastOnlineForUser', userid);
     const that = this;
     const lastOnlineRef = this.referenceLastOnlineForUser(userid);
     lastOnlineRef.on('value', (child) => {
@@ -128,7 +128,7 @@ export class FirebasePresenceService extends PresenceService {
     const connectedRefURL = '/.info/connected';
     const conn = firebase.database().ref(connectedRefURL);
     conn.on('value', (dataSnapshot) => {
-      this.logger.printDebug('FIREBASEPresenceSERVICE::self.deviceConnectionRef: ', dataSnapshot.val());
+      this.logger.debug('[FIREBASEPresenceSERVICE] self.deviceConnectionRef: ', dataSnapshot.val());
       if (dataSnapshot.val()) {
         if (this.onlineConnectionsRef) {
           this.keyConnectionRef = this.onlineConnectionsRef.push(true);
@@ -137,7 +137,7 @@ export class FirebasePresenceService extends PresenceService {
           const timestamp = now.valueOf();
           this.lastOnlineConnectionsRef.onDisconnect().set(timestamp);
         } else {
-          this.logger.printError('FIREBASEPresenceSERVICE::setPresence --> This is an error. self.deviceConnectionRef already set. Cannot be set again.');
+          this.logger.error('[FIREBASEPresenceSERVICE] setPresence --> This is an error. self.deviceConnectionRef already set. Cannot be set again.');
         }
       }
     });
@@ -154,7 +154,7 @@ export class FirebasePresenceService extends PresenceService {
       this.lastOnlineConnectionsRef.set(timestamp);
       this.onlineConnectionsRef.off();
       this.onlineConnectionsRef.remove();
-      this.logger.printDebug('FIREBASEPresenceSERVICE::goOffline onlineConnectionsRef', this.onlineConnectionsRef);
+      this.logger.debug('[FIREBASEPresenceSERVICE] goOffline onlineConnectionsRef', this.onlineConnectionsRef);
     }
   }
 

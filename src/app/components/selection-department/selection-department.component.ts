@@ -41,7 +41,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: ngOnInit');
+        this.logger.debug('[SELECT-DEP] ngOnInit');
         this.colorBck = '#000000';
         if ( this.g.departments && this.g.departments.length > 0 ) {
             if (this.g.windowContext && this.g.windowContext.tiledesk && this.g.windowContext.tiledesk['beforeDepartmentsFormRender'] ) {
@@ -102,7 +102,7 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
             // attributes.departmentName = department.name;
             // this.g.setParameter('attributes', attributes);
             this.appStorageService.setItem('attributes', JSON.stringify(attributes));
-            this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: setDepartment: attributes', JSON.stringify(attributes));
+            this.logger.debug('[SELECT-DEP] setDepartment: attributes', JSON.stringify(attributes));
         }
         this.closePage();
     }
@@ -156,23 +156,23 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
 
     // ========= begin:: ACTIONS ============//
     private onSelectDepartment(department) {
-        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: onSelectDepartment: ', department);
+        this.logger.debug('[SELECT-DEP] onSelectDepartment: ', department);
         this.setDepartment(department);
         this.onDepartmentSelected.emit(department);
     }
 
     openPage() {
-        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: openPage ');
+        this.logger.debug('[SELECT-DEP] openPage ');
         this.onOpen.emit();
     }
 
     closePage() {
-        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: closePage');
+        this.logger.debug('[SELECT-DEP] closePage');
         this.onClose.emit();
     }
 
     cancelPage() {
-        this.logger.printDebug('SELECTIONDEPARTMENTCOMPONENT:: cancelPage');
+        this.logger.debug('[SELECT-DEP] cancelPage');
         this.g.newConversationStart = false;
         this.onClose.emit();
     }

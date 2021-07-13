@@ -9,6 +9,8 @@ import { environment } from '../../../environments/environment';
 
 import { Globals } from '../../utils/globals';
 import { AppConfigService } from '../../providers/app-config.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
 
 
 @Injectable()
@@ -18,6 +20,7 @@ export class StarRatingWidgetService {
   private API_URL;
   public senderId: any;
   public requestid: any;
+  private logger: LoggerService = LoggerInstance.getInstance();
   // private requestid: String = 'LKfJrBCk6G5up3uNH1L';
   // private projectid: String = '5b55e806c93dde00143163dd';
 
@@ -69,8 +72,8 @@ export class StarRatingWidgetService {
         'rating': rate,
         'rating_message': message
       };
-      this.g.wdLog(['------------------> options: ', options]);
-      this.g.wdLog(['------------------> body: ', JSON.stringify(body)]);
+      this.logger.debug('[STAR-RATING-SERVICE] ------------------> options: ', options);
+      this.logger.debug('[STAR-RATING-SERVICE] ------------------> body: ', JSON.stringify(body));
       return this.http
         .patch(url, JSON.stringify(body), options)
         .map(res => (res.json()));
@@ -86,7 +89,7 @@ export class StarRatingWidgetService {
   // }
 
   setOsservable(bool) {
-    this.g.wdLog(['------------------> setOsservable: ', bool]);
+    this.logger.debug('[STAR-RATING-SERVICE] ------------------> setOsservable: ', bool);
     this.obsCloseConversation.next(bool);
   }
 

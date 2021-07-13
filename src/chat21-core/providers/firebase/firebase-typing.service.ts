@@ -44,7 +44,7 @@ export class FirebaseTypingService extends TypingService {
   /** */
   public initialize() {
     this.tenant = this.getTenant();
-    this.logger.printLog('FIREBASETypingSERVICE::initialize - tenant ', this.tenant)
+    this.logger.info('[FIREBASETypingSERVICE] initialize - tenant ', this.tenant)
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 
@@ -55,7 +55,7 @@ export class FirebaseTypingService extends TypingService {
     if (isDirect) {
       urlTyping = this.urlNodeTypings + idCurrentUser + '/' + idConversation;
     }
-    this.logger.printDebug('FIREBASETypingSERVICE::urlTyping: ', urlTyping);
+    this.logger.debug('[FIREBASETypingSERVICE] urlTyping: ', urlTyping);
     const ref = firebase.database().ref(urlTyping);
     ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
@@ -69,12 +69,12 @@ export class FirebaseTypingService extends TypingService {
     clearTimeout(this.setTimeoutWritingMessages);
     this.setTimeoutWritingMessages = setTimeout(() => {
       const urlTyping = this.urlNodeTypings + idConversation + '/' + recipientId;// + '/user';
-      this.logger.printDebug('FIREBASETypingSERVICE::setWritingMessages:', urlTyping, userFullname);
+      this.logger.debug('[FIREBASETypingSERVICE] setWritingMessages:', urlTyping, userFullname);
       const timestampData =  firebase.database.ServerValue.TIMESTAMP;
       const precence = new TypingModel(recipientId, timestampData, message, userFullname);
       firebase.database().ref(urlTyping).set(precence, ( error ) => {
         if (error) {
-          this.logger.printError('FIREBASETypingSERVICE::setTyping error', error);
+          this.logger.error('[FIREBASETypingSERVICE] setTyping error', error);
         } else {
           this.BSSetTyping.next({uid: idConversation, typing: precence});
         }

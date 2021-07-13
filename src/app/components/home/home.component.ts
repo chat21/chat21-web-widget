@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // get global variables
-    this.logger.printDebug('HOME:: ngOnInit');
+    this.logger.debug('[HOME-COMP] ngOnInit');
 
     if (this.g.firstOpen === true) {
       this.addAnimation();
@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.logger.printDebug('HOME::---ngAfterViewInit--- ');
+    this.logger.debug('[HOME-COMP]---ngAfterViewInit--- ');
     setTimeout(() => {
       if (this.aflistconv) {
         this.aflistconv.nativeElement.focus();
@@ -116,7 +116,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   hideMenuOptions() {
-    this.logger.printDebug('HOME:: hideMenuOptions');
+    this.logger.debug('[HOME-COMP] hideMenuOptions');
     // this.g.isOpenMenuOptions = false;
     this.g.setParameter('isOpenMenuOptions', false, true);
   }
@@ -139,7 +139,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         mainDiv.classList.add('start-animation');
       }
     } catch (error) {
-        this.logger.printError('HOME:: addAnimation > Error :' + error);
+        this.logger.error('[HOME-COMP] addAnimation > Error :' + error);
     }
   }
   removeAnimation() {
@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         mainDiv.classList.remove('start-animation');
       }
     } catch (error) {
-      this.logger.printError('HOME:: removeAnimation > Error :' + error);
+      this.logger.error('[HOME-COMP] removeAnimation > Error :' + error);
     }
   }
 

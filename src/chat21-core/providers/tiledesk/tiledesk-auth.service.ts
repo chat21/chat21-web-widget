@@ -39,7 +39,7 @@ export class TiledeskAuthService {
    * @param password
    */
   signInWithEmailAndPassword(email: string, password: string): Promise<string> {
-    this.logger.printDebug('TILEDESK-AUTH-SERV - signInWithEmailAndPassword', email, password);
+    this.logger.debug('[[TILEDESK-AUTH]-SERV] - signInWithEmailAndPassword', email, password);
     const httpHeaders = new HttpHeaders();
 
     httpHeaders.append('Accept', 'application/json');
@@ -69,7 +69,7 @@ export class TiledeskAuthService {
    * @param projectID
    */
   signInAnonymously(projectID: string): Promise<any> {
-    this.logger.printDebug('TILEDESK-AUTH-SERV - signInAnonymously - projectID', projectID);
+    this.logger.debug('[TILEDESK-AUTH] - signInAnonymously - projectID', projectID);
     const httpHeaders = new HttpHeaders();
 
     httpHeaders.append('Accept', 'application/json');
@@ -119,7 +119,7 @@ export class TiledeskAuthService {
   }
 
   logOut(){
-    this.logger.printDebug('TiledeskAUTHSERVICE::: logOut()')
+    this.logger.debug('[TILEDESK-AUTH] logOut()')
     this.appStorage.removeItem('tiledeskToken')
     this.appStorage.removeItem('currentUser')
   }
@@ -148,10 +148,10 @@ export class TiledeskAuthService {
       member.avatar = avatar;
       member.color = color;
       this.currentUser = member; 
-      this.logger.printDebug('TILEDESK-AUTH - createCompleteUser member ', member)
+      this.logger.debug('[TILEDESK-AUTH] - createCompleteUser member ', member)
       this.appStorage.setItem('currentUser', JSON.stringify(this.currentUser));
     } catch (err) {
-      this.logger.printError('TILEDESK-AUTH- createCompleteUser ERR ', err) 
+      this.logger.error('[TILEDESK-AUTH]- createCompleteUser ERR ', err) 
     }
     
   }

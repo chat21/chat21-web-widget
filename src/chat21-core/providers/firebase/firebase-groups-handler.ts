@@ -63,7 +63,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
      * inizializzo groups handler
      */
     initialize(tenant: string, loggedUserId: string) {
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::initialize GROUP-HANDLER');
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] initialize GROUP-HANDLER');
         this.tenant = tenant;
         this.loggedUserId = loggedUserId;
         this.BASE_URL = this.appConfig.getConfig().firebaseConfig.chat21ApiUrl;
@@ -78,18 +78,18 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         //********* NOT IN USE ********** */
         const that = this;
         const urlNodeGroups = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups';
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::connect -------> groups::', urlNodeGroups)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] connect -------> groups::', urlNodeGroups)
         this.ref = firebase.database().ref(urlNodeGroups)
         this.ref.on('child_added', (childSnapshot) => {
-            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_added ------->', childSnapshot.val())
+            that.logger.debug('[FIREBASEGroupHandlerSERVICE]  child_added ------->', childSnapshot.val())
             // that.added(childSnapshot);
         });
         this.ref.on('child_changed', (childSnapshot) => {
-            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_changed ------->', childSnapshot.val())
+            that.logger.debug('[FIREBASEGroupHandlerSERVICE]  child_changed ------->', childSnapshot.val())
             // that.changed(childSnapshot);
         });
         this.ref.on('child_removed', (childSnapshot) => {
-            that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: child_removed ------->', childSnapshot.val())
+            that.logger.debug('[FIREBASEGroupHandlerSERVICE]  child_removed ------->', childSnapshot.val())
             // that.removed(childSnapshot);
         });
     }
@@ -101,7 +101,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
      */
     getDetail(groupId: string, callback?: (group: GroupModel)=>void): Promise<GroupModel>{
         const urlNodeGroupById = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups/' + groupId;
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::getDetail -------> urlNodeGroupById::', urlNodeGroupById)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] getDetail -------> urlNodeGroupById::', urlNodeGroupById)
         const ref = firebase.database().ref(urlNodeGroupById)
         return new Promise((resolve) => {
             ref.off()
@@ -121,7 +121,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
     onGroupChange(groupId: string): Observable<GroupModel> {
         const that = this;
         const urlNodeGroupById = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups/' + groupId;
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::onGroupChange -------> urlNodeGroupById::', urlNodeGroupById)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] onGroupChange -------> urlNodeGroupById::', urlNodeGroupById)
         const ref = firebase.database().ref(urlNodeGroupById)
         ref.off()
         ref.on('value', (childSnapshot) => {
@@ -141,7 +141,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
 
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: CREATE GROUP idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  CREATE GROUP idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -160,7 +160,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                         resolve(res)
                     }).catch(function (error) {
                         // Handle error
-                        that.logger.printError('FIREBASEGroupHandlerSERVICE::createGROUP error: ', error);
+                        that.logger.error('[FIREBASEGroupHandlerSERVICE] createGROUP error: ', error);
                         callback(null, error);
                         reject(error);
                     });
@@ -176,7 +176,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         var that = this;
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: JOIN GROUP idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  JOIN GROUP idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -194,7 +194,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                         resolve(res)
                     }).catch(function (error) {
                         // Handle error
-                        that.logger.printError('FIREBASEGroupHandlerSERVICE::createGROUP error: ', error);
+                        that.logger.error('[FIREBASEGroupHandlerSERVICE] createGROUP error: ', error);
                         callback(null, error);
                         reject(error);
                     });
@@ -210,7 +210,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         var that = this;
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.printDebug('FIREBASEGroupHandlerSERVICE:: LEAVE CONV idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  LEAVE CONV idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -225,7 +225,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                         resolve(res)
                     }).catch(function (error) {
                         // Handle error
-                        that.logger.printError('FIREBASEGroupHandlerSERVICE:: LEAVE idToken error: ', error);
+                        that.logger.error('[FIREBASEGroupHandlerSERVICE]  LEAVE idToken error: ', error);
                         callback(null, error);
                         reject(error);
                     });
@@ -245,13 +245,13 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: DISPOSE', this.ref)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE]  DISPOSE', this.ref)
     }
 
     // // -------->>>> PRIVATE METHOD SECTION START <<<<---------------//
     private getFirebaseToken(callback) {
         const firebase_currentUser = firebase.auth().currentUser;
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: // firebase current user ', firebase_currentUser);
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE]  // firebase current user ', firebase_currentUser);
         if (firebase_currentUser) {
             const that = this;
             firebase_currentUser.getIdToken(/* forceRefresh */ true)
@@ -260,7 +260,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                     callback(null, idToken);
                 }).catch(function (error) {
                     // Handle error
-                    that.logger.printError('FIREBASEGroupHandlerSERVICE:: ERROR -> idToken.', error);
+                    that.logger.error('[FIREBASEGroupHandlerSERVICE]  ERROR -> idToken.', error);
                     callback(error, null);
                 });
         }
@@ -268,9 +268,9 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
 
     private groupValue(childSnapshot: any){
         const that = this;
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE::group detail::', childSnapshot.val(), childSnapshot)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] group detail::', childSnapshot.val(), childSnapshot)
         const group: GroupModel = childSnapshot.val();
-        this.logger.printDebug('FIREBASEGroupHandlerSERVICE:: groupValue ', group)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE]  groupValue ', group)
         if (group) {
             group.uid = childSnapshot.key
             // that.BSgroupDetail.next(group)

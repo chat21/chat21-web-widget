@@ -84,7 +84,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     // connect() {
     //     const that = this;
     //     const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId);
-    //     this.logger.printDebug('connect -------> conversations::ARCHIVED', urlNodeFirebase)
+    //     this.logger.debug('connect -------> conversations::ARCHIVED', urlNodeFirebase)
     //     this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
     //     this.ref.on('child_changed', (childSnapshot) => {
     //         that.changed(childSnapshot);
@@ -104,7 +104,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
      subscribeToConversations(callback: any) {
         const that = this;
         const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId);
-        this.logger.printDebug('FIREBASEArchivedConversationsHandlerSERVICE:: SubscribeToConversations conversations::ARCHIVED urlNodeFirebase', urlNodeFirebase)
+        this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] SubscribeToConversations conversations::ARCHIVED urlNodeFirebase', urlNodeFirebase)
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -178,14 +178,14 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
 
     getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
         const conversation = this.archivedConversations.find(item => item.uid === conversationId);
-        this.logger.printDebug('FIREBASEArchivedConversationsHandlerSERVICE:: SubscribeToConversations getConversationDetail::ARCHIVED *****: ', conversation)
+        this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] SubscribeToConversations getConversationDetail::ARCHIVED *****: ', conversation)
         if (conversation) {
             callback(conversation)
             // this.BSConversationDetail.next(conversationSelected);
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/archived_conversations/' + conversationId;
             const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
-            this.logger.printDebug('FIREBASEArchivedConversationsHandlerSERVICE:: urlNodeFirebase conversationDetail *****', urlNodeFirebase)
+            this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
@@ -211,7 +211,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        this.logger.printDebug('FIREBASEArchivedConversationsHandlerSERVICE:: DISPOSE::: ', this.ref)
+        this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] DISPOSE::: ', this.ref)
     }
 
 
@@ -303,7 +303,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
                 this.archivedConversationAdded.next(conversationAdded);
             }
         } else {
-            this.logger.printError('FIREBASEArchivedConversationsHandlerSERVICE:: ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
+            this.logger.error('[FIREBASEArchivedConversationsHandlerSERVICE] ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 
@@ -326,7 +326,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
                 this.archivedConversationChanged.next(conversationChanged);
             }
         } else {
-            this.logger.printError('FIREBASEArchivedConversationsHandlerSERVICE:: CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
+            this.logger.error('[FIREBASEArchivedConversationsHandlerSERVICE] CHANGED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
     }
 

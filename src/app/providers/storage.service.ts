@@ -3,11 +3,14 @@ import { Globals } from '../utils/globals';
 import { supports_html5_storage, supports_html5_session } from '../utils/utils';
 import { STORAGE_PREFIX } from '../utils/constants';
 import { environment } from '../../environments/environment';
+import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
 
 
 @Injectable()
 export class StorageService {
 
+  private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public g: Globals) { }
 
   // globals.setParameter(key, globalVar.key.value);
@@ -20,7 +23,7 @@ export class StorageService {
       // prefix = prefix + sv;
       prefix = environment.storage_prefix + '_';
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     const newKey = prefix + this.g.projectid + '_' + key;
     return this.getValueForKey(newKey);
@@ -34,7 +37,7 @@ export class StorageService {
       // prefix = prefix + sv;
       prefix = environment.storage_prefix + '_';
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     const newKey = prefix + key;
     return this.getValueForKey(newKey);
@@ -42,13 +45,11 @@ export class StorageService {
 
   /** */
   private getValueForKey(key) {
-    console.log('getValueForKey: ', this.g.persistence );
     if (this.g.persistence === 'local') {
       if (supports_html5_storage()) {
-        console.log('getValueForKey: ', key);
         return localStorage.getItem(key);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     // } else if (this.g.persistence === 'session') {
@@ -56,7 +57,7 @@ export class StorageService {
       if (supports_html5_session()) {
         return sessionStorage.getItem(key);
       } else {
-        console.warn('sessionStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] sessionStorage is not defind. Storage disabled');
         return null;
       }
     // } else if (this.g.persistence === 'none') {
@@ -66,7 +67,7 @@ export class StorageService {
       if (supports_html5_storage()) {
         return localStorage.getItem(key);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     }
@@ -82,7 +83,7 @@ export class StorageService {
       // prefix = prefix + sv;
       prefix = environment.storage_prefix + '_';
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
     this.saveValueForKey(newKey, value);
@@ -98,7 +99,7 @@ export class StorageService {
       prefix = environment.storage_prefix + '_';
       
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     const newKey = prefix + key;
     this.saveValueForKey(newKey, value);
@@ -110,7 +111,7 @@ export class StorageService {
       if (supports_html5_storage()) {
         return localStorage.setItem(key, value);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     // } else if (this.g.persistence === 'session') {
@@ -118,7 +119,7 @@ export class StorageService {
       if (supports_html5_session()) {
         return sessionStorage.setItem(key, value);
       } else {
-        console.warn('sessionStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] sessionStorage is not defind. Storage disabled');
         return null;
       }
     // } else if (this.g.persistence === 'none') {
@@ -128,7 +129,7 @@ export class StorageService {
       if (supports_html5_storage()) {
         return localStorage.setItem(key, value);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     }
@@ -141,7 +142,7 @@ export class StorageService {
       // prefix = prefix + sv;
       prefix = environment.storage_prefix + '_';
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     // const newKey = this.g.projectid + '_' + key;
     const newKey = prefix + this.g.projectid + '_' + key;  // this.g.projectid + '_' + key;
@@ -166,14 +167,14 @@ export class StorageService {
       if (supports_html5_storage()) {
         return localStorage.removeItem(key);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     } else if (this.g.persistence === 'session') {
       if (supports_html5_session()) {
         return sessionStorage.removeItem(key);
       } else {
-        console.warn('sessionStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] sessionStorage is not defind. Storage disabled');
         return null;
       }
     } else if (this.g.persistence === 'none') {
@@ -182,7 +183,7 @@ export class StorageService {
       if (supports_html5_storage()) {
         return localStorage.removeItem(key);
       } else {
-        console.warn('localStorage is not defind. Storage disabled');
+        this.logger.warn('[STORAGE-SERV] localStorage is not defind. Storage disabled');
         return null;
       }
     }
@@ -195,7 +196,7 @@ export class StorageService {
       // prefix = prefix + sv;
       prefix = environment.storage_prefix + '_';
     } catch (e) {
-      this.g.wdLog(['> Error :' + e]);
+      this.logger.error('[STORAGE-SERV] > Error :' + e);
     }
     // if (this.g.persistence === 'local') {
     const prefixKey = prefix + this.g.projectid;

@@ -4,6 +4,8 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChange
 import { Globals } from '../../../utils/globals';
 import { AppConfigService } from '../../../providers/app-config.service';
 import { convertColorToRGBA } from '../../../../chat21-core/utils/utils';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-conversation-header',
@@ -48,7 +50,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
 
   // text used within the html
   private API_URL: string;
-  
+  private logger: LoggerService = LoggerInstance.getInstance()
   constructor(
     public g: Globals,
     public typingService: TypingService,
@@ -57,21 +59,21 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
      }
 
   ngOnInit() {
-    this.g.wdLog([' ngOnInit: conversation-header COMPONENT ', this.translationMap]);
+    this.logger.debug('[CONV-HEADER] ngOnInit: conversation-header COMPONENT ', this.translationMap);
     this.membersConversation.push(this.senderId)
     //this.initializeTyping();
   }
 
   ngOnChanges(changes: SimpleChanges){
     if(changes['idConversation'] && changes['idConversation'].currentValue !== undefined){
-      console.log('onChanges -- Conversation-header.component-> start initializeTyping()', this.idConversation)
+      this.logger.debug('[CONV-HEADER] onChanges -- Conversation-header.component-> start initializeTyping()', this.idConversation)
       this.initializeTyping();
     }
   }
 
   ngAfterViewInit() {
     // this.isShowSpinner();
-    this.g.wdLog([' --------ngAfterViewInit: conversation-header-------- ']);
+    this.logger.debug('[CONV-HEADER] --------ngAfterViewInit: conversation-header-------- ');
     // this.appStorageService.setItem('activeConversation', this.conversation.uid);
     // --------------------------- //
     // after animation intro
@@ -107,7 +109,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
 
 
   initializeTyping() {
-    console.log('membersconversation', this.membersConversation)
+    this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
     //this.setSubscriptions();
     this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
@@ -116,11 +118,10 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   // /** */
   private setSubscriptions() {
     const that = this;
-    console.log('subsctiptions', this.subscriptions)
     const conversationSelected = this.subscriptions.find(item => item.key === this.idConversation);
     if (!conversationSelected) {
       const subscribeBSIsTyping =  this.typingService.BSIsTyping.subscribe((data: any) => {
-        console.log('***** BSIsTyping *****', data);
+        this.logger.debug('[CONV-HEADER] ***** BSIsTyping *****', data);
         if (data) {
           const isTypingUid = data.uid; //support-group-...
           if (this.idConversation === isTypingUid) {
@@ -142,18 +143,17 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
       if (data.nameUserTypingNow) {
         this.nameUserTypingNow = data.nameUserTypingNow;
       }
-      console.log('subscribeTypings data:', data);
+      this.logger.debug('[CONV-HEADER] subscribeTypings data:', data);
       const userTyping = this.membersConversation.includes(key);
       if ( !userTyping) {
         this.isTypings = true;
-        console.log('child_changed key', key);
         clearTimeout(this.setTimeoutWritingMessages);
         this.setTimeoutWritingMessages = setTimeout(() => {
             that.isTypings = false;
         }, 2000);
       }
     } catch (error) {
-      console.log('error: ', error);
+      this.logger.error('[CONV-HEADER] error: ', error);
     }
 
   }
@@ -200,7 +200,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
    */
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    this.g.wdLog(['ngOnDestroy ------------------> this.subscriptions', this.subscriptions]);
+    this.logger.debug('[CONV-HEADER] ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
     //this.appStorageService.removeItem('activeConversation');
     // this.unsubscribe();
     this.unsubescribeAll()
