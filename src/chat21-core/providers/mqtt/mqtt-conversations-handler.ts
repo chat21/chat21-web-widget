@@ -274,11 +274,15 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         // console.log("conversation.uid", conversation.uid)
         // if (this.isValidConversation(conversation)) {
         // this.setClosingConversation(conversation.uid, false);
-        const index = searchIndexInArrayForUid(this.conversations, conversation.uid);
+        if (!conversation.conversation_with) {
+            conversation.conversation_with = conversation.conversWith // conversWith comes from remote
+        }
+        const index = searchIndexInArrayForUid(this.conversations, conversation.conversation_with);
         if (index > -1) {
-            const conv = this.conversations[index];
-            console.log("Conversation to update found", conv);
+            // const conv = this.conversations[index];
+            // console.log("Conversation to update found", conv);
             this.updateConversationWithSnapshot(this.conversations[index], conversation);
+            console.log("conversationchanged.isnew", JSON.stringify(conversation))
             this.conversations.sort(compareValues('timestamp', 'desc'));
             this.conversationChanged.next(conversation);
         }
@@ -296,6 +300,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             if (k === 'text') {
                 console.log("aggiorno key:" + k);
                 conv.last_message_text = snap[k];
+                conv.text = snap[k];
             }
             if (k === 'recipient') {
                 console.log("aggiorno key:" + k);
@@ -324,6 +329,10 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             if (k === 'status') {
                 console.log("aggiorno key:" + k);
                 conv.status = this.setStatusConversation(conv.sender, conv.uid);
+            }
+            if (k === 'type') {
+                console.log("aggiorno key:" + k);
+                conv.type = snap[k];
             }
         });
         // SCHEMA ConversationModel
