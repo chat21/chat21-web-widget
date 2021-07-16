@@ -80,22 +80,11 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
     setTimeout(() => {
       // this.initAll();
       // this.setFocusOnId('chat21-main-message-context');
-      // this.updateConversationBadge();
 
       // this.g.currentConversationComponent = this;
       // if (this.g.newConversationStart === true) {
       //   this.onNewConversationComponentInit();
       //   this.g.newConversationStart = false;
-      //   const start_message = this.g.startMessage;
-      //   if (this.g.startMessage) {
-      //     this.sendMessage(
-      //       start_message.text,
-      //       start_message.type,
-      //       start_message.metadata,
-      //       start_message.attributes
-      //     );
-      //     // {"subtype": "info"}  //sponziello
-      //   }
       // }
       //this.subscriptionTyping();
       // if (this.afConversationComponent) {
