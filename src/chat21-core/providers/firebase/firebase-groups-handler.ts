@@ -63,10 +63,10 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
      * inizializzo groups handler
      */
     initialize(tenant: string, loggedUserId: string) {
-        this.logger.debug('[FIREBASEGroupHandlerSERVICE] initialize GROUP-HANDLER');
         this.tenant = tenant;
         this.loggedUserId = loggedUserId;
         this.BASE_URL = this.appConfig.getConfig().firebaseConfig.chat21ApiUrl;
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] initialize', this.tenant, this.loggedUserId);
     }
 
     /**
@@ -141,7 +141,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
 
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  CREATE GROUP idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE] CREATE GROUP idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -176,7 +176,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         var that = this;
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  JOIN GROUP idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE] JOIN GROUP idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -210,7 +210,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         var that = this;
         return new Promise((resolve, reject) =>{
             this.getFirebaseToken((error, idToken) => {
-                that.logger.debug('[FIREBASEGroupHandlerSERVICE]  LEAVE CONV idToken', idToken, error)
+                that.logger.debug('[FIREBASEGroupHandlerSERVICE] LEAVE CONV idToken', idToken, error)
                 if (idToken) {
                     const httpOptions = {
                         headers: new HttpHeaders({
@@ -225,7 +225,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                         resolve(res)
                     }).catch(function (error) {
                         // Handle error
-                        that.logger.error('[FIREBASEGroupHandlerSERVICE]  LEAVE idToken error: ', error);
+                        that.logger.error('[FIREBASEGroupHandlerSERVICE] LEAVE idToken error: ', error);
                         callback(null, error);
                         reject(error);
                     });
@@ -245,7 +245,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         // this.ref.off("child_changed");
         // this.ref.off("child_removed");
         // this.ref.off("child_added");
-        this.logger.debug('[FIREBASEGroupHandlerSERVICE]  DISPOSE', this.ref)
+        this.logger.debug('[FIREBASEGroupHandlerSERVICE] DISPOSE', this.ref)
     }
 
     // // -------->>>> PRIVATE METHOD SECTION START <<<<---------------//
@@ -260,7 +260,7 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
                     callback(null, idToken);
                 }).catch(function (error) {
                     // Handle error
-                    that.logger.error('[FIREBASEGroupHandlerSERVICE]  ERROR -> idToken.', error);
+                    that.logger.error('[FIREBASEGroupHandlerSERVICE] ERROR -> idToken.', error);
                     callback(error, null);
                 });
         }

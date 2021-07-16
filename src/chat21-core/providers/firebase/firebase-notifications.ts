@@ -20,11 +20,14 @@ export class FirebaseNotifications extends NotificationsService {
     private logger: LoggerService = LoggerInstance.getInstance()
     constructor() {
         super();
-        this.logger.debug('builddddd', this.BUILD_VERSION)
+    }
+
+    initialize(tenant: string): void{
+        this.tenant = tenant
     }
 
     getNotificationPermissionAndSaveToken(currentUserUid) {
-        this.tenant = this.getTenant();
+        // this.tenant = this.getTenant();
         this.logger.debug('[FIREBASE-NOTIFICATIONS] calling requestPermission - tenant ', this.tenant)
         this.logger.debug('[FIREBASE-NOTIFICATIONS] calling requestPermission - currentUserUid ', currentUserUid)
         this.userId = currentUserUid;
@@ -43,7 +46,7 @@ export class FirebaseNotifications extends NotificationsService {
                     this.updateToken(FCMtoken, currentUserUid)
                 })
                 .catch((err) => {
-                    this.logger.error('FIREBASE-NOTIFICATION >>>> requestPermission ERR: Unable to get permission to notify.', err);
+                    this.logger.error('[FIREBASE-NOTIFICATIONS] >>>> requestPermission ERR: Unable to get permission to notify.', err);
                 });
         }
     }
@@ -51,15 +54,15 @@ export class FirebaseNotifications extends NotificationsService {
     removeNotificationsInstance(callback: (string) => void) {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                this.logger.debug('FIREBASE-NOTIFICATION - User is signed in. ', user)
+                this.logger.debug('[FIREBASE-NOTIFICATIONS] - User is signed in. ', user)
 
             } else {
-                this.logger.debug('FIREBASE-NOTIFICATION - No user is signed in. ', user)
+                this.logger.debug('[FIREBASE-NOTIFICATIONS] - No user is signed in. ', user)
             }
         });
 
-        this.logger.debug('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > this.userId', this.userId);
-        this.logger.debug('FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > FCMcurrentToken', this.FCMcurrentToken);
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> removeNotificationsInstance > this.userId', this.userId);
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> removeNotificationsInstance > FCMcurrentToken', this.FCMcurrentToken);
 
         const urlNodeFirebase = '/apps/' + this.tenant
         const connectionsRefinstancesId = urlNodeFirebase + '/users/' + this.userId + '/instances/'
@@ -71,13 +74,13 @@ export class FirebaseNotifications extends NotificationsService {
             
             connectionsRef.remove()
                 .then(() => {
-                    this.logger.debug("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance > Remove succeeded.")
+                    this.logger.debug("[FIREBASE-NOTIFICATIONS] >>>> removeNotificationsInstance > Remove succeeded.")
                     callback('success')
                 }).catch((error) => {
-                    this.logger.error("FIREBASE-NOTIFICATION >>>> removeNotificationsInstance Remove failed: " + error.message)
+                    this.logger.error("[FIREBASE-NOTIFICATIONS] >>>> removeNotificationsInstance Remove failed: " + error.message)
                     callback('error')
                 }).finally(() => {
-                    this.logger.debug('FIREBASE-NOTIFICATION COMPLETED');
+                    this.logger.debug('[FIREBASE-NOTIFICATIONS] COMPLETED');
                 })
         }
     }
@@ -98,7 +101,7 @@ export class FirebaseNotifications extends NotificationsService {
 
     // ********** PRIVATE METHOD - START ****************//
     private updateToken(FCMcurrentToken, currentUserUid) {
-        console.log('FIREBASE-NOTIFICATION >>>> getPermission > updateToken ', FCMcurrentToken);
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> getPermission > updateToken ', FCMcurrentToken);
         // this.afAuth.authState.take(1).subscribe(user => {
         if (!currentUserUid || !FCMcurrentToken) {
             return
@@ -119,7 +122,7 @@ export class FirebaseNotifications extends NotificationsService {
 
         updates[connectionsRefinstancesId + connection] = device_model;
 
-        console.log('FIREBASE-NOTIFICATION >>>> getPermission > updateToken in DB', updates);
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] >>>> getPermission > updateToken in DB', updates);
         firebase.database().ref().update(updates)
     }
     // ********** PRIVATE METHOD - END ****************//
