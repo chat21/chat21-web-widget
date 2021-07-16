@@ -184,7 +184,7 @@ export class ListAllConversationsComponent implements OnInit, OnDestroy, AfterVi
 
   onConversationSelectedFN(conversation: ConversationModel){
     this.logger.debug('[LISTALLCONVERSATIONS] openConversationByID: ', conversation);
-    if ( conversation ) {
+    if (conversation) {
       // this.conversationsService.updateIsNew(conversation);
       this.onConversationSelected.emit(conversation);
     }

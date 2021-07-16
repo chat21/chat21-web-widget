@@ -1,7 +1,7 @@
 import { Globals } from './../../../utils/globals';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { MessageModel } from '../../../../chat21-core/models/message';
-import { isPopupUrl, popupUrl } from '../../../../chat21-core/utils/utils';
+import { isPopupUrl, popupUrl, stripTags } from '../../../../chat21-core/utils/utils';
 import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { strip_tags } from '../../../utils/utils';
 import { isInfo, isMine, messageType } from '../../../../chat21-core/utils/utils-message';
@@ -39,7 +39,6 @@ export class ConversationContentComponent implements OnInit {
   // ========= begin:: dichiarazione funzioni ======= //
   isPopupUrl = isPopupUrl;
   popupUrl = popupUrl;
-  strip_tags = strip_tags;
   // ========= end:: dichiarazione funzioni ======= //
 
   // ========== begin:: set icon status message ======= //
@@ -74,8 +73,7 @@ export class ConversationContentComponent implements OnInit {
   showUploadProgress: boolean = false;
   fileType: string;
   private logger: LoggerService = LoggerInstance.getInstance()
-  constructor(private g: Globals,
-              private cdref: ChangeDetectorRef,
+  constructor(private cdref: ChangeDetectorRef,
               private uploadService: UploadService) { }
 
   ngOnInit() {
