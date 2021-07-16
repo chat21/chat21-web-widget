@@ -38,10 +38,5 @@ export class CustomLogger extends LoggerService{
             console.error(message)
         }
     }
-    log(...message: any[]) {
-        if (this.isLogEnabled && this.logLevel >= LogLevel.All) {
-            console.log(message)
-        }
-    }
 
 }
