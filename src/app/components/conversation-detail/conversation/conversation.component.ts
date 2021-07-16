@@ -279,7 +279,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.g.newConversationStart === true) {
         this.onNewConversationComponentInit();
         this.g.newConversationStart = false;
-        const start_message = this.g.startMessage;
       }
       this.setSubscriptions();
       if (this.afConversationComponent) {
@@ -293,14 +292,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     //   // this.g.setParameter('newConversationStart', null)
     //   this.g.newConversationStart = false;
     //   // console.log('reset newconv ' + this.g.newConversationStart);
-    //   // console.log('start message ', this.g.startMessage);
     //   // do  not send message hello
-    //   const start_message = this.g.startMessage;
-    //  if (this.g.startMessage) {
-    //   // tslint:disable-next-line:max-line-length
-    //   this.sendMessage(start_message.text, start_message.type, start_message.metadata, start_message.attributes);
-    //   // {"subtype": "info"}  //sponziello
-    //  }
     // }
     // // ------------------------------------------------ //
     // this.g.wdLog([' --------ngAfterViewInit-------- ']);
