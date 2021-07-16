@@ -39,7 +39,7 @@ export class TiledeskAuthService {
    * @param password
    */
   signInWithEmailAndPassword(email: string, password: string): Promise<string> {
-    this.logger.debug('[[TILEDESK-AUTH]-SERV] - signInWithEmailAndPassword', email, password);
+    this.logger.debug('[TILEDESK-AUTH]-SERV] - signInWithEmailAndPassword', email, password);
     const httpHeaders = new HttpHeaders();
 
     httpHeaders.append('Accept', 'application/json');
