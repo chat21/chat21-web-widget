@@ -51,7 +51,6 @@ export class Globals {
   isMobile: boolean;
   isLogged: boolean;
   soundEnabled: boolean;
-  isLogoutEnabled: boolean;
   BUILD_VERSION: String;
   filterSystemMsg: boolean; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
@@ -171,7 +170,6 @@ export class Globals {
    newConversationStart: boolean;
    recipientFullname: string;
   //  userId: string;
-   userPassword: string;
   //  userToken: string;
    marginX: string;
    marginY: string;
@@ -195,7 +193,6 @@ export class Globals {
    offline_msg: string;
 
    customAttributes: any;
-   startMessage: any;
    showAttachmentButton: boolean;
    showAllConversations: boolean;
    privacyField: string;
@@ -322,18 +319,6 @@ export class Globals {
     /** set launcher balon widget shape: can set corner by corner   */
     this.isLogEnabled = false;
     // this.parameters['isLogEnabled'] = false;
-
-    // this.startMessage = {
-    //   text: "hello",
-    //   type: "text",
-    //   attributes: {
-    //     subtype: "info"
-    //   },
-    //   metadata: {}
-    // }
-
-    /** startMessage: The message to start a support conversation. */
-
     this.openExternalLinkButton = true;
     /** enable to open URL in  self action link button in external page from widget */
     this.hideHeaderConversationOptionsMenu = false;
@@ -382,10 +367,6 @@ export class Globals {
     // this.parameters['isLogged'] = false;
     // this.parameters.push({'isLogged': false});  /** detect is logged */
 
-    this.isLogoutEnabled = true;
-    // this.parameters['isLogoutEnabled'] = true;
-    // this.parameters.push({'isLogoutEnabled': true});
-                                                        /** enable/disable button logout in menu options */
     this.BUILD_VERSION = 'v.' + environment.version;
     // this.parameters['BUILD_VERSION'] = 'v.' + environment.version;
     // this.parameters.push({'BUILD_VERSION': 'v.' + environment.version});
@@ -463,8 +444,7 @@ export class Globals {
     this.default_settings = {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
-      'poweredBy': this.poweredBy, //'userId': this.userId,
-      'userEmail': this.userEmail, 'userPassword': this.userPassword,
+      'poweredBy': this.poweredBy, 'userEmail': this.userEmail, //'userId': this.userId, 
       'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
       'isOpen': this.isOpen, 'channelType': this.channelType,
       'lang': this.lang, 'calloutTimer': this.calloutTimer, 'calloutStaus': this.calloutStaus,

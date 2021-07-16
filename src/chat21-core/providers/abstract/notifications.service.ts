@@ -20,6 +20,7 @@ export abstract class NotificationsService {
     } 
   }
 
+  abstract initialize(tenant: string): void;
   abstract getNotificationPermissionAndSaveToken(currentUserUid: string): void;
   abstract removeNotificationsInstance(callback: (string) => void): void;
 

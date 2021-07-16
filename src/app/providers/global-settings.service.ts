@@ -1,3 +1,4 @@
+import { LogLevel } from './../../chat21-core/utils/constants';
 import { ElementRef, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Http, Headers, RequestOptions } from '@angular/http';
@@ -58,6 +59,11 @@ export class GlobalSettingsService {
 
         /** SET main Paramiters */
         this.setMainParametersFromSettings(globals);
+
+        /**SET TENANT parameter */
+        this.globals.tenant = this.appConfigService.getConfig().tenant
+        /**SET LOGLEVEL parameter */
+        this.globals.logLevel = this.appConfigService.getConfig().logLevel
 
         // ------------------------------- //
         /** LOAD PARAMETERS FROM SERVER
@@ -530,12 +536,6 @@ export class GlobalSettingsService {
             globals.userEmail = TEMP;
             // globals.setParameter('userEmail', TEMP);
         }
-        TEMP = tiledeskSettings['userPassword'];
-        // this.globals.wdLog(['9 - userPassword:: ', TEMP);
-        if (TEMP !== undefined) {
-            globals.userPassword = TEMP;
-            // globals.setParameter('userPassword', TEMP);
-        }
         TEMP = tiledeskSettings['userFullname'];
         // this.globals.wdLog(['10 - userFullname:: ', TEMP);
         if (TEMP !== undefined) {
@@ -730,18 +730,13 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.customAttributes = TEMP;
         }
-        TEMP = tiledeskSettings['startMessage'];
-        // this.globals.wdLog(['40 - startMessage:: ', TEMP]);
-        if (TEMP !== undefined) {
-            globals.startMessage = TEMP;
-        }
         TEMP = tiledeskSettings['showAttachmentButton'];
-        // this.globals.wdLog(['41 - startMessage:: ', TEMP]);
+        // this.globals.wdLog(['41 - showAttachmentButton:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.showAttachmentButton = (TEMP === true) ? true : false;
         }
         TEMP = tiledeskSettings['showAllConversations'];
-        // this.globals.wdLog(['42 - startMessage:: ', TEMP]);
+        // this.globals.wdLog(['42 - showAllConversations:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.showAllConversations = (TEMP === true) ? true : false;
         }
@@ -815,10 +810,6 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.userEmail = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('userPassword');
-        if (TEMP !== null) {
-            this.globals.userPassword = TEMP;
-        }
         TEMP = el.nativeElement.getAttribute('userFullname');
         if (TEMP !== null) {
             this.globals.userFullname = TEMP;
@@ -875,6 +866,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.welcomeMsg = TEMP;
         }
+        TEMP = el.nativeElement.getAttribute('welcomeTitle');
+        if (TEMP !== null) {
+            this.globals.welcomeTitle = TEMP;
+        }
         TEMP = el.nativeElement.getAttribute('calloutTitle');
         if (TEMP !== null) {
             this.globals.calloutTitle = TEMP;
@@ -891,10 +886,6 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.logoChat = TEMP;
         }
-        TEMP = el.nativeElement.getAttribute('welcomeTitle');
-        if (TEMP !== null) {
-            this.globals.welcomeTitle = TEMP;
-        }
         TEMP = el.nativeElement.getAttribute('autoStart');
         if (TEMP !== null) {
             this.globals.autoStart = (TEMP === true) ? true : false;
@@ -906,10 +897,6 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('isShown');
         if (TEMP !== null) {
             this.globals.isShown = (TEMP === true) ? true : false;
-        }
-        TEMP = el.nativeElement.getAttribute('isLogoutEnabled');
-        if (TEMP !== null) {
-          this.globals.isLogoutEnabled = (TEMP === true) ? true : false;
         }
         TEMP = el.nativeElement.getAttribute('isLogEnabled');
         if (TEMP !== null) {
@@ -1001,11 +988,6 @@ export class GlobalSettingsService {
             globals.userEmail = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_userPassword');
-        if (TEMP) {
-            globals.userPassword = stringToBoolean(TEMP);
-        }
-
         TEMP = getParameterByName(windowContext, 'tiledesk_userFullname');
         if (TEMP) {
             globals.userFullname = stringToBoolean(TEMP);
@@ -1090,7 +1072,6 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_themeColor');
         if (TEMP) {
             const themecolor = stringToBoolean(TEMP);
-            console.log('themeeeeee', themecolor)
             globals.themeColor = convertColorToRGBA(themecolor, 100);
         }
 
@@ -1175,12 +1156,6 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_fullscreenMode');
         if (TEMP) {
             globals.fullscreenMode = stringToBoolean(TEMP);
-        }
-
-        TEMP = getParameterByName(windowContext, 'tiledesk_startMessage');
-        if (TEMP) {
-            globals.startMessage = JSON.parse(TEMP);
-            this.globals.wdLog(['globals.startMessage: ' + globals.startMessage]);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showAttachmentButton');
