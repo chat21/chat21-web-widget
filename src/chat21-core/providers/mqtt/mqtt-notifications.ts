@@ -12,7 +12,11 @@ export class MQTTNotifications extends NotificationsService {
       super();
   }
 
-  
+  initialize(tenant: string): void {
+    console.log('Method not implemented.');
+    return;
+  }
+
   getNotificationPermissionAndSaveToken(currentUser: string) { 
     console.log('Method not implemented.');
     return;

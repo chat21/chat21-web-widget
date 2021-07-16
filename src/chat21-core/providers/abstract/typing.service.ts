@@ -29,7 +29,7 @@ export abstract class TypingService {
   }
 
   // functions
-  abstract initialize(): void;
+  abstract initialize(tenant: string): void;
   abstract isTyping(idConversation: string, idCurrentUser: string, isDirect: boolean): void;
   abstract setTyping(idConversation: string, message: string, idUser: string, userFullname: string): void;
 }

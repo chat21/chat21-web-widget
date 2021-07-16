@@ -28,7 +28,7 @@ export abstract class PresenceService {
   }
 
   // functions
-  abstract initialize(): void;
+  abstract initialize(tenant: string): void;
   abstract userIsOnline(userid: string): Observable<any>
   abstract lastOnlineForUser(userid: string): void;
   abstract setPresence(userid: string): void;

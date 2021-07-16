@@ -34,8 +34,9 @@ export class MQTTPresenceService extends PresenceService {
     super();
   }
 
-  initialize() {
-    this.tenant = this.getTenant();
+  initialize(tenant: string) {
+    // this.tenant = this.getTenant();
+    this.tenant = tenant;
     this.logger.info('[MQTT-PRESENCE] initialize this.tenant', this.tenant);
     this.urlNodePresence = '/apps/' + this.tenant + '/presence/';
   }

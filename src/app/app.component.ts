@@ -221,7 +221,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (that.g.isOpen === true) {
                     that.g.setParameter('displayEyeCatcherCard', 'none');
 
-                    this.logger.debug('[APP-COMP] obsChangeConversation ::: ' + conversation);
+                    this.logger.debug('[APP-COMP] obsChangeConversation ::: ', conversation);
                     if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
                         return;
                     }
@@ -285,8 +285,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tiledeskAuthService.initialize(this.appConfigService.getConfig().apiUrl)
         this.messagingAuthService.initialize();
         this.chatManager.initialize();
-        this.typingService.initialize();
-        this.presenceService.initialize();
         this.uploadService.initialize();
 
     }
@@ -463,9 +461,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.triggerOnAuthStateChanged(that.stateLoggedUser);
                 that.startUI();
                 that.logger.debug('[APP-COMP]  1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart);
+                this.typingService.initialize(this.g.tenant);
+                this.presenceService.initialize(this.g.tenant);
                 that.presenceService.setPresence(user.uid);
-                this.initConversationsHandler(environment.tenant, that.g.senderId);
-
+                this.initConversationsHandler(this.g.tenant, that.g.senderId);
                 if (autoStart !== false) {
                     that.showWidget();
                     // that.g.setParameter('isShown', true, true);
@@ -532,8 +531,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
                     // /** INIT  */
                     // that.initAll();
-                    
-                    (this.g.logLevel === 0 || this.g.logLevel !== 0) && this.g.logLevel !== undefined? this.logger.setLoggerConfig(this.g.isLogEnabled, this.g.logLevel) : this.logger.setLoggerConfig(this.g.isLogEnabled, this.appConfigService.getConfig().logLevel)
+                    this.logger.setLoggerConfig(this.g.isLogEnabled, this.g.logLevel)
+                    // (this.g.logLevel === 0 || this.g.logLevel !== 0) && this.g.logLevel !== undefined? this.logger.setLoggerConfig(this.g.isLogEnabled, this.g.logLevel) : this.logger.setLoggerConfig(this.g.isLogEnabled, this.appConfigService.getConfig().logLevel)
                     this.tabTitle = this.g.windowContext.window.document.title
                     this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
                     this.logger.debug('[APP-COMP] controllo se è stato passato un token: ', this.g.jwt);
@@ -886,38 +885,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
          *  4 - controllo se esiste currentUser
          */
 
-        // this.isBeingAuthenticated = true;
-        const userEmail = this.g.userEmail;
-        const userPassword = this.g.userPassword;
         const tiledeskToken = this.g.tiledeskToken;
         const user = this.appStorageService.getItem('currentUser')
         this.logger.debug('[APP-COMP] tiledesktokennn', tiledeskToken, user)
-        if (userEmail && userPassword) { //TODO:GAB deprecato ma in fase di eliminazione
-            this.logger.debug('[APP-COMP]  ---------------- 10 ---------------- ');
-            // se esistono email e psw faccio un'autenticazione firebase con email
-            this.tiledeskAuthService.signInWithEmailAndPassword(userEmail, userPassword).then(tiledeskToken => {
-                this.messagingAuthService.createCustomToken(tiledeskToken)
-            }).catch(error => { this.logger.error('[APP-COMP] signInWithEmailAndPassword ERR ',error); })
-            // this.authService.authenticateFirebaseWithEmailAndPassword(userEmail, userPassword);
-            // } else if (userId) {
-            //     // SE PASSO LO USERID NON EFFETTUO NESSUNA AUTENTICAZIONE
-            //     this.g.wdLog([' ---------------- 11 ---------------- ']);
-            //     this.g.wdLog(['this.userId:: ', userId]);
-            //     this.g.senderId = userId;
-            //     this.g.setParameter('senderId', userId);
-            //     this.g.setParameter('isLogged', true);
-            //     this.g.setParameter('attributes', this.setAttributesFromStorageService());
-            //     // this.startNwConversation();
-            //     this.startUI();
-            //     this.g.wdLog([' 11 - IMPOSTO STATO CONNESSO UTENTE ']);
-            //     // this.chatPresenceHandlerService.setupMyPresence(userId);
-            // } else if (userToken) {
-            //     // SE PASSO IL TOKEN NON EFFETTUO NESSUNA AUTENTICAZIONE
-            //     // !!! DA TESTARE NON FUNZIONA !!! //
-            //     this.g.wdLog([' ---------------- 12 ---------------- ']);
-            //     this.g.wdLog(['this.g.userToken:: ', userToken]);
-            //     //this.authService.authenticateFirebaseCustomToken(userToken);
-        } else if (tiledeskToken) {
+        if (tiledeskToken) {
             //     //  SONO GIA' AUTENTICATO
             this.logger.debug('[APP-COMP]  ---------------- 13 ---------------- ');
             this.logger.debug('[APP-COMP]  ----------- sono già loggato ------- ');
