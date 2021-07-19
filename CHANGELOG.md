@@ -1,5 +1,14 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.13
+- bug-fixed: same user after log out --> mqtt-auth not publish BSSignOut 
+- added: isLogEnabled parameter from url/tiledeskSettings in customLogger 
+- changed: renamed hideConversationOptionsMenu tiledeskSetting with hideHeaderConversationOptionsMenu
+- changed: method name of customLogger
+- changed: refactoring log method in components and levels struct
+- removed: startMessage, userPassword, isLogoutEnabled tiledesksettings properties
+- removed: from app.config userEmail && userPassword auth method
+
 ### 5.0.0-beta.3.12 - NATIVE-MQTT
 - updated: mqtt.min.js lib to 2.4.8
 - updated: mqtt service classes

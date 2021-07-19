@@ -45,3 +45,4 @@ test_widget.php
 
 src/environments
 src/environments_dati_reali
+src/widget-config-docker.json
