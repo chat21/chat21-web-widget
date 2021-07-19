@@ -282,9 +282,10 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             // const conv = this.conversations[index];
             // console.log("Conversation to update found", conv);
             this.updateConversationWithSnapshot(this.conversations[index], conversation);
-            console.log("conversationchanged.isnew", JSON.stringify(conversation))
+            console.log("conversationchanged.isnew", index, JSON.stringify(conversation))
             this.conversations.sort(compareValues('timestamp', 'desc'));
-            this.conversationChanged.next(conversation);
+            this.conversations.splice(index, 1, this.conversations[index])
+            this.conversationChanged.next(this.conversations[index]);
         }
     }
 
@@ -334,7 +335,9 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
                 console.log("aggiorno key:" + k);
                 conv.type = snap[k];
             }
+
         });
+        console.log('listtttttt', this.conversations, conv, snap)
         // SCHEMA ConversationModel
         // public uid: string,
         // public attributes: any,
