@@ -9,7 +9,9 @@
     console.log("testNEW ------"); 
     window.tiledeskSettings = 
       {
-        projectid: "6013ec749b32000045be650e",
+        // projectid: "6066e60cc3dade4e7389d182", //mqtt
+        projectid:"6013ec749b32000045be650e", // firebase
+        // projectid: "609b8efa8732eb00141763d9", //mqtt-docker
         autoStart: true
       };
 
@@ -46,135 +48,132 @@
       }(document, 'script', 'tiledesk-jssdk'));
 
 
-      
+      // EVENTS
       window.Tiledesk('onOpen', function(event_data) {
             console.log("onOpen",event_data);
       });
 
       window.Tiledesk('onClose', function(event_data) {
-            console.log("onClose",event_data);
+            console.log("onClose Tiledesk FN",event_data);
       });
 
       window.Tiledesk('onInit', function(event_data) {
-            console.log("onInit", event_data); 
+            console.log("onInit Tiledesk FN", event_data); 
       });
 
       window.Tiledesk('onLoadParams', function(event_data) {
-            console.log("onLoadParams", event_data); 
+            console.log("onLoadParams Tiledesk FN", event_data); 
       });
 
       window.Tiledesk('onNewConversationComponentInit', function(event_data) {
-            console.log("onNewConversationComponentInit", event_data);
+            console.log("onNewConversationComponentInit FN", event_data);
       });
-      
 
+
+      // METHOD
       // window.tiledesk.open();
       window.Tiledesk('open');
       
+      
       setTimeout(function() { 
         console.log("window.Tiledesk", window.Tiledesk);
-        window.Tiledesk('close') 
+        // window.Tiledesk('close') 
+        // window.Tiledesk('signInWithCustomToken', 'TOKENNNNN');
       },10000);
       
 
       
-      window.tileDeskAsyncInit = function() {  
-        // window.tiledesk.on('onOpen', function(event_data) {
-        //   console.log("onOpen test");
-        // });
-        console.log('tileddesk aysnccccc')
-        window.tiledesk.on('onLoadParams', function(event_data) {
-          // console.log("loadParams0");
-          if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
-            window.Tiledesk.q.forEach(f => {
-               console.log("onLoadParams w.q", f);
-              if (f.length>=1) {
-                var functionName = f[0];
-                // console.log("functionName", functionName);
-                if (functionName==="onLoadParams") {
-                  if (f.length==2) {
-                    var functionCallback = f[1];
-                    // console.log("functionCallback", functionCallback);
-                    if(typeof functionCallback === "function") {
-                      // console.log("functionName", functionName, "functionCallback", functionCallback);
-                      window.tiledesk.on(functionName, functionCallback); 
-                      functionCallback(event_data);
-                    } 
-                    else {
-                      console.error("functionCallback is not a function.");
-                    }
-                  }   
-                }
-              }
-            });
-          }
-        });
+      // window.tileDeskAsyncInit = function() {  
+      //   // window.tiledesk.on('onOpen', function(event_data) {
+      //   //   console.log("onOpen test");
+      //   // });
+      //   console.log('tileddesk aysnccccc')
+      //   window.tiledesk.on('onLoadParams', function(event_data) {
+      //     // console.log("loadParams0");
+      //     if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
+      //       window.Tiledesk.q.forEach(f => {
+      //         if (f.length>=1) {
+      //           var functionName = f[0];
+      //           // console.log("functionName", functionName);
+      //           if (functionName==="onLoadParams") {
+      //             if (f.length==2) {
+      //               var functionCallback = f[1];
+      //               // console.log("functionCallback", functionCallback);
+      //               if(typeof functionCallback === "function") {
+      //                 // console.log("functionName", functionName, "functionCallback", functionCallback);
+      //                 window.tiledesk.on(functionName, functionCallback); 
+      //                 functionCallback(event_data);
+      //               } 
+      //               else {
+      //                 console.error("functionCallback is not a function.");
+      //               }
+      //             }   
+      //           }
+      //         }
+      //       });
+      //     }
+      //   });
 
-        window.tiledesk.on('onInit', function(event_data) {
-          console.log("w.q", window.Tiledesk.q);
-          if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
-            window.Tiledesk.q.forEach(f => {
-              // console.log("w.q", f);
-              if (f.length>=1) {
-                var functionName = f[0];
-                // console.log("functionName", functionName);
+      //   window.tiledesk.on('onInit', function(event_data) {
+      //     console.log("w.q", window.Tiledesk.q);
+      //     if (window.Tiledesk.q && window.Tiledesk.q.length>0) {
+      //       window.Tiledesk.q.forEach(f => {
+      //         // console.log("w.q", f);
+      //         if (f.length>=1) {
+      //           var functionName = f[0];
+      //           // console.log("functionName", functionName);
 
-
-                if (functionName==="loadParams") {
-                  console.log("loadParams skip");
-                }
+      //           if (functionName==="onLoadParams") {
+      //             console.log("loadParams skip");
+      //           }
                 
-                else if (functionName.startsWith("on")) {
-                  if (f.length==2) {
-                    var functionCallback = f[1];
-                    // console.log("functionCallback", functionCallback);
-                    if(typeof functionCallback === "function"){
-                      // console.log("functionCallback", functionCallback);
-                      window.tiledesk.on(functionName, functionCallback); 
+      //           else if (functionName.startsWith("on")) {
+      //             if (f.length==2) {
+      //               var functionCallback = f[1];
+      //               // console.log("functionCallback", functionCallback);
+      //               if(typeof functionCallback === "function"){
+      //                 // console.log("functionCallback", functionCallback);
+      //                 window.tiledesk.on(functionName, functionCallback); //potrei usare window.Tiledesk ?!?
 
-                      if (functionName==="onInit") {
-                          console.log("onInit exec");
-                          functionCallback(event_data)
-                      }
-                    } 
-                    else {
-                      console.error("functionCallback is not a function.");
-                    }
-                  }   
-                } 
-              
-                else {
-                  console.log("calling method", functionName);
-                  window.tiledesk[functionName](); 
-                }
+      //                 if (functionName==="onInit") {
+      //                     console.log("onInit exec");
+      //                     functionCallback(event_data)
+      //                 }
+      //               } else {
+      //                 console.error("functionCallback is not a function.");
+      //               }
+      //             }   
+      //           } else {
+      //             console.log("calling method", functionName);
+      //             window.tiledesk[functionName](); 
+      //           }
 
-              }   
-            });
+      //         }   
+      //       });
 
-
-            window.Tiledesk = function() {
-              if (arguments.length>=1) {
-                var functionName = arguments[0];
-                if (arguments.length==2) {
-                    var functionCallback = arguments[1];
-                }
-                var methodOrProperty = window.tiledesk[functionName];
-
-                if(typeof methodOrProperty==="function"){     
-                  console.log("method", functionName, functionCallback);            
-                  return window.tiledesk[functionName](functionCallback);            
-                }else { //property
-                  console.log("property", functionName, functionCallback);
-                  return window.tiledesk[functionName];
-                }
-              }
-            };             
-            console.log("ovverrided");
+      //       // RICHIAMATO DOPO L'INIT DEL WIDGET
+      //       window.Tiledesk = function() {
+      //         if (arguments.length>=1) {
+      //           var functionName = arguments[0];
+      //           if (arguments.length==2) {
+      //               var functionCallback = arguments[1];
+      //           }
+      //           var methodOrProperty = window.tiledesk[functionName];
+      //           if(typeof methodOrProperty==="function"){     
+      //             console.log("method", functionName, functionCallback);            
+      //             return window.tiledesk[functionName](functionCallback);            
+      //           }else { //property
+      //             console.log("property", functionName, functionCallback);
+      //             return window.tiledesk[functionName];
+      //           }
+      //         }
+      //       };             
+      //       console.log("ovverrided");
   
 
-          }
-        });
-      }
+      //     }
+      //   });
+      // }
       
           
       //    window.tiledesk.on('onLoggedIn', function(event_data) {
