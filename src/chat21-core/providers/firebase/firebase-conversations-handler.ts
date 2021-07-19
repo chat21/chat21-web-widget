@@ -395,7 +395,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         } else {
             this.logger.error('[FIREBASEConversationsHandlerSERVICE]ADDED::conversations with conversationId: ', childSnapshot.key, 'is not valid')
         }
-        console.log('listttt', this.conversations)
     }
 
     /**

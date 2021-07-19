@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, IterableDiffers, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, IterableChangeRecord, IterableChanges, IterableDiffers, KeyValueDiffers, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
 import {
   getUrlImgProfile,
@@ -36,13 +36,35 @@ export class ListConversationsComponent implements OnInit {
   iterableDifferListConv: any;
   private logger: LoggerService = LoggerInstance.getInstance();
 
+  empDifferMap: Map<string, any> = new Map<string, any>();
+  empMap = new Map<string, ConversationModel>();
+  arrayDiffer: any;
+
   constructor(private iterableDiffers: IterableDiffers,
-              public imageRepoService: ImageRepoService) {
+              private kvDiffers: KeyValueDiffers) {
       this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
-               }
+      
+    }
 
   ngOnInit() {
     this.logger.debug('[LISTCONVERSATIONS] ngOnInit', this.listConversations);
+     let convs: ConversationModel[] = this.listConversations
+    // console.log('empDifferMap::' + JSON.stringify(this.listConversations))
+    // this.listConversations.forEach(emp => {
+    //   this.empDifferMap[emp.uid] = this.kvDiffers.find(emp).create();
+    //   this.empMap[emp.uid] = emp;
+    //   console.log('empDifferMap::', this.empDifferMap, this.empMap)
+    // })
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    // console.log('empDifferMap:: 1111' + JSON.stringify(this.listConversations[1]))
+    // console.log('empDifferMap:: 1111', this.listConversations)
+    // this.listConversations.forEach(emp => {
+    //   this.empDifferMap[emp.uid] = this.kvDiffers.find(emp).create();
+    //   this.empMap[emp.uid] = emp;
+    //   console.log('empDifferMap::', this.empDifferMap, this.empMap)
+    // })
   }
 
   public openConversationByID(conversation) {
@@ -61,28 +83,34 @@ export class ListConversationsComponent implements OnInit {
   ngDoCheck() {
     let changesListConversation = this.iterableDifferListConv.diff(this.listConversations);
     if(changesListConversation){
-      changesListConversation.forEachAddedItem(element => {
-        //console.log('1111 added ', element)
-        let conv = element.item
-        this.onImageLoaded.emit(conv)
-        this.onConversationLoaded.emit(conv)
-      });
-      changesListConversation.forEachRemovedItem(element => {
-        //console.log('1111 removed ', element)
-      });
-      //Detect changes in array when item added or removed
-      // let empArrayChanges = this.objDiffers.diff(this.listConversations);
-      // if (empArrayChanges) {
-      //   console.log('... Array changes ...', empArrayChanges);
-      //   empArrayChanges.forEachAddedItem((record) => {
-      //     console.log('1111 Added ', record.currentValue);
-  
-      //   });
-      //   empArrayChanges.forEachRemovedItem((record) => {
-      //     console.log('1111 Removed ' + record.previousValue);
-      //   });
-      // }
+      // changesListConversation.forEachAddedItem(element => {
+      //   let conv = element.item
+      //   this.onImageLoaded.emit(conv)
+      //   this.onConversationLoaded.emit(conv)
+      // });
+      // changesListConversation.forEachRemovedItem(element => {
+      // });
+      // changesListConversation.forEachOperation((element: IterableChangeRecord<ConversationModel>, adjustedPreviousIndex: number, currentIndex: number) => {
+      //     // if (item.previousIndex == null) {
+      //     //   console.log('itemmmm 1111', item, adjustedPreviousIndex)
+      //     // } else if (currentIndex == null) {
+      //     //   console.log('itemmmm 2222', item, adjustedPreviousIndex)
+      //     // } else {
+      //     //   console.log('itemmmm 3333', item, adjustedPreviousIndex)
+      //     // }
+      //     if(element.currentIndex == null || element.previousIndex == null){
+      //       console.log('itemmmm 44444', element, adjustedPreviousIndex, currentIndex)
+      //       let conv = element.item
+      //       this.onImageLoaded.emit(conv)
+      //       this.onConversationLoaded.emit(conv)
+      //     }
+      // });
+      // changesListConversation.forEachItem((item: IterableChangeRecord<ConversationModel>)=> {
+      //   console.log('itemmmm forEachItem', item)
+      // });
+
     }
+
 
     //Detect changes in object inside array
     // for (let [key, empDiffer] of this.objDiffers) {
