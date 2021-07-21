@@ -216,7 +216,7 @@
     <script defer="" src="./tiledesk_widget_files/jquery.min.js"></script>
     <script defer="" src="./tiledesk_widget_files/bootstrap.min.js"></script>
 
-    <script type="application/javascript">
+    <!-- <script type="application/javascript">
         window.tiledeskSettings = {
             marginX: "100px",
             marginY: "50px"
@@ -229,6 +229,41 @@
         fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'tiledesk-jssdk'));
 
+    </script> -->
+    <script type="application/javascript">
+        window.tiledeskSettings = {
+            marginX: "100px",
+            marginY: "50px",
+        };
+
+        (function(d, s, id) {
+            var w=window; var d=document;
+            var i=function() { 
+                i.c(arguments);
+            };
+            i.q=[];
+            i.c=function(args){ 
+                i.q.push(args);
+            };
+            w.Tiledesk=i;
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); 
+            js.id = id; js.async = true; js.src = "../../launch.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'tiledesk-jssdk'));
+        
+        window.Tiledesk('onInit', function(event_data) {
+            console.log("onInit Tiledesk FN", event_data); 
+            setTimeout(() => {
+                document.getElementById("preloader").style.display = "none";
+            }, 1000);
+        });
+
+        window.Tiledesk('onLoadParams', function(event_data) {
+            console.log("onLoadParams Tiledesk FN", event_data);
+            window.tiledesk.open();
+        });
     </script>
 
     <script type="application/javascript">
@@ -309,19 +344,19 @@
             document.getElementById("project_name").innerHTML = project_name;
         }
 
-        window.tileDeskAsyncInit = function() {
-            window.tiledesk.on('onLoadParams', function(event_data) {
-                // console.log('onLoadParams: ')
-                window.tiledesk.open();
-            });
+        // window.tileDeskAsyncInit = function() {
+        //     window.tiledesk.on('onLoadParams', function(event_data) {
+        //         // console.log('onLoadParams: ')
+        //         window.tiledesk.open();
+        //     });
 
-            window.tiledesk.on('onInit', function(event_data) {
-                setTimeout(() => {
-                    document.getElementById("preloader").style.display = "none";
-                }, 1000);
+        //     window.tiledesk.on('onInit', function(event_data) {
+        //         setTimeout(() => {
+        //             document.getElementById("preloader").style.display = "none";
+        //         }, 1000);
                 
-            });
-        };
+        //     });
+        // };
         
         var isOpen = getQueryVariable("isOpen");
         //var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
