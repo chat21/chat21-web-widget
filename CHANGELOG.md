@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.0-beta.3.14
+ - bug-fixed: badgeNumberConversation is 0
+ - changed: remoteConfig of env.pre.ts to false
+
 ### 5.0.0-beta.3.13
 - bug-fixed: same user after log out --> mqtt-auth not publish BSSignOut 
 - added: isLogEnabled parameter from url/tiledeskSettings in customLogger 

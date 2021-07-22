@@ -8,6 +8,8 @@ import { environment } from '../../environments/environment';
 import { Globals } from '../utils/globals';
 
 import { getParameterByName } from '../utils/utils';
+import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
 
 @Injectable()
 export class AppConfigService {
@@ -15,7 +17,7 @@ export class AppConfigService {
 
   constructor(private http: HttpClient, public g: Globals) {
     this.appConfig = environment;
-    console.log('chat21-web-widget environment: ', environment);
+    console.debug('chat21-web-widget environment: ', environment);
   }
 
   loadAppConfig() { // : Observable<any> {
@@ -53,7 +55,7 @@ export class AppConfigService {
     return this.http.get(urlConfigFile).toPromise().then(data => {
       that.appConfig = data;
       }).catch(err => {
-        console.log('error loadAppConfig', err);
+        console.error('error loadAppConfig', err);
       });
   }
 

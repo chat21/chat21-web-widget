@@ -190,18 +190,13 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 
 export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
   const config = appConfig.getConfig()
-  console.log('AUTH FACTORY - app.module', config)
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
-    
     chat21Service.config = config.chat21Config;
     chat21Service.initChat();
-    console.log("appConfig.getConfig().SERVER_BASE_URL", config.apiUrl);
     const auth = new MQTTAuthService(http, chat21Service, appSorage);
-    
     auth.setBaseUrl(appConfig.getConfig().apiUrl)
     return auth
   } else {
-
     FirebaseInitService.initFirebase(config.firebaseConfig)
     const auth= new FirebaseAuthService(http);
     auth.setBaseUrl(config.apiUrl)

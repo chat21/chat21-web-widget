@@ -188,7 +188,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
             let badgeNewConverstionNumber = this.conversationsHandlerService.countIsNew()
             this.logger.debug('[APP-COMP] badgeNewConverstionNumber::', badgeNewConverstionNumber)
-            badgeNewConverstionNumber > 0 ? badgeNewConverstionNumber : 1
+            badgeNewConverstionNumber > 0 ? badgeNewConverstionNumber : badgeNewConverstionNumber= 1
             this.g.windowContext.window.document.title = "(" + badgeNewConverstionNumber + ") " + this.tabTitle
             clearInterval(this.setIntervalTime)
             const that = this
