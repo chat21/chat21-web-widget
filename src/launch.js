@@ -175,13 +175,10 @@ function initAysncEvents() {
             window.Tiledesk.q.forEach(f => {
               if (f.length>=1) {
                 var functionName = f[0];
-                console.log("functionName", functionName);
                 if (functionName==="onLoadParams") {
                   if (f.length==2) {
                     var functionCallback = f[1];
-                    // console.log("functionCallback", functionCallback);
                     if(typeof functionCallback === "function") {
-                      // console.log("functionName", functionName, "functionCallback", functionCallback);
                       window.tiledesk.on(functionName, functionCallback); 
                       functionCallback(event_data);
                     } else {
@@ -198,19 +195,13 @@ function initAysncEvents() {
           if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
             console.log("w.q", window.Tiledesk.q);
             window.Tiledesk.q.forEach(f => {
-              // console.log("w.q", f);
               if (f.length>=1) {
                 var functionName = f[0];
-                // console.log("functionName", functionName);
-
                 if (functionName==="onLoadParams") {
-                  console.log("loadParams skip");
                 } else if (functionName.startsWith("on")) {
                   if (f.length==2) {
                     var functionCallback = f[1];
-                    // console.log("functionCallback", functionCallback);
                     if(typeof functionCallback === "function"){
-                      // console.log("functionCallback", functionCallback);
                       window.tiledesk.on(functionName, functionCallback); //potrei usare window.Tiledesk ?!?
 
                       if (functionName==="onInit") {

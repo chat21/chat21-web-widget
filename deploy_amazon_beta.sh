@@ -29,10 +29,10 @@ cd ..
 
 #aws  cloudfront create-invalidation --distribution-id E3EJDWEHY08CZZ --paths "/*"
 # echo new version deployed $NEW_VER/$NEW_BUILD/ on s3://tiledesk-widget-pre/v2
-echo new version deployed $version/ on s3://tiledesk-widget-pre/ and s3://tiledesk-widget-pre/$version/
-echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/index.html
-echo https://widget-pre.tiledesk.com/index.html
-echo https://widget-pre.tiledesk.com/$version/index.html
+echo new version deployed $version/ on s3://tiledesk-widget-pre/v5 and s3://tiledesk-widget-pre/v5/$version/
+echo available on https://s3.eu-west-1.amazonaws.com/tiledesk-widget-pre/v5/index.html
+echo https://widget-pre.tiledesk.com/v5/index.html
+echo https://widget-pre.tiledesk.com/v5/$version/index.html
 
 # ########## --->>>> FIREBASE folder END <<<<<------ ########## #
 

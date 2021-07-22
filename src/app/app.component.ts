@@ -256,8 +256,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     if (conversation.is_new) {
                         // this.soundMessage(); 
                     }
-                    that.lastConversation = conversation;
-                    that.g.isOpenNewMessage = true;
+                    if(this.g.isOpen === false){
+                        that.lastConversation = conversation;
+                        that.g.isOpenNewMessage = true;
+                    }
                 } else {
                     //widget closed
 

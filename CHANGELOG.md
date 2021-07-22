@@ -3,6 +3,7 @@
 ### 5.0.0-beta.3.13
 - bug-fixed: same user after log out --> mqtt-auth not publish BSSignOut 
 - added: isLogEnabled parameter from url/tiledeskSettings in customLogger 
+- adeed: queue initilialization in index.html page
 - changed: renamed hideConversationOptionsMenu tiledeskSetting with hideHeaderConversationOptionsMenu
 - changed: method name of customLogger
 - changed: refactoring log method in components and levels struct

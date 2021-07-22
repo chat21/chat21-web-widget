@@ -6,7 +6,6 @@ export class CustomLogger extends LoggerService{
     
     
     //private variables
-    //private logger: NGXLogger
     private logLevel: number = LogLevel.Debug
 
     constructor(@Inject('isLogEnabled') private isLogEnabled: boolean) {

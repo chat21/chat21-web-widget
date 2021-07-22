@@ -385,6 +385,9 @@
                 document.getElementById('events').value +=  'onLoadParams --> FIRED!' + '\n' 
                 document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
             }
+
+            document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
+            document.getElementById("project_name").innerHTML = project_name;
         });
 
         window.Tiledesk('onBeforeMessageSend', function(event_data) {
@@ -933,7 +936,6 @@
                     let element = document.getElementById(elementName)
                     if(element && element.value && elementName !== 'baloonShape'){
                         window.tiledeskSettings[elementName] = element.value
-                        console.log('111111', elementName, element.value)
                     } else if (elementName === 'baloonShape') {
                         let top = document.getElementById('top').value
                         let bottom = document.getElementById('bottom').value
@@ -979,10 +981,10 @@
         // console.log('tiledesk_projectid: ', tiledesk_projectid);
         // console.log('project_name: ', project_name);
         
-        window.onload = function() {
-            document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
-            document.getElementById("project_name").innerHTML = project_name;
-        }
+        // window.onload = function() {
+        //     document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
+        //     document.getElementById("project_name").innerHTML = project_name;
+        // }
 
         
         var isOpen = getQueryVariable("isOpen");
@@ -1243,6 +1245,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <h1 style="min-height: 39px;">TEST ACTIONS</h1>
+                    <h3 id="project_name" style="min-height: 39px;"></h3>
                     <div class="row">
                         <button class="btn btn-light" onclick="onClickTestButton('open')">Open <i class="fa-arrow-up fa"></i></button>
                         <button class="btn btn-light" onclick="onClickTestButton('close')">Close <i class="fa fa-arrow-down"></i></button>
@@ -1685,12 +1688,20 @@
                                 <br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }; <br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;        (function(d, s, id) { <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var w=window; var d=document;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var i=function() {<br>                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.c(arguments);<br> 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q=[];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.c=function(args){<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q.push(args);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w.Tiledesk=i;<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs = d.getElementsByTagName(s)[0];<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js = d.createElement(s); js.id = id; //js.async=!0;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.src = &quot;https://widget.tiledesk.com/v4/launch.js&quot;;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (d.getElementById(id)) return;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js = d.createElement(s); <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.id = id; js.async = true; js.src = "../../launch.js";<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
                                 &lt;/script&gt;
                             </span>
 
