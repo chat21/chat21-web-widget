@@ -23,12 +23,12 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
 
     // BehaviorSubject
     BSConversationDetail: BehaviorSubject<ConversationModel>;
-    readAllMessages: BehaviorSubject<string>;
     archivedConversationAdded: BehaviorSubject<ConversationModel>;
     archivedConversationChanged: BehaviorSubject<ConversationModel>;
     archivedConversationRemoved: BehaviorSubject<ConversationModel>;
     loadedConversationsStorage: BehaviorSubject<ConversationModel[]>;
     BSConversations: BehaviorSubject<ConversationModel[]>
+    // readAllMessages: BehaviorSubject<string>;
     // imageRepo: ImageRepoService;
 
     // public variables

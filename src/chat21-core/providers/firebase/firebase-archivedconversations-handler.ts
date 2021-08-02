@@ -34,7 +34,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
 
     // BehaviorSubject
     BSConversationDetail: BehaviorSubject<ConversationModel>;
-    readAllMessages: BehaviorSubject<string>;
+    // readAllMessages: BehaviorSubject<string>;
     archivedConversationAdded: BehaviorSubject<ConversationModel>;
     archivedConversationChanged: BehaviorSubject<ConversationModel>;
     archivedConversationRemoved: BehaviorSubject<ConversationModel>;
@@ -113,6 +113,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             that.removed(childSnapshot);
         });
         this.ref.on('child_added', (childSnapshot) => {
+            console.log('archiveddddd added', childSnapshot.val())
             that.added(childSnapshot);
         });
 
@@ -189,12 +190,15 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
-                childData.uid = childSnapshot.key;
-                const conversation = this.completeConversation(childData);
-                if(conversation){
-                    callback(conversation)
-                }else {
-                    callback(null)
+                this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
+                if (childSnapshot && childSnapshot.key && childSnapshot.key !== null) {
+                    childData.uid = childSnapshot.key;
+                    const conversation = this.completeConversation(childData);
+                    if (conversation) {
+                        callback(conversation)
+                    } else {
+                        callback(null)
+                    }
                 }
                 // this.BSConversationDetail.next(conversation);
             });

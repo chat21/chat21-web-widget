@@ -31,11 +31,11 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
     // BehaviorSubject
     BSConversationDetail: BehaviorSubject<ConversationModel>;
-    readAllMessages: BehaviorSubject<string>;
     conversationAdded: BehaviorSubject<ConversationModel>;
     conversationChanged: BehaviorSubject<ConversationModel>;
     conversationRemoved: BehaviorSubject<ConversationModel>;
     loadedConversationsStorage: BehaviorSubject<ConversationModel[]>;
+    // readAllMessages: BehaviorSubject<string>;
 
     // public params
     conversations: Array<ConversationModel> = [];
@@ -276,7 +276,8 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
-                if (childSnapshot.key && childSnapshot.key !== null) {
+                this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
+                if (childSnapshot && childSnapshot.key && childSnapshot.key !== null) {
                     childData.uid = childSnapshot.key;
                     const conversation = this.completeConversation(childData);
                     if (conversation) {
