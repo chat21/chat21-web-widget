@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.16-rc.1
+- changed: improved tiledesk script spaces
+
+### 5.0.0-beta.3.15
+- bug-fixed: archived conversation was removed when user viewed its detail for the first time
+- added: paste event on conversation-footer only for image file type
+- changed: new Tiledesk logo in poweredBy footer html code
 ### 5.0.0-beta.3.14
  - bug-fixed: badgeNumberConversation is 0
  - changed: remoteConfig of env.pre.ts to false
