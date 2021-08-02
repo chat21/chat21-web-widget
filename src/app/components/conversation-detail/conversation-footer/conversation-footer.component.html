@@ -13,8 +13,8 @@
       [(ngModel)]="textInputTextArea"
       (ngModelChange)="onTextAreaChange()" 
       (keypress)="onkeypress($event)" 
-      placeholder="{{ translationMap.get('LABEL_PLACEHOLDER') }}"
-      (paste)="onPaste($event)">
+      (paste)="onPaste($event)"
+      placeholder="{{ translationMap.get('LABEL_PLACEHOLDER') }}">
   </textarea>
 
   <!-- <chat-message-text-area

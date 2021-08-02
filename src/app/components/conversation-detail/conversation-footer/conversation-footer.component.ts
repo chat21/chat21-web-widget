@@ -537,18 +537,29 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     const items = (event.clipboardData || event.originalEvent.clipboardData).items;
     let file = null;
     this.logger.debug('[CONV-FOOTER] onPaste items ', items);
-    console.log('eventttt onPaste', event, items)
     for (const item of items) {
       this.logger.debug('[CONV-FOOTER] onPaste item ', item);
       this.logger.debug('[CONV-FOOTER] onPaste item.type ', item.type);
       if (item.type.startsWith("image")) {
+        // SEND TEXT MESSAGE IF EXIST
+        if(this.textInputTextArea){
+          this.logger.debug('[CONV-FOOTER] onPaste texttt ', this.textInputTextArea);
+          this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT)
+        }
 
+        try {
+          this.restoreTextArea();
+        } catch(e) {
+          this.logger.error('[CONV-FOOTER] onPaste - error while restoring textArea:',e)
+        }
+        
         this.logger.debug('[CONV-FOOTER] onPaste item.type', item.type);
         file = item.getAsFile();
-        const data = new ClipboardEvent('').clipboardData || new DataTransfer();
-        data.items.add(new File([file], file.name, { type: file.type }));
+        const data = {target: new ClipboardEvent('').clipboardData || new DataTransfer()};
+        data.target.items.add(new File([file], file.name, { type: file.type }));
         this.logger.debug('[CONV-FOOTER] onPaste data', data);
         this.logger.debug('[CONV-FOOTER] onPaste file ', file);
+        this.detectFiles(data)
       }
     }
   }
