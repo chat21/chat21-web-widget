@@ -68,6 +68,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() stylesMap: Map<string, string>;
   @Input() isOpen: boolean;
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() isConversationArchived: boolean;
   @Output() onBackHome = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
@@ -88,7 +89,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isMenuShow = false;
   
   isButtonsDisabled = true;
-  isConversationArchived = false;
+  // isConversationArchived = false;
   hideFooterTextReply: boolean = false;
   isTrascriptDownloadEnabled = false;
   audio: any;
@@ -383,13 +384,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getConversationDetail(){
-    this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-      this.logger.debug('[CONV-COMP] getConversationDetail', this.conversationId, conv)
-      this.conversation = conv;    
-      if (this.conversation && this.conversation.archived) {
-        this.isConversationArchived = true;
-      }
-    })
+    if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
+      this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+        this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
+        this.conversation = conv;    
+      })
+    }else { //get conversation from 'conversations' firebase node
+      this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+        this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
+        this.conversation = conv;    
+      })
+    }
+    
   }
 
   // onResize(event) {
@@ -540,6 +546,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if ( !recipientId ) { this.g.setParameter('recipientId', this.setRecipientId()); }
     if ( !channelType ) { this.g.setParameter('channelType', this.setChannelType()); }
     this.conversationWith = recipientId as string;
+    this.logger.debug('[CONV-COMP] setConversation conversation::: ', this.conversation);
     if (!this.conversation) {
       // this.conversation = new ConversationModel(
       //   recipientId,

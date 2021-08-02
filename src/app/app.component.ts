@@ -80,6 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
     // isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
     // isModalLeaveChatActive = false;     /** ???? */
+    isConversationArchived: boolean = false;
     departments = [];
     marginBottom: number;
     conversationSelected: ConversationModel;
@@ -1793,6 +1794,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const newConvId = this.generateNewUidConversation();
         this.g.setParameter('recipientId', newConvId);
         this.logger.debug('[APP-COMP]  recipientId: ', this.g.recipientId);
+        this.isConversationArchived = false;
         this.triggerNewConversationEvent(newConvId);
     }
 
@@ -1934,6 +1936,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('recipientId', $event.recipient);
             this.appStorageService.setItem('recipientId', $event.recipient)
             this.isOpenConversation = true;
+            this.isConversationArchived = $event.archived
             this.logger.debug('[APP-COMP] onSelectConversation in APP COMPONENT: ', $event);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
             // this.messages = this.messagingService.messages;
