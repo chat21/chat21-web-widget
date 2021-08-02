@@ -17,7 +17,7 @@ export class AppConfigService {
 
   constructor(private http: HttpClient, public g: Globals) {
     this.appConfig = environment;
-    console.debug('chat21-web-widget environment: ', environment);
+    // console.debug('chat21-web-widget environment: ', environment);
   }
 
   loadAppConfig() { // : Observable<any> {

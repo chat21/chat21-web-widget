@@ -440,7 +440,6 @@ export class GlobalSettingsService {
                         globals[key] = stringToBoolean(variables[key]);
                     }
                     if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
-                        console.log('setVariablesFromService > key', key, ' > variables[key]', variables[key])
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
                         globals[key] = variables[key];
                     }

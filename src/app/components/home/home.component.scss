@@ -171,9 +171,10 @@
                 }
 
                 img {
-                    display: inline-block;
-                    max-width: 30%;
-                    vertical-align: top;
+                    width: 60px;
+                    height: auto;
+                    position: relative;
+                    vertical-align: middle;
                 }
             }
             b{

@@ -19,13 +19,11 @@ export class UserTypingComponent implements OnInit, OnDestroy {
 
   /** */
   ngOnInit() {
-    console.log('UserTypingComponent - ngOnInit');
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
   /** */
   ngOnDestroy() {
-    console.log('UserTypingComponent - ngOnDestroy');
     // this.unsubescribeAll();
   }
 
