@@ -43,29 +43,41 @@ export const environment = {
   production: true,
   version: require('../../package.json').version,
   remoteConfig: false, // for performance don't load settings from remote
-  chatEngine: 'mqtt' //or custom engine
+  remoteConfigUrl: '/widget-config.json',
+  loadRemoteTranslations: true,
+  remoteTranslationsUrl: 'https://<YOUR_REMOTE_TRANSLATIONS_URL>/',
+  chatEngine: "mqtt", // OR YOUR CUSTOM CHAT ENGINE
+  updloaEngine: "native", // OR YOUR CUSTOM UPLOAD ENGINE
+  tenant: 'tilechat', 
+  fileUploadAccept:"*/*",
+  logLevel: '<YOUR-PREFERRED-LOG-LEVEL-NUMBER>',
   firebaseConfig: {
-    apiKey: 'CHANGEIT',
-    authDomain: 'CHANGEIT',
-    databaseURL: 'CHANGEIT',
-    projectId: 'CHANGEIT',
-    storageBucket: 'CHANGEIT',
-    messagingSenderId: 'CHANGEIT'
+    apiKey: '123ABC..',
+    authDomain: 'XYZ.firebaseapp.com',
+    databaseURL: 'https://XYZ.firebaseio.com',
+    projectId: 'XYZ',
+    storageBucket: 'XYZ.appspot.com',
+    messagingSenderId: '123456',
   },
   chat21Config: {
-    appId: 'CHANGEIT',
-    MQTTendpoint: 'CHANGEIT',
-    APIendpoint: 'CHANGEIT',
-    loginServiceEndpoint: 'CHANGEIT'
+    appId: 'tilechat',
+    MQTTendpoint: 'mqtt://<YOUR-MQTT-ENPOINT>',
+    APIendpoint: 'http://<YOUR-MQTT-API-ENPOINT>'
   },
-  apiUrl: 'https://<YOUR_TILEDESK_SERVER>/',
-  baseImageUrl: 'https://<YOUR_TILEDESK_SERVER>/',
-  tenant: 'tilechat',
+  apiUrl: 'https://<YOUR-TILEDESK-API-URL>/',
+  baseImageUrl: 'https://<YOUR-BASE-IMAGE-URL>/',
   defaultLang : 'en',
-  shemaVersion : '1'
+  storage_prefix : 'widget_sv5',
+  authPersistence: 'LOCAL',
+  supportMode: true,
 };
-
 ```
+
+* `logLevel`: The Chat21-ionic supports 4 log levels. The order is as follows:
+  `Error = 0 < Warn = 1 < Info = 2 < Debug = 3`
+
+* `fileUploadAccept`: The Chat21-ionic allows you to manage the type of files that can be uploaded. By default, all file types are accepted.
+
 ### RUN in dev
 
 Run the app with `ng serve`
