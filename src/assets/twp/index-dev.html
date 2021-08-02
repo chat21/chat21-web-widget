@@ -163,6 +163,10 @@
             text-align: center;
         }
 
+        .modal-content{
+            width: 105%;
+        }
+
         footer#footer {
             background-color: white;
             text-align: center;
@@ -671,6 +675,13 @@
             window.Tiledesk('restart')
         }
 
+        function onClickPoweredBy(){
+            let htmlText = document.getElementById('poweredBy').value
+            window.tiledeskSettings['poweredBy'] = htmlText
+            console.log('onClickPoweredBy: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
         function onClickLang(){
             let lang = document.getElementById('lang').value
             // if lang in not pre-translated, use English
@@ -685,6 +696,13 @@
             let status = document.querySelector('input[name="hideHeaderCloseButton"]:checked').value
             window.tiledeskSettings['hideHeaderCloseButton'] = stringToBoolean(status)
             console.log('onClickHideHeaderCloseButton: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickHideHeaderConversationOptionsMenu(){
+            let status = document.querySelector('input[name="hideHeaderConversationOptionsMenu"]:checked').value
+            window.tiledeskSettings['hideHeaderConversationOptionsMenu'] = stringToBoolean(status)
+            console.log('onClickHideHeaderConversationOptionsMenu:', window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
@@ -735,6 +753,13 @@
             let text = document.getElementById('departmentID').value
             window.tiledeskSettings['departmentID'] = text
             console.log('onClickDepartmentId:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickRecipientId(){
+            let text = document.getElementById('recipientId').value
+            window.tiledeskSettings['recipientId'] = text
+            console.log('onClickRecipientId:',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
@@ -793,6 +818,20 @@
             let status = document.querySelector('input[name="showAvailableAgents"]:checked').value
             window.tiledeskSettings['showAvailableAgents'] = stringToBoolean(status)
             console.log('onClickShowAvailableAgents', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickShowAttachmentButton(){
+            let status = document.querySelector('input[name="showAttachmentButton"]:checked').value
+            window.tiledeskSettings['showLogoutOptishowAttachmentButtonon'] = stringToBoolean(status)
+            console.log('onClickShowAttachmentButton:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickShowAllConversations(){
+            let status = document.querySelector('input[name="showAllConversations"]:checked').value
+            window.tiledeskSettings['showLogoutOption'] = stringToBoolean(status)
+            console.log('onClickShowAllConversations:', window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
@@ -914,12 +953,6 @@
             window.Tiledesk('restart')
         }
 
-        function onClickHideHeaderConversationOptionsMenu(){
-            let status = document.querySelector('input[name="hideHeaderConversationOptionsMenu"]:checked').value
-            window.tiledeskSettings['hideHeaderConversationOptionsMenu'] = stringToBoolean(status)
-            console.log('onClickHideHeaderConversationOptionsMenu:', window.tiledeskSettings)
-            window.Tiledesk('restart')
-        }
 
         function onClickTestAll(){
             inputs = document.getElementsByTagName('input');
@@ -1365,6 +1398,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>poweredBy</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="poweredBy" name="poweredBy" placeholder="(HTML code)">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickPoweredBy()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-5 formElement"><span><i><b>lang</b></i></span></div>
                             <div class="col-md-4">
                                 <select class="form-control select" id="lang" name="lang"></select>
@@ -1381,6 +1423,16 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickHideHeaderCloseButton()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>hideHeaderConversationOptionsMenu</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="false" checked><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickHideHeaderConversationOptionsMenu()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1420,6 +1472,15 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickDepartmentId()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>recipientId</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="recipientId" name="departmentID">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickRecipientId()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1498,6 +1559,26 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickShowAvailableAgents()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>showAttachmentButton</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="showAttachmentButton" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="showAttachmentButton" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickShowAttachmentButton()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>showAllConversations</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="showAllConversations" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="showAllConversations" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickShowAllConversations()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1619,26 +1700,14 @@
                             <div class="col-md-5 formElement"><span><i><b>logLevel</b></i></span></div>
                             <div class="col-md-4">
                                 <select class="form-control select" id="logLevel" name="logLevel">
-                                    <option value=1>Info</option>
-                                    <option value="2">Debug</option>
-                                    <option value="3">Warn</option>
-                                    <option value="4">Error</option>
-                                    <option value="5">All</option>
-                                    <option value="0">Off</option>
+                                    <option value="0">Error</option>
+                                    <option value="1">Warn</option>
+                                    <option value=2>Info</option>
+                                    <option value="3">Debug</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickLogLevel()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5 formElement"><span><i><b>hideHeaderConversationOptionsMenu</b></i></span></div>
-                            <div class="col-md-4">
-                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="true"><label>True</label>
-                                <input class="form-check-input" type="radio" name="hideHeaderConversationOptionsMenu" value="false" checked><label>False</label>
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickHideHeaderConversationOptionsMenu()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row testAllBtn">
@@ -1687,24 +1756,17 @@
                                 <span style="border:none !important">
                                 <br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }; <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;        (function(d, s, id) { <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var w=window; var d=document;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var i=function() {<br>                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.c(arguments);<br> 
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q=[];<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.c=function(args){<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q.push(args);<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w.Tiledesk=i;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs = d.getElementsByTagName(s)[0];<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (d.getElementById(id)) return;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js = d.createElement(s); <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.id = id; js.async = true; js.src = "../../launch.js";<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(function(d, s, id) { <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var w=window; var d=document; var i=function() { i.c(arguments); };<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q=[]; i.c=function(args){ i.q.push(args); }; w.Tiledesk=i;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs=d.getElementsByTagName(s)[0];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js=d.createElement(s); <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.id=id; js.async=true; js.src="../../launch.js";<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
                                 &lt;/script&gt;
                             </span>
-
                             <!-- <pre id="preid"> </pre> -->
                         </div>
                     </div>
