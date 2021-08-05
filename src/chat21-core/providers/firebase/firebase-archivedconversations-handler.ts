@@ -113,7 +113,6 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             that.removed(childSnapshot);
         });
         this.ref.on('child_added', (childSnapshot) => {
-            console.log('archiveddddd added', childSnapshot.val())
             that.added(childSnapshot);
         });
 
@@ -190,8 +189,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
-                this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
-                if (childSnapshot && childSnapshot.key && childSnapshot.key !== null) {
+                if (childSnapshot && childSnapshot.key && childData.uid) {
                     childData.uid = childSnapshot.key;
                     const conversation = this.completeConversation(childData);
                     if (conversation) {
