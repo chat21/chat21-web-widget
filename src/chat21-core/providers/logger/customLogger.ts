@@ -7,8 +7,8 @@ export class CustomLogger extends LoggerService{
     
     //private variables
     private logLevel: number = LogLevel.Debug
-
-    constructor(@Inject('isLogEnabled') private isLogEnabled: boolean) {
+    private isLogEnabled: boolean = true;
+    constructor() {
         super();
     }
 
@@ -35,6 +35,12 @@ export class CustomLogger extends LoggerService{
     error(...message: any[]) {
         if(this.isLogEnabled && this.logLevel >= LogLevel.Error){
             console.error(message)
+        }
+    }
+
+    log(...message: any[]) {
+        if (this.isLogEnabled && this.logLevel >= LogLevel.Debug) {
+            console.log(message)
         }
     }
 

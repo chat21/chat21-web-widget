@@ -180,7 +180,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
-    let customLogger = new CustomLogger(true)
+    let customLogger = new CustomLogger()
     LoggerInstance.setInstance(customLogger)
     if (environment.remoteConfig) {
       return appConfig.loadAppConfig();
