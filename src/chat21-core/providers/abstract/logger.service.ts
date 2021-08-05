@@ -10,6 +10,7 @@ export abstract class LoggerService {
 
   abstract setLoggerConfig(isLogEnabled: boolean, logLevel: number);
   abstract debug(...message: any[])
+  abstract log(...message: any[])
   abstract warn(...message: any[])
   abstract info(...message: any[])
   abstract error(...message: any[])

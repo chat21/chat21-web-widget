@@ -67,7 +67,7 @@ export class StarRatingWidgetService {
       const url = this.API_URL + projectId + '/requests/' + recipientId + '/rating';
       // 'chat/support/tilechat/requests/' + recipientId + '/rate?token=chat21-secret-orgAa,&rating=' + rate + '&rating_message=' + message;
       // project_id/requests/:id/rating
-      this.g.wdLog(['url: ', url]);
+      this.logger.debug('[STAR-RATING-SERVICE] ------------------> url: ', url);
       const body = {
         'rating': rate,
         'rating_message': message

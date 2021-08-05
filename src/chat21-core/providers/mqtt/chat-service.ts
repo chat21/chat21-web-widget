@@ -32,7 +32,6 @@ export class Chat21Service {
     if (!this._config || this._config.appId === 'CHANGEIT') {
       throw new Error('chat21Config is not defined. Please setup your environment');
     }
-    console.log("INIT new Chat21Client")
     if (!this.chatClient) {
       this.chatClient = new Chat21Client(this._config);
     }

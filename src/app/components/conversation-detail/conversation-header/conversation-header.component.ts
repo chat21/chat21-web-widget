@@ -198,9 +198,9 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
 
   /** */
   private unsubescribeAll() {
-    console.log('UserTypingComponent unsubescribeAll: ', this.subscriptions);
+    this.logger.debug('[CONV-HEADER] unsubescribeAll: ', this.subscriptions);
     this.subscriptions.forEach((subscription: any) => {
-      console.log('unsubescribe: ', subscription);
+      this.logger.debug('[CONV-HEADER] unsubescribe: ', subscription);
       subscription.value.unsubscribe();
     });
     this.subscriptions.length = 0;

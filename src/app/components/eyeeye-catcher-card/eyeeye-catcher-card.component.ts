@@ -4,6 +4,8 @@ import { isEmoji } from '../../utils/utils';
 
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-eyeeye-catcher-card',
@@ -21,8 +23,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class EyeeyeCatcherCardComponent implements OnInit {
 
    // ========= begin:: Input/Output values ============//
-   @Output()   onOpenChat  = new EventEmitter<boolean>();
-   @Output()   onCloseEyeCatcherCard = new EventEmitter<boolean>();
+   @Output() onOpenChat  = new EventEmitter<boolean>();
+   @Output() onCloseEyeCatcherCard = new EventEmitter<boolean>();
    // ========= end:: Input/Output values ============//
 
   // EYE-CATCHER CARD & EYE-CATCHER CARD CLOSE BTN
@@ -35,7 +37,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   title: string;
   /* EYE-CATCHER CLOSE BUTTON SWITCH */
 
-
+  private logger: LoggerService = LoggerInstance.getInstance();
   constructor(
     public g: Globals
   ) {
@@ -74,7 +76,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
   openEyeCatcher() {
       this.checkIsEmoji();
       const isOpen = this.g.isOpen;
-       console.log('calloutStaus ---------> ', this.g.calloutStaus);
+      this.logger.debug('[EYEEYE-CATCHER-CARD] openEyeCatcher: calloutStaus ---------> ', this.g.calloutStaus);
       // console.log('this.g.isMobile', this.g.isMobile);
       if (isOpen === false && this.g.calloutStaus) { // && this.g.isMobile === false
           this.onCloseEyeCatcherCard.emit(true);
@@ -85,7 +87,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
           this.displayEyeCatcherCardCloseBtnIsMobileWrapper = 'block';
           // this.rotateCalloutEmoticon();
       } else {
-         this.g.wdLog(['»»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ']);
+        this.logger.debug('[EYEEYE-CATCHER-CARD] openEyeCatcher: »»»»»»» CALLING OPEN-EYE-CATCHER BUT NOT DISPLAY THE CARD BECAUSE THE CHAT IS ALREADY OPEN ');
       }
   }
 
