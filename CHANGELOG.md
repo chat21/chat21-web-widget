@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.16-rc.2
+- bug-fixed: when user open a reopened chat, starRatingComponent was shown
+- bug-fixed: undefined conversation.uid in firebase-conversations-handler and firebase-archivedconversations-handler services
+- bug-fixed: align, language and fullScreenMode settings options undefined in index-dev
+- bug-fixed: hideAllWidget() methos is undefined fot index-dev.html page --> now used hideWidget()
+- changed: set isLogEnable default value in customLogger (before was assigned in constractor section)
+- added: clear button to events text area in index-dev.html page
+
 ### 5.0.16-rc.1
 - changed: improved tiledesk script spaces
 
