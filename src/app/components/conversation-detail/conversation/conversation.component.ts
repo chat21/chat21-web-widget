@@ -49,6 +49,8 @@ import { ConversationModel } from '../../../../chat21-core/models/conversation';
 import { AppStorageService } from '../../../../chat21-core/providers/abstract/app-storage.service';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -136,6 +138,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // devo inserirle nel globals
   obsTyping: Subscription;
   subscriptions: Array<any> = [];
+  private unsubscribe$: Subject<any> = new Subject<any>();
   showMessageWelcome: boolean;
 
   // ========= begin::agent availability
@@ -183,7 +186,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   public isButtonUrl: boolean = false;
   public buttonClicked: any;
-  private logger: LoggerService = LoggerInstance.getInstance()
+  private logger: LoggerService = LoggerInstance.getInstance();
+
   constructor(
     public el: ElementRef,
     public g: Globals,
@@ -771,13 +775,13 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       // CHIUSURA CONVERSAZIONE (ELIMINAZIONE UTENTE DAL GRUPPO)
       // tslint:disable-next-line:max-line-length
       this.logger.debug('[CONV-COMP] setSubscriptions!!!! StartRating', this.starRatingWidgetService.obsCloseConversation.value);
-      subscribtion = this.starRatingWidgetService.obsCloseConversation.subscribe(isOpenStartRating => {
+      subscribtion = this.starRatingWidgetService.obsCloseConversation.pipe(takeUntil(this.unsubscribe$)).subscribe(isOpenStartRating => {
         this.logger.debug('[CONV-COMP] startratingggg', isOpenStartRating)
         that.g.setParameter('isOpenStartRating', isOpenStartRating);
         if (isOpenStartRating === false) {
-          this.logger.debug('[CONV-COMP] CHIUDOOOOO!!!! StartRating');
+          this.logger.debug('[CONV-COMP] NOT OPEN StartRating **');
         } else if (isOpenStartRating === true) {
-          this.logger.debug('[CONV-COMP] APROOOOOOOO!!!! StartRating');
+          this.logger.debug('[CONV-COMP] OPEN StartRating **');
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
@@ -789,7 +793,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if (!subscribtion) {
       this.logger.debug('[CONV-COMP] ***** add messageAdded *****',  this.conversationHandlerService);
-      subscribtion = this.conversationHandlerService.messageAdded.subscribe((msg: MessageModel) => {
+      subscribtion = this.conversationHandlerService.messageAdded.pipe(takeUntil(this.unsubscribe$)).subscribe((msg: MessageModel) => {
         this.logger.debug('[CONV-COMP] ***** DATAIL messageAdded *****', msg);
         if (msg) {
           that.newMessageAdded(msg);
@@ -805,7 +809,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if(!subscribtion){
 
-      subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.subscribe((conversation) => {
+      subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.pipe(takeUntil(this.unsubscribe$)).subscribe((conversation) => {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
@@ -819,7 +823,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if(!subscribtion){
 
-      subscribtion = this.chatManager.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
+      subscribtion = this.chatManager.conversationsHandlerService.conversationChanged.pipe(takeUntil(this.unsubscribe$)).subscribe((conversation) => {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsChanged *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.sender !== this.senderId){
           const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
@@ -1798,6 +1802,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnDestroy() {
     this.logger.debug('[CONV-COMP] ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
     //this.storageService.removeItem('activeConversation');
+    
     this.unsubscribe();
   }
 
@@ -1805,6 +1810,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** */
   unsubscribe() {
     this.logger.debug('[CONV-COMP] ******* unsubscribe *******');
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    this.chatManager.conversationsHandlerService.conversationRemoved.next(null)
+
+    // TODO-GAB: da verificare se eliminarlo
     this.subscriptions.forEach(function (subscription) {
         subscription.value.unsubscribe();
     });
