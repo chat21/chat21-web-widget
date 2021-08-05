@@ -1114,7 +1114,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             /** hidden all widget */
             windowContext['tiledesk'].hide = function () {
                 ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.hideAllWidget();
+                    windowContext['tiledesk']['angularcomponent'].component.hideWidget();
                 });
             };
             /** close window chat */
@@ -1936,7 +1936,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('recipientId', $event.recipient);
             this.appStorageService.setItem('recipientId', $event.recipient)
             this.isOpenConversation = true;
-            this.isConversationArchived = $event.archived
+            $event.archived? this.isConversationArchived = $event.archived : this.isConversationArchived = false;
             this.logger.debug('[APP-COMP] onSelectConversation in APP COMPONENT: ', $event);
             // this.messagingService.initialize(this.senderId, this.tenant, this.channelType);
             // this.messages = this.messagingService.messages;
@@ -2055,7 +2055,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenAllConversation = false;
         }, 200);
     }
-
 
     onImageLoaded(conversation: ConversationModel) {
         this.logger.debug('[APP-COMP] onLoadImage convvvv:::', conversation)
