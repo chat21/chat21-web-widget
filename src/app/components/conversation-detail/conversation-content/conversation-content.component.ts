@@ -72,7 +72,8 @@ export class ConversationContentComponent implements OnInit {
   uploadProgress: number;
   showUploadProgress: boolean = false;
   fileType: string;
-  private logger: LoggerService = LoggerInstance.getInstance()
+  private logger: LoggerService = LoggerInstance.getInstance();
+
   constructor(private cdref: ChangeDetectorRef,
               private uploadService: UploadService) { }
 
@@ -220,7 +221,6 @@ export class ConversationContentComponent implements OnInit {
   * function customize tooltip
   */
   handleTooltipEvents() {
-    console.log('handleToolpitEvents')
     const that = this;
     const showDelay = this.tooltipOptions['showDelay'];
     // console.log(this.tooltipOptions);

@@ -40,6 +40,7 @@ export class ListConversationsComponent implements OnInit {
   empMap = new Map<string, ConversationModel>();
   arrayDiffer: any;
 
+  uidConvSelected: string;
   constructor(private iterableDiffers: IterableDiffers,
               private kvDiffers: KeyValueDiffers) {
       this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
@@ -48,7 +49,6 @@ export class ListConversationsComponent implements OnInit {
 
   ngOnInit() {
     this.logger.debug('[LISTCONVERSATIONS] ngOnInit', this.listConversations);
-     let convs: ConversationModel[] = this.listConversations
     // console.log('empDifferMap::' + JSON.stringify(this.listConversations))
     // this.listConversations.forEach(emp => {
     //   this.empDifferMap[emp.uid] = this.kvDiffers.find(emp).create();
@@ -72,6 +72,7 @@ export class ListConversationsComponent implements OnInit {
     if ( conversation ) {
       // this.conversationsService.updateIsNew(conversation);
       // this.conversationsService.updateConversationBadge();
+      this.uidConvSelected = conversation.uid
       this.onConversationSelected.emit(conversation);
     }
   }

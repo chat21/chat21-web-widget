@@ -1379,7 +1379,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         attributes,
         projectid,
         channel_type) {
-        this.logger.debug('[APP-COMP] *********** ',tenant,senderId,senderFullname,
+        this.logger.debug('[APP-COMP] sendMessage from window.tiledesk *********** ',tenant,senderId,senderFullname,
                                 msg,type,metadata,conversationWith,recipientFullname,
                                 attributes,projectid,channel_type);
         const messageSent = this.initConversationHandler(conversationWith).sendMessage(
