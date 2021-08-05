@@ -375,10 +375,10 @@
         window.Tiledesk('onInit', function(event_data) {
             console.log("onInit Tiledesk FN", event_data); 
             setTimeout(() => {
-                    document.getElementById("preloader").style.display = "none";
-                    initLang();
-                    document.getElementById('events').value += 'onInit --> FIRED!' + '\n' 
-                    document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+                initLang();
+                document.getElementById("preloader").style.display = "none";
+                document.getElementById('events').value += 'onInit --> FIRED!' + '\n' 
+                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
             }, 1000);
         });
 
@@ -615,7 +615,7 @@
 
         function onClickAlign(){
             let status = document.querySelector('input[name="align"]:checked').value
-            window.tiledeskSettings['align'] = value
+            window.tiledeskSettings['align'] = status
             console.log('onClickAlign: status-->',window.tiledeskSettings)
             window.Tiledesk('restart')
         }
@@ -684,9 +684,10 @@
 
         function onClickLang(){
             let lang = document.getElementById('lang').value
-            // if lang in not pre-translated, use English
-            const selectedLanguage = languages.find(el => el.code === lang)
-            selectedLanguage.type === '--- Needs own translation ---'? lang = 'en': ''
+            // if lang is not pre-translated, use English
+            const selectedLanguage = JSON.parse(lang)
+            console.log('langgg', selectedLanguage.type)
+            selectedLanguage.type === '--- Needs own translation ---'? lang = 'en': lang= selectedLanguage.code
             window.tiledeskSettings['lang'] = lang
             console.log('onClickLang: status-->',window.tiledeskSettings);
             window.Tiledesk('restart')
@@ -823,7 +824,7 @@
 
         function onClickShowAttachmentButton(){
             let status = document.querySelector('input[name="showAttachmentButton"]:checked').value
-            window.tiledeskSettings['showLogoutOptishowAttachmentButtonon'] = stringToBoolean(status)
+            window.tiledeskSettings['showAttachmentButton'] = stringToBoolean(status)
             console.log('onClickShowAttachmentButton:', window.tiledeskSettings)
             window.Tiledesk('restart')
         }
@@ -856,8 +857,8 @@
         }
 
         function onChangeLauncherHeight(){
-            let value = document.getElementById('launcherheight').value
-            document.getElementById('launcherheightText').innerText = value + ' px'
+            let value = document.getElementById('launcherHeight').value
+            document.getElementById('launcherHeightText').innerText = value + ' px'
         }
 
         function onClickLauncherHeight(){
@@ -1003,6 +1004,10 @@
                 elementName === 'logLevel'? window.tiledeskSettings[elementName] = +element.value : window.tiledeskSettings[elementName] = element.value
             }
             window.Tiledesk('restart')
+        }
+
+        function onClickClearHistory(){
+            document.getElementById('events').value = ""
         }
 
 
@@ -1230,7 +1235,7 @@
             let optionList = document.getElementById('lang')
             languages.forEach(option => {
                 optionList.add(
-                    new Option(option.name, option.code, option.selected)
+                    new Option(option.name, JSON.stringify({code: option.code, type: option.type}), option.selected)
                 )
             });
         }
@@ -1442,7 +1447,7 @@
                                 <input class="form-check-input" type="radio" name="fullscreenMode" value="false" checked ><label>False</label>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickFullscreenMode()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                                <button class="btn btn-light" onclick="onClickFullScreenMode()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1719,6 +1724,9 @@
                         <div>
                             <textarea class="form-control" id="events" placeholder="Events history here" rows="4" cols="60"></textarea>
                         </div>
+                        <div class="row" style="text-align: right; margin:0">
+                            <button class="btn btn-light" onclick="onClickClearHistory()">Clear <i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </div>
                     </div>
                 </div>
 
@@ -1750,20 +1758,20 @@
                             <span style="margin-bottom: 0px; border:none !important">
                                 &lt;script type=&quot;application/javascript&quot;&gt; <br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;window.tiledeskSettings = <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;projectid: </span> 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;projectid: </span> 
                                 <span id="project_id"> </span> 
                                 <span style="border:none !important">
                                 <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }; <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}; <br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(function(d, s, id) { <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var w=window; var d=document; var i=function() { i.c(arguments); };<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q=[]; i.c=function(args){ i.q.push(args); }; w.Tiledesk=i;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs=d.getElementsByTagName(s)[0];<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js=d.createElement(s); <br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.id=id; js.async=true; js.src="../../launch.js";<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var w=window; var d=document; var i=function() { i.c(arguments); };<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.q=[]; i.c=function(args){ i.q.push(args); }; w.Tiledesk=i;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var js, fjs=d.getElementsByTagName(s)[0];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (d.getElementById(id)) return;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js=d.createElement(s); js.id=id; js.async=true;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;js.src="https://widget-pre.tiledesk.com/v5/launch.js";<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fjs.parentNode.insertBefore(js, fjs);<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}(document, &#39;script&#39;, &#39;tiledesk-jssdk&#39;));<br>
                                 &lt;/script&gt;
                             </span>
