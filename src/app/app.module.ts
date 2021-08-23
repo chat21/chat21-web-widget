@@ -188,7 +188,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   };
 };
 
-export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService ) {
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService) {
   const config = appConfig.getConfig()
   if (config.chatEngine === CHAT_ENGINE_MQTT) {
     chat21Service.config = config.chat21Config;
@@ -318,8 +318,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     AvatarComponent,
     ReturnReceiptComponent,
     InfoMessageComponent,
-    InterlalFrameComponent,
-    
+    InterlalFrameComponent,  
   ],
   imports: [
     BrowserModule,

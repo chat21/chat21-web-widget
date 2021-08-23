@@ -1401,14 +1401,15 @@ export class GlobalSettingsService {
 
 
     getProjectParametersById(id: string): Observable<any[]> {
-        const API_URL = this.appConfigService.getConfig().apiUrl;
-        const url = API_URL + id + '/widgets';
-        // console.log('getProjectParametersById: ', url);
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        return this.http
-          .get(url, { headers })
-          .map((response) => response.json());
+        if(id){
+            const API_URL = this.appConfigService.getConfig().apiUrl;
+            const url = API_URL + id + '/widgets';
+            // console.log('getProjectParametersById: ', url);
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            return this.http.get(url, { headers })
+                            .map((response) => response.json());
+        }
     }
 
 }

@@ -1,3 +1,4 @@
+import { Globals } from './../utils/globals';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { ContactService } from './contact.service';
@@ -5,7 +6,10 @@ import { ContactService } from './contact.service';
 describe('ContactService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ContactService]
+      providers: [
+        ContactService,
+        Globals
+      ]
     });
   });
 

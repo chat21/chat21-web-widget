@@ -189,7 +189,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor(
-    public el: ElementRef,
+    //public el: ElementRef,
     public g: Globals,
     public starRatingWidgetService: StarRatingWidgetService,
     public sanitizer: DomSanitizer,
@@ -1770,6 +1770,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.scrollToBottom()
     } else if(height <= 20) {
       scrollDiv.nativeElement.style.height = '100%'
+    } else if(height > 110){
+      document.getElementById('chat21-button-send').style.right = '18px'
     }
   }
 

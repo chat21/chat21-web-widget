@@ -1,29 +1,29 @@
 <div class="c21-iframe-container" [@enterAnimation]>
-  <!-- 'background-color': stylesMap.get('backgroundColor'), 'color': styleMap.get('foregroundColor'), 'background-image': 'linear-gradient( 180grad,' + stylesMap.get('themeColor')+','+ convertColorToRGBA(stylesMap.get('themeColor'), 50)+')' -->
-  <div class="c21-iframe-header c21-header" [ngStyle]="{ 'background-image': stylesMap.get('colorGradient')}">
+  <!-- 'background-color': stylesMap?.get('backgroundColor'), 'color': styleMap?.get('foregroundColor'), 'background-image': 'linear-gradient( 180grad,' + stylesMap?.get('themeColor')+','+ convertColorToRGBA(stylesMap?.get('themeColor'), 50)+')' -->
+  <div class="c21-iframe-header c21-header" [ngStyle]="{ 'background-image': stylesMap?.get('colorGradient')}">
     
     <!-- ICON BACK CHAT -->
     <button tabindex="1530" class="c21-header-button c21-left c21-button-clean" (click)="returnClose()">
-      <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
+      <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
           width="24px" height="24px" viewBox="0 0 24 24">
           <path fill="none" d="M0 0h24v24H0V0z" />
           <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
-          <title id="altIconTitle">{{ translationMap.get('CLOSE') }}</title>
+          <title id="altIconTitle">{{ translationMap?.get('CLOSE') }}</title>
       </svg>
   </button>
 
     <!-- ICON OPEN EXTERNAL -->
     <button *ngIf="openExternalLinkButton" tabindex="1530" class="c21-header-button c21-right c21-button-clean" (click)="returnOpenExternal()">
-      <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
+      <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
           width="24px" height="24px" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-          <!-- <title id="altIconTitle">{{ translationMap.get('CLOSE') }}</title> -->
+          <!-- <title id="altIconTitle">{{ translationMap?.get('CLOSE') }}</title> -->
       </svg>
   </button>
 
   <!-- TITLE HEADER -->
-  <div class="c21-title" [ngStyle]="{'color': stylesMap.get('foregroundColor') }">
+  <div class="c21-title" [ngStyle]="{'color': stylesMap?.get('foregroundColor') }">
     <div class="titleText">{{button?.value}}</div>
 </div>
   </div>

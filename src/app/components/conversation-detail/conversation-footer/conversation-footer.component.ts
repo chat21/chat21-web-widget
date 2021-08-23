@@ -451,10 +451,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       // disabilito pulsanti
       this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed::isFilePendingToUpload:', this.isFilePendingToUpload);
     } else {
-      if ( this.textInputTextArea.length > 0 ) {
+      if ( this.textInputTextArea && this.textInputTextArea.length > 0 ) {
         this.logger.debug('[CONV-FOOTER] AppComponent::onSendPressed', 'is a message');
         // its a message
-        if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
+        if (this.textInputTextArea.trim() !== '') {
           //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
           // this.resizeInputField();
           // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
@@ -534,6 +534,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
   
   onPaste(event){
+    this.resizeInputField()
     const items = (event.clipboardData || event.originalEvent.clipboardData).items;
     let file = null;
     this.logger.debug('[CONV-FOOTER] onPaste items ', items);

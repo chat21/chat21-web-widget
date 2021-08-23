@@ -35,7 +35,6 @@ export class SelectionDepartmentComponent implements OnInit, AfterViewInit {
     constructor(
         private el: ElementRef,
         public g: Globals,
-        //public messagingService: MessagingService,
         public appStorageService: AppStorageService,
     ) {
     }

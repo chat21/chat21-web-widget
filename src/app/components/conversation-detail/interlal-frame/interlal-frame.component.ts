@@ -69,7 +69,9 @@ export class InterlalFrameComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.button.link);    
+    if(this.button && this.button.link){
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.button.link);    
+    }
   }
   
   ngAfterViewInit(){

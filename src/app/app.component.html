@@ -129,7 +129,7 @@
     <div *ngIf="!g.isOpen">
         <chat-last-message
             [conversation]="lastConversation"
-            [baseLocation]="g.windowContext['tiledesk'].getBaseLocation()"
+            [baseLocation]="g?.windowContext['tiledesk']?.getBaseLocation()"
             [stylesMap]="styleMapConversation"
             (onCloseMessagePreview)="triggerHandler.triggerOnCloseMessagePreview()"
             (onSelectedConversation)="onSelectedConversation($event)">

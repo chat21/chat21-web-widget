@@ -17,7 +17,6 @@ import {
   FIREBASESTORAGE_BASE_URL_IMAGE,
   IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT
 } from '../../utils/constants';
-import { ContactService } from '../../providers/contact.service';
 import { WaitingService } from '../../providers/waiting.service';
 import { TranslatorService } from '../../providers/translator.service';
 
@@ -96,7 +95,6 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
     // public conversationsHandlerService: ConversationsHandlerService,
     public imageRepoService: ImageRepoService,
     public chatManager: ChatManager,
-    public contactService: ContactService,
     public waitingService: WaitingService,
     public translatorService: TranslatorService,
     private customTranslateService: CustomTranslateService,
@@ -205,7 +203,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   showWaitingTime() {
     const that = this;
     const projectid = this.g.projectid;
-    this.waitingService.getCurrent(projectid).subscribe(response => {
+    if(projectid){
+      this.waitingService.getCurrent(projectid).subscribe(response => {
         that.logger.debug('[HOMECONVERSATIONS] response waiting', response);
         // console.log('response waiting ::::', response);
        if (response && response.length > 0 && response[0].waiting_time_avg) {
@@ -239,6 +238,8 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
       //   // that.waitingTimeMessage = 'Will reply as soon as they can';
       //  }
     });
+    }
+    
 }
 
 checkShowAllConversation() {
