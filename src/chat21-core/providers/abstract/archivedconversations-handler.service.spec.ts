@@ -3,7 +3,10 @@ import { TestBed, inject } from '@angular/core/testing';
 import { ArchivedConversationsHandlerService } from './archivedconversations-handler.service';
 
 describe('ArchivedconversationsHandlerService', () => {
-  beforeEach(() => { TestBed.configureTestingModule({});
+  beforeEach(() => { 
+    TestBed.configureTestingModule({
+      providers: [ArchivedConversationsHandlerService]
+    });
   });
 
   it('should be created', () => {

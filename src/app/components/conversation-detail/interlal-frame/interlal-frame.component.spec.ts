@@ -1,3 +1,4 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InterlalFrameComponent } from './interlal-frame.component';
@@ -8,7 +9,10 @@ describe('InterlalFrameComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InterlalFrameComponent ]
+      declarations: [ InterlalFrameComponent ],
+      imports: [
+        BrowserAnimationsModule
+      ]
     })
     .compileComponents();
   }));

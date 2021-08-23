@@ -1,11 +1,23 @@
+import { Globals } from './../utils/globals';
+import { AppConfigService } from './app-config.service';
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed, inject } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 
 import { AgentAvailabilityService } from './agent-availability.service';
 
-describe('IsOnlineService', () => {
+describe('AgentAvailabilityService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AgentAvailabilityService]
+      imports: [
+        HttpModule,
+        HttpClientModule
+      ],
+      providers: [
+        AgentAvailabilityService,
+        AppConfigService,
+        Globals
+      ]
     });
   });
 

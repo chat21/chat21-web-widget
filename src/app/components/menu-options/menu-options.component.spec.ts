@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Globals } from '../../utils/globals';
 
 import { MenuOptionsComponent } from './menu-options.component';
 
@@ -8,7 +9,8 @@ describe('MenuOptionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MenuOptionsComponent ]
+      declarations: [ MenuOptionsComponent ],
+      providers: [ Globals ]
     })
     .compileComponents();
   }));

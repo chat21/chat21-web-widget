@@ -1,11 +1,13 @@
+import { Globals } from './../utils/globals';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { SettingsSaverService } from './settings-saver.service';
+import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 
 describe('SettingsSaverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SettingsSaverService]
+      providers: [SettingsSaverService, Globals, AppStorageService]
     });
   });
 

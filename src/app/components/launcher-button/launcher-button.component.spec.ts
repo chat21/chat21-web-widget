@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
+import { Globals } from '../../utils/globals';
 
 import { LauncherButtonComponent } from './launcher-button.component';
 
@@ -8,7 +10,8 @@ describe('LauncherButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LauncherButtonComponent ]
+      declarations: [ LauncherButtonComponent ],
+      providers: [ Globals, AppStorageService]
     })
     .compileComponents();
   }));

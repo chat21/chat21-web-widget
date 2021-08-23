@@ -1,3 +1,6 @@
+import { ActionButtonComponent } from './../message/buttons/action-button/action-button.component';
+import { TextButtonComponent } from './../message/buttons/text-button/text-button.component';
+import { LinkButtonComponent } from './../message/buttons/link-button/link-button.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MessageAttachmentComponent } from './message-attachment.component';
@@ -8,7 +11,12 @@ describe('MessageAttachmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessageAttachmentComponent ]
+      declarations: [ 
+        MessageAttachmentComponent, 
+        LinkButtonComponent, 
+        TextButtonComponent, 
+        ActionButtonComponent 
+      ]
     })
     .compileComponents();
   }));

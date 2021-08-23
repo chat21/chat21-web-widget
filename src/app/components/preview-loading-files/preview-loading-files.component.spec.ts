@@ -1,14 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Globals } from '../../utils/globals';
 
 import { PreviewLoadingFilesComponent } from './preview-loading-files.component';
 
 describe('PreviewLoadingFilesComponent', () => {
-  let component: PreviewLoadingFilesComponent;
   let fixture: ComponentFixture<PreviewLoadingFilesComponent>;
+  let component: PreviewLoadingFilesComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreviewLoadingFilesComponent ]
+      declarations: [ PreviewLoadingFilesComponent ],
+      providers: [ Globals ]
     })
     .compileComponents();
   }));

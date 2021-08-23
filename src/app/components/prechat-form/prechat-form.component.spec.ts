@@ -1,6 +1,9 @@
+import { Globals } from './../../utils/globals';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PrechatFormComponent } from './prechat-form.component';
+import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 
 describe('PrechatFormComponent', () => {
   let component: PrechatFormComponent;
@@ -8,7 +11,9 @@ describe('PrechatFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrechatFormComponent ]
+      declarations: [ PrechatFormComponent ],
+      imports: [ FormsModule, ReactiveFormsModule ],
+      providers: [ Globals, AppStorageService]
     })
     .compileComponents();
   }));

@@ -1,3 +1,4 @@
+import { Globals } from './../utils/globals';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { ChatPresenceHandlerService } from './chat-presence-handler.service';
@@ -5,7 +6,10 @@ import { ChatPresenceHandlerService } from './chat-presence-handler.service';
 describe('ChatPresenceHandlerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ChatPresenceHandlerService]
+      providers: [
+        ChatPresenceHandlerService,
+        Globals
+      ]
     });
   });
 
