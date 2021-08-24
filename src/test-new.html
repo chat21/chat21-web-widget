@@ -16,32 +16,20 @@
       };
 
       (function(d, s, id) {
-
         var w=window;
-        // var ic=w.Tiledesk;
-        // if(typeof ic==="function"){
-        //   ic('reattach_activator');
-        //   ic('update',w.intercomSettings);
-        // }else{ 
         var d=document;
         var i=function() {                 //crea una function
           i.c(arguments);
         };
-        console.log("i",i);
         i.q=[];                   //q->queue
         i.c=function(args){       //c-> call
-          console.log("i.c0",i.c);
           i.q.push(args);
         };
-        console.log("i.c cccc",i.c, i.q);
-
         w.Tiledesk=i;
-      
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); 
-        js.id = id; 
-        js.async = true;
+        js.id = id; js.async = true;
         js.src = "./launch.js";
         // js.src = "https://widget.tiledesk.com/v4/launch.js";
         fjs.parentNode.insertBefore(js, fjs);
@@ -69,6 +57,13 @@
             console.log("onNewConversationComponentInit FN", event_data);
       });
 
+      window.Tiledesk('onAuthStateChanged', function(event_data) {
+            console.log("onAuthStateChanged FN", event_data);
+      });
+
+      window.Tiledesk('onLoggedOut', function(event_data) {
+            console.log("onLoggedOut FN", event_data);
+      });
 
       // METHOD
       // window.tiledesk.open();

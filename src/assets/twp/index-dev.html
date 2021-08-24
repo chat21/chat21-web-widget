@@ -394,6 +394,22 @@
             document.getElementById("project_name").innerHTML = project_name;
         });
 
+        window.Tiledesk('onAuthStateChanged', function(event_data) {
+            console.log("onAuthStateChanged Tiledesk FN", event_data); 
+            if(document.getElementById('events')){
+                document.getElementById('events').value +=  'onAuthStateChanged --> FIRED! ' + event_data.detail.event + '\n' 
+                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            }
+        });
+
+        window.Tiledesk('onNewConversationComponentInit', function(event_data) {
+            console.log("onNewConversationComponentInit Tiledesk FN", event_data); 
+            if(document.getElementById('events')){
+                document.getElementById('events').value +=  'onNewConversationComponentInit --> FIRED! ' + '\n' 
+                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            }
+        });
+
         window.Tiledesk('onBeforeMessageSend', function(event_data) {
             if(document.getElementById('events')){
                 document.getElementById('events').value +=  'onBeforeMessageSend --> FIRED!' + '\n' 
@@ -417,7 +433,7 @@
 
         window.Tiledesk('onOpen', function(event_data) {
             if(document.getElementById('events')){
-                document.getElementById('events').value +=  'onMessageCreated --> FIRED!' + '\n' 
+                document.getElementById('events').value +=  'onOpen --> FIRED!' + '\n' 
                 document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
             }
         });
@@ -439,26 +455,6 @@
         window.Tiledesk('onClosedEyeCatcher', function(event_data) {
             if(document.getElementById('events')){
                 document.getElementById('events').value +=  'onClosedEyeCatcher --> FIRED!' + '\n' 
-                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
-            }
-        });
-
-        window.Tiledesk('onLoggedIn', function(event_data) {
-            if(document.getElementById('events')){
-                document.getElementById('events').value +=  'onLoggedIn --> FIRED!' + '\n' 
-                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
-            }
-        });
-
-        window.Tiledesk('onLoggedOut', function(event_data) {
-            if(document.getElementById('events')){
-                document.getElementById('events').value +=  'onLoggedOut --> FIRED!' + '\n' 
-                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
-            }});
-
-        window.Tiledesk('onAuthStateChanged', function(event_data) {
-            if(document.getElementById('events')){
-                document.getElementById('events').value +=  'onAuthStateChanged --> FIRED!' + '\n' 
                 document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
             }
         });

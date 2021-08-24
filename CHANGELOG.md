@@ -1,5 +1,14 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.17-rc.1 
+- bug-fixed: if widget is opened in two or more tabs and i send a message, it sounds in other tabs--> do not sound if i send a message
+- bug-fixed: onPaste if text exceeded the minHeight, move send-button to left to not overflow the text-area scrool bar
+- bug-fixed: image was rendered above bubble message while loading it
+- bug-fixed: onAuthStateChanged not fired after signInWithCustomToken
+- removed: triggerOnLoggedOut - triggerOnLoggedIn, endMessageRender() method
+
+### 5.0.16 - PROD
+
 ### 5.0.16-rc.2
 - bug-fixed: when user open a reopened chat, starRatingComponent was shown
 - bug-fixed: undefined conversation.uid in firebase-conversations-handler and firebase-archivedconversations-handler services
