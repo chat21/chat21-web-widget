@@ -12,8 +12,8 @@
         "databaseURL": "CHANGEIT",
         "projectId": "CHANGEIT",
         "storageBucket": "CHANGEIT",
-        "appId": "CHANGEIT",
-        "messagingSenderId": "CHANGEIT"
+        "messagingSenderId": "CHANGEIT",
+        "appId": "CHANGEIT"
     },
     "chat21Config": {
         "appId": "tilechat",

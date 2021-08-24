@@ -230,15 +230,14 @@ function initAysncEvents() {
                 }
                 var methodOrProperty = window.tiledesk[functionName];
                 if(typeof methodOrProperty==="function"){     
-                  console.log("method", functionName, functionCallback);            
+                  console.log("method:", functionName, functionCallback);            
                   return window.tiledesk[functionName](functionCallback);            
                 }else { //property
-                  console.log("property", functionName, functionCallback);
+                  console.log("property:", functionName, functionCallback);
                   return window.tiledesk[functionName];
                 }
               }
-            };             
-            console.log("ovverrided");
+            };
   
           }
         });
@@ -318,7 +317,7 @@ function signInWithCustomToken() {
         throw new Error('CORS not supported');
     }
     httpRequest.setRequestHeader('Content-type','application/json');
-	httpRequest.send(json);
+	  httpRequest.send(json);
     httpRequest.onload = function() {
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 200) {
