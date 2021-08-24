@@ -65,18 +65,18 @@
                             <!--backgroundColor non viene ancora usato -->
                             <!-- class="messages msg_sent slide-in-right" -->
                             <chat-bubble-message class="messages msg_sent"
-                                [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
-                                [message]="message"
-                                [textColor]="'col-msg-sent'"
-                                (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-                                (onAfterMessageRender)="returnOnAfterMessageRender($event)"
-                                (onImageRendered)="onImageRenderedFN($event)">
+                              [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
+                              [message]="message"
+                              [textColor]="'col-msg-sent'"
+                              (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+                              (onAfterMessageRender)="returnOnAfterMessageRender($event)"
+                              (onImageRendered)="onImageRenderedFN($event)">
                             </chat-bubble-message>
 
                               <!-- icon status message -->
                               <!-- class="slide-in-right" -->
                             <chat-return-receipt 
-                                [status]="message?.status">
+                              [status]="message?.status">
                             </chat-return-receipt>
 
                           </div>
@@ -87,18 +87,18 @@
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">
                             
                             <chat-avatar-image class="slide-in-left"  
-                                [senderID]="message?.sender"
-                                [senderFullname]="message?.sender_fullname"
-                                [baseLocation]="baseLocation">
+                              [senderID]="message?.sender"
+                              [senderFullname]="message?.sender_fullname"
+                              [baseLocation]="baseLocation">
                             </chat-avatar-image>
 
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive slide-in-left"
-                                [message]="message"
-                                [textColor]="'black'"
-                                (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-                                (onAfterMessageRender)="returnOnAfterMessageRender($event)"
-                                (onImageRendered)="onImageRenderedFN($event)">
+                              [message]="message"
+                              [textColor]="'black'"
+                              (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
+                              (onAfterMessageRender)="returnOnAfterMessageRender($event)"
+                              (onImageRendered)="onImageRenderedFN($event)">
                             </chat-bubble-message>
 
                           </div>

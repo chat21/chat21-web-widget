@@ -1,4 +1,8 @@
 <div [ngStyle] = "{ 'max-width': width +'px', 'max-height': height +'px' }" style="position: relative;">
   <div *ngIf="loading" class="loader" [ngStyle] = "{ 'width': width +'px', 'height': height +'px' }"></div>
-  <img class="message-contentX message-content-imageX" [src]="metadata.src"  (load)="onLoaded()"/>
+  <img 
+    class="message-contentX message-content-imageX" 
+    [ngClass]="{'isLoadingImage': loading}"
+    [src]="metadata.src"  
+    (load)="onLoaded($event)"/>
 </div>

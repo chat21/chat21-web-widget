@@ -6,6 +6,12 @@ img {
     width: auto;
     height: auto;
     object-fit: cover;
+    
+}
+
+.isLoadingImage {
+    position: relative;
+    top: 6px;
 }
 
 .loader {

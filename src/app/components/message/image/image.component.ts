@@ -12,15 +12,15 @@ export class ImageComponent implements OnInit {
   @Input() height: number;
   @Output() onImageRendered = new EventEmitter<boolean>();
   loading: boolean = true
-  
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  onLoaded(){
-    this.loading = false
-    this.onImageRendered.emit(true)
+  onLoaded(event){
+      this.loading = false
+      this.onImageRendered.emit(true)
   }
 
 
