@@ -37,7 +37,7 @@
         "sass/styles.scss"
       ],
       "scripts": [
-        "assets/js/mqtt/4.2.8/mqtt.min.js"
+        "assets/js/mqtt/4.2.6/mqtt.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
