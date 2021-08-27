@@ -1,10 +1,23 @@
 /*
     Chat21Client
-    v. 0.1.3
+    v. 0.1.5
+    - added groupSetMembers()
+    - renamed createGroup() in groupCreate()
+    - renamed leaveGroup() in groupLeave()
+    - renamed joinGroup() in groupJoin()
+    - renamed getGroup() in groupData()
+
+
+    v. 0.1.4
+    - added basicMessageBuilder()
+    - added sendMessageRaw()
+    - added leaveGroup()
+
     (c) Tiledesk 2020
 */
 
-let mqtt = require('mqtt');
+let mqtt = require('./mqtt/4.2.6/mqtt.min.js');
+// let mqtt = require('mqtt')
 // let axios = require('axios');
 
 const _CLIENTADDED = "/clientadded"
@@ -14,10 +27,8 @@ const CALLBACK_TYPE_ON_MESSAGE_UPDATED_FOR_CONVERSATION = "onMessageUpdatedForCo
 const CALLBACK_TYPE_ON_MESSAGE_ADDED_FOR_CONVERSATION = "onMessageAddedForConversation"
 
 class Chat21Client {
-    
     constructor(options) {
-
-        // console.log('CHAT21-CLIENT.JS  HELLO ', mqtt)
+        console.log('CHAT21-CLIENT.JS  HELLO ', mqtt)
         this.client = null;
         this.reconnections = 0 // just to check how many reconnections
         this.client_id = this.uuidv4();
@@ -46,8 +57,9 @@ class Chat21Client {
         else {
             this.endpoint = "ws://34.253.207.0:15675/ws"
         }
-        this.APIendpoint = options.APIendpoint
-        this.appid = options.appId
+        this.log = options.log ? true : false;
+        this.APIendpoint = options.APIendpoint;
+        this.appid = options.appId;
         console.log("final endpoint:", this.endpoint)
         this.user_id = null;
         this.jwt = null;
@@ -113,6 +125,40 @@ class Chat21Client {
         })
     }
 
+    basicMessageBuilder(text, type, recipient_fullname, sender_fullname, attributes, metadata, channel_type) {
+        let outgoing_message = {
+            text: text,
+            type: type,
+            recipient_fullname: recipient_fullname,
+            sender_fullname: sender_fullname,
+            attributes: attributes,
+            metadata: metadata,
+            channel_type: channel_type
+        }
+        return outgoing_message;
+    }
+
+    sendMessageRaw(outgoing_message, recipient_id, callback) {
+        // callback - function (err) 
+        // console.log("recipient_id:", recipient_id)
+        let dest_topic = `apps/${this.appid}/users/${this.user_id}/messages/${recipient_id}/outgoing`
+        // console.log("dest_topic:", dest_topic)
+        // let outgoing_message = {
+        //     text: text,
+        //     type: type,
+        //     recipient_fullname: recipient_fullname,
+        //     sender_fullname: sender_fullname,
+        //     attributes: attributes,
+        //     metadata: metadata,
+        //     channel_type: channel_type
+        // }
+        // console.log("outgoing_message:", outgoing_message)
+        const payload = JSON.stringify(outgoing_message)
+        this.client.publish(dest_topic, payload, null, (err) => {
+            callback(err, outgoing_message)
+        })
+    }
+
     updateMessageStatus(messageId, conversWith, status, callback) {
         // callback - function (err) 
         console.log("updating recipient_id:", messageId, "on conversWith", conversWith, "status", status)
@@ -149,7 +195,7 @@ class Chat21Client {
         })
     }
 
-    createGroup(name, group_id, members, callback) {
+    groupCreate(name, group_id, members, callback) {
         // example:
         // {
         //     "group_id":"group-tiledeskteam",
@@ -201,7 +247,7 @@ class Chat21Client {
             else if (json && callback) {
                 callback(null, json);
             }
-        }, true);
+        }, this.log);
         // var xmlhttp = new XMLHttpRequest();
         // xmlhttp.open("POST", URL, true);
         // xmlhttp.setRequestHeader("authorization", this.jwt);
@@ -219,6 +265,125 @@ class Chat21Client {
         //     }
         // };
         // xmlhttp.send(JSON.stringify(data));
+    }
+
+    groupData(group_id, callback) {
+        const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}`
+        // console.log("creating group...", URL)
+        let options = {
+            url: URL,
+            headers: {
+                "Authorization": this.jwt,
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            method: 'GET'
+        }
+        Chat21Client.myrequest(options, (err, response, json) => {
+            if (err) {
+                callback(err, null);
+            }
+            else if (json && callback) {
+                callback(null, json);
+            }
+        }, this.log);
+        // const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}`
+        // console.log("getting group...", URL)
+        // var xmlhttp = new XMLHttpRequest();
+        // xmlhttp.open("GET", URL, true);
+        // xmlhttp.setRequestHeader("authorization", this.jwt);
+        // xmlhttp.onreadystatechange = function() {
+        //     if (callback && xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText) {
+        //         try {
+        //             const json = JSON.parse(xmlhttp.responseText)
+        //             callback(null, json.result)
+        //         }
+        //         catch (err) {
+        //             console.error("parsing json ERROR", err)
+        //             callback(err, null)
+        //         }
+        //     }
+        // };
+        // xmlhttp.send(null);
+    }
+
+    groupLeave(group_id, member_id, callback) {
+        console.log("leaving group:", group_id);
+        const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}/members/${member_id}`
+        console.log("leaving group:", URL)
+        let options = {
+            url: URL,
+            headers: {
+                "Authorization": this.jwt,
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            method: 'DELETE'
+        }
+        Chat21Client.myrequest(options, (err, response, json) => {
+            if (err) {
+                callback(err, null);
+            }
+            else if (callback) {
+                callback(null, json);
+            }
+        }, this.log);
+    }
+
+    groupJoin(group_id, member_id, callback) {
+        console.log("leaving group:", group_id);
+        const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}/members`
+        console.log("joining group:", URL)
+        let options = {
+            url: URL,
+            headers: {
+                "Authorization": this.jwt,
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            data: {
+                member_id: member_id
+            },
+            method: 'POST'
+        }
+        Chat21Client.myrequest(options, (err, response, json) => {
+            if (err) {
+                callback(err, null);
+            }
+            else if (callback) {
+                callback(null, json);
+            }
+        }, this.log);
+    }
+
+    groupSetMembers(group_id, members, callback) {
+        // example:
+        // {
+        //     "members":{
+        //         "608bc83b3d0b3e494f4d0578":1,
+        //         "608bc81f3d0b3e494f4d0575":1,
+        //         "6067513cb64a9b1ba259839c":1
+        //     }
+        // }
+        console.log("setting group members of", group_id, "members", members)
+        const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}/members`
+        console.log("setting group members...", URL)
+        let options = {
+            url: URL,
+            headers: {
+                "Authorization": this.jwt,
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            data: {
+                members: members
+            },
+            method: 'PUT'
+        }
+        Chat21Client.myrequest(options, (err, response, json) => {
+            if (err) {
+                callback(err, null);
+            }
+            else if (json && callback) {
+                callback(null, json);
+            }
+        }, this.log);
     }
 
     archiveConversation(conversWith, callback) {
@@ -586,28 +751,6 @@ class Chat21Client {
         xmlhttp.send(null);
     }
 
-    getGroup(group_id, callback) {
-        // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
-        const URL = `${this.APIendpoint}/${this.appid}/groups/${group_id}`
-        console.log("getting group...", URL)
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", URL, true);
-        xmlhttp.setRequestHeader("authorization", this.jwt);
-        xmlhttp.onreadystatechange = function() {
-            if (callback && xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText) {
-                try {
-                    const json = JSON.parse(xmlhttp.responseText)
-                    callback(null, json.result)
-                }
-                catch (err) {
-                    console.error("parsing json ERROR", err)
-                    callback(err, null)
-                }
-            }
-        };
-        xmlhttp.send(null);
-    }
-
     lastMessages(convers_with, callback) {
         // console.log("START: ", this.user_id)
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations
@@ -677,13 +820,14 @@ class Chat21Client {
                   headers: options.headers
                 })
               .then(function (response) {
-                console.log("response.status:", response.status);
+                if (log) {console.log("response.status:", response.status);}
                 if (callback) {
+                    if (log) { console.log("callback1()"); }
                     callback(null, response.headers, response.data);
                 }
               })
               .catch(function (error) {
-                console.error(error);
+                if (log) { console.log("Axios call error:", error); }
                 if (callback) {
                     callback(error, null, null);
                 }
@@ -744,7 +888,7 @@ class Chat21Client {
         }
         console.log("starting mqtt connection with LWT on:", presence_topic, this.endpoint)
         // client = mqtt.connect('mqtt://127.0.0.1:15675/ws',options)
-        this.client = mqtt.connect(this.endpoint,options)
+        this.client = mqtt.connect('a://99.80.197.164:15675/ws',options)
         
         this.client.on('connect',
             () => {
