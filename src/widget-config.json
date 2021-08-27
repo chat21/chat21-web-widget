@@ -2,9 +2,8 @@
     "chatEngine": "mqtt",
     "uploadEngine": "native",
     "pushEngine":"none",
-    "tenant": "tilechat",
     "fileUploadAccept":"*/*",
-    "logLevel":1,
+    "logLevel":"INFO",
     "remoteTranslationsUrl": "http://localhost:3000/",
     "firebaseConfig": {
         "apiKey": "CHANGEIT",
@@ -13,7 +12,8 @@
         "projectId": "CHANGEIT",
         "storageBucket": "CHANGEIT",
         "messagingSenderId": "CHANGEIT",
-        "appId": "CHANGEIT"
+        "appId": "CHANGEIT",
+        "tenant": "CHANGEIT"
     },
     "chat21Config": {
         "appId": "tilechat",

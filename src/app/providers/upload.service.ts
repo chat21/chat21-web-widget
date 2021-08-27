@@ -43,7 +43,7 @@ export class UploadService_old {
   public initialize(senderId, tenant, recipientId) {
     this.senderId = senderId;
     if (!tenant) {
-      this.tenant = this.appConfigService.getConfig().tenant;
+      this.tenant = this.appConfigService.getConfig().firebaseConfig.tenant;
     } else {
       this.tenant = tenant;
     }

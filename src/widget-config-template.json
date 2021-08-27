@@ -2,7 +2,6 @@
     "chatEngine": "${CHAT21_ENGINE}",
     "uploadEngine": "${UPLOAD_ENGINE}",
     "pushEngine": "${PUSH_ENGINE}",
-    "tenant": "${TENANT}",
     "fileUploadAccept":"${FILE_UPLOAD_ACCEPT}",
     "logLevel": "${LOG_LEVEL}"    ,
     "remoteTranslationsUrl": "${TRANSLATIONS_URL}",
@@ -13,7 +12,8 @@
         "projectId": "${FIREBASE_PROJECT_ID}",
         "storageBucket": "${FIREBASE_STORAGEBUCKET}",
         "messagingSenderId": "${FIREBASE_MESSAGINGSENDERID}",
-        "appId": "${FIREBASE_APP_ID}"
+        "appId": "${FIREBASE_APP_ID}",
+        "tenant": "${FIREBASE_TENANT}"
     },
     "chat21Config": {
         "appId": "${MQTT_APPID}",

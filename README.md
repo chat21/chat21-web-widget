@@ -48,7 +48,6 @@ export const environment = {
   remoteTranslationsUrl: 'https://<YOUR_REMOTE_TRANSLATIONS_URL>/',
   chatEngine: "mqtt", // OR YOUR CUSTOM CHAT ENGINE
   updloaEngine: "native", // OR YOUR CUSTOM UPLOAD ENGINE
-  tenant: 'tilechat', 
   fileUploadAccept:"*/*",
   logLevel: '<YOUR-PREFERRED-LOG-LEVEL-NUMBER>',
   firebaseConfig: {
@@ -58,6 +57,8 @@ export const environment = {
     projectId: 'XYZ',
     storageBucket: 'XYZ.appspot.com',
     messagingSenderId: '123456',
+    appId: "CHANGEIT",
+    tenant: 'tilechat', 
   },
   chat21Config: {
     appId: 'tilechat',
@@ -74,7 +75,7 @@ export const environment = {
 ```
 
 * `logLevel`: The Chat21-ionic supports 4 log levels. The order is as follows:
-  `Error = 0 < Warn = 1 < Info = 2 < Debug = 3`
+  `Error < Warn < Info < Debug`
 
 * `fileUploadAccept`: The Chat21-ionic allows you to manage the type of files that can be uploaded. By default, all file types are accepted.
 
