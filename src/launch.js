@@ -44,7 +44,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '<chat-root></chat-root>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/inline.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/polyfills.bundle.js"></script>';
-    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
+    srcTileDesk += '<script type="text/css" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/vendor.bundle.js"></script>';
     srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.bundle.js"></script>';
     srcTileDesk += '</body>';
@@ -222,7 +222,7 @@ function initAysncEvents() {
 
             // RICHIAMATO DOPO L'INIT DEL WIDGET
             window.Tiledesk = function() {
-              console.log('window.Tiledesk::', arguments)
+              console.log('window.Tiledesk:', arguments)
               if (arguments.length>=1) {
                 var functionName = arguments[0];
                 if (arguments.length==2) {
