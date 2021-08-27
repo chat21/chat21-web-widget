@@ -14,9 +14,8 @@ export const environment = {
   loadRemoteTranslations: true,
   chatEngine: 'mqtt',
   uploadEngine: 'native',
-  tenant: 'tilechat',
   fileUploadAccept:"*/*",
-  logLevel: 2,
+  logLevel: 'INFO',
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -24,7 +23,8 @@ export const environment = {
     projectId: 'CHANGEIT',
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT',
-    appId: 'CHANGEIT'
+    appId: 'CHANGEIT',
+    tenant: 'tilechat',
   },
   chat21Config: {
     appId: 'tilechat',

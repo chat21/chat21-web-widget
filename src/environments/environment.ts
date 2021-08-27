@@ -14,7 +14,7 @@ export const environment = {
   uploadEngine: 'native',
   tenant: 'tilechat',
   fileUploadAccept:"*/*",
-  logLevel: 2,
+  logLevel: 'INFO',
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -23,6 +23,7 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT',
     appId: 'CHANGEIT',
+    tenant: 'tilechat'
   },
   chat21Config: {
     appId: 'tilechat',

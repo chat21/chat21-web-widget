@@ -12,9 +12,8 @@ export const environment = {
   remoteTranslationsUrl: 'http://localhost:3000/',
   chatEngine: 'CHANGEIT',
   uploadEngine: 'CHANGEIT',
-  tenant: 'CHANGEIT',
   fileUploadAccept:"*/*",
-  logLevel: 2,
+  logLevel: 'INFO',
   firebaseConfig: {
     apiKey: 'CHANGEIT',
     authDomain: 'CHANGEIT',
@@ -22,7 +21,8 @@ export const environment = {
     projectId: 'CHANGEIT',
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT',
-    appId: 'CHANGEIT'
+    appId: 'CHANGEIT',
+    tenant: 'CHANGEIT',
   },
   chat21Config: {
     appId: 'tilechat',

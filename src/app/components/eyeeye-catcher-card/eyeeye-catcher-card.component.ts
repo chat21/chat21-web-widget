@@ -97,6 +97,7 @@ export class EyeeyeCatcherCardComponent implements OnInit {
       title = this.g.calloutTitle.trim();
     }
     this.title = title;
+    console.log('checkIsEmoji title', this.title)
     const emojiRegex = require('emoji-regex');
     const regex = emojiRegex();
     let match: any;
