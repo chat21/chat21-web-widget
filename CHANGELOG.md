@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.17-rc.2 
+- changed: loggerService accept string value as logLevel input parameter
+- changed: LogLevel const in constant.ts to map string in number
+- updated: env, README.md and env.sample to accept string for logLevel property
+- changed: removed mqtt lib from package.json and used specific version in chat21client.js
+- changed: upload mqtt.min.js lib locally from assets/js/mqtt folder 
+- bug-fixed: iframe url is null -> changed metadata.url to metadata.src in if condition
+
 ### 5.0.17-rc.1 
 - bug-fixed: if widget is opened in two or more tabs and i send a message, it sounds in other tabs--> do not sound if i send a message
 - bug-fixed: onPaste if text exceeded the minHeight, move send-button to left to not overflow the text-area scrool bar
