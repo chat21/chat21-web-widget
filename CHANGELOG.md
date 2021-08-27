@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.17-rc.3 
+- bug-fixed: endpoint parameter in mqtt.connect method in chat21clinet.js was hard-coded
+
 ### 5.0.17-rc.2 
 - changed: loggerService accept string value as logLevel input parameter
 - changed: LogLevel const in constant.ts to map string in number
