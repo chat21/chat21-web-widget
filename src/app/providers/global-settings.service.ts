@@ -61,7 +61,7 @@ export class GlobalSettingsService {
         this.setMainParametersFromSettings(globals);
 
         /**SET TENANT parameter */
-        this.globals.tenant = this.appConfigService.getConfig().tenant
+        this.globals.tenant = this.appConfigService.getConfig().firebaseConfig.tenant
         /**SET LOGLEVEL parameter */
         this.globals.logLevel = this.appConfigService.getConfig().logLevel
 
@@ -1209,7 +1209,7 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
         if (TEMP) {
-            globals.logLevel = stringToNumber(TEMP);
+            globals.logLevel = TEMP;
         }
         
     }

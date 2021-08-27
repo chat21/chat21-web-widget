@@ -200,7 +200,7 @@ export class Globals {
 
    isOpenNewMessage: boolean;
    dynamicWaitTimeReply: boolean; // *******  new ********
-   logLevel: number; // *******  new ********
+   logLevel: string; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -345,7 +345,7 @@ export class Globals {
 
 
     // ============ BEGIN: SET INTERNAL PARAMETERS ==============//
-    this.tenant = environment.tenant;
+    this.tenant = environment.firebaseConfig.tenant;
     // this.parameters['tenant'] = environment.tenant;
     // this.parameters.push({'tenant': environment.tenant});
 
