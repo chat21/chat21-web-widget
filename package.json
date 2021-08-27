@@ -1,7 +1,7 @@
 {
   "name": "@chat21/chat21-web-widget",
   "author": "Panico Gabriele - Frontiere21 SRL",
-  "version": "5.0.17-rc.1",
+  "version": "5.0.17-rc.2",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiledesk.com",
   "repository": {
@@ -54,7 +54,6 @@
     "less": "^2.7.3",
     "marked": "^1.1.0",
     "material-design-icons": "^3.0.1",
-    "mqtt": "^4.2.6",
     "ng2-tooltip-directive": "^2.9.20",
     "node-sass": "^4.13.0",
     "rxjs": "^5.4.2",
