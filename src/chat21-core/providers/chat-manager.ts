@@ -26,8 +26,8 @@ export class ChatManager {
 
   BSStart: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  supportMode = environment.supportMode;
-  tenant = environment.tenant;
+  // supportMode = environment.supportMode;
+  // tenant = environment.firebaseConfig.tenant;
 
   private currentUser: UserModel;
   private tiledeskToken: string;
