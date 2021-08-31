@@ -1,3 +1,4 @@
+import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { LoggerInstance } from './../chat21-core/providers/logger/loggerInstance';
 import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
@@ -5,7 +6,7 @@ import { StarRatingWidgetService } from './components/star-rating-widget/star-ra
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { UserModel } from '../../src/chat21-core/models/user';
 
-import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation, HostListener } from '@angular/core';
+import { ElementRef, Component, OnInit, OnDestroy, AfterViewInit, NgZone, ViewEncapsulation, HostListener, ViewChild } from '@angular/core';
 // import * as moment from 'moment';
 import * as moment from 'moment/moment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -119,7 +120,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // ========= end:: DA SPOSTARE ========= //
 
     styleMapConversation: Map<string, string> = new Map();
-
+    @ViewChild(EyeeyeCatcherCardComponent) eyeeyeCatcherCardComponent: EyeeyeCatcherCardComponent
     private logger: LoggerService = LoggerInstance.getInstance();
 
     constructor(
@@ -238,6 +239,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     //widget closed
                     that.lastConversation = conversation;
                     that.g.isOpenNewMessage = true;
+                    console.log('lastconversationnn', that.lastConversation, conversation)
 
                     let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
                     that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
@@ -507,6 +509,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.g.setAttributeParameter('userFullname', null);//clar parameter to enable preChatForm on logout with other token
                 that.g.setAttributeParameter('userEmail', null);//clar parameter to enable preChatForm on logout with other token
                 this.g.setParameter('conversationsBadge', 0);
+                this.g.setParameter('recipientId', null, false)
                 that.hideWidget();
                 // that.g.setParameter('isShown', false, true);
                 that.g.isLogout = true;
@@ -1220,11 +1223,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             windowContext['tiledesk'].sendSupportMessage = function (
                 message,
                 recipientId,
+                recipientFullname,
                 type,
                 metadata,
                 additional_attributes
             ) {
                 const _globals = windowContext['tiledesk'].angularcomponent.component.g;
+                console.log('globalllll', _globals)
                 if (!message) {
                     message = 'hello';
                 }
@@ -1254,12 +1259,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         .sendMessage(
                             _globals.tenant,
                             _globals.senderId,
-                            _globals.senderFullname,
+                            _globals.userFullname,
                             message,
                             type,
                             metadata,
                             recipientId,
-                            _globals.recipientFullname,
+                            recipientFullname,
                             attributes,
                             _globals.projectid,
                             _globals.channelType
@@ -1668,6 +1673,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /** show callout */
     private showCallout() {
         if (this.g.isOpen === false) {
+            // this.g.setParameter('calloutTimer', 1)
+            this.eyeeyeCatcherCardComponent.openEyeCatcher();
             this.g.setParameter('displayEyeCatcherCard', 'block');
             this.triggerOnOpenEyeCatcherEvent();
         }
@@ -1797,6 +1804,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logger.debug('[APP-COMP] AppComponent::startNwConversation');
         const newConvId = this.generateNewUidConversation();
         this.g.setParameter('recipientId', newConvId);
+        this.appStorageService.setItem('recipientId', newConvId)
         this.logger.debug('[APP-COMP]  recipientId: ', this.g.recipientId);
         this.isConversationArchived = false;
         this.triggerNewConversationEvent(newConvId);
