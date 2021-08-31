@@ -1,5 +1,14 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.17-rc.4
+- bug-fixed: senderFullname and recipientFullname parameters in sendSupportMessage function was undefined
+- bug-fixed: on new conversation started not saved recipientId in appStorage
+- bug-fixed: on logged out, widget restart from last conversation opened (this occur because globals stores 'recipiedId' --> cleaned parameter)
+- bug-fixed: if calloutTimer not set (default is -1), if use showCallout() method, emojii was not shown
+- changed: onBeforeMessageSent event is emitted after calc recipientFullname
+
+### 5.0.17-beta.1 - NATIVE-MQTT
+
 ### 5.0.17-rc.3 
 - bug-fixed: endpoint parameter in mqtt.connect method in chat21clinet.js was hard-coded
 
