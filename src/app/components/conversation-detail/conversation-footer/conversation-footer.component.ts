@@ -290,17 +290,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         // const showWidgetNameInConversation = this.showWidgetNameInConversation;
         const widgetTitle = this.widgetTitle;
         const conversationWith = this.conversationWith;
-        this.onBeforeMessageSent.emit({
-          senderFullname: recipientFullname,
-          text: msg,
-          type: type,
-          metadata: metadata,
-          conversationWith: conversationWith,
-          recipientFullname: recipientFullname,
-          attributes : attributes,
-          projectid: projectid,
-          channelType: channelType
-        })
+        
         // this.triggerBeforeSendMessageEvent(
         //   recipientFullname,
         //   msg,
@@ -324,6 +314,19 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         // if (showWidgetNameInConversation && showWidgetNameInConversation === true) {
         //   recipientFullname += ' - ' + widgetTitle;
         // }
+
+        this.onBeforeMessageSent.emit({
+          senderFullname: recipientFullname,
+          text: msg,
+          type: type,
+          metadata: metadata,
+          conversationWith: conversationWith,
+          recipientFullname: recipientFullname,
+          attributes : attributes,
+          projectid: projectid,
+          channelType: channelType
+        })
+        
         const messageSent = this.conversationHandlerService.sendMessage(
           msg,
           type,

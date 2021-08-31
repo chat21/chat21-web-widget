@@ -714,7 +714,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.conversationsHandlerService = this.chatManager.conversationsHandlerService
     this.archivedConversationsHandlerService = this.chatManager.archivedConversationsService
 
-
   }
 
 
