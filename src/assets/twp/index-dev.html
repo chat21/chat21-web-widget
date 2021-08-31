@@ -827,7 +827,7 @@
 
         function onClickShowAllConversations(){
             let status = document.querySelector('input[name="showAllConversations"]:checked').value
-            window.tiledeskSettings['showLogoutOption'] = stringToBoolean(status)
+            window.tiledeskSettings['showAllConversations'] = stringToBoolean(status)
             console.log('onClickShowAllConversations:', window.tiledeskSettings)
             window.Tiledesk('restart')
         }
