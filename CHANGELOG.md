@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.17-rc.5
+- bug-fixed: while load widget test page, if change active tab, widget test page title flashes and show 1 conversation not read (also if all conversations are read) - (WID-63)
+- bug-fixed: if widget is closed and receive an image, last-message component show 'Invalid date' as timestamp info message date ( WID-61)
+- changed: onBeforeMessageSent and onAfterMessageSend events object 
+
 ### 5.0.17-rc.4
 - bug-fixed: senderFullname and recipientFullname parameters in sendSupportMessage function was undefined
 - bug-fixed: on new conversation started not saved recipientId in appStorage

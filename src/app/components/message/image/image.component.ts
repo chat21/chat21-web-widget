@@ -19,8 +19,8 @@ export class ImageComponent implements OnInit {
   }
 
   onLoaded(event){
-      this.loading = false
-      this.onImageRendered.emit(true)
+    this.loading = false
+    this.onImageRendered.emit(true)
   }
 
 
