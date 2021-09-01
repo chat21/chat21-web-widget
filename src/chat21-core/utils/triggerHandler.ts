@@ -27,7 +27,7 @@ export class Triggerhandler {
     public triggerBeforeSendMessageEvent(messageModel){
         this.logger.info(' ---------------- triggerBeforeSendMessageEvent ---------------- ', messageModel);
         try {
-            const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { messageModel } });
+            const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { message: messageModel } });
             const windowContext = this.windowContext;
             if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
                 windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeMessageSend);
