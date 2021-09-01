@@ -7,14 +7,12 @@ export const environment = {
   production: false,
   version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
   remoteConfig: true,
-  // remoteConfigUrl: '/widget-config.json',
-  remoteConfigUrl: '/widget-config-firebase.json',
-  // remoteConfigUrl: '/widget-config-mqtt.json',
-  // remoteConfigUrl: '/widget-config-docker.json',
+  remoteConfigUrl: '/widget-config.json',
   loadRemoteTranslations: true,
   remoteTranslationsUrl: 'http://localhost:3000/',
   chatEngine: 'mqtt',
   uploadEngine: 'native',
+  tenant: 'tilechat',
   fileUploadAccept:"*/*",
   logLevel: 'INFO',
   firebaseConfig: {
@@ -25,11 +23,11 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT',
     appId: 'CHANGEIT',
-    tenant: 'CHANGEIT',
+    tenant: 'tilechat'
   },
   chat21Config: {
     appId: 'tilechat',
-    MQTTendpoint: 'ws://localhost:15675/ws', // MQTT endpoint
+    MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
     APIendpoint: 'http://localhost:8004/api'
   },
   apiUrl: 'http://localhost:3000/',
