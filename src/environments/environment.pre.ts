@@ -7,23 +7,24 @@
 
 export const environment = {
   production: true,
-  version: require('../../package.json').version, // https://stackoverflow.com/questions/34907682/how-to-display-app-version-in-angular2
-  remoteConfig: true,
+  version: require('../../package.json').version,
+  remoteConfig: false,
   remoteConfigUrl: '/widget-config.json',
-  remoteTranslationsUrl: 'http://localhost:3000/',
+  // remoteConfigUrl: '/widget-config-mqtt.json',
+  remoteTranslationsUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   loadRemoteTranslations: true,
-  chatEngine: 'mqtt',
-  uploadEngine: 'native',
+  chatEngine: 'firebase',
+  uploadEngine: 'firebase',
   fileUploadAccept:"*/*",
-  logLevel: 'INFO',
+  logLevel: 'DEBUG',
   firebaseConfig: {
-    apiKey: 'CHANGEIT',
-    authDomain: 'CHANGEIT',
-    databaseURL: 'CHANGEIT',
-    projectId: 'CHANGEIT',
-    storageBucket: 'CHANGEIT',
-    messagingSenderId: 'CHANGEIT',
-    appId: 'CHANGEIT',
+    apiKey: 'AIzaSyCoWXHNvP1-qOllCpTshhC6VjPXeRTK0T4',
+    authDomain: 'chat21-pre-01.firebaseapp.com',
+    databaseURL: 'https://chat21-pre-01.firebaseio.com',
+    projectId: 'chat21-pre-01',
+    storageBucket: 'chat21-pre-01.appspot.com',
+    messagingSenderId: '269505353043',
+    appId: '1:269505353043:web:b82af070572669e3707da6',
     tenant: 'tilechat',
   },
   chat21Config: {
@@ -31,7 +32,7 @@ export const environment = {
     MQTTendpoint: 'mqtt://localhost:15675/ws', // MQTT endpoint
     APIendpoint: 'http://localhost:8004/api'
   },
-  apiUrl: 'http://localhost:3000/',
+  apiUrl: 'https://tiledesk-server-pre.herokuapp.com/',
   baseImageUrl: 'https://firebasestorage.googleapis.com/v0/b/',
   defaultLang : 'en',
   storage_prefix : 'widget_sv5',

@@ -239,7 +239,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     //widget closed
                     that.lastConversation = conversation;
                     that.g.isOpenNewMessage = true;
-                    console.log('lastconversationnn', that.lastConversation, conversation)
+                    this.logger.debug('[APP-COMP] lastconversationnn', that.lastConversation)
 
                     let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
                     that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
@@ -260,6 +260,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                     if (conversation.is_new) {
                         // this.soundMessage(); 
+                        that.manageTabNotification()
                     }
                     if(this.g.isOpen === false){
                         that.lastConversation = conversation;
@@ -272,7 +273,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
                     this.logger.debug('[APP-COMP] widgetclosed:::', that.g.conversationsBadge, that.conversationsHandlerService.countIsNew())
                 }
-                that.manageTabNotification()
+                // that.manageTabNotification()
                 // });
             });
             this.subscriptions.push(subAddedConversation);
@@ -1229,7 +1230,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 additional_attributes
             ) {
                 const _globals = windowContext['tiledesk'].angularcomponent.component.g;
-                console.log('globalllll', _globals)
                 if (!message) {
                     message = 'hello';
                 }

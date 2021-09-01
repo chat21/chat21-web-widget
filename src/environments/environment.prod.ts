@@ -22,7 +22,7 @@ export const environment = {
     storageBucket: 'CHANGEIT',
     messagingSenderId: 'CHANGEIT',
     appId: 'CHANGEIT',
-    tenant: 'CHANGEIT',
+    tenant: 'CHANGEIT'
   },
   chat21Config: {
     appId: 'tilechat',
