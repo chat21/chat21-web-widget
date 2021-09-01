@@ -325,7 +325,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
             }
             if (k === 'timestamp') {
                 console.log("aggiorno key:" + k);
-                conv.timestamp = this.getTimeLastMessage(snap[k]);
+                conv.timestamp = snap[k]; //this.getTimeLastMessage(snap[k]);
             }
             if (k === 'status') {
                 console.log("aggiorno key:" + k);
