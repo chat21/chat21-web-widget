@@ -10,12 +10,15 @@ import 'rxjs/add/operator/catch';
 import { Globals } from '../utils/globals';
 
 import { AppConfigService } from './app-config.service';
+import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
 
 @Injectable()
 export class TranslatorService {
 
   private defaultLanguage = 'en'; // default language
   private language: string; // user language
+  private logger: LoggerService = LoggerInstance.getInstance()
   // private translations: Object;
 
   translated_string: any;
@@ -59,7 +62,7 @@ export class TranslatorService {
 
     this._translate.setDefaultLang('it');
     const browserLang = this._translate.getBrowserLang();
-    console.log('!!! ===== HELLO APP.COMP ===== DEVICE LANG ', browserLang);
+    this.logger.debug('[TRANSLATOR-SERV] initializeTransaltorService--> DEVICE LANG ', browserLang);
     if (browserLang) {
           if (browserLang === 'it') {
               this._translate.use('it');
@@ -93,11 +96,11 @@ export class TranslatorService {
   // https://github.com/ngx-translate/core/issues/282
   initI18n(): Promise<any> {
     this._translate.addLangs(['en', 'it']);
-    console.log(`»»»» initI18n getLangs '`, this._translate.getLangs());
+    this.logger.debug('[TRANSLATOR-SERV]»»»» initI18n getLangs ', this._translate.getLangs());
 
     // Set the default language for translation strings.
     const defaultLanguage = 'en';
-    console.log(`»»»» initI18n setDefaultLang '`);
+    this.logger.debug('[TRANSLATOR-SERV] »»»» initI18n setDefaultLang ');
     this._translate.setDefaultLang(defaultLanguage);
     // Detect user language.
     let browserLang = this._translate.getBrowserLang();
@@ -126,8 +129,8 @@ export class TranslatorService {
           this.translateWithBrowserLang(data['_body'], defaultLanguage);
         }, (er) => {
           // failed to load  default language from remote - fall back to local default language
-          console.log(`»»»» initI18n Get default language - ERROR `, er);
-          console.log(`»»»» initI18n - »»» loadRemoteTranslations IN ERROR ?`, environment.loadRemoteTranslations);
+          this.logger.error('[TRANSLATOR-SERV] »»»» initI18n Get default language - ERROR ', er);
+          this.logger.error('[TRANSLATOR-SERV] »»»» initI18n - »»» loadRemoteTranslations IN ERROR ?', environment.loadRemoteTranslations);
         }, () => {
           resolve(true);
           // console.log('»»»» initI18n Get default language * COMPLETE *');
@@ -138,7 +141,7 @@ export class TranslatorService {
       .subscribe((data) => {
         // I18N File loaded successfully, we can proceed
         // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
-        console.log(`»»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
+        this.logger.debug(`[TRANSLATOR-SERV] »»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
         if (!data._body || data._body === undefined || data._body === '') {
           browserLang = defaultLanguage;
           this.g.lang = defaultLanguage;
@@ -153,7 +156,7 @@ export class TranslatorService {
           this.translateWithBrowserLang(data._body, browserLang);
         }
       }, (error) => {
-        console.log(`»»»» initI18n Get '${browserLang}' language - ERROR `, error);
+        this.logger.error(`[TRANSLATOR-SERV] »»»» initI18n Get '${browserLang}' language - ERROR `, error);
       }, () => {
         resolve(true);
         // console.log(`»»»» initI18n Get '${browserLang}' language - COMPLETE`);
@@ -165,7 +168,7 @@ export class TranslatorService {
 
   private translateWithBrowserLang(body: any, lang: string) {
     this._translate.use(lang);
-    console.log(`»»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
+    this.logger.debug(`[TRANSLATOR-SERV] »»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
     if (environment.loadRemoteTranslations) {
       const remote_translation_res = JSON.parse(body);
       // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);
@@ -295,8 +298,7 @@ export class TranslatorService {
       }
 
     }, (error) => {
-      console.log('»»»»»» »»»»»» GET TRANSLATED LABELS - ERROR ', error);
-
+      this.logger.error('[TRANSLATOR-SERV]»»»»»» »»»»»» GET TRANSLATED LABELS - ERROR ', error);
     }, () => {
       // console.log('»»»»»» »»»»»» GET TRANSLATED LABELS * COMPLETE *');
     });

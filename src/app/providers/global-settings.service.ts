@@ -12,6 +12,8 @@ import { AppConfigService } from './app-config.service';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { ProjectModel } from '../../models/project';
 import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
+import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
 
 
 @Injectable()
@@ -19,6 +21,7 @@ export class GlobalSettingsService {
     globals: Globals;
     el: ElementRef;
     obsSettingsService: BehaviorSubject<boolean>;
+    private loggger: LoggerService = LoggerInstance.getInstance()
 
     constructor(
         public http: Http,
@@ -328,6 +331,7 @@ export class GlobalSettingsService {
      * E: imposto i parametri recuperati dallo storage in global
     */
     setParameters(response: any ) {
+        // this.loggger.debug('***************** setParameters *****************', response)
         this.globals.wdLog(['***************** setParameters *****************', response]);
         if (response !== null) {
             this.setVariablesFromService(this.globals, response);
@@ -351,7 +355,7 @@ export class GlobalSettingsService {
      */
     setCssIframe() {
         // tslint:disable-next-line:max-line-length
-        this.globals.wdLog(['***************** setCssIframe *****************', this.globals.windowContext.document.getElementById('tiledeskdiv')]);
+        // this.globals.wdLog(['***************** setCssIframe *****************', this.globals.windowContext.document.getElementById('tiledeskdiv')]);
         const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskdiv');
         if (!divTiledeskiframe) {
             return;
@@ -1308,7 +1312,7 @@ export class GlobalSettingsService {
     setDepartmentFromExternal() {
         // se esiste un departmentID impostato dall'esterno,
         // creo un department di default e lo imposto come department di default
-        this.globals.wdLog(['EXTERNAL departmentID ::::' + this.globals.departmentID]);
+        // this.globals.wdLog(['EXTERNAL departmentID ::::' + this.globals.departmentID]);
         let isValidID = false;
         if (this.globals.departmentID) {
             this.globals.departments.forEach(department => {

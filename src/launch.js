@@ -119,7 +119,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
     /**** BEGIN EVENST ****/
     /** */
     window.tiledesk.on('onNewConversation', function(event_data) {
-        console.log("test-custom-auth.html onNewConversation >>>",event_data);
+        // console.log("test-custom-auth.html onNewConversation >>>",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log(">>>> tiledeskToken >>>> ",event_data.detail.appConfigs.apiUrl+event_data.detail.default_settings.projectid);
         if(tiledeskToken) {
@@ -132,7 +132,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onLoggedIn', function(event_data) {
-        console.log("test-custom-auth.html onLoggedIn",event_data);
+        // console.log("test-custom-auth.html onLoggedIn",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
@@ -145,7 +145,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onAuthStateChanged', function(event_data) {
-        console.log("test-custom-auth.html onAuthStateChanged",event_data);
+        // console.log("test-custom-auth.html onAuthStateChanged",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {
@@ -169,7 +169,7 @@ function initAysncEvents() {
     console.log('INIT ASYNC EVENTS')
 
     window.tileDeskAsyncInit = function() {  
-      console.log('launch tiledeskAsyncInit:::')
+      // console.log('launch tiledeskAsyncInit:::')
         window.tiledesk.on('onLoadParams', function(event_data) {
           if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
             window.Tiledesk.q.forEach(f => {
@@ -182,7 +182,7 @@ function initAysncEvents() {
                       window.tiledesk.on(functionName, functionCallback); 
                       functionCallback(event_data);
                     } else {
-                      console.error("functionCallback is not a function.");
+                      console.error("initAysncEvents --> functionCallback is not a function.");
                     }
                   }   
                 }
@@ -193,7 +193,7 @@ function initAysncEvents() {
 
         window.tiledesk.on('onInit', function(event_data) {
           if (window.Tiledesk && window.Tiledesk.q && window.Tiledesk.q.length>0) {
-            console.log("w.q", window.Tiledesk.q);
+            // console.log("w.q", window.Tiledesk.q);
             window.Tiledesk.q.forEach(f => {
               if (f.length>=1) {
                 var functionName = f[0];
@@ -205,7 +205,7 @@ function initAysncEvents() {
                       window.tiledesk.on(functionName, functionCallback); //potrei usare window.Tiledesk ?!?
 
                       if (functionName==="onInit") {
-                          console.log("onInit exec");
+                          // console.log("onInit exec");
                           functionCallback(event_data)
                       }
                     } else {
@@ -213,7 +213,7 @@ function initAysncEvents() {
                     }
                   }   
                 } else {
-                  console.log("calling method", functionName);
+                  // console.log("calling method", functionName);
                   window.tiledesk[functionName](); 
                 }
 
@@ -222,7 +222,7 @@ function initAysncEvents() {
 
             // RICHIAMATO DOPO L'INIT DEL WIDGET
             window.Tiledesk = function() {
-              console.log('window.Tiledesk:', arguments)
+              // console.log('window.Tiledesk:', arguments)
               if (arguments.length>=1) {
                 var functionName = arguments[0];
                 if (arguments.length==2) {
@@ -230,10 +230,10 @@ function initAysncEvents() {
                 }
                 var methodOrProperty = window.tiledesk[functionName];
                 if(typeof methodOrProperty==="function"){     
-                  console.log("method:", functionName, functionCallback);            
+                  // console.log("method:", functionName, functionCallback);            
                   return window.tiledesk[functionName](functionCallback);            
                 }else { //property
-                  console.log("property:", functionName, functionCallback);
+                  // console.log("property:", functionName, functionCallback);
                   return window.tiledesk[functionName];
                 }
               }
