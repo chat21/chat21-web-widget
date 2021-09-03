@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { isString } from 'util';
 import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
+import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 import { Globals } from '../../utils/globals';
 
 @Component({
@@ -21,16 +23,19 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   // ========= begin:: component variables ======= //
   preChatFormGroup: FormGroup;
+  preChatFormGroupCustom:FormGroup;
   userFullname: string;
   userEmail: string;
   // ========= end:: component variables ======= //
 
   colorBck: string;
-
+  preChatFormStruct: Array<any>;
+  translationLabelMap: Map<string, string>;
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
-    public appStorageService: AppStorageService
+    public appStorageService: AppStorageService,
+    private customTranslateService: CustomTranslateService,
   ) {
 
   }
@@ -45,8 +50,70 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
     if (this.preChatFormGroup) {
       this.subcribeToFormChanges();
     }
+
+    this.preChatFormStruct = [
+      {
+        label: "TEL",
+        name: "tel",
+        type: "string",
+        mandatory: true,
+        regex: "[0-9]*"
+      },
+      {
+       label: {
+          en: "Email", // pivot
+          it: "Indirizzo email"
+        },
+        name: "email",
+        type: "string",
+        mandatory: false,
+        regex: "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"
+      },
+      {
+        label: "Prima di proseguire devi accettare l’informativa Privacy (<a href='URL'>leggi</a>)",
+        type: "label" // oppure assente?
+      },
+      {
+        label: {
+          en: "Accept", // pivot
+          it: "Accetto"
+        },
+        name: "privacy",
+        type: "checkbox",
+        mandatory: true // nel caso check "spunta"
+      }
+    ];
+
+    this.preChatFormGroupCustom = this.buildFormGroup(this.preChatFormStruct);
+    console.log('formmmmmm', this.preChatFormGroupCustom)
+    console.log('formmmmmm keyss', Object.keys(this.preChatFormGroupCustom.controls))
+
+    
   }
 
+  buildFormGroup(inputJson: any[]): FormGroup {
+    let objectFormBuilder: { [key: string]: FormControl } = {}
+    this.preChatFormStruct.forEach(child => {
+      if(child.type && (child.type === 'string' || child.type === 'checkbox')){
+        let validatorsObject: any[] = []
+        child.mandatory? validatorsObject.push(Validators.required) : null
+        child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex))) : null
+        objectFormBuilder[child.name] = new FormControl(null, Validators.compose(validatorsObject))
+      } 
+    })
+    return this.formBuilder.group(objectFormBuilder)
+  }
+
+  returnTranslation(label: string | {}): string {
+    console.log('labelllll', label)
+    if(typeof label === 'object'){
+      //check if a key in label object contains browser language
+      return 'translate'
+    }else if (isString(label)){
+      return this.customTranslateService.translateLanguage([label]).get(label)
+    }
+    
+  }
   ngAfterViewInit() {
     setTimeout(() => {
       if (this.afPrechatFormComponent) {

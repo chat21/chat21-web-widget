@@ -65,6 +65,13 @@ onFocus="document.querySelector('[start-focus-chat21-prechat-form]').focus()">
                             </small>
                         </div>
                     </form>
+
+                    <form id="chat21-form-container" [formGroup]="preChatFormGroupCustom">
+                        <div class="c21-input-container" *ngFor="let element of preChatFormStruct">
+                            <input *ngIf="element.type==='string' || element.type === 'checkbox'" class="form-control" tabindex="1411" [attr.disabled]="!g.isOpenPrechatForm? '' : null" [type]="element.type" id="form-field-name" [formControlName]="element.name" [placeholder]="returnTranslation(element.label)">
+                            
+                        </div>
+                    </form>
                     
                     <button tabindex="1413" [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
                         <span class="v-align-center">
