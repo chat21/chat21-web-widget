@@ -149,6 +149,11 @@ import { NativeImageRepoService } from '../chat21-core/providers/native/native-i
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
 import { LoggerInstance } from '../chat21-core/providers/logger/loggerInstance';
+import { FormBuilderComponent } from './components/form/form-builder/form-builder.component';
+import { CheckboxComponent } from './components/form/inputs/checkbox/checkbox.component';
+import { RadioButtonComponent } from './components/form/inputs/radio-button/radio-button.component';
+import { SelectComponent } from './components/form/inputs/select/select.component';
+import { LabelComponent } from './components/form/inputs/label/label.component';
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -318,7 +323,12 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     AvatarComponent,
     ReturnReceiptComponent,
     InfoMessageComponent,
-    InterlalFrameComponent,  
+    InterlalFrameComponent,
+    FormBuilderComponent,
+    CheckboxComponent,
+    RadioButtonComponent,
+    SelectComponent,
+    LabelComponent,  
   ],
   imports: [
     BrowserModule,

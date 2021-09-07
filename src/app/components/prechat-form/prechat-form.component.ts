@@ -23,19 +23,17 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   // ========= begin:: component variables ======= //
   preChatFormGroup: FormGroup;
-  preChatFormGroupCustom:FormGroup;
   userFullname: string;
   userEmail: string;
   // ========= end:: component variables ======= //
 
   colorBck: string;
+  browserLang: string;
   preChatFormStruct: Array<any>;
-  translationLabelMap: Map<string, string>;
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
-    public appStorageService: AppStorageService,
-    private customTranslateService: CustomTranslateService,
+    public appStorageService: AppStorageService
   ) {
 
   }
@@ -83,37 +81,9 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         mandatory: true // nel caso check "spunta"
       }
     ];
-
-    this.preChatFormGroupCustom = this.buildFormGroup(this.preChatFormStruct);
-    console.log('formmmmmm', this.preChatFormGroupCustom)
-    console.log('formmmmmm keyss', Object.keys(this.preChatFormGroupCustom.controls))
-
-    
+  
   }
 
-  buildFormGroup(inputJson: any[]): FormGroup {
-    let objectFormBuilder: { [key: string]: FormControl } = {}
-    this.preChatFormStruct.forEach(child => {
-      if(child.type && (child.type === 'string' || child.type === 'checkbox')){
-        let validatorsObject: any[] = []
-        child.mandatory? validatorsObject.push(Validators.required) : null
-        child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex))) : null
-        objectFormBuilder[child.name] = new FormControl(null, Validators.compose(validatorsObject))
-      } 
-    })
-    return this.formBuilder.group(objectFormBuilder)
-  }
-
-  returnTranslation(label: string | {}): string {
-    console.log('labelllll', label)
-    if(typeof label === 'object'){
-      //check if a key in label object contains browser language
-      return 'translate'
-    }else if (isString(label)){
-      return this.customTranslateService.translateLanguage([label]).get(label)
-    }
-    
-  }
   ngAfterViewInit() {
     setTimeout(() => {
       if (this.afPrechatFormComponent) {
