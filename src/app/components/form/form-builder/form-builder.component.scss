@@ -3,13 +3,39 @@
 #chat21-form-container {
     padding: 0 0 30px 0;
 
-    .c21-input-container {
-        background-color: #fff;
-        overflow: hidden;
+    .c21-body-header{
+        padding: 10px 0px;
+        margin: 0px 12px;
         position: relative;
-        height: 36px;
-        margin: 10px 10px 0px 10px;
+        left: 0;
+        right: 0;
+        .c21-form-message-field {
+            padding: 0;
+            margin: 0;
+            line-height: 1.2em;
+            color: #616161;
+            font-size: 1.5em;
+            text-align: center;
+            word-wrap: break-word;
+        }
     }
+
+    .c21-body-header-checkbox{
+        margin: 0px 12px;
+        position: relative;
+        left: 0;
+        right: 0;
+        .c21-form-message-field {
+            padding: 0;
+            margin: 0;
+            line-height: 1.2em;
+            color: #616161;
+            font-size: 1.5em;
+            text-align: center;
+            word-wrap: break-word;
+        }
+    }
+
     .text-danger {
         color: $danger;
         font-size: 1em;
@@ -27,10 +53,11 @@
         background-color: #ffffff;
         margin: 0 0 7px 0;
         position: relative;
-
         margin: 0;
         padding: 0;
+        overflow: hidden;
         width: 100%;
+        height: 36px;
         display: inline-flex;
         input, 
         select {

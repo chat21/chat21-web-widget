@@ -163,6 +163,10 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   returnClosePage() {
     this.onClosePage.emit();
   }
+
+  onSubmitForm(form: any){
+    console.log('form returneddd', form)
+  }
   // ========= end:: ACTIONS ============//
 
 

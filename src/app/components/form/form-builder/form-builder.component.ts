@@ -12,7 +12,8 @@ import { isString } from 'util';
 })
 export class FormBuilderComponent implements OnInit {
 
-  @Input() formArray: Array<FormArray>
+  @Input() formArray: Array<FormArray>;
+  @Input() isOpenPrechatForm: boolean;
   @Output() onSubmitForm = new EventEmitter<{}>();
 
   preChatFormGroupCustom:FormGroup;
@@ -75,6 +76,11 @@ export class FormBuilderComponent implements OnInit {
 
   onSubmitPreChatForm(){
     this.submitted = true;
-    console.log('sssssssss', this.preChatFormGroupCustom.value)
+    this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
+  }
+
+  onResetForm(){
+    this.submitted = false;
+    this.preChatFormGroupCustom.reset();
   }
 }

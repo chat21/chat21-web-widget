@@ -154,6 +154,9 @@ import { CheckboxComponent } from './components/form/inputs/checkbox/checkbox.co
 import { RadioButtonComponent } from './components/form/inputs/radio-button/radio-button.component';
 import { SelectComponent } from './components/form/inputs/select/select.component';
 import { LabelComponent } from './components/form/inputs/label/label.component';
+import { FormTextComponent } from './components/form/inputs/form-text/form-text.component';
+import { FormLabelComponent } from './components/form/inputs/form-label/form-label.component';
+import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -328,7 +331,10 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     CheckboxComponent,
     RadioButtonComponent,
     SelectComponent,
-    LabelComponent,  
+    LabelComponent,
+    FormTextComponent,
+    FormLabelComponent,
+    FormCheckboxComponent,  
   ],
   imports: [
     BrowserModule,

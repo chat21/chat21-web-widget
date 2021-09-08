@@ -1,21 +1,22 @@
 <div>
   <form id="chat21-form-container" [formGroup]="preChatFormGroupCustom">
     <span *ngFor="let element of formArray">
-        <div class="c21-input-container" *ngIf="element.type==='string'">
-            <input class="form-control" tabindex="1411" type="text" id="form-field-name" [formControlName]="element.name" [placeholder]="element.label">
-            <small [hidden]="preChatFormGroupCustom.get(element.name).valid || preChatFormGroupCustom.get(element.name).pristine">
-                errorrrrr
-            </small>
-        </div>
-        <div  *ngIf="element.type === 'label'">
-          <label [innerHTML]="element.label"></label>
-      </div>
-        <div *ngIf="element.type === 'checkbox'">
+        <chat-form-text *ngIf="element.type==='string'"
+          [element]="element"
+          [controlName]="element.name">
+        </chat-form-text>
+
+        <chat-form-label *ngIf="element.type==='label'"
+          [element]="element"
+          [controlName]="element.name">
+        </chat-form-label>
+
+        <div *ngIf="element.type === 'checkbox'" class="c21-body-header-checkbox">
             <input  class="form-check-input" 
                     type="checkbox" 
                     [formControlName]="element.name"
                     [class.errors]="submitted && preChatFormGroupCustom.get(element.name).errors">
-            <label>{{element.label}}</label>
+            <label class="c21-form-message-field">{{element.label}}</label>
             <small [hidden]="preChatFormGroupCustom.get(element.name).valid || preChatFormGroupCustom.get(element.name).pristine">
               errorrrr checkbox 
             </small>
@@ -23,6 +24,7 @@
               fild required or error present
             </div>
         </div>
+
     </span>
   </form>
   <button (click)="onSubmitPreChatForm()">
