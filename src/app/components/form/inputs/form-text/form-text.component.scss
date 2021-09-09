@@ -32,10 +32,6 @@
         line-height: 1.2em;
         -webkit-box-shadow: none;
         box-shadow: none;
-
-        &.errors {
-            border: 1px solid red;
-        }
     }
     input::placeholder {
         color: rgb(179, 182, 184);
@@ -65,4 +61,17 @@
     input:-webkit-autofill:active {
         transition: background-color 5000s ease-in-out 0s;
     }
+}
+
+input[type='text'].errors{
+    border-bottom: 2px solid red;
+    color: red;
+}
+
+.text-danger {
+    color: red;
+    font-size: 1em;
+    min-height: 20px;
+    background-color: #ffffff;
+    margin: 0px 10px 0px 10px;
 }

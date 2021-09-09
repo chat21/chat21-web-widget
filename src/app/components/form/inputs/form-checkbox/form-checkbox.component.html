@@ -1,3 +1,15 @@
-<p>
-  form-checkbox works!
-</p>
+<form [formGroup]="form">
+  <div class="c21-body-header-checkbox">
+    <input  class="form-check-input errors" 
+            type="checkbox" 
+            [formControlName]="element.name"
+            [ngClass]="{'errors': hasSubmitted && form.controls[element.name].errors}">
+    <label class="c21-form-message-field">{{element.label}}</label>
+    <!-- <small [hidden]="form.controls[element.name].valid || form.get(element.name).pristine">
+      errorrrr checkbox 
+    </small> -->
+    <div *ngIf="hasSubmitted && form.get(element.name).errors" class="text-danger">
+      Field required
+    </div>
+  </div>
+</form>

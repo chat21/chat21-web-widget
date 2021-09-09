@@ -1,8 +1,21 @@
 <form [formGroup]="form">
   <div class="c21-input-container" >
-    <input class="form-control" tabindex="1411" type="text" id="form-field-name" [formControlName]="element.name" [placeholder]="element.label">
-    <small [hidden]="form.get(element.name).errors">
-        errorrrrr
-    </small>
+    <input 
+      class="form-control" 
+      tabindex="1411" 
+      type="text" 
+      id="form-field-name" 
+      [formControlName]="element.name" 
+      [placeholder]="element.label"
+      [ngClass]="{'errors': form.controls[element.name].errors && form.controls[element.name].touched }">
+    <!-- <small [hidden]="form.controls[element.name].valid || form.controls[element.name].pristine">
+        Field required
+    </small> -->
+  </div>
+  <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('required')" class="text-danger">
+    Field required
+  </div>
+  <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('pattern')" class="text-danger">
+    Field not match with pattern
   </div>
 </form>

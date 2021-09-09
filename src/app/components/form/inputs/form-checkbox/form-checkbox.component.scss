@@ -1,0 +1,109 @@
+.c21-body-header-checkbox{
+    margin: 0px 12px;
+    position: relative;
+    left: 0;
+    right: 0;
+    .c21-form-message-field {
+        padding: 0;
+        margin: 0;
+        line-height: 1.2em;
+        color: #616161;
+        font-size: 1.5em;
+        text-align: center;
+        word-wrap: break-word;
+    }
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+    margin: 0 0.4em 0.4em 0;
+    border: 1px solid #616161;
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -webkit-appearance: none;
+    -webkit-transition: box-shadow 200ms;
+  
+}
+
+
+/* hover state */
+input[type="checkbox"]:not(:disabled):hover {
+    border-color:#444444; 
+}
+
+/* active state */
+input[type="radio"]:active:not(:disabled),
+input[type="checkbox"]:active:not(:disabled) {
+    border-color:#444444;
+}
+
+/* focus state */
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+    outline:none;
+  
+}
+
+/* input checked border color */
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+    border-color: #616161;
+    background-color: #444444;
+}
+
+/* radio checked */
+input[type="radio"]:checked:before {
+    display: block;
+    height: 0.4em;
+    width: 0.4em;
+    position: relative;
+    left: 0.4em;
+    top: 0.4em;
+    background: #fff;
+    border-radius: 100%;
+    content: '';
+}
+
+/* checkbox checked */
+input[type="checkbox"]:checked:before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    margin-left: 4px;
+    margin-top: 1px;
+}
+
+/* disabled input */
+input:disabled {
+    opacity: .6;
+    box-shadow: none;
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow:none;
+}
+
+/* style label for disabled input */
+input:disabled + label {
+    opacity: .6;
+    cursor:default;
+    -webkit-user-select: none;
+}
+
+input[type='checkbox'].errors {
+    border: 2px solid red;
+}
+
+.text-danger {
+    color: red;
+    font-size: 1em;
+    min-height: 20px;
+    background-color: #ffffff;
+    margin: 0px 10px 0px 10px;
+}

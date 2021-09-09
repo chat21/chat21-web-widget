@@ -3,27 +3,21 @@
     <span *ngFor="let element of formArray">
         <chat-form-text *ngIf="element.type==='string'"
           [element]="element"
-          [controlName]="element.name">
+          [controlName]="element.name"
+          [hasSubmitted]="submitted">
         </chat-form-text>
 
         <chat-form-label *ngIf="element.type==='label'"
           [element]="element"
-          [controlName]="element.name">
+          [controlName]="element.name"
+          [hasSubmitted]="submitted">
         </chat-form-label>
 
-        <div *ngIf="element.type === 'checkbox'" class="c21-body-header-checkbox">
-            <input  class="form-check-input" 
-                    type="checkbox" 
-                    [formControlName]="element.name"
-                    [class.errors]="submitted && preChatFormGroupCustom.get(element.name).errors">
-            <label class="c21-form-message-field">{{element.label}}</label>
-            <small [hidden]="preChatFormGroupCustom.get(element.name).valid || preChatFormGroupCustom.get(element.name).pristine">
-              errorrrr checkbox 
-            </small>
-            <div *ngIf="submitted && preChatFormGroupCustom.get(element.name).errors">
-              fild required or error present
-            </div>
-        </div>
+        <chat-form-checkbox *ngIf="element.type === 'checkbox'"
+          [element]="element"
+          [controlName]="element.name"
+          [hasSubmitted]="submitted">
+        </chat-form-checkbox>
 
     </span>
   </form>

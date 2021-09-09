@@ -1,3 +1,4 @@
+import { FormArray } from './../../../chat21-core/models/formArray';
 import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
@@ -29,7 +30,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   colorBck: string;
   browserLang: string;
-  preChatFormStruct: Array<any>;
+  preChatFormStruct: Array<FormArray>;
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
@@ -55,7 +56,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         name: "tel",
         type: "string",
         mandatory: true,
-        regex: "[0-9]*"
+        regex: "^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$",
+        value: '1234567890'
       },
       {
        label: {
@@ -78,6 +80,21 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         },
         name: "privacy",
         type: "checkbox",
+        mandatory: true // nel caso check "spunta"
+      },
+      {
+        options: [
+          {
+            en: "Male", // pivot
+            it: "maschio"
+          },
+          {
+            en: "Female", 
+            it: "femmina"
+          }
+        ],
+        name: "sex",
+        type: "radio",
         mandatory: true // nel caso check "spunta"
       }
     ];

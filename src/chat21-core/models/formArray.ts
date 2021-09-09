@@ -5,5 +5,7 @@ export class FormArray {
         public type?: string,
         public mandatory?: boolean,
         public regex?: string,
+        public value?: string,
+        public options?: Array<any>
       ) { }
 }

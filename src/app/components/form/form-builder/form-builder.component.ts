@@ -1,4 +1,3 @@
-import { CheckboxComponent } from './../inputs/checkbox/checkbox.component';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FormArray } from './../../../../chat21-core/models/formArray';
 import { Component, OnInit, SimpleChange, EventEmitter, Output, Input } from '@angular/core';
@@ -42,9 +41,11 @@ export class FormBuilderComponent implements OnInit {
     inputJson.forEach(child => {
       if(child.type && (child.type === 'string')){
         let validatorsObject: any[] = []
+        let defaultValue: string = null
         child.mandatory? validatorsObject.push(Validators.required) : null
         child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex))) : null
-        objectFormBuilder[child.name] = new FormControl(null, Validators.compose(validatorsObject))
+        child.value? defaultValue= child.value : null
+        objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
       }else if (child.type === 'checkbox'){
         let validatorsObject: any[] = []
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
@@ -76,6 +77,7 @@ export class FormBuilderComponent implements OnInit {
 
   onSubmitPreChatForm(){
     this.submitted = true;
+    console.log('formmmmm', this.preChatFormGroupCustom)
     this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
   }
 

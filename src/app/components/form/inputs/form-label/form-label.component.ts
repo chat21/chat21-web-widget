@@ -11,6 +11,7 @@ export class FormLabelComponent implements OnInit {
 
   @Input() element: FormArray;
   @Input() controlName: string;
+  @Input() hasSubmitted: boolean; 
 
   form: FormGroup;
   constructor(private rootFormGroup: FormGroupDirective) { }
