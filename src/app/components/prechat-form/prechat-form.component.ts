@@ -56,8 +56,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         name: "tel",
         type: "string",
         mandatory: true,
-        regex: "^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$",
-        value: '1234567890'
+        regex: "[0-9]",
+        value: '0836661234'
       },
       {
        label: {
@@ -82,21 +82,21 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         type: "checkbox",
         mandatory: true // nel caso check "spunta"
       },
-      {
-        options: [
-          {
-            en: "Male", // pivot
-            it: "maschio"
-          },
-          {
-            en: "Female", 
-            it: "femmina"
-          }
-        ],
-        name: "sex",
-        type: "radio",
-        mandatory: true // nel caso check "spunta"
-      }
+      // {
+      //   options: [
+      //     {
+      //       en: "Male", // pivot
+      //       it: "maschio"
+      //     },
+      //     {
+      //       en: "Female", 
+      //       it: "femmina"
+      //     }
+      //   ],
+      //   name: "sex",
+      //   type: "radio",
+      //   mandatory: true // nel caso check "spunta"
+      // }
     ];
   
   }
