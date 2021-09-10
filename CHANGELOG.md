@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.1
+- bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response
+
 ### 5.0.17 - PROD
 
 ### 5.0.17-rc.5

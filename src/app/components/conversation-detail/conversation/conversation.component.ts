@@ -574,7 +574,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       //   );
       this.conversation = new ConversationModel(
         recipientId,
-        {},
+        this.g.attributes,
         channelType,
         this.g.recipientFullname,
         this.conversationWith,

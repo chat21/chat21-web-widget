@@ -457,6 +457,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      * @param conv
      */
     private completeConversation(conv): ConversationModel {
+        this.logger.debug('[FIREBASEConversationsHandlerSERVICE] completeConversation --> conv from firebase', conv)
         conv.selected = false;
         if (!conv.sender_fullname || conv.sender_fullname === 'undefined' || conv.sender_fullname.trim() === '') {
             conv.sender_fullname = conv.sender;
