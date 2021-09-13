@@ -34,10 +34,14 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "chat",
       "styles": [
-        "sass/styles.scss"
+        "sass/styles.scss",
+        "./../node_modules/bootstrap/dist/css/bootstrap.min.css"
       ],
       "scripts": [
-        "assets/js/mqtt/4.2.6/mqtt.min.js"
+        "assets/js/mqtt/4.2.6/mqtt.min.js",
+        "./../node_modules/jquery/dist/jquery.min.js", 
+        "./../node_modules/popper.js/dist/umd/popper.min.js",
+        "./../node_modules/bootstrap/dist/js/bootstrap.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
