@@ -943,12 +943,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.tiledeskAuthService.signInAnonymously(this.g.projectid).then(tiledeskToken => {
                 this.messagingAuthService.createCustomToken(tiledeskToken)
                 const user = this.tiledeskAuthService.getCurrentUser();
-                if (user.firstname || user.lastname) {
+                //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
+                //if tiledesk_userFullname not exist--> update parameter with tiledesk user returned from auth
+                if ((user.firstname || user.lastname) && !this.g.userFullname) {
                     const fullName = user.firstname + ' ' + user.lastname;
                     this.g.setParameter('userFullname', fullName);
                     this.g.setAttributeParameter('userFullname', fullName);
                 }
-                if (user.email) {
+                //check if tiledesk_userEmail exist (passed from URL or tiledeskSettings) before update userEmail parameter
+                //if tiledesk_userEmail not exist--> update parameter with tiledesk user returned from auth
+                if (user.email && !this.g.userEmail) {
                     this.g.setParameter('userEmail', user.email);
                     this.g.setAttributeParameter('userEmail', user.email);
                 }
@@ -1415,19 +1419,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private signInWithCustomToken(token: string) {
         const that = this;
-        this.tiledeskAuthService.signInWithCustomToken(token).then((resp: UserModel) => {
+        this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
             this.messagingAuthService.createCustomToken(token)
-            const currentUser = resp;
-            this.logger.debug('[APP-COMP] signInWithCustomToken user::', currentUser)
-            if (currentUser.firstname || currentUser.lastname) {
-                const fullName = currentUser.firstname + ' ' + currentUser.lastname;
+            this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
+            //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
+            //if tiledesk_userFullname not exist--> update parameter with tiledesk user returned from auth
+            if ((user.firstname || user.lastname) && !this.g.userFullname) {
+                const fullName = user.firstname + ' ' + user.lastname;
                 this.g.setParameter('userFullname', fullName);
                 this.g.setAttributeParameter('userFullname', fullName);
             }
-            if (currentUser.email) {
-                this.logger.debug('[APP-COMP] signInWithCustomToken Set user email::', currentUser.email)
-                this.g.setParameter('userEmail', currentUser.email);
-                this.g.setAttributeParameter('userEmail', currentUser.email);
+            //check if tiledesk_userEmail exist (passed from URL or tiledeskSettings) before update userEmail parameter
+            //if tiledesk_userEmail not exist--> update parameter with tiledesk user returned from auth
+            if (user.email && !this.g.userEmail) {
+                this.g.setParameter('userEmail', user.email);
+                this.g.setAttributeParameter('userEmail', user.email);
             }
             // this.showWidget()
         }).catch(error => {
