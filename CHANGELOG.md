@@ -2,6 +2,7 @@
 
 ### 5.0.18-rc.1
 - bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response
+-removed: 2 unuseful log (app.component and localSessionStorage initialize)
 
 ### 5.0.17 - PROD
 

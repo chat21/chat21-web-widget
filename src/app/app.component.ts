@@ -271,7 +271,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
                     let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
                     that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
-                    this.logger.debug('[APP-COMP] widgetclosed:::', that.g.conversationsBadge, that.conversationsHandlerService.countIsNew())
                 }
                 // that.manageTabNotification()
                 // });

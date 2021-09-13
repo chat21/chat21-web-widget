@@ -17,7 +17,6 @@ export class LocalSessionStorage extends AppStorageService{
       this.storagePrefix = storagePrefix;
       this.projectID = projectID;
       this.persistence = persistence;
-      this.logger.info('[LocalSessionStorage] ****** initialize *******', this.storagePrefix, this.persistence, this.projectID)
   }
 
   /** GET item in local/session storage from key value
