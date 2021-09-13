@@ -4,6 +4,7 @@
         <chat-form-text *ngIf="element.type==='string'"
           [element]="element"
           [controlName]="element.name"
+          [translationErrorLabelMap]="translationErrorLabelMap"
           [hasSubmitted]="submitted">
         </chat-form-text>
 
@@ -16,6 +17,7 @@
         <chat-form-checkbox *ngIf="element.type === 'checkbox'"
           [element]="element"
           [controlName]="element.name"
+          [translationErrorLabelMap]="translationErrorLabelMap"
           [hasSubmitted]="submitted">
         </chat-form-checkbox>
 

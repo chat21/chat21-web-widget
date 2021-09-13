@@ -12,6 +12,7 @@ export class FormCheckboxComponent implements OnInit {
 
   @Input() element: FormArray;
   @Input() controlName: string;
+  @Input() translationErrorLabelMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 
   
   form: FormGroup;

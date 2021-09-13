@@ -49,10 +49,19 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
     if (this.preChatFormGroup) {
       this.subcribeToFormChanges();
     }
-
     this.preChatFormStruct = [
       {
         label: "TEL",
+        errorLabel: {
+          pattern: {
+            en: "Pattern not valid. Insert only 10-digits number", // pivot
+            it: "Campo non valido. Insersci solo un numero di dieci cifre"
+          },
+          length: {
+            en: "Insert 10 digits ", // pivot
+            it: "Inserisci 10 cifre"
+          },
+        },
         name: "tel",
         type: "string",
         mandatory: true,
@@ -60,7 +69,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         value: '0836661234'
       },
       {
-       label: {
+        label: {
           en: "Email", // pivot
           it: "Indirizzo email"
         },

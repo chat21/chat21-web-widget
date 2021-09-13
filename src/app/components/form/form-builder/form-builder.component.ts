@@ -1,3 +1,4 @@
+import { transition } from '@angular/animations';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FormArray } from './../../../../chat21-core/models/formArray';
 import { Component, OnInit, SimpleChange, EventEmitter, Output, Input } from '@angular/core';
@@ -18,14 +19,15 @@ export class FormBuilderComponent implements OnInit {
   preChatFormGroupCustom:FormGroup;
   browserLang: string;
   preChatFormStruct: Array<any>;
-  translationLabelMap: Map<string, string>;
+  translationErrorLabelMap: Map<string, string>;
   submitted: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private customTranslateService: CustomTranslateService,) { }
 
   ngOnInit() {
-    
+    const key = [ 'LABEL_ERROR_FIELD_REQUIRED' ]
+    this.translationErrorLabelMap = this.customTranslateService.translateLanguage(key)
   }
 
   ngOnChanges(changes: SimpleChange){
@@ -33,6 +35,7 @@ export class FormBuilderComponent implements OnInit {
       this.browserLang = navigator.language
       this.preChatFormGroupCustom = this.buildFormGroup(this.formArray);
       this.formArray = this.setTranslations(this.formArray)
+      this.formArray = this.setErrorTranslations(this.formArray)
     }
   }
 
@@ -71,6 +74,30 @@ export class FormBuilderComponent implements OnInit {
       } else if (isString(element.label)){
         return element.label = this.customTranslateService.translateLanguage([element.label]).get(element.label)
       }
+    })
+    return this.formArray
+  }
+
+  setErrorTranslations(inputJson: Array<FormArray>): Array<FormArray> {
+    inputJson.forEach(element => {
+      if(element.errorLabel){
+        Object.keys(element.errorLabel).forEach((errorKey) => {
+          if(typeof element.errorLabel[errorKey] === 'object'){
+            //check if a key in label object contains browser language
+            let translation:string = ''
+            Object.keys(element.errorLabel[errorKey]).forEach((lang)=> {
+              console.log('langgg', lang)
+              if(this.browserLang.includes(lang.substring(0,2))){
+                return translation = element.errorLabel[errorKey][lang]
+              }
+            })
+            translation === ''?  translation= element.errorLabel[errorKey][0] : null 
+            Object(element.errorLabel)[errorKey] = translation
+          } else if (isString(element.errorLabel)){
+            return element.errorLabel[errorKey] = this.customTranslateService.translateLanguage([element.errorLabel[errorKey]]).get(element.errorLabel[errorKey])
+          }
+        })
+      } 
     })
     return this.formArray
   }
