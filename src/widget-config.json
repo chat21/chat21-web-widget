@@ -21,6 +21,7 @@
         "APIendpoint": "http://localhost:8004/api"
     },
     "apiUrl": "http://localhost:3000/",
-    "baseImageUrl": "http://localhost:3000/"
+    "baseImageUrl": "http://localhost:3000/",
+    "authPersistence": "LOCAL"
     
 }
