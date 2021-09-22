@@ -58,6 +58,7 @@ export class Globals {
   isLogout = false; /** indica se ho appena fotto il logout */
 
   attributes: any;
+  preChatFormJson: any;
   token: string;
   tiledeskToken: string;
   firebaseToken: string;

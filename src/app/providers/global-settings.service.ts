@@ -67,6 +67,8 @@ export class GlobalSettingsService {
         this.globals.tenant = this.appConfigService.getConfig().firebaseConfig.tenant
         /**SET LOGLEVEL parameter */
         this.globals.logLevel = this.appConfigService.getConfig().logLevel
+        /**SET PERSISTENCE parameter */
+        this.globals.persistence = this.appConfigService.getConfig().authPersistence
 
         // ------------------------------- //
         /** LOAD PARAMETERS FROM SERVER
@@ -446,6 +448,9 @@ export class GlobalSettingsService {
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
                         globals[key] = variables[key];
                     }
+                    if (variables.hasOwnProperty('preChatFormJson')) {
+                        globals[key] = variables[key];
+                    }
                 }
             }
         } catch (error) {
@@ -771,6 +776,11 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.logLevel = TEMP;
         }
+        TEMP = tiledeskSettings['preChatFormJson'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatFormJson:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.preChatFormJson = TEMP;
+        }
         
 
     }
@@ -942,6 +952,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('logLevel');
         if (TEMP !== null) {
             this.globals.logLevel = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('preChatFormJson');
+        if (TEMP !== null) {
+            this.globals.preChatFormJson = TEMP;
         }
         
     }
@@ -1157,6 +1171,11 @@ export class GlobalSettingsService {
             globals.fullscreenMode = stringToBoolean(TEMP);
         }
 
+        TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
+        if (TEMP) {
+            globals.customAttributes = stringToBoolean(TEMP);
+        }
+
         TEMP = getParameterByName(windowContext, 'tiledesk_showAttachmentButton');
         if (TEMP) {
             globals.showAttachmentButton = stringToBoolean(TEMP);
@@ -1210,6 +1229,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
         if (TEMP) {
             globals.logLevel = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_preChatFormJson');
+        if (TEMP) {
+            globals.preChatFormJson = JSON.parse(TEMP);
         }
         
     }
