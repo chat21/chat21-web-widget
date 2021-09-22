@@ -69,11 +69,12 @@ onFocus="document.querySelector('[start-focus-chat21-prechat-form]').focus()">
                     <chat-form-builder
                         [formArray]='preChatFormStruct'
                         [isOpenPrechatForm]='g.isOpenPrechatForm'
+                        [stylesMap]="stylesMap"
                         (onSubmitForm)='onSubmitForm($event)'>
                     </chat-form-builder>
                     
                     
-                    <button tabindex="1413" [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
+                    <!-- <button tabindex="1413" [disabled]="!preChatFormGroup.controls.name.valid || !preChatFormGroup.controls.email.valid" class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': g.themeColor, 'border-color': g.themeColor, 'color': g.themeForegroundColor }">
                         <span class="v-align-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': g.themeForegroundColor}"/>
@@ -84,7 +85,7 @@ onFocus="document.querySelector('[start-focus-chat21-prechat-form]').focus()">
                             {{g.LABEL_START_NW_CONV}}
                         </span>  
                         <div class="clear"></div>
-                    </button>
+                    </button> -->
 
                 </div>
 

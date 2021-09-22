@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="c21-right-conv">
-          <div class="c21-last-time">{{conversation.time_last_message}}</div>
+          <div class="c21-last-time">{{conversation.timestamp | amTimeAgo}}</div>
           <div class="truncate c21-name">{{conversation.sender_fullname }}</div>
           <div *ngIf="conversation.type ==='image'">
             <div [class.not-read]="conversation.is_new" class="c21-msg" style="float: left; margin-right: 5px;">

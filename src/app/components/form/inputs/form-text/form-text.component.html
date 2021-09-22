@@ -13,23 +13,12 @@
     </small> - ->
   </div> -->
   <div class="form-group label-floating" id="div_input" #div_input
-      [ngClass]="{'is-empty': !form.controls[element.name].value}"
-      [ngClass]="{'has-error': form.controls[element.name].errors && form.controls[element.name].touched }"
-      [ngClass]="{'has-success': form.controls[element.name].valid }">
+      [ngClass]="{'is-empty': !form.controls[element.name].value}">
     <label class="control-label">
       {{element.name}}
     </label>
     <input [formControlName]="element.name" type="text" class="form-control" (focus)="onFocus()" (focusout)="onFocusOut()">
   </div>
-  <!-- <div class="form-floating mb-3">
-    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-    <label for="floatingInput">Email address</label>
-  </div>
-  <div class="form-floating">
-    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-    <label for="floatingPassword">Password</label>
-  </div> -->
-
   <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('required')" class="text-danger">
     {{translationErrorLabelMap.get('LABEL_ERROR_FIELD_REQUIRED')}}
   </div>

@@ -14,12 +14,14 @@ export class FormBuilderComponent implements OnInit {
 
   @Input() formArray: Array<FormArray>;
   @Input() isOpenPrechatForm: boolean;
+  @Input() stylesMap: Map<string, string>;
   @Output() onSubmitForm = new EventEmitter<{}>();
 
   preChatFormGroupCustom:FormGroup;
   browserLang: string;
   preChatFormStruct: Array<any>;
   translationErrorLabelMap: Map<string, string>;
+  translationMap: Map<string, string>
   submitted: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
@@ -27,7 +29,9 @@ export class FormBuilderComponent implements OnInit {
 
   ngOnInit() {
     const key = [ 'LABEL_ERROR_FIELD_REQUIRED' ]
+    const translationKey =[ 'LABEL_START_NW_CONV']
     this.translationErrorLabelMap = this.customTranslateService.translateLanguage(key)
+    this.translationMap = this.customTranslateService.translateLanguage(translationKey)
   }
 
   ngOnChanges(changes: SimpleChange){
@@ -42,7 +46,7 @@ export class FormBuilderComponent implements OnInit {
   buildFormGroup(inputJson: Array<FormArray>): FormGroup {
     let objectFormBuilder: { [key: string]: FormControl } = {}
     inputJson.forEach(child => {
-      if(child.type && (child.type === 'string')){
+      if(child.type && (child.type === 'string' || child.type === 'textarea')){
         let validatorsObject: any[] = []
         let defaultValue: string = null
         child.mandatory? validatorsObject.push(Validators.required) : null
@@ -105,7 +109,9 @@ export class FormBuilderComponent implements OnInit {
   onSubmitPreChatForm(){
     this.submitted = true;
     console.log('formmmmm', this.preChatFormGroupCustom)
-    this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
+    if(this.preChatFormGroupCustom.valid){
+      this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
+    }
   }
 
   onResetForm(){

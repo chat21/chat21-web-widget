@@ -1,5 +1,14 @@
+
+:root {
+	--foregroundColor: #0000;
+  --themeColor: #2a6ac1;
+  --backgroundUnchecked: #ffff;
+  --dangerError: #ff0000;
+}
+
 .c21-body-header-checkbox{
-    margin: 0px 12px;
+    --dangerError: #ff0000;
+    //margin: 0px 12px;
     position: relative;
     left: 0;
     right: 0;
@@ -20,7 +29,7 @@ input[type="checkbox"] {
     width: 16px;
     vertical-align: middle;
     margin: 0 0.4em 0.4em 0;
-    border: 1px solid #616161;
+    border: 1px solid var(--themeColor);
     border-radius:3px;
     -webkit-border-radius:3px;
     -webkit-appearance: none;
@@ -29,32 +38,40 @@ input[type="checkbox"] {
 }
 
 
-/* hover state */
-input[type="checkbox"]:not(:disabled):hover {
-    border-color:#444444; 
+// /* hover state */
+input[type="checkbox"]:not(:checked):hover {
+    border-width: 2px;
+
+    //box-shadow
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    padding: 15px 25px;
+    transition: all 0.1s ease-in;
 }
 
-/* active state */
+// /* active state */
 input[type="radio"]:active:not(:disabled),
 input[type="checkbox"]:active:not(:disabled) {
-    border-color:#444444;
+    border-width: 2px;
 }
 
-/* focus state */
+// /* focus state */
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
     outline:none;
   
 }
 
-/* input checked border color */
+// /* input checked border color */
 input[type="radio"]:checked,
 input[type="checkbox"]:checked {
-    border-color: #616161;
-    background-color: #444444;
+    background-color: var(--themeColor);
+    animation: shrink-bounce 200ms cubic-bezier(.4,.0,.23,1);
 }
 
-/* radio checked */
+// /* radio checked */
 input[type="radio"]:checked:before {
     display: block;
     height: 0.4em;
@@ -62,26 +79,65 @@ input[type="radio"]:checked:before {
     position: relative;
     left: 0.4em;
     top: 0.4em;
-    background: #fff;
+    background: var(--backgroundUnchecked);
     border-radius: 100%;
     content: '';
 }
 
-/* checkbox checked */
+// /* checkbox checked */
 input[type="checkbox"]:checked:before {
+    // content: '';
+    // display: block;
+    // width: 7px;
+    // height: 14px;
+    // border: solid var(--foregroundColor);
+    // color: var(--foregroundColor);
+    // border-width: 0 3px 3px 0;
+    // -webkit-transform: rotate(45deg);
+    // transform: rotate(45deg);
+    // margin-left: 1px;
+    // margin-top: -12px;
+    // -webkit-transform-origin: 0% 100%;
+    // transform-origin: 0% 100%;
+    // background-color: transparent;
+    // -webkit-animation: rippleOn 200ms;
+    // animation: rippleOn 200ms;
+
     content: '';
     display: block;
     width: 4px;
-    height: 8px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
+    height: 10px;
+    border: solid var(--foregroundColor);
+    color: var(--foregroundColor);
+    border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
-    margin-left: 4px;
-    margin-top: 1px;
+    margin-left: 0px;
+    margin-top: -5px;
+    -webkit-transform-origin: 0% 100%;
+    transform-origin: 0% 100%;
+    background-color: transparent;
+    -webkit-animation: rippleOn 200ms;
+    animation: rippleOn 200ms;
 }
 
-/* disabled input */
+
+
+input[type="checkbox"]:checked:after {
+    border: solid var(--backgroundUnchecked);
+    background-color: var(--themeColor);
+    animation: rippleOn 200ms forwards;
+}
+
+input[type="checkbox"]:not(:checked):before {
+    animation: rippleOff 200ms;
+}
+
+input[type="checkbox"]:not(:checked):after {
+    animation: rippleOff 200ms;
+}
+
+// /* disabled input */
 input:disabled {
     opacity: .6;
     box-shadow: none;
@@ -89,7 +145,7 @@ input:disabled {
     box-shadow:none;
 }
 
-/* style label for disabled input */
+// /* style label for disabled input */
 input:disabled + label {
     opacity: .6;
     cursor:default;
@@ -97,13 +153,37 @@ input:disabled + label {
 }
 
 input[type='checkbox'].errors {
-    border: 2px solid red;
+    border: 2px solid var(--dangerError);
 }
 
 .text-danger {
-    color: red;
+    color: var(--dangerError);
     font-size: 1em;
     min-height: 20px;
-    background-color: #ffffff;
+    background-color: var(--backgroundUnchecked);
     margin: 0px 10px 0px 10px;
 }
+
+  @keyframes rippleOn {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes rippleOff {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.2;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+

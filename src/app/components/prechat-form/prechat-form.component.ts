@@ -1,5 +1,5 @@
 import { FormArray } from './../../../chat21-core/models/formArray';
-import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, Input } from '@angular/core';
 
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { isString } from 'util';
@@ -17,6 +17,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   @ViewChild('afPrechatFormComponent') private afPrechatFormComponent: ElementRef;
   @ViewChild('privacyInputField') private privacyInputField: ElementRef;
   // ========= begin:: Input/Output values ===========//
+  @Input() stylesMap: Map<string, string>;
   @Output() onClosePage = new EventEmitter();
   @Output() onCloseForm = new EventEmitter();
   // ========= end:: Input/Output values ===========//
@@ -73,10 +74,56 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
           en: "Email", // pivot
           it: "Indirizzo email"
         },
-        name: "email",
+        name: "userEmail",
         type: "string",
         mandatory: false,
-        regex: "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"
+        regex: "/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i"
+      },
+      {
+        label: {
+          en: "Email", // pivot
+          it: "Indirizzo email"
+        },
+        name: "userEmail",
+        type: "string",
+        mandatory: false
+      },
+      {
+        label: {
+          en: "Userfullname", // pivot
+          it: "Nome utente"
+        },
+        name: "userFullname",
+        type: "string",
+        mandatory: false
+      },
+      {
+        label: {
+          en: "First message", // pivot
+          it: "Primo messaggio"
+        },
+        name: "firstMessage",
+        type: "textarea",
+        mandatory: false
+      },
+      {
+        label: {
+          en: "Email", // pivot
+          it: "Indirizzo email"
+        },
+        name: "city",
+        type: "string",
+        mandatory: false,
+      },
+      {
+        label: {
+          en: "Email", // pivot
+          it: "Indirizzo email"
+        },
+        name: "place",
+        type: "string",
+        mandatory: true,
+        regex: "[a-zA-Z]"
       },
       {
         label: "Prima di proseguire devi accettare l’informativa Privacy (<a href='URL'>leggi</a>)",
@@ -90,22 +137,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         name: "privacy",
         type: "checkbox",
         mandatory: true // nel caso check "spunta"
-      },
-      // {
-      //   options: [
-      //     {
-      //       en: "Male", // pivot
-      //       it: "maschio"
-      //     },
-      //     {
-      //       en: "Female", 
-      //       it: "femmina"
-      //     }
-      //   ],
-      //   name: "sex",
-      //   type: "radio",
-      //   mandatory: true // nel caso check "spunta"
-      // }
+      }
     ];
   
   }
@@ -116,7 +148,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         this.afPrechatFormComponent.nativeElement.focus();
       }
     }, 1000);
-}
+  }
 
 
   // START FORM
@@ -190,8 +222,21 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
     this.onClosePage.emit();
   }
 
-  onSubmitForm(form: any){
-    console.log('form returneddd', form)
+  onSubmitForm(form: {}){
+    console.log('form returneddd', form, form.hasOwnProperty('userFullname'), form.hasOwnProperty('userEmail'))
+    if(this.g.attributes){
+      if(form.hasOwnProperty('userFullname')){
+        this.g.setAttributeParameter('userFullname', form['userFullname']);
+        this.g.setParameter('userFullname', form['userFullname']);
+      }
+      if(form.hasOwnProperty('userEmail')){
+        this.g.setAttributeParameter('userEmail', form['userEmail']);
+        this.g.setParameter('userEmail', form['userEmail']);
+      }
+      this.g.attributes['preChatForm'] = form
+      this.appStorageService.setItem('attributes', JSON.stringify(this.g.attributes));
+      this.onCloseForm.emit();
+    }
   }
   // ========= end:: ACTIONS ============//
 

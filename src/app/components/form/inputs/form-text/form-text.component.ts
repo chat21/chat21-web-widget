@@ -1,6 +1,6 @@
 import { element } from 'protractor';
 import { style } from '@angular/animations';
-import { Component, ElementRef, Input, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChange, ViewChild, OnChanges } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { FormArray } from '../../../../../chat21-core/models/formArray';
 
@@ -14,18 +14,31 @@ export class FormTextComponent implements OnInit {
   @Input() element: FormArray;
   @Input() controlName: string;
   @Input() translationErrorLabelMap: Map<string, string>;
+  @Input() stylesMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 
 
   @ViewChild('div_input') input: ElementRef;
-  div_input: HTMLElement
   form: FormGroup;
-  constructor(private rootFormGroup: FormGroupDirective) { }
+  constructor(private rootFormGroup: FormGroupDirective,
+              private elementRef: ElementRef) { }
 
   ngOnInit() {
-    this.form = this.rootFormGroup.control;
-    this.div_input =  document.getElementById('div_input') as HTMLElement;
+    this.form = this.rootFormGroup.control as FormGroup;
+    this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'));
+    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'));
     console.log('elementttt', this.element)
+    this.form.controls[this.controlName].valueChanges.subscribe((value) => {
+      this.hasSubmitted= false;
+      this.setFormStyle();
+    })
   }
+
+  // ngOnChanges(changes: SimpleChange){
+  //   if(this.hasSubmitted){
+  //     this.input.nativeElement.classList.add('is-focused')
+  //     this.setFormStyle()
+  //   }
+  // }
 
   onFocusOut(){
     this.input.nativeElement.classList.remove('is-focused')
@@ -33,6 +46,17 @@ export class FormTextComponent implements OnInit {
 
   onFocus(){
     this.input.nativeElement.classList.add('is-focused')
+  }
+
+
+  setFormStyle(){
+    if(this.form.controls[this.controlName].hasError('pattern') || 
+      this.form.controls[this.controlName].hasError('required') || 
+      this.form.controls[this.controlName].invalid){
+        this.input.nativeElement.classList.add('form-danger')
+    } else if (this.form.controls[this.controlName].valid){
+        this.input.nativeElement.classList.add('form-success')
+    }
   }
 
 }
