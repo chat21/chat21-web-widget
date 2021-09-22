@@ -157,6 +157,7 @@ import { SelectComponent } from './components/form/inputs/select/select.componen
 import { FormTextComponent } from './components/form/inputs/form-text/form-text.component';
 import { FormLabelComponent } from './components/form/inputs/form-label/form-label.component';
 import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
+import { FormTextareaComponent } from './components/form/inputs/form-textarea/form-textarea.component';
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -332,7 +333,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     SelectComponent,
     FormTextComponent,
     FormLabelComponent,
-    FormCheckboxComponent,  
+    FormCheckboxComponent,
+    FormTextareaComponent,  
   ],
   imports: [
     BrowserModule,
