@@ -413,8 +413,6 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
     //     console.log('conv.uid', conv.uid);
     //     conversation.status = this.setStatusConversation(conv.sender, conv.uid);
 
-    //     conversation.time_last_message = this.getTimeLastMessage(conv.timestamp);
-
     //     conversation.avatar = avatarPlaceholder(conversationWithFullname);
     //     conversation.color = getColorBck(conversationWithFullname);
     //     conversation.image = this.getImageUrlThumbFromFirebasestorage(conv.uid);
@@ -452,7 +450,6 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
         // conv.conversation_with_fullname = conversation_with_fullname;
 
         // conv.status = this.setStatusConversation(conv.sender, conv.uid);
-        // conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         // conv.avatar = avatarPlaceholder(conversation_with_fullname);
         // conv.color = getColorBck(conversation_with_fullname);
         // return conv;
@@ -478,7 +475,6 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
         conv.conversation_with_fullname = conversation_with_fullname;
         conv.conversation_with = conversation_with;
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
-        conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
         if (!conv.last_message_text) {
