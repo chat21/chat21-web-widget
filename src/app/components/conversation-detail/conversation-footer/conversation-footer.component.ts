@@ -50,7 +50,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   HEIGHT_DEFAULT = '20px';
   // ========= end:: send image ========= //
 
-  isNewConversation = true;
+  // isNewConversation = true;
   textInputTextArea: string;
   conversationHandlerService: ConversationHandlerService
 
@@ -235,6 +235,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           if (metadata.type.startsWith('image') && !metadata.type.includes('svg')) {
               type_message = TYPE_MSG_IMAGE;
               message = ''; // 'Image: ' + metadata.src;
+          } else if (!metadata.type.startsWith('image')){
+              type_message = metadata.type
           }
           that.sendMessage(message, type_message, metadata);
           that.chat21_file.nativeElement.value = '';
@@ -255,7 +257,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
    * @param metadata
    * @param additional_attributes
    */
-  sendMessage(msg, type, metadata?, additional_attributes?) { // sponziello
+  sendMessage(msg: string, type: string, metadata?: any, additional_attributes?: any) { // sponziello
     (metadata) ? metadata = metadata : metadata = '';
     this.logger.debug('[CONV-FOOTER] SEND MESSAGE: ', msg, type, metadata, additional_attributes);
     if (msg && msg.trim() !== '' || type === TYPE_MSG_IMAGE || type === TYPE_MSG_FILE ) {
@@ -341,7 +343,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
         // this.triggerAfterSendMessageEvent(messageSent);
         this.onAfterSendMessage.emit(messageSent)
-        this.isNewConversation = false;
+        // this.isNewConversation = false;
 
         //TODO-GAB: da rivedere
         try {
