@@ -156,7 +156,7 @@
     
     
                           <div class="time slide-in-left" [ngClass]="{'sender' : message?.sender == senderId}">
-                              <time #timeTooltip *ngIf="message?.sender!=='' && message?.timestamp !== '{.sv: timestamp}'" >{{message?.timestamp  | amTimeAgo}} </time>
+                            <time #timeTooltip *ngIf="message?.sender!=='' && message?.timestamp !== '{.sv: timestamp}'" >{{message?.timestamp  | amTimeAgo}} </time>
                           </div>
     
     

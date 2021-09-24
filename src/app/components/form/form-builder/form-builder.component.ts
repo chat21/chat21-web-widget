@@ -4,6 +4,8 @@ import { FormArray } from './../../../../chat21-core/models/formArray';
 import { Component, OnInit, SimpleChange, EventEmitter, Output, Input } from '@angular/core';
 import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
 import { isString } from 'util';
+import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-form-builder',
@@ -23,6 +25,8 @@ export class FormBuilderComponent implements OnInit {
   translationErrorLabelMap: Map<string, string>;
   translationMap: Map<string, string>
   submitted: boolean = false;
+
+  private logger: LoggerService = LoggerInstance.getInstance()
 
   constructor(private formBuilder: FormBuilder,
               private customTranslateService: CustomTranslateService,) { }
@@ -90,7 +94,6 @@ export class FormBuilderComponent implements OnInit {
             //check if a key in label object contains browser language
             let translation:string = ''
             Object.keys(element.errorLabel[errorKey]).forEach((lang)=> {
-              console.log('langgg', lang)
               if(this.browserLang.includes(lang.substring(0,2))){
                 return translation = element.errorLabel[errorKey][lang]
               }
@@ -108,7 +111,7 @@ export class FormBuilderComponent implements OnInit {
 
   onSubmitPreChatForm(){
     this.submitted = true;
-    console.log('formmmmm', this.preChatFormGroupCustom)
+    this.logger.debug('[FORM-BUILDER] onSubmitPreChatForm', this.preChatFormGroupCustom)
     if(this.preChatFormGroupCustom.valid){
       this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
     }
