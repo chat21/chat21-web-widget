@@ -14,6 +14,7 @@ import { ProjectModel } from '../../models/project';
 import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
+import { isJsonString } from '../../chat21-core/utils/utils';
 
 
 @Injectable()
@@ -441,16 +442,33 @@ export class GlobalSettingsService {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.right = '0!important';
                     }
-                    if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
-                        globals[key] = stringToBoolean(variables[key]);
+                    // if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
+                    //     globals[key] = stringToBoolean(variables[key]); //-> fare test perchè se param è !== string allora ritorna string e non boolean
+                    // }
+                    if (variables.hasOwnProperty('calloutTimer')) {
+                        globals['calloutTimer'] = variables['calloutTimer'];
                     }
                     if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
+                        globals['dynamicWaitTimeReply'] = variables['dynamicWaitTimeReply'];
+                    }
+                    if (variables.hasOwnProperty('logoChat')) {
+                        globals['logoChat'] = variables['logoChat'];
+                    }
+                    if (variables.hasOwnProperty('preChatForm')) {
+                        globals['preChatForm'] = variables['preChatForm'];
+                    }
+                    if (variables.hasOwnProperty('preChatFormCustomFieldsEnabled')) {
+                        if(variables.hasOwnProperty('preChatFormJson'))
+                            globals['preChatFormJson'] = variables['preChatFormJson'];
+                    }
+                    if (variables.hasOwnProperty('themeColor')) {
+                        globals['themeColor'] = variables['themeColor'];
+                    }
+                    if (variables.hasOwnProperty('themeForegroundColor')) {
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
-                        globals[key] = variables[key];
+                        globals['themeForegroundColor'] = variables['themeForegroundColor'];
                     }
-                    if (variables.hasOwnProperty('preChatFormJson')) {
-                        globals[key] = variables[key];
-                    }
+                    
                 }
             }
         } catch (error) {
@@ -779,7 +797,9 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['preChatFormJson'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatFormJson:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.preChatFormJson = TEMP;
+            if(isJsonString(TEMP)){
+                globals.preChatFormJson = TEMP;
+            }
         }
         
 

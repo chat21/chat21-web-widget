@@ -611,3 +611,13 @@ export function isGroup(conv: ConversationModel) {
   };
   return false
 }
+
+export function isJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    console.log('ERROR to parse JSON object. Pass a valid Json object: ', e)
+    return false;
+  }
+  return true;
+}
