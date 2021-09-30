@@ -26,7 +26,6 @@ export class FormTextComponent implements OnInit {
     this.form = this.rootFormGroup.control as FormGroup;
     this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'));
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'));
-    console.log('elementttt', this.element)
     this.form.controls[this.controlName].valueChanges.subscribe((value) => {
       this.hasSubmitted= false;
       this.setFormStyle();
@@ -54,7 +53,9 @@ export class FormTextComponent implements OnInit {
       this.form.controls[this.controlName].hasError('required') || 
       this.form.controls[this.controlName].invalid){
         this.input.nativeElement.classList.add('form-danger')
+        this.input.nativeElement.classList.remove('form-success')
     } else if (this.form.controls[this.controlName].valid){
+      this.input.nativeElement.classList.remove('form-danger')
         this.input.nativeElement.classList.add('form-success')
     }
   }

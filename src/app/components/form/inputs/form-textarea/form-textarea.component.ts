@@ -23,10 +23,8 @@ export class FormTextareaComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.rootFormGroup.control as FormGroup;
-    console.log('formmmm', this.form)
     this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'));
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'));
-    console.log('elementttt', this.element)
     this.form.controls[this.controlName].valueChanges.subscribe((value) => {
       this.hasSubmitted= false;
       this.setFormStyle();
