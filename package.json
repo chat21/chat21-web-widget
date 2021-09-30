@@ -1,7 +1,7 @@
 {
   "name": "@chat21/chat21-web-widget",
   "author": "Tiledesk SRL",
-  "version": "5.0.17",
+  "version": "5.0.18-rc.2",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiledesk.com",
   "repository": {
@@ -44,6 +44,7 @@
     "angular2-moment": "^1.8.0",
     "angular2-uuid": "^1.1.1",
     "bootstrap": "^5.1.1",
+    "bootstrap-material-design": "^0.5.10",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.1",
     "custom-event-polyfill": "^1.0.6",
