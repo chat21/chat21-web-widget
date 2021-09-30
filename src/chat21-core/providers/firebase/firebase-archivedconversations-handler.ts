@@ -189,7 +189,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             firebaseMessages.on('value', (childSnapshot) => {
                 const childData: ConversationModel = childSnapshot.val();
-                if (childSnapshot && childSnapshot.key) {
+                if (childSnapshot && childSnapshot.key && childData) {
                     childData.uid = childSnapshot.key;
                     const conversation = this.completeConversation(childData);
                     if (conversation) {
