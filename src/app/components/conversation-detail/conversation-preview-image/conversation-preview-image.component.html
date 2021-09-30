@@ -31,8 +31,8 @@
       <chat-image
         [metadata]="fileSelected"
         [width]="100"
-        [height]="50"
-        (onImageRendered)="onImageRenderedFN($event)">
+        [height]="50">
+        <!-- (onImageRendered)="onImageRenderedFN($event)" -->
       </chat-image>
       <img [src]="fileSelected"/>
     </div>
@@ -41,7 +41,7 @@
     <div class="c21-footer">
       <div class="visible-text-area">
         <!-- isFilePendingToUpload || -->
-        <textarea 
+        <!-- <textarea 
             [attr.disabled] = "( isConversationArchived || hideTextReply)? true : null"
             start-focus-chat21-conversation-component
             inputTextArea 
@@ -56,7 +56,7 @@
             (keypress)="onkeypress($event)" 
             (paste)="onPaste($event)"
             placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}">
-        </textarea>
+        </textarea> -->
       
         <!-- <chat-message-text-area
           [text]="textInputTextArea"
