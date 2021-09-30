@@ -1,8 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { FormArray } from './../../../chat21-core/models/formArray';
+import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, Input } from '@angular/core';
 
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { isString } from 'util';
 import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
+import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 import { Globals } from '../../utils/globals';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-prechat-form',
@@ -14,6 +19,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   @ViewChild('afPrechatFormComponent') private afPrechatFormComponent: ElementRef;
   @ViewChild('privacyInputField') private privacyInputField: ElementRef;
   // ========= begin:: Input/Output values ===========//
+  @Input() stylesMap: Map<string, string>;
   @Output() onClosePage = new EventEmitter();
   @Output() onCloseForm = new EventEmitter();
   // ========= end:: Input/Output values ===========//
@@ -26,6 +32,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   // ========= end:: component variables ======= //
 
   colorBck: string;
+  browserLang: string;
+  private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor(
     public g: Globals,
@@ -41,10 +49,11 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   initialize() {
     this.colorBck = '#000000';
-    this.preChatFormGroup = this.createForm(this.formBuilder);
-    if (this.preChatFormGroup) {
-      this.subcribeToFormChanges();
-    }
+    // this.preChatFormGroup = this.createForm(this.formBuilder);
+    // if (this.preChatFormGroup) {
+    //   this.subcribeToFormChanges();
+    // }
+  
   }
 
   ngAfterViewInit() {
@@ -53,34 +62,34 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
         this.afPrechatFormComponent.nativeElement.focus();
       }
     }, 1000);
-}
+  }
 
 
   // START FORM
   // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
 
   /** */
-  createForm(formBuilder): FormGroup {
-    // SET FORM
-    // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-    // tslint:disable-next-line:max-line-length
-    const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const preChatFormGroupTemp = formBuilder.group({
-        email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-        name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
-    });
-    return preChatFormGroupTemp;
-  }
+  // createForm(formBuilder): FormGroup {
+  //   // SET FORM
+  //   // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+  //   // tslint:disable-next-line:max-line-length
+  //   const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   const preChatFormGroupTemp = formBuilder.group({
+  //       email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+  //       name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
+  //   });
+  //   return preChatFormGroupTemp;
+  // }
 
   /** */
-  subcribeToFormChanges() {
-    const that = this;
-    const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
-    preChatFormValueChanges$.subscribe(x => {
-      that.userFullname = x.name;
-      that.userEmail = x.email;
-    });
-  }
+  // subcribeToFormChanges() {
+  //   const that = this;
+  //   const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
+  //   preChatFormValueChanges$.subscribe(x => {
+  //     that.userFullname = x.name;
+  //     that.userEmail = x.email;
+  //   });
+  // }
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
@@ -115,16 +124,33 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
 
   /**  */
-  checkInput() {
-    const spanCheck = window.document.getElementById('span-checkmark');
-    // console.log('-----------> ', spanCheck);
-    if (spanCheck) {
-      spanCheck.classList.remove('unchecked');
-    }
-  }
+  // checkInput() {
+  //   const spanCheck = window.document.getElementById('span-checkmark');
+  //   // console.log('-----------> ', spanCheck);
+  //   if (spanCheck) {
+  //     spanCheck.classList.remove('unchecked');
+  //   }
+  // }
 
   returnClosePage() {
     this.onClosePage.emit();
+  }
+
+  onSubmitForm(form: {}){
+    this.logger.debug('[PRE-CHAT-FORM] onSubmitForm:', form)
+    if(this.g.attributes){
+      if(form.hasOwnProperty('userFullname')){
+        this.g.setAttributeParameter('userFullname', form['userFullname']);
+        this.g.setParameter('userFullname', form['userFullname']);
+      }
+      if(form.hasOwnProperty('userEmail')){
+        this.g.setAttributeParameter('userEmail', form['userEmail']);
+        this.g.setParameter('userEmail', form['userEmail']);
+      }
+      this.g.attributes['preChatForm'] = form
+      this.appStorageService.setItem('attributes', JSON.stringify(this.g.attributes));
+      this.onCloseForm.emit();
+    }
   }
   // ========= end:: ACTIONS ============//
 

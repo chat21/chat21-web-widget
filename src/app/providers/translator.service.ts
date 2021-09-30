@@ -54,10 +54,11 @@ export class TranslatorService {
    * @returns
    */
   public getLanguage() {
-    // return this.language;
-    return this._translate.getBrowserLang();
+    return this.language;
+    // return this._translate.getBrowserLang();
   }
 
+  // ********* UNUSED ***************** //
   initializeTransaltorService() {
 
     this._translate.setDefaultLang('it');
@@ -102,10 +103,12 @@ export class TranslatorService {
     const defaultLanguage = 'en';
     this.logger.debug('[TRANSLATOR-SERV] »»»» initI18n setDefaultLang ');
     this._translate.setDefaultLang(defaultLanguage);
+    this.language = defaultLanguage;
     // Detect user language.
     let browserLang = this._translate.getBrowserLang();
     if (this.g.lang && this.g.lang !== '') {
       browserLang = this.g.lang;
+      this.language = this.g.lang
     } else {
       this.g.lang = browserLang;
     }
@@ -144,6 +147,7 @@ export class TranslatorService {
         this.logger.debug(`[TRANSLATOR-SERV] »»»» initI18n Successfully initialized '${browserLang}' language from URL'`, data.url);
         if (!data._body || data._body === undefined || data._body === '') {
           browserLang = defaultLanguage;
+          this.language = defaultLanguage;
           this.g.lang = defaultLanguage;
           this._translate.use(defaultLanguage);
           // console.log('»»»» translateWithBrowserLang ', this.getTranslationFileUrl(defaultLanguage));
@@ -153,7 +157,8 @@ export class TranslatorService {
           });
         } else {
           // console.log(`»»»» translateWithBrowserLang '${browserLang}' language.'`);
-          this.translateWithBrowserLang(data._body, browserLang);
+          this.language = JSON.parse(data._body).lang.toLowerCase();;
+          this.translateWithBrowserLang(data._body, this.language);
         }
       }, (error) => {
         this.logger.error(`[TRANSLATOR-SERV] »»»» initI18n Get '${browserLang}' language - ERROR `, error);

@@ -150,6 +150,16 @@ import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
 import { LocalSessionStorage } from '../chat21-core/providers/localSessionStorage';
 import { LoggerInstance } from '../chat21-core/providers/logger/loggerInstance';
 
+//FORM COMPONENT
+import { FormBuilderComponent } from './components/form/form-builder/form-builder.component';
+import { RadioButtonComponent } from './components/form/inputs/radio-button/radio-button.component';
+import { SelectComponent } from './components/form/inputs/select/select.component';
+import { FormTextComponent } from './components/form/inputs/form-text/form-text.component';
+import { FormLabelComponent } from './components/form/inputs/form-label/form-label.component';
+import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
+import { FormTextareaComponent } from './components/form/inputs/form-textarea/form-textarea.component';
+import { ConversationPreviewImageComponent } from './components/conversation-detail/conversation-preview-image/conversation-preview-image.component';
+
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
   constructor(private http: HttpClient, 
@@ -318,7 +328,15 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     AvatarComponent,
     ReturnReceiptComponent,
     InfoMessageComponent,
-    InterlalFrameComponent,  
+    InterlalFrameComponent,
+    FormBuilderComponent,
+    RadioButtonComponent,
+    SelectComponent,
+    FormTextComponent,
+    FormLabelComponent,
+    FormCheckboxComponent,
+    FormTextareaComponent,
+    ConversationPreviewImageComponent,  
   ],
   imports: [
     BrowserModule,

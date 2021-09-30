@@ -109,6 +109,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isFilePendingToUpload: Boolean = false;
   arrayFilesLoad: Array<any>;
   isFileSelected: Boolean = false;
+
+  isOpenAttachmentPreview: Boolean = false;
+  files: Array<any>;
   // ========= end:: send image ========= //
 
 
@@ -177,6 +180,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   translationMapHeader: Map<string, string>;
   translationMapFooter: Map<string, string>;
   translationMapContent: Map<string, string>;
+  translationMapPreview: Map<string, string>;
 
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
   @ViewChild(ConversationContentComponent) conversationContent: ConversationContentComponent
@@ -262,10 +266,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'ARRAY_DAYS',
     ];
 
+    const keysPreview= [
+      'BACK', 
+      'CLOSE',
+      'LABEL_PLACEHOLDER',
+    ];
+
     
     this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
     this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
     this.translationMapContent = this.customTranslateService.translateLanguage(keysContent);
+    this.translationMapPreview = this.customTranslateService.translateLanguage(keysPreview);
   }
 
   ngAfterViewInit() {
@@ -589,7 +600,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.g.userFullname,
         '0',
         '',
-        '',
         true,
         '',
         '',
@@ -686,7 +696,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.conversationHandlerService.connect();
       this.logger.debug('[CONV-COMP] DETTAGLIO CONV - NEW handler **************', this.conversationHandlerService);
       this.messages = this.conversationHandlerService.messages;
-
+      
+      /* SEND FIRST MESSAGE if preChatForm has 'firstMessage' key */ 
+      this.sendFirstMessagePreChatForm()
+      
+      this.logger.debug('[CONV-COMP] DETTAGLIO CONV - messages **************', this.messages);
       this.chatManager.addConversationHandler(this.conversationHandlerService);
 
       // attendo un secondo e poi visualizzo il messaggio se nn ci sono messaggi
@@ -695,6 +709,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         if (!that.messages || that.messages.length === 0) {
           //this.showIonContent = true;
           that.showMessageWelcome = true;
+          // that.sendFirstMessage()
           that.logger.debug('[CONV-COMP] setTimeout ***', that.showMessageWelcome);
         }
       }, 8000);
@@ -716,7 +731,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
-
+  /**
+   *  se nel preChatForm c'è una chiave 'firstMessage'
+   *  e la conversazione non ha altri messaggi, invio il firstMessage
+   *  del preChatForm appena compilato
+   */
+  sendFirstMessagePreChatForm(){
+    setTimeout(() => {
+      if(this.messages && this.messages.length === 0){
+        this.logger.debug('[CONV-COMP] sendFirstMessage: messages + attributes ',this.messages, this.g.attributes)
+        if(this.g.attributes && this.g.attributes.preChatForm && this.g.attributes.preChatForm.firstMessage){
+          const firstMessage = this.g.attributes.preChatForm.firstMessage
+          this.conversationFooter.sendMessage(firstMessage, TYPE_MSG_TEXT, this.g.attributes) 
+        }
+      }
+    }, 1000);
+  }
   /**
    * inizializzo variabili
    * effettuo il login anonimo su firebase
@@ -1758,6 +1788,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnMenuOption(event:boolean){
       this.isMenuShow = event;
+  }
+
+  /** CALLED BY: conv-footer component */
+  onAttachmentButtonClicked(files: any){
+    this.isOpenAttachmentPreview = true
+    this.files = files
+  }
+
+  /** CALLED BY: conv-preview component */
+  onCloseModalPreview(){
+    this.isOpenAttachmentPreview = false
+  }
+
+  /** CALLED BY: conv-preview component */
+  onSendAttachment(){
+    console.log('sendd messageee')
   }
 
   returnChangeTextArea(event){

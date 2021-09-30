@@ -1,0 +1,121 @@
+@import '../../../../sass/variables';
+
+#c21-preview{
+    --margin-top: 200px;
+    --margin-left: 50px;
+    --margin-right: 50px;
+    --header-height: 40px;
+
+    --modal-height: 200px;
+    --modal-width: 80%;
+
+    background-color: rgba(0,0,0,0.4);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 25;
+
+    .modal-preview-image {
+        
+        width: auto;
+        height: auto;
+        min-height: var( --modal-height);
+        min-width: 100px;
+        max-width: 80%;
+        border-radius: 3px;
+        font-size: 1.2em;
+        line-height: normal;
+        overflow: hidden;
+        border: 1px solid #d7d7d7;  
+        background-color: #ffffff; 
+        z-index: 25;
+        margin: auto;
+        margin-top: var(--margin-top);
+        
+    }
+    
+    .c21-header{
+        height: var(--header-height);
+        position: fixed;
+        top: var(--margin-top);
+        // right: var(--margin-right);
+        // left: var(--margin-left);
+        .c21-header-container{
+            height: var(--header-height);
+            width: var(--modal-width);
+            margin: inherit;
+            -webkit-box-shadow: 0 3px 5px -3px rgba(0, 0, 0, 0.4);
+            -moz-box-shadow: 0 3px 5px -3pxrgba(0, 0, 0, 0.4);
+            box-shadow: 0 3px 5px -3px rgba(0, 0, 0, 0.4);
+            .c21-header-content {
+                .c21-title {
+                    position: absolute;
+                    // left: 50px;
+                    // right: 100px;
+                    display: inline-block;
+                    width: auto;
+                    height: 40px;
+                    padding: 0px;
+                    margin: 0px 10px;
+                    font-size: 1.0em;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+        
+                    .titleText {
+                        position: relative;
+                        line-height: 40px;
+                        text-align: left;
+                        font-size: 1em;
+                    }
+                }
+
+                .c21-header-button{
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+
+        
+    }
+
+
+    .c21-content{
+        position: fixed;
+        top: calc( var(--margin-top) + var(--header-height));
+        width: var(--modal-width);
+
+        // img {
+        //     border-radius: 8px;
+        //     //padding: 3px;
+        //     margin-bottom: 0px;
+        //     max-width: calc(100% - 6px);
+        //     width: auto;
+        //     height: auto;
+        //     object-fit: cover;
+            
+        // }
+    }
+
+    .c21-footer{
+        position: fixed;
+        top: calc( var(--margin-top) + var(--header-height) + 80px);
+        box-shadow: 0 -1px 0px 0px $trasp-light-gray;
+        background: white;
+
+        .visible-text-area {
+            pointer-events: auto;
+        }
+        
+        .chat21-textarea-button {
+            pointer-events: auto;
+        }
+        .chat21-textarea-button {
+            fill: $blue;
+            pointer-events: auto;
+        }
+    }
+    
+}

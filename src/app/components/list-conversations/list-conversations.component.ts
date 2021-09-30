@@ -1,3 +1,5 @@
+import { TranslatorService } from './../../providers/translator.service';
+import { TranslateService } from '@ngx-translate/core';
 import { Component, EventEmitter, Input, IterableChangeRecord, IterableChanges, IterableDiffers, KeyValueDiffers, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ConversationModel } from '../../../chat21-core/models/conversation';
 import {
@@ -8,7 +10,7 @@ import {
 import { ImageRepoService } from '../../../chat21-core/providers/abstract/image-repo.service';
 import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
-
+import * as moment from 'moment';
 @Component({
   selector: 'chat-list-conversations',
   templateUrl: './list-conversations.component.html',
@@ -42,6 +44,7 @@ export class ListConversationsComponent implements OnInit {
 
   uidConvSelected: string;
   constructor(private iterableDiffers: IterableDiffers,
+              private translatorService: TranslatorService,
               private kvDiffers: KeyValueDiffers) {
       this.iterableDifferListConv = this.iterableDiffers.find([]).create(null);
       

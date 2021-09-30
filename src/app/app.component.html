@@ -83,6 +83,7 @@
         -->
         <div *ngIf="g.isOpenPrechatForm" class="modal-page prechat-form active">
             <chat-prechat-form
+                [stylesMap]="styleMapConversation"
                 (onClosePage)="onCloseModalPrechatForm()" 
                 (onCloseForm)="onPrechatFormComplete()">
             </chat-prechat-form>

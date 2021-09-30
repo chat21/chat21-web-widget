@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.2
+- bug-fixed: timestamp not changed in list-conversations
+- bug-fixed: waiting_time_reply not translate time with the same language of previous string
+- bug-fixed: timesatamp in list-conversations has not the correct widget language
+- bug-fixed: onImageLoaded and onConversationLoaded were not called
+- changed: replace msg text with 'sent an image' or 'sent an attachment' string for last_message_text property value
+- changed: avatar conversations color
+
 ### 5.0.18-rc.1
 - bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response
 -removed: 2 unuseful log (app.component and localSessionStorage initialize)
@@ -55,6 +63,7 @@
 - bug-fixed: archived conversation was removed when user viewed its detail for the first time
 - added: paste event on conversation-footer only for image file type
 - changed: new Tiledesk logo in poweredBy footer html code
+
 ### 5.0.0-beta.3.14
  - bug-fixed: badgeNumberConversation is 0
  - changed: remoteConfig of env.pre.ts to false

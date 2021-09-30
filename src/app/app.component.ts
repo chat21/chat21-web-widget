@@ -214,6 +214,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             const subChangedConversation = this.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
                 // that.ngZone.run(() => {
                 if (conversation) {
+                    this.onImageLoaded(conversation)
+                    this.onConversationLoaded(conversation)
+
                     if(conversation.sender !== this.g.senderId){
                         that.manageTabNotification();
                     }
@@ -274,6 +277,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 // that.manageTabNotification()
                 // });
+                if(conversation){
+                    this.onImageLoaded(conversation)
+                    this.onConversationLoaded(conversation)
+                }
+                
             });
             this.subscriptions.push(subAddedConversation);
 
@@ -281,6 +289,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // that.ngZone.run(() => {
                 if (conversation) {
                     that.triggerOnConversationUpdated(conversation);
+                    this.onImageLoaded(conversation)
+                    this.onConversationLoaded(conversation)
                 }
                 // });
             });
@@ -508,6 +518,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 that.g.setParameter('userEmail', null);//clar parameter to enable preChatForm on logout with other token
                 that.g.setAttributeParameter('userFullname', null);//clar parameter to enable preChatForm on logout with other token
                 that.g.setAttributeParameter('userEmail', null);//clar parameter to enable preChatForm on logout with other token
+                this.g.setAttributeParameter('preChatForm', null)
                 this.g.setParameter('conversationsBadge', 0);
                 this.g.setParameter('recipientId', null, false)
                 that.hideWidget();
@@ -556,6 +567,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                     this.translatorService.initI18n().then((result) => {
                         this.logger.debug('[APP-COMP] »»»» APP-COMPONENT.TS initI18n result', result);
+                        const browserLang = this.translatorService.getLanguage();
+                        moment.locale(browserLang)
                         this.translatorService.translate(this.g);
                     }).then(() => {
                         /** INIT  */
@@ -707,18 +720,25 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      *
     */
     private setAttributesFromStorageService(): any {
+        let attributes: any = {};
+        try {
+            attributes = JSON.parse(this.appStorageService.getItem('attributes'));
+            if (attributes.preChatForm) {
+                const preChatForm = attributes.preChatForm;
+                if(preChatForm.userEmail) this.g.userEmail = preChatForm.userEmail;
+                if(preChatForm.userFullname) this.g.userFullname = preChatForm.userFullname 
+            }
+            // this.g.wdLog(['> attributes: ', attributes]);
+        } catch (error) {
+            this.logger.debug('[APP-COMP] > Error :' + error);
+        }
+
         const CLIENT_BROWSER = navigator.userAgent;
         const projectid = this.g.projectid;
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
-        let attributes: any = {};
-        try {
-            attributes = JSON.parse(this.appStorageService.getItem('attributes'));
-            // this.g.wdLog(['> attributes: ', attributes]);
-        } catch (error) {
-            this.logger.debug('[APP-COMP] > Error :' + error);
-        }
+
         if (!attributes && attributes === null) {
             if (this.g.attributes) {
                 attributes = this.g.attributes;
@@ -1078,7 +1098,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-            this.startNwConversation();
+            this.startNewConversation();
         }
     }
 
@@ -1309,6 +1329,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             };
 
+            /** setPrechatForm  */
+            windowContext['tiledesk'].setPreChatFormJson = function (form: Array<any>) {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.setPreChatFormJson(form);
+                });
+            };
+
+            /** getPreChatForm  */
+            windowContext['tiledesk'].getPreChatFormJson = function () {
+                let preChatForm = {}
+                ngZone.run(() => {
+                    preChatForm = windowContext['tiledesk']['angularcomponent'].component.getPreChatFormJson();
+                });
+                return preChatForm
+            };
+
         }
     }
 
@@ -1514,6 +1550,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.appStorageService.removeItem('preChatForm');
             }
         }
+    }
+
+    private setPreChatFormJson(form: Array<any>) {
+        if(form){
+            this.g.setParameter('preChatFormJson', form);
+        }
+    }
+
+    private getPreChatFormJson() {
+        let preChatForm = {}
+        if(this.g.preChatFormJson){
+            preChatForm = this.g.preChatFormJson
+        }
+        console.log('prechatformmm', preChatForm)
+        return preChatForm
     }
 
     private setPrivacyPolicy() {
@@ -1730,7 +1781,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.appStorageService.clear();
             this.presenceService.removePresence();
             this.tiledeskAuthService.logOut();
-            this.messagingAuthService.logout()
+            this.messagingAuthService.logout();
             // this.authService.signOut(-2);
         }
     }
@@ -1804,7 +1855,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * premendo sul pulsante 'APRI UNA NW CONVERSAZIONE'
      * attivo una nuova conversazione
      */
-    startNwConversation() {
+    startNewConversation() {
         this.logger.debug('[APP-COMP] AppComponent::startNwConversation');
         const newConvId = this.generateNewUidConversation();
         this.g.setParameter('recipientId', newConvId);
@@ -1891,7 +1942,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isOpenSelectionDepartment = false;
             if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
                 this.isOpenConversation = true;
-                this.startNwConversation();
+                this.startNewConversation();
             }
         }
     }
@@ -1918,7 +1969,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenPrechatForm', false);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
             this.isOpenConversation = true;
-            this.startNwConversation();
+            this.startNewConversation();
         }
         // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
     }
@@ -2000,7 +2051,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
         if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-            this.startNwConversation();
+            this.startNewConversation();
         }
     }
 
@@ -2077,7 +2128,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onConversationLoaded(conversation: ConversationModel) {
-        //this.logger.debug('[APP-COMP] onConversationLoaded convvvv:::', conversation)
+        this.logger.debug('[APP-COMP] onConversationLoaded convvvv:::', conversation)
+        const keys = ['YOU', 'SENT_AN_IMAGE', 'SENT_AN_ATTACHMENT'];
+        const translationMap = this.translateService.translateLanguage(keys);
+        if(conversation.sender === this.g.senderId){
+            if (conversation.type === "image") {
+
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
+                const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
+                conversation.last_message_text = SENT_AN_IMAGE;
+      
+            } else if (conversation.type !== "image" && conversation.type !== "text") {
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
+                const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
+                conversation.last_message_text =  SENT_AN_ATTACHMENT;
+            }
+        }
     }
 
     /**

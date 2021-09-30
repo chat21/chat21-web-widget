@@ -16,7 +16,6 @@ export class ConversationModel {
     public sender_fullname: string,
     public status: string,
     public timestamp: string,
-    public time_last_message: string,
     public selected: boolean,
     public color: string,
     public avatar: string,

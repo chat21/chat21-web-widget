@@ -14,6 +14,7 @@ import { ProjectModel } from '../../models/project';
 import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
+import { isJsonString } from '../../chat21-core/utils/utils';
 
 
 @Injectable()
@@ -21,7 +22,7 @@ export class GlobalSettingsService {
     globals: Globals;
     el: ElementRef;
     obsSettingsService: BehaviorSubject<boolean>;
-    private loggger: LoggerService = LoggerInstance.getInstance()
+    private logger: LoggerService = LoggerInstance.getInstance()
 
     constructor(
         public http: Http,
@@ -56,7 +57,7 @@ export class GlobalSettingsService {
         try {
             projectid = this.setProjectId();
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] > Error :' + error);
             return;
         }
 
@@ -67,6 +68,8 @@ export class GlobalSettingsService {
         this.globals.tenant = this.appConfigService.getConfig().firebaseConfig.tenant
         /**SET LOGLEVEL parameter */
         this.globals.logLevel = this.appConfigService.getConfig().logLevel
+        /**SET PERSISTENCE parameter */
+        this.globals.persistence = this.appConfigService.getConfig().authPersistence
 
         // ------------------------------- //
         /** LOAD PARAMETERS FROM SERVER
@@ -122,7 +125,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setProjectId 1 > Error :' + error);
         }
 
         // get projectid for attributeHtml//
@@ -131,7 +134,7 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setProjectId 2 > Error :' + error);
         }
 
         // get projectid for UrlParameters//
@@ -140,10 +143,10 @@ export class GlobalSettingsService {
             if (projectid) { this.globals.projectid = projectid; }
             // this.globals.setParameter('projectid', projectid);
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setProjectId 3 > Error :' + error);
         }
 
-        // this.globals.wdLog(['projectid: ', this.globals.projectid);
+        // this.logger.debug('[GLOBAL-SET] setProjectId projectid: ', this.globals.projectid);
         return this.globals.projectid;
     }
 
@@ -162,52 +165,52 @@ export class GlobalSettingsService {
         let tiledeskSettings: any;
         try {
             const baseLocation = this.globals.windowContext['tiledesk'].getBaseLocation();
-            this.globals.wdLog(['1 > baseLocation: ', baseLocation]);
+            this.logger.debug('[GLOBAL-SET] 1 > baseLocation: ', baseLocation);
             if (typeof baseLocation !== 'undefined') { this.globals.baseLocation = baseLocation; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings baseLocation > Error :', error);
         }
         try {
             tiledeskSettings = this.globals.windowContext['tiledeskSettings'];
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings tiledeskSettings > Error :', error);
         }
         try {
             const persistence = tiledeskSettings['persistence'];
             if (typeof persistence !== 'undefined') { this.globals.persistence = persistence; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings persistence > Error :', error);
         }
         // try {
         //     const userToken = tiledeskSettings['userToken'];
         //     if (typeof userToken !== 'undefined') { this.globals.userToken = userToken; }
         // } catch (error) {
-        //     this.globals.wdLog(['> Error :' + error]);
+        //     this.logger.error('[GLOBAL-SET] setMainParametersFromSettings userToken > Error :', error);
         // }
         // try {
         //     const userId = tiledeskSettings['userId'];
         //     if (typeof userId !== 'undefined') { this.globals.userId = userId; }
         // } catch (error) {
-        //     this.globals.wdLog(['> Error :' + error]);
+        //     this.logger.error('[GLOBAL-SET] setMainParametersFromSettings userId > Error :', error);
         // }
         try {
             const filterByRequester = tiledeskSettings['filterByRequester'];
-            this.globals.wdLog(['1 > filterByRequester: ', filterByRequester]);
+            this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings  > filterByRequester: ', filterByRequester);
             if (typeof filterByRequester !== 'undefined') { this.globals.filterByRequester = (filterByRequester === true) ? true : false; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings filterByRequester > Error :', error);
         }
         try {
             const isLogEnabled = tiledeskSettings['isLogEnabled'];
             if (typeof isLogEnabled !== 'undefined') { this.globals.isLogEnabled = (isLogEnabled === true) ? true : false; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings isLogEnabled > Error :', error);
         }
         try {
             const departmentID = tiledeskSettings['departmentID'];
             if (typeof departmentID !== 'undefined') { this.globals.departmentID = departmentID; }
         } catch (error) {
-            this.globals.wdLog(['departmentID > Error is handled: ', error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings departmentID > Error :', error);
         }
 
         try {
@@ -215,7 +218,7 @@ export class GlobalSettingsService {
             // tslint:disable-next-line:max-line-length
             if (typeof showAttachmentButton !== 'undefined') { this.globals.showAttachmentButton = (showAttachmentButton === true) ? true : false; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings showAttachmentButton > Error :', error);
         }
 
         try {
@@ -223,7 +226,7 @@ export class GlobalSettingsService {
             // tslint:disable-next-line:max-line-length
             if (typeof showAllConversations !== 'undefined') { this.globals.showAllConversations = (showAllConversations === true) ? true : false; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings showAllConversations > Error :', error);
         }
 
 
@@ -231,7 +234,7 @@ export class GlobalSettingsService {
             const privacyField = tiledeskSettings['privacyField'];
             if (typeof privacyField !== 'undefined') { this.globals.privacyField = privacyField; }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings privacyField > Error :', error);
         }
 
 
@@ -255,31 +258,31 @@ export class GlobalSettingsService {
         //     globals.projectid = TEMP;
         // }
         // TEMP = tiledeskSettings['persistence'];
-        // // this.globals.wdLog(['35 - persistence:: ', TEMP);
+        // // this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings - persistence:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.persistence = TEMP;
         //     // globals.setParameter('persistence', TEMP);
         // }
         // TEMP = tiledeskSettings['userToken'];
-        // // this.globals.wdLog(['26 - userToken:: ', TEMP);
+        // // this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings - userToken:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.userToken = TEMP;
         //     // globals.setParameter('userToken', TEMP);
         // }
         // TEMP = tiledeskSettings['userId'];
-        // // this.globals.wdLog(['7 - userId:: ', TEMP);
+        // // this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings - userId:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.userId = TEMP;
         //     // globals.setParameter('userId', TEMP);
         // }
         // TEMP = tiledeskSettings['filterByRequester'];
-        // // this.globals.wdLog(['8 - filterByRequester:: ', TEMP);
+        // // this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings - filterByRequester:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.filterByRequester = (TEMP === false) ? false : true;
         //     // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         // }
         // TEMP = tiledeskSettings['isLogEnabled'];
-        // // this.globals.wdLog(['33 - isLogEnabled:: ', TEMP);
+        // // this.logger.debug('[GLOBAL-SET] setMainParametersFromSettings - isLogEnabled:: ', TEMP);
         // if (TEMP !== undefined) {
         //     globals.isLogEnabled = (TEMP === false) ? false : true;
         //     // globals.setParameter('isLogEnabled', (TEMP === false) ? false : true);
@@ -311,11 +314,11 @@ export class GlobalSettingsService {
     //             res(response);
     //         },
     //         errMsg => {
-    //             globals.wdLog(['http ERROR MESSAGE', errMsg]);
+    //             that.logger.error('[GLOBAL-SET] getProjectParametersById --> http ERROR MESSAGE', errMsg);
     //             rej(errMsg);
     //         },
     //         () => {
-    //             globals.wdLog(['API ERROR NESSUNO']);
+    //             that.logger.debug('[GLOBAL-SET] getProjectParametersById --> API ERROR NESSUNO');
     //             rej('NULL');
     //         });
     //     });
@@ -331,8 +334,7 @@ export class GlobalSettingsService {
      * E: imposto i parametri recuperati dallo storage in global
     */
     setParameters(response: any ) {
-        // this.loggger.debug('***************** setParameters *****************', response)
-        this.globals.wdLog(['***************** setParameters *****************', response]);
+        this.logger.debug('[GLOBAL-SET] ***** setParameters ***** ', response)
         if (response !== null) {
             this.setVariablesFromService(this.globals, response);
         }
@@ -346,7 +348,7 @@ export class GlobalSettingsService {
         /** set css iframe from parameters */
         this.setCssIframe();
 
-        this.globals.wdLog(['***************** END SET PARAMETERS *****************']);
+        this.logger.debug('[GLOBAL-SET] ***** END SET PARAMETERS *****');
         this.obsSettingsService.next(true);
     }
 
@@ -355,7 +357,7 @@ export class GlobalSettingsService {
      */
     setCssIframe() {
         // tslint:disable-next-line:max-line-length
-        // this.globals.wdLog(['***************** setCssIframe *****************', this.globals.windowContext.document.getElementById('tiledeskdiv')]);
+        // this.logger.debug('[GLOBAL-SET] ***** setCssIframe *****', this.globals.windowContext.document.getElementById('tiledeskdiv'));
         const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskdiv');
         if (!divTiledeskiframe) {
             return;
@@ -388,7 +390,7 @@ export class GlobalSettingsService {
      * A: setVariablesFromService
      */
     setVariablesFromService(globals: Globals, response: any) {
-        this.globals.wdLog(['> setVariablesFromService :' , response]);
+        this.logger.debug('[GLOBAL-SET] > setVariablesFromService :' , response);
         this.globals = globals;
         // DEPARTMENTS
         try {
@@ -400,12 +402,12 @@ export class GlobalSettingsService {
             }
         } catch (error) {
             this.initDepartments(null);
-            this.globals.wdLog(['> Error is departments: ', error]);
+            this.logger.error('[GLOBAL-SET] setVariablesFromService > Error is departments: ', error);
         }
 
         // DEPARTMENTS
         // if (response && response.departments !== null) {
-        //     globals.wdLog(['response DEP ::::', response.departments]);
+        //     this.logger.debug('[GLOBAL-SET] response DEP ::::', response.departments);
         //     // globals.setParameter('departments', response.departments);
         //     this.initDepartments(response.departments);
         // }
@@ -414,17 +416,17 @@ export class GlobalSettingsService {
         try {
             const user_available = response.user_available;
             if (typeof user_available !== 'undefined') {
-                globals.wdLog(['user_available ::::', user_available]);
+                this.logger.debug('[GLOBAL-SET] setVariablesFromService > user_available ::::', user_available);
                 this.setAvailableAgentsStatus(user_available);
             }
         } catch (error) {
             this.setAvailableAgentsStatus(null);
-            this.globals.wdLog(['> Error is departments: ', error]);
+            this.logger.error('[GLOBAL-SET] setVariablesFromService > Error is departments: ', error);
         }
 
         // AVAILABLE AGENTS
         // if (response && response.user_available !== null) {
-        //     //this.globals.wdLog(['user_available ::::', response.user_available);
+        //     //this.logger.error('[GLOBAL-SET] setVariablesFromService > user_available ::::', response.user_available);
         //     this.setAvailableAgentsStatus(response.user_available);
         // }
 
@@ -440,17 +442,37 @@ export class GlobalSettingsService {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.right = '0!important';
                     }
-                    if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
-                        globals[key] = stringToBoolean(variables[key]);
+                    // if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
+                    //     globals[key] = stringToBoolean(variables[key]); //-> fare test perchè se param è !== string allora ritorna string e non boolean
+                    // }
+                    if (variables.hasOwnProperty('calloutTimer')) {
+                        globals['calloutTimer'] = variables['calloutTimer'];
                     }
                     if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
-                        // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
-                        globals[key] = variables[key];
+                        globals['dynamicWaitTimeReply'] = variables['dynamicWaitTimeReply'];
                     }
+                    if (variables.hasOwnProperty('logoChat')) {
+                        globals['logoChat'] = variables['logoChat'];
+                    }
+                    if (variables.hasOwnProperty('preChatForm')) {
+                        globals['preChatForm'] = variables['preChatForm'];
+                    }
+                    if (variables.hasOwnProperty('preChatFormCustomFieldsEnabled')) {
+                        if(variables.hasOwnProperty('preChatFormJson'))
+                            globals['preChatFormJson'] = variables['preChatFormJson'];
+                    }
+                    if (variables.hasOwnProperty('themeColor')) {
+                        globals['themeColor'] = variables['themeColor'];
+                    }
+                    if (variables.hasOwnProperty('themeForegroundColor')) {
+                        // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
+                        globals['themeForegroundColor'] = variables['themeForegroundColor'];
+                    }
+                    
                 }
             }
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setVariablesFromService widget > Error :', error);
         }
 
         // IP
@@ -462,21 +484,21 @@ export class GlobalSettingsService {
             }
             this.globals.attributes['ipAddress'] = IP;
             this.globals.setAttributeParameter('ipAddress', IP);
-            this.globals.wdLog(['> ipAddress :' + IP]);
+            this.logger.debug('[GLOBAL-SET] setVariablesFromService > ipAddress :', IP);
             // console.log('this.globals.attributes.IP ----------------->', this.globals.attributes);
         } catch (error) {
-            this.globals.wdLog(['> Error :' + error]);
+            this.logger.error('[GLOBAL-SET] setVariablesFromService > ipAddress > Error :', error);
         }
 
         // if (response && response.project && response.project.widget !== null) {
-        //     this.globals.wdLog(['response.widget: ', response.project.widget);
+        //     this.logger.debug('[GLOBAL-SET] setVariablesFromService response.widget: ', response.project.widget);
         //     const variables = response.project.widget;
         //     if (!variables || variables === undefined) {
         //         return;
         //     }
         //     for (const key of Object.keys(variables)) {
-        //         // this.globals.wdLog(['SET globals from service KEY ---------->', key);
-        //         // this.globals.wdLog(['SET globals from service VAL ---------->', variables[key]);
+        //         // this.logger.debug('[GLOBAL-SET] setVariablesFromService SET globals from service KEY ---------->', key);
+        //         // this.logger.debug('[GLOBAL-SET] setVariablesFromService SET globals from service VAL ---------->', variables[key]);
         //         // sposto l'intero frame a sx se align è = left
         //         if (key === 'align' && variables[key] === 'left') {
         //             const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskiframe');
@@ -486,7 +508,7 @@ export class GlobalSettingsService {
         //             globals[key] = stringToBoolean(variables[key]);
         //         }
         //     }
-        //     // this.globals.wdLog(['SET globals == ---------->', globals);
+        //     // this.logger.error('[GLOBAL-SET] setVariablesFromService SET globals == ---------->', globals);
         // }
     }
 
@@ -494,9 +516,9 @@ export class GlobalSettingsService {
     * B: getVariablesFromSettings
     */
     setVariablesFromSettings(globals: Globals) {
-        // this.globals.wdLog(['setVariablesFromSettings');
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings');
         const windowContext = globals.windowContext;
-        // this.globals.wdLog(['windowContext', globals.windowContext);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings windowContext', globals.windowContext);
         if (!windowContext['tiledesk']) {
             return;
         } else {
@@ -508,63 +530,63 @@ export class GlobalSettingsService {
         }
         let TEMP: any;
         const tiledeskSettings = windowContext['tiledeskSettings'];
-        // this.globals.wdLog(['tiledeskSettings: ', tiledeskSettings);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > tiledeskSettings: ', tiledeskSettings);
         TEMP = tiledeskSettings['tenant'];
-        // this.globals.wdLog(['2 - tenant:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings >  tenant:: ', TEMP);
         if (TEMP !== undefined) {
             globals.tenant = TEMP;
             // globals.setParameter('tenant', TEMP);
         }
         TEMP = tiledeskSettings['recipientId'];
-        // this.globals.wdLog(['3 - recipientId:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > recipientId:: ', TEMP);
         if (TEMP !== undefined) {
             globals.recipientId = TEMP;
             // globals.setParameter('recipientId', TEMP);
         }
         TEMP = tiledeskSettings['widgetTitle'];
-        // this.globals.wdLog(['5 - widgetTitle:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > widgetTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.widgetTitle = TEMP;
             // globals.setParameter('widgetTitle', TEMP);
         }
         TEMP = tiledeskSettings['poweredBy'];
-        // this.globals.wdLog(['6 - poweredBy:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > poweredBy:: ', TEMP);
         if (TEMP !== undefined) {
             globals.poweredBy = TEMP;
             // globals.setParameter('poweredBy', TEMP);
         }
         TEMP = tiledeskSettings['userEmail'];
-        // this.globals.wdLog(['8 - userEmail:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > userEmail:: ', TEMP);
         if (TEMP !== undefined) {
             globals.userEmail = TEMP;
             // globals.setParameter('userEmail', TEMP);
         }
         TEMP = tiledeskSettings['userFullname'];
-        // this.globals.wdLog(['10 - userFullname:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > userFullname:: ', TEMP);
         if (TEMP !== undefined) {
             globals.userFullname = TEMP;
             // globals.setParameter('userFullname', TEMP);
         }
         TEMP = tiledeskSettings['preChatForm'];
-                // this.globals.wdLog(['11 - preChatForm:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatForm:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.preChatForm = (TEMP === true) ? true : false;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['isOpen'];
-        // this.globals.wdLog(['12 - isOpen:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > isOpen:: ', TEMP);
         if (TEMP !== undefined) {
             globals.isOpen = (TEMP === true) ? true : false;
             // globals.setParameter('isOpen', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['channelType'];
-        // this.globals.wdLog(['13 - channelType:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > channelType:: ', TEMP);
         if (TEMP !== undefined) {
             globals.channelType = TEMP;
             // globals.setParameter('channelType', TEMP);
         }
         TEMP = tiledeskSettings['lang'];
-        // this.globals.wdLog(['14 - lang:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > lang:: ', TEMP);
         if (TemplateBindingParseResult) {
             globals.lang = TEMP;
             // globals.setParameter('lang', TEMP);
@@ -580,115 +602,115 @@ export class GlobalSettingsService {
             }
         }
         TEMP = tiledeskSettings['marginX'];
-        // this.globals.wdLog(['16 - marginX:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > marginX:: ', TEMP);
         if (TEMP !== undefined) {
             globals.marginX = TEMP;
             // globals.setParameter('marginX', TEMP);
         }
         TEMP = tiledeskSettings['marginY'];
-        // this.globals.wdLog(['17 - marginY:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > marginY:: ', TEMP);
         if (TEMP !== undefined) {
             globals.marginY = TEMP;
             // globals.setParameter('marginY', TEMP);
         }
         TEMP = tiledeskSettings['launcherWidth'];
-        // this.globals.wdLog(['18 - launcherWidth:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > launcherWidth:: ', TEMP);
         if (TEMP !== undefined) {
             globals.launcherWidth = TEMP;
             // globals.setParameter('launcherWidth', TEMP);
         }
         TEMP = tiledeskSettings['launcherHeight'];
-        // this.globals.wdLog(['19 - launcherHeight:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > launcherHeight:: ', TEMP);
         if (TEMP !== undefined) {
             globals.launcherHeight = TEMP;
             // globals.setParameter('launcherHeight', TEMP);
         }
         TEMP = tiledeskSettings['baloonImage'];
-        // this.globals.wdLog(['19 - baloonImage:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > baloonImage:: ', TEMP);
         if (TEMP !== undefined) {
             globals.baloonImage = TEMP;
             // globals.setParameter('baloonImage', TEMP);
         }
         TEMP = tiledeskSettings['baloonShape'];
-        // this.globals.wdLog(['19 - baloonShape:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > baloonShape:: ', TEMP);
         if (TEMP !== undefined) {
             globals.baloonShape = TEMP;
             // globals.setParameter('baloonShape', TEMP);
         }
         TEMP = tiledeskSettings['calloutTimer'];
-        // this.globals.wdLog(['20 - calloutTimer:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > calloutTimer:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutTimer = TEMP;
             // globals.setParameter('calloutTimer', TEMP);
         }
         TEMP = tiledeskSettings['calloutTitle'];
-        // this.globals.wdLog(['21 - calloutTitle:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > calloutTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutTitle = TEMP;
             // globals.setParameter('calloutTitle', TEMP);
         }
         TEMP = tiledeskSettings['calloutMsg'];
-        // this.globals.wdLog(['22 - calloutMsg:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > calloutMsg:: ', TEMP);
         if (TEMP !== undefined) {
             globals.calloutMsg = TEMP;
             // globals.setParameter('calloutMsg', TEMP);
         }
         TEMP = tiledeskSettings['fullscreenMode'];
-        // this.globals.wdLog(['23 - fullscreenMode:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > fullscreenMode:: ', TEMP);
         if (TEMP !== undefined) {
             globals.fullscreenMode = TEMP;
             // globals.setParameter('fullscreenMode', TEMP);
         }
         TEMP = tiledeskSettings['hideHeaderCloseButton'];
-        // this.globals.wdLog(['24 - hideHeaderCloseButton:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > hideHeaderCloseButton:: ', TEMP);
         if (TEMP !== undefined) {
             globals.hideHeaderCloseButton = TEMP;
             // globals.setParameter('hideHeaderCloseButton', TEMP);
         }
         TEMP = tiledeskSettings['themeColor'];
-        // this.globals.wdLog(['25 - themeColor:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > themeColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeColor = convertColorToRGBA(TEMP, 100);
             // globals.setParameter('themeColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['themeForegroundColor'];
-        // this.globals.wdLog(['26 - themeForegroundColor:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > themeForegroundColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeForegroundColor = convertColorToRGBA(TEMP, 100);
             // globals.setParameter('themeForegroundColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['allowTranscriptDownload'];
-        // this.globals.wdLog(['27 - allowTranscriptDownload:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > allowTranscriptDownload:: ', TEMP);
         if (TEMP !== undefined) {
             globals.allowTranscriptDownload = (TEMP === true) ? true : false;
             // globals.setParameter('allowTranscriptDownload', TEMP);
         }
         TEMP = tiledeskSettings['startFromHome'];
-        // this.globals.wdLog(['28 - startFromHome:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > startFromHome:: ', TEMP);
         if (TEMP !== undefined) {
             globals.startFromHome = (TEMP === true) ? true : false;
             // globals.setParameter('startFromHome', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['logoChat'];
-        // this.globals.wdLog(['29 - logoChat:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logoChat:: ', TEMP);
         if (TEMP !== undefined) {
             globals.logoChat = TEMP;
             // globals.setParameter('logoChat', TEMP);
         }
         TEMP = tiledeskSettings['welcomeTitle'];
-        // this.globals.wdLog(['30 - welcomeTitle:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > welcomeTitle:: ', TEMP);
         if (TEMP !== undefined) {
             globals.welcomeTitle = TEMP;
             // globals.setParameter('welcomeTitle', TEMP);
         }
         TEMP = tiledeskSettings['welcomeMsg'];
-        // this.globals.wdLog(['31 - welcomeMsg:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > welcomeMsg:: ', TEMP);
         if (TEMP !== undefined) {
             globals.welcomeMsg = TEMP;
             // globals.setParameter('welcomeMsg', TEMP);
         }
         TEMP = tiledeskSettings['autoStart'];
-        // this.globals.wdLog(['32 - autoStart:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > autoStart:: ', TEMP);
         if (TEMP !== undefined) {
             globals.autoStart = (TEMP === true) ? true : false;
             // globals.setParameter('autoStart', (TEMP === false) ? false : true);
@@ -698,80 +720,86 @@ export class GlobalSettingsService {
             globals.startHidden = (TEMP === true) ? true : false;
         }
         TEMP = tiledeskSettings['isShown'];
-        // this.globals.wdLog(['33 - isShown:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > isShown:: ', TEMP);
         if (TEMP !== undefined) {
             globals.isShown = (TEMP === true) ? true : false;
             // globals.setParameter('isShown', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['filterByRequester'];
-        // this.globals.wdLog(['34 - filterByRequester:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > filterByRequester:: ', TEMP);
         if (TEMP !== undefined) {
             globals.filterByRequester = (TEMP === true) ? true : false;
-            // this.globals.wdLog(['34 - globals.filterByRequester:: ', globals.filterByRequester);
             // globals.setParameter('filterByRequester', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showWaitTime'];
-        // this.globals.wdLog(['35 - showWaitTime:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > showWaitTime:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showWaitTime = (TEMP === true) ? true : false;
             // globals.setParameter('showWaitTime', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showAvailableAgents'];
-        // this.globals.wdLog(['36 - showAvailableAgents:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > showAvailableAgents:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showAvailableAgents = (TEMP === true) ? true : false;
             // globals.setParameter('showAvailableAgents', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['showLogoutOption'];
-        // this.globals.wdLog(['37 - showLogoutOption:: ', TEMP);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > showLogoutOption:: ', TEMP);
         if (TEMP !== undefined) {
             globals.showLogoutOption = (TEMP === true) ? true : false;
             // globals.setParameter('showLogoutOption', (TEMP === false) ? false : true);
         }
         TEMP = tiledeskSettings['customAttributes'];
-        // this.globals.wdLog(['39 - customAttributes:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > customAttributes:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.customAttributes = TEMP;
         }
         TEMP = tiledeskSettings['showAttachmentButton'];
-        // this.globals.wdLog(['41 - showAttachmentButton:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > showAttachmentButton:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.showAttachmentButton = (TEMP === true) ? true : false;
         }
         TEMP = tiledeskSettings['showAllConversations'];
-        // this.globals.wdLog(['42 - showAllConversations:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > showAllConversations:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.showAllConversations = (TEMP === true) ? true : false;
         }
         TEMP = tiledeskSettings['privacyField'];
-        // this.globals.wdLog(['43 - privacyField:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > privacyField:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.privacyField = TEMP;
         }
         TEMP = tiledeskSettings['dynamicWaitTimeReply'];
-        // this.globals.wdLog(['44 - dynamicWaitTimeReply:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > dynamicWaitTimeReply:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.dynamicWaitTimeReply = TEMP;
         }
         TEMP = tiledeskSettings['soundEnabled'];
-        // this.globals.wdLog(['45 - soundEnabled:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > soundEnabled:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.soundEnabled = TEMP;
         }
         TEMP = tiledeskSettings['openExternalLinkButton'];
-        // this.globals.wdLog(['46 - openExternalLinkButton:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > openExternalLinkButton:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.openExternalLinkButton = TEMP;
         }
         TEMP = tiledeskSettings['hideHeaderConversationOptionsMenu'];
-        // this.globals.wdLog(['47 - hideHeaderConversationOptionsMenu:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > hideHeaderConversationOptionsMenu:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.hideHeaderConversationOptionsMenu = TEMP;
         }
         TEMP = tiledeskSettings['logLevel'];
-        // this.globals.wdLog(['48 - logLevel:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.logLevel = TEMP;
+        }
+        TEMP = tiledeskSettings['preChatFormJson'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatFormJson:: ', TEMP]);
+        if (TEMP !== undefined) {
+            if(isJsonString(TEMP)){
+                globals.preChatFormJson = TEMP;
+            }
         }
         
 
@@ -782,7 +810,7 @@ export class GlobalSettingsService {
      * desueto, potrebbe essere commentato.
      */
     setVariablesFromAttributeHtml(globals: Globals, el: ElementRef) {
-        // this.globals.wdLog(['getVariablesFromAttributeHtml', el);
+        // this.logger.debug('[GLOBAL-SET] getVariablesFromAttributeHtml', el);
         // const projectid = el.nativeElement.getAttribute('projectid');
         // if (projectid !== null) {
         //     globals.setParameter('projectid', projectid);
@@ -945,6 +973,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.logLevel = TEMP;
         }
+        TEMP = el.nativeElement.getAttribute('preChatFormJson');
+        if (TEMP !== null) {
+            this.globals.preChatFormJson = TEMP;
+        }
         
     }
 
@@ -953,7 +985,7 @@ export class GlobalSettingsService {
     * D: setVariableFromUrlParameters
     */
     setVariablesFromUrlParameters(globals: Globals) {
-        globals.wdLog(['setVariablesFromUrlParameters: ']);
+        this.logger.debug('[GLOBAL-SET] setVariablesFromUrlParameters: ');
         const windowContext = globals.windowContext;
         let TEMP: any;
         TEMP = getParameterByName(windowContext, 'tiledesk_tenant');
@@ -1117,7 +1149,6 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_filterByRequester');
         if (TEMP) {
             globals.filterByRequester = stringToBoolean(TEMP);
-            // this.globals.wdLog(['tiledesk_filterByRequester:: ', globals.filterByRequester);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showWaitTime');
@@ -1138,7 +1169,6 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_preChatForm');
         if (TEMP) {
             globals.preChatForm = stringToBoolean(TEMP);
-            // this.globals.wdLog(['globals.preChatForm: ' + globals.preChatForm);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_isOpen');
@@ -1159,6 +1189,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_fullscreenMode');
         if (TEMP) {
             globals.fullscreenMode = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
+        if (TEMP) {
+            globals.customAttributes = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showAttachmentButton');
@@ -1215,6 +1250,11 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.logLevel = TEMP;
         }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_preChatFormJson');
+        if (TEMP) {
+            globals.preChatFormJson = JSON.parse(TEMP);
+        }
         
     }
 
@@ -1225,16 +1265,16 @@ export class GlobalSettingsService {
      * @param globals
      */
     setVariableFromStorage(globals: Globals) {
-        this.globals.wdLog(['setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals)]);
+        this.logger.debug('[GLOBAL-SET] setVariableFromStorage :::::::: SET VARIABLE ---------->', Object.keys(globals));
         for (const key of Object.keys(globals)) {
             const val = this.appStorageService.getItem(key);
-            // this.globals.wdLog(['SET globals KEY ---------->', key]);
-            // this.globals.wdLog(['SET globals VAL ---------->', val]);
+            // this.logger.debug('[GLOBAL-SET] setVariableFromStorage SET globals KEY ---------->', key);
+            // this.logger.debug('[GLOBAL-SET] setVariableFromStorage SET globals VAL ---------->', val);
             if (val && val !== null) {
                 // globals.setParameter(key, val);
                 globals[key] = stringToBoolean(val);
             }
-            // this.globals.wdLog(['SET globals == ---------->', globals);
+            // this.logger.debug('[GLOBAL-SET] setVariableFromStorage SET globals == ---------->', globals);
         }
     }
 
@@ -1248,14 +1288,14 @@ export class GlobalSettingsService {
     initDepartments(departments: any) {
         this.globals.setParameter('departmentSelected', null);
         this.globals.setParameter('departmentDefault', null);
-        this.globals.wdLog(['departments ::::', departments]);
+        this.logger.debug('[GLOBAL-SET] initDepartments departments ::::', departments);
         if (departments === null ) { return; }
         this.globals.departments = departments;
         // console.log('departments.length', departments.length);
         if (departments.length === 1) {
             // UN SOLO DEPARTMENT
             const department = departments[0];
-            this.globals.wdLog(['DEPARTMENT FIRST ::::', departments[0]]);
+            this.logger.debug('[GLOBAL-SET] initDepartments DEPARTMENT FIRST ::::', departments[0]);
             this.globals.setParameter('departmentDefault', departments[0]);
             if (department && department.online_msg && department.online_msg !== '') {
                 this.globals.online_msg = department.online_msg;
@@ -1273,7 +1313,7 @@ export class GlobalSettingsService {
             // return false;
         } else if (departments.length > 1) {
             // CI SONO + DI 2 DIPARTIMENTI
-            this.globals.wdLog(['CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]]);
+            this.logger.debug('[GLOBAL-SET] initDepartments > CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]);
             let i = 0;
             departments.forEach(department => {
                 if (department['default'] === true) {
@@ -1301,7 +1341,7 @@ export class GlobalSettingsService {
             this.setDepartment(departments[0]);
         } else {
             // DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI !!!!
-            this.globals.wdLog(['DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::']);
+            this.logger.error('[GLOBAL-SET] initDepartments > DEPARTMENT DEFAULT NON RESTITUISCE RISULTATI ::::');
             // return;
         }
 
@@ -1312,12 +1352,12 @@ export class GlobalSettingsService {
     setDepartmentFromExternal() {
         // se esiste un departmentID impostato dall'esterno,
         // creo un department di default e lo imposto come department di default
-        // this.globals.wdLog(['EXTERNAL departmentID ::::' + this.globals.departmentID]);
+        // this.logger.debug('[GLOBAL-SET] setDepartmentFromExternal > EXTERNAL departmentID ::::' + this.globals.departmentID);
         let isValidID = false;
         if (this.globals.departmentID) {
             this.globals.departments.forEach(department => {
                 if (department._id === this.globals.departmentID) {
-                    this.globals.wdLog(['EXTERNAL DEPARTMENT ::::' + department._id]);
+                    this.logger.debug('[GLOBAL-SET] setDepartmentFromExternal > EXTERNAL DEPARTMENT ::::' + department._id);
                     this.globals.setParameter('departmentDefault', department);
                     this.setDepartment(department);
                     isValidID = true;
@@ -1329,7 +1369,7 @@ export class GlobalSettingsService {
                 // per permettere di passare dalla modale dell scelta del dipartimento se necessario (+ di 1 dipartimento presente)
                 this.globals.departmentID = null;
             }
-            this.globals.wdLog(['END departmentID ::::' + this.globals.departmentID + isValidID]);
+            this.logger.debug('[GLOBAL-SET] setDepartmentFromExternal > END departmentID ::::' + this.globals.departmentID + isValidID);
         }
     }
 
@@ -1340,7 +1380,7 @@ export class GlobalSettingsService {
      * save attributes in this.appStorageService
     */
     setDepartment(department) {
-        this.globals.wdLog(['setDepartment: ', JSON.stringify(department)]);
+        this.logger.debug('[GLOBAL-SET] setDepartment: ', JSON.stringify(department));
         this.globals.setParameter('departmentSelected', department);
         // let attributes = this.globals.attributes;
         let attributes: any = JSON.parse(this.appStorageService.getItem('attributes'));
@@ -1354,9 +1394,9 @@ export class GlobalSettingsService {
             attributes.departmentName = department.name;
         }
 
-        // this.globals.wdLog(['department.online_msg: ', department.online_msg]);
-        // this.globals.wdLog(['department.offline_msg: ', department.offline_msg]);
-        this.globals.wdLog(['setAttributes: ', JSON.stringify(attributes)]);
+        // this.logger.debug('[GLOBAL-SET] setDepartment > department.online_msg: ', department.online_msg);
+        // this.logger.debug('[GLOBAL-SET] setDepartment > department.offline_msg: ', department.offline_msg);
+        this.logger.debug('[GLOBAL-SET] setDepartment > setAttributes: ', JSON.stringify(attributes));
         this.globals.setParameter('departmentSelected', department);
         this.globals.setParameter('attributes', attributes);
         this.appStorageService.setItem('attributes', JSON.stringify(attributes));
@@ -1381,7 +1421,7 @@ export class GlobalSettingsService {
                 element.imageurl = getImageUrlThumb(element.id);
                 arrayAgents.push(element);
                 if (index >= 4) { return; }
-                // this.globals.wdLog([index, ' - element->', element);
+                // this.logger.debug('[GLOBAL-SET] setAvailableAgentsStatus > index, ' - element->', element);
             });
 
             // availableAgents.forEach(element => {
@@ -1395,9 +1435,9 @@ export class GlobalSettingsService {
             this.globals.availableAgents = arrayAgents;
             this.globals.setParameter('availableAgentsStatus', true);
             // this.globals.setParameter('availableAgents', availableAgents);
-            // this.globals.wdLog(['element->', this.globals.availableAgents);
-            // this.globals.wdLog(['areAgentsAvailable->', this.globals.areAgentsAvailable);
-            // this.globals.wdLog(['areAgentsAvailableText->', this.globals.areAgentsAvailableText);
+            // this.logger.debug('[GLOBAL-SET] setAvailableAgentsStatus > element->', this.globals.availableAgents);
+            // this.logger.debug('[GLOBAL-SET] setAvailableAgentsStatus > areAgentsAvailable->', this.globals.areAgentsAvailable);
+            // this.logger.debug('[GLOBAL-SET] setAvailableAgentsStatus > areAgentsAvailableText->', this.globals.areAgentsAvailableText);
         }
 
     }

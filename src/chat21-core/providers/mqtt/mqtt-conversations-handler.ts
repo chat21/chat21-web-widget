@@ -354,7 +354,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         // public sender_fullname: string,
         // public status: string,
         // public timestamp: string,
-        // public time_last_message: string,
         // public selected: boolean,
         // public color: string,
         // public avatar: string,
@@ -431,7 +430,6 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         conv.conversation_with_fullname = conversation_with_fullname;
         conv.conversation_with = conversation_with;
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
-        conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
         if (!conv.last_message_text) {

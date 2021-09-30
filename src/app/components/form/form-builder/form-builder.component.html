@@ -1,0 +1,50 @@
+<div>
+  <form id="chat21-form-container" [formGroup]="preChatFormGroupCustom">
+    <span *ngFor="let element of formArray">
+        <chat-form-text *ngIf="element?.type==='string'"
+          [element]="element"
+          [controlName]="element?.name"
+          [translationErrorLabelMap]="translationErrorLabelMap"
+          [stylesMap]="stylesMap"
+          [hasSubmitted]="submitted">
+        </chat-form-text>
+
+        <chat-form-label *ngIf="element?.type==='label'"
+          [element]="element"
+          [controlName]="element?.name"
+          [hasSubmitted]="submitted">
+        </chat-form-label>
+
+        <chat-form-checkbox *ngIf="element?.type === 'checkbox'"
+          [element]="element"
+          [controlName]="element?.name"
+          [translationErrorLabelMap]="translationErrorLabelMap"
+          [stylesMap]="stylesMap"
+          [hasSubmitted]="submitted">
+        </chat-form-checkbox>
+
+        <chat-form-textarea *ngIf="element?.type === 'textarea'"
+          [element]="element"
+          [controlName]="element?.name"
+          [cols]="3"
+          [translationErrorLabelMap]="translationErrorLabelMap"
+          [stylesMap]="stylesMap"
+          [hasSubmitted]="submitted">
+        </chat-form-textarea>
+    </span>
+  </form>
+
+  <!-- [disabled]="!preChatFormGroupCustom?.valid" -->
+  <button tabindex="1413"  class="c21-button-primary" (click)="onSubmitPreChatForm()" [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
+    <span class="v-align-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+    </span>
+    <span class="v-align-center c21-label-button">
+      {{translationMap?.get('LABEL_START_NW_CONV')}}
+    </span>  
+    <div class="clear"></div>
+  </button>
+</div>

@@ -31,15 +31,15 @@
     transition: background-color .6s ease;
     .icon-button-action {
         position: absolute;
-        top: -1;
-        right: 1;
+        top: -1px;
+        right: 1px;
         svg {
             fill: $blue;
         }
     }
     .icon-button-action-self{
         position: absolute;
-        right: 1;
+        right: 1px;
         svg {
             fill: $blue;
         }
