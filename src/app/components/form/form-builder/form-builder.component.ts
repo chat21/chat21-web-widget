@@ -54,7 +54,7 @@ export class FormBuilderComponent implements OnInit {
         let validatorsObject: any[] = []
         let defaultValue: string = null
         child.mandatory? validatorsObject.push(Validators.required) : null
-        child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex))) : null
+        child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex.slice(1,-1)))) : null
         child.value? defaultValue= child.value : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
       }else if (child.type === 'checkbox'){
