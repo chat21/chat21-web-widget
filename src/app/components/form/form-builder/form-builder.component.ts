@@ -6,6 +6,7 @@ import { CustomTranslateService } from '../../../../chat21-core/providers/custom
 import { isString } from 'util';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
+import { validateRegex } from '../../../../chat21-core/utils/utils';
 
 @Component({
   selector: 'chat-form-builder',
@@ -54,7 +55,7 @@ export class FormBuilderComponent implements OnInit {
         let validatorsObject: any[] = []
         let defaultValue: string = null
         child.mandatory? validatorsObject.push(Validators.required) : null
-        child.regex? validatorsObject.push(Validators.pattern(new RegExp(child.regex.slice(1,-1)))) : null
+        child.regex? validatorsObject.push(Validators.pattern(new RegExp(validateRegex(child.regex).slice(1,-1)))) : null
         child.value? defaultValue= child.value : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
       }else if (child.type === 'checkbox'){
@@ -110,7 +111,9 @@ export class FormBuilderComponent implements OnInit {
   }
 
   onSubmitPreChatForm(){
+    this.logger.debug('[FORM-BUILDER] submitted before', this.submitted)
     this.submitted = true;
+    this.logger.debug('[FORM-BUILDER] submitted', this.submitted)
     this.logger.debug('[FORM-BUILDER] onSubmitPreChatForm', this.preChatFormGroupCustom)
     if(this.preChatFormGroupCustom.valid){
       this.onSubmitForm.emit(this.preChatFormGroupCustom.value)

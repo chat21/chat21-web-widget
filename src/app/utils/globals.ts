@@ -328,7 +328,7 @@ export class Globals {
     /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
     /** set the auth persistence */
-    this.preChatFormJson = [{name: "userFullname", type:"string", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"string", mandatory:false, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ pattern:{ en:"Invalid email address", it:"Indirizzo email non valido"}}}]
+    this.preChatFormJson = [{name: "userFullname", type:"string", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"string", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ pattern:{ en:"Invalid email address", it:"Indirizzo email non valido"}}}]
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
 
     this.showWaitTime = true;

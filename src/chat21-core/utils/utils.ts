@@ -621,3 +621,13 @@ export function isJsonString(str) {
   }
   return true;
 }
+
+export function validateRegex(regex){
+  let validRegex = regex
+  if(regex.substring(0,1) !== '/')
+    validRegex = '/' + regex
+  if(regex.substring(regex.length -1, regex.length) !== '/'){
+    validRegex = validRegex + '/'
+  }
+  return validRegex
+}

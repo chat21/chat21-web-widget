@@ -3,14 +3,16 @@
 ### 5.0.18-rc.2
 - bug-fixed: timestamp not changed in list-conversations
 - bug-fixed: waiting_time_reply not translate time with the same language of previous string
-- bug-fixed: timesatamp in list-conversations has not the correct widget language
+- bug-fixed: timestamp in list-conversations has not the correct widget language
 - bug-fixed: onImageLoaded and onConversationLoaded were not called
 - changed: replace msg text with 'sent an image' or 'sent an attachment' string for last_message_text property value
 - changed: avatar conversations color
-
+- added: custom preChatFormJson, preChatFormJson and preChatFormCustomFieldsEnabled properties from widget remote object - (WID-64)
+- added: getPreChatFormJson() and setPreChatFormJson(form) as javascript method 
+- added: validateRegex function to check for valid regex from preChatFormJson object
 ### 5.0.18-rc.1
-- bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response
--removed: 2 unuseful log (app.component and localSessionStorage initialize)
+- bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response - (WID-68)
+- removed: 2 unuseful log (app.component and localSessionStorage initialize)
 
 ### 5.0.17 - PROD
 

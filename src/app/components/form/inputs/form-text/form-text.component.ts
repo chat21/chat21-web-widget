@@ -1,4 +1,3 @@
-import { element } from 'protractor';
 import { style } from '@angular/animations';
 import { Component, ElementRef, Input, OnInit, SimpleChange, ViewChild, OnChanges } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
