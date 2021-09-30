@@ -2133,16 +2133,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logger.debug('[APP-COMP] onConversationLoaded convvvv:::', conversation)
         const keys = ['YOU', 'SENT_AN_IMAGE', 'SENT_AN_ATTACHMENT'];
         const translationMap = this.translateService.translateLanguage(keys);
-        if (conversation.type === "image") {
+        if(conversation.sender === this.g.senderId){
+            if (conversation.type === "image") {
 
-            this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
-            const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
-            conversation.last_message_text = SENT_AN_IMAGE;
-  
-        } else if (conversation.type !== "image" && conversation.type !== "text") {
-            this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
-            const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
-            conversation.last_message_text =  SENT_AN_ATTACHMENT;
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
+                const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
+                conversation.last_message_text = SENT_AN_IMAGE;
+      
+            } else if (conversation.type !== "image" && conversation.type !== "text") {
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
+                const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
+                conversation.last_message_text =  SENT_AN_ATTACHMENT;
+            }
         }
     }
 
