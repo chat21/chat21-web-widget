@@ -39,6 +39,7 @@
         (onMenuOptionShow)="returnOnMenuOption($event)">
     </chat-conversation-content>
 
+    <!-- INTERNAL FRAME FOR SELF ACTION LINK BUTTONS-->
     <chat-interlal-frame *ngIf="isButtonUrl"
         [button]="buttonClicked"
         [openExternalLinkButton]="g?.openExternalLinkButton"
@@ -49,6 +50,14 @@
     </chat-interlal-frame>
 
 
+    <!-- PREVIEW ATTACHMENT BUTTON-->
+    <!-- <chat-conversation-preview-image *ngIf="isOpenAttachmentPreview"
+        [files]="files"
+        [translationMap]="translationMapPreview"
+        [stylesMap]="stylesMap"
+        (onSendAttachment)="onSendAttachment()"
+        (onCloseModalPreview)="onCloseModalPreview()">
+    </chat-conversation-preview-image> -->
 
     <!-- FOOTER -->
     <div id="chat21-footer">
@@ -75,7 +84,8 @@
             [translationMap]="translationMapFooter"
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
             (onAfterSendMessage)="returnAfterSendMessage($event)"
-            (onChangeTextArea)="returnChangeTextArea($event)">
+            (onChangeTextArea)="returnChangeTextArea($event)"
+            (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)">
         </chat-conversation-footer>
 
     </div>

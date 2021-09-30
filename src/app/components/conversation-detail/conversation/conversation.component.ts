@@ -109,6 +109,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isFilePendingToUpload: Boolean = false;
   arrayFilesLoad: Array<any>;
   isFileSelected: Boolean = false;
+
+  isOpenAttachmentPreview: Boolean = false;
+  files: Array<any>;
   // ========= end:: send image ========= //
 
 
@@ -177,6 +180,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   translationMapHeader: Map<string, string>;
   translationMapFooter: Map<string, string>;
   translationMapContent: Map<string, string>;
+  translationMapPreview: Map<string, string>;
 
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
   @ViewChild(ConversationContentComponent) conversationContent: ConversationContentComponent
@@ -262,10 +266,17 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'ARRAY_DAYS',
     ];
 
+    const keysPreview= [
+      'BACK', 
+      'CLOSE',
+      'LABEL_PLACEHOLDER',
+    ];
+
     
     this.translationMapHeader = this.customTranslateService.translateLanguage(keysHeader);
     this.translationMapFooter = this.customTranslateService.translateLanguage(keysFooter);
     this.translationMapContent = this.customTranslateService.translateLanguage(keysContent);
+    this.translationMapPreview = this.customTranslateService.translateLanguage(keysPreview);
   }
 
   ngAfterViewInit() {
@@ -1777,6 +1788,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnMenuOption(event:boolean){
       this.isMenuShow = event;
+  }
+
+  /** CALLED BY: conv-footer component */
+  onAttachmentButtonClicked(files: any){
+    this.isOpenAttachmentPreview = true
+    this.files = files
+  }
+
+  /** CALLED BY: conv-preview component */
+  onCloseModalPreview(){
+    this.isOpenAttachmentPreview = false
+  }
+
+  /** CALLED BY: conv-preview component */
+  onSendAttachment(){
+    console.log('sendd messageee')
   }
 
   returnChangeTextArea(event){

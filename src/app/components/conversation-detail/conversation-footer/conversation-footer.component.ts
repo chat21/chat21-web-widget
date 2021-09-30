@@ -38,7 +38,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
-  @Output() onChangeTextArea = new EventEmitter<any>()
+  @Output() onChangeTextArea = new EventEmitter<any>();
+  @Output() onAttachmentButtonClicked = new EventEmitter<any>();
 
   @ViewChild('chat21_file') public chat21_file: ElementRef;
 
@@ -89,6 +90,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if (event) {
         this.selectedFiles = event.target.files;
         this.logger.debug('[CONV-FOOTER] AppComponent:detectFiles::selectedFiles', this.selectedFiles);
+        this.onAttachmentButtonClicked.emit(this.selectedFiles)
         if (this.selectedFiles == null) {
           this.isFilePendingToUpload = false;
         } else {
