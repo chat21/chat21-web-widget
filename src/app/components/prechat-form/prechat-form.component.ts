@@ -6,6 +6,8 @@ import { isString } from 'util';
 import { AppStorageService } from '../../../chat21-core/providers/abstract/app-storage.service';
 import { CustomTranslateService } from '../../../chat21-core/providers/custom-translate.service';
 import { Globals } from '../../utils/globals';
+import { LoggerService } from '../../../chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from '../../../chat21-core/providers/logger/loggerInstance';
 
 @Component({
   selector: 'chat-prechat-form',
@@ -31,7 +33,8 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   colorBck: string;
   browserLang: string;
-  preChatFormStruct: Array<FormArray>;
+  private logger: LoggerService = LoggerInstance.getInstance();
+
   constructor(
     public g: Globals,
     public formBuilder: FormBuilder,
@@ -46,99 +49,10 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   initialize() {
     this.colorBck = '#000000';
-    this.preChatFormGroup = this.createForm(this.formBuilder);
-    if (this.preChatFormGroup) {
-      this.subcribeToFormChanges();
-    }
-    this.preChatFormStruct = [
-      {
-        label: "TEL",
-        errorLabel: {
-          pattern: {
-            en: "Pattern not valid. Insert only 10-digits number", // pivot
-            it: "Campo non valido. Insersci solo un numero di dieci cifre"
-          },
-          length: {
-            en: "Insert 10 digits ", // pivot
-            it: "Inserisci 10 cifre"
-          },
-        },
-        name: "tel",
-        type: "string",
-        mandatory: true,
-        regex: "[0-9]",
-        value: '0836661234'
-      },
-      {
-        label: {
-          en: "Email", // pivot
-          it: "Indirizzo email"
-        },
-        name: "userEmail",
-        type: "string",
-        mandatory: false,
-        regex: "/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i"
-      },
-      {
-        label: {
-          en: "Email", // pivot
-          it: "Indirizzo email"
-        },
-        name: "userEmail",
-        type: "string",
-        mandatory: false
-      },
-      {
-        label: {
-          en: "Userfullname", // pivot
-          it: "Nome utente"
-        },
-        name: "userFullname",
-        type: "string",
-        mandatory: false
-      },
-      {
-        label: {
-          en: "First message", // pivot
-          it: "Primo messaggio"
-        },
-        name: "firstMessage",
-        type: "textarea",
-        mandatory: false
-      },
-      {
-        label: {
-          en: "Email", // pivot
-          it: "Indirizzo email"
-        },
-        name: "city",
-        type: "string",
-        mandatory: false,
-      },
-      {
-        label: {
-          en: "Email", // pivot
-          it: "Indirizzo email"
-        },
-        name: "place",
-        type: "string",
-        mandatory: true,
-        regex: "[a-zA-Z]"
-      },
-      {
-        label: "Prima di proseguire devi accettare l’informativa Privacy (<a href='URL'>leggi</a>)",
-        type: "label" // oppure assente?
-      },
-      {
-        label: {
-          en: "Accept", // pivot
-          it: "Accetto"
-        },
-        name: "privacy",
-        type: "checkbox",
-        mandatory: true // nel caso check "spunta"
-      }
-    ];
+    // this.preChatFormGroup = this.createForm(this.formBuilder);
+    // if (this.preChatFormGroup) {
+    //   this.subcribeToFormChanges();
+    // }
   
   }
 
@@ -155,27 +69,27 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   // https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
 
   /** */
-  createForm(formBuilder): FormGroup {
-    // SET FORM
-    // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-    // tslint:disable-next-line:max-line-length
-    const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const preChatFormGroupTemp = formBuilder.group({
-        email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-        name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
-    });
-    return preChatFormGroupTemp;
-  }
+  // createForm(formBuilder): FormGroup {
+  //   // SET FORM
+  //   // const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+  //   // tslint:disable-next-line:max-line-length
+  //   const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   const preChatFormGroupTemp = formBuilder.group({
+  //       email: [this.userEmail, Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+  //       name: [this.userFullname, Validators.compose([Validators.minLength(2), Validators.required])]
+  //   });
+  //   return preChatFormGroupTemp;
+  // }
 
   /** */
-  subcribeToFormChanges() {
-    const that = this;
-    const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
-    preChatFormValueChanges$.subscribe(x => {
-      that.userFullname = x.name;
-      that.userEmail = x.email;
-    });
-  }
+  // subcribeToFormChanges() {
+  //   const that = this;
+  //   const preChatFormValueChanges$ = this.preChatFormGroup.valueChanges;
+  //   preChatFormValueChanges$.subscribe(x => {
+  //     that.userFullname = x.name;
+  //     that.userEmail = x.email;
+  //   });
+  // }
 
   // ========= begin:: ACTIONS ============//
   openNewConversation() {
@@ -210,20 +124,20 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
 
   /**  */
-  checkInput() {
-    const spanCheck = window.document.getElementById('span-checkmark');
-    // console.log('-----------> ', spanCheck);
-    if (spanCheck) {
-      spanCheck.classList.remove('unchecked');
-    }
-  }
+  // checkInput() {
+  //   const spanCheck = window.document.getElementById('span-checkmark');
+  //   // console.log('-----------> ', spanCheck);
+  //   if (spanCheck) {
+  //     spanCheck.classList.remove('unchecked');
+  //   }
+  // }
 
   returnClosePage() {
     this.onClosePage.emit();
   }
 
   onSubmitForm(form: {}){
-    console.log('form returneddd', form, form.hasOwnProperty('userFullname'), form.hasOwnProperty('userEmail'))
+    this.logger.debug('[PRE-CHAT-FORM] onSubmitForm:', form)
     if(this.g.attributes){
       if(form.hasOwnProperty('userFullname')){
         this.g.setAttributeParameter('userFullname', form['userFullname']);
