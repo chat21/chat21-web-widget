@@ -112,6 +112,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   isOpenAttachmentPreview: Boolean = false;
   files: Array<any>;
+  metadata: {} = {};
   // ========= end:: send image ========= //
 
 
@@ -1791,9 +1792,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /** CALLED BY: conv-footer component */
-  onAttachmentButtonClicked(files: any){
+  onAttachmentButtonClicked(event: any){
     this.isOpenAttachmentPreview = true
-    this.files = files
+    this.files = event.files
+    this.metadata = event.metadata
   }
 
   /** CALLED BY: conv-preview component */

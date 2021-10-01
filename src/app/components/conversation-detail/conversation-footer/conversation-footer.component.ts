@@ -90,7 +90,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if (event) {
         this.selectedFiles = event.target.files;
         this.logger.debug('[CONV-FOOTER] AppComponent:detectFiles::selectedFiles', this.selectedFiles);
-        this.onAttachmentButtonClicked.emit(this.selectedFiles)
         if (this.selectedFiles == null) {
           this.isFilePendingToUpload = false;
         } else {
@@ -184,6 +183,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
+            this.onAttachmentButtonClicked.emit({ metadata: metadata, file: file})
             this.uploadSingle(metadata, file);
             // this.isSelected = false;
         }

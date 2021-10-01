@@ -167,9 +167,9 @@ export class ConversationPreviewImageComponent implements OnInit {
     this.onCloseModalPreview.emit()
   }
 
-  onSendPressed(text){
+  onSendPressed(text: string){
     this.logger.debug('[LOADER-PREVIEW] onSendPressed')
-    this.onSendAttachment.emit()
+    this.onSendAttachment.emit(text)
   }
 
 }
