@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.3
+- bug-fixed: form error label was shown only on the first press of the submit button
+- changed: 'errorLabel' property in preChatFormJson (now has the same structure of 'label' property)
+- changed: 'type' property value in preChatFormJson from 'string' to 'text' for input text form field
+- added: case insensitive to 'type' property in preChatFormJson
+
 ### 5.0.18-rc.2
 - bug-fixed: timestamp not changed in list-conversations
 - bug-fixed: waiting_time_reply not translate time with the same language of previous string
