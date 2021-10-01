@@ -26,7 +26,6 @@ export class FormTextComponent implements OnInit {
     this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'));
     this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'));
     this.form.controls[this.controlName].valueChanges.subscribe((value) => {
-      this.hasSubmitted= false;
       this.setFormStyle();
     })
   }

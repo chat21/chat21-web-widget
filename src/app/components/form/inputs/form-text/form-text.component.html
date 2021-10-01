@@ -13,7 +13,7 @@
   <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('required')" class="text-danger">
     {{translationErrorLabelMap.get('LABEL_ERROR_FIELD_REQUIRED')}}
   </div>
-  <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('pattern') && element.errorLabel && element.errorLabel['pattern']" class="text-danger">
-    {{element.errorLabel['pattern']}}
+  <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('pattern') && element.errorLabel" class="text-danger">
+    {{element.errorLabel}}
   </div>
 </form>
