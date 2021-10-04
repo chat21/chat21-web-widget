@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.4
+- changed: if 'label' property in preChatFormJson not exist, set 'name' property as its value
+- changed: if 'name' property in preChatFormJson not exist, not render form field
+- changed: if 'type' property in preChatFormJson not exist, set 'text' as default value
+- changed: renamed 'label' with 'description' for preChatFormJson with type 'label'
+- added: 'rows' property to preChatFormJson for type: 'textarea'
+- bug-fixed: preChatFormJson was not shown if preChatFormCustomFieldsEnabled was true
+
 ### 5.0.18-rc.3
 - bug-fixed: form error label was shown only on the first press of the submit button
 - changed: 'errorLabel' property in preChatFormJson (now has the same structure of 'label' property)
