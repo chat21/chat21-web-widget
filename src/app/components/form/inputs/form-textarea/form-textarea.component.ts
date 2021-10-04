@@ -11,7 +11,7 @@ export class FormTextareaComponent implements OnInit {
 
   @Input() element: FormArray;
   @Input() controlName: string;
-  @Input() cols: number;   
+  @Input() rows: number = 3;   
   @Input() translationErrorLabelMap: Map<string, string>;
   @Input() stylesMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 

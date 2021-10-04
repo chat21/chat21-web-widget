@@ -119,9 +119,10 @@ export class TiledeskAuthService {
   }
 
   logOut(){
-    this.logger.debug('[TILEDESK-AUTH] logOut()')
-    this.appStorage.removeItem('tiledeskToken')
-    this.appStorage.removeItem('currentUser')
+    this.logger.debug('[TILEDESK-AUTH] logOut()');
+    this.appStorage.removeItem('tiledeskToken');
+    this.appStorage.removeItem('currentUser');
+    this.setCurrentUser(null);
   }
 
 

@@ -145,7 +145,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
               if (event.target.files[0]) {
                 reader.readAsDataURL(event.target.files[0]);
-                  that.logger.debug('[CONV-FOOTER] reader-result: ', event.target.files[0]);
+                that.logger.debug('[CONV-FOOTER] reader-result: ', event.target.files[0]);
               }
         }
     }
