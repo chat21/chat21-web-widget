@@ -9,6 +9,8 @@
     --modal-height: 200px;
     --modal-width: 80%;
 
+    --content-height: 120px;
+
     background-color: rgba(0,0,0,0.4);
     height: 100%;
     width: 100%;
@@ -86,6 +88,7 @@
         position: fixed;
         top: calc( var(--margin-top) + var(--header-height));
         width: var(--modal-width);
+        height: var(--content-height);
 
         // img {
         //     border-radius: 8px;
@@ -99,11 +102,52 @@
         // }
     }
 
-    .c21-footer{
+    #c21-footer{
         position: fixed;
-        top: calc( var(--margin-top) + var(--header-height) + 80px);
+        top: calc( var(--margin-top) + var(--header-height) + var(--content-height));
+        width: var(--modal-width);
         box-shadow: 0 -1px 0px 0px $trasp-light-gray;
         background: white;
+        
+        #chat21-main-message-context-preview {
+            overflow: hidden;
+            word-wrap: break-word;
+            resize: horizontal;
+            overflow-y: auto;
+            box-sizing: border-box;
+            color: $black;
+            min-width: 100%;
+            outline: 0;
+            resize: none;
+            font-size: 1.4em;
+            line-height: 1.4em;
+            font-weight: 300;
+            max-height: 110px;
+            min-height: auto;
+            height: 20px;
+            padding: 0px 0px 0px 20px;
+            margin: 10px 0px 10px;
+            border: none;
+        }
+
+        .chat21-textarea-button {
+            position: absolute;
+            display: block;
+            bottom: 22px;
+            width: 20px;
+            height: 20px;
+            opacity: 0.3;
+            cursor: initial;
+            &.active {
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
+
+        #chat21-button-send {
+            right: 8px;
+            bottom: 10px;
+        }
 
         .visible-text-area {
             pointer-events: auto;

@@ -27,32 +27,33 @@
 
     <div class="c21-content">
       <chat-image
-        [metadata]="fileSelected"
-        [width]="getMetadataSize(fileSelected)?.width"
-        [height]="getMetadataSize(fileSelected)?.height">
-        <!-- (onImageRendered)="onImageRenderedFN($event)" -->
+        [metadata]="fileSelected?.metadata"
+        [width]="getMetadataSize(fileSelected?.metadata)?.width"
+        [height]="getMetadataSize(fileSelected?.metadata)?.height"
+        (onImageRendered)="onImageRenderedFN($event)">
       </chat-image>
     </div>
 
 
-    <div class="c21-footer">
+    <div id="c21-footer">
       <div class="visible-text-area">
         <!-- isFilePendingToUpload || -->
         <textarea 
-            start-focus-chat21-conversation-component
-            inputTextArea 
-            #textbox 
-            tabindex="1501" 
-            aria-labelledby="altTextArea"
-            rows="1" 
-            id="chat21-main-message-context-preview" 
-            class='f21textarea c21-button-clean'
-            [(ngModel)]="textInputTextArea"
-            (ngModelChange)="onTextAreaChange()" 
-            (keypress)="onkeypress($event)" 
-            (paste)="onPaste($event)"
-            placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}">
-        </textarea> -->
+          [attr.disabled] = "isFilePendingToLoad"
+          start-focus-chat21-conversation-component
+          inputTextArea 
+          #textbox 
+          tabindex="1501" 
+          aria-labelledby="altTextArea"
+          rows="1" 
+          id="chat21-main-message-context-preview" 
+          class='f21textarea c21-button-clean'
+          [(ngModel)]="textInputTextArea"
+          (ngModelChange)="onTextAreaChange()" 
+          (keypress)="onkeypress($event)" 
+          (paste)="onPaste($event)"
+          placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}">
+        </textarea>
       
         <!-- <chat-message-text-area
           [text]="textInputTextArea"
@@ -60,7 +61,7 @@
         ></chat-message-text-area> -->
       
       </div>
-      <div tabindex="-1" class="chat21-textarea-button" id="chat21-button-send" (click)="onSendPressed($event)">
+      <div tabindex="-1" class="chat21-textarea-button" id="chat21-button-send" [class.active]="!isFilePendingToLoad " (click)="onSendPressed($event)">
         <span class="v-align-center">
             <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28">
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

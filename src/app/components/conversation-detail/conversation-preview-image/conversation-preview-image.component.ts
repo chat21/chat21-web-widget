@@ -11,7 +11,7 @@ import { MAX_WIDTH_IMAGES } from '../../../../chat21-core/utils/constants';
 })
 export class ConversationPreviewImageComponent implements OnInit {
 
-  @Input() files: [any];
+  @Input() attachments: [{ file: Array<any>, metadata: {}}];
   @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
   @Output() onSendAttachment = new EventEmitter<any>();
@@ -20,10 +20,10 @@ export class ConversationPreviewImageComponent implements OnInit {
   public hideHeaderCloseButton: Boolean = false;
   public arrayFiles = [];
   public fileSelected: any;
-  private selectedFiles: any; 
 
   /**TEXT AREA PARAMETER */
-  public textInputTextArea: string;
+  public textInputTextArea: string = '';
+  public isFilePendingToLoad: boolean = true;
   public HEIGHT_DEFAULT = '20px';
 
   private logger: LoggerService = LoggerInstance.getInstance()
@@ -32,16 +32,17 @@ export class ConversationPreviewImageComponent implements OnInit {
   ngOnInit() {
     this.logger.log('[LOADER-PREVIEW-PAGE] Hello!');
     // tslint:disable-next-line: prefer-for-of
-    this.selectedFiles = this.files;
-    for (let i = 0; i < this.files.length; i++) {
-      console.log('[CONV-PREVIEW] ngOnInit', this.files[i])
-      this.readAsDataURL(this.files[i]);
+    // this.selectedFiles = this.files;
+    for (let i = 0; i < this.attachments.length; i++) {
+      console.log('[CONV-PREVIEW] ngOnInit', this.attachments[i])
+      if(!this.fileSelected){
+        this.fileSelected = this.attachments[0]
+      }
+      // this.readAsDataURL(this.attachments[i]); //GABBBBBBB
       //this.fileChange(this.files[i]);
     }
-  }
-
-  ngOnChanges(changes: SimpleChange){
-    console.log('[CONV-PREVIEW] ngOnChanges', this.files)
+    
+    
   }
 
   /**
@@ -210,10 +211,25 @@ export class ConversationPreviewImageComponent implements OnInit {
       //this.setWritingMessages(target.value);
       // this.onChangeTextArea.emit({textAreaEl: target, minHeightDefault: this.HEIGHT_DEFAULT})
     } catch (e) {
-      this.logger.error('[CONV-FOOTER] > Error :' + e);
+      this.logger.error('[LOADER-PREVIEW-PAGE] > Error :' + e);
     }
     // tslint:disable-next-line:max-line-length
     //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  }
+
+  private restoreTextArea() {
+    //   that.logger.debug('[CONV-FOOTER] AppComponent:restoreTextArea::restoreTextArea');
+    this.resizeInputField();
+    const textArea = (<HTMLInputElement>document.getElementById('chat21-main-message-context-preview'));
+    this.textInputTextArea = ''; // clear the textarea
+    if (textArea) {
+      textArea.value = '';  // clear the textarea
+      textArea.placeholder = this.translationMap.get('LABEL_PLACEHOLDER');  // restore the placholder
+      this.logger.debug('[LOADER-PREVIEW-PAGE] AppComponent:restoreTextArea::restoreTextArea::textArea:', 'restored');
+    } else {
+      this.logger.error('[LOADER-PREVIEW-PAGE] restoreTextArea::textArea:', 'not restored');
+    }
+    // this.setFocusOnId('chat21-main-message-context-preview');
   }
 
   /*
@@ -231,7 +247,7 @@ export class ConversationPreviewImageComponent implements OnInit {
         // this.setDepartment();
         // this.textInputTextArea = replaceBr(this.textInputTextArea);
         this.onSendAttachment.emit(this.textInputTextArea);
-        // this.restoreTextArea();
+        this.restoreTextArea();
       }
     } else if (keyCode === 9) {
       // console.log('TAB pressedddd')
@@ -239,16 +255,25 @@ export class ConversationPreviewImageComponent implements OnInit {
     }
   }
 
-
+  onPaste(event){
+    this.resizeInputField();
+    this.logger.debug('[LOADER-PREVIEW] onPaste', event)
+    
+  }
 
   onClickClose(){
     this.logger.debug('[LOADER-PREVIEW] onCLose')
     this.onCloseModalPreview.emit()
   }
 
-  onSendPressed(text: string){
-    this.logger.debug('[LOADER-PREVIEW] onSendPressed')
-    this.onSendAttachment.emit(text)
+  onSendPressed(event){
+    this.logger.debug('[LOADER-PREVIEW] onSendPressed', event)
+    this.onSendAttachment.emit(this.textInputTextArea)
   }
 
+  // =========== BEGIN: event emitter function ====== //
+  onImageRenderedFN(event){
+    this.isFilePendingToLoad = false
+  }
+  // =========== END: event emitter function ====== //
 }
