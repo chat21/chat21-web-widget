@@ -37,6 +37,8 @@ export class FormBuilderComponent implements OnInit {
     const translationKey =[ 'LABEL_START_NW_CONV']
     this.translationErrorLabelMap = this.customTranslateService.translateLanguage(key)
     this.translationMap = this.customTranslateService.translateLanguage(translationKey)
+    this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatFormJson ---->', this.formArray)
+    this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatForm completed ---->', this.preChatFormGroupCustom)
   }
 
   ngOnChanges(changes: SimpleChange){
@@ -51,7 +53,12 @@ export class FormBuilderComponent implements OnInit {
   buildFormGroup(inputJson: Array<FormArray>): FormGroup {
     let objectFormBuilder: { [key: string]: FormControl } = {}
     inputJson.forEach(child => {
-      child.type = child.type.toLowerCase()
+      // child.type = child.type.toLowerCase()
+      if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
+
+      child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
+      child.type? child.type = child.type.toLowerCase() :  'text' // if 'type' property not exist, set 'text' as default value
+      console.log('childdddd', child)
       if(child.type && (child.type === 'text' || child.type === 'textarea')){
         let validatorsObject: any[] = []
         let defaultValue: string = null

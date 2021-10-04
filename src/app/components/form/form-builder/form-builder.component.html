@@ -1,7 +1,7 @@
 <div>
   <form id="chat21-form-container" [formGroup]="preChatFormGroupCustom">
     <span *ngFor="let element of formArray">
-        <chat-form-text *ngIf="element?.type==='text'"
+        <chat-form-text *ngIf="element?.type === 'text'"
           [element]="element"
           [controlName]="element?.name"
           [translationErrorLabelMap]="translationErrorLabelMap"
@@ -9,7 +9,7 @@
           [hasSubmitted]="submitted">
         </chat-form-text>
 
-        <chat-form-label *ngIf="element?.type==='label'"
+        <chat-form-label *ngIf="element?.type === 'label'"
           [element]="element"
           [controlName]="element?.name"
           [hasSubmitted]="submitted">
@@ -26,7 +26,7 @@
         <chat-form-textarea *ngIf="element?.type === 'textarea'"
           [element]="element"
           [controlName]="element?.name"
-          [cols]="3"
+          [rows]="element?.rows"
           [translationErrorLabelMap]="translationErrorLabelMap"
           [stylesMap]="stylesMap"
           [hasSubmitted]="submitted">

@@ -1804,8 +1804,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /** CALLED BY: conv-preview component */
-  onSendAttachment(){
-    console.log('sendd messageee')
+  onSendAttachment(text: string){
+    console.log('sendd messageee', text)
+    // send message to footer-component
   }
 
   returnChangeTextArea(event){

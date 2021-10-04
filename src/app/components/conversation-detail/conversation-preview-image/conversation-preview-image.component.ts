@@ -20,7 +20,11 @@ export class ConversationPreviewImageComponent implements OnInit {
   public hideHeaderCloseButton: Boolean = false;
   public arrayFiles = [];
   public fileSelected: any;
-  private selectedFiles: any;
+  private selectedFiles: any; 
+
+  /**TEXT AREA PARAMETER */
+  public textInputTextArea: string;
+  public HEIGHT_DEFAULT = '20px';
 
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(private sanitizer: DomSanitizer) { }
@@ -67,6 +71,7 @@ export class ConversationPreviewImageComponent implements OnInit {
   
 
   readAsDataURL(file: any) {
+    const that = this;
     this.logger.log('[LOADER-PREVIEW-PAGE] readAsDataURL file', file);
     // ---------------------------------------------------------------------
     // USE CASE IMAGE
@@ -76,12 +81,29 @@ export class ConversationPreviewImageComponent implements OnInit {
       this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE IMAGE file TYPE', file.type);
       const reader = new FileReader();
       reader.onloadend = (evt) => {
-        const img = reader.result.toString();
-        this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - FileReader success ', img);
-        this.arrayFiles.push(img);
-        if (!this.fileSelected) {
-          this.fileSelected = {src: img};
-        }
+        const imageXLoad = new Image;
+        this.logger.debug('[LOADER-PREVIEW-PAGE] onload ', imageXLoad);
+        imageXLoad.src = reader.result.toString();
+        imageXLoad.title = file.name;
+        imageXLoad.onload = function () {
+          // that.arrayFilesLoad.push(imageXLoad);
+          const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
+          const metadata = {
+            'name': imageXLoad.title,
+            'src': imageXLoad.src,
+            'width': imageXLoad.width,
+            'height': imageXLoad.height,
+            'type': file.type,
+            'uid': uid
+          };
+
+          that.logger.debug('[LOADER-PREVIEW-PAGE] OK: ', metadata);
+          that.arrayFiles.push(metadata);
+          if (!that.fileSelected) {
+            that.fileSelected = metadata;
+          }
+        };
+        
       };
 
       reader.readAsDataURL(file);
@@ -113,7 +135,6 @@ export class ConversationPreviewImageComponent implements OnInit {
       }, false);
 
       if (file) {
-
         reader.readAsDataURL(file);
       }
 
@@ -160,6 +181,64 @@ export class ConversationPreviewImageComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
+
+
+  /** -------- TEXT AREA METHODS: BEGIN ----------- */
+  onTextAreaChange(){
+    this.resizeInputField()
+    // this.setWritingMessages(this.textInputTextArea)
+  }
+
+  resizeInputField() {
+    try {
+      const target = document.getElementById('chat21-main-message-context-preview') as HTMLInputElement;
+      // tslint:disable-next-line:max-line-length
+      //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+      target.style.height = '100%';
+      if (target.value === '\n') {
+          target.value = '';
+          target.style.height = this.HEIGHT_DEFAULT;
+      } else if (target.scrollHeight > target.offsetHeight) {
+          target.style.height = target.scrollHeight + 2 + 'px';
+          target.style.minHeight = this.HEIGHT_DEFAULT;
+      } else {
+          //   that.logger.debug('[CONV-FOOTER] PASSO 3');
+          target.style.height = this.HEIGHT_DEFAULT;
+          // segno sto scrivendo
+          // target.offsetHeight - 15 + 'px';
+      }
+      //this.setWritingMessages(target.value);
+      // this.onChangeTextArea.emit({textAreaEl: target, minHeightDefault: this.HEIGHT_DEFAULT})
+    } catch (e) {
+      this.logger.error('[CONV-FOOTER] > Error :' + e);
+    }
+    // tslint:disable-next-line:max-line-length
+    //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  }
+
+  /*
+  * @param event
+  */
+  onkeypress(event) {
+    const keyCode = event.which || event.keyCode;
+    this.textInputTextArea = ((document.getElementById('chat21-main-message-context-preview') as HTMLInputElement).value);
+    // this.logger.debug('[CONV-FOOTER] onkeypress **************', this.textInputTextArea, keyCode]);
+    if (keyCode === 13) {
+      if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
+        //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
+        // this.resizeInputField();
+        // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+        // this.setDepartment();
+        // this.textInputTextArea = replaceBr(this.textInputTextArea);
+        this.onSendAttachment.emit(this.textInputTextArea);
+        // this.restoreTextArea();
+      }
+    } else if (keyCode === 9) {
+      // console.log('TAB pressedddd')
+      event.preventDefault();
+    }
+  }
+
 
 
   onClickClose(){
