@@ -58,7 +58,6 @@ export class FormBuilderComponent implements OnInit {
 
       child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
       child.type? child.type = child.type.toLowerCase() :  'text' // if 'type' property not exist, set 'text' as default value
-      console.log('childdddd', child)
       if(child.type && (child.type === 'text' || child.type === 'textarea')){
         let validatorsObject: any[] = []
         let defaultValue: string = null

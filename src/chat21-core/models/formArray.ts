@@ -1,6 +1,7 @@
 export class FormArray {
     constructor(
         public label?: string | {},
+        public description?: string | {},
         public errorLabel?: string | {},
         public name?: string,
         public type?: string,
