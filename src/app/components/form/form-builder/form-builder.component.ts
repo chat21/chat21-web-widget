@@ -55,20 +55,23 @@ export class FormBuilderComponent implements OnInit {
     inputJson.forEach(child => {
       // child.type = child.type.toLowerCase()
       if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
-
+      
       child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
-      child.type? child.type = child.type.toLowerCase() :  'text' // if 'type' property not exist, set 'text' as default value
+      child.type? child.type = child.type.toLowerCase() :  child.type = 'text' // if 'type' property not exist, set 'text' as default value
+      
       if(child.type && (child.type === 'text' || child.type === 'textarea')){
         let validatorsObject: any[] = []
-        let defaultValue: string = null
+        let defaultValue: any = null
         child.mandatory? validatorsObject.push(Validators.required) : null
         child.regex? validatorsObject.push(Validators.pattern(new RegExp(validateRegex(child.regex).slice(1,-1)))) : null
         child.value? defaultValue= child.value : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
-      }else if (child.type === 'checkbox'){
+      } else if (child.type === 'checkbox'){
         let validatorsObject: any[] = []
+        let defaultValue: boolean = false
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
-        objectFormBuilder[child.name] = new FormControl(false, Validators.compose(validatorsObject))
+        child.value? defaultValue = (child.value=== 'true' || child.value=== true) : null
+        objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
       }
     })
     return this.formBuilder.group(objectFormBuilder)
