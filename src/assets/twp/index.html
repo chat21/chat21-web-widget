@@ -268,6 +268,7 @@
 
     <script type="application/javascript">
         var baseUrlConsole = "https://console.tiledesk.com/v2/dashboard/";
+        var baseUrlTestPage ="https://widget.tiledesk.com/v5/assets/twp/"
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
         var urlToConsole = urlParams.get('goToConsole');
@@ -323,7 +324,6 @@
             var url = new URL(currentUrl);
             var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
             var project_name = url.searchParams.get("project_name");
-           
             var urlConsole = baseUrlConsole + "#/project/"+tiledesk_projectid+"/home";
             //var urlConsole = "dashboard/#/project/"+tiledesk_projectid+"/home";
             window.open(
@@ -331,14 +331,23 @@
                 '_blank' 
             );
         }
+
+        function goToTestPage(){
+            var urlTestPage = currentUrl.replace('index.html', 'index-dev.html')
+            window.open(
+                urlTestPage,
+                '_blank' 
+            );
+        }
                         
         var url = new URL(currentUrl);
         var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
         var project_name = url.searchParams.get("project_name");
+        var role = url.searchParams.get("role")
         var urlConsole = baseUrlConsole + "#/projects/"+tiledesk_projectid+"/home";
         // console.log('tiledesk_projectid: ', tiledesk_projectid);
         // console.log('project_name: ', project_name);
-        
+
         window.onload = function() {
             document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
             document.getElementById("project_name").innerHTML = project_name;
@@ -410,6 +419,10 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="sign-up"><a onclick="goToConsole()" href="#">GO TO CONSOLE</a></li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right" *ngIf="role !== 'agent'">
+                            <li class="sign-up"><a onclick="goToTestPage()" href="#">GO TO TEST PAGE</a></li>
                         </ul>
                     </div>
                 </div>
