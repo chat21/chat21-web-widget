@@ -35,6 +35,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Input() hideTextReply: boolean;
   @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
+  @Input() isFilePendingToUpload: boolean;
   @Input() translationMap: Map< string, string>;
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
@@ -45,7 +46,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
   // ========= begin:: send image ======= //
   selectedFiles: FileList;
-  isFilePendingToUpload: Boolean = false;
+  // isFilePendingToUpload: Boolean = false;
   arrayFilesLoad: Array<any> = [];
   isFileSelected: Boolean = false;
   HEIGHT_DEFAULT = '20px';
@@ -184,8 +185,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
-            // this.onAttachmentButtonClicked.emit([{metadata, file}]) //GABBBBBBBB
-            this.uploadSingle(metadata, file); 
+            this.onAttachmentButtonClicked.emit([{metadata, file}]) //GABBBBBBBB
+            // this.uploadSingle(metadata, file); 
             // this.isSelected = false;
         }
     }
@@ -237,9 +238,11 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           let message = `[${metadata.name}](${metadata.src})`
           if (metadata.type.startsWith('image') && !metadata.type.includes('svg')) {
               type_message = TYPE_MSG_IMAGE;
-              message = ''; // 'Image: ' + metadata.src;
+              // message = '';
+              message = messageText 
           } else if (!metadata.type.startsWith('image')){
               type_message = metadata.type
+              message = message + '\n' + messageText
           }
           that.sendMessage(message, type_message, metadata);
           that.chat21_file.nativeElement.value = '';

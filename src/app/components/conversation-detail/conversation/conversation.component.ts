@@ -112,8 +112,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   isOpenAttachmentPreview: Boolean = false;
   attachments: Array<{ file: Array<any>, metadata: {}}>
-  files: Array<any>;
-  metadata: {} = {};
   // ========= end:: send image ========= //
 
 
@@ -1802,11 +1800,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** CALLED BY: conv-preview component */
   onCloseModalPreview(){
     this.isOpenAttachmentPreview = false
+    this.isFilePendingToUpload = false;
   }
 
   /** CALLED BY: conv-preview component */
   onSendAttachment(messageText: string){
-    console.log('sendd messageee', messageText)
     this.isOpenAttachmentPreview = false
     this.conversationFooter.uploadSingle(this.attachments[0].metadata, this.attachments[0].file, messageText)
     // send message to footer-component

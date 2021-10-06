@@ -26,20 +26,22 @@
     </div>
 
     <div class="c21-content">
-      <chat-image
+      <chat-image *ngIf="fileSelected"
         [metadata]="fileSelected?.metadata"
         [width]="getMetadataSize(fileSelected?.metadata)?.width"
         [height]="getMetadataSize(fileSelected?.metadata)?.height"
         (onImageRendered)="onImageRenderedFN($event)">
       </chat-image>
+      <div id="img-preview-file-extension">{{ file_extension }} </div>
     </div>
 
 
     <div id="c21-footer">
       <div class="visible-text-area">
         <!-- isFilePendingToUpload || -->
+        <!-- [attr.disabled] = "isFilePendingToLoad" -->
         <textarea 
-          [attr.disabled] = "isFilePendingToLoad"
+          
           start-focus-chat21-conversation-component
           inputTextArea 
           #textbox 

@@ -1,15 +1,23 @@
 @import '../../../../sass/variables';
 
+
+:host .c21-content ::ng-deep > chat-image  {
+
+    div { 
+        margin: 5px auto;
+    }  
+}
+
 #c21-preview{
     --margin-top: 200px;
     --margin-left: 50px;
     --margin-right: 50px;
     --header-height: 40px;
 
-    --modal-height: 200px;
+    --modal-height: 230px;
     --modal-width: 80%;
 
-    --content-height: 120px;
+    --content-height: 150px;
 
     background-color: rgba(0,0,0,0.4);
     height: 100%;
@@ -100,6 +108,15 @@
         //     object-fit: cover;
             
         // }
+
+        #img-preview-file-extension {
+            text-align: center;
+            position: relative;
+            text-transform: uppercase;
+            color: #fff;
+            top: -25px;
+            font-weight: 500;
+        }
     }
 
     #c21-footer{
