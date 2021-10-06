@@ -344,6 +344,9 @@
         var tiledesk_projectid = url.searchParams.get("tiledesk_projectid");
         var project_name = url.searchParams.get("project_name");
         var role = url.searchParams.get("role")
+
+        
+        
         var urlConsole = baseUrlConsole + "#/projects/"+tiledesk_projectid+"/home";
         // console.log('tiledesk_projectid: ', tiledesk_projectid);
         // console.log('project_name: ', project_name);
@@ -351,6 +354,10 @@
         window.onload = function() {
             document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
             document.getElementById("project_name").innerHTML = project_name;
+
+            if(role !== 'agent'){
+                document.getElementById("testPageButton").style.display = 'block'
+            }
         }
 
         // window.tileDeskAsyncInit = function() {
@@ -421,7 +428,7 @@
                             <li class="sign-up"><a onclick="goToConsole()" href="#">GO TO CONSOLE</a></li>
                         </ul>
 
-                        <ul class="nav navbar-nav navbar-right" *ngIf="role !== 'agent'">
+                        <ul class="nav navbar-nav navbar-right" id="testPageButton"  style="display: none;">
                             <li class="sign-up"><a onclick="goToTestPage()" href="#">GO TO TEST PAGE</a></li>
                         </ul>
                     </div>
