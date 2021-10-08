@@ -70,7 +70,7 @@ export class FormBuilderComponent implements OnInit {
         let validatorsObject: any[] = []
         let defaultValue: boolean = false
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
-        child.value? defaultValue = (child.value=== 'true') : null
+        child.value? defaultValue = (child.value=== 'true' || child.value=== true) : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
       }
     })

@@ -1,16 +1,19 @@
+import { MAX_HEIGHT_TEXTAREA } from './../../../../chat21-core/utils/constants';
+import { style } from '@angular/animations';
 import { NativeImageRepoService } from './../../../../chat21-core/providers/native/native-image-repo';
-import { Component, Input, OnInit, EventEmitter, Output, SimpleChange } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, SimpleChange, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { MAX_WIDTH_IMAGES } from '../../../../chat21-core/utils/constants';
 
 @Component({
-  selector: 'chat-conversation-preview-image',
+  selector: 'chat-conversation-attachment-preview',
   templateUrl: './conversation-preview-image.component.html',
   styleUrls: ['./conversation-preview-image.component.scss']
 })
 export class ConversationPreviewImageComponent implements OnInit {
+  @ViewChild('divPreview') public scrollMe: ElementRef;
 
   @Input() attachments: [{ file: Array<any>, metadata: {}}];
   @Input() translationMap: Map< string, string>;
@@ -27,12 +30,24 @@ export class ConversationPreviewImageComponent implements OnInit {
   public textInputTextArea: string = '';
   public isFilePendingToLoad: boolean = false;
   public HEIGHT_DEFAULT = '20px';
+  public currentHeight: number = 0;
+
+
+  // ========= begin:: gestione scroll view messaggi ======= //
+  startScroll = true; // indica lo stato dello scroll: true/false -> è in movimento/ è fermo
+  idDivScroll = 'c21-contentScroll-preview'; // id div da scrollare
+  isScrolling = false;
+  isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+  firstScroll = true;
+  // ========= end:: gestione scroll view messaggi ======= //
+
 
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.logger.log('[LOADER-PREVIEW-PAGE] Hello!');
+    this.setFocusOnId('chat21-main-message-context-preview')
     // tslint:disable-next-line: prefer-for-of
     // this.selectedFiles = this.files;
     for (let i = 0; i < this.attachments.length; i++) {
@@ -226,27 +241,39 @@ export class ConversationPreviewImageComponent implements OnInit {
 
   /** -------- TEXT AREA METHODS: BEGIN ----------- */
   onTextAreaChange(){
-    this.resizeInputField()
+    this.resizeInputField();
+    this.resizeModalHeight()
     // this.setWritingMessages(this.textInputTextArea)
+  }
+
+  setFocusOnId(id) {
+    setTimeout(function () {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+            //   that.logger.debug('[CONV-FOOTER] 1--------> FOCUSSSSSS : ', textarea);
+            textarea.setAttribute('value', ' ');
+            textarea.focus();
+        }
+    }, 500);
   }
 
   resizeInputField() {
     try {
       const target = document.getElementById('chat21-main-message-context-preview') as HTMLInputElement;
-      // tslint:disable-next-line:max-line-length
       //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
       target.style.height = '100%';
       if (target.value === '\n') {
-          target.value = '';
-          target.style.height = this.HEIGHT_DEFAULT;
+        target.value = '';
+        target.style.height = this.HEIGHT_DEFAULT;
       } else if (target.scrollHeight > target.offsetHeight) {
-          target.style.height = target.scrollHeight + 2 + 'px';
-          target.style.minHeight = this.HEIGHT_DEFAULT;
+        target.style.height = target.scrollHeight + 2 + 'px';
+        target.style.minHeight = this.HEIGHT_DEFAULT;
+
       } else {
-          //   that.logger.debug('[CONV-FOOTER] PASSO 3');
-          target.style.height = this.HEIGHT_DEFAULT;
-          // segno sto scrivendo
-          // target.offsetHeight - 15 + 'px';
+        //   that.logger.debug('[CONV-FOOTER] PASSO 3');
+        target.style.height = this.HEIGHT_DEFAULT;
+        // segno sto scrivendo
+        // target.offsetHeight - 15 + 'px';
       }
       //this.setWritingMessages(target.value);
       // this.onChangeTextArea.emit({textAreaEl: target, minHeightDefault: this.HEIGHT_DEFAULT})
@@ -255,6 +282,28 @@ export class ConversationPreviewImageComponent implements OnInit {
     }
     // tslint:disable-next-line:max-line-length
     //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', this.textInputTextArea, target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
+  }
+
+
+  resizeModalHeight(){
+    try{
+      const textarea = document.getElementById('chat21-main-message-context-preview') as HTMLInputElement;
+      const height = +textarea.style.height.substring(0, textarea.style.height.length - 2);
+      
+      if(height > 20 && height < 110){
+        this.scrollMe.nativeElement.style.height = 'calc(40% + ' + (height - 20)+'px'
+        // document.getElementById('chat21-button-send-preview').style.right = '18px'
+        // this.scrollToBottom()
+      } else if(height <= 20) {
+        this.scrollMe.nativeElement.style.height = '40%'
+      } else if(height > 110){
+        // document.getElementById('chat21-button-send-preview').style.right = '18px'
+      }
+
+
+    } catch (e) {
+      this.logger.error('[LOADER-PREVIEW-PAGE] > Error :' + e);
+    }
   }
 
   private restoreTextArea() {
@@ -269,7 +318,7 @@ export class ConversationPreviewImageComponent implements OnInit {
     } else {
       this.logger.error('[LOADER-PREVIEW-PAGE] restoreTextArea::textArea:', 'not restored');
     }
-    // this.setFocusOnId('chat21-main-message-context-preview');
+    this.setFocusOnId('chat21-main-message-context-preview');
   }
 
   /*

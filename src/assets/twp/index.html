@@ -351,6 +351,10 @@
         window.onload = function() {
             document.getElementById("project_id").innerHTML = '"' + tiledesk_projectid + '"';
             document.getElementById("project_name").innerHTML = project_name;
+
+            if(role !== 'agent'){
+                document.getElementById("testPageButton").style.display = 'block'
+            }
         }
 
         // window.tileDeskAsyncInit = function() {

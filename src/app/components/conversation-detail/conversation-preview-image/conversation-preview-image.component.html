@@ -1,5 +1,5 @@
-<div id='c21-preview'>
-  <div class="modal-preview-image">
+<div id='c21-preview' >
+  <div class="modal-preview-image" #divPreview id="divPreview">
 
     <div class="c21-header">
       <div class="c21-header-container">
@@ -25,14 +25,14 @@
 
     </div>
 
-    <div class="c21-content">
-      <chat-image *ngIf="fileSelected"
-        [metadata]="fileSelected?.metadata"
-        [width]="getMetadataSize(fileSelected?.metadata)?.width"
-        [height]="getMetadataSize(fileSelected?.metadata)?.height"
-        (onImageRendered)="onImageRenderedFN($event)">
-      </chat-image>
-      <div id="img-preview-file-extension">{{ file_extension }} </div>
+    <div class="c21-content" #scrollMePreview id="scroll-me-preview">
+        <chat-image *ngIf="fileSelected"
+          [metadata]="fileSelected?.metadata"
+          [width]="getMetadataSize(fileSelected?.metadata)?.width"
+          [height]="getMetadataSize(fileSelected?.metadata)?.height"
+          (onImageRendered)="onImageRenderedFN($event)">
+        </chat-image>
+        <div id="img-preview-file-extension">{{ file_extension }} </div>
     </div>
 
 
@@ -41,11 +41,10 @@
         <!-- isFilePendingToUpload || -->
         <!-- [attr.disabled] = "isFilePendingToLoad" -->
         <textarea 
-          
-          start-focus-chat21-conversation-component
+          start-focus-chat21-conversation-preview-component
           inputTextArea 
           #textbox 
-          tabindex="1501" 
+          tabindex="1502" 
           aria-labelledby="altTextArea"
           rows="1" 
           id="chat21-main-message-context-preview" 
@@ -76,3 +75,5 @@
   </div>
 
 </div>
+<span id="testFocus" tabindex="1599" onFocus="document.querySelector('[start-focus-chat21-conversation-preview-component]').focus()"></span>
+<span id="altTextArea" style="display: none">scrivi la tua domanda</span>

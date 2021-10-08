@@ -51,13 +51,13 @@
 
 
     <!-- PREVIEW ATTACHMENT BUTTON-->
-    <chat-conversation-preview-image *ngIf="isOpenAttachmentPreview"
+    <chat-conversation-attachment-preview *ngIf="isOpenAttachmentPreview"
         [attachments]="attachments"
         [translationMap]="translationMapPreview"
         [stylesMap]="stylesMap"
         (onSendAttachment)="onSendAttachment($event)"
         (onCloseModalPreview)="onCloseModalPreview()">
-    </chat-conversation-preview-image>
+    </chat-conversation-attachment-preview>
 
     <!-- FOOTER -->
     <div id="chat21-footer">
@@ -77,7 +77,6 @@
             [userEmail]="g?.userEmail"
             [widgetTitle]="g?.widgetTitle"
             [showAttachmentButton]="g?.showAttachmentButton"
-            [isFilePendingToUpload]="isFilePendingToUpload"
             [isConversationArchived]="isConversationArchived"
             [hideTextReply]="hideFooterTextReply"
             [fileUploadAccept]="appConfigService?.getConfig().fileUploadAccept"

@@ -106,7 +106,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= begin:: send image ======= //
   selectedFiles: FileList;
-  isFilePendingToUpload: Boolean = false;
+  // isFilePendingToUpload: Boolean = false;
   arrayFilesLoad: Array<any>;
   isFileSelected: Boolean = false;
 
@@ -1800,7 +1800,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** CALLED BY: conv-preview component */
   onCloseModalPreview(){
     this.isOpenAttachmentPreview = false
-    this.isFilePendingToUpload = false;
+    this.conversationFooter.isFilePendingToUpload = false;
+    console.log('onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
   }
 
   /** CALLED BY: conv-preview component */
