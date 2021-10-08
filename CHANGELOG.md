@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.5
+- bug-fixed: if 'type' property in preChatFormJson not exist, field was not rendered
+- changed: renamed 'description' with 'value' for preChatFormJson with type 'label'
+- changed: set 'type' with 'static' value for preChatFormJson static fields
+- added: 'value' property to type: static
+- added: 'GO TO TEST PAGE' in index.html page only for users different from agents
+
 ### 5.0.18-rc.4
 - changed: if 'label' property in preChatFormJson not exist, set 'name' property as its value
 - changed: if 'name' property in preChatFormJson not exist, not render form field
