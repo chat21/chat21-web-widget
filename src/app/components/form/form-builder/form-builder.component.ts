@@ -40,7 +40,6 @@ export class FormBuilderComponent implements OnInit {
     this.translationMap = this.customTranslateService.translateLanguage(translationKey)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatFormJson ---->', this.formArray)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatForm completed ---->', this.preChatFormGroupCustom)
-    console.log('parseeee', parser.parse('en-GB,en;q=0.8'))
   }
 
   ngOnChanges(changes: SimpleChange){

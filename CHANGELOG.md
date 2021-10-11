@@ -6,7 +6,7 @@
 - changed: footer div css when hideTextReply is TRUE -> background color added
 - added: footer textarea placeholder when hideTextReply is TRUE
 - added: 'accept-language-parser' plugin to parse label and errorLabel for preCahtForm
-
+- added: userFullname and userEmail property using 'updateUserEmail' 'updateUserEmail' property in msg attributes on newMessageAdded
 
 ### 5.0.18-rc.5
 - bug-fixed: if 'type' property in preChatFormJson not exist, field was not rendered
