@@ -5,7 +5,7 @@
 - bug-fixed: footer textarea did not activate again if msg.attributes.hideTextReply return to become false or undefined
 - changed: footer div css when hideTextReply is TRUE -> background color added
 - added: footer textarea placeholder when hideTextReply is TRUE
-- added: 'accept-language-parser' plugin to parse label and errorLabel for preCahtForm
+- added: 'accept-language-parser' plugin to parse label and errorLabel for preChatForm
 - added: userFullname and userEmail property using 'updateUserEmail' 'updateUserEmail' property in msg attributes on newMessageAdded
 
 ### 5.0.18-rc.5
