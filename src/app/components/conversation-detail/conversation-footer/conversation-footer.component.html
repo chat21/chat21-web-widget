@@ -1,7 +1,8 @@
-<div class="visible-text-area">
+<div class="visible-text-area" [class.disabled] = "( isConversationArchived || hideTextReply)? true : null">
     <!-- isFilePendingToUpload || -->
   <textarea 
-      [attr.disabled] = "( isConversationArchived || hideTextReply)? true : null"
+      [attr.disabled] = "(isConversationArchived || hideTextReply)? true : null"
+      [attr.placeholder] ="(hideTextReply)? hideFooterMessagePlaceholder : translationMap?.get('LABEL_PLACEHOLDER')"
       start-focus-chat21-conversation-component
       inputTextArea 
       #textbox 
@@ -13,8 +14,8 @@
       [(ngModel)]="textInputTextArea"
       (ngModelChange)="onTextAreaChange()" 
       (keypress)="onkeypress($event)" 
-      (paste)="onPaste($event)"
-      placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}">
+      (paste)="onPaste($event)">
+      <!-- placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}"> -->
   </textarea>
 
   <!-- <chat-message-text-area

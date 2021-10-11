@@ -93,6 +93,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isButtonsDisabled = true;
   // isConversationArchived = false;
   hideFooterTextReply: boolean = false;
+  hideFooterMessagePlaceholder: string = '';
   isTrascriptDownloadEnabled = false;
   audio: any;
   // ========= begin:: gestione scroll view messaggi ======= //
@@ -957,7 +958,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const that = this;
     const senderId = that.senderId;
       if (msg.sender === senderId) { //caso in cui sender manda msg
-        that.logger.debug('[CONV-COMP] *A 1-------');
+        that.logger.debug('[CONV-COMP] *A1-------');
         setTimeout(function () {
           that.conversationContent.scrollToBottom();
         }, 200);
@@ -976,8 +977,29 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         // check if sender can reply --> set footer active/disabled
-        if(msg.attributes && msg.attributes.hideTextReply){
-          this.hideFooterTextReply = msg.attributes.hideTextReply
+        if(msg.attributes && msg.attributes['hideTextReply']){
+          this.hideFooterTextReply = msg.attributes['hideTextReply']
+          if(msg.attributes['typeMessagePlaceholder']) {
+            this.hideFooterMessagePlaceholder = msg.attributes['typeMessagePlaceholder']
+          }
+        } else if (msg.attributes && !msg.attributes['hideTextReply']) {
+          this.hideFooterTextReply = false
+        }
+
+        //check if user has changed userFullName and userEmail
+        if (msg.attributes && msg.attributes['updateUserFullname']) {
+          const userFullname = msg.attributes['updateUserFullname'];
+          that.logger.debug('[CONV-COMP] newMessageAdded --> updateUserFullname', userFullname)
+          that.g.setAttributeParameter('userFullname', userFullname);
+          that.g.setParameter('userFullname', userFullname);
+          that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
+        }
+        if (msg.attributes && msg.attributes['updateUserEmail']) {
+          const userEmail = msg.attributes['updateUserEmail'];
+          console.log('[CONV-COMP] newMessageAdded --> userEmail', userEmail)
+          that.g.setAttributeParameter('userEmail', userEmail);
+          that.g.setParameter('userEmail', userEmail);
+          that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
         }
       }
 

@@ -2,6 +2,9 @@
 
 .visible-text-area {
     pointer-events: auto;
+    &.disabled {
+        background-color: rgb(232, 233, 237);
+    }
 }
 
 .chat21-textarea-button {
@@ -10,6 +13,14 @@
 .chat21-textarea-button {
     fill: $blue;
     pointer-events: auto;
+}
+
+textarea,
+textarea:visited,
+textarea:focus,
+textarea:hover,
+textarea:active{
+    all: unset;
 }
 
 #button {
