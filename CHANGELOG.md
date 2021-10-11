@@ -1,12 +1,44 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.6
+- bug-fixed: on hover in form-textarea border-bottom disappeared
+- bug-fixed: footer textarea did not activate again if msg.attributes.hideTextReply return to become false or undefined
+- changed: footer div css when hideTextReply is TRUE -> background color added
+- added: footer textarea placeholder when hideTextReply is TRUE
+- added: 'accept-language-parser' plugin to parse label and errorLabel for preCahtForm
+
+
+### 5.0.18-rc.5
+- bug-fixed: if 'type' property in preChatFormJson not exist, field was not rendered
+- changed: renamed 'description' with 'value' for preChatFormJson with type 'label'
+- changed: set 'type' with 'static' value for preChatFormJson static fields
+- added: 'value' property to type: static
+- added: 'GO TO TEST PAGE' in index.html page only for users different from agents
+
+### 5.0.18-rc.4
+- changed: if 'label' property in preChatFormJson not exist, set 'name' property as its value
+- changed: if 'name' property in preChatFormJson not exist, not render form field
+- changed: if 'type' property in preChatFormJson not exist, set 'text' as default value
+- changed: renamed 'label' with 'description' for preChatFormJson with type 'label'
+- added: 'rows' property to preChatFormJson for type: 'textarea'
+- bug-fixed: preChatFormJson was not shown if preChatFormCustomFieldsEnabled was true
+
+### 5.0.18-rc.3
+- bug-fixed: form error label was shown only on the first press of the submit button
+- changed: 'errorLabel' property in preChatFormJson (now has the same structure of 'label' property)
+- changed: 'type' property value in preChatFormJson from 'string' to 'text' for input text form field
+- added: case insensitive to 'type' property in preChatFormJson
+
 ### 5.0.18-rc.2
 - bug-fixed: timestamp not changed in list-conversations
 - bug-fixed: waiting_time_reply not translate time with the same language of previous string
-- bug-fixed: timesatamp in list-conversations has not the correct widget language
+- bug-fixed: timestamp in list-conversations has not the correct widget language
 - bug-fixed: onImageLoaded and onConversationLoaded were not called
 - changed: replace msg text with 'sent an image' or 'sent an attachment' string for last_message_text property value
 - changed: avatar conversations color
+- added: custom preChatFormJson, preChatFormJson and preChatFormCustomFieldsEnabled properties from widget remote object - (WID-64)
+- added: getPreChatFormJson() and setPreChatFormJson(form) as javascript method 
+- added: validateRegex function to check for valid regex from preChatFormJson object
 
 ### 5.0.18-rc.1
 - bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response
