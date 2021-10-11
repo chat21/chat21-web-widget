@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.6
+- bug-fixed: on hover in form-textarea border-bottom disappeared
+- bug-fixed: footer textarea did not activate again if msg.attributes.hideTextReply return to become false or undefined
+- changed: footer div css when hideTextReply is TRUE -> background color added
+- added: footer textarea placeholder when hideTextReply is TRUE
+- added: 'accept-language-parser' plugin to parse label and errorLabel for preCahtForm
+
+
 ### 5.0.18-rc.5
 - bug-fixed: if 'type' property in preChatFormJson not exist, field was not rendered
 - changed: renamed 'description' with 'value' for preChatFormJson with type 'label'
@@ -31,6 +39,10 @@
 - added: custom preChatFormJson, preChatFormJson and preChatFormCustomFieldsEnabled properties from widget remote object - (WID-64)
 - added: getPreChatFormJson() and setPreChatFormJson(form) as javascript method 
 - added: validateRegex function to check for valid regex from preChatFormJson object
+<<<<<<< HEAD
+=======
+
+>>>>>>> features/preChatForm-custom
 ### 5.0.18-rc.1
 - bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response - (WID-68)
 - removed: 2 unuseful log (app.component and localSessionStorage initialize)

@@ -33,6 +33,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
+  @Input() hideFooterMessagePlaceholder: string;
   @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
@@ -69,6 +70,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges){
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
+    }
+    if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined  && changes['hideTextReply'].currentValue === false){
+      this.setFocusOnId('chat21-main-message-context')
     }
     // if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
     //   this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
