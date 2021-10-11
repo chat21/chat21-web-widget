@@ -7,6 +7,7 @@ import { isString } from 'util';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { validateRegex } from '../../../../chat21-core/utils/utils';
+import * as parser from 'accept-language-parser'
 
 @Component({
   selector: 'chat-form-builder',
@@ -39,6 +40,7 @@ export class FormBuilderComponent implements OnInit {
     this.translationMap = this.customTranslateService.translateLanguage(translationKey)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatFormJson ---->', this.formArray)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatForm completed ---->', this.preChatFormGroupCustom)
+    console.log('parseeee', parser.parse('en-GB,en;q=0.8'))
   }
 
   ngOnChanges(changes: SimpleChange){
@@ -58,7 +60,6 @@ export class FormBuilderComponent implements OnInit {
 
       child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
       child.type? child.type = child.type.toLowerCase() :  'text' // if 'type' property not exist, set 'text' as default value
-      console.log('childdddd', child)
       if(child.type && (child.type === 'text' || child.type === 'textarea')){
         let validatorsObject: any[] = []
         let defaultValue: string = null
@@ -70,6 +71,8 @@ export class FormBuilderComponent implements OnInit {
         let validatorsObject: any[] = []
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
         objectFormBuilder[child.name] = new FormControl(false, Validators.compose(validatorsObject))
+      } else {
+        //renderizza form default
       }
     })
     return this.formBuilder.group(objectFormBuilder)
@@ -81,14 +84,17 @@ export class FormBuilderComponent implements OnInit {
       /** 'label' property */
       if(typeof element.label === 'object'){
         //check if a key in label object contains browser language
-        let translation = ''
-        Object.keys(element.label).forEach((lang)=> {
-          if(this.browserLang.includes(lang.substring(0,2))){
-            return translation = element.label[lang]
-          }
-        })
-        translation === ''?  translation= element.label[0] : null 
-        element.label = translation
+        const language = this.getAcceptLanguage(element.label)
+        this.logger.debug('[FORM-BUILDER] setTranslations acceptedLanguage for element.label:', element, language)
+        element.label= element.label[language]
+        // let translation = ''
+        // Object.keys(element.label).forEach((lang)=> {
+        //   if(this.browserLang.includes(lang.substring(0,2))){
+        //     return translation = element.label[lang]
+        //   }
+        // })
+        // translation === ''?  translation= element.label[0] : null 
+        // element.label = translation
       } else if (isString(element.label)){
         return element.label = this.customTranslateService.translateLanguage([element.label]).get(element.label)
       }
@@ -96,14 +102,17 @@ export class FormBuilderComponent implements OnInit {
       /** 'erroLabel' property */
       if(typeof element.errorLabel === 'object'){
         //check if a key in label object contains browser language
-        let translation = ''
-        Object.keys(element.errorLabel).forEach((lang)=> {
-          if(this.browserLang.includes(lang.substring(0,2))){
-            return translation = element.errorLabel[lang]
-          }
-        })
-        translation === ''?  translation= element.errorLabel[0] : null 
-        element.errorLabel = translation
+        const language = this.getAcceptLanguage(element.errorLabel)
+        this.logger.debug('[FORM-BUILDER] setTranslations acceptedLanguage for element.errorLabel:', element, language)
+        element.errorLabel= element.errorLabel[language]
+        // let translation = ''
+        // Object.keys(element.errorLabel).forEach((lang)=> {
+        //   if(this.browserLang.includes(lang.substring(0,2))){
+        //     return translation = element.errorLabel[lang]
+        //   }
+        // })
+        // translation === ''?  translation= element.errorLabel[0] : null 
+        // element.errorLabel = translation
       } else if (isString(element.errorLabel)){
         return element.errorLabel = this.customTranslateService.translateLanguage([element.errorLabel]).get(element.errorLabel)
       }
@@ -111,6 +120,22 @@ export class FormBuilderComponent implements OnInit {
     })
 
     return this.formArray
+  }
+
+  getAcceptLanguage(languages: {}): string {
+    let arrayLang=''
+    let language = ''
+    if(languages && languages['default']){
+      language = 'default'
+      // delete languages['default'] //NOT NECESSARY TO DELETE THE 'default' KEY
+    }
+
+    navigator.languages.forEach(lang => {
+      arrayLang += lang + ',' 
+    })
+    const parse = parser.pick(Object.keys(languages), arrayLang)
+    parse? language = parse : null
+    return language
   }
 
   subscribeToFormChanges(){
