@@ -10,8 +10,9 @@ img {
 }
 
 .isLoadingImage {
-    position: relative;
-    top: 6px;
+    // position: relative;
+    // top: 6px;
+    display: none;
 }
 
 .loader {

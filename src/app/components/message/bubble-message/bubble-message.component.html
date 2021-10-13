@@ -1,6 +1,6 @@
 <!-- [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" -->
 <!-- ngStyle]="{'padding': (isImage(message) || isFrame(message))?'1px':'0 8px'}" -->
-<div  [ngStyle]="{'padding': (isImage(message) || isFrame(message))?'0px':'0 8px'}" class="messages primary-color"  [class.emoticon]="message?.emoticon">
+<div [ngStyle]="{'padding': (isImage(message) || isFrame(message))?'0px':'0 8px', 'width': (isImage(message) || isFrame(message))? getMetadataSize(message.metadata).width: null }" class="messages primary-color"  [class.emoticon]="message?.emoticon">
   
     
     <div>

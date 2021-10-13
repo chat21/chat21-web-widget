@@ -116,7 +116,8 @@ export class ConversationContentComponent implements OnInit {
   listenToUploadFileProgress() {
     this.uploadService.BSStateUpload.subscribe((data: any) => {
       this.logger.debug('[CONV-CONTENT] BSStateUpload', data);
-      if (data && data.type.startsWith("application")) {
+      // && data.type.startsWith("application")
+      if (data) { 
           data.upload === 100 || isNaN(data.upload)? this.showUploadProgress = false : this.showUploadProgress = true
           this.uploadProgress = data.upload
           this.fileType = 'file'
