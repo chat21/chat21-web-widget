@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.7
+- bug-fixed: on image/file received, managed conversation-list last-message field
+- bug-fixed: restored footer textarea if 'hideTextReply' changes
+- bug-fixed: restored default preChatFormJson if error occurred while rendering a field 
+
 ### 5.0.18-rc.6
 - bug-fixed: on hover in form-textarea border-bottom disappeared
 - bug-fixed: footer textarea did not activate again if msg.attributes.hideTextReply return to become false or undefined

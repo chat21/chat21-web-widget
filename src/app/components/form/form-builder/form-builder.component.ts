@@ -91,7 +91,6 @@ export class FormBuilderComponent implements OnInit {
       this.logger.error('[FORM-BUILDER] ERROR while rendering field --> restoreDefault', objectFormBuilder)
       this.onErrorRenderForm.emit();
     }
-    console.log('objectFormBuilder -->', objectFormBuilder)
     return this.formBuilder.group(objectFormBuilder)
   }
 
