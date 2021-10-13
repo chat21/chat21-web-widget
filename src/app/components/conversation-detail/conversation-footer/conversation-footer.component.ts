@@ -71,12 +71,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
-    if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined  && changes['hideTextReply'].currentValue === false){
-      this.setFocusOnId('chat21-main-message-context')
+    if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined){
+      this.restoreTextArea()
     }
-    // if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
-    //   this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
-    // }
   }
   
   ngAfterViewInit() {
@@ -94,7 +91,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if (event) {
         this.selectedFiles = event.target.files;
         this.logger.debug('[CONV-FOOTER] AppComponent:detectFiles::selectedFiles', this.selectedFiles);
-        this.onAttachmentButtonClicked.emit(this.selectedFiles)
+        // this.onAttachmentButtonClicked.emit(this.selectedFiles)
         if (this.selectedFiles == null) {
           this.isFilePendingToUpload = false;
         } else {
@@ -241,8 +238,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           if (metadata.type.startsWith('image') && !metadata.type.includes('svg')) {
               type_message = TYPE_MSG_IMAGE;
               message = ''; // 'Image: ' + metadata.src;
-          } else if (!metadata.type.startsWith('image')){
-              type_message = metadata.type
+          } else if ((metadata.type.startsWith('image') && metadata.type.includes('svg')) || !metadata.type.startsWith('image')){
+              type_message = TYPE_MSG_FILE
+              // type_message = metadata.type
           }
           that.sendMessage(message, type_message, metadata);
           that.chat21_file.nativeElement.value = '';
