@@ -3,7 +3,9 @@
 ### 5.0.18-rc.7
 - bug-fixed: on image/file received, managed conversation-list last-message field
 - bug-fixed: restored footer textarea if 'hideTextReply' changes
-- bug-fixed: restored default preChatFormJson if error occurred while rendering a field 
+- bug-fixed: restored default preChatFormJson if error occurred while rendering a field
+- bug-fixed: added load while image msg is loaded (previously the loader was shown only in the case of a file type message)
+- bug-fixed: bubble message now get same width of image/iframe - (WID-74)
 
 ### 5.0.18-rc.6
 - bug-fixed: on hover in form-textarea border-bottom disappeared
