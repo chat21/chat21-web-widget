@@ -1,7 +1,7 @@
 import { transition } from '@angular/animations';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FormArray } from './../../../../chat21-core/models/formArray';
-import { Component, OnInit, SimpleChange, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, SimpleChange, EventEmitter, Output, Input, ChangeDetectorRef } from '@angular/core';
 import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
 import { isString } from 'util';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
@@ -20,6 +20,7 @@ export class FormBuilderComponent implements OnInit {
   @Input() isOpenPrechatForm: boolean;
   @Input() stylesMap: Map<string, string>;
   @Output() onSubmitForm = new EventEmitter<{}>();
+  @Output() onErrorRenderForm = new EventEmitter()
 
   preChatFormGroupCustom:FormGroup;
   browserLang: string;
@@ -40,7 +41,6 @@ export class FormBuilderComponent implements OnInit {
     this.translationMap = this.customTranslateService.translateLanguage(translationKey)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatFormJson ---->', this.formArray)
     this.logger.debug('[FORM-BUILDER] ngOnChanges: preChatForm completed ---->', this.preChatFormGroupCustom)
-    console.log('parseeee', parser.parse('en-GB,en;q=0.8'))
   }
 
   ngOnChanges(changes: SimpleChange){
@@ -54,29 +54,48 @@ export class FormBuilderComponent implements OnInit {
 
   buildFormGroup(inputJson: Array<FormArray>): FormGroup {
     let objectFormBuilder: { [key: string]: FormControl } = {}
+    let restoreDefault = false;
     inputJson.forEach(child => {
       // child.type = child.type.toLowerCase()
       if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
-
+      
       child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
-      child.type? child.type = child.type.toLowerCase() :  'text' // if 'type' property not exist, set 'text' as default value
+      child.type? child.type = child.type.toLowerCase() :  child.type = 'text' // if 'type' property not exist, set 'text' as default value
+      
       if(child.type && (child.type === 'text' || child.type === 'textarea')){
         let validatorsObject: any[] = []
-        let defaultValue: string = null
+        let defaultValue: any = null
         child.mandatory? validatorsObject.push(Validators.required) : null
         child.regex? validatorsObject.push(Validators.pattern(new RegExp(validateRegex(child.regex).slice(1,-1)))) : null
         child.value? defaultValue= child.value : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
-      }else if (child.type === 'checkbox'){
+      } else if (child.type === 'checkbox'){
         let validatorsObject: any[] = []
+        let defaultValue: boolean = false
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
-        objectFormBuilder[child.name] = new FormControl(false, Validators.compose(validatorsObject))
+        child.value? defaultValue = (child.value=== 'true' || child.value=== true) : null
+        objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
+      } else if(child.type === 'label'){
+        // type: 'label' not need to render as FormControl object in formBuilder --> skip it
+        return;
       } else {
-        //renderizza form default
+        this.logger.error('[FORM-BUILDER] ERROR while rendering field --> RESTORE DEFAULT')
+        restoreDefault = true
+        // this.onErrorRenderForm.emit()
+        return;
       }
-    })
+    });
+
+    if(restoreDefault){
+      objectFormBuilder = {};
+      this.logger.error('[FORM-BUILDER] ERROR while rendering field --> restoreDefault', objectFormBuilder)
+      this.onErrorRenderForm.emit();
+    }
+    console.log('objectFormBuilder -->', objectFormBuilder)
     return this.formBuilder.group(objectFormBuilder)
   }
+
+  
 
 
   setTranslations(inputJson: Array<FormArray>): Array<FormArray> {
@@ -139,9 +158,12 @@ export class FormBuilderComponent implements OnInit {
   }
 
   subscribeToFormChanges(){
-    this.preChatFormGroupCustom.valueChanges.subscribe(value => {
-      this.submitted = false;
-    })
+    if(this.preChatFormGroupCustom){
+      this.preChatFormGroupCustom.valueChanges.subscribe(value => {
+        this.submitted = false;
+      })
+    }
+    
   }
 
   onSubmitPreChatForm(){
