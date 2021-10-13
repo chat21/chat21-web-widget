@@ -70,7 +70,8 @@ onFocus="document.querySelector('[start-focus-chat21-prechat-form]').focus()">
                         [formArray]='g.preChatFormJson'
                         [isOpenPrechatForm]='g.isOpenPrechatForm'
                         [stylesMap]="stylesMap"
-                        (onSubmitForm)='onSubmitForm($event)'>
+                        (onSubmitForm)='onSubmitForm($event)'
+                        (onErrorRenderForm)='onErrorRenderForm()'>
                     </chat-form-builder>
                     
                     

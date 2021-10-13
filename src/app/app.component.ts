@@ -2138,7 +2138,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
                 conversation.last_message_text = SENT_AN_IMAGE;
       
-            } else if (conversation.type !== "image" && conversation.type !== "text") {
+            // } else if (conversation.type !== "image" && conversation.type !== "text") {
+            } else if (conversation.type === 'file') {
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
+                const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
+                conversation.last_message_text =  SENT_AN_ATTACHMENT;
+            }
+        } else {
+            if (conversation.type === "image") {
+
+                this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
+                const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
+                conversation.last_message_text = SENT_AN_IMAGE;
+      
+            // } else if (conversation.type !== "image" && conversation.type !== "text") {
+            } else if (conversation.type === 'file') {
                 this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
                 const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
                 conversation.last_message_text =  SENT_AN_ATTACHMENT;
