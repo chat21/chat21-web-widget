@@ -12,8 +12,9 @@
       id="chat21-main-message-context" 
       class='f21textarea c21-button-clean'
       [(ngModel)]="textInputTextArea"
-      (ngModelChange)="onTextAreaChange()" 
+      (ngModelChange)="onTextAreaChange()"
       (keypress)="onkeypress($event)" 
+      (keydown)="onkeydown($event)"
       (paste)="onPaste($event)">
       <!-- placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}"> -->
   </textarea>

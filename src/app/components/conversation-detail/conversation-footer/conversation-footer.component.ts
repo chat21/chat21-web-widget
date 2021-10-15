@@ -513,33 +513,46 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   /**
-     * quando premo un tasto richiamo questo metodo che:
-     * verifica se è stato premuto 'invio'
-     * se si azzera testo
-     * imposta altezza campo come min di default
-     * leva il focus e lo reimposta dopo pochi attimi
-     * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
-     * invio messaggio
-     * @param event
-     */
-    onkeypress(event) {
-      const keyCode = event.which || event.keyCode;
-      this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
-      // this.logger.debug('[CONV-FOOTER] onkeypress **************', this.textInputTextArea, keyCode]);
-      if (keyCode === 13) {
-        if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
-          //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
-          // this.resizeInputField();
-          // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
-          // this.setDepartment();
-          // this.textInputTextArea = replaceBr(this.textInputTextArea);
-          this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT);
-          // this.restoreTextArea();
-        }
-      } else if (keyCode === 9) {
-        // console.log('TAB pressedddd')
-        event.preventDefault();
+   * quando premo un tasto richiamo questo metodo che:
+   * verifica se è stato premuto 'invio'
+   * se si azzera testo
+   * imposta altezza campo come min di default
+   * leva il focus e lo reimposta dopo pochi attimi
+   * (questa è una toppa per mantenere il focus e eliminare il br dell'invio!!!)
+   * invio messaggio
+   * @param event
+   */
+  onkeypress(event) {
+    const keyCode = event.which || event.keyCode;
+    // console.log('keycode', keyCode)
+    this.textInputTextArea = ((document.getElementById('chat21-main-message-context') as HTMLInputElement).value);
+    // this.logger.debug('[CONV-FOOTER] onkeypress **************', this.textInputTextArea, keyCode]);
+    if (keyCode === 13) {
+      if (this.textInputTextArea && this.textInputTextArea.trim() !== '') {
+        //   that.logger.debug('[CONV-FOOTER] sendMessage -> ', this.textInputTextArea);
+        // this.resizeInputField();
+        // this.messagingService.sendMessage(msg, TYPE_MSG_TEXT);
+        // this.setDepartment();
+        // this.textInputTextArea = replaceBr(this.textInputTextArea);
+        this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT);
+        // this.restoreTextArea();
       }
+    } else if (keyCode === 9) {
+      // console.log('TAB pressedddd')
+      event.preventDefault();
+    }
+  }
+
+  /*
+  HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
+  */
+  onkeydown(event){
+    const keyCode = event.which || event.keyCode;
+    // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
+    if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   
+      event.preventDefault();
+      this.textInputTextArea += '\r\n'
+    }
   }
 
   
