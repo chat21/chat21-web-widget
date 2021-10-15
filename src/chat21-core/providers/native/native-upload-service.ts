@@ -1,4 +1,3 @@
-import { AppConfigService } from './../../../app/providers/app-config.service';
 import { UploadService } from '../abstract/upload.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -13,12 +12,12 @@ import { LoggerInstance } from '../logger/loggerInstance';
 export class NativeUploadService extends UploadService {
 
     BSStateUpload: BehaviorSubject<any>;
-    
+
     private tiledeskToken: string;
     private URL_TILEDESK_IMAGES: string;
     private URL_TILEDESK_FILE: string;
     private logger: LoggerService = LoggerInstance.getInstance()
-    
+
     constructor(
         public http: HttpClient,
         public appStorage: AppStorageService
@@ -69,6 +68,7 @@ export class NativeUploadService extends UploadService {
                     resolve(downloadURL)
                     // that.BSStateUpload.next({upload: upload});
                 }, (error) => {
+                    this.logger.error('[NATIVE UPLOAD] - ERROR upload new file ', error)
                     reject(error)
                 });
             });

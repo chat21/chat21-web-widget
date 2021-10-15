@@ -1,4 +1,3 @@
-import { CustomLogger } from './../logger/customLogger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -13,6 +12,7 @@ import { LoggerService } from '../abstract/logger.service';
 import { LoggerInstance } from '../logger/loggerInstance';
 
 export class TypingModel {
+
   constructor(
       public uid: string,
       public timestamp: any,
@@ -82,6 +82,5 @@ export class FirebaseTypingService extends TypingService {
       });
     }, 500);
   }
-
 
 }

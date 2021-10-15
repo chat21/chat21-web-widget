@@ -1,4 +1,3 @@
-import { AppConfigService } from '../../../app/providers/app-config.service';
 import { GroupsHandlerService } from '../abstract/groups-handler.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -12,20 +11,16 @@ import 'firebase/storage';
 
 // models
 import { ConversationModel } from '../../models/conversation';
+import { GroupModel } from '../../models/group';
 
 // services
-//import { DatabaseProvider } from '../database';
-
-// utils
-import { CustomLogger } from '../logger/customLogger';
-import { GroupModel } from '../../models/group';
+import { AppConfigService } from '../../../app/providers/app-config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { avatarPlaceholder } from '../../../app/utils/utils';
-import { getColorBck } from '../../utils/utils-user';
 import { LoggerService } from '../abstract/logger.service';
 import { LoggerInstance } from '../logger/loggerInstance';
 
-
+// utils
+import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -120,17 +115,42 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
 
     onGroupChange(groupId: string): Observable<GroupModel> {
         const that = this;
+        let SgroupDetail = new Subject<GroupModel>();
         const urlNodeGroupById = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/groups/' + groupId;
-        this.logger.debug('[FIREBASEGroupHandlerSERVICE] onGroupChange -------> urlNodeGroupById::', urlNodeGroupById)
+        this.logger.log('[FIREBASEGroupHandlerSERVICE] onGroupChange -------> urlNodeGroupById::', urlNodeGroupById)
         const ref = firebase.database().ref(urlNodeGroupById)
         ref.off()
         ref.on('value', (childSnapshot) => {
-            this.groupValue(childSnapshot)
+            // this.groupValue(childSnapshot)
+            if(childSnapshot.val() ) {
+                const group: GroupModel = childSnapshot.val();
+                if (group) {
+                    group.uid = childSnapshot.key
+                    // that.BSgroupDetail.next(group)
+                    let groupCompleted = this.completeGroup(group)
+                    // this.SgroupDetail.next(groupCompleted) 
+                    SgroupDetail.next(groupCompleted) 
+                } 
+            }
         });
-        // return that.BSgroupDetail
-        return this.SgroupDetail
-
+        // return this.SgroupDetail
+        return SgroupDetail
     }
+
+    // private groupValue(childSnapshot: any){
+    //     const that = this;
+    //     let SgroupDetail = new Subject<GroupModel>();
+    //     this.logger.debug('[FIREBASEGroupHandlerSERVICE] group detail::', childSnapshot.val(), childSnapshot)
+    //     const group: GroupModel = childSnapshot.val();
+    //     this.logger.debug('[FIREBASEGroupHandlerSERVICE]  groupValue ', group)
+    //     if (group) {
+    //         group.uid = childSnapshot.key
+    //         // that.BSgroupDetail.next(group)
+    //         let groupCompleted = this.completeGroup(group)
+    //         // this.SgroupDetail.next(groupCompleted) 
+    //         SgroupDetail.next(groupCompleted) 
+    //     } 
+    // }
 
     create(groupName: string, members: [string], callback?: (res: any, error: any) => void): Promise<any> {
         var that = this;
@@ -266,24 +286,10 @@ export class FirebaseGroupsHandler extends GroupsHandlerService {
         }
     }
 
-    private groupValue(childSnapshot: any){
-        const that = this;
-        this.logger.debug('[FIREBASEGroupHandlerSERVICE] group detail::', childSnapshot.val(), childSnapshot)
-        const group: GroupModel = childSnapshot.val();
-        this.logger.debug('[FIREBASEGroupHandlerSERVICE]  groupValue ', group)
-        if (group) {
-            group.uid = childSnapshot.key
-            // that.BSgroupDetail.next(group)
-            let groupCompleted = this.completeGroup(group)
-            this.SgroupDetail.next(groupCompleted) 
-        } 
-    }
-
     private completeGroup(group: any): GroupModel{
         group.avatar = avatarPlaceholder(group.name);
         group.color = getColorBck(group.name);
         return group 
     }
     // // -------->>>> PRIVATE METHOD SECTION SECTION END <<<<---------------//
-
 }

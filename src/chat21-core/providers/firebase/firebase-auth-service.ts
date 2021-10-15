@@ -19,7 +19,7 @@ import { LoggerInstance } from '../logger/loggerInstance';
 // @Injectable({ providedIn: 'root' })
 @Injectable()
 export class FirebaseAuthService extends MessagingAuthService {
-  
+
 
   // BehaviorSubject
   BSAuthStateChanged: BehaviorSubject<any>;
@@ -129,13 +129,13 @@ export class FirebaseAuthService extends MessagingAuthService {
         break;
       }
     }
-    return firebase.auth().setPersistence(firebasePersistence).then( async () => {
-      return firebase.auth().signInWithCustomToken(token).then( async () => {
-                // that.firebaseSignInWithCustomToken.next(response);
-              }).catch((error) => {
-                that.logger.error('[FIREBASEAuthSERVICE] signInFirebaseWithCustomToken Error: ', error);
-                  // that.firebaseSignInWithCustomToken.next(null);
-              });
+    return firebase.auth().setPersistence(firebasePersistence).then(async () => {
+      return firebase.auth().signInWithCustomToken(token).then(async () => {
+        // that.firebaseSignInWithCustomToken.next(response);
+      }).catch((error) => {
+        that.logger.error('[FIREBASEAuthSERVICE] signInFirebaseWithCustomToken Error: ', error);
+        // that.firebaseSignInWithCustomToken.next(null);
+      });
     }).catch((error) => {
       that.logger.error('[FIREBASEAuthSERVICE] signInFirebaseWithCustomToken Error: ', error);
     });

@@ -11,25 +11,22 @@ import 'firebase/firestore';
 
 // models
 import { UserModel } from '../../models/user';
+import { MessageModel } from '../../models/message';
 
 // services
 import { ConversationHandlerService } from '../abstract/conversation-handler.service';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 // utils
 import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, TYPE_DIRECT, MESSAGE_TYPE_INFO } from '../../utils/constants';
 import {
-  htmlEntities,
   compareValues,
   searchIndexInArrayForUid,
   conversationMessagesRef
 } from '../../utils/utils';
-import { timestamp } from 'rxjs/operators';
-import { MessageModel } from '../../models/message';
+
 import { messageType } from '../../utils/utils-message';
-import { LoggerService } from '../abstract/logger.service';
-import { LoggerInstance } from '../logger/loggerInstance';
-
-
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()

@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
-// models
-import { UserModel } from '../../models/user';
 
 // @Injectable({
 //   providedIn: 'root'
@@ -16,7 +13,7 @@ export abstract class MessagingAuthService {
   abstract BSSignOut: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   // params
-  public DEFAULT_PERSISTENCE: string = 'none';
+  public DEFAULT_PERSISTENCE: string = 'NONE';
   public DEFAULT_URL: string = 'https://api.tiledesk.com/v2/auth/';
 
   private persistence;

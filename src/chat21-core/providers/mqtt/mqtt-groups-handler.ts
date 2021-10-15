@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { GroupModel } from '../../models/group';
-import { GroupsHandlerService } from '../../providers/abstract/groups-handler.service';
+import { GroupsHandlerService } from '../abstract/groups-handler.service';
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { LoggerService } from '../abstract/logger.service';
 import { CustomLogger } from '../logger/customLogger';
@@ -10,7 +10,7 @@ import { Chat21Service } from './chat-service';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
-export class MQTTGroupsHanlder extends GroupsHandlerService {
+export class MQTTGroupsHandler extends GroupsHandlerService {
     
     // BehaviorSubject
     BSgroupDetail: BehaviorSubject<GroupModel>;

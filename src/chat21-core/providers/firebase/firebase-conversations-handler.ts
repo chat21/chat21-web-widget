@@ -1,4 +1,3 @@
-import { AppConfigService } from './../../../app/providers/app-config.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -14,14 +13,15 @@ import { ConversationModel } from '../../models/conversation';
 
 // services
 import { ConversationsHandlerService } from '../abstract/conversations-handler.service';
-//import { DatabaseProvider } from '../database';
+import { AppConfigService } from './../../../app/providers/app-config.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
 
 // utils
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
 import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArrayForUid, isGroup } from '../../utils/utils';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LoggerService } from '../abstract/logger.service';
-import { LoggerInstance } from '../logger/loggerInstance';
+
 
 
 
@@ -54,7 +54,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // private setTimeoutSound: any;
 
     constructor(
-        //public databaseProvider: DatabaseProvider
         public http: HttpClient,
         public appConfig: AppConfigService
     ) {
@@ -127,7 +126,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         this.ref.on('child_added', (childSnapshot) => {
             that.added(childSnapshot);
         });
-        
+
         setTimeout(() => {
             callback()
         }, 2000);
@@ -216,7 +215,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
         this.getFirebaseToken((error, idToken) => {
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV idToken', idToken)
-            this.logger.error('F[FIREBASEConversationsHandlerSERVICE] DELETE CONV error', error)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV error', error)
             if (idToken) {
                 const httpOptions = {
                     headers: new HttpHeaders({
@@ -479,18 +478,17 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             conversation_with = conv.recipient;
             conversation_with_fullname = conv.recipient_fullname;
         }
+        // Fixes the bug: if a snippet of code is pasted and sent it is not displayed correctly in the convesations list
+        // conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.conversation_with = conversation_with;
         conv.conversation_with_fullname = conversation_with_fullname;
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
-        // conv.time_last_message = this.getTimeLastMessage(conv.timestamp);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
         conv.color = getColorBck(conversation_with_fullname);
         //conv.image = this.imageRepo.getImagePhotoUrl(conversation_with);
         // getImageUrlThumbFromFirebasestorage(conversation_with, this.FIREBASESTORAGE_BASE_URL_IMAGE, this.urlStorageBucket);
         return conv;
     }
-
- 
 
     /** */
     private setStatusConversation(sender: string, uid: string): string {
@@ -562,5 +560,4 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     // ---------------------------------------------------------- //
     // END PRIVATE FUNCTIONS
     // ---------------------------------------------------------- //
-
 }

@@ -11,17 +11,10 @@ import 'firebase/storage';
 // models
 import { ConversationModel } from '../../models/conversation';
 
-// services
-import { ConversationsHandlerService } from '../abstract/conversations-handler.service';
-//import { DatabaseProvider } from '../database';
-
 // utils
 import { avatarPlaceholder, getColorBck } from '../../utils/utils-user';
-import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup, htmlEntities } from '../../utils/utils';
-import { ImageRepoService } from '../abstract/image-repo.service';
-import { FirebaseImageRepoService } from './firebase-image-repo';
+import { compareValues, getFromNow, searchIndexInArrayForUid, archivedConversationsPathForUserId, isGroup } from '../../utils/utils';
 import { ArchivedConversationsHandlerService } from '../abstract/archivedconversations-handler.service';
-import { CustomLogger } from '../logger/customLogger';
 import { LoggerService } from '../abstract/logger.service';
 import { LoggerInstance } from '../logger/loggerInstance';
 
@@ -117,8 +110,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         });
 
         setTimeout(() => {
-            callback() 
-          }, 2000);
+            callback()
+        }, 2000);
         // SET AUDIO
         // this.audio = new Audio();
         // this.audio.src = URL_SOUND;
@@ -202,7 +195,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             });
         }
     }
-    
+
     /**
      * dispose reference di conversations
      */
@@ -258,8 +251,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             return false;
         }
     }
+
      /**
-     *
      * @param childSnapshot
      */
     // private conversationGenerate(childSnapshot: any): ConversationModel {
@@ -390,6 +383,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         }
         // Fixes the bug: if a snippet of code is pasted and sent it is not displayed correctly in the archived convesations list
         // conv.last_message_text = htmlEntities(conv.last_message_text)
+        conv.conversation_with = conversation_with;
         conv.conversation_with_fullname = conversation_with_fullname;
         conv.status = this.setStatusConversation(conv.sender, conv.uid);
         conv.avatar = avatarPlaceholder(conversation_with_fullname);
