@@ -55,7 +55,7 @@ import { ConversationHandlerService } from '../chat21-core/providers/abstract/co
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
-import { URL_SOUND_LIST_CONVERSATION } from '../chat21-core/utils/constants';
+import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, URL_SOUND_LIST_CONVERSATION } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
@@ -451,7 +451,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
             const autoStart = this.g.autoStart;
             that.stateLoggedUser = state;
-            if (state && state === 'online') {
+            if (state && state === AUTH_STATE_ONLINE) {
                 /** sono loggato */
                 // const user = that.authService.getCurrentUser();
                 const user = that.tiledeskAuthService.getCurrentUser()
@@ -486,7 +486,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     // that.g.setParameter('isShown', true, true);
                 }
 
-            } else if (state && state === 'offline') {
+            } else if (state && state === AUTH_STATE_OFFLINE) {
                 /** non sono loggato */
                 that.logger.debug('[APP-COMP] sono nel caso in cui non sono loggato 0');
                 that.logger.debug('[APP-COMP] NO CURRENT USER AUTENTICATE: ');

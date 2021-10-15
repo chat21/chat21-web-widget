@@ -94,7 +94,7 @@ import { InterlalFrameComponent } from './components/conversation-detail/interla
 import { UserTypingComponent } from '../../src/chat21-core/utils/user-typing/user-typing.component';
 
 //CONSTANTS
-import { CHAT_ENGINE_MQTT, CHAT_ENGINE_FIREBASE, UPLOAD_ENGINE_NATIVE, LogLevel, PUSH_ENGINE_NATIVE } from '../../src/chat21-core/utils/constants';
+import { CHAT_ENGINE_MQTT, UPLOAD_ENGINE_NATIVE } from '../../src/chat21-core/utils/constants';
 
 //TRIGGER-HANDLER
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
