@@ -207,6 +207,9 @@
     }
     svg.star:hover{
       fill: #FFD700;
+      // stroke: #4e4305;
+      stroke-width: 15px;
+      transform: rotate(-15deg) scale(1.3)
     }
     svg.star.active{
       fill: #FFD700;

@@ -15,6 +15,7 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: Input/Output values ===========//
   @Input() recipientId: string;
+  @Input() stylesMap: Map<string, string>;
   @Output() onClosePage = new EventEmitter();
   @Output() onCloseRate = new EventEmitter();
   // @Input() recipientId: string; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2

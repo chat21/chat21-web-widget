@@ -99,6 +99,7 @@
         <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
             <chat-star-rating-widget
                 [recipientId]="g.recipientId"
+                [stylesMap]="styleMapConversation"
                 (onClosePage)="onCloseModalRateChat()" 
                 (onCloseRate)="onRateChatComplete()">
             </chat-star-rating-widget>
