@@ -7,11 +7,12 @@
 export const CHAT_ENGINE_MQTT = 'mqtt';
 export const CHAT_ENGINE_FIREBASE = 'firebase';
 export const UPLOAD_ENGINE_NATIVE = 'native';
-export const PUSH_ENGINE_NATIVE = 'native'
+export const PUSH_ENGINE_MQTT = 'mqtt';
+export const PUSH_ENGINE_FIREBASE = 'firebase';
 
 // AUTH
 export const AUTH_STATE_OFFLINE = 'offline';
-
+export const AUTH_STATE_ONLINE = 'online'
 
 
 // MESSAGES STATUS
@@ -58,7 +59,7 @@ export const MESSAGE_TYPE_MINE = 'MINE';
 export const MESSAGE_TYPE_OTHERS = 'OTHERS';
 export const MESSAGE_TYPE_DATE = 'DATE';
 
-export const CHAT_REOPENED  = 'CHAT_REOPENED';
+export const CHAT_REOPENED = 'CHAT_REOPENED';
 export const CHAT_CLOSED = 'CHAT_CLOSED';
 export const MEMBER_JOINED_GROUP = 'MEMBER_JOINED_GROUP';
 
@@ -95,7 +96,7 @@ export const IMG_PROFILE_BOT = '/assets/images/avatar_bot_tiledesk.svg';
 export const IMG_PROFILE_DEFAULT = '/assets/images/avatar_male_tiledesk.svg';
 
 //LOG LEVEL
-export const LogLevel =  {
+export const LogLevel = {
     'ERROR' :0,
     'WARN' : 1,
     'INFO' : 2,
