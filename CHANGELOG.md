@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.8
+- added: ability to insert a new line after the current position in the message text area by pressing the key combinations "ALT + ENTER", "CTRL + ENTER", "CMD + ENTER", "SHIFT + ENTER"
+- updated: chat21-core lib
+- updated: star-rating-widget component UI (in-progress)
+
 ### 5.0.18-rc.7
 - bug-fixed: on image/file received, managed conversation-list last-message field
 - bug-fixed: restored footer textarea if 'hideTextReply' changes
