@@ -216,7 +216,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
 
         this.getFirebaseToken((error, idToken) => {
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV idToken', idToken)
-            this.logger.error('F[FIREBASEConversationsHandlerSERVICE] DELETE CONV error', error)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] DELETE CONV error', error)
             if (idToken) {
                 const httpOptions = {
                     headers: new HttpHeaders({
