@@ -13,6 +13,7 @@
       [(ngModel)]="textInputTextArea"
       (ngModelChange)="onTextAreaChange()" 
       (keypress)="onkeypress($event)" 
+      (keydown)="onkeydown($event)"
       (paste)="onPaste($event)"
       placeholder="{{ translationMap?.get('LABEL_PLACEHOLDER') }}">
   </textarea>
