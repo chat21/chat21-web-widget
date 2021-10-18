@@ -83,6 +83,13 @@ export class ConversationPreviewImageComponent implements OnInit {
         sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW;
         sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW / rapporto;
     }
+
+    if(metadata.height && metadata.width > MAX_WIDTH_IMAGES_PREVIEW){
+      const rapporto = (metadata['height'] / metadata['width']);
+      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW / rapporto;
+      sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW ;
+    }
+    
     return sizeImage; // h.toString();
   }
   

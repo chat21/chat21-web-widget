@@ -3,6 +3,12 @@
   <img 
     class="message-contentX message-content-imageX" 
     [ngClass]="{'isLoadingImage': loading}"
-    [src]="metadata.src"  
-    (load)="onLoaded($event)"/>
+    [src]="metadata.src" 
+    [width]="width" 
+    [height]="height"
+    (load)="onLoaded($event)"
+    (click)="downloadImage(metadata.src, metadata.name)"/>
+  <ng-template #timeTooltipRight>
+    <span>{{ tooltipMessage }}</span>
+  </ng-template>
 </div>

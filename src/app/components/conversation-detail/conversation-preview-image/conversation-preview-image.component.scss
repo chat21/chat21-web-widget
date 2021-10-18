@@ -4,7 +4,7 @@
 :host .c21-content ::ng-deep > chat-image  {
 
     div { 
-        margin: 5px auto;
+        margin: 5px auto !important;
 
         img {
             width: 75%;
@@ -18,10 +18,10 @@
     --margin-right: 50px;
     --header-height: 40px;
 
-    --modal-height: 230px;
+    --modal-height: 240px;
     --modal-width: 80%;
 
-    --content-height: 165px;
+    --content-height: 160px;
 
     background-color: rgba(0,0,0,0.4);
     height: 100%;
@@ -223,6 +223,15 @@
             fill: $blue;
             pointer-events: auto;
         }
+
+        textarea,
+        textarea:visited,
+        textarea:focus,
+        textarea:hover,
+        textarea:active{
+            all: unset;
+        }
+
     }
     
 }
