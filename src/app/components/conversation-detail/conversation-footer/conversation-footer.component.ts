@@ -33,6 +33,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
+  @Input() hideFooterMessagePlaceholder: string;
   @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;
@@ -70,6 +71,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     console.log('changessss', changes)
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
+    }
+    if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined  && changes['hideTextReply'].currentValue === false){
+      this.restoreTextArea()
     }
     // if(changes['senderId'] && changes['tenant'] && (changes['senderId'].currentValue !== undefined) && (changes['tenant'].currentValue !== undefined)){
     //   this.upSvc.initialize(this.senderId, this.tenant, this.conversationWith);
@@ -549,7 +553,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
   */
   onkeydown(event){
-    console.log('eventtttt', event)
     const keyCode = event.which || event.keyCode;
     // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
     if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   

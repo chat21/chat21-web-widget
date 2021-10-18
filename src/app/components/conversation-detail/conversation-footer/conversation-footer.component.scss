@@ -2,6 +2,9 @@
 
 .visible-text-area {
     pointer-events: auto;
+    &.disabled {
+        background-color: rgb(232, 233, 237);
+    }
 }
 
 .chat21-textarea-button {
