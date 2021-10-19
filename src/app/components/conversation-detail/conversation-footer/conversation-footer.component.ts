@@ -189,7 +189,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
-            this.onAttachmentButtonClicked.emit([{metadata, file}]) //GABBBBBBBB
+            this.onAttachmentButtonClicked.emit({attachments: [{metadata, file}], message: this.textInputTextArea}) //GABBBBBBBB
+            this.restoreTextArea();
             this.chat21_file.nativeElement.value = ''; //BUG-FIXED: allow you to re-load the same previous file
             // this.uploadSingle(metadata, file); 
             // this.isSelected = false;
@@ -571,10 +572,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       this.logger.debug('[CONV-FOOTER] onPaste item.type ', item.type);
       if (item.type.startsWith("image")) {
         // SEND TEXT MESSAGE IF EXIST
-        if(this.textInputTextArea){
-          this.logger.debug('[CONV-FOOTER] onPaste texttt ', this.textInputTextArea);
-          this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT)
-        }
+        // if(this.textInputTextArea){
+        //   this.logger.debug('[CONV-FOOTER] onPaste texttt ', this.textInputTextArea);
+        //   this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT)
+        // }
 
         try {
           this.restoreTextArea();

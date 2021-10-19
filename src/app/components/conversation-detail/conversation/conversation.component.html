@@ -52,6 +52,7 @@
 
     <!-- PREVIEW ATTACHMENT BUTTON-->
     <chat-conversation-attachment-preview *ngIf="isOpenAttachmentPreview"
+        [textInputTextArea]="textInputTextArea"
         [attachments]="attachments"
         [translationMap]="translationMapPreview"
         [stylesMap]="stylesMap"

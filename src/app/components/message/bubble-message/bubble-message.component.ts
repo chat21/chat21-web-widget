@@ -32,7 +32,7 @@ export class BubbleMessageComponent implements OnInit {
     'hideDelayAfterClick': 3000,
     'hide-delay': 200
   };
-  private sizeImage : { width: number, height: number}
+  sizeImage : { width: number, height: number}
 
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public sanitizer: DomSanitizer) { }

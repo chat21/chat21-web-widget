@@ -1,3 +1,4 @@
+import { MessageAttachmentComponent } from './../../message-attachment/message-attachment.component';
 import { MAX_HEIGHT_TEXTAREA } from './../../../../chat21-core/utils/constants';
 import { style } from '@angular/animations';
 import { NativeImageRepoService } from './../../../../chat21-core/providers/native/native-image-repo';
@@ -6,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { MAX_WIDTH_IMAGES } from '../../../../chat21-core/utils/constants';
+import { MIN_WIDTH_IMAGES } from '../../../utils/constants';
 
 @Component({
   selector: 'chat-conversation-attachment-preview',
@@ -15,6 +17,7 @@ import { MAX_WIDTH_IMAGES } from '../../../../chat21-core/utils/constants';
 export class ConversationPreviewImageComponent implements OnInit {
   @ViewChild('divPreview') public scrollMe: ElementRef;
 
+  @Input() textInputTextArea: string;
   @Input() attachments: [{ file: Array<any>, metadata: {}}];
   @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
@@ -27,7 +30,7 @@ export class ConversationPreviewImageComponent implements OnInit {
   public file_extension: string;
 
   /**TEXT AREA PARAMETER */
-  public textInputTextArea: string = '';
+  // public textInputTextArea: string = '';
   public isFilePendingToLoad: boolean = false;
   public HEIGHT_DEFAULT = '20px';
   public currentHeight: number = 0;
@@ -46,7 +49,7 @@ export class ConversationPreviewImageComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.logger.log('[LOADER-PREVIEW-PAGE] Hello!');
+    this.logger.log('[LOADER-PREVIEW-PAGE] Hello!', this.textInputTextArea);
     this.setFocusOnId('chat21-main-message-context-preview')
     // tslint:disable-next-line: prefer-for-of
     // this.selectedFiles = this.files;
@@ -56,15 +59,14 @@ export class ConversationPreviewImageComponent implements OnInit {
       //this.fileChange(this.files[i]);
     }
     
-    
   }
 
   /**
    *
    * @param message
    */
-  getMetadataSize(metadata): any {
-    const MAX_WIDTH_IMAGES_PREVIEW = 200
+  getMetadataSize(metadata): {width, height} {
+    const MAX_WIDTH_IMAGES_PREVIEW = 150
     if(metadata.width === undefined){
       metadata.width= MAX_WIDTH_IMAGES_PREVIEW
     }
@@ -77,19 +79,24 @@ export class ConversationPreviewImageComponent implements OnInit {
         width: metadata.width,
         height: metadata.height
     };
-    //   that.g.wdLog(['message::: ', metadata);
+    
+    // SCALE IN WIDTH --> for horizontal images
     if (metadata.width && metadata.width > MAX_WIDTH_IMAGES_PREVIEW) {
-        const rapporto = (metadata['width'] / metadata['height']);
-        sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW;
-        sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW / rapporto;
+      const ratio = (metadata['width'] / metadata['height']);
+      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW;
+      sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW / ratio;
+    } else if(metadata.width && metadata.width <= 55){
+      const ratio = (metadata['width'] / metadata['height']);
+      sizeImage.width = MIN_WIDTH_IMAGES;
+      sizeImage.height = MIN_WIDTH_IMAGES / ratio;
     }
 
+    // SCALE IN HEIGHT --> for vertical images
     if(metadata.height && metadata.width > MAX_WIDTH_IMAGES_PREVIEW){
-      const rapporto = (metadata['height'] / metadata['width']);
-      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW / rapporto;
+      const ratio = (metadata['height'] / metadata['width']);
+      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW / ratio;
       sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW ;
     }
-    
     return sizeImage; // h.toString();
   }
   
@@ -97,93 +104,7 @@ export class ConversationPreviewImageComponent implements OnInit {
   readAsDataURL(attachment: any) {
     const that = this;
     this.logger.log('[LOADER-PREVIEW-PAGE] readAsDataURL file', attachment);
-    // ---------------------------------------------------------------------
-    // USE CASE IMAGE
-    // ---------------------------------------------------------------------
-    // if (file.type.startsWith("image") && (!file.type.includes('svg'))) {
-
-    //   this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE IMAGE file TYPE', file.type);
-    //   const reader = new FileReader();
-    //   reader.onloadend = (evt) => {
-    //     const imageXLoad = new Image;
-    //     this.logger.debug('[LOADER-PREVIEW-PAGE] onload ', imageXLoad);
-    //     imageXLoad.src = reader.result.toString();
-    //     imageXLoad.title = file.name;
-    //     imageXLoad.onload = function () {
-    //       // that.arrayFilesLoad.push(imageXLoad);
-    //       const uid = (new Date().getTime()).toString(36); // imageXLoad.src.substring(imageXLoad.src.length - 16);
-    //       const metadata = {
-    //         'name': imageXLoad.title,
-    //         'src': imageXLoad.src,
-    //         'width': imageXLoad.width,
-    //         'height': imageXLoad.height,
-    //         'type': file.type,
-    //         'uid': uid
-    //       };
-
-    //       that.logger.debug('[LOADER-PREVIEW-PAGE] OK: ', metadata);
-    //       that.arrayFiles.push(metadata);
-    //       if (!that.fileSelected) {
-    //         that.fileSelected = metadata;
-    //       }
-    //     };
-        
-    //   };
-
-    //   reader.readAsDataURL(file);
-    //   // ---------------------------------------------------------------------
-    //   // USE CASE SVG 
-    //   // ---------------------------------------------------------------------
-    // } else if (file.type.startsWith("image") && (file.type.includes('svg'))) {
-    //   // this.previewFiles(file)
-
-    //   this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL file TYPE', file.type);
-    //   this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL file ', file);
-    //   const preview = document.querySelector('#img-preview') as HTMLImageElement;
-
-
-    //   const reader = new FileReader();
-    //   const that = this;
-    //   reader.addEventListener("load", function () {
-    //     // convert image file to base64 string
-    //     // const img = reader.result as string;
-    //     const img = reader.result.toString();
-    //     that.logger.log('FIREBASE-UPLOAD USE CASE SVG LoaderPreviewPage readAsDataURL img ', img);
-
-    //     // that.fileSelected = that.sanitizer.bypassSecurityTrustResourceUrl(img);
-
-    //     that.arrayFiles.push(that.sanitizer.bypassSecurityTrustResourceUrl(img));
-    //     if (!that.fileSelected) {
-    //       that.fileSelected = that.sanitizer.bypassSecurityTrustResourceUrl(img);
-    //     }
-    //   }, false);
-
-    //   if (file) {
-    //     reader.readAsDataURL(file);
-    //   }
-
-    //   // ---------------------------------------------------------------------
-    //   // USE CASE FILE
-    //   // ---------------------------------------------------------------------
-    //   // } else if (file.type.startsWith("application") || file.type.startsWith("video") || file.type.startsWith("audio") ) {
-    // } else {
-    //   this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE FILE - FILE ', file);
-    //   this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE FILE - FILE TYPE', file.type);
-    //   // this.file_extension = file.name.substring(file.name.lastIndexOf('.') + 1, file.name.length) || file.name;
-    //   // this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE FILE - FILE EXTENSION', this.file_extension);
-    //   // this.file_name = file.name
-    //   // this.file_name_ellipsis_the_middle = this.start_and_end(file.name)
-    //   // this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE FILE - FILE NAME', this.file_name);
-    //   // if (file.type) {
-    //   //   const file_type_array = file.type.split('/');
-    //   //   this.logger.log('FIREBASE-UPLOAD USE CASE FILE LoaderPreviewPage readAsDataURL file_type_array', file_type_array);
-    //   //   this.file_type = file_type_array[1]
-    //   // } else {
-    //   //   this.file_type = file.name.substring(file.name.lastIndexOf('.')+1, file.name.length) || file.name;
-
-    //   // }
-    //   this.createFile();
-    // }
+    
     if((attachment.file.type.startsWith("image")) && (!attachment.file.type.includes("svg"))){
       // ---------------------------------------------------------------------
       // USE CASE IMAGE
@@ -191,6 +112,10 @@ export class ConversationPreviewImageComponent implements OnInit {
       this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE IMAGE - IMAGE ', attachment);
       if(!this.fileSelected){
         this.fileSelected = this.attachments[0]
+        const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
+        this.fileSelected.metadata.width = sizeImage.width
+        this.fileSelected.metadata.height = sizeImage.height
+
       }
     } else if ((attachment.file.type.startsWith("image")) && (attachment.file.type.includes("svg"))){
       // ---------------------------------------------------------------------
@@ -200,8 +125,11 @@ export class ConversationPreviewImageComponent implements OnInit {
       attachment.metadata.src = this.sanitizer.bypassSecurityTrustUrl(attachment.metadata.src)
       if(!this.fileSelected){
         this.fileSelected = this.attachments[0]
+        const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
+        this.fileSelected.metadata.width = sizeImage.width
+        this.fileSelected.metadata.height = sizeImage.height
       }
-    }else if((!attachment.file.type.startsWith("image")) || (!attachment.file.type.includes('svg'))){
+    }else if(!attachment.file.type.startsWith("image")){
       // ---------------------------------------------------------------------
       // USE CASE FILE
       // ---------------------------------------------------------------------
@@ -298,11 +226,11 @@ export class ConversationPreviewImageComponent implements OnInit {
       const height = +textarea.style.height.substring(0, textarea.style.height.length - 2);
       
       if(height > 20 && height < 110){
-        this.scrollMe.nativeElement.style.height = 'calc(40% + ' + (height - 20)+'px'
+        this.scrollMe.nativeElement.style.height = 'calc(39% + ' + (height - 20)+'px'
         // document.getElementById('chat21-button-send-preview').style.right = '18px'
         // this.scrollToBottom()
       } else if(height <= 20) {
-        this.scrollMe.nativeElement.style.height = '40%'
+        this.scrollMe.nativeElement.style.height = '39%'
       } else if(height > 110){
         // document.getElementById('chat21-button-send-preview').style.right = '18px'
       }

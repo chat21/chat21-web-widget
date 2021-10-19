@@ -3,9 +3,8 @@
   <img 
     class="message-contentX message-content-imageX" 
     [ngClass]="{'isLoadingImage': loading}"
+    [ngStyle] = "{ 'width': width, 'height': height }"
     [src]="metadata.src" 
-    [width]="width" 
-    [height]="height"
     (load)="onLoaded($event)"
     (click)="downloadImage(metadata.src, metadata.name)"/>
   <ng-template #timeTooltipRight>
