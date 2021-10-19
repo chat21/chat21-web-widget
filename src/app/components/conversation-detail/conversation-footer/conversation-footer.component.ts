@@ -68,6 +68,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges){
+    console.log('changessss', changes)
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
@@ -185,8 +186,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
-            // this.onAttachmentButtonClicked.emit([{metadata, file}]) //GABBBBBBBB
-            this.uploadSingle(metadata, file); 
+            this.onAttachmentButtonClicked.emit({attachments: [{metadata, file}], message: this.textInputTextArea}) //GABBBBBBBB
+            this.restoreTextArea();
+            this.chat21_file.nativeElement.value = ''; //BUG-FIXED: allow you to re-load the same previous file
+            // this.uploadSingle(metadata, file); 
             // this.isSelected = false;
         }
     }
@@ -244,7 +247,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
               // type_message = metadata.type
           }
           that.sendMessage(message, type_message, metadata);
-          that.chat21_file.nativeElement.value = '';
+          that.chat21_file.nativeElement.value = ''; //BUG-FIXED: allow you to re-load the same previous file
           that.isFilePendingToUpload = false;
           // return downloadURL;
         }).catch(error => {
@@ -554,7 +557,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       this.textInputTextArea += '\r\n'
     }
   }
-
   
   onPaste(event){
     this.resizeInputField()
@@ -566,10 +568,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       this.logger.debug('[CONV-FOOTER] onPaste item.type ', item.type);
       if (item.type.startsWith("image")) {
         // SEND TEXT MESSAGE IF EXIST
-        if(this.textInputTextArea){
-          this.logger.debug('[CONV-FOOTER] onPaste texttt ', this.textInputTextArea);
-          this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT)
-        }
+        // if(this.textInputTextArea){
+        //   this.logger.debug('[CONV-FOOTER] onPaste texttt ', this.textInputTextArea);
+        //   this.sendMessage(this.textInputTextArea, TYPE_MSG_TEXT)
+        // }
 
         try {
           this.restoreTextArea();

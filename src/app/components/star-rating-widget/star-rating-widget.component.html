@@ -26,7 +26,11 @@ svg.star:hover{
                     </div>
                 </div>
             </div> -->
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> features/attachment-preview
             <!-- CONTENT HEADER -->
             <div class="c21-header-content">
                 <!-- ICON BACK -->
@@ -56,9 +60,7 @@ svg.star:hover{
 
             <div class="c21-body-content">
 
-                <!-- 
-                ***************  STEP 0  ***************** 
-                -->
+                <!-- ***************  STEP 0 : BEGIN ***************** -->
                 <div *ngIf="step==0" class="step-rate">
                     <div *ngIf="g.allowTranscriptDownload" class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
                         <div class="c21-link" (click)="dowloadTranscript()" >
@@ -69,7 +71,7 @@ svg.star:hover{
                    
                     <!-- CONTENT -->
                     <div class="c21-modal-content">
-                        <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE  }}</div>
+                        <div class="default-text">{{ g.YOUR_OPINION_ON_OUR_CUSTOMER_SERVICE }}</div>
                         <fieldset class="chat21-rating" [attr.disabled]="!g.isOpenStartRating? '' : null">
                             <input class="c21-input-star" type="radio" id="star1" name="rating" value="1" />
                             <label (mouseover)="mouseOverRate(1)" (mouseleave)="mouseOverRate(0)" (click)="openRate(1)" class="full c21-button" for="star1" title="scarso - 1 star">
@@ -98,8 +100,11 @@ svg.star:hover{
                         (click)="dowloadTranscript()">
                         <span [ngStyle]="{'color': g.themeForegroundColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                     </button> -->
-                    
-                    <!-- ICON CLOSE -->
+                    <!-- <button class="c21-button-link" (click)="returnClosePage()">
+                        <span>{{ g.CLOSE }}</span>
+                    </button> -->
+
+                     <!-- ICON CLOSE -->
                     <button tabindex="1414"  class="c21-button-primary" (click)="returnClosePage()" [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
                         <span class="v-align-center">
                             <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}" xmlns="http://www.w3.org/2000/svg"
@@ -116,18 +121,16 @@ svg.star:hover{
                         <div class="clear"></div>
                     </button>
                 </div>
+                <!-- ***************  STEP 0 : END ***************** -->
 
-
-                <!-- 
-                ***************  STEP 1  ***************** 
-                -->
+                <!-- ***************  STEP 1 : BEGIN ***************** -->
                 <div *ngIf="step==1" class="step-rate">
                     <!-- CONTENT -->
-                    <div *ngIf="g.allowTranscriptDownload" class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
+                    <!-- <div *ngIf="g.allowTranscriptDownload" class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
                         <div class="c21-link" (click)="dowloadTranscript()" >
                             <span [ngStyle]="{'color': g.themeColor}">{{ g.DOWNLOAD_TRANSCRIPT }}</span>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="clear"></div>
                     <div class="c21-step-content">
                         <!-- il tuo voto: -->
@@ -162,6 +165,7 @@ svg.star:hover{
                               <!-- {{translationMap?.get('LABEL_START_NW_CONV')}} -->
                             </span>  
                             <div class="clear"></div>
+<<<<<<< HEAD
                         </button>
 
                         <!-- ICON SUBMIT -->
@@ -182,14 +186,40 @@ svg.star:hover{
                         </button>
 
                     </div>
+=======
+                        </button>
 
-                    
+                        <!-- ICON SUBMIT -->
+                        <button tabindex="1416"  class="c21-button-primary" (click)="sendRate()" [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
+                            <span class="v-align-center">
+                                <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}" xmlns="http://www.w3.org/2000/svg"
+                                    width="18" height="18" viewBox="0 0 24 24">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <title id="altIconTitle">{{ g.SUBMIT }}</title>    
+                                </svg>
+                            </span>
+                            <span class="v-align-center c21-label-button">
+                                {{ g.SUBMIT }}
+                              <!-- {{translationMap?.get('LABEL_START_NW_CONV')}} -->
+                            </span>  
+                            <div class="clear"></div>
+                        </button>
+
+                        <!-- <button class="c21-button-link" (click)="returnClosePage()">
+                            <span>{{ g.CLOSE }}</span>
+                        </button>
+                        <button class="c21-button-link" (click)="sendRate()">
+                            <span>{{ g.SUBMIT }}</span>
+                        </button> -->
+>>>>>>> features/attachment-preview
+
+                    </div>  
 
                 </div>
+                <!-- ***************  STEP 1 : END ***************** -->
 
-                <!-- 
-                ***************  STEP 2  ***************** 
-                -->
+                <!-- ***************  STEP 2 : BEGIN ***************** -->
                 <div *ngIf="step==2" class="step-rate">
                     <div *ngIf="g.allowTranscriptDownload" class="c21-modal-content" style="text-align: right; margin: 0px 20px 30px 10px;">
                         <div class="c21-link" (click)="dowloadTranscript()" >
@@ -208,6 +238,8 @@ svg.star:hover{
                         <span>{{ g.CLOSE }}</span>
                     </button>
                 </div>
+                <!-- ***************  STEP 2 : END ***************** -->
+
 
 
 

@@ -29,7 +29,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] getItem >Error :' + e);
+          this.logger.error('[LocalSessionStorage] getItem >Error :', e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       return this.getValueForKey(newKey);
@@ -47,7 +47,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] setItem > Error :' + e);
+          this.logger.error('[LocalSessionStorage] setItem > Error :', e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       this.saveValueForKey(newKey, value);
@@ -63,7 +63,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] getItemWithoutProjectID > Error :' + e);
+          this.logger.error('[LocalSessionStorage] getItemWithoutProjectID > Error :', e);
       }
       const newKey = prefix + key;
       return this.getValueForKey(newKey);
@@ -81,7 +81,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] setItemWithoutProjectID > Error :' + e);
+          this.logger.error('[LocalSessionStorage] setItemWithoutProjectID > Error :', e);
       }
       const newKey = prefix + key;
       this.saveValueForKey(newKey, value);
@@ -94,7 +94,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] removeItem > Error :' + e);
+          this.logger.error('[LocalSessionStorage] removeItem > Error :', e);
       }
       const newKey = prefix + this.projectID + '_' + key;
       return this.removeItemForKey(newKey);
@@ -107,7 +107,7 @@ export class LocalSessionStorage extends AppStorageService{
           // prefix = prefix + sv;
           prefix = this.storagePrefix + '_';
       } catch (e) {
-          this.logger.error('[LocalSessionStorage] clear > Error :' + e);
+          this.logger.error('[LocalSessionStorage] clear > Error :', e);
       }
       const prefixKey = prefix + this.projectID
       const arrayKey: Array<string>  = [];

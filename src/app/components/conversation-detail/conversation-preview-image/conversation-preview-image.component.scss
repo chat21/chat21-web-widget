@@ -1,15 +1,27 @@
 @import '../../../../sass/variables';
 
+
+:host .c21-content ::ng-deep > chat-image  {
+
+    div { 
+        margin: 2px auto !important;
+
+        // img {
+        //     width: 75%;
+        // }
+    }  
+}
+
 #c21-preview{
     --margin-top: 200px;
     --margin-left: 50px;
     --margin-right: 50px;
     --header-height: 40px;
 
-    --modal-height: 200px;
+    --modal-height: 240px;
     --modal-width: 80%;
 
-    --content-height: 120px;
+    --content-height: 160px;
 
     background-color: rgba(0,0,0,0.4);
     height: 100%;
@@ -100,6 +112,49 @@
         //     object-fit: cover;
             
         // }
+        #c21-contentScroll-preview{
+            position: absolute;
+            left: 0px;
+            right: 10px;
+            padding: 10px;
+            // display: none;
+            opacity: 0;
+            -webkit-transition: opacity 0.5s; /* Safari */
+            transition: opacity 0.5s;
+            transition-timing-function: ease-in;
+        }
+
+        #scroll-me-preview {
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        #scroll-me-preview:hover {
+            &::-webkit-scrollbar-thumb {
+                background: #777777; 
+            }
+        }
+
+
+        #scroll-me-preview {
+            scroll-behavior: smooth;
+        }
+        #scroll-me-preview.withoutAnimation {
+            scroll-behavior: unset;
+        }
+
+        #img-preview-file-extension {
+            text-align: center;
+            position: relative;
+            text-transform: uppercase;
+            color: #fff;
+            top: -25px;
+            font-weight: 500;
+        }
     }
 
     #c21-footer{
@@ -109,6 +164,14 @@
         box-shadow: 0 -1px 0px 0px $trasp-light-gray;
         background: white;
         
+        textarea,
+        textarea:visited,
+        textarea:focus,
+        textarea:hover,
+        textarea:active{
+            all: unset;
+        }
+
         #chat21-main-message-context-preview {
             overflow: hidden;
             word-wrap: break-word;
@@ -125,7 +188,7 @@
             max-height: 110px;
             min-height: auto;
             height: 20px;
-            padding: 0px 0px 0px 20px;
+            padding: 0px 30px 0px 10px;
             margin: 10px 0px 10px;
             border: none;
         }

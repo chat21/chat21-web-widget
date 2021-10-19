@@ -65,7 +65,6 @@ export function isMine(message: any) {
 
 /** */
 export function messageType(msgType: string, message: any) {
-  const that = this
     if (msgType === MESSAGE_TYPE_DATE) {
       if (message.headerDate && message.headerDate !== '') {
         return true;

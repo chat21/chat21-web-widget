@@ -51,10 +51,7 @@
 - added: custom preChatFormJson, preChatFormJson and preChatFormCustomFieldsEnabled properties from widget remote object - (WID-64)
 - added: getPreChatFormJson() and setPreChatFormJson(form) as javascript method 
 - added: validateRegex function to check for valid regex from preChatFormJson object
-<<<<<<< HEAD
-=======
 
->>>>>>> features/preChatForm-custom
 ### 5.0.18-rc.1
 - bug-fixed: userFullname passed from url not set correctly due to user info received after tiledesk auth response - (WID-68)
 - removed: 2 unuseful log (app.component and localSessionStorage initialize)

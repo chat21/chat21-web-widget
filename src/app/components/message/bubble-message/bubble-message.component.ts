@@ -1,3 +1,4 @@
+import { MIN_WIDTH_IMAGES } from './../../../utils/constants';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageModel } from '../../../../chat21-core/models/message';
@@ -31,36 +32,80 @@ export class BubbleMessageComponent implements OnInit {
     'hideDelayAfterClick': 3000,
     'hide-delay': 200
   };
-  
+  sizeImage : { width: number, height: number}
+
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    // console.log('BUBBLE-MSG Hello !!!! this.message ',  this.message)
+    if (this.message && this.message.metadata) {
+      this.sizeImage = this.getMetadataSize(this.message.metadata)
+      // console.log('BUBBLE-MSG ngOnChanges message > metadata', this.message.metadata)
+    }
+
+  }
+
   /**
    *
    * @param message
    */
-  getMetadataSize(metadata): any {
-    if(metadata.width === undefined){
-      metadata.width= MAX_WIDTH_IMAGES
+  // getMetadataSize(metadata): any {
+  //   if(metadata.width === undefined){
+  //     metadata.width= MAX_WIDTH_IMAGES
+  //   }
+  //   if(metadata.height === undefined){
+  //     metadata.height = MAX_WIDTH_IMAGES
+  //   }
+  //   // const MAX_WIDTH_IMAGES = 300;
+  //   const sizeImage = {
+  //       width: metadata.width,
+  //       height: metadata.height
+  //   };
+  //   //   that.g.wdLog(['message::: ', metadata);
+  //   if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
+  //       const rapporto = (metadata['width'] / metadata['height']);
+  //       sizeImage.width = MAX_WIDTH_IMAGES;
+  //       sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
+  //   }
+  //   return sizeImage; // h.toString();
+  // }
+
+  /**
+   *
+   * @param message
+   */
+  getMetadataSize(metadata): {width, height} {
+    if (metadata.width === undefined) {
+      metadata.width = MAX_WIDTH_IMAGES
     }
-    if(metadata.height === undefined){
+    if (metadata.height === undefined) {
       metadata.height = MAX_WIDTH_IMAGES
     }
-    // const MAX_WIDTH_IMAGES = 300;
+
     const sizeImage = {
-        width: metadata.width,
-        height: metadata.height
+      width: metadata.width,
+      height: metadata.height
     };
-    //   that.g.wdLog(['message::: ', metadata);
-    if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
-        const rapporto = (metadata['width'] / metadata['height']);
-        sizeImage.width = MAX_WIDTH_IMAGES;
-        sizeImage.height = MAX_WIDTH_IMAGES / rapporto;
+
+    if (metadata.width && metadata.width < MAX_WIDTH_IMAGES) {
+      if (metadata.width <= 55) {
+        const ratio = (metadata['width'] / metadata['height']);
+        sizeImage.width = MIN_WIDTH_IMAGES;
+        sizeImage.height = MIN_WIDTH_IMAGES / ratio;
+      } else if (metadata.width > 55) {
+        sizeImage.width = metadata.width;
+        sizeImage.height = metadata.height
+      }
+    } else if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
+      const ratio = (metadata['width'] / metadata['height']);
+      sizeImage.width = MAX_WIDTH_IMAGES;
+      sizeImage.height = MAX_WIDTH_IMAGES / ratio;
     }
-    return sizeImage; // h.toString();
+    return sizeImage
   }
 
   /**

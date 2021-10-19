@@ -1,5 +1,5 @@
-<div id='c21-preview'>
-  <div class="modal-preview-image">
+<div id='c21-preview' >
+  <div class="modal-preview-image" #divPreview id="divPreview">
 
     <div class="c21-header">
       <div class="c21-header-container">
@@ -17,7 +17,7 @@
     
            <!-- TITLE -->
           <div class="c21-title" [ngStyle]="{'color': stylesMap?.get('themeColor') }">
-            <div class="titleText">Anteprima</div>
+            <div class="titleText">{{ translationMap?.get('PREVIEW') }}</div>
           </div>
         </div>
 
@@ -25,25 +25,26 @@
 
     </div>
 
-    <div class="c21-content">
-      <chat-image
-        [metadata]="fileSelected?.metadata"
-        [width]="getMetadataSize(fileSelected?.metadata)?.width"
-        [height]="getMetadataSize(fileSelected?.metadata)?.height"
-        (onImageRendered)="onImageRenderedFN($event)">
-      </chat-image>
+    <div class="c21-content" #scrollMePreview id="scroll-me-preview">
+        <chat-image *ngIf="fileSelected"
+          [metadata]="fileSelected?.metadata"
+          [width]="fileSelected?.metadata?.width"
+          [height]="fileSelected?.metadata?.height"
+          (onImageRendered)="onImageRenderedFN($event)">
+        </chat-image>
+        <div id="img-preview-file-extension">{{ file_extension }} </div>
     </div>
 
 
     <div id="c21-footer">
       <div class="visible-text-area">
         <!-- isFilePendingToUpload || -->
+        <!-- [attr.disabled] = "isFilePendingToLoad" -->
         <textarea 
-          [attr.disabled] = "isFilePendingToLoad"
-          start-focus-chat21-conversation-component
+          start-focus-chat21-conversation-preview-component
           inputTextArea 
           #textbox 
-          tabindex="1501" 
+          tabindex="1502" 
           aria-labelledby="altTextArea"
           rows="1" 
           id="chat21-main-message-context-preview" 
@@ -74,3 +75,5 @@
   </div>
 
 </div>
+<span id="testFocus" tabindex="1599" onFocus="document.querySelector('[start-focus-chat21-conversation-preview-component]').focus()"></span>
+<span id="altTextArea" style="display: none">scrivi la tua domanda</span>

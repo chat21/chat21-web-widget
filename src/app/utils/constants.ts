@@ -40,6 +40,7 @@ export const UID_SUPPORT_GROUP_MESSAGES = 'support-group-';
 export const MIN_HEIGHT_TEXTAREA = 24;
 export const MAX_HEIGHT_TEXTAREA = 180;
 export const MAX_WIDTH_IMAGES = 230;
+export const MIN_WIDTH_IMAGES = 130;
 
 
 // pagine

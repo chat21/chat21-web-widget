@@ -108,6 +108,14 @@ textarea:active{
     }
 }
 
+textarea,
+textarea:visited,
+textarea:focus,
+textarea:hover,
+textarea:active{
+    all: unset;
+}
+
 #chat21-main-message-context {
     overflow: hidden;
     word-wrap: break-word;

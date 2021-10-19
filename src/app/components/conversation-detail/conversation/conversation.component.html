@@ -51,13 +51,14 @@
 
 
     <!-- PREVIEW ATTACHMENT BUTTON-->
-    <!-- <chat-conversation-preview-image *ngIf="isOpenAttachmentPreview"
+    <chat-conversation-attachment-preview *ngIf="isOpenAttachmentPreview"
+        [textInputTextArea]="textInputTextArea"
         [attachments]="attachments"
         [translationMap]="translationMapPreview"
         [stylesMap]="stylesMap"
         (onSendAttachment)="onSendAttachment($event)"
         (onCloseModalPreview)="onCloseModalPreview()">
-    </chat-conversation-preview-image> -->
+    </chat-conversation-attachment-preview>
 
     <!-- FOOTER -->
     <div id="chat21-footer">

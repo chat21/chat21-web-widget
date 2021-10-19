@@ -1,6 +1,6 @@
 <!-- [ngClass]="{'button-in-msg' : message.metadata && message.metadata.button}" -->
 <!-- ngStyle]="{'padding': (isImage(message) || isFrame(message))?'1px':'0 8px'}" -->
-<div [ngStyle]="{'padding': (isImage(message) || isFrame(message))?'0px':'0 8px', 'width': (isImage(message) || isFrame(message))? getMetadataSize(message.metadata).width: null }" class="messages primary-color"  [class.emoticon]="message?.emoticon">
+<div [ngStyle]="{'padding': (isImage(message) || isFrame(message))?'0px':'0 8px', 'width': (isImage(message) || isFrame(message))? sizeImage?.width + 'px': null }" class="messages primary-color"  [class.emoticon]="message?.emoticon">
   
     
     <div>
@@ -13,17 +13,19 @@
       [src]="message.metadata.src" [width]="getSizeImg(message).width"
       [height]="getSizeImg(message).height" /> -->
 
+      <!-- [width]="getMetadataSize(message.metadata).width"
+      [height]="getMetadataSize(message.metadata).height" -->
       <chat-image *ngIf="isImage(message)"
         [metadata]="message.metadata"
-        [width]="getMetadataSize(message.metadata).width"
-        [height]="getMetadataSize(message.metadata).height"
+        [width]="sizeImage?.width"
+        [height]="sizeImage?.height"
         (onImageRendered)="onImageRenderedFN($event)">
       </chat-image>
 
       <chat-frame *ngIf="isFrame(message)"
         [metadata]="message.metadata"
-        [width]="getMetadataSize(message.metadata).width"
-        [height]="getMetadataSize(message.metadata).height">
+        [width]="sizeImage?.width"
+        [height]="sizeImage?.height">
       </chat-frame>
 
       <!-- <chat-frame *ngIf="message.metadata && message.metadata.type && message.metadata.type.includes('video')"

@@ -107,14 +107,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   // ========= begin:: send image ======= //
   selectedFiles: FileList;
-  isFilePendingToUpload: Boolean = false;
+  // isFilePendingToUpload: Boolean = false;
   arrayFilesLoad: Array<any>;
   isFileSelected: Boolean = false;
 
   isOpenAttachmentPreview: Boolean = false;
   attachments: Array<{ file: Array<any>, metadata: {}}>
-  files: Array<any>;
-  metadata: {} = {};
   // ========= end:: send image ========= //
 
 
@@ -126,7 +124,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // userEmail: string;
   // userFullname: string;
   preChatForm = false;
-  //textInputTextArea: String;
+  textInputTextArea: String;
   HEIGHT_DEFAULT = '20px';
   
   isPopupUrl = isPopupUrl;
@@ -273,6 +271,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'BACK', 
       'CLOSE',
       'LABEL_PLACEHOLDER',
+      'PREVIEW'
     ];
 
     
@@ -1817,18 +1816,21 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   /** CALLED BY: conv-footer component */
   onAttachmentButtonClicked(event: any){
     console.log('onAttachmentButtonClicked::::', event)
+    this.attachments = event.attachments
+    this.textInputTextArea= event.message
+    console.log('onAttachmentButtonClicked::::', this.textInputTextArea)
     this.isOpenAttachmentPreview = true
-    this.attachments = event
   }
 
   /** CALLED BY: conv-preview component */
   onCloseModalPreview(){
     this.isOpenAttachmentPreview = false
+    this.conversationFooter.isFilePendingToUpload = false;
+    console.log('onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
   }
 
   /** CALLED BY: conv-preview component */
   onSendAttachment(messageText: string){
-    console.log('sendd messageee', messageText)
     this.isOpenAttachmentPreview = false
     this.conversationFooter.uploadSingle(this.attachments[0].metadata, this.attachments[0].file, messageText)
     // send message to footer-component
