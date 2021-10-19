@@ -241,10 +241,16 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
           let message = `[${metadata.name}](${metadata.src})`
           if (metadata.type.startsWith('image') && !metadata.type.includes('svg')) {
               type_message = TYPE_MSG_IMAGE;
-              message = ''; // 'Image: ' + metadata.src;
+              // message = '';
+              message = messageText 
           } else if ((metadata.type.startsWith('image') && metadata.type.includes('svg')) || !metadata.type.startsWith('image')){
               type_message = TYPE_MSG_FILE
               // type_message = metadata.type
+              message = message + '\n' + messageText
+          } else if (!metadata.type.startsWith('image')){
+            type_message = TYPE_MSG_FILE
+            // type_message = metadata.type
+            message = message + '\n' + messageText
           }
           that.sendMessage(message, type_message, metadata);
           that.chat21_file.nativeElement.value = ''; //BUG-FIXED: allow you to re-load the same previous file
