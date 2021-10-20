@@ -271,7 +271,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'BACK', 
       'CLOSE',
       'LABEL_PLACEHOLDER',
-      'PREVIEW'
+      'LABEL_PREVIEW'
     ];
 
     

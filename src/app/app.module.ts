@@ -75,6 +75,7 @@ import { ConversationComponent } from './components/conversation-detail/conversa
 import { ConversationHeaderComponent } from './components/conversation-detail/conversation-header/conversation-header.component';
 import { ConversationContentComponent } from './components/conversation-detail/conversation-content/conversation-content.component';
 import { ConversationFooterComponent } from './components/conversation-detail/conversation-footer/conversation-footer.component';
+import { ConversationPreviewComponent } from './components/conversation-detail/conversation-preview/conversation-preview.component';
 import { BubbleMessageComponent } from './components/message/bubble-message/bubble-message.component';
 import { TextComponent } from './components/message/text/text.component';
 import { ImageComponent } from './components/message/image/image.component';
@@ -115,7 +116,6 @@ import { TypingService } from '../chat21-core/providers/abstract/typing.service'
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { AppStorageService } from '../chat21-core/providers/abstract/app-storage.service';
-import { NotificationsService } from '../chat21-core/providers/abstract/notifications.service';
 
 //FIREBASE SERVICES
 import { FirebaseInitService } from '../chat21-core/providers/firebase/firebase-init-service';
@@ -128,7 +128,6 @@ import { FirebaseTypingService } from '../chat21-core/providers/firebase/firebas
 import { FirebasePresenceService } from '../chat21-core/providers/firebase/firebase-presence.service';
 import { FirebaseImageRepoService } from '../chat21-core/providers/firebase/firebase-image-repo';
 import { FirebaseUploadService } from '../chat21-core/providers/firebase/firebase-upload.service';
-import { FirebaseNotifications } from '../chat21-core/providers/firebase/firebase-notifications';
 
 // MQTT
 import { Chat21Service } from '../chat21-core/providers/mqtt/chat-service';
@@ -139,7 +138,6 @@ import { MQTTArchivedConversationsHandler } from '../chat21-core/providers/mqtt/
 import { MQTTConversationHandler } from '../chat21-core/providers/mqtt/mqtt-conversation-handler';
 import { MQTTTypingService } from '../chat21-core/providers/mqtt/mqtt-typing.service';
 import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence.service';
-import { MQTTNotifications } from '../chat21-core/providers/mqtt/mqtt-notifications';
 
 //NATIVE
 import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
@@ -158,7 +156,8 @@ import { FormTextComponent } from './components/form/inputs/form-text/form-text.
 import { FormLabelComponent } from './components/form/inputs/form-label/form-label.component';
 import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
 import { FormTextareaComponent } from './components/form/inputs/form-textarea/form-textarea.component';
-import { ConversationPreviewImageComponent } from './components/conversation-detail/conversation-preview-image/conversation-preview-image.component';
+
+
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -336,7 +335,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     FormLabelComponent,
     FormCheckboxComponent,
     FormTextareaComponent,
-    ConversationPreviewImageComponent,  
+    ConversationPreviewComponent,  
   ],
   imports: [
     BrowserModule,

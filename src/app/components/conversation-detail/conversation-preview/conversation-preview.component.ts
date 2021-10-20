@@ -1,20 +1,15 @@
-import { MessageAttachmentComponent } from './../../message-attachment/message-attachment.component';
-import { MAX_HEIGHT_TEXTAREA } from './../../../../chat21-core/utils/constants';
-import { style } from '@angular/animations';
-import { NativeImageRepoService } from './../../../../chat21-core/providers/native/native-image-repo';
-import { Component, Input, OnInit, EventEmitter, Output, SimpleChange, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
-import { MAX_WIDTH_IMAGES } from '../../../../chat21-core/utils/constants';
 import { MIN_WIDTH_IMAGES } from '../../../utils/constants';
 
 @Component({
   selector: 'chat-conversation-attachment-preview',
-  templateUrl: './conversation-preview-image.component.html',
-  styleUrls: ['./conversation-preview-image.component.scss']
+  templateUrl: './conversation-preview.component.html',
+  styleUrls: ['./conversation-preview.component.scss']
 })
-export class ConversationPreviewImageComponent implements OnInit {
+export class ConversationPreviewComponent implements OnInit {
   @ViewChild('divPreview') public scrollMe: ElementRef;
 
   @Input() textInputTextArea: string;
@@ -102,7 +97,6 @@ export class ConversationPreviewImageComponent implements OnInit {
   
 
   readAsDataURL(attachment: any) {
-    const that = this;
     this.logger.log('[LOADER-PREVIEW-PAGE] readAsDataURL file', attachment);
     
     if((attachment.file.type.startsWith("image")) && (!attachment.file.type.includes("svg"))){
@@ -147,7 +141,7 @@ export class ConversationPreviewImageComponent implements OnInit {
     let file_temp = new File([data], attachment.file.name);
     this.logger.log('[LOADER-PREVIEW-PAGE] - createFile file - file', file_temp);
     const reader = new FileReader();
-    reader.onloadend = (evt) => {
+    reader.onloadend = () => {
       const imageXLoad = new Image;
       this.logger.debug('[LOADER-PREVIEW-PAGE] onload ', imageXLoad);
       imageXLoad.src = reader.result.toString();
@@ -296,7 +290,7 @@ export class ConversationPreviewImageComponent implements OnInit {
   }
 
   // =========== BEGIN: event emitter function ====== //
-  onImageRenderedFN(event){
+  onImageRenderedFN(){
     this.isFilePendingToLoad = false
   }
   // =========== END: event emitter function ====== //
