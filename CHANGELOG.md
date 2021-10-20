@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.9
+- updated: star-rating-widget component UI
+- added: conversation-preview component while loading an attachment
+
 ### 5.0.18-rc.8
 - added: ability to insert a new line after the current position in the message text area by pressing the key combinations "ALT + ENTER", "CTRL + ENTER", "CMD + ENTER", "SHIFT + ENTER"
 - updated: chat21-core lib
@@ -9,7 +13,7 @@
 - bug-fixed: on image/file received, managed conversation-list last-message field
 - bug-fixed: restored footer textarea if 'hideTextReply' changes
 - bug-fixed: restored default preChatFormJson if error occurred while rendering a field
-- bug-fixed: added load while image msg is loaded (previously the loader was shown only in the case of a file type message)
+- bug-fixed: added loader while image msg is loaded (previously the loader was shown only in the case of a file type message)
 - bug-fixed: bubble message now get same width of image/iframe - (WID-74)
 
 ### 5.0.18-rc.6

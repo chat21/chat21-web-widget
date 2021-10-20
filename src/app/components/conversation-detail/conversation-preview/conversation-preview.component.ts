@@ -49,7 +49,7 @@ export class ConversationPreviewComponent implements OnInit {
     // tslint:disable-next-line: prefer-for-of
     // this.selectedFiles = this.files;
     for (let i = 0; i < this.attachments.length; i++) {
-      console.log('[LOADER-PREVIEW-PAGE] ngOnInit', this.attachments[i])
+      this.logger.log('[LOADER-PREVIEW-PAGE] ngOnInit', this.attachments[i])
       this.readAsDataURL(this.attachments[i]); //GABBBBBBB
       //this.fileChange(this.files[i]);
     }
