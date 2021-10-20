@@ -560,7 +560,8 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
     if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   
       event.preventDefault();
-      this.textInputTextArea += '\r\n'
+      this.textInputTextArea += '\r\n';
+      this.resizeInputField();
     }
   }
   

@@ -55,7 +55,7 @@ import { ConversationHandlerService } from '../chat21-core/providers/abstract/co
 import { Triggerhandler } from '../chat21-core/utils/triggerHandler';
 import { PresenceService } from '../chat21-core/providers/abstract/presence.service';
 import { ArchivedConversationsHandlerService } from '../chat21-core/providers/abstract/archivedconversations-handler.service';
-import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, URL_SOUND_LIST_CONVERSATION } from '../chat21-core/utils/constants';
+import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, URL_SOUND_LIST_CONVERSATION } from '../chat21-core/utils/constants';
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
@@ -2132,27 +2132,27 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const keys = ['YOU', 'SENT_AN_IMAGE', 'SENT_AN_ATTACHMENT'];
         const translationMap = this.translateService.translateLanguage(keys);
         if(conversation.sender === this.g.senderId){
-            if (conversation.type === "image") {
+            if (conversation.type === TYPE_MSG_IMAGE) {
 
                 this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
                 const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
                 conversation.last_message_text = SENT_AN_IMAGE;
       
             // } else if (conversation.type !== "image" && conversation.type !== "text") {
-            } else if (conversation.type === 'file') {
+            } else if (conversation.type === TYPE_MSG_FILE) {
                 this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
                 const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
                 conversation.last_message_text =  SENT_AN_ATTACHMENT;
             }
         } else {
-            if (conversation.type === "image") {
+            if (conversation.type === TYPE_MSG_IMAGE) {
 
                 this.logger.log('[CONVS-LIST-PAGE] HAS SENT AN IMAGE');
                 const SENT_AN_IMAGE = conversation['last_message_text'] = translationMap.get('SENT_AN_IMAGE')
                 conversation.last_message_text = SENT_AN_IMAGE;
       
             // } else if (conversation.type !== "image" && conversation.type !== "text") {
-            } else if (conversation.type === 'file') {
+            } else if (conversation.type === TYPE_MSG_FILE) {
                 this.logger.log('[CONVS-LIST-PAGE] HAS SENT FILE')
                 const SENT_AN_ATTACHMENT = conversation['last_message_text'] = translationMap.get('SENT_AN_ATTACHMENT')
                 conversation.last_message_text =  SENT_AN_ATTACHMENT;
