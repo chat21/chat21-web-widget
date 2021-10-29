@@ -22,6 +22,7 @@
     bottom: 0px;
     display: block;
     position: fixed;
+    box-shadow: rgba(0, 18, 46, 0.16) 0px 8px 36px 0px; /* NEW GAB */
 }
 
 
@@ -30,6 +31,8 @@
     height: 100px;
     min-width: auto;
     min-height: auto;
+    box-shadow: none; /* NEW GAB */ 
+    
 }
 #tiledesk-container.closed #tiledeskdiv.callout {
     /* width: 400px;

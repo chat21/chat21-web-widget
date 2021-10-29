@@ -505,9 +505,10 @@ chat-root {
             border-radius: 0px;
             overflow: hidden;
             background-color: transparent;
-            border: 1px solid #cccccc;
+            // border: 1px solid #cccccc; //NEW GAB
             margin: 0px;
             padding: 0px;
+            box-shadow:rgba(0, 18, 46, 0.16) 0px 8px 36px 0px; //NEW GAB
 
             &.full-screen-mode {
                 width: 100%;
