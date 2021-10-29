@@ -66,5 +66,7 @@
     "ARRAY_DAYS": ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
 
     "SENT_AN_ATTACHMENT": "envoyé une pièce jointe",
-    "SENT_AN_IMAGE":"envoyé une image"
+    "SENT_AN_IMAGE":"envoyé une image",
+
+    "LABEL_PREVIEW": "Aperçu"
 }

@@ -66,5 +66,7 @@
     "ARRAY_DAYS": ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
 
     "SENT_AN_ATTACHMENT": "envió un archivo adjunto",
-    "SENT_AN_IMAGE":"envió una imagen"
+    "SENT_AN_IMAGE":"envió una imagen",
+
+    "LABEL_PREVIEW": "Avance"
 }

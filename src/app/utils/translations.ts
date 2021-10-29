@@ -12,6 +12,7 @@ export const en = {
     'LABEL_ERROR_FIELD_NAME': 'Required field (minimum 5 characters).',
     'LABEL_FIELD_EMAIL': 'Email',
     'LABEL_ERROR_FIELD_EMAIL': 'Enter a valid email address.',
+    'LABEL_ERROR_FIELD_REQUIRED':'Required field',
     'LABEL_WRITING': 'is writing...',
     'LABEL_SEND_NEW_MESSAGE': 'Send a new message',
     'AGENT_NOT_AVAILABLE': ' Offline',
@@ -54,7 +55,9 @@ export const en = {
     'SEE_PREVIOUS': 'see previous',
     'WAITING_TIME_FOUND': 'The team typically replies in ',
     'WAITING_TIME_NOT_FOUND': 'The team will reply as soon as possible',
-    'CLOSED': 'CLOSED'
+    'CLOSED': 'CLOSED',
+    'LABEL_PREVIEW':'Preview'
+
 };
 
 // 'LABEL_START_NW_CONV': 'INIZIA UNA NUOVA CONVERSAZIONE',
@@ -71,6 +74,7 @@ export const it = {
     'LABEL_ERROR_FIELD_NAME': 'Nome richiesto (minimo 2 caratteri).',
     'LABEL_FIELD_EMAIL': 'Email',
     'LABEL_ERROR_FIELD_EMAIL': 'Inserisci un indirizzo email valido.',
+    'LABEL_ERROR_FIELD_REQUIRED':'Campo obbligatorio',
     'LABEL_WRITING': 'sta scrivendo...',
     'LABEL_SEND_NEW_MESSAGE': 'Invia un nuovo messaggio',
     'AGENT_NOT_AVAILABLE': ' Offline',
@@ -113,5 +117,6 @@ export const it = {
     'SEE_PREVIOUS': 'vedi precedenti',
     'WAITING_TIME_FOUND': 'Il team tipicamente risponde in ',
     'WAITING_TIME_NOT_FOUND': 'Vi risponderemo appena possibile',
-    'CLOSED': 'CHIUSA'
+    'CLOSED': 'CHIUSA',
+    'LABEL_PREVIEW':'Anteprima'
 };

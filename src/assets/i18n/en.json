@@ -66,6 +66,8 @@
     "ARRAY_DAYS": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 
     "SENT_AN_ATTACHMENT": "sent an attachment",
-    "SENT_AN_IMAGE":"sent an image"
+    "SENT_AN_IMAGE":"sent an image",
+
+    "LABEL_PREVIEW": "Preview"
 
 }

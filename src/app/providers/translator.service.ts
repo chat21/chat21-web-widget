@@ -58,7 +58,7 @@ export class TranslatorService {
     // return this._translate.getBrowserLang();
   }
 
-  // ********* UNUSED ***************** //
+  /** @unused method not used */
   initializeTransaltorService() {
 
     this._translate.setDefaultLang('it');
@@ -67,8 +67,14 @@ export class TranslatorService {
     if (browserLang) {
           if (browserLang === 'it') {
               this._translate.use('it');
-              // this.http.get(this.baseLocation + `/assets/i18n/${browserLang}.json`).subscribe(data=> console.log('ress lang', data))
-              // this._translate.setTranslation('en', './assets/i18n/en.json')
+              this.http.get(this.baseLocation + `/assets/i18n/${browserLang}.json`).subscribe(data=> {
+                console.log('ress lang', JSON.parse(data['_body']))
+                this._translate.setTranslation('it', JSON.parse(data['_body']));
+                this._translate.get('LABEL_PREVIEW').subscribe(res => {
+                  console.log('default translate --> ', res)
+                });
+              })
+              // this._translate.setTranslation('it', './assets/i18n/en.json')
           } else {
               this._translate.use('en');
               // this.http.get(this.baseLocation + `/assets/i18n/${browserLang}.json`).subscribe(data=> console.log('ress lang', data))
@@ -202,6 +208,7 @@ export class TranslatorService {
       'LABEL_ERROR_FIELD_NAME',
       'LABEL_FIELD_EMAIL',
       'LABEL_ERROR_FIELD_EMAIL',
+      'LABEL_ERROR_FIELD_REQUIRED',
       'LABEL_WRITING',
       'LABEL_SEND_NEW_MESSAGE',
       'AGENT_NOT_AVAILABLE',
@@ -239,7 +246,8 @@ export class TranslatorService {
       'SEE_PREVIOUS',
       'WAITING_TIME_FOUND',
       'WAITING_TIME_NOT_FOUND',
-      'CLOSED'
+      'CLOSED',
+      'LABEL_PREVIEW'
     ];
 
 
@@ -294,6 +302,8 @@ export class TranslatorService {
       globals.WAITING_TIME_FOUND = res['WAITING_TIME_FOUND'];
       globals.WAITING_TIME_NOT_FOUND = res['WAITING_TIME_NOT_FOUND'];
       globals.CLOSED = res['CLOSED'];
+      globals.LABEL_PREVIEW = res['LABEL_PREVIEW']
+      globals.LABEL_ERROR_FIELD_REQUIRED= res['LABEL_ERROR_FIELD_REQUIRED']
 
       if (!globals.welcomeTitle) {
         globals.welcomeTitle = globals.WELLCOME_TITLE;   /** Set the widget welcome message. Value type : string */
