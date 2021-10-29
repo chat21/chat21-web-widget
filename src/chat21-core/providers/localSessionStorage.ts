@@ -40,7 +40,7 @@ export class LocalSessionStorage extends AppStorageService{
    *  @param value
    */
   setItem(key: string, value: any): void {
-      this.removeItem(key);
+      // this.removeItem(key);
       let prefix;
       try {
           // const sv = 'sv' + environment.shemaVersion + '_';
@@ -54,6 +54,7 @@ export class LocalSessionStorage extends AppStorageService{
   }
 
   /** GET item in local/session storage from key value without project id SUFFIX
+   *  @deprecated method not used
    *  @param key
    */
   getItemWithoutProjectID(key: string) {
@@ -70,6 +71,7 @@ export class LocalSessionStorage extends AppStorageService{
   }
 
   /** SET new item in local/session storage without project id SUFFIX
+   *  @deprecated method not used
    *  @param key
    *  @param value
    */
