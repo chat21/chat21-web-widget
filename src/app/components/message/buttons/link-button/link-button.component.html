@@ -1,4 +1,5 @@
-<div class="button-in-msg url" (click)="actionButtonUrl()" title="{{button?.value}}"> 
+<div class="button-in-msg url" (click)="actionButtonUrl()" title="{{button?.value}}"
+(mouseover)="onMouseOver($event)" (mouseout)="onMouseOut($event)"> 
   <span *ngIf="button?.target !== 'self'" class="icon-button-action">
     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="12px" height="12px">
       <path d="M0 0h24v24H0z" fill="none"/>

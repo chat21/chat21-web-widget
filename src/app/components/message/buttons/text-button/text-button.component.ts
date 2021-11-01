@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 
 
 @Component({
@@ -12,13 +12,24 @@ export class TextButtonComponent implements OnInit {
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
+
   public type: string = "text"
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
     //decomment if element should have same color of themeColor and fregroundColor
-    // this.elementRef.nativeElement.style.setProperty('--themeColor', this.themeColor);
-    // this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
+    this.elementRef.nativeElement.querySelector('.text').style.setProperty('--themeColor', this.themeColor);
+    this.elementRef.nativeElement.querySelector('.text').style.setProperty('--foregroundColor', this.foregroundColor);
+  }
+
+  onMouseOver(event){
+    this.elementRef.nativeElement.querySelector('.text').style.color = this.foregroundColor
+    this.elementRef.nativeElement.querySelector('.text').style.background = this.themeColor
+  }
+
+  onMouseOut(event){
+    this.elementRef.nativeElement.querySelector('.text').style.color = '';
+    this.elementRef.nativeElement.querySelector('.text').style.background = ''
   }
 
   actionButtonText(){

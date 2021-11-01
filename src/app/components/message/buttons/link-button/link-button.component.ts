@@ -16,8 +16,18 @@ export class LinkButtonComponent implements OnInit {
 
   ngOnInit() {
     //decomment if element should have same color of themeColor and fregroundColor
-    // this.elementRef.nativeElement.style.setProperty('--themeColor', this.themeColor);
-    // this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
+    this.elementRef.nativeElement.querySelector('.url').style.setProperty('--themeColor', this.themeColor);
+    this.elementRef.nativeElement.querySelector('.url').style.setProperty('--foregroundColor', this.foregroundColor);
+  }
+
+  onMouseOver(event){
+    this.elementRef.nativeElement.querySelector('.url').style.color = this.foregroundColor
+    this.elementRef.nativeElement.querySelector('.url').style.background = this.themeColor
+  }
+
+  onMouseOut(event){
+    this.elementRef.nativeElement.querySelector('.url').style.color = '';
+    this.elementRef.nativeElement.querySelector('.url').style.background = ''
   }
 
   actionButtonUrl(){

@@ -1,17 +1,19 @@
 @import '../../../../../sass/variables';
-:root {
-    --themeColor: $bck-msg-sent;
-    --foregroundColor: $bck-msg-sent;
+
+:host {
+    --themeColor: #{$blue};
+    --foregroundColor: #{$bck-msg-sent};
 }
 
 
 .button-in-msg {
+
     padding: 8px 16px!important;
     position: relative;
     max-width: 300px;
     min-width: inherit;
     cursor: pointer;
-    border: 1px solid $blue;
+    border: 1px solid var(--themeColor); //$blue
     border-radius: 20px;
     margin: 3px;
     background: transparent;
@@ -23,7 +25,7 @@
     white-space: nowrap;
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
-    color: $blue;
+    color: var(--themeColor); //$blue
     line-height: 16px;
 }
 
@@ -33,7 +35,7 @@
     &:focus,
     &:hover {
         color: white;
-        background: $blue;
+        background: var(--themeColor);
         .icon-button-action {
             svg {
                 fill: $black;

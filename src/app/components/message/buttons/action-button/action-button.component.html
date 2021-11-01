@@ -1,3 +1,5 @@
-<div #actionButton id="actionButton" class="button-in-msg action" (click)="actionButtonAction()" title="{{button?.value}}">
+<div #actionButton id="actionButton" class="button-in-msg action" 
+    (click)="actionButtonAction()" title="{{button?.value}}"
+    (mouseover)="onMouseOver($event)" (mouseout)="onMouseOut($event)">
   {{button?.value}}
 </div>

@@ -1,8 +1,8 @@
 @import '../../../../../sass/variables';
 
 :root {
-    --themeColor: $bck-msg-sent;
-    --foregroundColor: $col-msg-sent;
+    --themeColor: #{$blue};
+    --foregroundColor: #{$col-msg-sent};
 }
 
 .button-in-msg {
@@ -11,7 +11,7 @@
     max-width: 300px;
     min-width: inherit;
     cursor: pointer;
-    border: 1px solid $blue;
+    border: 1px solid var(--themeColor);
     border-radius: 20px;
     margin: 3px;
     background: transparent;
@@ -33,7 +33,7 @@
     &:focus,
     &:hover {
         color: white;
-        background:  $blue;
+        background:  var(--themeColor);
         .icon-button-action {
             svg {
                 fill: white;
