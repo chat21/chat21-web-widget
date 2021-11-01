@@ -58,7 +58,7 @@ export class Globals {
   isLogout = false; /** indica se ho appena fotto il logout */
 
   attributes: any;
-  preChatFormJson: any;
+  preChatFormJson: any; // *******  new ********
   token: string;
   tiledeskToken: string;
   firebaseToken: string;
@@ -136,6 +136,7 @@ export class Globals {
   WAITING_TIME_FOUND: string;
   WAITING_TIME_NOT_FOUND: string;
   CLOSED: string;
+  LABEL_PREVIEW: string;
 
   // ============ BEGIN: EXTERNAL PARAMETERS ==============//
    globalsParameters: any;
@@ -145,7 +146,7 @@ export class Globals {
    isOpen: boolean;
    startFromHome: boolean;
    projectid: string;
-   preChatForm: boolean;
+   preChatForm: boolean; 
    align: string;
    calloutTimer: number;
    calloutTitle: string;
@@ -202,6 +203,13 @@ export class Globals {
    isOpenNewMessage: boolean;
    dynamicWaitTimeReply: boolean; // *******  new ********
    logLevel: string; // *******  new ********
+
+   bubbleMsgSentBackground: string; // *******  new ********
+   bubbleMsgSentTextColor: string; // *******  new ********
+   bubbleMsgReceivedBackground: string; // *******  new ********
+   bubbleMsgReceivedTextColor: string; // *******  new ********
+   fontSize: string; // *******  new ********
+   fontFamily: string; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -330,6 +338,18 @@ export class Globals {
     /** set the auth persistence */
     this.preChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ en:"Invalid email address", it:"Indirizzo email non valido"}}]
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
+    this.bubbleMsgSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
+    /** set the background of bubble sent message */
+    this.bubbleMsgSentTextColor = convertColorToRGBA('#ffffff', 100); //'#ffffff'
+    /** set the text color of bubble sent message */
+    this.bubbleMsgReceivedBackground= '#f7f7f7'
+    /** set the background of bubble received message */
+    this.bubbleMsgReceivedTextColor = '#1a1a1a'
+    /** set the text color of bubble received message */
+    this.fontSize = '1.4em'
+    /** set the text size of bubble messages */
+    this.fontFamily = "'Roboto','Google Sans', Helvetica, Arial, sans-serif'"
+    /** set the text family of bubble messages */
 
     this.showWaitTime = true;
 
@@ -474,7 +494,8 @@ export class Globals {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
-}
+    this.bubbleMsgSentBackground = 'linear-gradient( 135grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
+  }
 
   /**
    *
