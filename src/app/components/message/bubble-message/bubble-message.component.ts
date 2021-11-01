@@ -15,7 +15,9 @@ import { Globals } from '../../../utils/globals';
 export class BubbleMessageComponent implements OnInit {
 
   @Input() message: MessageModel;
-  @Input() textColor: string;
+  @Input() fontColor: string;
+  @Input() fontSize: string;
+  @Input() fontFamily: string;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onImageRendered = new EventEmitter<boolean>()

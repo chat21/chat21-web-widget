@@ -1,3 +1,4 @@
 <p  #messageEl class="message_innerhtml marked" 
     [innerHTML]="printMessage(text, messageEl, this) | htmlEntitiesEncode  | marked"
-    [ngStyle]="{'color': '$'+ color }"></p>
+    [style.color]="color"
+    [style.font-size]="fontSize"></p>

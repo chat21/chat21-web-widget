@@ -65,9 +65,12 @@
                             <!--backgroundColor non viene ancora usato -->
                             <!-- class="messages msg_sent slide-in-right" -->
                             <chat-bubble-message class="messages msg_sent"
+                              [ngStyle]="{'background': stylesMap.get('bubbleMsgSentBackground'), 'color': stylesMap.get('bubbleMsgSentTextColor')}"
                               [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
                               [message]="message"
-                              [textColor]="'col-msg-sent'"
+                              [fontColor]="stylesMap.get('bubbleMsgSentTextColor')"
+                              [fontSize]="stylesMap.get('fontSize')"
+                              [fontFamily]="stylesMap.get('fontFamily')"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                               (onAfterMessageRender)="returnOnAfterMessageRender($event)"
                               (onImageRendered)="onImageRenderedFN($event)">
@@ -94,8 +97,11 @@
 
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive slide-in-left"
+                              [ngStyle]="{'background': stylesMap.get('bubbleMsgReceivedBackground'), 'color': stylesMap.get('bubbleMsgReceivedTextColor')}"
                               [message]="message"
-                              [textColor]="'black'"
+                              [fontColor]="stylesMap.get('bubbleMsgReceivedTextColor')"
+                              [fontSize]="stylesMap.get('fontSize')"
+                              [fontFamily]="stylesMap.get('fontFamily')"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                               (onAfterMessageRender)="returnOnAfterMessageRender($event)"
                               (onImageRendered)="onImageRenderedFN($event)">

@@ -2295,7 +2295,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('foregroundColor', this.g.themeForegroundColor)
         this.styleMapConversation.set('themeColor', this.g.themeColor)
         this.styleMapConversation.set('colorGradient', this.g.colorGradient180)
-
+        this.styleMapConversation.set('bubbleMsgSentBackground', this.g.bubbleMsgSentBackground)
+        this.styleMapConversation.set('bubbleMsgSentTextColor', this.g.bubbleMsgSentTextColor)
+        this.styleMapConversation.set('bubbleMsgReceivedBackground', this.g.bubbleMsgReceivedBackground)
+        this.styleMapConversation.set('bubbleMsgReceivedTextColor', this.g.bubbleMsgReceivedTextColor)
+        this.styleMapConversation.set('fontSize', this.g.fontSize)
+        this.styleMapConversation.set('fontFamily', this.g.fontFamily)
     }
 
 

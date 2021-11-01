@@ -43,7 +43,9 @@
 
           <chat-text
             [text]="message?.text"
-            [color]="textColor"
+            [color]="fontColor"
+            [fontSize]="fontSize"
+            [fontFamily]="fontFamily"
             (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
             (onAfterMessageRender)="returnOnAfterMessageRender($event)">
           </chat-text>

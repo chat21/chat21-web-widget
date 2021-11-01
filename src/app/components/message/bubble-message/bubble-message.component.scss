@@ -2,7 +2,7 @@
 /* ====== SET MESSAGES ====== */
 
 .messages {
-    border-radius: 8px;
+    border-radius: $border-radius-bubble-message;
     padding: 0;
     word-wrap: break-word;
     // padding: 14px;
@@ -11,17 +11,18 @@
     // -webkit-animation: heartbeat 1.5s ease-in-out both;
     // animation: heartbeat 1.5s ease-in-out both;
 
-    p {
-        font-size: 1.4em;
-        margin: 0;
-        padding: 14px;
-        font-style: normal;
-        letter-spacing: normal;
-        font-stretch: normal;
-        font-variant: normal;
-        font-weight: 300;
-        overflow: hidden;
-    }
+    // p {
+    //     font-size: 1.4em;
+    //     margin: 0;
+    //     padding: 14px;
+    //     font-style: normal;
+    //     letter-spacing: normal;
+    //     font-stretch: normal;
+    //     font-variant: normal;
+    //     font-weight: 300;
+    //     overflow: hidden;
+    // }
+    
     img {
         border-radius: 8px;
         padding: 3px;
