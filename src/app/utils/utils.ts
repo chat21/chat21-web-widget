@@ -247,7 +247,7 @@ export function detectIfIsMobile(windowContext) {
 
 export function convertColorToRGBA(color, opacity) {
   let result = color;
-  // console.log('convertColorToRGBA' + color, opacity);
+  // console.log('convertColorToRGBA' , color, opacity);
   if ( color && color.indexOf('#') > -1 ) {
     color = color.replace('#', '');
     const r = parseInt(color.substring(0, 2), 16);
@@ -286,7 +286,8 @@ export function convertColorToRGBA(color, opacity) {
 export function getParameterByName(windowContext: any, name: String) {
   const url = windowContext.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url);
+  // const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'), results = regex.exec(url); //BUG-FIXED: when HEX color was passed throw url
+  const regex = new RegExp('[?&]' + name + '(=([^&]*)|&|$)'), results = regex.exec(url);
   // console.log('results----> ', results);
   if (!results) { return null; }
   if (!results[2]) {
