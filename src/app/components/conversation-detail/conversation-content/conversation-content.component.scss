@@ -104,7 +104,7 @@
                 }
                 /* ====== SET MESSAGES ====== */
                 .messages {
-                    border-radius: 8px;
+                    border-radius: $border-radius-bubble-message;
                     padding: 0;
                     word-wrap: break-word;
                     // padding: 14px;
