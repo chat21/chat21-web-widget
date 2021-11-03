@@ -2295,12 +2295,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('foregroundColor', this.g.themeForegroundColor)
         this.styleMapConversation.set('themeColor', this.g.themeColor)
         this.styleMapConversation.set('colorGradient', this.g.colorGradient180)
-        this.styleMapConversation.set('bubbleMsgSentBackground', this.g.bubbleMsgSentBackground)
-        this.styleMapConversation.set('bubbleMsgSentTextColor', this.g.bubbleMsgSentTextColor)
-        this.styleMapConversation.set('bubbleMsgReceivedBackground', this.g.bubbleMsgReceivedBackground)
-        this.styleMapConversation.set('bubbleMsgReceivedTextColor', this.g.bubbleMsgReceivedTextColor)
+        this.styleMapConversation.set('bubbleSentBackground', this.g.bubbleSentBackground)
+        this.styleMapConversation.set('bubbleSentTextColor', this.g.bubbleSentTextColor)
+        this.styleMapConversation.set('bubbleReceivedBackground', this.g.bubbleReceivedBackground)
+        this.styleMapConversation.set('bubbleReceivedTextColor', this.g.bubbleReceivedTextColor)
         this.styleMapConversation.set('fontSize', this.g.fontSize)
         this.styleMapConversation.set('fontFamily', this.g.fontFamily)
+        this.styleMapConversation.set('buttonFontSize', this.g.buttonFontSize)
+    
+        this.el.nativeElement.style.setProperty('--button-in-msg-background-color', this.g.colorGradient)
+        this.el.nativeElement.style.setProperty('--button-in-msg-font-size', this.g.buttonFontSize)
     }
 
 

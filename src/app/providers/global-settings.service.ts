@@ -14,7 +14,7 @@ import { ProjectModel } from '../../models/project';
 import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
-import { isJsonString } from '../../chat21-core/utils/utils';
+import { invertColor, isJsonString } from '../../chat21-core/utils/utils';
 
 
 @Injectable()
@@ -464,11 +464,12 @@ export class GlobalSettingsService {
                     if (variables.hasOwnProperty('themeColor')) {
                         globals['themeColor'] = variables['themeColor'];
                         globals['bubbleMsgSentBackground']=variables['themeColor'];
+                        globals['bubbleMsgSentTextColor']= invertColor(variables['themeColor'], true)
                     }
                     if (variables.hasOwnProperty('themeForegroundColor')) {
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
                         globals['themeForegroundColor'] = variables['themeForegroundColor'];
-                        globals['bubbleMsgSentTextColor'] = variables['themeForegroundColor'];
+                        // globals['bubbleMsgSentTextColor'] = variables['themeForegroundColor'];
                     }
                     
                 }
@@ -673,14 +674,15 @@ export class GlobalSettingsService {
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > themeColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeColor = convertColorToRGBA(TEMP, 100);
-            globals.bubbleMsgSentBackground = convertColorToRGBA(TEMP, 100);
+            globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
+            globals.bubbleSentTextColor = invertColor(TEMP, true)
             // globals.setParameter('themeColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['themeForegroundColor'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > themeForegroundColor:: ', TEMP);
         if (TEMP !== undefined) {
             globals.themeForegroundColor = convertColorToRGBA(TEMP, 100);
-            globals.bubbleMsgSentTextColor = convertColorToRGBA(TEMP, 100);
+            // globals.bubbleMsgSentTextColor = convertColorToRGBA(TEMP, 100);
             // globals.setParameter('themeForegroundColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['allowTranscriptDownload'];
@@ -805,35 +807,42 @@ export class GlobalSettingsService {
                 globals.preChatFormJson = TEMP;
             }
         }
-        TEMP = tiledeskSettings['bubbleMsgSentBackground'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        TEMP = tiledeskSettings['bubbleSentBackground'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentBackground:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.bubbleMsgSentBackground = convertColorToRGBA(TEMP, 100);;
+            globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
+            globals.bubbleSentTextColor = invertColor(TEMP, true)
         }
-        TEMP = tiledeskSettings['bubbleMsgSentTextColor'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        TEMP = tiledeskSettings['bubbleSentTextColor'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentTextColor:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.bubbleMsgSentTextColor = convertColorToRGBA(TEMP, 100);;
+            globals.bubbleSentTextColor = convertColorToRGBA(TEMP, 100);
         }
-        TEMP = tiledeskSettings['bubbleMsgReceivedBackground'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        TEMP = tiledeskSettings['bubbleReceivedBackground'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleReceivedBackground:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.bubbleMsgReceivedBackground = convertColorToRGBA(TEMP, 100);;
+            globals.bubbleReceivedBackground = convertColorToRGBA(TEMP, 100);
+            globals.bubbleReceivedTextColor = invertColor(TEMP, true)
         }
-        TEMP = tiledeskSettings['bubbleMsgReceivedTextColor'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        TEMP = tiledeskSettings['bubbleReceivedTextColor'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleReceivedTextColor:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.bubbleMsgReceivedTextColor = convertColorToRGBA(TEMP, 100);;
+            globals.bubbleReceivedTextColor = convertColorToRGBA(TEMP, 100);
         }
         TEMP = tiledeskSettings['fontSize'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > fontSize:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.fontSize = TEMP;
         }
         TEMP = tiledeskSettings['fontFamily'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > fontFamily:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.fontFamily = TEMP;
+        }
+        TEMP = tiledeskSettings['buttonFontSize'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > buttonFontSize:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.buttonFontSize = TEMP;
         }
         
 
@@ -1019,6 +1028,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.fontFamily = TEMP;
         }
+        TEMP = el.nativeElement.getAttribute('buttonFontSize');
+        if (TEMP !== null) {
+            this.globals.buttonFontSize = TEMP;
+        }
         
     }
 
@@ -1150,14 +1163,14 @@ export class GlobalSettingsService {
         if (TEMP) {
             const themecolor = stringToBoolean(TEMP);
             globals.themeColor = convertColorToRGBA(themecolor, 100);
-            globals.bubbleMsgSentBackground = convertColorToRGBA(themecolor, 100);
+            globals.bubbleSentBackground = convertColorToRGBA(themecolor, 100);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_themeForegroundColor');
         if (TEMP) {
             const themeforegroundcolor = stringToBoolean(TEMP);
             globals.themeForegroundColor = convertColorToRGBA(themeforegroundcolor, 100);
-            globals.bubbleMsgSentTextColor = convertColorToRGBA(themeforegroundcolor, 100);
+            globals.bubbleSentTextColor = convertColorToRGBA(themeforegroundcolor, 100);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_logoChat');
@@ -1300,28 +1313,30 @@ export class GlobalSettingsService {
             globals.preChatFormJson = JSON.parse(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleMsgSentBackground');
+        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleSentBackground');
         if (TEMP) {
-            const bubbleMsgSentBackground = stringToBoolean(TEMP);
-            globals.bubbleMsgSentBackground = convertColorToRGBA(bubbleMsgSentBackground, 100);
+            const bubbleSentBackground = stringToBoolean(TEMP);
+            globals.bubbleSentBackground = convertColorToRGBA(bubbleSentBackground, 100);
+            globals.bubbleSentTextColor = invertColor(TEMP, true)
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleMsgSentTextColor');
+        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleSentTextColor');
         if (TEMP) {
-            const bubbleMsgSentTextColor = stringToBoolean(TEMP);
-            globals.bubbleMsgSentTextColor = convertColorToRGBA(bubbleMsgSentTextColor, 100);
+            const bubbleSentTextColor = stringToBoolean(TEMP);
+            globals.bubbleSentTextColor = convertColorToRGBA(bubbleSentTextColor, 100);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleMsgReceivedBackground');
+        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleReceivedBackground');
         if (TEMP) {
-            const bubbleMsgReceivedBackground = stringToBoolean(TEMP);
-            globals.bubbleMsgReceivedBackground = convertColorToRGBA(bubbleMsgReceivedBackground, 100);
+            const bubbleReceivedBackground = stringToBoolean(TEMP);
+            globals.bubbleReceivedBackground = convertColorToRGBA(bubbleReceivedBackground, 100);
+            globals.bubbleReceivedTextColor = invertColor(TEMP, true)
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleMsgReceivedTextColor');
+        TEMP = getParameterByName(windowContext, 'tiledesk_bubbleReceivedTextColor');
         if (TEMP) {
-            const bubbleMsgReceivedTextColor = stringToBoolean(TEMP);
-            globals.bubbleMsgReceivedTextColor = convertColorToRGBA(bubbleMsgReceivedTextColor, 100);
+            const bubbleReceivedTextColor = stringToBoolean(TEMP);
+            globals.bubbleReceivedTextColor = convertColorToRGBA(bubbleReceivedTextColor, 100);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_fontSize');
@@ -1332,6 +1347,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_fontFamily');
         if (TEMP) {
             globals.fontFamily = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_buttonFontSize');
+        if (TEMP) {
+            globals.buttonFontSize = TEMP;
         }
         
     }

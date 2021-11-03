@@ -65,10 +65,10 @@
                             <!--backgroundColor non viene ancora usato -->
                             <!-- class="messages msg_sent slide-in-right" -->
                             <chat-bubble-message class="messages msg_sent"
-                              [ngStyle]="{'background': stylesMap.get('bubbleMsgSentBackground'), 'color': stylesMap.get('bubbleMsgSentTextColor')}"
+                              [ngStyle]="{'background': stylesMap.get('bubbleSentBackground'), 'color': stylesMap.get('bubbleSentTextColor')}"
                               [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
                               [message]="message"
-                              [fontColor]="stylesMap.get('bubbleMsgSentTextColor')"
+                              [fontColor]="stylesMap.get('bubbleSentTextColor')"
                               [fontSize]="stylesMap.get('fontSize')"
                               [fontFamily]="stylesMap.get('fontFamily')"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
@@ -97,9 +97,9 @@
 
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive slide-in-left"
-                              [ngStyle]="{'background': stylesMap.get('bubbleMsgReceivedBackground'), 'color': stylesMap.get('bubbleMsgReceivedTextColor')}"
+                              [ngStyle]="{'background': stylesMap.get('bubbleReceivedBackground'), 'color': stylesMap.get('bubbleReceivedTextColor')}"
                               [message]="message"
-                              [fontColor]="stylesMap.get('bubbleMsgReceivedTextColor')"
+                              [fontColor]="stylesMap.get('bubbleReceivedTextColor')"
                               [fontSize]="stylesMap.get('fontSize')"
                               [fontFamily]="stylesMap.get('fontFamily')"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"

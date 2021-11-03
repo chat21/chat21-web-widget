@@ -40,6 +40,10 @@ input, select:focus, textarea {
 //     background: #777; 
 // }
 
+:root {
+    --button-in-msg-background-color:  #{$blue};
+    --button-in-msg-font-size: 15px;
+}
 
 .chat-tooltip {
     font-family: 'Roboto','Google Sans', Helvetica, Arial, sans-serif;
@@ -176,7 +180,7 @@ textarea::placeholder {
   .msg_container{
     .button-in-msg {
         color: white!important;
-        background:  rgb(42, 106, 193)!important;
+        background:  var(--button-in-msg-background-color) !important;
 
         position: relative;
         max-width: 300px;
@@ -198,7 +202,7 @@ textarea::placeholder {
             // padding: 0px 14px!important;
         }
         p{
-            font-size: 15px!important;
+            font-size: var(--button-in-msg-font-size)!important;
             font-family: 'Muli', sans-serif!important;
             font-weight: normal!important;
         }
@@ -740,7 +744,8 @@ chat-root {
 
     @media (width: 376px){
         #chat21-conversations {
-            border-radius: 10px!important;
+            // border-radius: 10px!important;
+            border-radius: 16px!important;
         }
     }
 

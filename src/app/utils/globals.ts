@@ -14,6 +14,7 @@ import { CHANNEL_TYPE_GROUP } from '../utils/constants';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ConversationModel } from '../../models/conversation';
 import { ConversationComponent } from '../components/conversation-detail/conversation/conversation.component';
+import { invertColor } from '../../chat21-core/utils/utils';
 // import { variable } from '@angular/compiler/src/output/output_ast';
 // import { storage } from 'firebase';
 
@@ -204,12 +205,13 @@ export class Globals {
    dynamicWaitTimeReply: boolean; // *******  new ********
    logLevel: string; // *******  new ********
 
-   bubbleMsgSentBackground: string; // *******  new ********
-   bubbleMsgSentTextColor: string; // *******  new ********
-   bubbleMsgReceivedBackground: string; // *******  new ********
-   bubbleMsgReceivedTextColor: string; // *******  new ********
+   bubbleSentBackground: string; // *******  new ********
+   bubbleSentTextColor: string; // *******  new ********
+   bubbleReceivedBackground: string; // *******  new ********
+   bubbleReceivedTextColor: string; // *******  new ********
    fontSize: string; // *******  new ********
    fontFamily: string; // *******  new ********
+   buttonFontSize: string; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -338,18 +340,20 @@ export class Globals {
     /** set the auth persistence */
     this.preChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ en:"Invalid email address", it:"Indirizzo email non valido"}}]
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
-    this.bubbleMsgSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
+    this.bubbleSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
     /** set the background of bubble sent message */
-    this.bubbleMsgSentTextColor = convertColorToRGBA('#ffffff', 100); //'#ffffff'
+    this.bubbleSentTextColor = invertColor('#2a6ac1', true); //'#ffffff'
     /** set the text color of bubble sent message */
-    this.bubbleMsgReceivedBackground= convertColorToRGBA('#f7f7f7', 100);
+    this.bubbleReceivedBackground= convertColorToRGBA('#f7f7f7', 100);
     /** set the background of bubble received message */
-    this.bubbleMsgReceivedTextColor = convertColorToRGBA('#1a1a1a', 100);
+    this.bubbleReceivedTextColor = invertColor('#f7f7f7', true); //#1a1a1a
     /** set the text color of bubble received message */
     this.fontSize = '1.4em'
     /** set the text size of bubble messages */
     this.fontFamily = "'Roboto','Google Sans', Helvetica, Arial, sans-serif'"
     /** set the text family of bubble messages */
+    this.buttonFontSize = '15px'
+    /** set the text size of attachment-buttons */
 
     this.showWaitTime = true;
 
@@ -494,7 +498,7 @@ export class Globals {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
-    this.bubbleMsgSentBackground = 'linear-gradient( 135grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
+    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
   }
 
   /**
