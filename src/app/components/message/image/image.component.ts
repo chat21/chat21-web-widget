@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { popupUrl } from '../../../../chat21-core/utils/utils';
 
 @Component({
   selector: 'chat-image',
@@ -14,7 +15,6 @@ export class ImageComponent implements OnInit {
 
   loading: boolean = true
   tooltipMessage: string;
-
   tooltipOptions = {
     'show-delay': 0,
     'tooltip-class': 'chat-tooltip',
@@ -24,6 +24,9 @@ export class ImageComponent implements OnInit {
     'hideDelayAfterClick': 3000,
     'hide-delay': 200
   };
+
+  popupUrl = popupUrl;
+  
   constructor() { }
 
   ngOnInit() {

@@ -311,7 +311,7 @@ export function isPopupUrl(url) {
 }
 
 export function popupUrl(windowContext, html, title) {
-  const url = this.stripTags(html);
+  const url = stripTags(html);
   const w = 600;
   const h = 600; // screen.height - 40;
   const left = (screen.width / 2) - (w / 2);
