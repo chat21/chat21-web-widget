@@ -1,4 +1,4 @@
-import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
+
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
@@ -64,6 +64,7 @@ import { MenuOptionsComponent } from './components/menu-options/menu-options.com
 import { StarRatingWidgetComponent } from './components/star-rating-widget/star-rating-widget.component';
 import { StarRatingWidgetService } from './components/star-rating-widget/star-rating-widget.service';
 import { LastMessageComponent } from './components/last-message/last-message.component';
+import { SendButtonComponent } from './components/send-button/send-button.component';
 
 
 // ___________ CONVERSATIONS LIST ______________//
@@ -142,6 +143,9 @@ import { MQTTPresenceService } from '../chat21-core/providers/mqtt/mqtt-presence
 //NATIVE
 import { NativeUploadService } from '../chat21-core/providers/native/native-upload-service';
 import { NativeImageRepoService } from '../chat21-core/providers/native/native-image-repo';
+
+//TILEDESK
+import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
 
 //LOGGER SERVICES
 import { CustomLogger } from '../chat21-core/providers/logger/customLogger';
@@ -335,7 +339,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     FormLabelComponent,
     FormCheckboxComponent,
     FormTextareaComponent,
-    ConversationPreviewComponent,  
+    ConversationPreviewComponent,
+    SendButtonComponent
   ],
   imports: [
     BrowserModule,
