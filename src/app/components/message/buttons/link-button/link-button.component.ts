@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'chat-link-button-attachment',
@@ -8,6 +8,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@ang
 export class LinkButtonComponent implements OnInit {
 
   @Input() button: any;
+  @Input() fontSize: string;
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
@@ -15,14 +16,18 @@ export class LinkButtonComponent implements OnInit {
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges){
     //decomment if element should have same color of themeColor and fregroundColor
-    this.elementRef.nativeElement.querySelector('.url').style.setProperty('--themeColor', this.themeColor);
-    this.elementRef.nativeElement.querySelector('.url').style.setProperty('--foregroundColor', this.foregroundColor);
+    if(this.fontSize) this.elementRef.nativeElement.querySelector('.url').style.setProperty('--fontSize', this.fontSize);
+    if(this.themeColor) this.elementRef.nativeElement.querySelector('.url').style.setProperty('--themeColor', this.themeColor);
+    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.url').style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
   onMouseOver(event){
-    this.elementRef.nativeElement.querySelector('.url').style.color = this.foregroundColor
-    this.elementRef.nativeElement.querySelector('.url').style.background = this.themeColor
+    if(this.themeColor) this.elementRef.nativeElement.querySelector('.url').style.background = this.themeColor
+    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.url').style.color = this.foregroundColor
   }
 
   onMouseOut(event){

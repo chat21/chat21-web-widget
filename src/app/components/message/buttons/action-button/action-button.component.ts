@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'chat-action-button-attachment',
@@ -8,6 +8,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@ang
 export class ActionButtonComponent implements OnInit {
 
   @Input() button: any;
+  @Input() fontSize: string;
   @Input() themeColor: string;
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
@@ -15,14 +16,18 @@ export class ActionButtonComponent implements OnInit {
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges){
     //decomment if element should have same color of themeColor and fregroundColor
-    this.elementRef.nativeElement.querySelector('.action').style.setProperty('--themeColor', this.themeColor);
-    this.elementRef.nativeElement.querySelector('.action').style.setProperty('--foregroundColor', this.foregroundColor);
+    if(this.fontSize) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--fontSize', this.fontSize);
+    if(this.themeColor) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--themeColor', this.themeColor);
+    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--foregroundColor', this.foregroundColor);
   }
 
   onMouseOver(event){
-    this.elementRef.nativeElement.querySelector('.action').style.color = this.foregroundColor
-    this.elementRef.nativeElement.querySelector('.action').style.background = this.themeColor
+    if(this.themeColor) this.elementRef.nativeElement.querySelector('.action').style.background = this.themeColor
+    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.action').style.color = this.foregroundColor
   }
 
   onMouseOut(event){

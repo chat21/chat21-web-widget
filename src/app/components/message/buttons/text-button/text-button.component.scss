@@ -3,6 +3,7 @@
 :host {
     --themeColor: #{$blue};
     --foregroundColor: #{$bck-msg-sent};
+    --fontSize: #{$button-in-msg-font-size};
 }
 
 
@@ -19,7 +20,7 @@
     background: transparent;
     overflow: hidden;
     font-family: 'Muli', sans-serif;
-    font-size: 15px;
+    font-size: var(--fontSize);
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
