@@ -225,6 +225,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.getTranslation();
     this.translations();
     //this.initAll();
+
   }
 
   public translations() {
@@ -978,13 +979,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         // check if sender can reply --> set footer active/disabled
-        if(msg.attributes && msg.attributes['hideTextReply']){
-          this.hideFooterTextReply = msg.attributes['hideTextReply']
-          if(msg.attributes['typeMessagePlaceholder']) {
-            this.hideFooterMessagePlaceholder = msg.attributes['typeMessagePlaceholder']
-          }
-        } else if (msg.attributes && !msg.attributes['hideTextReply']) {
+        if(msg.attributes && msg.attributes['disableInputMessage']){
+          this.hideFooterTextReply = msg.attributes['disableInputMessage']
+          
+        } else if (msg.attributes && !msg.attributes['disableInputMessage']) {
           this.hideFooterTextReply = false
+        }
+
+        // check if footer text placebolder exist --> set new footer text placeholder
+        if(msg.attributes && msg.attributes['inputMessagePlaceholder']) {
+          this.hideFooterMessagePlaceholder = msg.attributes['inputMessagePlaceholder']
         }
 
         //check if user has changed userFullName and userEmail
@@ -997,7 +1001,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         }
         if (msg.attributes && msg.attributes['updateUserEmail']) {
           const userEmail = msg.attributes['updateUserEmail'];
-          console.log('[CONV-COMP] newMessageAdded --> userEmail', userEmail)
+          that.logger.debug('[CONV-COMP] newMessageAdded --> userEmail', userEmail)
           that.g.setAttributeParameter('userEmail', userEmail);
           that.g.setParameter('userEmail', userEmail);
           that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
