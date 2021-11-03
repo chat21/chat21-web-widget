@@ -33,7 +33,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
-  @Input() hideFooterMessagePlaceholder: string;
+  @Input() footerMessagePlaceholder: string;
   @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
   @Input() translationMap: Map< string, string>;

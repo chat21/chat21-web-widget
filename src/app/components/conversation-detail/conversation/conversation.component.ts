@@ -1,41 +1,33 @@
-import { style } from '@angular/animations';
-import { MAX_HEIGHT_TEXTAREA } from './../../../../chat21-core/utils/constants';
 import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
 
 import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
 
 // tslint:disable-next-line:max-line-length
-import { NgZone, HostListener, ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, SimpleChanges } from '@angular/core';
+import { ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../../utils/globals';
-import { MessagingService } from '../../../providers/messaging.service';
 import { ConversationsService } from '../../../providers/conversations.service';
 import { AppConfigService } from '../../../providers/app-config.service';
 
 import {
   CHANNEL_TYPE_DIRECT, CHANNEL_TYPE_GROUP, TYPE_MSG_TEXT,
   MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER,
-  TYPE_MSG_FILE, TYPE_MSG_IMAGE, MAX_WIDTH_IMAGES, IMG_PROFILE_BOT, IMG_PROFILE_DEFAULT, UID_SUPPORT_GROUP_MESSAGES
+  UID_SUPPORT_GROUP_MESSAGES
 } from '../../../utils/constants';
-import { UploadService_old } from '../../../providers/upload.service';
-import { ContactService } from '../../../providers/contact.service';
-import { AgentAvailabilityService } from '../../../providers/agent-availability.service';
 import { StarRatingWidgetService } from '../../star-rating-widget/star-rating-widget.service';
 
 // models
 
 import { MessageModel } from '../../../../chat21-core/models/message';
-import { UploadModel } from '../../../../models/upload';
 
 // utils
-import { isJustRecived, getUrlImgProfile, convertColorToRGBA, isPopupUrl, searchIndexInArrayForUid, replaceBr} from '../../../utils/utils';
+import { isJustRecived, getUrlImgProfile, isPopupUrl, searchIndexInArrayForUid} from '../../../utils/utils';
 import { v4 as uuidv4 } from 'uuid';
 
 
 // Import the resized event model
-import { ResizedEvent } from 'angular-resize-event/resized-event';
 
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 import { AppComponent } from '../../../app.component';
 import { CustomTranslateService } from '../../../../chat21-core/providers/custom-translate.service';
@@ -61,7 +53,6 @@ import { Subject } from 'rxjs';
   host: {'(window:resize)': 'onResize($event)'}
 })
 export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
-  @ViewChild('scrollMe') private scrollMe: ElementRef; // l'ID del div da scrollare
   @ViewChild('afConversationComponent') private afConversationComponent: ElementRef; // l'ID del div da scrollare
   // @HostListener('window:resize', ['$event'])
   // ========= begin:: Input/Output values
@@ -93,7 +84,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   isButtonsDisabled = true;
   // isConversationArchived = false;
   hideFooterTextReply: boolean = false;
-  hideFooterMessagePlaceholder: string = '';
+  footerMessagePlaceholder: string = '';
   isTrascriptDownloadEnabled = false;
   audio: any;
   // ========= begin:: gestione scroll view messaggi ======= //
@@ -113,13 +104,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   isOpenAttachmentPreview: Boolean = false;
   attachments: Array<{ file: Array<any>, metadata: {}}>
-  // ========= end:: send image ========= //
-
-
-
-
-  // text used within the html
-  private LABEL_PLACEHOLDER: string;
 
   // userEmail: string;
   // userFullname: string;
@@ -988,7 +972,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
         // check if footer text placebolder exist --> set new footer text placeholder
         if(msg.attributes && msg.attributes['inputMessagePlaceholder']) {
-          this.hideFooterMessagePlaceholder = msg.attributes['inputMessagePlaceholder']
+          this.footerMessagePlaceholder = msg.attributes['inputMessagePlaceholder']
+        }else {
+          this.footerMessagePlaceholder = '';
         }
 
         //check if user has changed userFullName and userEmail
@@ -1423,7 +1409,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * chiamato in maniera ricorsiva sino a quando non risponde correttamente
   */
 
- scrollToBottom(withoutAnimation?: boolean) {
+ scrollToBottom() {
   this.conversationContent.scrollToBottom();
   // const that = this;
   //  try {
@@ -1991,7 +1977,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     window.open(event.link, '_blank');
   }
 
-  onCloseInternalFrame(event){
+  onCloseInternalFrame(){
     this.isButtonUrl = false
     this.buttonClicked = null;
   }
