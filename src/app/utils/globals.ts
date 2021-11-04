@@ -342,11 +342,11 @@ export class Globals {
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
     this.bubbleSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
     /** set the background of bubble sent message */
-    this.bubbleSentTextColor = invertColor('#2a6ac1', true); //'#ffffff'
+    this.bubbleSentTextColor = invertColor('#ffffff', true); //'#ffffff'
     /** set the text color of bubble sent message */
     this.bubbleReceivedBackground= convertColorToRGBA('#f7f7f7', 100);
     /** set the background of bubble received message */
-    this.bubbleReceivedTextColor = invertColor('#f7f7f7', true); //#1a1a1a
+    this.bubbleReceivedTextColor = invertColor('#1a1a1a', true); //#1a1a1a
     /** set the text color of bubble received message */
     this.fontSize = '1.4em'
     /** set the text size of bubble messages */
@@ -498,7 +498,7 @@ export class Globals {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
-    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
+    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 50) + ')';
   }
 
   /**

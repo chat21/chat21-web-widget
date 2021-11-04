@@ -463,8 +463,8 @@ export class GlobalSettingsService {
                     }
                     if (variables.hasOwnProperty('themeColor')) {
                         globals['themeColor'] = variables['themeColor'];
-                        globals['bubbleMsgSentBackground']=variables['themeColor'];
-                        globals['bubbleMsgSentTextColor']= invertColor(variables['themeColor'], true)
+                        globals['bubbleSentBackground']=variables['themeColor'];
+                        globals['bubbleSentTextColor']= invertColor(variables['themeColor'], true)
                     }
                     if (variables.hasOwnProperty('themeForegroundColor')) {
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
@@ -808,7 +808,7 @@ export class GlobalSettingsService {
             }
         }
         TEMP = tiledeskSettings['bubbleSentBackground'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentBackground:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentBackground:: ', TEMP);
         if (TEMP !== undefined) {
             globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
             globals.bubbleSentTextColor = invertColor(TEMP, true)
@@ -819,7 +819,7 @@ export class GlobalSettingsService {
             globals.bubbleSentTextColor = convertColorToRGBA(TEMP, 100);
         }
         TEMP = tiledeskSettings['bubbleReceivedBackground'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleReceivedBackground:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleReceivedBackground:: ', TEMP);
         if (TEMP !== undefined) {
             globals.bubbleReceivedBackground = convertColorToRGBA(TEMP, 100);
             globals.bubbleReceivedTextColor = invertColor(TEMP, true)
