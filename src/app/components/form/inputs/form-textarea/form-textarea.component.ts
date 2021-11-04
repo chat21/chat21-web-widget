@@ -54,7 +54,9 @@ export class FormTextareaComponent implements OnInit {
       this.form.controls[this.controlName].hasError('required') || 
       this.form.controls[this.controlName].invalid){
         this.input.nativeElement.classList.add('form-danger')
+        this.input.nativeElement.classList.remove('form-success')
     } else if (this.form.controls[this.controlName].valid){
+        this.input.nativeElement.classList.remove('form-danger')
         this.input.nativeElement.classList.add('form-success')
     }
   }
