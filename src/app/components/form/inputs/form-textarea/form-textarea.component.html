@@ -15,7 +15,7 @@
   <div class="form-group label-floating" id="div_input" #div_input
       [ngClass]="{'is-empty': !form.controls[element.name]?.value}">
     <label class="control-label">
-      {{element.name}}
+      {{element.label}}
     </label>
     <textarea 
       [formControlName]="element.name"  

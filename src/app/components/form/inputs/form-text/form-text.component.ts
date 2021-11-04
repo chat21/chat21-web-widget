@@ -56,7 +56,7 @@ export class FormTextComponent implements OnInit {
         this.input.nativeElement.classList.add('form-danger')
         this.input.nativeElement.classList.remove('form-success')
     } else if (this.form.controls[this.controlName].valid){
-      this.input.nativeElement.classList.remove('form-danger')
+        this.input.nativeElement.classList.remove('form-danger')
         this.input.nativeElement.classList.add('form-success')
     }
   }
