@@ -342,11 +342,11 @@ export class Globals {
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
     this.bubbleSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
     /** set the background of bubble sent message */
-    this.bubbleSentTextColor = invertColor('#ffffff', true); //'#ffffff'
+    this.bubbleSentTextColor = convertColorToRGBA('#ffffff', 100); //'#ffffff'
     /** set the text color of bubble sent message */
     this.bubbleReceivedBackground= convertColorToRGBA('#f7f7f7', 100);
     /** set the background of bubble received message */
-    this.bubbleReceivedTextColor = invertColor('#1a1a1a', true); //#1a1a1a
+    this.bubbleReceivedTextColor = convertColorToRGBA('#1a1a1a', 100); //#1a1a1a
     /** set the text color of bubble received message */
     this.fontSize = '1.4em'
     /** set the text size of bubble messages */
