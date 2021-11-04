@@ -1,8 +1,27 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.11
+- bug-fixed: form textarea label not showed
+- bug-fixed: form textarea show error border also if regex is validated
+- bug-fixed: default value of bubbleSentTextColor and bubbleReceivedTextColor
+- bug fixed: blur radius of shadow in laucher button reduced
+
+### 5.0.18-rc.10
+- removed: border from widget
+- added: box-shadow to widget components and launcher-button component
+- added: programmatically set fontSize, fontColor & fontFamily to bubble message child components (buttons and text components)
+- added: programmatically set bubble message background and foreground color with bubbleSentBackground, bubbleReceivedBackground, bubbleSentTextColor, bubbleSentTextColor
+- added:  programatically set message attachment buttons font size with buttonFontSize
+- added: linear gradient to bubble message background like conversation-header background
+- added: bubbleSentBackground, bubbleMsgReceivedBackground, bubbleSentTextColor, bubbleSentTextColor, fontSize, fontFamily , buttonFontSize as tiledesk parameters
+- added: invertColor function to programatically decide the text color (white or black) of message text based on background color
+- changed: hideTextReply and typeMessagePlaceholder attributes message key property renamed
+- changed: border radius of widget 
+- bug-fixed: when HEX color is passed throw url or settings, getParameterByname return a boolean --> removed '#' and '|#|' from regex
+- bug-fixed: errorLabel object changed for form textarea component
 ### 5.0.18-rc.9
 - updated: star-rating-widget component UI
-- added: conversation-preview component while loading an attachment
+- added: conversation-preview component while loading an attachment or onPaste event on footer textarea
 
 ### 5.0.18-rc.8
 - added: ability to insert a new line after the current position in the message text area by pressing the key combinations "ALT + ENTER", "CTRL + ENTER", "CMD + ENTER", "SHIFT + ENTER"
