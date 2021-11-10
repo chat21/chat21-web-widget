@@ -632,6 +632,8 @@ export function validateRegex(regex){
   return validRegex
 }
 
+
+// https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
 export function invertColor(hex: string, bw: boolean) {
   let r,g,b;
   if (hex.indexOf('#') === 0) {
