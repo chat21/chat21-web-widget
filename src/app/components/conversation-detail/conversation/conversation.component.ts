@@ -2002,7 +2002,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log(event);
     const action = event.action ? event.action : '';
     const message = event.value ? event.value : '';
-    const subtype = event.show_reply ?  '' : 'info';
+    const subtype = event.show_echo ?  '' : 'info';
 
     const attributes = {
       action: action,
