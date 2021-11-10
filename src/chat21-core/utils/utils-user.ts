@@ -21,9 +21,12 @@ export function avatarPlaceholder(name: string): string {
     if (name) {
         const arrayName = name.split(' ');
         arrayName.forEach(member => {
-        if (member.trim().length > 1 && initials.length < 3) {
-            initials += member.substring(0, 1).toUpperCase();
-        }
+            if (member.trim().length > 1 && initials.length < 3) {
+                initials += member.substring(0, 1).toUpperCase();
+            }
+            if(member.trim().length == 1){
+                initials+= member.substring(0, 1).toUpperCase();
+            }
         });
     }
     return initials;
