@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.12
+- bug-fixed: if userFullname contains only one word, avatarPlaceholder function return null string
+- bug-fixed: form label property changed from 'value' to 'label' to support multilanguage
+- changed: action button attribute property changed from 'show_reply' to 'show_echo'
+
 ### 5.0.18-rc.11
 - bug-fixed: form textarea label not showed
 - bug-fixed: form textarea show error border also if regex is validated
