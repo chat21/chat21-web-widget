@@ -13,7 +13,6 @@ export class ActionButtonComponent implements OnInit {
   @Input() foregroundColor: string;
   @Output() onButtonClicked = new EventEmitter();
 
-  @ViewChild("actionButton") actionButtonDiv: ElementRef;
   public type: string = "action"
   constructor(private elementRef: ElementRef) { }
 
