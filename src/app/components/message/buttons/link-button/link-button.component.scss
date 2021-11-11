@@ -3,6 +3,7 @@
 :root {
     --themeColor: #{$blue};
     --foregroundColor: #{$col-msg-sent};
+    --fontSize: #{$button-in-msg-font-size};
 }
 
 .button-in-msg {
@@ -17,7 +18,7 @@
     background: transparent;
     overflow: hidden;
     font-family: 'Muli', sans-serif;
-    font-size: 15px;
+    font-size: var(--fontSize);
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
