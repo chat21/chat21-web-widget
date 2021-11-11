@@ -50,7 +50,8 @@
                 <p class="c21-text overflow4Lines" [innerHTML]="conversation.last_message_text | htmlEntitiesEncode  | marked"></p>
             </ng-template>
 
-            <div *ngIf="conversation.attributes && conversation.attributes.attachment " class="slide-in-left" > 
+            <!-- NOT AVAILABLE WITH FIREBASE DUE TO INCOMPATIBILITY WITH conversation OBJECT-->
+            <!-- <div *ngIf="conversation.attributes && conversation.attributes.attachment " class="slide-in-left" > 
               <chat-message-attachment 
                   style="height: 100%; display: block;"
                   [message]="conversation"
@@ -58,7 +59,7 @@
                   [stylesMap]="stylesMap"
                   (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)">
               </chat-message-attachment>
-            </div>  
+            </div>   -->
         </div>
 
         <div class="c21-time c21-text">
