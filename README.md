@@ -2,6 +2,10 @@
 
 # chat21-web-widget
 
+> ***🚀 Do you want to install Tiledesk on your server with just one click?***
+> 
+> ***Use [Docker Compose Tiledesk installation](https://github.com/Tiledesk/tiledesk-deployment/blob/master/docker-compose/README.md) guide***
+
 Chat21-web-widget is a Free Live Chat Widget built on Firebase with Angular5 that lets you support and chat with visitors and customers on your website. 
 More information about web widget here : http://www.tiledesk.com
 
