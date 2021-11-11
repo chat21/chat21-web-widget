@@ -18,6 +18,7 @@ export class FormTextComponent implements OnInit {
 
   @ViewChild('div_input') input: ElementRef;
   form: FormGroup;
+  inputType: string = 'text'
   constructor(private rootFormGroup: FormGroupDirective,
               private elementRef: ElementRef) { }
 
@@ -33,12 +34,15 @@ export class FormTextComponent implements OnInit {
     }
   }
 
-  // ngOnChanges(changes: SimpleChange){
-  //   if(this.hasSubmitted){
-  //     this.input.nativeElement.classList.add('is-focused')
-  //     this.setFormStyle()
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChange){
+    if(this.controlName && (this.controlName.toLowerCase().includes('email') || this.controlName.toLowerCase().includes('e-mail')) ){
+      this.inputType = 'email';
+    }
+    // if(this.hasSubmitted){
+    //   this.input.nativeElement.classList.add('is-focused')
+    //   this.setFormStyle()
+    // }
+  }
 
   onFocusOut(){
     this.input.nativeElement.classList.remove('is-focused')

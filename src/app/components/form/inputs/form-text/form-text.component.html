@@ -5,7 +5,7 @@
     <label class="control-label">
       {{element.label}}
     </label>
-    <input [formControlName]="element.name" type="text" 
+    <input [formControlName]="element.name" [type]="inputType" 
       class="form-control" 
       [class.errors]="form.controls[element.name].errors && hasSubmitted" 
       (focus)="onFocus()" (focusout)="onFocusOut()">
