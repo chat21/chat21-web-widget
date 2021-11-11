@@ -48,7 +48,7 @@ export class FirebaseAuthService extends MessagingAuthService {
   initialize() {
     this.SERVER_BASE_URL = this.getBaseUrl();
     this.URL_TILEDESK_CREATE_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'chat21/firebase/auth/createCustomToken';
-    this.logger.info('[FIREBASEAuthSERVICE] - initialize URL_TILEDESK_CREATE_CUSTOM_TOKEN ', this.URL_TILEDESK_CREATE_CUSTOM_TOKEN)
+    this.logger.debug('[FIREBASEAuthSERVICE] - initialize URL_TILEDESK_CREATE_CUSTOM_TOKEN ', this.URL_TILEDESK_CREATE_CUSTOM_TOKEN)
     // this.URL_TILEDESK_SIGNIN = this.SERVER_BASE_URL + 'auth/signin';
     // this.URL_TILEDESK_SIGNIN_ANONYMOUSLY = this.SERVER_BASE_URL + 'auth/signinAnonymously'
     // this.URL_TILEDESK_SIGNIN_WITH_CUSTOM_TOKEN = this.SERVER_BASE_URL + 'auth/signinWithCustomToken';
@@ -96,10 +96,10 @@ export class FirebaseAuthService extends MessagingAuthService {
     firebase.auth().onAuthStateChanged(user => {
       this.logger.debug('[FIREBASEAuthSERVICE] onAuthStateChanged', user)
       if (!user) {
-        this.logger.debug('[FIREBASEAuthSERVICE] 1 - PASSO OFFLINE AL CHAT MANAGER')
+        this.logger.debug('[FIREBASEAuthSERVICE] 1 - PUBLISH OFFLINE to chat-manager')
         that.BSAuthStateChanged.next('offline');
       } else {
-        this.logger.debug('[FIREBASEAuthSERVICE] 2 - PASSO ONLINE AL CHAT MANAGER')
+        this.logger.debug('[FIREBASEAuthSERVICE] 2 - PUBLISH ONLINE to chat-manager')
         that.BSAuthStateChanged.next('online');
       }
     });

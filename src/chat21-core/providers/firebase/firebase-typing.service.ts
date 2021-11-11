@@ -45,7 +45,7 @@ export class FirebaseTypingService extends TypingService {
   public initialize(tenant: string) {
     // this.tenant = this.getTenant();
     this.tenant = tenant;
-    this.logger.info('[FIREBASETypingSERVICE] initialize - tenant ', this.tenant)
+    this.logger.debug('[FIREBASETypingSERVICE] initialize - tenant ', this.tenant)
     this.urlNodeTypings = '/apps/' + this.tenant + '/typings/';
   }
 

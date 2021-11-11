@@ -26,7 +26,7 @@ export class FirebaseNotifications extends NotificationsService {
     initialize(tenant: string, vapId: string): void {
         this.tenant = tenant
         this.vapidkey = vapId
-        this.logger.info('[FIREBASE-NOTIFICATIONS] initialize - tenant ', this.tenant)
+        this.logger.debug('[FIREBASE-NOTIFICATIONS] initialize - tenant ', this.tenant)
 
 
         if (!('serviceWorker' in navigator)) {

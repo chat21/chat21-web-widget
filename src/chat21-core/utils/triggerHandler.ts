@@ -25,7 +25,7 @@ export class Triggerhandler {
 
     /**CONVERSATION-FOOTER.component */
     public triggerBeforeSendMessageEvent(messageModel){
-        this.logger.info(' ---------------- triggerBeforeSendMessageEvent ---------------- ', messageModel);
+        this.logger.debug(' ---------------- triggerBeforeSendMessageEvent ---------------- ', messageModel);
         try {
             const onBeforeMessageSend = new CustomEvent('onBeforeMessageSend', { detail: { message: messageModel } });
             const windowContext = this.windowContext;
@@ -42,7 +42,7 @@ export class Triggerhandler {
 
     /**CONVERSATION-FOOTER.component */
     public triggerAfterSendMessageEvent(messageSent: MessageModel){
-        this.logger.info(' ---------------- triggerAfterSendMessageEvent ---------------- ', messageSent);
+        this.logger.debug(' ---------------- triggerAfterSendMessageEvent ---------------- ', messageSent);
         try {
             const onAfterMessageSend = new CustomEvent('onAfterMessageSend', { detail: { message: messageSent } });
             const windowContext = this.windowContext;
@@ -59,7 +59,7 @@ export class Triggerhandler {
 
     /**CONVERSATION.component */
     public triggerOnNewConversationInit(detailObj: {}){
-        this.logger.info(' ---------------- triggerOnNewConversationComponentInit ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnNewConversationComponentInit ---------------- ', detailObj);
         const onNewConversation = new CustomEvent('onNewConversationComponentInit', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -72,7 +72,7 @@ export class Triggerhandler {
 
     /**CONVERSATION.component */
     public triggerBeforeMessageRender(detailObj: {}) {
-        //this.logger.info(' ---------------- triggerBeforeMessageRender ---------------- ', detailObj]);
+        //this.logger.debug(' ---------------- triggerBeforeMessageRender ---------------- ', detailObj]);
         try {
           const beforeMessageRender = new CustomEvent('beforeMessageRender', { detail: detailObj });
           const windowContext = this.windowContext;
@@ -89,7 +89,7 @@ export class Triggerhandler {
 
     /**CONVERSATION.component */
     public triggerAfterMessageRender(detailObj: {}) {
-        //this.logger.info(' ---------------- triggerAfterMessageRender ---------------- ', detailObj]);
+        //this.logger.debug(' ---------------- triggerAfterMessageRender ---------------- ', detailObj]);
         try {
             const afterMessageRender = new CustomEvent('afterMessageRender', { detail: detailObj });
             const windowContext = this.windowContext;
@@ -106,7 +106,7 @@ export class Triggerhandler {
 
     /**CONVERSATION.component */
     public triggerOnMessageCreated(message: MessageModel) {
-        this.logger.info(' ---------------- triggerOnMessageCreated ---------------- ', message);
+        this.logger.debug(' ---------------- triggerOnMessageCreated ---------------- ', message);
         const onMessageCreated = new CustomEvent('onMessageCreated', { detail: { message: message } });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -119,7 +119,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */  
     public triggerOnViewInit(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnInit ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnInit ---------------- ', detailObj);
         const onInit = new CustomEvent('onInit', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -132,7 +132,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnOpenEvent(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnOpenEvent ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnOpenEvent ---------------- ', detailObj);
         const onOpen = new CustomEvent('onOpen', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -145,7 +145,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnCloseEvent(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnCloseEvent ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnCloseEvent ---------------- ', detailObj);
         const onClose = new CustomEvent('onClose', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -158,7 +158,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnOpenEyeCatcherEvent(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnOpenEyeCatcherEvent ---------------- ', detailObj);
         const onOpenEyeCatcher = new CustomEvent('onOpenEyeCatcher', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -171,7 +171,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnClosedEyeCatcherEvent() {
-        this.logger.info(' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ');
+        this.logger.debug(' ---------------- triggerOnClosedEyeCatcherEvent ---------------- ');
         const onClosedEyeCatcher = new CustomEvent('onClosedEyeCatcher', { detail: { } });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -186,7 +186,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnLoggedIn(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnLoggedIn ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnLoggedIn ---------------- ', detailObj);
         const onLoggedIn = new CustomEvent('onLoggedIn', { detail: detailObj});
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -199,7 +199,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnLoggedOut(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnLoggedOut ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnLoggedOut ---------------- ', detailObj);
         const onLoggedOut = new CustomEvent('onLoggedOut', { detail: detailObj});
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -212,7 +212,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnAuthStateChanged(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnAuthStateChanged ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnAuthStateChanged ---------------- ', detailObj);
         const onAuthStateChanged = new CustomEvent('onAuthStateChanged', { detail: detailObj});
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -224,7 +224,7 @@ export class Triggerhandler {
     }
 
     public triggerNewConversationEvent(detailObj: {}) {
-        this.logger.info(' ---------------- triggerNewConversationEvent ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerNewConversationEvent ---------------- ', detailObj);
         const onNewConversation = new CustomEvent('onNewConversation', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -239,7 +239,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerLoadParamsEvent(detailObj: {}) {
-        this.logger.info(' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj);
+        this.logger.debug(' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj);
         const onLoadParams = new CustomEvent('onLoadParams', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -252,7 +252,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnConversationUpdated(conversation: ConversationModel) {
-        this.logger.info(' ---------------- triggerOnConversationUpdated ---------------- ', conversation);
+        this.logger.debug(' ---------------- triggerOnConversationUpdated ---------------- ', conversation);
         try {
             const triggerConversationUpdated = new CustomEvent('onConversationUpdated', { detail: { conversation: conversation } });
             const windowContext = this.windowContext;
@@ -269,7 +269,7 @@ export class Triggerhandler {
 
     /**APP-COMPONENT.component */
     public triggerOnCloseMessagePreview() {
-        this.logger.info(' ---------------- triggerOnCloseMessagePreview ---------------- ');
+        this.logger.debug(' ---------------- triggerOnCloseMessagePreview ---------------- ');
         try {
             const triggerCloseMessagePreview = new CustomEvent('onCloseMessagePreview', { detail: { } });
             const windowContext = this.windowContext;
@@ -286,7 +286,7 @@ export class Triggerhandler {
 
     /**SELECTION-DEPARTMENT.component */
     public triggerOnbeforeDepartmentsFormRender(departments: DepartmentModel[]) {
-        this.logger.info(' ---------------- triggerOnbeforeDepartmentsFormRender ---------------- ');
+        this.logger.debug(' ---------------- triggerOnbeforeDepartmentsFormRender ---------------- ');
         const onOpen = new CustomEvent('onBeforeDepartmentsFormRender', { detail: { departments: departments } });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
@@ -299,7 +299,7 @@ export class Triggerhandler {
 
     /** */
     public triggerGetImageUrlThumb(message: MessageModel) {
-        this.logger.info(' ---------------- getImageUrlThumb ---------------- ');
+        this.logger.debug(' ---------------- getImageUrlThumb ---------------- ');
         try {
             const triggerGetImageUrlThumb = new CustomEvent('getImageUrlThumb', { detail: { message: message } });
             const windowContext = this.windowContext;

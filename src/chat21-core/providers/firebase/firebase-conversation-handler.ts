@@ -66,7 +66,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * inizializzo conversation handler
      */
     initialize(recipientId: string,recipientFullName: string,loggedUser: UserModel,tenant: string,translationMap: Map<string, string>) {
-        this.logger.info('[FIREBASEConversationHandlerSERVICE] initWithRecipient',recipientId, recipientFullName, loggedUser, tenant, translationMap)
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] initWithRecipient',recipientId, recipientFullName, loggedUser, tenant, translationMap)
         this.recipientId = recipientId;
         this.recipientFullname = recipientFullName;
         this.loggedUser = loggedUser;

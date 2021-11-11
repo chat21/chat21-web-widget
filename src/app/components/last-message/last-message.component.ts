@@ -74,7 +74,7 @@ export class LastMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.logger.debug('[LASTMESSAGE] onchagnges', changes)
+    this.logger.debug('[LASTMESSAGE] onChanges', changes)
     if(this.conversation){
       this.conversation.image = this.imageRepoService.getImagePhotoUrl(this.conversation.sender)
     }

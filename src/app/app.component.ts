@@ -456,6 +456,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // const user = that.authService.getCurrentUser();
                 const user = that.tiledeskAuthService.getCurrentUser()
                 that.logger.debug('[APP-COMP] sono nel caso in cui sono loggato', user);
+                that.logger.info('[APP-COMP] ONLINE - LOGGED SUCCESSFULLY', user);
                 // that.g.wdLog([' anonymousAuthenticationInNewProject']);
                 // that.authService.resigninAnonymousAuthentication();
                 // confronto id utente tiledesk con id utente di firebase
@@ -489,7 +490,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             } else if (state && state === AUTH_STATE_OFFLINE) {
                 /** non sono loggato */
                 that.logger.debug('[APP-COMP] sono nel caso in cui non sono loggato 0');
-                that.logger.debug('[APP-COMP] NO CURRENT USER AUTENTICATE: ');
+                that.logger.info('[APP-COMP] OFFLINE - NO CURRENT USER AUTENTICATE: ');
                 that.g.setParameter('isLogged', false);
                 that.hideWidget();
                 // that.g.setParameter('isShown', false, true);

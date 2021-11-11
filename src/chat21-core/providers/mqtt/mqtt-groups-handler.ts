@@ -34,7 +34,7 @@ export class MQTTGroupsHandler extends GroupsHandlerService {
      * inizializzo groups handler
      */
     initialize(tenant: string, loggedUserId: string): void {
-        this.logger.info('[MQTT-GROUPS-HANDLER] initialize');
+        this.logger.debug('[MQTT-GROUPS-HANDLER] initialize');
         this.tenant = tenant;
         this.loggedUserId = loggedUserId;
 
