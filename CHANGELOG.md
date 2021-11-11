@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18-rc.13
+- bug-fixed: action button not show animation on button clicked if multiple action button is in DOM but show animation in previous action button
+- bug-fixed: when conversation menu-options is clicked, the focus is moved to footer and mobile keyboard opens
+- added: control if form-text name contains 'email' to show relative keyboard 
+- removed: chat-message-attachment component in last-message component due to incompatibility with conversation object
+- changed: moved all info log to debug log expect for init and authenticated log event
+- changed: box shadow of launcher-button
+
 ### 5.0.18-rc.12
 - bug-fixed: if userFullname contains only one word, avatarPlaceholder function return null string
 - bug-fixed: form label property changed from 'value' to 'label' to support multilanguage
