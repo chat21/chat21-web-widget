@@ -1801,6 +1801,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnOnMenuOption(event:boolean){
       this.isMenuShow = event;
+      this.conversationFooter.removeFocusOnId('chat21-main-message-context')
   }
 
   /** CALLED BY: conv-footer component */

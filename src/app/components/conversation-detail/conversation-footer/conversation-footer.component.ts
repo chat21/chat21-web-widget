@@ -502,6 +502,13 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     }, 500);
   }
 
+  removeFocusOnId(id){
+    const textarea = document.getElementById(id);
+    if (textarea) {
+        textarea.blur()
+    }
+  }
+
   /**
    *
    * @param str
