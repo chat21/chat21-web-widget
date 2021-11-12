@@ -43,6 +43,7 @@
 
           <chat-text
             [text]="message?.text"
+            [htmlEnabled]="(message?.type==='html')? true : false"
             [color]="fontColor"
             [fontSize]="fontSize"
             [fontFamily]="fontFamily"
