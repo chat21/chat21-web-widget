@@ -39,7 +39,8 @@ input[type="checkbox"] {
 
 
 // /* hover state */
-input[type="checkbox"]:not(:checked):hover {
+input[type="checkbox"]:not(:checked):hover,
+input[type="checkbox"]:not(:checked):focus {
     border-width: 2px;
 
     //box-shadow

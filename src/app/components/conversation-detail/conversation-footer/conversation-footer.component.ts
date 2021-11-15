@@ -558,8 +558,10 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     }
   }
 
-  /*
-  HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
+
+  /**
+  * HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
+  * @param event 
   */
   onkeydown(event){
     const keyCode = event.which || event.keyCode;

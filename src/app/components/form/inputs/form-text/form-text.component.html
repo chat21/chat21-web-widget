@@ -5,9 +5,13 @@
     <label class="control-label">
       {{element.label}}
     </label>
-    <input [formControlName]="element.name" [type]="inputType" 
+    <input 
+      [formControlName]="element.name" 
+      [type]="inputType"
+      [tabIndex]="element?.tabIndex"
       class="form-control" 
-      [class.errors]="form.controls[element.name].errors && hasSubmitted" 
+      [class.errors]="form.controls[element.name].errors && hasSubmitted"
+      (keydown.enter)="onEnterPressed($event)" 
       (focus)="onFocus()" (focusout)="onFocusOut()">
   </div>
   <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('required')" class="text-danger">

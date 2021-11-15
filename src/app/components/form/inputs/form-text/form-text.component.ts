@@ -1,5 +1,5 @@
 import { style } from '@angular/animations';
-import { Component, ElementRef, Input, OnInit, SimpleChange, ViewChild, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChange, ViewChild, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { FormArray } from '../../../../../chat21-core/models/formArray';
 
@@ -15,6 +15,7 @@ export class FormTextComponent implements OnInit {
   @Input() translationErrorLabelMap: Map<string, string>;
   @Input() stylesMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 
+  @Output() onKeyEnterPressed = new EventEmitter<any>();
 
   @ViewChild('div_input') input: ElementRef;
   form: FormGroup;
@@ -52,6 +53,13 @@ export class FormTextComponent implements OnInit {
     this.input.nativeElement.classList.add('is-focused')
   }
 
+  /**
+   * FIRED when user press ENTER button on keyboard 
+   * @param event 
+   */
+  onEnterPressed(event){
+    this.onKeyEnterPressed.emit(event)
+  }
 
   setFormStyle(){
     if(this.form.controls[this.controlName].hasError('pattern') || 

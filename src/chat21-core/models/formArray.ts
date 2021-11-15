@@ -7,6 +7,7 @@ export class FormArray {
       public mandatory?: boolean,
       public regex?: string,
       public value?: any,
-      public options?: Array<any>
+      public options?: Array<any>,
+      public tabIndex?: number
     ) { }
 }
