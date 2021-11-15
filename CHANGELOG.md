@@ -1,5 +1,10 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.1
+- added: if msg.type is 'html' enable possibility to render html code inside msg.text
+
+### 5.0.18 IN PROD
+
 ### 5.0.18-rc.13
 - bug-fixed: action button not show animation on button clicked if multiple action button is in DOM but show animation in previous action button
 - bug-fixed: when conversation menu-options is clicked, the focus is moved to footer and mobile keyboard opens
@@ -32,6 +37,7 @@
 - changed: border radius of widget 
 - bug-fixed: when HEX color is passed throw url or settings, getParameterByname return a boolean --> removed '#' and '|#|' from regex
 - bug-fixed: errorLabel object changed for form textarea component
+
 ### 5.0.18-rc.9
 - updated: star-rating-widget component UI
 - added: conversation-preview component while loading an attachment or onPaste event on footer textarea
