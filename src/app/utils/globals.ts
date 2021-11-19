@@ -183,6 +183,7 @@ export class Globals {
    isLogEnabled: boolean;
    openExternalLinkButton: boolean;
    hideHeaderConversationOptionsMenu: boolean;
+   hideSettings: boolean;
    filterByRequester: boolean;
    persistence;
    windowContext;
@@ -198,7 +199,7 @@ export class Globals {
    customAttributes: any;
    showAttachmentButton: boolean;
    showAllConversations: boolean;
-   privacyField: string;
+  //  privacyField: string;
    jwt: string;
 
    isOpenNewMessage: boolean;
@@ -334,6 +335,8 @@ export class Globals {
     /** enable to open URL in  self action link button in external page from widget */
     this.hideHeaderConversationOptionsMenu = false;
     /** enable to hide/show options menu in conversation detail header */
+    this.hideSettings = false;
+    /** enable to hide/show options menu in home component */
     this.filterByRequester = false;
     /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
@@ -473,7 +476,7 @@ export class Globals {
       'tenant': this.tenant, 'recipientId': this.recipientId,
       'projectid': this.projectid, 'widgetTitle': this.widgetTitle,
       'poweredBy': this.poweredBy, 'userEmail': this.userEmail, //'userId': this.userId, 
-      'userFullname': this.userFullname, 'preChatForm': this.preChatForm,
+      'userFullname': this.userFullname, 'preChatForm': this.preChatForm, 'preChatFormJson': this.preChatFormJson,
       'isOpen': this.isOpen, 'channelType': this.channelType,
       'lang': this.lang, 'calloutTimer': this.calloutTimer, 'calloutStaus': this.calloutStaus,
       'align': this.align,'welcomeMsg': this.welcomeMsg, 'calloutTitle': this.calloutTitle,
@@ -486,10 +489,14 @@ export class Globals {
       'marginY': this.marginY, 'lancherWidth': this.launcherWidth, 'lancherHeight': this.launcherHeight,
       'baloonImage': this.baloonImage, 'baloonShape': this.baloonShape, 'isLogEnabled': this.isLogEnabled,
       'openExternalLinkButton': this.openExternalLinkButton, 'hideHeaderConversationOptionsMenu': this.hideHeaderConversationOptionsMenu,
-      'filterByRequester': this.filterByRequester, 'persistence': this.persistence,'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
+      'hideSettings': this.hideSettings,'filterByRequester': this.filterByRequester, 
+      'persistence': this.persistence,'showWaitTime': this.showWaitTime, 'showAvailableAgents': this.showAvailableAgents,
       'showLogoutOption': this.showLogoutOption, 'showAttachmentButton': this.showAttachmentButton,
-      'showAllConversations': this.showAllConversations, 'privacyField': this.privacyField, 'jwt': this.jwt,
-      'dynamicWaitTimeReply': this.dynamicWaitTimeReply, 'soundEnabled': this.soundEnabled, 'logLevel': this.logLevel
+      'showAllConversations': this.showAllConversations, 'jwt': this.jwt,
+      'dynamicWaitTimeReply': this.dynamicWaitTimeReply, 'soundEnabled': this.soundEnabled, 'logLevel': this.logLevel,
+      'bubbleSentBackground' : this.bubbleSentBackground, 'bubbleSentTextColor': this.bubbleSentTextColor,   
+      'bubbleReceivedBackground': this.bubbleReceivedBackground, 'bubbleReceivedTextColor': this.bubbleReceivedTextColor,
+      'fontSize': this.fontSize, 'fontFamily': this.fontFamily, 'buttonFontSize': this.buttonFontSize
     };
   }
 
