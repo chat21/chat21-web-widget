@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { FormArray } from '../../../../../chat21-core/models/formArray';
 
@@ -15,7 +15,8 @@ export class FormTextareaComponent implements OnInit {
   @Input() translationErrorLabelMap: Map<string, string>;
   @Input() stylesMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 
-
+  @Output() onKeyEnterPressed = new EventEmitter<any>();
+  
   @ViewChild('div_input') input: ElementRef;
   form: FormGroup;
   constructor(private rootFormGroup: FormGroupDirective,
@@ -48,6 +49,27 @@ export class FormTextareaComponent implements OnInit {
     this.input.nativeElement.classList.add('is-focused')
   }
 
+  /**
+   * FIRED when user press ENTER button on keyboard 
+   * @param event 
+   */
+  onEnterPressed(event){
+    event.preventDefault();
+    this.onKeyEnterPressed.emit(event)
+  }
+
+  /**
+  * HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
+  * @param event 
+  */
+ onkeydown(event){
+  const keyCode = event.which || event.keyCode;
+  // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
+  if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   
+    event.preventDefault();
+    this.form.controls[this.controlName].patchValue(this.form.controls[this.controlName].value + '\r\n')
+  }
+}
 
   setFormStyle(){
     if(this.form.controls[this.controlName].hasError('pattern') || 

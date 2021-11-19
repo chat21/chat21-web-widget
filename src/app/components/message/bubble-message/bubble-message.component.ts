@@ -18,6 +18,7 @@ export class BubbleMessageComponent implements OnInit {
   @Input() fontColor: string;
   @Input() fontSize: string;
   @Input() fontFamily: string;
+  @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onImageRendered = new EventEmitter<boolean>()

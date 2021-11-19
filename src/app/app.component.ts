@@ -739,6 +739,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
+        const widgetVersion = this.g.BUILD_VERSION
 
         if (!attributes && attributes === null) {
             if (this.g.attributes) {
@@ -766,6 +767,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (senderId) {
             attributes['requester_id'] = senderId;
+        }
+        if (widgetVersion) {
+            attributes['widgetVer'] = widgetVersion;
         }
         try {
             // attributes['payload'] = this.g.customAttributes.payload;

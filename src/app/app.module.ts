@@ -25,6 +25,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader/src/http-loader'
 //pipe
 import { MarkedPipe } from './directives/marked.pipe';
 import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
+import { SafeHtmlPipe } from './directives/safe-html.pipe';
+
 // utils
 import { Globals } from './utils/globals';
 
@@ -79,6 +81,7 @@ import { ConversationFooterComponent } from './components/conversation-detail/co
 import { ConversationPreviewComponent } from './components/conversation-detail/conversation-preview/conversation-preview.component';
 import { BubbleMessageComponent } from './components/message/bubble-message/bubble-message.component';
 import { TextComponent } from './components/message/text/text.component';
+import { HtmlComponent } from './components/message/html/html.component';
 import { ImageComponent } from './components/message/image/image.component';
 import { TextButtonComponent } from './components/message/buttons/text-button/text-button.component';
 import { FrameComponent } from './components/message/frame/frame.component';
@@ -160,8 +163,6 @@ import { FormTextComponent } from './components/form/inputs/form-text/form-text.
 import { FormLabelComponent } from './components/form/inputs/form-label/form-label.component';
 import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
 import { FormTextareaComponent } from './components/form/inputs/form-textarea/form-textarea.component';
-
-
 
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
@@ -340,7 +341,9 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     FormCheckboxComponent,
     FormTextareaComponent,
     ConversationPreviewComponent,
-    SendButtonComponent
+    SendButtonComponent,
+    HtmlComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,

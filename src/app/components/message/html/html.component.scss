@@ -1,0 +1,79 @@
+@import '../../../../sass/variables';
+
+:root {
+    --themeColor: #{$blue};
+    --foregroundColor: #{$col-msg-sent};
+    --buttonFontSize: #{$button-in-msg-font-size};
+}
+
+
+::ng-deep {
+
+    .button-html {
+        padding: 8px 16px!important;
+        position: relative;
+        max-width: 300px;
+        min-width: inherit;
+        cursor: pointer !important;
+        border: 1px solid var(--themeColor);
+        border-radius: 20px;
+        margin: 3px;
+        background: transparent;
+        overflow: hidden;
+        font-family: 'Muli', sans-serif !important;
+        font-size: var(--buttonFontSize) !important;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.24px;
+        -webkit-font-smoothing: antialiased;
+        color: var(--themeColor);
+        line-height: 16px;
+
+    }
+
+    .url {
+        transition: background-color .6s ease;
+        .icon-button-action {
+            position: absolute;
+            top: -1px;
+            right: 1px;
+            svg {
+                fill: var(--themeColor);
+            }
+        }
+        .icon-button-action-self{
+            position: absolute;
+            right: 1px;
+            svg {
+                fill: var(--themeColor);
+            }
+        }
+        &:focus,
+        &:hover {
+            color: white;
+            background:  var(--themeColor);
+            .icon-button-action, .icon-button-action-self {
+                svg {
+                    fill: white;
+                }
+            }
+        }
+        &:active{
+            font-size: 20px;
+        }
+    }
+    
+    .text-html{
+        font-size: 1.4em;
+        margin: 0;
+        padding: 8px;
+        font-style: normal;
+        letter-spacing: normal;
+        font-stretch: normal;
+        font-variant: normal;
+        font-weight: 300;
+        overflow: hidden;
+    }
+
+}

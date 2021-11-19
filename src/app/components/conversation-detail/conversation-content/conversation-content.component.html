@@ -71,6 +71,7 @@
                               [fontColor]="stylesMap.get('bubbleSentTextColor')"
                               [fontSize]="stylesMap.get('fontSize')"
                               [fontFamily]="stylesMap.get('fontFamily')"
+                              [stylesMap]="stylesMap"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                               (onAfterMessageRender)="returnOnAfterMessageRender($event)"
                               (onImageRendered)="onImageRenderedFN($event)">
@@ -102,6 +103,7 @@
                               [fontColor]="stylesMap.get('bubbleReceivedTextColor')"
                               [fontSize]="stylesMap.get('fontSize')"
                               [fontFamily]="stylesMap.get('fontFamily')"
+                              [stylesMap]="stylesMap"
                               (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
                               (onAfterMessageRender)="returnOnAfterMessageRender($event)"
                               (onImageRendered)="onImageRenderedFN($event)">
@@ -180,15 +182,22 @@
                       </div>
 
                       <!-- FILE PENDING UPLOAD -->
-                      <div *ngIf="showUploadProgress" class="msg_container base_sent" style="margin-right: 24px;">
+                      <div *ngIf="showUploadProgress" class="msg_container base_sent" >
                         <!-- class="slide-in-right" -->
-                        <div class="messages msg_sent ">
-                          <div class="spinner">
-                            <div class="bounce1"></div>
-                            <div class="bounce2"></div>
-                            <div class="bounce3"></div>
-                          </div>
+                        <div class="chat21-spinner active" id="chat21-spinner" style="margin: 0px 6px 0px;">
+                          <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                          <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                          <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                          <!-- <span [ngStyle]="{'color': stylesMap.get('themeColor')}">{{translationMap.get('LABEL_LOADING')}}</span> -->
                         </div>
+
+                        <!-- <div class="messages msg_sent ">
+                          <div class="spinner">
+                            <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                            <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                            <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                          </div>
+                        </div> -->
                       </div>
                       
                   </div>

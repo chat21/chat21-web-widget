@@ -78,7 +78,7 @@
 
     <!-- FOOTER -->
     <div class="c21-footer fade-in-bottom-footer">
-        <chat-menu-options
+        <chat-menu-options *ngIf="!hideSettings"
             (onSignOut)="onSignOutFN()">
         </chat-menu-options>
         <div id="c21-powered-by">

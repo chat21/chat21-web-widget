@@ -206,39 +206,7 @@
                         .c21-ico-done_all {
                             background-image: url("../../../../assets/images/f21ico-done_all.svg");
                         }
-                    }
-
-                    .spinner {
-                        // margin: 100px auto 0;
-                        width: 90px;
-                        min-height: 20px;
-                        // padding: 7px;
-                        padding-top: 8px;
-                        text-align: center;
-                      }
-                      
-                      .spinner > div {
-                        width: 10px;
-                        height: 10px;
-                        background-color: rgb(255, 255, 255);
-                      
-                        border-radius: 100%;
-                        display: inline-block;
-                        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-                        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-                      }
-                      
-                      .spinner .bounce1 {
-                        -webkit-animation-delay: -0.32s;
-                        animation-delay: -0.32s;
-                      }
-                      
-                      .spinner .bounce2 {
-                        -webkit-animation-delay: -0.16s;
-                        animation-delay: -0.16s;
-                      }
-                      
-                    
+                    }       
                 }
     
                 /** recive message **/

@@ -4,7 +4,9 @@
             type="checkbox" 
             [formControlName]="element.name"
             [checked]="element.value"
-            [ngClass]="{'errors': hasSubmitted && form.controls[element.name].errors}">
+            [tabIndex]="element?.tabIndex"
+            [ngClass]="{'errors': hasSubmitted && form.controls[element.name].errors}"
+            (keydown.enter)="onEnterPressed($event)">
     <label class="c21-form-message-field">{{element.label}}</label>
     <div *ngIf="hasSubmitted && form.get(element.name).errors" class="text-danger">
       {{translationErrorLabelMap.get('LABEL_ERROR_FIELD_REQUIRED')}}
