@@ -41,15 +41,22 @@
               <span>{{message.timestamp | amTimeAgo}}</span>
           </ng-template>
 
-          <chat-text
+          <!-- [htmlEnabled]="(message?.type==='html')? true : false" -->
+          <chat-text *ngIf="message?.type !=='html'"
             [text]="message?.text"
-            [htmlEnabled]="(message?.type==='html')? true : false"
             [color]="fontColor"
             [fontSize]="fontSize"
             [fontFamily]="fontFamily"
             (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
             (onAfterMessageRender)="returnOnAfterMessageRender($event)">
           </chat-text>
+
+          <chat-html *ngIf="message?.type==='html'"
+            [htmlText]="message?.text"
+            [fontSize]="stylesMap.get('buttonFontSize')"
+            [themeColor]="stylesMap.get('themeColor')"
+            [foregroundColor]="stylesMap.get('foregroundColor')">
+          </chat-html>
           <!-- <p #messageEl class="message_innerhtml marked" [innerHTML]="printMessage(message, messageEl, this) | marked"></p> -->
           <!-- <div *ngIf="isPopupUrl(message.text); then contentPopup else contentNewTab">here
               is ignored</div>

@@ -1,4 +1,4 @@
 <p  #messageEl class="message_innerhtml marked" 
-    [innerHTML]="htmlEnabled? (printMessage(text, messageEl, this) | marked) : (printMessage(text, messageEl, this) | htmlEntitiesEncode | marked)" 
+    [innerHTML]="printMessage(text, messageEl, this) | htmlEntitiesEncode | marked" 
     [style.color]="color"
     [style.font-size]="fontSize"></p>

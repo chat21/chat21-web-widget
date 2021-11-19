@@ -18,6 +18,7 @@ export class BubbleMessageComponent implements OnInit {
   @Input() fontColor: string;
   @Input() fontSize: string;
   @Input() fontFamily: string;
+  @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onImageRendered = new EventEmitter<boolean>()
@@ -94,6 +95,7 @@ export class BubbleMessageComponent implements OnInit {
     };
 
     if (metadata.width && metadata.width < MAX_WIDTH_IMAGES) {
+      console.log('sizeeee 111111111', metadata)
       if (metadata.width <= 55) {
         const ratio = (metadata['width'] / metadata['height']);
         sizeImage.width = MIN_WIDTH_IMAGES;
@@ -103,6 +105,7 @@ export class BubbleMessageComponent implements OnInit {
         sizeImage.height = metadata.height
       }
     } else if (metadata.width && metadata.width > MAX_WIDTH_IMAGES) {
+      console.log('sizeeee 2222222', metadata)
       const ratio = (metadata['width'] / metadata['height']);
       sizeImage.width = MAX_WIDTH_IMAGES;
       sizeImage.height = MAX_WIDTH_IMAGES / ratio;

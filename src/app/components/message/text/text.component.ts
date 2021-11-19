@@ -14,7 +14,7 @@ export class TextComponent implements OnInit {
   @Input() fontFamily: string;
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
-  
+
   constructor() { }
 
   ngOnInit() {
