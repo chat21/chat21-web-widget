@@ -1,5 +1,16 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.1
+- added: if msg.type is 'html' enable possibility to render html code inside msg.text (WID-82)
+- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)
+- added: widgetVer attributes property in conversation (WID-79)
+- removed: title tag from return-receipt svg icons
+- removed: privacyField property from tiledesk settings and from components usage
+- bug-fixed: disabled horizontal resize for form-textarea component
+- bug-fixed: loading bounce don't have themeColor and foregroundColor right value as background and color css property (WID-84)
+
+### 5.0.18 IN PROD
+
 ### 5.0.18-rc.13
 - bug-fixed: action button not show animation on button clicked if multiple action button is in DOM but show animation in previous action button
 - bug-fixed: when conversation menu-options is clicked, the focus is moved to footer and mobile keyboard opens
