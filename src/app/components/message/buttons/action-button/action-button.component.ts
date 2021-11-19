@@ -21,7 +21,7 @@ export class ActionButtonComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges){
     //decomment if element should have same color of themeColor and fregroundColor
-    if(this.fontSize) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--fontSize', this.fontSize);
+    if(this.fontSize) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--buttonFontSize', this.fontSize);
     if(this.themeColor) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--themeColor', this.themeColor);
     if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.action').style.setProperty('--foregroundColor', this.foregroundColor);
   }

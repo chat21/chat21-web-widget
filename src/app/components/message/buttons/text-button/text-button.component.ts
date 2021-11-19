@@ -22,7 +22,7 @@ export class TextButtonComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges){
     //decomment if element should have same color of themeColor and fregroundColor
-    if(this.fontSize) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--fontSize', this.fontSize);
+    if(this.fontSize) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--buttonFontSize', this.fontSize);
     if(this.themeColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--themeColor', this.themeColor);
     if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--foregroundColor', this.foregroundColor);
   }
