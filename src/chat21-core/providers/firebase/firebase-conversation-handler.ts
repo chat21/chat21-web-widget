@@ -23,9 +23,10 @@ import { MSG_STATUS_RECEIVED, CHAT_REOPENED, CHAT_CLOSED, MEMBER_JOINED_GROUP, T
 import {
   compareValues,
   searchIndexInArrayForUid,
-  conversationMessagesRef
+  conversationMessagesRef,
+  isJustRecived
 } from '../../utils/utils';
-
+import { v4 as uuidv4 } from 'uuid';
 import { messageType } from '../../utils/utils-message';
 
 // @Injectable({ providedIn: 'root' })
@@ -99,7 +100,13 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.ref = firebaseMessages.orderByChild('timestamp').limitToLast(100);
         this.ref.on('child_added', (childSnapshot) => {
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
-            that.added(childSnapshot);
+            const msg: MessageModel = childSnapshot.val();        
+            msg.uid = childSnapshot.key;
+            if(msg.attributes && !msg.attributes.commands){
+                that.addedNew(msg).then(res => console.log('responsee', res));
+            }else if(msg.attributes && msg.attributes.commands){
+                that.renderCommandsMessages(msg).then(res => console.log('responsee 222', res));
+            }
         });
         this.ref.on('child_changed', (childSnapshot) => {
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
@@ -240,14 +247,34 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     // }
 
     /** */
-    private added(childSnapshot: any) {
-        const msg = this.messageGenerate(childSnapshot);
+    private added(childSnapshot: any, commandMessage?: MessageModel) {
+        let msg: MessageModel;
+        if(commandMessage)  msg = this.messageCommandGenerate(commandMessage);
+        if(!commandMessage) msg = this.messageGenerate(childSnapshot);
         // msg.attributes && msg.attributes['subtype'] === 'info'
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
             return;
         }
-        this.addRepalceMessageInArray(childSnapshot.key, msg);
+        // this.addRepalceMessageInArray(childSnapshot.key, msg);
+        this.addRepalceMessageInArray(msg.uid, msg);
         this.messageAdded.next(msg);
+    }
+
+    private addedNew(message:MessageModel): Promise<any>{
+        return new Promise((resolve, reject)=> {
+            const msg = this.messageCommandGenerate(message);
+            // msg.attributes && msg.attributes['subtype'] === 'info'
+            if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
+                // return;
+                resolve(true)
+            }
+            // this.addRepalceMessageInArray(childSnapshot.key, msg);
+            console.log('added --> ', msg)
+            this.addRepalceMessageInArray(msg.uid, msg);
+            this.messageAdded.next(msg);
+            resolve(true)
+        })
+        
     }
 
     /** */
@@ -303,9 +330,38 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         return msg;
     }
 
+    private messageCommandGenerate(message:MessageModel){
+        const msg: MessageModel = message;
+        // controllo fatto per i gruppi da rifattorizzare
+        if (!msg.sender_fullname || msg.sender_fullname === 'undefined') {
+            msg.sender_fullname = msg.sender;
+        }
+        // bonifico messaggio da url
+        // if (msg.type === 'text') {
+        //     msg.text = htmlEntities(msg.text)
+        //     msg.text = replaceEndOfLine(msg.text)
+        // }
+        
+        // verifico che il sender è il logged user
+        msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
+        // traduco messaggi se sono del server
+        if (msg.attributes && msg.attributes.subtype) {
+            if (msg.attributes.subtype === 'info' || msg.attributes.subtype === 'info/support') {
+                this.translateInfoSupportMessages(msg);
+            }
+        }
+        /// commented because NOW ATTRIBUTES COMES FROM OUTSIDE 
+        // if (msg.attributes && msg.attributes.projectId) {
+        //     this.attributes.projectId = msg.attributes.projectId;
+        //     // sessionStorage.setItem('attributes', JSON.stringify(attributes));
+        // }
+        return msg;
+    }
+
     /** */
     private addRepalceMessageInArray(key: string, msg: MessageModel) {
         const index = searchIndexInArrayForUid(this.messages, key);
+        console.log('addRepalceMessageInArray --->', key, msg)
         if (index > -1) {
             this.messages.splice(index, 1, msg);
         } else {
@@ -407,11 +463,82 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
   unsubscribe(key: string) {
     this.listSubsriptions.forEach(sub => {
         this.logger.debug('[FIREBASEConversationHandlerSERVICE] unsubscribe: ', sub.uid, key);
-    	if (sub.uid === key) {
-			this.logger.debug('[FIREBASEConversationHandlerSERVICE] unsubscribe: ', sub.uid, key);
-			sub.unsubscribe(key, null);
-			return;
-      	}
+        if (sub.uid === key) {
+            this.logger.debug('[FIREBASEConversationHandlerSERVICE] unsubscribe: ', sub.uid, key);
+            sub.unsubscribe(key, null);
+            return;
+        }
     });
   }
+
+
+
+  renderCommandsMessages(msg: MessageModel): Promise<any>{
+    return new Promise((resolve, reject)=> {
+        const that = this;
+        const commands = msg.attributes.commands;
+        let i=0;
+        console.log('commandssssssss', commands)
+        function execute(command){
+            if(command.type === "message"){
+                if (i >= 2) {
+                    if(!isJustRecived(new Date(), msg.timestamp)){
+                        command.message.timestamp
+                    }else if(!commands[i-1].time){
+                        commands[i-1].time ===1000
+                    }
+                    // if(!commands[i-1].time) commands[i-1].time ===1000
+                     command.message.timestamp = msg.timestamp + commands[i-1].time;
+                }
+                else {
+                    command.message.timestamp = msg.timestamp;
+                }
+                that.render_command_message(msg, command.message, function () {
+                    i += 1
+                    if (i < commands.length) {
+                        //   console.log("after send_message. New i: ", i)
+                        execute(commands[i])
+                    }
+                    else {
+                        console.log("last command executed (wait), exit")
+                        resolve(true)
+                    }
+                })
+            }else if(command.type === "wait"){
+                console.log("waittttttt", command.time)
+                setTimeout(function() {
+                    i += 1
+                    if (i < commands.length) {
+                        execute(commands[i])
+                    }
+                    else {
+                        console.log("last command executed (send message), exit")
+                    }
+                },command.time)
+            }
+        }
+        execute(commands[0])
+    })
+  }
+
+
+render_command_message(message, command_message, callback) {
+    command_message.uid = uuidv4();
+    command_message.language = message.language;
+    command_message.recipient = message.recipient;
+    command_message.recipient_fullname = message.recipient_fullname;
+    command_message.sender = message.sender;
+    command_message.sender_fullname = message.sender_fullname;
+    command_message.channel_type = message.channel_type;
+    command_message.status = message.status;
+    command_message.isSender = message.isSender;
+    this.addedNew(command_message)
+    callback()
+    // render_message(command_message);
+  }
+
+
+
+  
 }
+
