@@ -671,7 +671,6 @@ function padZero(str, len) {
   return (zeros + str).slice(-len);
 }
 
-
 function rgbToHex(rgb) {
   var rgbRegex = /^rgb\(\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*\)$/;
   var result, r, g, b, hex = "";
@@ -690,4 +689,3 @@ function componentFromStr(numStr, percent) {
   return percent ?
       Math.floor(255 * Math.min(100, num) / 100) : Math.min(255, num);
 }
-
