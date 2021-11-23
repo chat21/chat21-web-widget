@@ -55,7 +55,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     private senderId: string;
     private listSubsriptions: any[];
     private CLIENT_BROWSER: string;
-    private lastDate = '';
+    private startTime: Date = new Date();
     private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
 
@@ -66,7 +66,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     /**
      * inizializzo conversation handler
      */
-    initialize(recipientId: string,recipientFullName: string,loggedUser: UserModel,tenant: string,translationMap: Map<string, string>) {
+    initialize(recipientId: string,recipientFullName: string,loggedUser: UserModel,tenant: string, translationMap: Map<string, string>) {
         this.logger.debug('[FIREBASEConversationHandlerSERVICE] initWithRecipient',recipientId, recipientFullName, loggedUser, tenant, translationMap)
         this.recipientId = recipientId;
         this.recipientFullname = recipientFullName;
@@ -91,7 +91,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * mi sottoscrivo a change, removed, added
      */
     connect() {
-        this.lastDate = '';
         const that = this;
         this.urlNodeFirebase = conversationMessagesRef(this.tenant, this.loggedUser.uid);
         this.urlNodeFirebase = this.urlNodeFirebase + this.conversationWith;
@@ -103,9 +102,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             const msg: MessageModel = childSnapshot.val();        
             msg.uid = childSnapshot.key;
             if(msg.attributes && !msg.attributes.commands){
-                that.addedNew(msg).then(res => console.log('responsee', res));
+                that.addedNew(msg)
             }else if(msg.attributes && msg.attributes.commands){
-                that.renderCommandsMessages(msg).then(res => console.log('responsee 222', res));
+                that.addCommandMessage(msg)
             }
         });
         this.ref.on('child_changed', (childSnapshot) => {
@@ -260,20 +259,16 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         this.messageAdded.next(msg);
     }
 
-    private addedNew(message:MessageModel): Promise<any>{
-        return new Promise((resolve, reject)=> {
-            const msg = this.messageCommandGenerate(message);
-            // msg.attributes && msg.attributes['subtype'] === 'info'
-            if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
-                // return;
-                resolve(true)
-            }
-            // this.addRepalceMessageInArray(childSnapshot.key, msg);
-            console.log('added --> ', msg)
-            this.addRepalceMessageInArray(msg.uid, msg);
-            this.messageAdded.next(msg);
-            resolve(true)
-        })
+    private addedNew(message:MessageModel){
+        const msg = this.messageCommandGenerate(message);
+        // msg.attributes && msg.attributes['subtype'] === 'info'
+        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
+            return;
+        }
+        // this.addRepalceMessageInArray(childSnapshot.key, msg);
+        console.log('added --> ', msg)
+        this.addRepalceMessageInArray(msg.uid, msg);
+        this.messageAdded.next(msg);
         
     }
 
@@ -473,56 +468,59 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
 
 
-  renderCommandsMessages(msg: MessageModel): Promise<any>{
-    return new Promise((resolve, reject)=> {
-        const that = this;
-        const commands = msg.attributes.commands;
-        let i=0;
-        console.log('commandssssssss', commands)
-        function execute(command){
-            if(command.type === "message"){
-                if (i >= 2) {
-                    if(!isJustRecived(new Date(), msg.timestamp)){
-                        command.message.timestamp
-                    }else if(!commands[i-1].time){
-                        commands[i-1].time ===1000
-                    }
-                    // if(!commands[i-1].time) commands[i-1].time ===1000
-                     command.message.timestamp = msg.timestamp + commands[i-1].time;
+private addCommandMessage(msg: MessageModel){
+    const that = this;
+    const commands = msg.attributes.commands;
+    let i=0;
+    function execute(command){
+        if(command.type === "message"){
+            if (i >= 2) {
+                
+                //check if previus wait message type has time value, otherwize set to 1000ms
+                !commands[i-1].time? commands[i-1].time= 1000 : commands[i-1].time
+                command.message.timestamp = msg.timestamp + commands[i-1].time;
+                
+                /** CHECK IF MESSAGE IS JUST RECEIVED: IF false, set next message time (if object exist) to 0 -> this allow to show it immediately */
+                if(!isJustRecived(that.startTime.getTime(), msg.timestamp)){
+                    let previewsTimeMsg = msg.timestamp;
+                    commands[i-2]? previewsTimeMsg = commands[i-2].message.timestamp : null;
+                    command.message.timestamp = previewsTimeMsg + 100
+                    commands[i+1]? commands[i+1].time = 0 : null
+                }
+            } else { /**MANAGE FIRST MESSAGE */
+                command.message.timestamp = msg.timestamp;
+                if(!isJustRecived(that.startTime.getTime(), msg.timestamp)){
+                    commands[i+1]? commands[i+1].time = 0 : null
+                }
+            }
+            that.generateMessageObject(msg, command.message, function () {
+                i += 1
+                if (i < commands.length) {
+                    //   console.log("after send_message. New i: ", i)
+                    execute(commands[i])
                 }
                 else {
-                    command.message.timestamp = msg.timestamp;
+                    console.log("last command executed (wait), exit")
+                    
                 }
-                that.render_command_message(msg, command.message, function () {
-                    i += 1
-                    if (i < commands.length) {
-                        //   console.log("after send_message. New i: ", i)
-                        execute(commands[i])
-                    }
-                    else {
-                        console.log("last command executed (wait), exit")
-                        resolve(true)
-                    }
-                })
-            }else if(command.type === "wait"){
-                console.log("waittttttt", command.time)
-                setTimeout(function() {
-                    i += 1
-                    if (i < commands.length) {
-                        execute(commands[i])
-                    }
-                    else {
-                        console.log("last command executed (send message), exit")
-                    }
-                },command.time)
-            }
+            })
+        }else if(command.type === "wait"){
+            console.log("waittttttt", command.time)
+            setTimeout(function() {
+                i += 1
+                if (i < commands.length) {
+                    execute(commands[i])
+                }
+                else {
+                    console.log("last command executed (send message), exit")
+                }
+            },command.time)
         }
-        execute(commands[0])
-    })
-  }
+    }
+    execute(commands[0]) //START render first message
+}
 
-
-render_command_message(message, command_message, callback) {
+private generateMessageObject(message, command_message, callback) {
     command_message.uid = uuidv4();
     command_message.language = message.language;
     command_message.recipient = message.recipient;
@@ -533,8 +531,7 @@ render_command_message(message, command_message, callback) {
     command_message.status = message.status;
     command_message.isSender = message.isSender;
     this.addedNew(command_message)
-    callback()
-    // render_message(command_message);
+    callback();
   }
 
 

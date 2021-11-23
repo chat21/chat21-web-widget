@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.3
+- changed: border-radius bubble-message (same as buttons)
+- added: enabled splitting messages into different message objects
+
+### 5.0.19-rc.2
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value
+
 ### 5.0.19-rc.1
 - added: if msg.type is 'html' enable possibility to render html code inside msg.text (WID-82)
 - added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)
