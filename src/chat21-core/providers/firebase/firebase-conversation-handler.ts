@@ -258,12 +258,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
     private addedNew(message:MessageModel){
         const msg = this.messageCommandGenerate(message);
+        console.log('msggggg', msg)
         // msg.attributes && msg.attributes['subtype'] === 'info'
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
             return;
         }
         // this.addRepalceMessageInArray(childSnapshot.key, msg);
-        console.log('added --> ', msg)
         this.addRepalceMessageInArray(msg.uid, msg);
         this.messageAdded.next(msg);
         
@@ -353,7 +353,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     /** */
     private addRepalceMessageInArray(key: string, msg: MessageModel) {
         const index = searchIndexInArrayForUid(this.messages, key);
-        console.log('addRepalceMessageInArray --->', key, msg)
         if (index > -1) {
             this.messages.splice(index, 1, msg);
         } else {
@@ -471,6 +470,7 @@ private addCommandMessage(msg: MessageModel){
     let i=0;
     function execute(command){
         if(command.type === "message"){
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="message"', command)
             if (i >= 2) {
                 
                 //check if previus wait message type has time value, otherwize set to 1000ms
@@ -493,23 +493,21 @@ private addCommandMessage(msg: MessageModel){
             that.generateMessageObject(msg, command.message, function () {
                 i += 1
                 if (i < commands.length) {
-                    //   console.log("after send_message. New i: ", i)
                     execute(commands[i])
                 }
                 else {
-                    console.log("last command executed (wait), exit")
-                    
+                    that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> last command executed (wait), exit') 
                 }
             })
         }else if(command.type === "wait"){
-            console.log("waittttttt", command.time)
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="wait"', command)
             setTimeout(function() {
                 i += 1
                 if (i < commands.length) {
                     execute(commands[i])
                 }
                 else {
-                    console.log("last command executed (send message), exit")
+                    that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> last command executed (send message), exit') 
                 }
             },command.time)
         }
