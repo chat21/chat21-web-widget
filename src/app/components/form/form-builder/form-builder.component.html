@@ -6,13 +6,15 @@
           [controlName]="element?.name"
           [translationErrorLabelMap]="translationErrorLabelMap"
           [stylesMap]="stylesMap"
-          [hasSubmitted]="submitted">
+          [hasSubmitted]="submitted"
+          (onKeyEnterPressed)="onEnterButtonPressed($event)">
         </chat-form-text>
 
         <chat-form-label *ngIf="element?.type === 'static'"
           [element]="element"
           [controlName]="element?.name"
-          [hasSubmitted]="submitted">
+          [hasSubmitted]="submitted"
+          (onKeyEnterPressed)="onEnterButtonPressed($event)">
         </chat-form-label>
 
         <chat-form-checkbox *ngIf="element?.type === 'checkbox'"
@@ -20,7 +22,8 @@
           [controlName]="element?.name"
           [translationErrorLabelMap]="translationErrorLabelMap"
           [stylesMap]="stylesMap"
-          [hasSubmitted]="submitted">
+          [hasSubmitted]="submitted"
+          (onKeyEnterPressed)="onEnterButtonPressed($event)">
         </chat-form-checkbox>
 
         <chat-form-textarea *ngIf="element?.type === 'textarea'"
@@ -29,13 +32,17 @@
           [rows]="element?.rows"
           [translationErrorLabelMap]="translationErrorLabelMap"
           [stylesMap]="stylesMap"
-          [hasSubmitted]="submitted">
+          [hasSubmitted]="submitted"
+          (onKeyEnterPressed)="onEnterButtonPressed($event)">
         </chat-form-textarea>
     </span>
   </form>
 
   <!-- [disabled]="!preChatFormGroupCustom?.valid" -->
-  <button tabindex="1413"  class="c21-button-primary" (click)="onSubmitPreChatForm()" [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
+  <button [tabindex]="lastTabIndex"  class="c21-button-primary" 
+  (click)="onSubmitPreChatForm()"
+  (keydown.enter)="onEnterButtonPressed($event)"
+  [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
     <span class="v-align-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}"/>

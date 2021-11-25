@@ -28,6 +28,7 @@ export class FormBuilderComponent implements OnInit {
   translationErrorLabelMap: Map<string, string>;
   translationMap: Map<string, string>
   submitted: boolean = false;
+  lastTabIndex: number;
 
   private logger: LoggerService = LoggerInstance.getInstance()
 
@@ -55,7 +56,11 @@ export class FormBuilderComponent implements OnInit {
   buildFormGroup(inputJson: Array<FormArray>): FormGroup {
     let objectFormBuilder: { [key: string]: FormControl } = {}
     let restoreDefault = false;
-    inputJson.forEach(child => {
+    let initIndex:number = 1411;
+    inputJson.forEach((child, index) => {
+      child.tabIndex= initIndex + index;
+      this.lastTabIndex = initIndex + index + 1;
+
       // child.type = child.type.toLowerCase()
       if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
       
@@ -171,6 +176,16 @@ export class FormBuilderComponent implements OnInit {
     if(this.preChatFormGroupCustom.valid){
       this.onSubmitForm.emit(this.preChatFormGroupCustom.value)
     }
+  }
+
+  /**
+   * FIRED when user press ENTER button on keyboard when an input field is fired.
+   * METHOD handled from output event
+   * @param event 
+   */
+  onEnterButtonPressed(event){
+    console.log('onEnterButtonPressed eventtttt', event)
+    this.onSubmitPreChatForm();
   }
 
   onResetForm(){

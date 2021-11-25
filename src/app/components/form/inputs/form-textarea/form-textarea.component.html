@@ -18,10 +18,13 @@
       {{element.label}}
     </label>
     <textarea 
-      [formControlName]="element.name"  
+      [formControlName]="element.name" 
       [rows]="rows"
+      [tabIndex]="element?.tabIndex"
       type="text"
-      class="form-control" 
+      class="form-control"
+      (keydown)="onkeydown($event)"
+      (keydown.enter)="onEnterPressed($event)" 
       (focus)="onFocus()" 
       (focusout)="onFocusOut()">
     </textarea>
