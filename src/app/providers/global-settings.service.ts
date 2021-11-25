@@ -338,10 +338,10 @@ export class GlobalSettingsService {
         if (response !== null) {
             this.setVariablesFromService(this.globals, response);
         }
+        this.setVariableFromStorage(this.globals);
         this.setVariablesFromSettings(this.globals);
         this.setVariablesFromAttributeHtml(this.globals, this.el);
         this.setVariablesFromUrlParameters(this.globals);
-        this.setVariableFromStorage(this.globals);
         this.setDepartmentFromExternal();
         /** set color with gradient from theme's colors */
         this.globals.setColorWithGradient();
