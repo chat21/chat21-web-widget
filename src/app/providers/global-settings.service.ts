@@ -230,12 +230,12 @@ export class GlobalSettingsService {
         }
 
 
-        try {
-            const privacyField = tiledeskSettings['privacyField'];
-            if (typeof privacyField !== 'undefined') { this.globals.privacyField = privacyField; }
-        } catch (error) {
-            this.logger.error('[GLOBAL-SET] setMainParametersFromSettings privacyField > Error :', error);
-        }
+        // try {
+        //     const privacyField = tiledeskSettings['privacyField'];
+        //     if (typeof privacyField !== 'undefined') { this.globals.privacyField = privacyField; }
+        // } catch (error) {
+        //     this.logger.error('[GLOBAL-SET] setMainParametersFromSettings privacyField > Error :', error);
+        // }
 
 
         // -------------------------------------- //
@@ -541,7 +541,7 @@ export class GlobalSettingsService {
             // globals.setParameter('tenant', TEMP);
         }
         TEMP = tiledeskSettings['recipientId'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > recipientId:: ', TEMP);
+        this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > recipientId:: ', TEMP);
         if (TEMP !== undefined) {
             globals.recipientId = TEMP;
             // globals.setParameter('recipientId', TEMP);
@@ -770,11 +770,11 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.showAllConversations = (TEMP === true) ? true : false;
         }
-        TEMP = tiledeskSettings['privacyField'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > privacyField:: ', TEMP]);
-        if (TEMP !== undefined) {
-            globals.privacyField = TEMP;
-        }
+        // TEMP = tiledeskSettings['privacyField'];
+        // // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > privacyField:: ', TEMP]);
+        // if (TEMP !== undefined) {
+        //     globals.privacyField = TEMP;
+        // }
         TEMP = tiledeskSettings['dynamicWaitTimeReply'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > dynamicWaitTimeReply:: ', TEMP]);
         if (TEMP !== undefined) {
@@ -794,6 +794,11 @@ export class GlobalSettingsService {
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > hideHeaderConversationOptionsMenu:: ', TEMP]);
         if (TEMP !== undefined) {
             globals.hideHeaderConversationOptionsMenu = TEMP;
+        }
+        TEMP = tiledeskSettings['hideSettings'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > hideSettings:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.hideSettings = TEMP;
         }
         TEMP = tiledeskSettings['logLevel'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > logLevel:: ', TEMP]);
@@ -992,10 +997,10 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.showAllConversations = (TEMP === true) ? true : false;
         }
-        TEMP = el.nativeElement.getAttribute('privacyField');
-        if (TEMP !== null) {
-            this.globals.privacyField = TEMP;
-        }
+        // TEMP = el.nativeElement.getAttribute('privacyField');
+        // if (TEMP !== null) {
+        //     this.globals.privacyField = TEMP;
+        // }
         TEMP = el.nativeElement.getAttribute('dynamicWaitTimeReply');
         if (TEMP !== null) {
             this.globals.dynamicWaitTimeReply = TEMP;
@@ -1011,6 +1016,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('hideHeaderConversationOptionsMenu');
         if (TEMP !== null) {
             this.globals.hideHeaderConversationOptionsMenu = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('hideSettings');
+        if (TEMP !== null) {
+            this.globals.hideSettings = TEMP;
         }
         TEMP = el.nativeElement.getAttribute('logLevel');
         if (TEMP !== null) {
@@ -1273,10 +1282,10 @@ export class GlobalSettingsService {
             globals.showAllConversations = stringToBoolean(TEMP);
         }
 
-        TEMP = getParameterByName(windowContext, 'tiledesk_privacyField');
-        if (TEMP) {
-            globals.privacyField = TEMP;
-        }
+        // TEMP = getParameterByName(windowContext, 'tiledesk_privacyField');
+        // if (TEMP) {
+        //     globals.privacyField = TEMP;
+        // }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_jwt');
         if (TEMP) {
@@ -1302,7 +1311,7 @@ export class GlobalSettingsService {
         if (TEMP) {
             globals.hideHeaderConversationOptionsMenu = stringToBoolean(TEMP); 
         }
-
+        
         TEMP = getParameterByName(windowContext, 'tiledesk_logLevel');
         if (TEMP) {
             globals.logLevel = TEMP;

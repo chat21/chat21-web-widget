@@ -15,9 +15,13 @@ import { Globals } from '../../utils/globals';
   encapsulation: ViewEncapsulation.None, /* it allows to customize 'Powered By' */
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+
   @ViewChild('homeComponent') private element: ElementRef;
   @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ===========/
+  @Input() listConversations: Array<ConversationModel>;
+  @Input() hideSettings: boolean;
+  @Input() stylesMap: Map<string, string>
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<ConversationModel>();
   @Output() onOpenAllConvesations = new EventEmitter();
@@ -25,8 +29,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @Output() onSignOut = new EventEmitter();
   @Output() onImageLoaded = new EventEmitter<ConversationModel>();
   @Output() onConversationLoaded = new EventEmitter<ConversationModel>();
-  @Input() listConversations: Array<ConversationModel>;
-  @Input() stylesMap: Map<string, string>
   // ========= end:: Input/Output values ===========/
 
 

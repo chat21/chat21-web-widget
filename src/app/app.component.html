@@ -16,6 +16,7 @@
             <!-- [class.active]="true" -->
             <chat-home 
                 [listConversations]="listConversations"
+                [hideSettings]="g.hideSettings"
                 [stylesMap]="styleMapConversation"
                 (onNewConversation)="onNewConversation()" 
                 (onConversationSelected)="onSelectedConversation($event)"
