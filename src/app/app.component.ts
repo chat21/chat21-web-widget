@@ -739,6 +739,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const userEmail = this.g.userEmail;
         const userFullname = this.g.userFullname;
         const senderId = this.g.senderId;
+        const widgetVersion = this.g.BUILD_VERSION
 
         if (!attributes && attributes === null) {
             if (this.g.attributes) {
@@ -766,6 +767,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (senderId) {
             attributes['requester_id'] = senderId;
+        }
+        if (widgetVersion) {
+            attributes['widgetVer'] = widgetVersion;
         }
         try {
             // attributes['payload'] = this.g.customAttributes.payload;
@@ -2304,7 +2308,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('fontFamily', this.g.fontFamily)
         this.styleMapConversation.set('buttonFontSize', this.g.buttonFontSize)
     
-        this.el.nativeElement.style.setProperty('--button-in-msg-background-color', this.g.colorGradient)
+        this.el.nativeElement.style.setProperty('--button-in-msg-background-color', this.g.bubbleSentBackground)
         this.el.nativeElement.style.setProperty('--button-in-msg-font-size', this.g.buttonFontSize)
     }
 
