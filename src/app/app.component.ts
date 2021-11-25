@@ -1005,7 +1005,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isOpenAllConversation = false;
         // const conversationActive: ConversationModel = JSON.parse(this.appStorageService.getItem('activeConversation'));
         const recipientId : string = this.appStorageService.getItem('recipientId')
-        this.logger.debug('[APP-COMP]  ============ idConversation ===============', recipientId);
+        this.logger.debug('[APP-COMP]  ============ idConversation ===============', recipientId, this.g.recipientId);
         // this.g.recipientId = null;
         if(this.g.recipientId){
             this.logger.debug('[APP-COMP]  conv da urll', this.g.recipientId)
@@ -1561,6 +1561,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if(form){
             this.g.setParameter('preChatFormJson', form);
         }
+        this.logger.debug('[APP-COMP] setPreChatFormJson from external', form)
     }
 
     private getPreChatFormJson() {
@@ -1568,7 +1569,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if(this.g.preChatFormJson){
             preChatForm = this.g.preChatFormJson
         }
-        console.log('prechatformmm', preChatForm)
+        this.logger.debug('[APP-COMP] getPreChatFormJson from external', preChatForm)
         return preChatForm
     }
 
