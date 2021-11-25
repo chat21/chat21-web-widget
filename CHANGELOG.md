@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.4
+- bug-fixed: recipientId property from url was override by storage value
+
+
 ### 5.0.19-rc.3
 - changed: border-radius bubble-message (same as buttons)
 - added: enabled splitting messages into different message objects
