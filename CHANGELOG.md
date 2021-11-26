@@ -1,8 +1,9 @@
 # chat21-web-widget ver 5.0
 
 ### 5.0.19-rc.4
-- bug-fixed: recipientId property from url was override by storage value
-
+- bug-fixed: recipientId property from url was override by storage value (WID-87)
+- added: loader in iframe bubblemessage component (WID-53)
+- added: when user send/receive single emotion, it is showed without background and bigger than normal message text size
 
 ### 5.0.19-rc.3
 - changed: border-radius bubble-message (same as buttons)
