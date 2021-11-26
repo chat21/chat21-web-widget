@@ -27,7 +27,7 @@ import {
   isJustRecived
 } from '../../utils/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { messageType } from '../../utils/utils-message';
+import { isEmojii, messageType } from '../../utils/utils-message';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -163,7 +163,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             typeMsg,
             attributes,
             channelType,
-            false
+            isEmojii(msg)
         );
         const messageRef = firebaseMessagesCustomUid.push({
                 language: lang,
@@ -308,6 +308,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         
         // verifico che il sender è il logged user
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
+        //check if message contains only an emojii
+        msg.emoticon = isEmojii(msg.text)
         // traduco messaggi se sono del server
         if (msg.attributes && msg.attributes.subtype) {
             if (msg.attributes.subtype === 'info' || msg.attributes.subtype === 'info/support') {
@@ -336,6 +338,8 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         
         // verifico che il sender è il logged user
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
+        //check if message contains only an emojii
+        msg.emoticon = isEmojii(msg.text)
         // traduco messaggi se sono del server
         if (msg.attributes && msg.attributes.subtype) {
             if (msg.attributes.subtype === 'info' || msg.attributes.subtype === 'info/support') {

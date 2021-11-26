@@ -65,6 +65,7 @@
                             <!--backgroundColor non viene ancora usato -->
                             <!-- class="messages msg_sent slide-in-right" -->
                             <chat-bubble-message class="messages msg_sent"
+                              [class.emoticon]="message?.emoticon"
                               [ngStyle]="{'background': stylesMap.get('bubbleSentBackground'), 'color': stylesMap.get('bubbleSentTextColor')}"
                               [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
                               [message]="message"
@@ -98,6 +99,7 @@
 
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive slide-in-left"
+                              [class.emoticon]="message?.emoticon"
                               [ngStyle]="{'background': stylesMap.get('bubbleReceivedBackground'), 'color': stylesMap.get('bubbleReceivedTextColor')}"
                               [message]="message"
                               [fontColor]="stylesMap.get('bubbleReceivedTextColor')"
