@@ -119,7 +119,9 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         const that = this;
         const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
         this.logger.debug('[FIREBASEConversationsHandlerSERVICE] SubscribeToConversations conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
-        this.getConversationsRESTApi(urlNodeFirebase)
+        this.getConversationsRESTApi(urlNodeFirebase, (conversation, error)=> {
+            console.log('converationnnnn', conversation)
+        })
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -562,7 +564,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     }
 
 
-    private getConversationsRESTApi(childNode: string){
+    private getConversationsRESTApi(childNode: string, callback: (lastConversation: ConversationModel, error: string)=>void){
 
         this.getFirebaseToken((error, idToken) => {
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  idToken', idToken)
@@ -574,21 +576,25 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
                         'Content-Type': 'application/json',
                         // 'Authorization': 'Bearer ' + idToken,
                     })
+
                 }
                 const queryString = '?auth=' + idToken +'&orderBy="timestamp"&limitToFirst=1'
                 const url = this.BASE_URL_DATABASE + childNode + '.json' + queryString// + queryString;
-                this.http.get(url, httpOptions).subscribe(res => {
-                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi - RES', res);
-                    // callback('success')
+                this.http.get(url, httpOptions).subscribe((childSnapshot: any) => {
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi - RES', childSnapshot);
+                    const childData: ConversationModel = childSnapshot[Object.keys(childSnapshot)[0]];
+                    childData.uid = Object.keys(childSnapshot)[0]
+                    const conversation = this.completeConversation(childData); 
+                    callback(conversation, null)
                 }, (error) => {
                     this.logger.error('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi ERROR ', error);
-                    // callback('error')
+                    callback(null, 'error')
                 }, () => {
                     this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi * COMPLETE *');
 
                 });
             } else {
-                // callback('error')
+                callback(null, 'error')
             }
         });
     }
