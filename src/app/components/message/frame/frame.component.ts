@@ -13,6 +13,7 @@ export class FrameComponent implements OnInit {
   @Input() height: string;
   
   url: any;
+  loading: boolean = true
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -26,6 +27,10 @@ export class FrameComponent implements OnInit {
 
   ngOnDestroy(){
     this.url = null;
+  }
+
+  onLoaded(event){
+    this.loading = false
   }
 
 

@@ -1,0 +1,25 @@
+.loader {
+    float: left;
+    // position: absolute;
+    z-index: 1000;
+    background-color: #ccc;
+    border-radius: 8px;
+    background-image: linear-gradient(90deg, #f7f4f4 0px, #e8e8e8 40px, #f7f4f4 80px);
+    background-size: 600px;
+    animation: shine-loader 1.6s infinite linear;
+}
+
+.isLoadingImage {
+    // position: relative;
+    // top: 6px;
+    display: none;
+}
+
+@keyframes shine-loader {
+    0% {
+        background-position: -32px;
+    }
+    40%, 100% {
+        background-position: 208px;
+    }
+}

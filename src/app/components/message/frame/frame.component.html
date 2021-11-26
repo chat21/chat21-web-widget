@@ -1,3 +1,9 @@
 <div  [ngStyle] = "{ 'max-width': '100%', 'width': width, 'height': height + 'px' }">
-  <iframe  allowfullscreen width = "100%" height = "100%" style= "border:none; border-radius: 20px 20px 0 0 " [src]="url" ></iframe>
+  <div *ngIf="loading" class="loader" [ngStyle] = "{ 'width': width +'px', 'height': height +'px' }"></div>
+  <iframe  allowfullscreen 
+    [ngClass]="{'isLoadingImage': loading}"
+    width = "100%" height = "100%" 
+    style= "border:none; border-radius: 20px " 
+    [src]="url"
+    (load)="onLoaded($event)"></iframe>
 </div>
