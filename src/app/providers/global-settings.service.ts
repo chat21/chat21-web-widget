@@ -849,6 +849,11 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.buttonFontSize = TEMP;
         }
+        TEMP = tiledeskSettings['singleConversation'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > singleConversation:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.singleConversation = TEMP;
+        }
         
 
     }
@@ -1040,6 +1045,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('buttonFontSize');
         if (TEMP !== null) {
             this.globals.buttonFontSize = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('singleConversation');
+        if (TEMP !== null) {
+            this.globals.singleConversation = TEMP;
         }
         
     }
@@ -1366,6 +1375,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_buttonFontSize');
         if (TEMP) {
             globals.buttonFontSize = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_singleConversation');
+        if (TEMP) {
+            globals.singleConversation = TEMP;
         }
         
     }

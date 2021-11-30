@@ -213,6 +213,7 @@ export class Globals {
    fontSize: string; // *******  new ********
    fontFamily: string; // *******  new ********
    buttonFontSize: string; // *******  new ********
+   singleConversation: boolean; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -357,6 +358,8 @@ export class Globals {
     /** set the text family of bubble messages */
     this.buttonFontSize = '15px'
     /** set the text size of attachment-buttons */
+    this.singleConversation = false;
+    /** set the single conversation mode for the widget */
 
     this.showWaitTime = true;
 
@@ -505,7 +508,7 @@ export class Globals {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
-    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 50) + ')';
+    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 80) + ')';
   }
 
   /**
