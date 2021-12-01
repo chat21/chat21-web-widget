@@ -467,8 +467,8 @@ export class GlobalSettingsService {
                         globals['bubbleSentTextColor']= invertColor(variables['themeColor'], true);
                         globals['buttonBackgroundColor']= invertColor(variables['themeColor'], true);
                         globals['buttonTextColor'] = variables['themeColor'];
-                        globals['buttonHoverBackgroundColor'] = invertColor(variables['themeColor'], true);
-                        globals['buttonHoverTextColor'] = variables['themeColor'];
+                        globals['buttonHoverTextColor'] = invertColor(variables['themeColor'], true);
+                        globals['buttonHoverBackgroundColor'] = variables['themeColor'];
                     }
                     if (variables.hasOwnProperty('themeForegroundColor')) {
                         // globals[key] = stringToBoolean(variables[key]); -> fare test perchè se param è !== string allora ritorna string e non boolean
@@ -680,10 +680,11 @@ export class GlobalSettingsService {
             globals.themeColor = convertColorToRGBA(TEMP, 100);
             globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
             globals.bubbleSentTextColor = invertColor(TEMP, true)
-            globals.buttonBackgroundColor= invertColor(TEMP, true);
+
+            globals.buttonBackgroundColor = invertColor(TEMP, true);
             globals.buttonTextColor = convertColorToRGBA(TEMP, 100);
-            globals.buttonHoverBackgroundColor = invertColor(TEMP, true);
-            globals.buttonHoverTextColor = convertColorToRGBA(TEMP, 100);
+            globals.buttonHoverBackgroundColor = convertColorToRGBA(TEMP, 100);
+            globals.buttonHoverTextColor = invertColor(TEMP, true);
             // globals.setParameter('themeColor', convertColorToRGBA(TEMP, 100));
         }
         TEMP = tiledeskSettings['themeForegroundColor'];
