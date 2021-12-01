@@ -386,6 +386,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getConversationDetail(){
+    console.log('isconveratioArchiveddddddd', this.isConversationArchived)
     if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
       this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
         this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
