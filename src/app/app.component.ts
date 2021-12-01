@@ -454,8 +454,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             if (state && state === AUTH_STATE_ONLINE) {
                 /** sono loggato */
                 // const user = that.authService.getCurrentUser();
-                const user = that.tiledeskAuthService.getCurrentUser()
-                that.logger.debug('[APP-COMP] sono nel caso in cui sono loggato', user);
+                const user = that.tiledeskAuthService.getCurrentUser();
                 that.logger.info('[APP-COMP] ONLINE - LOGGED SUCCESSFULLY', user);
                 // that.g.wdLog([' anonymousAuthenticationInNewProject']);
                 // that.authService.resigninAnonymousAuthentication();
@@ -470,26 +469,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // this.g.setAttributeParameter('userEmail', user.email);
                 that.g.setParameter('isLogged', true);
                 that.g.setParameter('attributes', that.setAttributesFromStorageService());
-                /* faccio scattare il trigger del login solo una volta */
-                // if (that.isBeingAuthenticated) {
-                //     that.triggerOnLoggedIn();
-                //     that.isBeingAuthenticated = false;
-                // }
-                that.startUI();
+                that.initConversationsHandler(this.g.tenant, that.g.senderId);
+                
+                /* If singleConversation mode is active wait to startUI: do it later in initConversationsHandler */
+                that.g.singleConversation? null: that.startUI();
                 that.triggerOnAuthStateChanged(that.stateLoggedUser);
                 that.logger.debug('[APP-COMP]  1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart);
-                this.typingService.initialize(this.g.tenant);
-                this.presenceService.initialize(this.g.tenant);
+                that.typingService.initialize(this.g.tenant);
+                that.presenceService.initialize(this.g.tenant);
                 that.presenceService.setPresence(user.uid);
-                this.initConversationsHandler(this.g.tenant, that.g.senderId);
-                if (autoStart) {
+                // that.initConversationsHandler(this.g.tenant, that.g.senderId);
+                /* If singleConversation mode is active wait to showWidget: do it later in initConversationsHandler */
+                if (autoStart && !that.g.singleConversation) { 
                     that.showWidget();
-                    // that.g.setParameter('isShown', true, true);
                 }
 
             } else if (state && state === AUTH_STATE_OFFLINE) {
                 /** non sono loggato */
-                that.logger.debug('[APP-COMP] sono nel caso in cui non sono loggato 0');
                 that.logger.info('[APP-COMP] OFFLINE - NO CURRENT USER AUTENTICATE: ');
                 that.g.setParameter('isLogged', false);
                 that.hideWidget();
@@ -679,6 +675,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.archivedConversationsService.initialize(tenant, senderId, translationMap)
         // 2 - get conversations from storage
         // this.chatConversationsHandler.getConversationsFromStorage();
+        // 3 - get conversation from database with REST Api call if singleConversation mode is active
+        if(this.g.singleConversation){
+            this.manageWidgetSingleConversation();
+        }
         // 5 - connect conversationHandler and archviedConversationsHandler to firebase event (add, change, remove)
         this.conversationsHandlerService.subscribeToConversations(() => { })
         this.archivedConversationsService.subscribeToConversations(() => { })
@@ -691,6 +691,47 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logger.debug('[APP-COMP] this.listConversations.length', this.listConversations.length);
         this.logger.debug('[APP-COMP] this.listConversations appcomponent', this.listConversations, this.archivedConversations);
 
+    }
+
+
+    manageWidgetSingleConversation(){
+        this.conversationsHandlerService.getConverationRESTApi((conv, error)=> {
+            console.log('conversation from rest API --> ', conv)
+            if(error){
+                this.logger.error("[APP-COMP] getConverationRESTApi: ERORR while retriving data", error)
+            }
+            if(conv){
+                //start widget from this conversation
+                const recipientId : string = conv.uid
+                console.log('conversation from rest API recipientid -->', recipientId)
+                this.g.setParameter('recipientId', recipientId);
+                this.appStorageService.setItem('recipientId', recipientId)
+                this.startUI();
+                // if (this.g.isOpen === true) {
+                //     console.log('conversation from rest API go to conversationdetail -->', recipientId)
+                //     this.isOpenHome = false;
+                //     this.isOpenConversation = true;
+                //     this.isOpenSelectionDepartment = false;
+                //     this.isConversationArchived = false;
+                //     this.triggerOnOpenEvent();
+                // } else {
+                //     this.triggerOnCloseEvent();
+                // }
+            }else {
+                //start widget with NEW CONVERSATION
+                console.log('conversation from rest API start new conversation')
+                // this.isOpenHome = false;
+                // this.isOpenConversation = true;
+                // this.onNewConversation()
+            }
+
+            new Promise((resolve, reject)=>{
+                this.startUI();
+                resolve()
+            }).then((res)=> { this.showWidget() });
+            
+        });
+        
     }
 
     /** initChatSupportMode
@@ -1007,7 +1048,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const recipientId : string = this.appStorageService.getItem('recipientId')
         this.logger.debug('[APP-COMP]  ============ idConversation ===============', recipientId, this.g.recipientId);
         // this.g.recipientId = null;
-        if(this.g.recipientId){
+        this.logger.debug('[APP-COMP] singleConversation conv da ...', this.g.recipientId)
+        if(this.g.recipientId && this.g.singleConversation){
+            //start widget from current recipientId conversation
+            this.logger.debug('[APP-COMP] singleConversation conv da API', this.g.recipientId)
+            this.isOpenHome = false;
+            this.isOpenConversation = true;
+            this.isOpenSelectionDepartment = false;
+        }else if (!this.g.recipientId && this.g.singleConversation){
+            //start newConversation
+            this.logger.debug('[APP-COMP] singleConversation start new conv ', this.g.recipientId)
+            this.isOpenHome = false;
+            this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            // if (departments.length > 1 && !this.g.departmentID == null) {
+            //     // this.logger.debug('[APP-COMP] 22222');
+            //     this.isOpenSelectionDepartment = true;
+            // } else {
+            //     // this.logger.debug('[APP-COMP] 11111', this.g.isOpen, this.g.recipientId);
+            //     this.isOpenConversation = false;
+            //     if (!this.g.recipientId && this.g.isOpen) {
+            //         // this.startNwConversation();
+            //         this.openNewConversation();
+            //     }
+            // }
+            this.openNewConversation();
+        }else if(this.g.recipientId){
             this.logger.debug('[APP-COMP]  conv da urll', this.g.recipientId)
             if (this.g.isOpen) {
                 this.isOpenConversation = true;
@@ -1015,7 +1081,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.g.setParameter('recipientId', this.g.recipientId);
             this.appStorageService.setItem('recipientId', this.g.recipientId)
         }else if(recipientId){ 
-            this.logger.debug('[APP-COMP]  conv da storagee', recipientId)
+            this.logger.debug('[APP-COMP] conv da storagee', recipientId)
             if (this.g.isOpen) {
                 this.isOpenConversation = true;
             }
@@ -1906,7 +1972,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logger.debug('[APP-COMP] openCloseWidget', recipientId, this.g.isOpen, this.g.startFromHome);
         if (this.g.isOpen === true) {
             if (!recipientId) {
-                if (this.g.startFromHome) {
+                if(this.g.singleConversation){
+                    this.onNewConversation()
+                } else if (this.g.startFromHome) {
                     this.isOpenHome = true;
                     this.isOpenConversation = false;
                 } else {
@@ -2308,7 +2376,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('fontSize', this.g.fontSize)
         this.styleMapConversation.set('fontFamily', this.g.fontFamily)
         this.styleMapConversation.set('buttonFontSize', this.g.buttonFontSize)
-    
+        this.styleMapConversation.set('buttonBackgroundColor', this.g.buttonBackgroundColor)
+        this.styleMapConversation.set('buttonTextColor', this.g.buttonTextColor)
+        this.styleMapConversation.set('buttonHoverBackgroundColor',this.g.buttonHoverBackgroundColor)
+        this.styleMapConversation.set('buttonHoverTextColor', this.g.buttonHoverTextColor)
+
+
+
         this.el.nativeElement.style.setProperty('--button-in-msg-background-color', this.g.bubbleSentBackground)
         this.el.nativeElement.style.setProperty('--button-in-msg-font-size', this.g.buttonFontSize)
     }
