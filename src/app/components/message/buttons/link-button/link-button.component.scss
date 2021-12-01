@@ -1,8 +1,10 @@
 @import '../../../../../sass/variables';
 
 :root {
-    --themeColor: #{$blue};
-    --foregroundColor: #{$col-msg-sent};
+    --backgroundColor: #{$blue};
+    --textColor: #{$bck-msg-sent};
+    --hoverBackgroundColor: #{$bck-msg-sent};
+    --hoverTextColor: #{$blue};
     --buttonFontSize: #{$button-in-msg-font-size};
 }
 
@@ -12,10 +14,10 @@
     max-width: 300px;
     min-width: inherit;
     cursor: pointer;
-    border: 1px solid var(--themeColor);
+    border: 1px solid var(--textColor);
     border-radius: 20px;
     margin: 3px;
-    background: transparent;
+    background: var(--backgroundColor);
     overflow: hidden;
     font-family: 'Muli', sans-serif;
     font-size: var(--buttonFontSize);
@@ -24,7 +26,7 @@
     white-space: nowrap;
     letter-spacing: -0.24px;
     -webkit-font-smoothing: antialiased;
-    color: var(--themeColor);
+    color: var(--textColor);
     line-height: 16px;
 }
 
@@ -35,23 +37,23 @@
         top: -1px;
         right: 1px;
         svg {
-            fill: var(--themeColor);
+            fill: var(--textColor);
         }
     }
     .icon-button-action-self{
         position: absolute;
         right: 1px;
         svg {
-            fill: var(--themeColor);
+            fill: var(--textColor);
         }
     }
     &:focus,
     &:hover {
-        color: white;
-        background:  var(--themeColor);
+        color: var(--hoverTextColor);
+        background:  var(--hoverBackgroundColor);
         .icon-button-action, .icon-button-action-self {
             svg {
-                fill: white;
+                fill: var(--hoverTextColor);
             }
         }
     }

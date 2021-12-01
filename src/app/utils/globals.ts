@@ -213,6 +213,10 @@ export class Globals {
    fontSize: string; // *******  new ********
    fontFamily: string; // *******  new ********
    buttonFontSize: string; // *******  new ********
+   buttonBackgroundColor: string // *******  new ********
+   buttonTextColor: string // *******  new ********
+   buttonHoverBackgroundColor: string // *******  new ********
+   buttonHoverTextColor: string // *******  new ********
    singleConversation: boolean; // *******  new ********
   constructor(
   ) {
@@ -358,6 +362,15 @@ export class Globals {
     /** set the text family of bubble messages */
     this.buttonFontSize = '15px'
     /** set the text size of attachment-buttons */
+    this.buttonBackgroundColor = convertColorToRGBA('#ffffff', 100)
+    /** set the backgroundColor of attachment-buttons */
+    this.buttonTextColor = convertColorToRGBA('#2a6ac1', 100)
+    /** set the text color of attachment-buttons */
+    this.buttonHoverBackgroundColor = convertColorToRGBA('#2a6ac1', 100)
+    /** set the text size of attachment-buttons */
+    this.buttonHoverTextColor = convertColorToRGBA('#ffffff', 100);
+    /** set the text size of attachment-buttons */
+
     this.singleConversation = false;
     /** set the single conversation mode for the widget */
 
@@ -499,7 +512,9 @@ export class Globals {
       'dynamicWaitTimeReply': this.dynamicWaitTimeReply, 'soundEnabled': this.soundEnabled, 'logLevel': this.logLevel,
       'bubbleSentBackground' : this.bubbleSentBackground, 'bubbleSentTextColor': this.bubbleSentTextColor,   
       'bubbleReceivedBackground': this.bubbleReceivedBackground, 'bubbleReceivedTextColor': this.bubbleReceivedTextColor,
-      'fontSize': this.fontSize, 'fontFamily': this.fontFamily, 'buttonFontSize': this.buttonFontSize
+      'fontSize': this.fontSize, 'fontFamily': this.fontFamily, 'buttonFontSize': this.buttonFontSize,
+      'buttonBackgroundColor': this.buttonBackgroundColor, 'buttonTextColor': this.buttonTextColor,
+      'buttonHoverBackgroundColor': this.buttonHoverBackgroundColor, 'buttonHoverTextColor': this.buttonHoverTextColor
     };
   }
 
