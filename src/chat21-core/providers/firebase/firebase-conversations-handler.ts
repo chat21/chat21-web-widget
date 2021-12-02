@@ -1,4 +1,3 @@
-import { firebaseConfig } from './../../../environments/firebase-config';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
