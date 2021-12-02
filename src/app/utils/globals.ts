@@ -499,7 +499,6 @@ export class Globals {
       'fontSize': this.fontSize, 'fontFamily': this.fontFamily, 'buttonFontSize': this.buttonFontSize
 
     };
-    console.log('recipienttttt'+this.recipientId)
   }
 
 
@@ -507,7 +506,7 @@ export class Globals {
     this.themeColor50 = convertColorToRGBA(this.themeColor, 50); // this.g.themeColor + 'CC';
     this.colorGradient = 'linear-gradient(' + this.themeColor + ', ' + this.themeColor50 + ')';
     this.colorGradient180 = 'linear-gradient( 180grad, ' + this.themeColor + ', ' + this.themeColor50 + ')';
-    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 50) + ')';
+    this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 80) + ')';
   }
 
   /**
