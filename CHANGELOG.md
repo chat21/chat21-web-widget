@@ -1,5 +1,18 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.18.1 IN PROD 
+- bug-fixed: property align not works when no one set it (WID-92)	
+- bug-fixed: loading bounces not have same color of themeColor
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value (WID-86)	
+- bug-fixed: disabled horizontal resize for form-textarea component
+- changed: bubbleSentMessage gradiend from .5 to .8
+- changed: bubbleMessage border radius from 8px to 20px
+- added: management of keaboard tab button for preChatForm
+- added: widgetVer attributes property 
+- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)	
+
+### 5.0.18 IN PROD
+
 ### 5.0.18-rc.13
 - bug-fixed: action button not show animation on button clicked if multiple action button is in DOM but show animation in previous action button
 - bug-fixed: when conversation menu-options is clicked, the focus is moved to footer and mobile keyboard opens
