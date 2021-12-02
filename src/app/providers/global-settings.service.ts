@@ -438,9 +438,11 @@ export class GlobalSettingsService {
                     if (key === 'align' && variables[key] === 'left') {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.left = '0!important';
+                        globals['align']= 'left'
                     } else if (key === 'align' && variables[key] === 'right') {
                         const divWidgetContainer = globals.windowContext.document.getElementById('tiledeskdiv');
                         divWidgetContainer.style.right = '0!important';
+                        globals['align']= 'right'
                     }
                     // if (variables[key] && variables[key] !== null && key !== 'online_msg')  {
                     //     globals[key] = stringToBoolean(variables[key]); //-> fare test perchè se param è !== string allora ritorna string e non boolean
