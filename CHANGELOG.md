@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.5.1
+- bug-fixed: cannot find module environments/firebase-config in firebase-conversations-handler
+
 ### 5.0.19-rc.5
 - added: buttonBackgroundColor, buttonTextColor, buttonHoverBackgroundColor, buttonHoverTextColor tiledesk settings property to customize attachment buttons
 - changed: bubblemessage ui when single emojii is in message text
