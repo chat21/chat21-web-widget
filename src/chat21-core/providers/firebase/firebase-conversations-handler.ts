@@ -312,28 +312,40 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             // this.BSConversationDetail.next(conversationSelected);
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/conversations/' + conversationId;
-            const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
+            const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail urlNodeFirebase *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (childSnapshot) => {
-                const childData: ConversationModel = childSnapshot.val();
-                this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
-                if (childSnapshot && childSnapshot.key && childData) {
-                    childData.uid = childSnapshot.key;
-                    const conversation = this.completeConversation(childData);
-                    if (conversation) {
-                        callback(conversation)
-                    } else {
-                        callback(null)
+            firebaseMessages.on('value', (snap) => {
+                const childSnapshot = snap.child('/'+conversationId)
+                if(!childSnapshot.exists()){
+                    callback(null)
+                } else {
+                    const childData: ConversationModel = childSnapshot.val();
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val(), childSnapshot.key)
+                    if (childSnapshot && childSnapshot.key && childData) {
+                        childData.uid = childSnapshot.key;
+                        const conversation = this.completeConversation(childData);
+                        if (conversation) {
+                            callback(conversation)
+                        } else {
+                            callback(null)
+                        }
                     }
+                    // this.BSConversationDetail.next(conversation);
                 }
+                // const childData: ConversationModel = childSnapshot.val();
+                // this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
+                // if (childSnapshot && childSnapshot.key && childData) {
+                //     childData.uid = childSnapshot.key;
+                //     const conversation = this.completeConversation(childData);
+                //     if (conversation) {
+                //         callback(conversation)
+                //     } else {
+                //         callback(null)
+                //     }
+                // }
                 // this.BSConversationDetail.next(conversation);
             });
-            let childN = conversationsPathForUserId(this.tenant, this.loggedUserId)
-            console.log('childdddddd', childN)
-            firebase.database().ref(childN).on('value', (snap)=> {
-                console.log('onceeeeeee', snap.child('/'+conversationId).exists())
-            })
         }
 
     }

@@ -169,7 +169,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     }
 
 
-    getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
+    public getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
         const conversation = this.archivedConversations.find(item => item.uid === conversationId);
         this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] SubscribeToConversations getConversationDetail::ARCHIVED *****: ', conversation)
         if (conversation) {
@@ -177,21 +177,26 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             // this.BSConversationDetail.next(conversationSelected);
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/archived_conversations/' + conversationId;
-            const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
+            const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
             this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (childSnapshot) => {
-                const childData: ConversationModel = childSnapshot.val();
-                if (childSnapshot && childSnapshot.key && childData) {
-                    childData.uid = childSnapshot.key;
-                    const conversation = this.completeConversation(childData);
-                    if (conversation) {
-                        callback(conversation)
-                    } else {
-                        callback(null)
+            firebaseMessages.on('value', (snap) => {
+                const childSnapshot = snap.child('/'+conversationId)
+                if(!childSnapshot.exists()){
+                    callback(null)
+                }else {
+                    const childData: ConversationModel = childSnapshot.val();
+                    if (childSnapshot && childSnapshot.key && childData) {
+                        childData.uid = childSnapshot.key;
+                        const conversation = this.completeConversation(childData);
+                        if (conversation) {
+                            callback(conversation)
+                        } else {
+                            callback(null)
+                        }
                     }
+                    // this.BSConversationDetail.next(conversation);
                 }
-                // this.BSConversationDetail.next(conversation);
             });
         }
     }
