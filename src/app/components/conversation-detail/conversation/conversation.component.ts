@@ -386,7 +386,32 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getConversationDetail(){
-    console.log('isconveratioArchiveddddddd', this.isConversationArchived)
+    // if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
+    //   this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //     this.conversation = conv;    
+    //     if(!this.conversation){
+    //       console.log('archivedddddd')
+    //       this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //         this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //         conv? this.isConversationArchived= true : null  
+    //         this.conversation = conv;
+    //       })
+    //     }
+    //   })
+    // } else { //get conversation from 'conversations' firebase node
+    //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //     this.conversation = conv;
+    //     if(!this.conversation){
+    //       this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //         this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //         conv? this.isConversationArchived = false : null  
+    //         this.conversation = conv; 
+    //       })
+    //     }
+    //   })
+    // }
     if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
       this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
         this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
@@ -398,7 +423,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.conversation = conv;    
       })
     }
-    
+    // this.updateConversationBadge()
   }
 
   // onResize(event) {
