@@ -1,7 +1,11 @@
 @import '../../../../sass/variables';
 
+:host{
+    --borderRadius: 8px;
+}
+
 img {
-    border-radius: 8px;
+    border-radius: var(--borderRadius);
     //padding: 3px;
     margin-bottom: 0px;
     max-width: calc(100% - 6px);
@@ -38,7 +42,7 @@ img {
     // position: absolute;
     z-index: 1000;
     background-color: #ccc;
-    border-radius: 8px;
+    border-radius: var(--borderRadius);
     background-image: linear-gradient(90deg, #f7f4f4 0px, #e8e8e8 40px, #f7f4f4 80px);
     background-size: 600px;
     animation: shine-loader 1.6s infinite linear;
