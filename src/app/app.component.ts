@@ -703,6 +703,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     manageWidgetSingleConversation(){
         if(this.g.recipientId){
+            this.appStorageService.setItem('recipientId', this.g.recipientId)
             new Promise((resolve, reject)=>{
                 this.startUI();
                 resolve()
