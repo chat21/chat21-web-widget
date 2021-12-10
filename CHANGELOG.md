@@ -1,5 +1,22 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.6
+- added: border to conversation-preview header
+- added: singleConversation widget mode: if true and recipientId property IS NOT SET, widget loads the last active conversation by timestamp order; if true and recipientId property IS SET, widget loads current conversation 
+- removed: 'px' to image component dimensions
+- bug-fixed: getConversationDetail logic updates because if conversation is archived and widget tab is already closed, when user open it again, widget don't know the right status of the conversation and think always that is an active conversation
+
+### 5.0.18.1 IN PROD 
+- bug-fixed: property align not works when no one set it (WID-92)	
+- bug-fixed: loading bounces not have same color of themeColor
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value (WID-86)	
+- bug-fixed: disabled horizontal resize for form-textarea component
+- changed: bubbleSentMessage gradiend from .5 to .8
+- changed: bubbleMessage border radius from 8px to 20px
+- added: management of keaboard tab button for preChatForm
+- added: widgetVer attributes property 
+- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)	
+
 ### 5.0.19-rc.5.1
 - bug-fixed: cannot find module environments/firebase-config in firebase-conversations-handler
 
