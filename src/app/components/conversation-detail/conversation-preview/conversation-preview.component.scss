@@ -49,7 +49,7 @@
     }
     
     .c21-header{
-        height: var(--header-height);
+        height: calc(2px + var(--header-height));
         position: fixed;
         top: var(--margin-top);
         // right: var(--margin-right);
