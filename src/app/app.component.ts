@@ -694,19 +694,33 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
+    /**
+     * @description 
+     * -if recipientId from tiledesk settings IS SET, not get last active conversation
+     * and call startUI() and showWidget() from current recipientId
+     * - if recipientId from tiledesk settings IS NOT SET, get last active
+     * conversation from REST API call and then startUI() and showWidget()
+     */
     manageWidgetSingleConversation(){
+        if(this.g.recipientId){
+            new Promise((resolve, reject)=>{
+                this.startUI();
+                resolve()
+            }).then((res)=> { this.showWidget() });
+            return;
+        }
+
         this.conversationsHandlerService.getConverationRESTApi((conv, error)=> {
-            console.log('conversation from rest API --> ', conv)
+            this.logger.debug('[APP-COMP] getConverationRESTApi: conversation from rest API --> ', conv)
             if(error){
                 this.logger.error("[APP-COMP] getConverationRESTApi: ERORR while retriving data", error)
             }
             if(conv){
                 //start widget from this conversation
                 const recipientId : string = conv.uid
-                console.log('conversation from rest API recipientid -->', recipientId)
                 this.g.setParameter('recipientId', recipientId);
                 this.appStorageService.setItem('recipientId', recipientId)
-                this.startUI();
+                // this.startUI();
                 // if (this.g.isOpen === true) {
                 //     console.log('conversation from rest API go to conversationdetail -->', recipientId)
                 //     this.isOpenHome = false;
@@ -719,7 +733,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // }
             }else {
                 //start widget with NEW CONVERSATION
-                console.log('conversation from rest API start new conversation')
+                this.logger.error("[APP-COMP] getConverationRESTApi: NO active conversations")
                 // this.isOpenHome = false;
                 // this.isOpenConversation = true;
                 // this.onNewConversation()
