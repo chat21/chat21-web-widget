@@ -477,6 +477,9 @@ export class GlobalSettingsService {
                         globals['themeForegroundColor'] = variables['themeForegroundColor'];
                         // globals['bubbleMsgSentTextColor'] = variables['themeForegroundColor'];
                     }
+                    if (variables.hasOwnProperty('nativeRating')) {
+                        globals['nativeRating'] = variables['nativeRating'];
+                    }
                     
                 }
             }
@@ -892,7 +895,12 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['singleConversation'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > singleConversation:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.singleConversation = TEMP;
+            globals.singleConversation = (TEMP === true) ? true : false;;
+        }
+        TEMP = tiledeskSettings['nativeRating'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > nativeRating:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.nativeRating = (TEMP === true) ? true : false;;
         }
         
 
@@ -1104,7 +1112,11 @@ export class GlobalSettingsService {
         }
         TEMP = el.nativeElement.getAttribute('singleConversation');
         if (TEMP !== null) {
-            this.globals.singleConversation = TEMP;
+            this.globals.singleConversation = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('nativeRating');
+        if (TEMP !== null) {
+            this.globals.nativeRating = (TEMP === true) ? true : false;
         }
         
     }
@@ -1473,6 +1485,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_singleConversation');
         if (TEMP) {
             globals.singleConversation = TEMP;
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_nativeRating');
+        if (TEMP) {
+            globals.nativeRating = stringToBoolean(TEMP);
         }
         
     }

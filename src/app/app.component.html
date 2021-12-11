@@ -48,8 +48,9 @@
                 [isOpen]="g.isOpen"
                 [isConversationArchived]="isConversationArchived"
                 [stylesMap]="styleMapConversation"
-                (onBackHome)="onCloseConversation()" 
+                (onBackHome)="onBackConversation()" 
                 (onCloseWidget)="onCloseWidget()"
+                (onConversationClosed)="onConversationClosed($event)"
                 (onSoundChange)="onSoundChange($event)"
                 (onBeforeMessageSent)="triggerHandler.triggerBeforeSendMessageEvent($event)"
                 (onAfterSendMessage)="triggerHandler.triggerAfterSendMessageEvent($event)"
@@ -97,7 +98,7 @@
         ****************************************
         [class.active]="g.isOpenStartRating === true"
         -->
-        <div *ngIf="g.isOpenStartRating" class="modal-page star-rating-widget active">
+        <div *ngIf="g.isOpenStartRating && g.nativeRating" class="modal-page star-rating-widget active">
             <chat-star-rating-widget
                 [recipientId]="g.recipientId"
                 [stylesMap]="styleMapConversation"

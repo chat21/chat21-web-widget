@@ -63,6 +63,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() senderId: string;    // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
   @Input() isConversationArchived: boolean;
   @Output() onBackHome = new EventEmitter();
+  @Output() onConversationClosed = new EventEmitter<string>()
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
   @Output() onBeforeMessageSent = new EventEmitter();
@@ -877,6 +878,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
+          this.g.nativeRating? null: this.onConversationClosed.emit(conversation.uid) //if nativeRating is false, when conversation in archived -> manually back to home
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };

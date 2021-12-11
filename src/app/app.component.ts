@@ -2178,7 +2178,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * MODAL CONVERSATION:
      * close conversation
      */
-    onCloseConversation() {
+    onBackConversation() {
         this.logger.debug('[APP-COMP] onCloseConversation')
         this.appStorageService.removeItem('recipientId');
         this.g.setParameter('recipientId', null, false)
@@ -2192,6 +2192,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.isOpenConversation = false;
         }, 200);
         // this.startNwConversation();
+    }
+
+    
+    /**
+     * MODAL CONVERSATION:
+     * conversation archived
+     * @param conversationId 
+     * @description - if singleConversation is TRUE show new conv/load last active conversatio
+     * - if singleConversation is FALSE -> back to Home component
+     */
+    onConversationClosed(conversationId: string){
+        if(this.g.singleConversation){
+            //manage single conversation
+        }else{
+            this.onBackConversation
+        }
     }
 
     /**
@@ -2270,7 +2286,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
-        this.onCloseConversation();
+        this.onBackConversation();
     }
 
     /**
@@ -2286,7 +2302,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
-        this.onCloseConversation();
+        this.onBackConversation();
     }
     // ========= end:: CALLBACK FUNCTIONS ============//
 

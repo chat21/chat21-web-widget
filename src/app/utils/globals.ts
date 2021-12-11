@@ -218,6 +218,7 @@ export class Globals {
    buttonHoverBackgroundColor: string // *******  new ********
    buttonHoverTextColor: string // *******  new ********
    singleConversation: boolean; // *******  new ********
+   nativeRating: boolean; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -373,6 +374,8 @@ export class Globals {
 
     this.singleConversation = false;
     /** set the single conversation mode for the widget */
+    this.nativeRating =false
+    /** set if native rating componet has to be shown */
 
     this.showWaitTime = true;
 
