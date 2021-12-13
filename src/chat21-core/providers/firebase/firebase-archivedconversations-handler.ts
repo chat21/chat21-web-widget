@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -45,6 +46,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     private isConversationClosingMap: Map<string, boolean>;
     private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
+
+    private subscribe: any;
 
     constructor(
         //public databaseProvider: DatabaseProvider
@@ -178,14 +181,21 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/archived_conversations/' + conversationId;
             const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
-            this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase)
+            this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase, conversationId)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (snap) => {
+            if(this.subscribe){
+                this.logger.log('initialize FROM [APP-COMP] - [FIREBASEAuthSERVICE] onAuthStateChanged ALREADY SUBSCRIBED')
+                return;
+            }
+            
+            this.subscribe = firebaseMessages.on('value', (snap) => {
                 const childSnapshot = snap.child('/'+conversationId)
                 if(!childSnapshot.exists()){
+                    console.log('archived conversation NOT exist', conversationId)
                     callback(null)
-                }else {
+                } else {
                     const childData: ConversationModel = childSnapshot.val();
+                    console.log('archived conversation exist', childData)
                     if (childSnapshot && childSnapshot.key && childData) {
                         childData.uid = childSnapshot.key;
                         const conversation = this.completeConversation(childData);

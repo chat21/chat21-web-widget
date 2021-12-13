@@ -53,6 +53,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     private BASE_URL_DATABASE: string;
     // private audio: any;
     // private setTimeoutSound: any;
+    private subscribe: any
 
     constructor(
         public http: HttpClient,
@@ -138,8 +139,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         // this.audio.load();
     }
 
-    //getLastCOnversation
-    public getConverationRESTApi(callback: (conversation: ConversationModel, error: string)=>void){
+    public getLastConversation(callback: (conversation: ConversationModel, error: string)=>void){
 
         this.getFirebaseToken((error, idToken) => {
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  idToken', idToken)
@@ -315,7 +315,12 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail urlNodeFirebase *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (snap) => {
+            if(this.subscribe){
+                this.logger.log('initialize FROM [APP-COMP] - [FIREBASEAuthSERVICE] onAuthStateChanged ALREADY SUBSCRIBED')
+                return;
+            }
+            
+            this.subscribe = firebaseMessages.on('value', (snap) => {
                 const childSnapshot = snap.child('/'+conversationId)
                 if(!childSnapshot.exists()){
                     callback(null)
