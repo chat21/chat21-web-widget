@@ -324,7 +324,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    this.logger.debug('[CONV-COMP] updateConversationBadge', this.conversationId)
+    this.logger.debug('[CONV-COMP] updateConversationBadge', this.conversationId, this.isConversationArchived)
     if(this.isConversationArchived && this.conversationId && this.archivedConversationsHandlerService){
       this.archivedConversationsHandlerService.setConversationRead(this.conversationId)
     }
@@ -375,6 +375,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.getConversationDetail((isConversationArchived) => {
       this.logger.debug('[CONV-COMP] ------ 6: updateConversationbage ------ ');
       this.updateConversationBadge();
+      return;
     }) //check if conv is archived or not
 
     // this.checkListMessages();
@@ -400,50 +401,61 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
    * @returns isConversationArchived (status conversation archived: boolean) 
    */
   getConversationDetail(callback:(isConversationArchived: boolean)=>void){
-    if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
-      this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-        this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
+    // if(!this.isConversationArchived){ 
+    //get conversation from 'conversations' firebase node
+    this.logger.debug('[CONV-COMP] getConversationDetail: isConversationArchived???', this.isConversationArchived, this.conversationWith)
+      this.conversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+        this.logger.debug('[CONV-COMP] getConversationDetail: conversationsHandlerService ', this.conversationWith, conv, this.isConversationArchived)
         if(conv){
           this.conversation = conv;
+          this.isConversationArchived = false;
           callback(this.isConversationArchived)
         }
         if(!conv){
-          this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-            this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
-            conv? this.isConversationArchived= true : null  
-            this.conversation = conv;
-            callback(this.isConversationArchived) 
+          //get conversation from 'archivedconversations' firebase node
+          this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list')
+          this.archivedConversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+            this.logger.debug('[CONV-COMP] getConversationDetail: archivedConversationsHandlerService', this.conversationWith, conv, this.isConversationArchived)
+            if(conv){
+              this.conversation = conv;
+              this.isConversationArchived = true;
+              callback(this.isConversationArchived)
+            }else if(!conv) {
+              callback(null);
+            }
           })
         }
       })
-    } else { //get conversation from 'conversations' firebase node
-      this.isConversationArchived= true;
-      this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-        this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
-        if(conv){
-          this.conversation = conv;
-          callback(this.isConversationArchived) 
-        }
-        if(!conv){
-          this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-            this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
-            conv? this.isConversationArchived = false : null  
-            this.conversation = conv;
-            callback(this.isConversationArchived) 
-          })
-        }
-      })
-    }
+    // } else { //get conversation from 'conversations' firebase node
+    //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
+    //     if(conv){
+    //       this.conversation = conv;
+    //       this.isConversationArchived = true;
+    //       callback(this.isConversationArchived) 
+    //     }
+    //     if(!conv){
+    //       this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //         this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
+    //         conv? this.isConversationArchived = false : null  
+    //         this.conversation = conv;
+    //         callback(this.isConversationArchived) 
+    //       })
+    //     }
+    //   })
+    // }
     
     // if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
     //   this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
     //     this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
-    //     this.conversation = conv;    
+    //     this.conversation = conv;
+    //     callback(this.isConversationArchived)    
     //   })
     // }else { //get conversation from 'conversations' firebase node
     //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
     //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
-    //     this.conversation = conv;    
+    //     this.conversation = conv;   
+    //     callback(this.isConversationArchived)   
     //   })
     // }
     // this.updateConversationBadge()
@@ -1856,10 +1868,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** CALLED BY: conv-footer component */
   onAttachmentButtonClicked(event: any){
-    console.log('onAttachmentButtonClicked::::', event)
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', event)
     this.attachments = event.attachments
     this.textInputTextArea= event.message
-    console.log('onAttachmentButtonClicked::::', this.textInputTextArea)
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', this.textInputTextArea)
     this.isOpenAttachmentPreview = true
   }
 
@@ -1867,7 +1879,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   onCloseModalPreview(){
     this.isOpenAttachmentPreview = false
     this.conversationFooter.isFilePendingToUpload = false;
-    console.log('onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
+    this.logger.debug('[CONV-COMP] onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
   }
 
   /** CALLED BY: conv-preview component */
@@ -1963,7 +1975,6 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.audio = new Audio();
       this.audio.src = baseLocation + '/assets/sounds/justsaying.mp3';
       this.audio.load();
-      // console.log('conversation play');
       clearTimeout(this.setTimeoutSound);
       this.setTimeoutSound = setTimeout(function () {
         that.audio.play();
