@@ -29,7 +29,7 @@ export abstract class ConversationsHandlerService {
   // functions
   abstract initialize(tenant: string, userId: string, translationMap: Map<string, string>): void;
   abstract subscribeToConversations(callback: any): void;
-  abstract getConverationRESTApi(callback:(conv: ConversationModel, error: string)=>void): void
+  abstract getLastConversation(callback:(conv: ConversationModel, error: string)=>void): void
   abstract countIsNew(): number;
   abstract setConversationRead(conversationId: string): void;
   abstract dispose(): void;

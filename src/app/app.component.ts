@@ -711,7 +711,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        this.conversationsHandlerService.getConverationRESTApi((conv, error)=> {
+        this.conversationsHandlerService.getLastConversation((conv, error)=> {
             this.logger.debug('[APP-COMP] getConverationRESTApi: conversation from rest API --> ', conv)
             if(error){
                 this.logger.error("[APP-COMP] getConverationRESTApi: ERORR while retriving data", error)
@@ -2203,10 +2203,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * - if singleConversation is FALSE -> back to Home component
      */
     onConversationClosed(conversationId: string){
+        this.logger.debug('[APP-COMP] onConversationClosed', conversationId)
         if(this.g.singleConversation){
             //manage single conversation
+            this.isConversationArchived = true;
         }else{
-            this.onBackConversation
+            this.onBackConversation()
         }
     }
 
