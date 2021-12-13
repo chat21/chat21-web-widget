@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.7
+- added: nativeRating property to tiledesk settings to decide if show/hide rating component
+- updated: chat21client.js and mqtt-conversation-handler.ts
+- bug-fixed: ratingWidget component not shown because getConversationDetail fired multiple times and change isConversationArchived boolean value
+- bug-fixed: tiledesk_singleConversation property not get right value 
+
 ### 5.0.19-rc.6
 - added: border to conversation-preview header
 - added: singleConversation widget mode: if true and recipientId property IS NOT SET, widget loads the last active conversation by timestamp order; if true and recipientId property IS SET, widget loads current conversation 
