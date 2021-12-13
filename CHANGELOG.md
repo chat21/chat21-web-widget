@@ -2,6 +2,7 @@
 
 ### 5.0.19-rc.7
 - added: nativeRating property to tiledesk settings to decide if show/hide rating component
+- added : subscription to on('value') firebase event in getConversationDetail method
 - updated: chat21client.js and mqtt-conversation-handler.ts
 - bug-fixed: ratingWidget component not shown because getConversationDetail fired multiple times and change isConversationArchived boolean value
 - bug-fixed: tiledesk_singleConversation property not get right value 
