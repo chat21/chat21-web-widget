@@ -7,7 +7,8 @@
     (c) Tiledesk 2020
 */
 
-// let mqtt = require('mqtt');
+let mqtt = require('./mqtt/4.2.6/mqtt.min.js');
+// let mqtt = require('mqtt')
 // let axios = require('axios');
 
 const _CLIENTADDED = "/clientadded"
