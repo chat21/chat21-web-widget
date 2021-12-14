@@ -41,14 +41,14 @@
     </chat-conversation-content>
 
     <!-- INTERNAL FRAME FOR SELF ACTION LINK BUTTONS-->
-    <chat-interlal-frame *ngIf="isButtonUrl"
+    <chat-internal-frame *ngIf="isButtonUrl"
         [button]="buttonClicked"
         [openExternalLinkButton]="g?.openExternalLinkButton"
         [translationMap]="translationMapHeader"
         [stylesMap]="stylesMap"
         (onOpenExternal)="onOpenExternalFrame($event)"
         (onClose)="onCloseInternalFrame($event)">
-    </chat-interlal-frame>
+    </chat-internal-frame>
 
 
     <!-- PREVIEW ATTACHMENT BUTTON-->
