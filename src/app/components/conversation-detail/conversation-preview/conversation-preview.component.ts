@@ -14,6 +14,7 @@ export class ConversationPreviewComponent implements OnInit {
 
   @Input() textInputTextArea: string;
   @Input() attachments: [{ file: Array<any>, metadata: {}}];
+  @Input() baseLocation: string;
   @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
   @Output() onSendAttachment = new EventEmitter<any>();
@@ -136,7 +137,7 @@ export class ConversationPreviewComponent implements OnInit {
 
   async createFile(attachment) {
     const that = this
-    let response = await fetch('./assets/images/file-alt-solid.png');
+    let response = await fetch( that.baseLocation + '/assets/images/file-alt-solid.png');
     let data = await response.blob();
     let file_temp = new File([data], attachment.file.name);
     this.logger.log('[LOADER-PREVIEW-PAGE] - createFile file - file', file_temp);

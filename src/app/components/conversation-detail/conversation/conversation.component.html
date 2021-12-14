@@ -55,6 +55,7 @@
     <chat-conversation-attachment-preview *ngIf="isOpenAttachmentPreview"
         [textInputTextArea]="textInputTextArea"
         [attachments]="attachments"
+        [baseLocation]="g?.baseLocation"
         [translationMap]="translationMapPreview"
         [stylesMap]="stylesMap"
         (onSendAttachment)="onSendAttachment($event)"
@@ -88,7 +89,8 @@
             (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
             (onAfterSendMessage)="returnAfterSendMessage($event)"
             (onChangeTextArea)="returnChangeTextArea($event)"
-            (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)">
+            (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)"
+            (onNewConversationButtonClicked)="onNewConversationButtonClickedFN($event)">
         </chat-conversation-footer>
 
     </div>
