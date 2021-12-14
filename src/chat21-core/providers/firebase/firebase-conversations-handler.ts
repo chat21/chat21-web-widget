@@ -316,17 +316,18 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail urlNodeFirebase *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             if(this.subscribe){
-                this.logger.log('initialize FROM [APP-COMP] - [FIREBASEAuthSERVICE] onAuthStateChanged ALREADY SUBSCRIBED')
+                this.logger.log('[FIREBASEConversationsHandlerSERVICE] getConversationDetail ALREADY SUBSCRIBED')
                 return;
             }
             
             this.subscribe = firebaseMessages.on('value', (snap) => {
                 const childSnapshot = snap.child('/'+conversationId)
                 if(!childSnapshot.exists()){
+                    this.logger.log('[FIREBASEConversationsHandlerSERVICE] getConversationDetail conversation NOT exist', conversationId)
                     callback(null)
                 } else {
                     const childData: ConversationModel = childSnapshot.val();
-                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val(), childSnapshot.key)
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationDetail conversation exist', childSnapshot.val(), childSnapshot.key)
                     if (childSnapshot && childSnapshot.key && childData) {
                         childData.uid = childSnapshot.key;
                         const conversation = this.completeConversation(childData);

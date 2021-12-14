@@ -184,18 +184,18 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase, conversationId)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
             if(this.subscribe){
-                this.logger.log('initialize FROM [APP-COMP] - [FIREBASEAuthSERVICE] onAuthStateChanged ALREADY SUBSCRIBED')
+                this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail ALREADY SUBSCRIBED')
                 return;
             }
             
             this.subscribe = firebaseMessages.on('value', (snap) => {
                 const childSnapshot = snap.child('/'+conversationId)
                 if(!childSnapshot.exists()){
-                    console.log('archived conversation NOT exist', conversationId)
+                    this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail archived conversation NOT exist', conversationId)
                     callback(null)
                 } else {
                     const childData: ConversationModel = childSnapshot.val();
-                    console.log('archived conversation exist', childData)
+                    this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail archived conversation exist', childData)
                     if (childSnapshot && childSnapshot.key && childData) {
                         childData.uid = childSnapshot.key;
                         const conversation = this.completeConversation(childData);
