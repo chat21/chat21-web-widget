@@ -72,6 +72,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onNewMessageCreated = new EventEmitter();
+  @Output() onNewConversationButtonClicked = new EventEmitter();
   // ========= end:: Input/Output values
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
@@ -238,6 +239,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const keysFooter = [
       'LABEL_PLACEHOLDER',
       'GUEST_LABEL',
+      'LABEL_START_NW_CONV'
     ];
 
     const keysContent = [
@@ -890,6 +892,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
+          this.isConversationArchived = true;
           this.g.nativeRating? null: this.onConversationClosed.emit(conversation.uid) //if nativeRating is false, when conversation in archived -> manually back to home
         }
       });
@@ -1901,6 +1904,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     } else if(height > 110){
       document.getElementById('chat21-button-send').style.right = '18px'
     }
+  }
+
+ /** CALLED BY: floating-button footer component */
+  onNewConversationButtonClickedFN(event){
+    console.log('floating onNewConversationButtonClicked')
+    this.onNewConversationButtonClicked.emit()
   }
 
   // =========== END: event emitter function ====== //

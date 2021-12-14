@@ -167,3 +167,28 @@ textarea:active{
     left: 8px;
     top: 10px;
 }
+
+
+#floating-container{
+    width: auto;
+    margin: 0 25%;
+    height: auto;
+    position: relative;
+    border-top: 0px solid $light-gray;
+    display: inline-block;
+    align-items: center;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    vertical-align: top;
+
+    .c21-label-button {
+        margin-left: 8px;
+        font-weight: 400;
+        font-size: 1.2em;
+    }
+
+    .c21-button-primary {
+        position: fixed;
+        bottom: 40px;
+    }
+}
