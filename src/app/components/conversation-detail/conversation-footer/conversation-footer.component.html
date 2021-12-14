@@ -1,8 +1,11 @@
 
-<div id="floating-container" *ngIf="isConversationArchived" [@popOverState]="stateName"> 
+<div id="floating-container" *ngIf="isConversationArchived" class="fade-in-bottom"> 
     <!--  *ngIf="this.g.supportMode" -->
+    <div class="c21-waiting-time">
+        g.WAITING_TIME_NOT_FOUND
+    </div>
+
     <button tabindex="1040" aflistconv #aflistconv class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': stylesMap.get('themeColor'), 'border-color': stylesMap.get('themeColor'), 'color': stylesMap?.get('themeForegroundColor')}">
-        {{stylesMap.get('themeForegroundColor')}}
         <span class="v-align-center">
           <svg [ngStyle]="{'fill': 'yellow' }" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': stylesMap.get('themeForegroundColor')}"/>
@@ -16,7 +19,7 @@
     </button>
 </div>
 
-<div class="visible-text-area" [class.disabled] = "( isConversationArchived || hideTextReply)? true : null">
+<div class="visible-text-area" *ngIf="!isConversationArchived" [class.disabled] = "( isConversationArchived || hideTextReply)? true : null">
     <!-- isFilePendingToUpload || -->
   <textarea 
     [attr.disabled] = "(isConversationArchived || hideTextReply)? true : null"
@@ -43,7 +46,7 @@
   ></chat-message-text-area> -->
 </div>
 <!--   -->
-<div #div_attached>
+<div #div_attached *ngIf="!isConversationArchived">
     <!-- ICON ATTACHMENT -->
     <label *ngIf="showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && !hideTextReply" id="chat21-start-upload-doc">
         <span class="v-align-center">

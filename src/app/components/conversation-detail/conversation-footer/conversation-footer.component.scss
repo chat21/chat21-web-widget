@@ -170,16 +170,18 @@ textarea:active{
 
 
 #floating-container{
-    width: auto;
-    margin: 0 25%;
-    height: auto;
-    position: relative;
+    width: 100%;
+    margin: 6px auto;
+    height: 70px;
+    position: absolute;
+    bottom: 0px;
     border-top: 0px solid $light-gray;
     display: inline-block;
     align-items: center;
     -webkit-box-shadow: none;
     box-shadow: none;
     vertical-align: top;
+    text-align: center;
 
     .c21-label-button {
         margin-left: 8px;
@@ -187,8 +189,20 @@ textarea:active{
         font-size: 1.2em;
     }
 
-    .c21-button-primary {
-        position: fixed;
-        bottom: 40px;
+    .c21-waiting-time {
+        font-size: 1.3em;
+        font-weight: 200;
+        padding: 0px 24px 5px 24px;
     }
+
+    // .c21-button-primary {
+    //     position: fixed;
+    //     bottom: 10px;
+    // }
+
+}
+
+.fade-in-bottom {
+    -webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+    animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
 }

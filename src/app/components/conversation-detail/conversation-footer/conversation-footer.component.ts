@@ -18,18 +18,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   selector: 'chat-conversation-footer',
   templateUrl: './conversation-footer.component.html',
   styleUrls: ['./conversation-footer.component.scss'],
-  animations: [
-    trigger('popOverState', [
-      state('show', style({
-        opacity: 1
-      })),
-      state('hide',   style({
-        opacity: 0
-      })),
-      transition('show => hide', animate('1000ms ease-out')),
-      transition('hide => show', animate('1000ms ease-in'))
-    ])
-  ]
 })
 export class ConversationFooterComponent implements OnInit, OnChanges {
 
@@ -70,11 +58,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   textInputTextArea: string;
   conversationHandlerService: ConversationHandlerService
 
-  show = false;
-
   convertColorToRGBA = convertColorToRGBA;
   private logger: LoggerService = LoggerInstance.getInstance()
-  constructor(public g: Globals,
+  constructor( //public g: Globals,
               //public upSvc: UploadService,
               private chatManager: ChatManager,
               private typingService: TypingService,
@@ -83,19 +69,12 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  get stateName() {
-    return this.show ? 'show' : 'hide'
-  }
-
   ngOnChanges(changes: SimpleChanges){
     if(changes['conversationWith'] && changes['conversationWith'].currentValue !== undefined){
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
     if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined){
       this.restoreTextArea()
-    }
-    if(changes['isConversationArchived'] && changes['isConversationArchived'].currentValue !== undefined && changes['isConversationArchived'].currentValue === true){
-      this.show = true;
     }
   }
   
@@ -512,7 +491,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
 
   openNewConversation(){
-    this.show = false;
     this.onNewConversationButtonClicked.emit();
   }
 
