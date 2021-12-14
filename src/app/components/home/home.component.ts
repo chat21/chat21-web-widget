@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('aflistconv') private aflistconv: ElementRef;
   // ========= begin:: Input/Output values ===========/
   @Input() listConversations: Array<ConversationModel>;
+  @Input() archivedConversations: Array<ConversationModel>;
   @Input() hideSettings: boolean;
   @Input() stylesMap: Map<string, string>
   @Output() onNewConversation = new EventEmitter<string>();
