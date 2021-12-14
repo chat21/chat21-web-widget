@@ -2206,10 +2206,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logger.debug('[APP-COMP] onConversationClosed', conversationId)
         if(this.g.singleConversation){
             //manage single conversation
-            this.isConversationArchived = true;
         }else{
-            this.onBackConversation()
+            // this.onBackConversation()
         }
+    }
+
+     /**
+     * CONVERSATION DETAIL FOOTER:
+     * floating button -> start new Conversation();
+     */
+    onNewConversationButtonClicked(){
+        this.onNewConversation()
     }
 
     /**
@@ -2294,17 +2301,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * MODAL RATING WIDGET:
      * complete rate chat
-     */
+     */ 
     onRateChatComplete() {
-        this.isOpenHome = true;
-        this.g.setParameter('isOpenPrechatForm', false);
-        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
-        this.isOpenConversation = false;
-        this.isOpenSelectionDepartment = false;
-        this.g.setParameter('isOpenStartRating', false);
-        // this.settingsSaverService.setVariable('isOpenStartRating', false);
-        // this.startNwConversation();
-        this.onBackConversation();
+        if (!this.g.singleConversation && this.g.nativeRating){
+            this.isOpenHome = true;
+            this.g.setParameter('isOpenPrechatForm', false);
+            // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
+            this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            this.g.setParameter('isOpenStartRating', false);
+            // this.settingsSaverService.setVariable('isOpenStartRating', false);
+            // this.startNwConversation();
+            this.onBackConversation();
+        }
     }
     // ========= end:: CALLBACK FUNCTIONS ============//
 
