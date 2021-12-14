@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.8
+- changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
+- bug-fixed: mqtt is not definet in chat21client.js
+- bug-fixed: /file-alt-solid.png not found 
+- added: if singleConversation and nativeRating is active, after rating is completed, go back to conversation detail; if singleConversation is NOT active and nativeRating is active, after rating is completed, go to home component
+- added: 'start new conversation' button in conversation-footer component if conversation is archived to have the possibility to start faster a new conversation
+
 ### 5.0.19-rc.7
 - added: nativeRating property to tiledesk settings to decide if show/hide rating component
 - added : subscription to on('value') firebase event in getConversationDetail method
