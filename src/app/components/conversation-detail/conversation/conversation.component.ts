@@ -191,7 +191,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
     private chatManager: ChatManager,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private elementRef: ElementRef
   ) { }
 
   onResize(event){
@@ -202,6 +203,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.logger.debug('[CONV-COMP] ngOnInit: ', this.senderId);
     this.showMessageWelcome = false;
+    this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'))
+    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'))
     // const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
     //   this.ngZone.run(() => {
     //     // that.scrollToBottom();
