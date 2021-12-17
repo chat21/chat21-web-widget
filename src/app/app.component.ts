@@ -2304,15 +2304,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * close modal page
      */
     onCloseModalRateChat() {
-        this.isOpenHome = true;
-        this.g.setParameter('isOpenPrechatForm', false);
-        // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
-        this.isOpenConversation = false;
-        this.isOpenSelectionDepartment = false;
-        this.g.setParameter('isOpenStartRating', false);
-        // this.settingsSaverService.setVariable('isOpenStartRating', false);
-        // this.startNwConversation();
-        this.onBackConversation();
+        if (!this.g.singleConversation && this.g.nativeRating){
+            this.isOpenHome = true;
+            this.g.setParameter('isOpenPrechatForm', false);
+            // this.settingsSaverService.setVariable('isOpenPrechatForm', false);
+            this.isOpenConversation = false;
+            this.isOpenSelectionDepartment = false;
+            this.g.setParameter('isOpenStartRating', false);
+            // this.settingsSaverService.setVariable('isOpenStartRating', false);
+            // this.startNwConversation();
+            this.onBackConversation();
+        }
     }
 
     /**
