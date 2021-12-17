@@ -58,11 +58,13 @@ export class ConversationPreviewComponent implements OnInit {
   }
 
   /**
-   *
-   * @param message
+   * @param metadata 
+   * @return width, height
    */
   getMetadataSize(metadata): {width, height} {
-    const MAX_WIDTH_IMAGES_PREVIEW = 150
+    console.log('sizeimageee  00', metadata)
+    const MAX_WIDTH_IMAGES_PREVIEW = 230
+    const MAX_HEIGHT_IMAGES_PREIEW = 150
     if(metadata.width === undefined){
       metadata.width= MAX_WIDTH_IMAGES_PREVIEW
     }
@@ -75,24 +77,27 @@ export class ConversationPreviewComponent implements OnInit {
         width: metadata.width,
         height: metadata.height
     };
+    console.log('sizeimageee', sizeImage)
     
     // SCALE IN WIDTH --> for horizontal images
     if (metadata.width && metadata.width > MAX_WIDTH_IMAGES_PREVIEW) {
       const ratio = (metadata['width'] / metadata['height']);
-      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW;
-      sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW / ratio;
+      sizeImage.width = metadata.width = MAX_WIDTH_IMAGES_PREVIEW;
+      sizeImage.height = metadata.height = MAX_WIDTH_IMAGES_PREVIEW / ratio;
     } else if(metadata.width && metadata.width <= 55){
       const ratio = (metadata['width'] / metadata['height']);
       sizeImage.width = MIN_WIDTH_IMAGES;
       sizeImage.height = MIN_WIDTH_IMAGES / ratio;
     }
 
+    console.log('sizeeee 1111', sizeImage, metadata)
     // SCALE IN HEIGHT --> for vertical images
-    if(metadata.height && metadata.width > MAX_WIDTH_IMAGES_PREVIEW){
+    if(metadata.height && metadata.height > MAX_HEIGHT_IMAGES_PREIEW){
       const ratio = (metadata['height'] / metadata['width']);
-      sizeImage.width = MAX_WIDTH_IMAGES_PREVIEW / ratio;
-      sizeImage.height = MAX_WIDTH_IMAGES_PREVIEW ;
+      sizeImage.width = MAX_HEIGHT_IMAGES_PREIEW / ratio;
+      sizeImage.height = MAX_HEIGHT_IMAGES_PREIEW ;
     }
+    console.log('sizeeeeeeeee', sizeImage)
     return sizeImage; // h.toString();
   }
   
@@ -107,9 +112,10 @@ export class ConversationPreviewComponent implements OnInit {
       this.logger.log('[LOADER-PREVIEW-PAGE] - readAsDataURL - USE CASE IMAGE - IMAGE ', attachment);
       if(!this.fileSelected){
         this.fileSelected = this.attachments[0]
-        const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
-        this.fileSelected.metadata.width = sizeImage.width
-        this.fileSelected.metadata.height = sizeImage.height
+        // const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
+        // console.log('attachmenttttt', attachment, this.attachments[0])
+        // this.fileSelected.metadata.width = sizeImage.width
+        // this.fileSelected.metadata.height = sizeImage.height
 
       }
     } else if ((attachment.file.type.startsWith("image")) && (attachment.file.type.includes("svg"))){
@@ -120,9 +126,9 @@ export class ConversationPreviewComponent implements OnInit {
       attachment.metadata.src = this.sanitizer.bypassSecurityTrustUrl(attachment.metadata.src)
       if(!this.fileSelected){
         this.fileSelected = this.attachments[0]
-        const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
-        this.fileSelected.metadata.width = sizeImage.width
-        this.fileSelected.metadata.height = sizeImage.height
+        // const sizeImage = this.getMetadataSize(this.fileSelected.metadata)
+        // this.fileSelected.metadata.width = sizeImage.width
+        // this.fileSelected.metadata.height = sizeImage.height
       }
     }else if(!attachment.file.type.startsWith("image")){
       // ---------------------------------------------------------------------
