@@ -2027,10 +2027,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.logger.debug('[APP-COMP] onSelectDepartment: ', $event);
             this.g.setParameter('departmentSelected', $event);
             // this.settingsSaverService.setVariable('departmentSelected', $event);
-            this.isOpenHome = true;
-            this.isOpenSelectionDepartment = false;
-            if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            // this.isOpenHome = true;
+            // this.isOpenSelectionDepartment = false;
+            // if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            //     this.isOpenConversation = true;
+            //     this.startNewConversation();
+            // }
+            if (this.g.isOpenPrechatForm === false) {
                 this.isOpenConversation = true;
+                this.isOpenHome = false
+                this.isOpenSelectionDepartment = false;
                 this.startNewConversation();
             }
         }
