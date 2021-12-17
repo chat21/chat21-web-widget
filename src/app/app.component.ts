@@ -1943,7 +1943,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * attivo una nuova conversazione
      */
     startNewConversation() {
-        this.logger.debug('[APP-COMP] AppComponent::startNwConversation');
+        this.logger.debug('[APP-COMP] AppComponent::startNewConversation');
         const newConvId = this.generateNewUidConversation();
         this.g.setParameter('recipientId', newConvId);
         this.appStorageService.setItem('recipientId', newConvId)
@@ -2216,7 +2216,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * floating button -> start new Conversation();
      */
     onNewConversationButtonClicked(){
-        this.onNewConversation()
+        this.logger.debug('[APP-COMP] onNewConversationButtonClicked');
+        
+        this.isOpenConversation = false;
+        this.g.singleConversation? this.isOpenHome = false: null;
+        const departments = this.g.departments;
+        if (departments && departments.length > 1 && this.g.departmentID == null) {
+            this.isOpenSelectionDepartment = true;
+        } else {
+            this.isOpenConversation = true;
+        }
+
+        this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
+        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            this.startNewConversation();
+        }
+        // setTimeout(() => {
+        //     this.onNewConversation();
+        // }, 0); 
     }
 
     /**
