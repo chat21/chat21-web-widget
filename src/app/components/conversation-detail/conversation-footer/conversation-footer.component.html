@@ -1,10 +1,6 @@
 
 <div id="floating-container" *ngIf="isConversationArchived" class="fade-in-bottom"> 
     <!--  *ngIf="this.g.supportMode" -->
-    <div class="c21-waiting-time">
-        g.WAITING_TIME_NOT_FOUND
-    </div>
-
     <button tabindex="1040" aflistconv #aflistconv class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': stylesMap.get('themeColor'), 'border-color': stylesMap.get('themeColor'), 'color': stylesMap?.get('themeForegroundColor')}">
         <span class="v-align-center">
           <svg [ngStyle]="{'fill': 'yellow' }" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">

@@ -75,38 +75,38 @@ textarea:active{
 // }
 
 /* button scroll to bottom page */
-#chat21-buttonToBottom {
-    display: flex;
-    position: relative;
-    margin-right: 10px;
-    margin-top: -40px;
-    float: right;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    z-index: 1;
-    cursor: pointer;
-    background-color: #ffffff;
-    border: 1px solid $trasp-light-gray;
-    // -webkit-box-shadow: 0 3px 2px $trasp-light-black;
-    // box-shadow: 0 3px 2px $trasp-light-black;
-    text-align: center;
-    svg {
-        margin: auto;
-        fill: $gray;
-    }
-}
-#chat21-buttonToBottom:hover {
-    background-color: $blue;
-    opacity: 1!important;
-    transition: all .45s ease-in-out!important;
-    -moz-transition: all .45s ease-in-out!important;
-    -webkit-transition: all .45s ease-in-out!important;
-    border: 1px solid #ffffff;
-    svg {
-        fill: #ffffff;
-    }
-}
+// #chat21-buttonToBottom {
+//     display: flex;
+//     position: relative;
+//     margin-right: 10px;
+//     margin-top: -40px;
+//     float: right;
+//     width: 30px;
+//     height: 30px;
+//     border-radius: 50%;
+//     z-index: 1;
+//     cursor: pointer;
+//     background-color: #ffffff;
+//     border: 1px solid $trasp-light-gray;
+//     // -webkit-box-shadow: 0 3px 2px $trasp-light-black;
+//     // box-shadow: 0 3px 2px $trasp-light-black;
+//     text-align: center;
+//     svg {
+//         margin: auto;
+//         fill: $gray;
+//     }
+// }
+// #chat21-buttonToBottom:hover {
+//     background-color: $blue;
+//     opacity: 1!important;
+//     transition: all .45s ease-in-out!important;
+//     -moz-transition: all .45s ease-in-out!important;
+//     -webkit-transition: all .45s ease-in-out!important;
+//     border: 1px solid #ffffff;
+//     svg {
+//         fill: #ffffff;
+//     }
+// }
 
 textarea,
 textarea:visited,
@@ -170,11 +170,11 @@ textarea:active{
 
 
 #floating-container{
-    width: 100%;
-    margin: 6px auto;
-    height: 70px;
-    position: absolute;
-    bottom: 0px;
+    width: 98%; //not 100% due to vertical scroll bar
+    margin: 2px auto;
+    // height: 46px;
+    // position: absolute;
+    // bottom: 0px;
     border-top: 0px solid $light-gray;
     display: inline-block;
     align-items: center;
@@ -187,6 +187,11 @@ textarea:active{
         margin-left: 8px;
         font-weight: 400;
         font-size: 1.2em;
+    }
+
+    .c21-button-primary {
+        height: 30px;
+        margin: 5px 0px;
     }
 
     .c21-waiting-time {
