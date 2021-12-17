@@ -1,5 +1,14 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.9
+- changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
+- added: info message component only when chat is closed (not visible yet)
+- added: managed 'New Conversation' button on conversation footer when conversation is archived -> start new conversation workflow
+- bug-fixed: image was resized with preview maximum dimensions and not with bubble-message maximum dimensions
+- bug-fixed: chatbot gif was grainly
+- bug-fixed: textAreaEl undefined 
+- bug-fixed: if singleConversation and nativeRating is active, after rating is completed, go back to conversation detail
+- bug-fixed: do not show home component after department is selected -> show conversation component and then destroy select-department component
 ### 5.0.19-rc.8
 - changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
 - bug-fixed: mqtt is not definet in chat21client.js
