@@ -1896,16 +1896,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   returnChangeTextArea(event){
-    const scrollDiv = this.conversationContent.scrollMe
-    const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
-    if(height > 20 && height < 110){
-      scrollDiv.nativeElement.style.height = 'calc(100% - ' + (height - 20)+'px'
-      document.getElementById('chat21-button-send').style.right = '18px'
-      this.scrollToBottom()
-    } else if(height <= 20) {
-      scrollDiv.nativeElement.style.height = '100%'
-    } else if(height > 110){
-      document.getElementById('chat21-button-send').style.right = '18px'
+    if(event && event.textAreaEl){
+      const scrollDiv = this.conversationContent.scrollMe
+      const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
+      if(height > 20 && height < 110){
+        scrollDiv.nativeElement.style.height = 'calc(100% - ' + (height - 20)+'px'
+        document.getElementById('chat21-button-send').style.right = '18px'
+        this.scrollToBottom()
+      } else if(height <= 20) {
+        scrollDiv.nativeElement.style.height = '100%'
+      } else if(height > 110){
+        document.getElementById('chat21-button-send').style.right = '18px'
+      }
     }
   }
 
