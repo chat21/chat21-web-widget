@@ -374,7 +374,7 @@ export class Globals {
 
     this.singleConversation = false;
     /** set the single conversation mode for the widget */
-    this.nativeRating =false
+    this.nativeRating = true;
     /** set if native rating componet has to be shown */
 
     this.showWaitTime = true;
