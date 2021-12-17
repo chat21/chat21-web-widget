@@ -82,12 +82,12 @@ export class BubbleMessageComponent implements OnInit {
    * @param message
    */
   getMetadataSize(metadata): {width, height} {
-    if (metadata.width === undefined) {
-      metadata.width = MAX_WIDTH_IMAGES
-    }
-    if (metadata.height === undefined) {
-      metadata.height = MAX_WIDTH_IMAGES
-    }
+    // if (metadata.width === undefined) {
+    //   metadata.width = MAX_WIDTH_IMAGES
+    // }
+    // if (metadata.height === undefined) {
+    //   metadata.height = MAX_WIDTH_IMAGES
+    // }
 
     const sizeImage = {
       width: metadata.width,
