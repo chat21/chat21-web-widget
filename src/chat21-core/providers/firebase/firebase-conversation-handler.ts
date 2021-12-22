@@ -473,12 +473,12 @@ private addCommandMessage(msg: MessageModel){
     let i=0;
     function execute(command){
         if(command.type === "message"){
-            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="message"', command)
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="message"', command, i)
             if (i >= 2) {
                 
                 //check if previus wait message type has time value, otherwize set to 1000ms
                 !commands[i-1].time? commands[i-1].time= 1000 : commands[i-1].time
-                command.message.timestamp = msg.timestamp + commands[i-1].time;
+                command.message.timestamp = commands[i-2].message.timestamp + commands[i-1].time;
                 
                 /** CHECK IF MESSAGE IS JUST RECEIVED: IF false, set next message time (if object exist) to 0 -> this allow to show it immediately */
                 if(!isJustRecived(that.startTime.getTime(), msg.timestamp)){
