@@ -68,7 +68,7 @@ export class TiledeskAuthService {
   /**
    * @param projectID
    */
-  signInAnonymously(projectID: string): Promise<any> {
+  signInAnonymously(projectID: string): Promise<string> {
     this.logger.debug('[TILEDESK-AUTH] - signInAnonymously - projectID', projectID);
     const httpHeaders = new HttpHeaders();
 
@@ -97,7 +97,7 @@ export class TiledeskAuthService {
   /**
    * @param tiledeskToken
    */
-  signInWithCustomToken(tiledeskToken: string): Promise<any> {
+  signInWithCustomToken(tiledeskToken: string): Promise<UserModel> {
     const headers = new HttpHeaders({
       'Content-type': 'application/json',
       Authorization: tiledeskToken

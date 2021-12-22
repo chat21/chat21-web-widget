@@ -1199,15 +1199,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
     
             /** loggin with token */
-            windowContext['tiledesk'].signInWithCustomToken = function (response) {
-                ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(response);
+            windowContext['tiledesk'].signInWithCustomToken = function (response):Promise<UserModel> {
+                return ngZone.run(() => {
+                    return windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(response); 
                 });
             };
             /** loggin anonymous */
-            windowContext['tiledesk'].signInAnonymous = function () {
-                ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
+            windowContext['tiledesk'].signInAnonymous = function ():Promise<UserModel> {
+                return ngZone.run(() => {
+                    return windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
             // window['tiledesk'].on = function (event_name, handler) {
@@ -1537,29 +1537,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * Custom Auth called from the test-custom-auth.html
      * note: https://tiledesk.atlassian.net/browse/TD-42?atlOrigin=eyJpIjoiMGMyZmVmNDgzNTFjNGZkZjhiMmM2Y2U1MmYyNzkwODMiLCJwIjoiaiJ9
     */
-    private signInWithCustomToken(token: string) {
+    private signInWithCustomToken(token: string):Promise<UserModel> {
         const that = this;
-        this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
-            this.messagingAuthService.createCustomToken(token)
-            this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
-            //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
-            //if tiledesk_userFullname not exist--> update parameter with tiledesk user returned from auth
-            if ((user.firstname || user.lastname) && !this.g.userFullname) {
-                const fullName = user.firstname + ' ' + user.lastname;
-                this.g.setParameter('userFullname', fullName);
-                this.g.setAttributeParameter('userFullname', fullName);
-            }
-            //check if tiledesk_userEmail exist (passed from URL or tiledeskSettings) before update userEmail parameter
-            //if tiledesk_userEmail not exist--> update parameter with tiledesk user returned from auth
-            if (user.email && !this.g.userEmail) {
-                this.g.setParameter('userEmail', user.email);
-                this.g.setAttributeParameter('userEmail', user.email);
-            }
-            // this.showWidget()
-        }).catch(error => {
-            this.logger.debug('[APP-COMP] signInWithCustomToken ERR ',error);
-            that.signOut();
-        });
+        return this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
+                this.messagingAuthService.createCustomToken(token)
+                this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
+                //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
+                //if tiledesk_userFullname not exist--> update parameter with tiledesk user returned from auth
+                if ((user.firstname || user.lastname) && !this.g.userFullname) {
+                    const fullName = user.firstname + ' ' + user.lastname;
+                    this.g.setParameter('userFullname', fullName);
+                    this.g.setAttributeParameter('userFullname', fullName);
+                }
+                //check if tiledesk_userEmail exist (passed from URL or tiledeskSettings) before update userEmail parameter
+                //if tiledesk_userEmail not exist--> update parameter with tiledesk user returned from auth
+                if (user.email && !this.g.userEmail) {
+                    this.g.setParameter('userEmail', user.email);
+                    this.g.setAttributeParameter('userEmail', user.email);
+                }
+                return Promise.resolve(user)
+                // this.showWidget()
+            }).catch(error => {
+                this.logger.debug('[APP-COMP] signInWithCustomToken ERR ',error);
+                that.signOut();
+                return Promise.reject(error)
+            });
+
     }
 
     // UNUSED
@@ -1607,9 +1610,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
 
     /** */
-    private signInAnonymous() {
+    private signInAnonymous(): Promise<UserModel> {
         this.logger.debug('[APP-COMP] signInAnonymous');
-        this.tiledeskAuthService.signInAnonymously(this.g.projectid).then((tiledeskToken) => {
+        return this.tiledeskAuthService.signInAnonymously(this.g.projectid).then((tiledeskToken) => {
             this.messagingAuthService.createCustomToken(tiledeskToken)
             const user = this.tiledeskAuthService.getCurrentUser();
             if (user.firstname || user.lastname) {
@@ -1621,6 +1624,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.g.setParameter('userEmail', user.email);
                 this.g.setAttributeParameter('userEmail', user.email);
             }
+            return Promise.resolve(user)
+        }).catch((error)=> {
+            this.logger.error('[APP-COMP] signInAnonymous ERR', error);
+            return Promise.reject(error);
         });
         // this.authService.anonymousAuthentication();
         // this.authService.authenticateFirebaseAnonymously();
