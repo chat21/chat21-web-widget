@@ -20,6 +20,7 @@ export class ConversationContentComponent implements OnInit {
   @Input() messages: MessageModel[]
   @Input() senderId: string;
   @Input() baseLocation: string;
+  @Input() isConversationArchived: boolean;
   @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();

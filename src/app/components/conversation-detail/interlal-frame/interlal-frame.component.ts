@@ -7,7 +7,7 @@ import { slideInOutAnimation } from '../../../_animations/slide-in-out.animation
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 @Component({
-  selector: 'chat-interlal-frame',
+  selector: 'chat-internal-frame',
   templateUrl: './interlal-frame.component.html',
   styleUrls: ['./interlal-frame.component.scss'],
   animations: [

@@ -453,9 +453,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             that.stateLoggedUser = state;
             if (state && state === AUTH_STATE_ONLINE) {
                 /** sono loggato */
-                // const user = that.authService.getCurrentUser();
                 const user = that.tiledeskAuthService.getCurrentUser()
-                that.logger.debug('[APP-COMP] sono nel caso in cui sono loggato', user);
                 that.logger.info('[APP-COMP] ONLINE - LOGGED SUCCESSFULLY', user);
                 // that.g.wdLog([' anonymousAuthenticationInNewProject']);
                 // that.authService.resigninAnonymousAuthentication();
@@ -470,26 +468,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 // this.g.setAttributeParameter('userEmail', user.email);
                 that.g.setParameter('isLogged', true);
                 that.g.setParameter('attributes', that.setAttributesFromStorageService());
-                /* faccio scattare il trigger del login solo una volta */
-                // if (that.isBeingAuthenticated) {
-                //     that.triggerOnLoggedIn();
-                //     that.isBeingAuthenticated = false;
-                // }
                 that.startUI();
                 that.triggerOnAuthStateChanged(that.stateLoggedUser);
                 that.logger.debug('[APP-COMP]  1 - IMPOSTO STATO CONNESSO UTENTE ', autoStart);
-                this.typingService.initialize(this.g.tenant);
-                this.presenceService.initialize(this.g.tenant);
+                that.typingService.initialize(this.g.tenant);
+                that.presenceService.initialize(this.g.tenant);
                 that.presenceService.setPresence(user.uid);
                 this.initConversationsHandler(this.g.tenant, that.g.senderId);
                 if (autoStart) {
                     that.showWidget();
-                    // that.g.setParameter('isShown', true, true);
                 }
 
             } else if (state && state === AUTH_STATE_OFFLINE) {
                 /** non sono loggato */
-                that.logger.debug('[APP-COMP] sono nel caso in cui non sono loggato 0');
                 that.logger.info('[APP-COMP] OFFLINE - NO CURRENT USER AUTENTICATE: ');
                 that.g.setParameter('isLogged', false);
                 that.hideWidget();
@@ -1862,7 +1853,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * attivo una nuova conversazione
      */
     startNewConversation() {
-        this.logger.debug('[APP-COMP] AppComponent::startNwConversation');
+        this.logger.debug('[APP-COMP] AppComponent::startNewConversation');
         const newConvId = this.generateNewUidConversation();
         this.g.setParameter('recipientId', newConvId);
         this.appStorageService.setItem('recipientId', newConvId)
@@ -2095,7 +2086,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * MODAL CONVERSATION:
      * close conversation
      */
-    onCloseConversation() {
+    onBackConversation() {
         this.logger.debug('[APP-COMP] onCloseConversation')
         this.appStorageService.removeItem('recipientId');
         this.g.setParameter('recipientId', null, false)
@@ -2109,6 +2100,46 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.isOpenConversation = false;
         }, 200);
         // this.startNwConversation();
+    }
+        
+    /**
+     * MODAL CONVERSATION:
+     * conversation archived
+     * @param conversationId 
+     * @description - if singleConversation is TRUE show new conv/load last active conversatio
+     * - if singleConversation is FALSE -> back to Home component
+     */
+    onConversationClosed(conversationId: string){
+        if(this.g.singleConversation){
+            //manage single conversation
+        }else{
+            this.onBackConversation
+        }
+    }
+
+    /**
+     * CONVERSATION DETAIL FOOTER:
+     * floating button -> start new Conversation();
+     */
+    onNewConversationButtonClicked(){
+        this.logger.debug('[APP-COMP] onNewConversationButtonClicked');
+        
+        this.isOpenConversation = false;
+        this.g.singleConversation? this.isOpenHome = false: null;
+        const departments = this.g.departments;
+        if (departments && departments.length > 1 && this.g.departmentID == null) {
+            this.isOpenSelectionDepartment = true;
+        } else {
+            this.isOpenConversation = true;
+        }
+
+        this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
+        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            this.startNewConversation();
+        }
+        // setTimeout(() => {
+        //     this.onNewConversation();
+        // }, 0); 
     }
 
     /**
@@ -2187,7 +2218,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
-        this.onCloseConversation();
+        this.onBackConversation();
     }
 
     /**
@@ -2203,7 +2234,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.g.setParameter('isOpenStartRating', false);
         // this.settingsSaverService.setVariable('isOpenStartRating', false);
         // this.startNwConversation();
-        this.onCloseConversation();
+        this.onBackConversation();
     }
     // ========= end:: CALLBACK FUNCTIONS ============//
 
@@ -2308,7 +2339,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.styleMapConversation.set('fontSize', this.g.fontSize)
         this.styleMapConversation.set('fontFamily', this.g.fontFamily)
         this.styleMapConversation.set('buttonFontSize', this.g.buttonFontSize)
-    
+        this.styleMapConversation.set('buttonBackgroundColor', this.g.buttonBackgroundColor)
+        this.styleMapConversation.set('buttonTextColor', this.g.buttonTextColor)
+        this.styleMapConversation.set('buttonHoverBackgroundColor',this.g.buttonHoverBackgroundColor)
+        this.styleMapConversation.set('buttonHoverTextColor', this.g.buttonHoverTextColor)
+
         this.el.nativeElement.style.setProperty('--button-in-msg-background-color', this.g.bubbleSentBackground)
         this.el.nativeElement.style.setProperty('--button-in-msg-font-size', this.g.buttonFontSize)
     }

@@ -10,8 +10,10 @@ export class TextButtonComponent implements OnInit {
 
   @Input() button: any;
   @Input() fontSize: string;
-  @Input() themeColor: string;
-  @Input() foregroundColor: string;
+  @Input() backgroundColor: string;
+  @Input() textColor: string;
+  @Input() hoverBackgroundColor: string;
+  @Input() hoverTextColor: string;
   @Output() onButtonClicked = new EventEmitter();
 
   public type: string = "text"
@@ -23,18 +25,20 @@ export class TextButtonComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges){
     //decomment if element should have same color of themeColor and fregroundColor
     if(this.fontSize) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--buttonFontSize', this.fontSize);
-    if(this.themeColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--themeColor', this.themeColor);
-    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--foregroundColor', this.foregroundColor);
+    if(this.backgroundColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--backgroundColor', this.backgroundColor);
+    if(this.textColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--textColor', this.textColor);
+    if(this.hoverBackgroundColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--hoverBackgroundColor', this.hoverBackgroundColor);
+    if(this.hoverTextColor) this.elementRef.nativeElement.querySelector('.text').style.setProperty('--hoverTextColor', this.hoverTextColor);
   }
 
   onMouseOver(event){
-    if(this.themeColor) this.elementRef.nativeElement.querySelector('.text').style.background = this.themeColor
-    if(this.foregroundColor) this.elementRef.nativeElement.querySelector('.text').style.color = this.foregroundColor
+    // if(this.backgroundColor) this.elementRef.nativeElement.querySelector('.text').style.background = this.textColor
+    // if(this.textColor) this.elementRef.nativeElement.querySelector('.text').style.color = this.backgroundColor
   }
 
   onMouseOut(event){
-    this.elementRef.nativeElement.querySelector('.text').style.color = '';
-    this.elementRef.nativeElement.querySelector('.text').style.background = ''
+    // this.elementRef.nativeElement.querySelector('.text').style.color = '';
+    // this.elementRef.nativeElement.querySelector('.text').style.background = ''
   }
 
   actionButtonText(){

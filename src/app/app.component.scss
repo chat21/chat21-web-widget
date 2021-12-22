@@ -742,7 +742,7 @@ chat-root {
     // nk: .chat21-sheet CUSTOM DIMENSIONS WHEN THE WINDOW WIDTH IS < 451PX 
     ***************/
 
-    @media (width: 376px){
+    @media (min-width: 376px){
         #chat21-conversations {
             // border-radius: 10px!important;
             border-radius: 16px!important;

@@ -59,6 +59,7 @@
                     <div class="c21-card fade-in-top" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': g.themeColor50 }">
                         <chat-home-conversations 
                             [listConversations]="listConversations"
+                            [archivedConversations]="archivedConversations"
                             [stylesMap]="stylesMap"
                             (onNewConversation)="onNewConversationFN()" 
                             (onConversationSelected)="onConversationSelectedFN($event)"

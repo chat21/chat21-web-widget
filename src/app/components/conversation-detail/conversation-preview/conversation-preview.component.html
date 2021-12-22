@@ -28,8 +28,8 @@
     <div class="c21-content" #scrollMePreview id="scroll-me-preview">
         <chat-image *ngIf="fileSelected"
           [metadata]="fileSelected?.metadata"
-          [width]="fileSelected?.metadata?.width"
-          [height]="fileSelected?.metadata?.height"
+          [width]="getMetadataSize(fileSelected.metadata)?.width"
+          [height]="getMetadataSize(fileSelected.metadata)?.height"
           (onImageRendered)="onImageRenderedFN($event)">
         </chat-image>
         <div id="img-preview-file-extension">{{ file_extension }} </div>

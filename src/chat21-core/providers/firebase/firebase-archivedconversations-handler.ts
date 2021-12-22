@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -45,6 +46,8 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     private isConversationClosingMap: Map<string, boolean>;
     private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
+
+    private subscribe: any;
 
     constructor(
         //public databaseProvider: DatabaseProvider
@@ -169,7 +172,7 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
     }
 
 
-    getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
+    public getConversationDetail(conversationId: string, callback:(conv: ConversationModel)=>void) {
         const conversation = this.archivedConversations.find(item => item.uid === conversationId);
         this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] SubscribeToConversations getConversationDetail::ARCHIVED *****: ', conversation)
         if (conversation) {
@@ -177,21 +180,33 @@ export class FirebaseArchivedConversationsHandler extends ArchivedConversationsH
             // this.BSConversationDetail.next(conversationSelected);
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/archived_conversations/' + conversationId;
-            const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
-            this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase)
+            const urlNodeFirebase = archivedConversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
+            this.logger.debug('[FIREBASEArchivedConversationsHandlerSERVICE] urlNodeFirebase conversationDetail *****', urlNodeFirebase, conversationId)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (childSnapshot) => {
-                const childData: ConversationModel = childSnapshot.val();
-                if (childSnapshot && childSnapshot.key && childData) {
-                    childData.uid = childSnapshot.key;
-                    const conversation = this.completeConversation(childData);
-                    if (conversation) {
-                        callback(conversation)
-                    } else {
-                        callback(null)
+            if(this.subscribe){
+                this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail ALREADY SUBSCRIBED')
+                return;
+            }
+            
+            this.subscribe = firebaseMessages.on('value', (snap) => {
+                const childSnapshot = snap.child('/'+conversationId)
+                if(!childSnapshot.exists()){
+                    this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail archived conversation NOT exist', conversationId)
+                    callback(null)
+                } else {
+                    const childData: ConversationModel = childSnapshot.val();
+                    this.logger.log('[FIREBASEArchivedConversationsHandlerSERVICE] getConversationDetail archived conversation exist', childData)
+                    if (childSnapshot && childSnapshot.key && childData) {
+                        childData.uid = childSnapshot.key;
+                        const conversation = this.completeConversation(childData);
+                        if (conversation) {
+                            callback(conversation)
+                        } else {
+                            callback(null)
+                        }
                     }
+                    // this.BSConversationDetail.next(conversation);
                 }
-                // this.BSConversationDetail.next(conversation);
             });
         }
     }

@@ -72,7 +72,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       this.conversationHandlerService = this.chatManager.getConversationHandlerByConversationId(this.conversationWith);
     }
     if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined){
-      this.restoreTextArea()
+      this.restoreTextArea();
     }
   }
   
@@ -431,14 +431,14 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
       const target = document.getElementById('chat21-main-message-context') as HTMLInputElement;
       // tslint:disable-next-line:max-line-length
       //   that.logger.debug('[CONV-FOOTER] H:: this.textInputTextArea', (document.getElementById('chat21-main-message-context') as HTMLInputElement).value , target.style.height, target.scrollHeight, target.offsetHeight, target.clientHeight);
-      target.style.height = '100%';
-      if (target.value === '\n') {
+      target? target.style.height = '100%': null;
+      if (target && target.value === '\n') {
           target.value = '';
           target.style.height = this.HEIGHT_DEFAULT;
-      } else if (target.scrollHeight > target.offsetHeight) {
+        } else if (target && target.scrollHeight > target.offsetHeight) {
           target.style.height = target.scrollHeight + 2 + 'px';
           target.style.minHeight = this.HEIGHT_DEFAULT;
-      } else {
+        } else if (target) {
           //   that.logger.debug('[CONV-FOOTER] PASSO 3');
           target.style.height = this.HEIGHT_DEFAULT;
           // segno sto scrivendo

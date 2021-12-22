@@ -16,6 +16,7 @@
             <!-- [class.active]="true" -->
             <chat-home 
                 [listConversations]="listConversations"
+                [archivedConversations]="archivedConversations"
                 [hideSettings]="g.hideSettings"
                 [stylesMap]="styleMapConversation"
                 (onNewConversation)="onNewConversation()" 
@@ -48,9 +49,10 @@
                 [isOpen]="g.isOpen"
                 [isConversationArchived]="isConversationArchived"
                 [stylesMap]="styleMapConversation"
-                (onBackHome)="onCloseConversation()" 
+                (onBackHome)="onBackConversation()" 
                 (onCloseWidget)="onCloseWidget()"
                 (onSoundChange)="onSoundChange($event)"
+                (onNewConversationButtonClicked)="onNewConversationButtonClicked($event)"
                 (onBeforeMessageSent)="triggerHandler.triggerBeforeSendMessageEvent($event)"
                 (onAfterSendMessage)="triggerHandler.triggerAfterSendMessageEvent($event)"
                 (onNewMessageCreated)="triggerHandler.triggerOnMessageCreated($event)"

@@ -1,4 +1,3 @@
-import { firebaseConfig } from './../../../environments/firebase-config';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -54,6 +53,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     private BASE_URL_DATABASE: string;
     // private audio: any;
     // private setTimeoutSound: any;
+    private subscribe: any
 
     constructor(
         public http: HttpClient,
@@ -119,9 +119,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         const that = this;
         const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
         this.logger.debug('[FIREBASEConversationsHandlerSERVICE] SubscribeToConversations conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
-        this.getConversationsRESTApi(urlNodeFirebase, (conversation, error)=> {
-            console.log('converationnnnn', conversation)
-        })
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -140,6 +137,45 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         // this.audio = new Audio();
         // this.audio.src = URL_SOUND;
         // this.audio.load();
+    }
+
+    public getLastConversation(callback: (conversation: ConversationModel, error: string)=>void){
+
+        this.getFirebaseToken((error, idToken) => {
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  idToken', idToken)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  error', error)
+            if (idToken) {
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + idToken,
+                    })
+
+                }
+                const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
+                const queryString = '?auth=' + idToken +'&orderBy="timestamp"&limitToLast=1'
+                const url = this.BASE_URL_DATABASE + urlNodeFirebase + '.json' + queryString// + queryString;
+                this.http.get(url, httpOptions).subscribe((childSnapshot: any) => {
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi - RES', childSnapshot);
+                    if(childSnapshot){
+                        const childData: ConversationModel = childSnapshot[Object.keys(childSnapshot)[0]];
+                        childData.uid = Object.keys(childSnapshot)[0]
+                        const conversation = this.completeConversation(childData); 
+                        callback(conversation, null)
+                    }else if(!childSnapshot){
+                        callback(null, null)
+                    }
+                }, (error) => {
+                    this.logger.error('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi ERROR ', error);
+                    callback(null, 'error')
+                }, () => {
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi * COMPLETE *');
+                });
+            } else {
+                callback(null, 'error')
+            }
+        });
     }
 
     /**
@@ -276,21 +312,44 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
             // this.BSConversationDetail.next(conversationSelected);
         } else {
             // const urlNodeFirebase = '/apps/' + this.tenant + '/users/' + this.loggedUserId + '/conversations/' + conversationId;
-            const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) + '/' + conversationId;
+            const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId) // + '/' + conversationId;
             this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail urlNodeFirebase *****', urlNodeFirebase)
             const firebaseMessages = firebase.database().ref(urlNodeFirebase);
-            firebaseMessages.on('value', (childSnapshot) => {
-                const childData: ConversationModel = childSnapshot.val();
-                this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
-                if (childSnapshot && childSnapshot.key && childData) {
-                    childData.uid = childSnapshot.key;
-                    const conversation = this.completeConversation(childData);
-                    if (conversation) {
-                        callback(conversation)
-                    } else {
-                        callback(null)
+            if(this.subscribe){
+                this.logger.log('[FIREBASEConversationsHandlerSERVICE] getConversationDetail ALREADY SUBSCRIBED')
+                return;
+            }
+            
+            this.subscribe = firebaseMessages.on('value', (snap) => {
+                const childSnapshot = snap.child('/'+conversationId)
+                if(!childSnapshot.exists()){
+                    this.logger.log('[FIREBASEConversationsHandlerSERVICE] getConversationDetail conversation NOT exist', conversationId)
+                    callback(null)
+                } else {
+                    const childData: ConversationModel = childSnapshot.val();
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationDetail conversation exist', childSnapshot.val(), childSnapshot.key)
+                    if (childSnapshot && childSnapshot.key && childData) {
+                        childData.uid = childSnapshot.key;
+                        const conversation = this.completeConversation(childData);
+                        if (conversation) {
+                            callback(conversation)
+                        } else {
+                            callback(null)
+                        }
                     }
+                    // this.BSConversationDetail.next(conversation);
                 }
+                // const childData: ConversationModel = childSnapshot.val();
+                // this.logger.debug('[FIREBASEConversationsHandlerSERVICE] conversationDetail childSnapshot *****', childSnapshot.val())
+                // if (childSnapshot && childSnapshot.key && childData) {
+                //     childData.uid = childSnapshot.key;
+                //     const conversation = this.completeConversation(childData);
+                //     if (conversation) {
+                //         callback(conversation)
+                //     } else {
+                //         callback(null)
+                //     }
+                // }
                 // this.BSConversationDetail.next(conversation);
             });
         }
@@ -561,42 +620,6 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
      */
     private isValidField(field: any): boolean {
         return (field === null || field === undefined) ? false : true;
-    }
-
-
-    private getConversationsRESTApi(childNode: string, callback: (lastConversation: ConversationModel, error: string)=>void){
-
-        this.getFirebaseToken((error, idToken) => {
-            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  idToken', idToken)
-            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  error', error)
-            if (idToken) {
-                const httpOptions = {
-                    headers: new HttpHeaders({
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        // 'Authorization': 'Bearer ' + idToken,
-                    })
-
-                }
-                const queryString = '?auth=' + idToken +'&orderBy="timestamp"&limitToFirst=1'
-                const url = this.BASE_URL_DATABASE + childNode + '.json' + queryString// + queryString;
-                this.http.get(url, httpOptions).subscribe((childSnapshot: any) => {
-                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi - RES', childSnapshot);
-                    const childData: ConversationModel = childSnapshot[Object.keys(childSnapshot)[0]];
-                    childData.uid = Object.keys(childSnapshot)[0]
-                    const conversation = this.completeConversation(childData); 
-                    callback(conversation, null)
-                }, (error) => {
-                    this.logger.error('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi ERROR ', error);
-                    callback(null, 'error')
-                }, () => {
-                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi * COMPLETE *');
-
-                });
-            } else {
-                callback(null, 'error')
-            }
-        });
     }
 
     // ---------------------------------------------------------- //

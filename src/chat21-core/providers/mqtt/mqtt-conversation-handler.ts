@@ -1,11 +1,9 @@
-import { Inject, Injectable, ɵConsole } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-// // firebase
-// import * as firebase from 'firebase/app';
-// import 'firebase/messaging';
-// import 'firebase/database';
-// import 'firebase/firestore';
+import { LoggerService } from '../abstract/logger.service';
+import { LoggerInstance } from '../logger/loggerInstance';
+
 // mqtt
 import {Chat21Service} from './chat-service';
 
@@ -56,14 +54,13 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     private CLIENT_BROWSER: string;
     private lastDate = '';
 
+    private logger: LoggerService = LoggerInstance.getInstance()
 
     constructor(
         public chat21Service: Chat21Service,
         @Inject('skipMessage') private skipInfoMessage: boolean
-        
     ) {
         super();
-        console.log('contructor MQTTConversationHandler');
     }
 
     /**
@@ -76,7 +73,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         tenant: string,
         translationMap: Map<string, string>
     ) {
-        console.log('initWithRecipient:::', tenant);
+        this.logger.log('[MQTTConversationHandler] initWithRecipient:', tenant);
         this.recipientId = recipientId;
         this.recipientFullname = recipientFullName;
         this.loggedUser = loggedUser;
@@ -100,9 +97,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
      * mi sottoscrivo a change, removed, added
      */
     connect() {
-        console.log('connecting conversation handler...');
+        this.logger.log('[MQTTConversationHandler] connecting conversation handler...');
         if (this.conversationWith == null) {
-            console.error('cant connect invalid this.conversationWith', this.conversationWith);
+            this.logger.error('[MQTTConversationHandler] cant connect invalid this.conversationWith', this.conversationWith);
             return;
         }
         this.chat21Service.chatClient.lastMessages(this.conversationWith, (err, messages) => {
@@ -114,26 +111,15 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         });
         const handler_message_added = this.chat21Service.chatClient.onMessageAddedInConversation(
             this.conversationWith, (message, topic) => {
-                console.log('message added:', message, 'on topic:', topic);
+                this.logger.log('[MQTTConversationHandler] message added:', message, 'on topic:', topic);
                 this.addedMessage(message);
         });
         const handler_message_updated = this.chat21Service.chatClient.onMessageUpdatedInConversation(
             this.conversationWith,  (message, topic) => {
-            console.log('message updated:', message, 'on topic:', topic);
+            this.logger.log('[MQTTConversationHandler] message updated:', message, 'on topic:', topic);
             this.updatedMessageStatus(message);
         });
-        console.log("this.conversationWith,", this.conversationWith);
-        // if (this.isGroup(this.conversationWith)) {
-        //     this.chat21Service.chatClient.getGroup(this.conversationWith, (err, group) => {
-        //         console.log('got group:', group)
-        //         console.log('subscribing to group updates...');
-        //         const handler_group_updated = this.chat21Service.chatClient.onGroupUpdated( (group, topic) => {
-        //             if (topic.conversWith === this.conversationWith) {
-        //                 console.log('group updated:', group);
-        //             }
-        //         });
-        //     });
-        // }
+        this.logger.log("[MQTTConversationHandler] this.conversationWith,", this.conversationWith);
     }
 
     isGroup(groupId) {
@@ -179,7 +165,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             channelType = TYPE_DIRECT;
         }
 
-        console.log('Senderfullname', senderFullname);
+        this.logger.log('[MQTTConversationHandler] Senderfullname', senderFullname);
         const language = document.documentElement.lang;
         const recipientFullname = conversationWithFullname;
         const recipientId = conversationWith;
@@ -195,14 +181,11 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             channelType,
             // language,
             (err, message) => {
-                console.log('message: ' + JSON.stringify(message) + ' sent with err: ' + err);
                 if (err) {
-                // cambio lo stato in rosso: invio nn riuscito!!!
-                message.status = '-100';
-                console.log('ERRORE', err);
+                    message.status = '-100';
+                    this.logger.log('[MQTTConversationHandler] ERROR', err);
                 } else {
-                message.status = '150';
-                console.log('OK MSG INVIATO CON SUCCESSO AL SERVER', message);
+                    message.status = '150';
                 }
             }
         );
@@ -245,7 +228,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     //             userEmail: this.loggedUser.email,
     //             userFullname: this.loggedUser.fullname
     //         };
-    //         console.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
+    //         this.logger.log('>>>>>>>>>>>>>> setAttributes: ', JSON.stringify(attributes));
     //         sessionStorage.setItem('attributes', JSON.stringify(attributes));
     //     }
     //     return attributes;
@@ -265,10 +248,10 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             this.lastDate = headerDate;
             msg.headerDate = headerDate;
         }
-        console.log('adding message:' + JSON.stringify(msg));
-        // console.log('childSnapshot.message_id:' + msg.message_id);
-        // console.log('childSnapshot.key:' + msg.key);
-        // console.log('childSnapshot.uid:' + msg.uid);
+        this.logger.log('[MQTTConversationHandler] adding message:' + JSON.stringify(msg));
+        // this.logger.log('childSnapshot.message_id:' + msg.message_id);
+        // this.logger.log('childSnapshot.key:' + msg.key);
+        // this.logger.log('childSnapshot.uid:' + msg.uid);
         this.addReplaceMessageInArray(msg.uid, msg);
         this.updateMessageStatusReceived(msg);
         this.messageAdded.next(msg);
@@ -289,13 +272,13 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, patch) ){
             return;
         }
-        console.log('updating message with patch', patch);
+        this.logger.log('[MQTTConversationHandler] updating message with patch', patch);
         const index = searchIndexInArrayForUid(this.messages, patch.message_id);
         if (index > -1) {
             const message = this.messages[index];
             if (message) {
                 message.status = patch.status;
-                console.log('message found and patched (replacing)', message);
+                this.logger.log('[MQTTConversationHandler] message found and patched (replacing)', message);
                 // imposto il giorno del messaggio per visualizzare o nascondere l'header data
                 // con**** DATAIL messageAdded ***sole.log('>>>>>>>>>>>>>> changed headerDate: ', msg);
                 this.addReplaceMessageInArray(message.uid, message);
@@ -317,7 +300,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     /** */
     private messageGenerate(childSnapshot: any) {
         // const msg: MessageModel = childSnapshot.val();
-        console.log("childSnapshot>" + JSON.stringify(childSnapshot));
+        this.logger.log("[MQTTConversationHandler] childSnapshot >" + JSON.stringify(childSnapshot));
         const msg = childSnapshot;
         msg.uid = childSnapshot.key;
         // controllo fatto per i gruppi da rifattorizzare
@@ -329,8 +312,8 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         //     msg.text = htmlEntities(msg.text);
         // }
         // verifico che il sender è il logged user
-        console.log("****>msg.sender:" + msg.sender);
-        console.log("****>this.loggedUser.uid:" + this.loggedUser.uid);
+        this.logger.log("****>msg.sender:" + msg.sender);
+        this.logger.log("****>this.loggedUser.uid:" + this.loggedUser.uid);
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
         // traduco messaggi se sono del server
         if (msg.attributes && msg.attributes.subtype) {
@@ -404,18 +387,18 @@ export class MQTTConversationHandler extends ConversationHandlerService {
      * @param conversationWith
      */
     private updateMessageStatusReceived(msg) {
-        console.log('updateMessageStatusReceived', msg);
+        this.logger.log('[MQTTConversationHandler] updateMessageStatusReceived', msg);
         if (msg['status'] < MSG_STATUS_RECEIVED) {
-            console.log('status ', msg['status'], ' < (RECEIVED:200)', MSG_STATUS_RECEIVED);
+            this.logger.log('[MQTTConversationHandler] status ', msg['status'], ' < (RECEIVED:200)', MSG_STATUS_RECEIVED);
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
-                console.log('updating message with status received');
+                this.logger.log('[MQTTConversationHandler] updating message with status received');
                 this.chat21Service.chatClient.updateMessageStatus(msg.message_id, this.conversationWith, MSG_STATUS_RECEIVED, null);
             }
         }
         // if (msg.status < MSG_STATUS_RECEIVED) {
         //     if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
         //     const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + msg.uid;
-        //     console.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
+        //     this.logger.log('AGGIORNO STATO MESSAGGIO', urlNodeMessagesUpdate);
         //     firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
         //     }
         // }
@@ -426,7 +409,6 @@ export class MQTTConversationHandler extends ConversationHandlerService {
      * richiamato dalla pagina elenco messaggi della conversazione
      */
     private isSender(sender: string, currentUserId: string) {
-        console.log('isSender::::: ', sender, currentUserId);
         if (currentUserId) {
             if (sender === currentUserId) {
                 return true;
@@ -451,11 +433,11 @@ export class MQTTConversationHandler extends ConversationHandlerService {
 
 
   unsubscribe(key: string) {
-    console.log('unsubscribe: ', key);
+    this.logger.log('[MQTTConversationHandler] unsubscribe: ', key);
     this.listSubsriptions.forEach(sub => {
-      console.log('unsubscribe: ', sub.uid, key);
+      this.logger.log('[MQTTConversationHandler] unsubscribe: ', sub.uid, key);
       if (sub.uid === key) {
-        console.log('unsubscribe: ', sub.uid, key);
+        this.logger.log('[MQTTConversationHandler] unsubscribe: ', sub.uid, key);
         sub.unsubscribe(key, null);
         return;
       }

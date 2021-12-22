@@ -3,7 +3,7 @@ import { ChatManager } from './../../../../chat21-core/providers/chat-manager';
 import { ConversationFooterComponent } from './../conversation-footer/conversation-footer.component';
 
 // tslint:disable-next-line:max-line-length
-import { ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, SimpleChanges } from '@angular/core';
+import { ElementRef, Component, OnInit, OnChanges, AfterViewInit, Input, Output, ViewChild, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Globals } from '../../../utils/globals';
 import { ConversationsService } from '../../../providers/conversations.service';
@@ -71,6 +71,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() onBeforeMessageRender = new EventEmitter();
   @Output() onAfterMessageRender = new EventEmitter();
   @Output() onNewMessageCreated = new EventEmitter();
+  @Output() onNewConversationButtonClicked = new EventEmitter();
   // ========= end:: Input/Output values
 
   // projectid: string;   // uid progetto passato come parametro getVariablesFromSettings o getVariablesFromAttributeHtml
@@ -188,7 +189,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public conversationHandlerBuilderService: ConversationHandlerBuilderService,
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
-    private chatManager: ChatManager
+    private chatManager: ChatManager,
+    private changeDetectorRef: ChangeDetectorRef,
+    private elementRef: ElementRef
   ) { }
 
   onResize(event){
@@ -199,6 +202,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // this.initAll();
     this.logger.debug('[CONV-COMP] ngOnInit: ', this.senderId);
     this.showMessageWelcome = false;
+    this.elementRef.nativeElement.style.setProperty('--themeColor', this.stylesMap.get('themeColor'))
+    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.stylesMap.get('foregroundColor'))
     // const subscriptionEndRenderMessage = this.appComponent.obsEndRenderMessage.subscribe(() => {
     //   this.ngZone.run(() => {
     //     // that.scrollToBottom();
@@ -236,6 +241,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     const keysFooter = [
       'LABEL_PLACEHOLDER',
       'GUEST_LABEL',
+      'LABEL_START_NW_CONV'
     ];
 
     const keysContent = [
@@ -309,6 +315,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // }, 1000);
   }
 
+  ngAfterViewChecked(){
+    this.changeDetectorRef.detectChanges();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.logger.debug('[CONV-COMP] onChagnges', changes)
@@ -319,7 +328,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateConversationBadge() {
-    this.logger.debug('[CONV-COMP] updateConversationBadge', this.conversationId)
+    this.logger.debug('[CONV-COMP] updateConversationBadge', this.conversationId, this.isConversationArchived)
     if(this.isConversationArchived && this.conversationId && this.archivedConversationsHandlerService){
       this.archivedConversationsHandlerService.setConversationRead(this.conversationId)
     }
@@ -362,12 +371,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // sponziello, commentato
     // this.logger.debug('[CONV-COMP] ------ 5: setAvailableAgentsStatus ------ ');
     // this.setAvailableAgentsStatus();
-    this.logger.debug('[CONV-COMP] ------ 5: updateConversationbage ------ ');
-    this.updateConversationBadge();
+
+    // this.logger.debug('[CONV-COMP] ------ 5: updateConversationbage ------ ');
+    // this.updateConversationBadge();
 
     this.logger.debug('[CONV-COMP] ------ 6: getConversationDetail ------ ', this.conversationId);
-    this.getConversationDetail() //check if conv is archived or not
-
+    this.getConversationDetail((isConversationArchived) => {
+      this.logger.debug('[CONV-COMP] ------ 6: updateConversationbage ------ ');
+      this.updateConversationBadge();
+      return;
+    }) //check if conv is archived or not
     // this.checkListMessages();
 
     if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
@@ -385,19 +398,70 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // }
   }
 
-  getConversationDetail(){
-    if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
-      this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-        this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
-        this.conversation = conv;    
+  /**
+   * @description get detail of conversation by uid and then return callback with conversation status
+   * @param callback
+   * @returns isConversationArchived (status conversation archived: boolean) 
+   */
+  getConversationDetail(callback:(isConversationArchived: boolean)=>void){
+    // if(!this.isConversationArchived){ 
+    //get conversation from 'conversations' firebase node
+    this.logger.debug('[CONV-COMP] getConversationDetail: isConversationArchived???', this.isConversationArchived, this.conversationWith)
+      this.conversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+        this.logger.debug('[CONV-COMP] getConversationDetail: conversationsHandlerService ', this.conversationWith, conv, this.isConversationArchived)
+        if(conv){
+          this.conversation = conv;
+          this.isConversationArchived = false;
+          callback(this.isConversationArchived)
+        }
+        if(!conv){
+          //get conversation from 'archivedconversations' firebase node
+          this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list')
+          this.archivedConversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+            this.logger.debug('[CONV-COMP] getConversationDetail: archivedConversationsHandlerService', this.conversationWith, conv, this.isConversationArchived)
+            if(conv){
+              this.conversation = conv;
+              this.isConversationArchived = true;
+              callback(this.isConversationArchived)
+            }else if(!conv) {
+              callback(null);
+            }
+          })
+        }
       })
-    }else { //get conversation from 'conversations' firebase node
-      this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
-        this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
-        this.conversation = conv;    
-      })
-    }
+    // } else { //get conversation from 'conversations' firebase node
+    //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
+    //     if(conv){
+    //       this.conversation = conv;
+    //       this.isConversationArchived = true;
+    //       callback(this.isConversationArchived) 
+    //     }
+    //     if(!conv){
+    //       this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //         this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
+    //         conv? this.isConversationArchived = false : null  
+    //         this.conversation = conv;
+    //         callback(this.isConversationArchived) 
+    //       })
+    //     }
+    //   })
+    // }
     
+    // if(!this.isConversationArchived){ //get conversation from 'conversations' firebase node
+    //   this.conversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] conversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //     this.conversation = conv;
+    //     callback(this.isConversationArchived)    
+    //   })
+    // }else { //get conversation from 'conversations' firebase node
+    //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
+    //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv)
+    //     this.conversation = conv;   
+    //     callback(this.isConversationArchived)   
+    //   })
+    // }
+    // this.updateConversationBadge()
   }
 
   // onResize(event) {
@@ -829,6 +893,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
           this.starRatingWidgetService.setOsservable(true)
+          this.isConversationArchived = true;
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
@@ -1828,19 +1893,26 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   returnChangeTextArea(event){
-    const scrollDiv = this.conversationContent.scrollMe
-    const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
-    if(height > 20 && height < 110){
-      scrollDiv.nativeElement.style.height = 'calc(100% - ' + (height - 20)+'px'
-      document.getElementById('chat21-button-send').style.right = '18px'
-      this.scrollToBottom()
-    } else if(height <= 20) {
-      scrollDiv.nativeElement.style.height = '100%'
-    } else if(height > 110){
-      document.getElementById('chat21-button-send').style.right = '18px'
+    if(event && event.textAreaEl){
+      const scrollDiv = this.conversationContent.scrollMe
+      const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
+      if(height > 20 && height < 110){
+        scrollDiv.nativeElement.style.height = 'calc(100% - ' + (height - 20)+'px'
+        document.getElementById('chat21-button-send').style.right = '18px'
+        this.scrollToBottom()
+      } else if(height <= 20) {
+        scrollDiv.nativeElement.style.height = '100%'
+      } else if(height > 110){
+        document.getElementById('chat21-button-send').style.right = '18px'
+      }
     }
   }
 
+   /** CALLED BY: floating-button footer component */
+   onNewConversationButtonClickedFN(event){
+    console.log('floating onNewConversationButtonClicked')
+    this.onNewConversationButtonClicked.emit()
+  }
   // =========== END: event emitter function ====== //
 
 

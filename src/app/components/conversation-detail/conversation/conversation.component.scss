@@ -4,7 +4,7 @@
 @import '../../../../sass/variables';
 // @import '../../../sass/normalize.css';
 
-:root {
+:host {
     --themeColor: $bck-msg-sent;
     --foregroundColor: $col-msg-sent;
 }
@@ -472,14 +472,14 @@
         }
     }
     #chat21-buttonToBottom:hover {
-        background-color: $blue;
+        background-color: var(--themeColor);
         opacity: 1!important;
         transition: all .45s ease-in-out!important;
         -moz-transition: all .45s ease-in-out!important;
         -webkit-transition: all .45s ease-in-out!important;
-        border: 1px solid #ffffff;
+        border: 1px solid var(--foregroundColor);
         svg {
-            fill: #ffffff;
+            fill: var(--foregroundColor);
         }
     }
 

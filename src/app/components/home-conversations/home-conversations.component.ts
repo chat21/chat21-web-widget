@@ -45,6 +45,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   
   // ========= begin:: Input/Output values ============//
   @Input() listConversations: Array<ConversationModel>; // uid utente ex: JHFFkYk2RBUn87LCWP2WZ546M7d2
+  @Input() archivedConversations: Array<ConversationModel>;
   @Input() stylesMap: Map<string, string>
   @Output() onNewConversation = new EventEmitter<string>();
   @Output() onConversationSelected = new EventEmitter<ConversationModel>();
@@ -71,7 +72,7 @@ export class HomeConversationsComponent implements OnInit, OnDestroy {
   // ========= begin:: variabili del componente ======= //
   // conversations: ConversationModel[];
   //listConversations: Array<ConversationModel>;
-  archivedConversations: Array<ConversationModel>;
+  // archivedConversations: Array<ConversationModel>;
   tenant = '';
   themeColor = '';
   themeForegroundColor = '';

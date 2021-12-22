@@ -59,7 +59,7 @@
                 #c21-contentScroll{
                     position: absolute;
                     left: 0px;
-                    right: 10px;
+                    right: 0px; //10px;
                     padding: 10px;
                     // display: none;
                     opacity: 0;
@@ -179,10 +179,23 @@
                     .emoticon {
                         background: transparent!important;
                         font-size: 4em;
+                        // animation: zoom-in-zoom-out 3s ease-out infinite;
                         .message_innerhtml {
                             padding: 0;
                             margin: 0;
                         }
+                         
+                        // @keyframes zoom-in-zoom-out {
+                        //     0% {
+                        //         transform: scale(1, 1);
+                        //     }
+                        //     50% {
+                        //         transform: scale(1.3, 1.3);
+                        //     }
+                        //     100% {
+                        //         transform: scale(1, 1);
+                        //     }
+                        // }
                     }                        
                     
                     .status-message {

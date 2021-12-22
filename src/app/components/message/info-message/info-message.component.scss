@@ -1,11 +1,20 @@
+@import '../../../../sass/variables';
+
 .base_info {
-    border-radius: 8px;
+    border-radius: 14px;
     border: 1px solid #C9E4F6;
     padding-left: 4px;
     padding-right: 4px;
+    padding: 6px 10px;
     display: inline-block;
     background: #C9E4F6;
-    font-size: 0.85em;
-    margin-left: 32px;;
+    font-size: 0.90em;
+    color: $base-gray;
+    margin-left: 32px;
     margin-right: 32px;
+}
+
+.base_info ::ng-deep > p {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }

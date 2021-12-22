@@ -21,6 +21,7 @@ import { compareValues, getFromNow, conversationsPathForUserId, searchIndexInArr
 // @Injectable({ providedIn: 'root' })
 @Injectable()
 export class MQTTConversationsHandler extends ConversationsHandlerService {
+    
 
     // BehaviorSubject
     BSConversationDetail: BehaviorSubject<ConversationModel>;
@@ -201,6 +202,10 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
                     loaded();
                 }
             });
+    }
+
+    getLastConversation(callback: (conv: ConversationModel, error: string) => void): void {
+        throw new Error('Method not implemented.');
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
