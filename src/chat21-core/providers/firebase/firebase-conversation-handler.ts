@@ -258,7 +258,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
     private addedNew(message:MessageModel){
         const msg = this.messageCommandGenerate(message);
-        console.log('msggggg', msg)
         // msg.attributes && msg.attributes['subtype'] === 'info'
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
             return;

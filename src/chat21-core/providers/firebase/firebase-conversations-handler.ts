@@ -1,3 +1,4 @@
+import { firebaseConfig } from './../../../environments/firebase-config';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -50,6 +51,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     private logger:LoggerService = LoggerInstance.getInstance()
     private ref: firebase.database.Query;
     private BASE_URL: string;
+    private BASE_URL_DATABASE: string;
     // private audio: any;
     // private setTimeoutSound: any;
 
@@ -76,6 +78,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         //this.databaseProvider.initialize(userId, this.tenant);
         //this.getConversationsFromStorage();
         this.BASE_URL = this.appConfig.getConfig().firebaseConfig.chat21ApiUrl;
+        this.BASE_URL_DATABASE = this.appConfig.getConfig().firebaseConfig.databaseURL;
     }
 
     /**
@@ -116,6 +119,9 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         const that = this;
         const urlNodeFirebase = conversationsPathForUserId(this.tenant, this.loggedUserId);
         this.logger.debug('[FIREBASEConversationsHandlerSERVICE] SubscribeToConversations conversations::ACTIVE urlNodeFirebase', urlNodeFirebase)
+        this.getConversationsRESTApi(urlNodeFirebase, (conversation, error)=> {
+            console.log('converationnnnn', conversation)
+        })
         this.ref = firebase.database().ref(urlNodeFirebase).orderByChild('timestamp').limitToLast(200);
         this.ref.on('child_changed', (childSnapshot) => {
             that.changed(childSnapshot);
@@ -242,7 +248,7 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
     }
 
 
-    getFirebaseToken(callback) {
+    getFirebaseToken(callback:(error: any, idToken: string)=>void) {
         const firebase_currentUser = firebase.auth().currentUser;
         this.logger.debug(' // firebase current user ', firebase_currentUser);
         if (firebase_currentUser) {
@@ -557,7 +563,44 @@ export class FirebaseConversationsHandler extends ConversationsHandlerService {
         return (field === null || field === undefined) ? false : true;
     }
 
+
+    private getConversationsRESTApi(childNode: string, callback: (lastConversation: ConversationModel, error: string)=>void){
+
+        this.getFirebaseToken((error, idToken) => {
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  idToken', idToken)
+            this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi  error', error)
+            if (idToken) {
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + idToken,
+                    })
+
+                }
+                const queryString = '?auth=' + idToken +'&orderBy="timestamp"&limitToFirst=1'
+                const url = this.BASE_URL_DATABASE + childNode + '.json' + queryString// + queryString;
+                this.http.get(url, httpOptions).subscribe((childSnapshot: any) => {
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi - RES', childSnapshot);
+                    const childData: ConversationModel = childSnapshot[Object.keys(childSnapshot)[0]];
+                    childData.uid = Object.keys(childSnapshot)[0]
+                    const conversation = this.completeConversation(childData); 
+                    callback(conversation, null)
+                }, (error) => {
+                    this.logger.error('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi ERROR ', error);
+                    callback(null, 'error')
+                }, () => {
+                    this.logger.debug('[FIREBASEConversationsHandlerSERVICE] getConversationsRESTApi * COMPLETE *');
+
+                });
+            } else {
+                callback(null, 'error')
+            }
+        });
+    }
+
     // ---------------------------------------------------------- //
     // END PRIVATE FUNCTIONS
     // ---------------------------------------------------------- //
 }
+
