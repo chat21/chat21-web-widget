@@ -59,6 +59,7 @@ import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, U
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
+import { isInfo } from '../chat21-core/utils/utils-message';
 
 @Component({
     selector: 'chat-root',
@@ -217,7 +218,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.onImageLoaded(conversation)
                     this.onConversationLoaded(conversation)
 
-                    if(conversation.sender !== this.g.senderId){
+                    if(conversation.sender !== this.g.senderId && !isInfo(conversation)){
                         that.manageTabNotification();
                     }
                     that.triggerOnConversationUpdated(conversation);
