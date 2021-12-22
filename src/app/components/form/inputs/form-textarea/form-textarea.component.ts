@@ -16,7 +16,6 @@ export class FormTextareaComponent implements OnInit {
   @Input() stylesMap: Map<string, string>;
   @Input() hasSubmitted: boolean; 
   @Output() onKeyEnterPressed = new EventEmitter<any>();
-  
   @ViewChild('div_input') input: ElementRef;
   form: FormGroup;
   constructor(private rootFormGroup: FormGroupDirective,
@@ -62,14 +61,17 @@ export class FormTextareaComponent implements OnInit {
   * HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
   * @param event 
   */
- onkeydown(event){
-  const keyCode = event.which || event.keyCode;
-  // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
-  if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   
-    event.preventDefault();
-    this.form.controls[this.controlName].patchValue(this.form.controls[this.controlName].value + '\r\n')
+  onkeydown(event){
+    const keyCode = event.which || event.keyCode;
+    // metaKey -> COMMAND ,  shiftKey -> SHIFT, altKey -> ALT, ctrlKey -> CONTROL
+    if( (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) && keyCode===13){   
+      event.preventDefault();
+      this.form.controls[this.controlName].patchValue(this.form.controls[this.controlName].value + '\r\n')
+    }
   }
-}
+
+
+
 
   setFormStyle(){
     if(this.form.controls[this.controlName].hasError('pattern') || 

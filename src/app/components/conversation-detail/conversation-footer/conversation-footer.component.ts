@@ -558,7 +558,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     }
   }
 
-
+  
   /**
   * HANDLE: cmd+enter, shiftKey+enter, alt+enter, ctrl+enter
   * @param event 

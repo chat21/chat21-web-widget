@@ -20,6 +20,16 @@
 - removed: privacyField property from tiledesk settings and from components usage
 - bug-fixed: disabled horizontal resize for form-textarea component
 - bug-fixed: loading bounce don't have themeColor and foregroundColor right value as background and color css property (WID-84)
+### 5.0.18.1 IN PROD 
+- bug-fixed: property align not works when no one set it (WID-92)	
+- bug-fixed: loading bounces not have same color of themeColor
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value (WID-86)	
+- bug-fixed: disabled horizontal resize for form-textarea component
+- changed: bubbleSentMessage gradiend from .5 to .8
+- changed: bubbleMessage border radius from 8px to 20px
+- added: management of keaboard tab button for preChatForm
+- added: widgetVer attributes property 
+- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)	
 
 ### 5.0.18 IN PROD
 

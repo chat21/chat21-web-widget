@@ -14,8 +14,8 @@ export class FormTextComponent implements OnInit {
   @Input() controlName: string;
   @Input() translationErrorLabelMap: Map<string, string>;
   @Input() stylesMap: Map<string, string>;
-  @Input() hasSubmitted: boolean; 
-  @Output() onKeyEnterPressed = new EventEmitter<any>();
+  @Input() hasSubmitted: boolean;
+  @Output() onKeyEnterPressed = new EventEmitter<any>(); 
 
   @ViewChild('div_input') input: ElementRef;
   form: FormGroup;

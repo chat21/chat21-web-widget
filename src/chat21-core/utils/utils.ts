@@ -689,3 +689,5 @@ function componentFromStr(numStr, percent) {
   return percent ?
       Math.floor(255 * Math.min(100, num) / 100) : Math.min(255, num);
 }
+
+
