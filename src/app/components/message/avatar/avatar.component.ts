@@ -15,12 +15,15 @@ export class AvatarComponent implements OnInit {
 
   ngOnInit() {
     if(this.senderID){
-      this.url = this.imageRepoService.getImagePhotoUrl(this.senderID)
-      if(!this.url && (this.senderID.indexOf('bot_') !== -1 || this.senderFullname === 'Bot')){
+      if(this.senderID.indexOf('bot_') !== -1 || this.senderFullname === 'Bot'){
         this.url =  this.baseLocation +'/assets/images/avatar_bot_tiledesk.svg'
-      }else if(!this.url && this.senderID.indexOf('bot_') == -1){
+      }else if( this.senderID.indexOf('bot_') == -1){
         this.url =  this.baseLocation +'/assets/images/light_avatar_placeholder.svg'
       }
+      let url = this.imageRepoService.getImagePhotoUrl(this.senderID)
+      this.checkImageExists(url, (existImage)=> {
+        existImage? this.url = url: null; 
+      })
     }
     
   }
@@ -38,6 +41,18 @@ export class AvatarComponent implements OnInit {
 
   onLoadedHuman(event){
     // console.log('LOADED Bot human image...')
+  }
+
+
+  checkImageExists(imageUrl, callBack) {
+    var imageData = new Image();
+    imageData.onload = function () {
+      callBack(true);
+    };
+    imageData.onerror = function () {
+      callBack(false);
+    };
+    imageData.src = imageUrl;
   }
 
 }
