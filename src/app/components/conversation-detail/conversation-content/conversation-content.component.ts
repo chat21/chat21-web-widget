@@ -79,7 +79,7 @@ export class ConversationContentComponent implements OnInit {
               private uploadService: UploadService) { }
 
   ngOnInit() {
-    this.listenToUploadFileProgress()
+    this.listenToUploadFileProgress();
   }
 
   ngAfterContentChecked() {
@@ -250,6 +250,13 @@ export class ConversationContentComponent implements OnInit {
   isLastMessage(idMessage: string) {
     // console.log('idMessage: ' + idMessage + 'id LAST Message: ' + this.messages[this.messages.length - 1].uid);
     if (idMessage === this.messages[this.messages.length - 1].uid) {
+      return true;
+    }
+    return false;
+  }
+
+  isSameSender(senderId, index){
+    if(senderId && this.messages[index - 1] && (senderId === this.messages[index - 1].sender)){
       return true;
     }
     return false;
