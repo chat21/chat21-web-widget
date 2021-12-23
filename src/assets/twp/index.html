@@ -234,6 +234,8 @@
         window.tiledeskSettings = {
             marginX: "100px",
             marginY: "50px",
+            // autostart: false
+
         };
 
         (function(d, s, id) {
@@ -263,6 +265,17 @@
         window.Tiledesk('onLoadParams', function(event_data) {
             console.log("onLoadParams Tiledesk FN", event_data);
             window.tiledesk.open();
+            // window.tiledesk.signInWithCustomToken('JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhNWE3MTU1Zi1lMjZmLTRkNDUtYmIyNC03MWIxNGViOGI3MTMiLCJzdWIiOiJhYzlkYTFjMi01N2I1LTQzYmQtYTZjOS1hZjczZDBhMDA5ZjIiLCJzY29wZSI6WyJyYWJiaXRtcS5yZWFkOiovKi9hcHBzLnRpbGVjaGF0LnVzZXJzLmFjOWRhMWMyLTU3YjUtNDNiZC1hNmM5LWFmNzNkMGEwMDlmMi4qIiwicmFiYml0bXEud3JpdGU6Ki8qL2FwcHMudGlsZWNoYXQudXNlcnMuYWM5ZGExYzItNTdiNS00M2JkLWE2YzktYWY3M2QwYTAwOWYyLioiLCJyYWJiaXRtcS5jb25maWd1cmU6Ki8qLyoiXSwiY2xpZW50X2lkIjoiYWM5ZGExYzItNTdiNS00M2JkLWE2YzktYWY3M2QwYTAwOWYyIiwiY2lkIjoiYWM5ZGExYzItNTdiNS00M2JkLWE2YzktYWY3M2QwYTAwOWYyIiwiYXpwIjoiYWM5ZGExYzItNTdiNS00M2JkLWE2YzktYWY3M2QwYTAwOWYyIiwidXNlcl9pZCI6ImFjOWRhMWMyLTU3YjUtNDNiZC1hNmM5LWFmNzNkMGEwMDlmMiIsImFwcF9pZCI6InRpbGVjaGF0IiwiaWF0IjoxNjM5OTk5NjU2LCJleHAiOjE2NDI1OTE2NTYsImF1ZCI6WyJyYWJiaXRtcSIsImFjOWRhMWMyLTU3YjUtNDNiZC1hNmM5LWFmNzNkMGEwMDlmMiJdLCJraWQiOiJ0aWxlZGVzay1rZXkiLCJ0aWxlZGVza19hcGlfcm9sZXMiOiJ1c2VyIn0.NThih7mHK41OX7tnHjMXVgPX9yDDyIDlxrMvjDqNJ-Y')
+            //                 .then(response => console.log('signInWithCustomToken: user_logged -> ', response))
+            //                 .catch((error)=> console.error('signInWithCustomToken: error', error))
+        });
+        
+        window.Tiledesk('onAuthStateChanged', function(event_data) {
+        	console.log("AUTHENTICATED!", event_data);
+       		// if(event_data.detail.isLogged){
+            // 	console.log("isLogged!!!!", event_data);
+            // 	window.Tiledesk('show')
+            // }
         });
     </script>
 

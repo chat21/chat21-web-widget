@@ -88,10 +88,10 @@
     
     
                           <!-- message RECIPIENT:: -->
-                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="message_sender_fullname slide-in-left">{{message?.sender_fullname}}</div>
+                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message) && !isSameSender(message?.sender, i)" class="message_sender_fullname slide-in-left">{{message?.sender_fullname}}</div>
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">
                             
-                            <chat-avatar-image class="slide-in-left"  
+                            <chat-avatar-image *ngIf="!isSameSender(message?.sender, i)" class="slide-in-left"    
                               [senderID]="message?.sender"
                               [senderFullname]="message?.sender_fullname"
                               [baseLocation]="baseLocation">
@@ -100,6 +100,7 @@
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive slide-in-left"
                               [class.emoticon]="message?.emoticon"
+                              [style.margin-left]="isSameSender(message?.sender, i)? '50px': null"
                               [ngStyle]="{'background': stylesMap.get('bubbleReceivedBackground'), 'color': stylesMap.get('bubbleReceivedTextColor')}"
                               [message]="message"
                               [fontColor]="stylesMap.get('bubbleReceivedTextColor')"

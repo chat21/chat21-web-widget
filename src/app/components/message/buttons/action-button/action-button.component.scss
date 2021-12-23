@@ -35,11 +35,11 @@
     transition: background-color .6s ease;
     &:focus,
     &:hover {
-        color: white;
-        background:  var(--themeColor);
+        color: var(--hoverTextColor);
+        background:  var(--hoverBackgroundColor);
         .icon-button-action {
             svg {
-                fill: white;
+                fill: var(--hoverTextColor);
             }
         }
     }

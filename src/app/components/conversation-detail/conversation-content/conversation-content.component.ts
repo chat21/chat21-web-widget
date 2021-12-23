@@ -79,7 +79,7 @@ export class ConversationContentComponent implements OnInit {
               private uploadService: UploadService) { }
 
   ngOnInit() {
-    this.listenToUploadFileProgress()
+    this.listenToUploadFileProgress();
   }
 
   ngAfterContentChecked() {
@@ -254,6 +254,14 @@ export class ConversationContentComponent implements OnInit {
     }
     return false;
   }
+
+  isSameSender(senderId, index){
+    if(senderId && this.messages[index - 1] && (senderId === this.messages[index - 1].sender)){
+      return true;
+    }
+    return false;
+  }
+
 
   hideMenuOption(){
     this.onMenuOptionShow.emit(false)

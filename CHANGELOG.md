@@ -1,5 +1,86 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.11
+- bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
+- bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
+- bug-fixed: check if conversation.attributes has property subtype: 'info' before manageTabNotification
+- bug-fixed: chatbot gif was grainly
+- bug-fixed: do not show home component after department is selected -> show conversation component and then destroy select-department component
+- bug-fixed: /file-alt-solid.png not found
+- bug-fixed: getConversationDetail logic updates because if conversation is archived and widget tab is already closed, when user open it again, widget don't know the right status of the conversation and think always that is an active conversation
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value
+- added: if previus message has same senderId, not show avatar and agent/bot placeholder
+- added : subscription to on('value') firebase event in getConversationDetail method
+- added: buttonBackgroundColor, buttonTextColor, buttonHoverBackgroundColor, buttonHoverTextColor tiledesk settings property to customize attachment buttons
+- added: enabled splitting messages into different message objects
+- added: loader in iframe bubblemessage component (WID-53)
+- added: when user send/receive single emotion, it is showed without background and bigger than normal message text size
+- updated: chat21client.js and mqtt-conversation-handler.ts
+- changed: signInWithCustomToken and signInAnonymously function now return a Promise\<UserModel>
+- changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
+- changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
+
+
+ 
+
+### 5.0.19-rc.10
+- bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
+- bug-fixed: when single emoticon is sent there was a lot of space: reduced it
+- bug-fixed: splitted messages not shown in right position
+- bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
+- bug-fixed: check if conversation.attributes has property subtype: 'info' before manageTabNotification
+- changed: signInWithCustomToken and signInAnonymously function now return a Promise\<UserModel>
+- added: if previus message has same senderId, not show avatar and agent/bot placeholder
+
+### 5.0.19-rc.9
+- changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
+- added: info message component only when chat is closed (not visible yet)
+- added: managed 'New Conversation' button on conversation footer when conversation is archived -> start new conversation workflow
+- bug-fixed: image was resized with preview maximum dimensions and not with bubble-message maximum dimensions
+- bug-fixed: chatbot gif was grainly
+- bug-fixed: textAreaEl undefined 
+- bug-fixed: if singleConversation and nativeRating is active, after rating is completed, go back to conversation detail
+- bug-fixed: do not show home component after department is selected -> show conversation component and then destroy select-department component
+
+### 5.0.19-rc.8
+- changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
+- bug-fixed: mqtt is not definet in chat21client.js
+- bug-fixed: /file-alt-solid.png not found 
+- added: if singleConversation and nativeRating is active, after rating is completed, go back to conversation detail; if singleConversation is NOT active and nativeRating is active, after rating is completed, go to home component
+- added: 'start new conversation' button in conversation-footer component if conversation is archived to have the possibility to start faster a new conversation
+- added: not show footer if conversation is archived
+
+### 5.0.19-rc.7
+- added: nativeRating property to tiledesk settings to decide if show/hide rating component
+- added : subscription to on('value') firebase event in getConversationDetail method
+- updated: chat21client.js and mqtt-conversation-handler.ts
+- bug-fixed: ratingWidget component not shown because getConversationDetail fired multiple times and change isConversationArchived boolean value
+- bug-fixed: tiledesk_singleConversation property not get right value 
+
+### 5.0.19-rc.6
+- added: border to conversation-preview header
+- added: singleConversation widget mode: if true and recipientId property IS NOT SET, widget loads the last active conversation by timestamp order; if true and recipientId property IS SET, widget loads current conversation 
+- removed: 'px' to image component dimensions
+- bug-fixed: getConversationDetail logic updates because if conversation is archived and widget tab is already closed, when user open it again, widget don't know the right status of the conversation and think always that is an active conversation
+
+### 5.0.18.1 IN PROD 
+- bug-fixed: property align not works when no one set it (WID-92)	
+- bug-fixed: loading bounces not have same color of themeColor
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value (WID-86)	
+- bug-fixed: disabled horizontal resize for form-textarea component
+- changed: bubbleSentMessage gradiend from .5 to .8
+- changed: bubbleMessage border radius from 8px to 20px
+- added: management of keaboard tab button for preChatForm
+- added: widgetVer attributes property 
+- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)	
+
+### 5.0.19-rc.5.1
+- bug-fixed: cannot find module environments/firebase-config in firebase-conversations-handler
+
+### 5.0.19-rc.5
+- added: buttonBackgroundColor, buttonTextColor, buttonHoverBackgroundColor, buttonHoverTextColor tiledesk settings property to customize attachment buttons
+- changed: bubblemessage ui when single emojii is in message text
+
 ### 5.0.19-rc.4
 - bug-fixed: recipientId property from url was override by storage value (WID-87)
 - added: loader in iframe bubblemessage component (WID-53)
@@ -20,16 +101,6 @@
 - removed: privacyField property from tiledesk settings and from components usage
 - bug-fixed: disabled horizontal resize for form-textarea component
 - bug-fixed: loading bounce don't have themeColor and foregroundColor right value as background and color css property (WID-84)
-### 5.0.18.1 IN PROD 
-- bug-fixed: property align not works when no one set it (WID-92)	
-- bug-fixed: loading bounces not have same color of themeColor
-- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value (WID-86)	
-- bug-fixed: disabled horizontal resize for form-textarea component
-- changed: bubbleSentMessage gradiend from .5 to .8
-- changed: bubbleMessage border radius from 8px to 20px
-- added: management of keaboard tab button for preChatForm
-- added: widgetVer attributes property 
-- added: hideSettings tiledesk property to hide/show settings icon in home (WID-80)	
 
 ### 5.0.18 IN PROD
 

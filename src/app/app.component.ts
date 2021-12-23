@@ -59,6 +59,7 @@ import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, U
 import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.service';
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
+import { isInfo } from '../chat21-core/utils/utils-message';
 
 @Component({
     selector: 'chat-root',
@@ -217,7 +218,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.onImageLoaded(conversation)
                     this.onConversationLoaded(conversation)
 
-                    if(conversation.sender !== this.g.senderId){
+                    if(conversation.sender !== this.g.senderId && !isInfo(conversation)){
                         that.manageTabNotification();
                     }
                     that.triggerOnConversationUpdated(conversation);
@@ -1109,15 +1110,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             windowContext['tiledesk']['angularcomponent'] = { component: this, ngZone: ngZone };
     
             /** loggin with token */
-            windowContext['tiledesk'].signInWithCustomToken = function (response) {
-                ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(response);
+            windowContext['tiledesk'].signInWithCustomToken = function (response):Promise<UserModel> {
+                return ngZone.run(() => {
+                    return windowContext['tiledesk']['angularcomponent'].component.signInWithCustomToken(response); 
                 });
             };
             /** loggin anonymous */
-            windowContext['tiledesk'].signInAnonymous = function () {
-                ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
+            windowContext['tiledesk'].signInAnonymous = function ():Promise<UserModel> {
+                return ngZone.run(() => {
+                    return windowContext['tiledesk']['angularcomponent'].component.signInAnonymous();
                 });
             };
             // window['tiledesk'].on = function (event_name, handler) {
@@ -1447,9 +1448,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * Custom Auth called from the test-custom-auth.html
      * note: https://tiledesk.atlassian.net/browse/TD-42?atlOrigin=eyJpIjoiMGMyZmVmNDgzNTFjNGZkZjhiMmM2Y2U1MmYyNzkwODMiLCJwIjoiaiJ9
     */
-    private signInWithCustomToken(token: string) {
+    private signInWithCustomToken(token: string):Promise<UserModel> {
         const that = this;
-        this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
+        return this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
             this.messagingAuthService.createCustomToken(token)
             this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
             //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
@@ -1465,11 +1466,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.g.setParameter('userEmail', user.email);
                 this.g.setAttributeParameter('userEmail', user.email);
             }
-            // this.showWidget()
+            return Promise.resolve(user)
+                // this.showWidget()
         }).catch(error => {
             this.logger.debug('[APP-COMP] signInWithCustomToken ERR ',error);
             that.signOut();
+            return Promise.reject(error)
         });
+
     }
 
     // UNUSED
@@ -1517,9 +1521,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
 
     /** */
-    private signInAnonymous() {
+    private signInAnonymous(): Promise<UserModel> {
         this.logger.debug('[APP-COMP] signInAnonymous');
-        this.tiledeskAuthService.signInAnonymously(this.g.projectid).then((tiledeskToken) => {
+        return this.tiledeskAuthService.signInAnonymously(this.g.projectid).then((tiledeskToken) => {
             this.messagingAuthService.createCustomToken(tiledeskToken)
             const user = this.tiledeskAuthService.getCurrentUser();
             if (user.firstname || user.lastname) {
@@ -1531,6 +1535,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.g.setParameter('userEmail', user.email);
                 this.g.setAttributeParameter('userEmail', user.email);
             }
+            return Promise.resolve(user)
+        }).catch((error)=> {
+            this.logger.error('[APP-COMP] signInAnonymous ERR', error);
+            return Promise.reject(error);
         });
         // this.authService.anonymousAuthentication();
         // this.authService.authenticateFirebaseAnonymously();
@@ -1935,10 +1943,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.logger.debug('[APP-COMP] onSelectDepartment: ', $event);
             this.g.setParameter('departmentSelected', $event);
             // this.settingsSaverService.setVariable('departmentSelected', $event);
-            this.isOpenHome = true;
-            this.isOpenSelectionDepartment = false;
-            if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            // this.isOpenHome = true;
+            // this.isOpenSelectionDepartment = false;
+            // if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+            //     this.isOpenConversation = true;
+            //     this.startNewConversation();
+            // }
+            if (this.g.isOpenPrechatForm === false) {
                 this.isOpenConversation = true;
+                this.isOpenHome = false
+                this.isOpenSelectionDepartment = false;
                 this.startNewConversation();
             }
         }
