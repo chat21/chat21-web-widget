@@ -1,6 +1,6 @@
 # chat21-web-widget ver 5.0
 
-### 5.0.19-rc.11
+### 5.0.19-rc.10
 - bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
 - bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
 - bug-fixed: check if conversation.attributes has property subtype: 'info' before manageTabNotification
@@ -19,18 +19,6 @@
 - changed: signInWithCustomToken and signInAnonymously function now return a Promise\<UserModel>
 - changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
 - changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
-
-
- 
-
-### 5.0.19-rc.10
-- bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
-- bug-fixed: when single emoticon is sent there was a lot of space: reduced it
-- bug-fixed: splitted messages not shown in right position
-- bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
-- bug-fixed: check if conversation.attributes has property subtype: 'info' before manageTabNotification
-- changed: signInWithCustomToken and signInAnonymously function now return a Promise\<UserModel>
-- added: if previus message has same senderId, not show avatar and agent/bot placeholder
 
 ### 5.0.19-rc.9
 - changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
