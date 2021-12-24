@@ -220,26 +220,29 @@ function initAysncEvents() {
               }   
             });
 
-            // RICHIAMATO DOPO L'INIT DEL WIDGET
-            window.Tiledesk = function() {
-              // console.log('window.Tiledesk:', arguments)
-              if (arguments.length>=1) {
-                var functionName = arguments[0];
-                if (arguments.length==2) {
-                    var functionCallback = arguments[1];
-                }
-                var methodOrProperty = window.tiledesk[functionName];
-                if(typeof methodOrProperty==="function"){     
-                  // console.log("method:", functionName, functionCallback);            
-                  return window.tiledesk[functionName](functionCallback);            
-                }else { //property
-                  // console.log("property:", functionName, functionCallback);
-                  return window.tiledesk[functionName];
-                }
-              }
-            };
+            
   
           }
+
+          // RICHIAMATO DOPO L'INIT DEL WIDGET
+          window.Tiledesk = function() {
+            // console.log('window.Tiledesk:', arguments)
+            if (arguments.length>=1) {
+              var functionName = arguments[0];
+              if (arguments.length==2) {
+                  var functionCallback = arguments[1];
+              }
+              var methodOrProperty = window.tiledesk[functionName];
+              if(typeof methodOrProperty==="function"){     
+                // console.log("method:", functionName, functionCallback);            
+                return window.tiledesk[functionName](functionCallback);            
+              }else { //property
+                // console.log("property:", functionName, functionCallback);
+                return window.tiledesk[functionName];
+              }
+            }
+          };
+
         });
       }
 }
