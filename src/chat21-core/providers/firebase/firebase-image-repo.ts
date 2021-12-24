@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
@@ -34,6 +35,8 @@ export class FirebaseImageRepoService extends ImageRepoService {
         const firebase_photo = '/o/profiles%2F'+ sender_id + '%2Fphoto.jpg?alt=media'
         const firebase_thumbnail = '/o/profiles%2F'+ sender_id + '%2Fthumb_photo.jpg?alt=media'
         const imageurl = this.baseImageURL + firebase.storage().ref().bucket + firebase_thumbnail
+
+        // this.http.get(imageurl).subscribe(res=>console.log('resssss', res), (error) => console.log('errorrrr', error));
         return imageurl;
     }
 }

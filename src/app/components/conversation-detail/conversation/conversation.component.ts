@@ -1871,10 +1871,10 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   /** CALLED BY: conv-footer component */
   onAttachmentButtonClicked(event: any){
-    console.log('onAttachmentButtonClicked::::', event)
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', event)
     this.attachments = event.attachments
     this.textInputTextArea= event.message
-    console.log('onAttachmentButtonClicked::::', this.textInputTextArea)
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', this.textInputTextArea)
     this.isOpenAttachmentPreview = true
   }
 
@@ -1882,7 +1882,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   onCloseModalPreview(){
     this.isOpenAttachmentPreview = false
     this.conversationFooter.isFilePendingToUpload = false;
-    console.log('onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
+    this.logger.debug('[CONV-COMP] onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
   }
 
   /** CALLED BY: conv-preview component */

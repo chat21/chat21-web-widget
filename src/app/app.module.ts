@@ -272,7 +272,7 @@ export function presenceFactory(appConfig: AppConfigService) {
   }
 }
 
-export function imageRepoFactory(appConfig: AppConfigService) {
+export function imageRepoFactory(appConfig: AppConfigService, http: HttpClient) {
   const config = appConfig.getConfig()
   if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
     const imageService = new NativeImageRepoService()
@@ -423,7 +423,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     {
       provide: ImageRepoService,
       useFactory: imageRepoFactory,
-      deps: [AppConfigService, AppConfigService]
+      deps: [AppConfigService, HttpClient]
     },
     {
       provide: UploadService,

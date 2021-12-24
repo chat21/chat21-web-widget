@@ -17,7 +17,6 @@ export class FrameComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    console.log('metadata', this.metadata)
     if(this.metadata && this.metadata.src){
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.metadata.src);
     }

@@ -183,7 +183,7 @@ export class FormBuilderComponent implements OnInit {
    * @param event 
    */
   onEnterButtonPressed(event){
-    console.log('onEnterButtonPressed eventtttt', event)
+    this.logger.debug('[FORM-BUILDER] onEnterButtonPressed event', event)
     this.onSubmitPreChatForm();
   }
 
