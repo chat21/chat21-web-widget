@@ -250,6 +250,18 @@ export class Triggerhandler {
         }
     }
 
+    public triggerOnBeforeInit(detailObj: {}) {
+        this.logger.debug(' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj);
+        const onLoadParams = new CustomEvent('onBeforeInit', { detail: detailObj });
+        const windowContext = this.windowContext;
+        if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
+            this.windowContext = windowContext;
+        } else {
+            this.el.nativeElement.dispatchEvent(onLoadParams);
+        }
+    }
+
     /**APP-COMPONENT.component */
     public triggerOnConversationUpdated(conversation: ConversationModel) {
         this.logger.debug(' ---------------- triggerOnConversationUpdated ---------------- ', conversation);

@@ -566,6 +566,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     }).then(() => {
                         /** INIT  */
                         that.initAll();
+                        /**TRIGGER ONBEFORE INIT */
+                        that.triggerOnBeforeInit();
                         /** AUTH */
                         that.setAuthSubscription();
                     })
@@ -2255,6 +2257,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     // ========= START:: TRIGGER FUNCTIONS ============//
+    private triggerOnBeforeInit() {
+        const detailOBJ = { global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig() }
+        this.triggerHandler.triggerOnBeforeInit(detailOBJ)
+    }
+
     private triggerOnViewInit() {
         const detailOBJ = { global: this.g, default_settings: this.g.default_settings, appConfigs: this.appConfigService.getConfig() }
         this.triggerHandler.triggerOnViewInit(detailOBJ)
