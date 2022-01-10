@@ -1344,6 +1344,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 return preChatForm
             };
 
+            /** set a value to a parameter in widget  */
+            windowContext['tiledesk'].setParameter = function (parameterObj: {key: string, value: string}) {
+                // let preChatForm = {}
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.setParameter(parameterObj);
+                });
+                // return preChatForm
+            };
+
         }
     }
 
