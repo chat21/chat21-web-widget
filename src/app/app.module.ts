@@ -275,11 +275,11 @@ export function presenceFactory(appConfig: AppConfigService) {
 export function imageRepoFactory(appConfig: AppConfigService, http: HttpClient) {
   const config = appConfig.getConfig()
   if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
-    const imageService = new NativeImageRepoService()
+    const imageService = new NativeImageRepoService(http)
     imageService.setImageBaseUrl(config.baseImageUrl)
     return imageService
   } else {
-    const imageService = new FirebaseImageRepoService();
+    const imageService = new FirebaseImageRepoService(http);
     FirebaseInitService.initFirebase(config.firebaseConfig)
     imageService.setImageBaseUrl(config.baseImageUrl)
     return imageService

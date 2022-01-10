@@ -24,4 +24,5 @@ export abstract class ImageRepoService {
 
   // functions
   abstract getImagePhotoUrl(uid: string): string;
+  abstract checkImageExists(uid: string, callback:(exist: boolean)=>void): void;
 }
