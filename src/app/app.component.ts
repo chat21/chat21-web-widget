@@ -1315,9 +1315,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             };
 
             /** set logout */
-            windowContext['tiledesk'].logout = function () {
-                ngZone.run(() => {
-                    windowContext['tiledesk']['angularcomponent'].component.logout();
+            windowContext['tiledesk'].logout = function (): Promise<boolean> {
+                return ngZone.run(() => {
+                    return windowContext['tiledesk']['angularcomponent'].component.logout();
                 });
             };
 
@@ -1728,8 +1728,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // }
 
-    private logout() {
-        this.signOut();
+    private logout(): Promise<boolean> {
+        return this.signOut();
     }
 
     /** show callout */
@@ -1776,7 +1776,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * 1 - clear local storage
      * 2 - remove user in firebase
     */
-    signOut() {
+    signOut(): Promise<boolean> {
         this.logger.debug('[APP-COMP] SIGNOUT');
         if (this.g.isLogged === true) {
             this.g.wdLog(['prima ero loggato allora mi sloggo!']);
@@ -1788,7 +1788,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             this.appStorageService.clear();
             this.presenceService.removePresence();
             this.tiledeskAuthService.logOut();
-            this.messagingAuthService.logout();
+            return this.messagingAuthService.logout();
             // this.authService.signOut(-2);
         }
     }

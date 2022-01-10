@@ -178,16 +178,19 @@ export class FirebaseAuthService extends MessagingAuthService {
   /**
    * FIREBASE: signOut
    */
-  private signOut() {
+  private signOut(): Promise<boolean> {
     const that = this;
-    firebase.auth().signOut().then(() => {
+    return new Promise((resolve, reject)=> {firebase.auth().signOut().then(() => {
       that.logger.debug('[FIREBASEAuthSERVICE] firebase-sign-out');
-      // cancello token
-      // this.appStorage.removeItem('tiledeskToken');
-      //localStorage.removeItem('firebaseToken');
-      that.BSSignOut.next(true);
-    }).catch((error) => {
-      that.logger.error('[FIREBASEAuthSERVICE] signOut error: ', error);
+        // cancello token
+        // this.appStorage.removeItem('tiledeskToken');
+        //localStorage.removeItem('firebaseToken');
+        that.BSSignOut.next(true);
+        resolve(true)
+      }).catch((error) => {
+        resolve(false)
+        that.logger.error('[FIREBASEAuthSERVICE] signOut error: ', error);
+      });
     });
   }
 
@@ -229,11 +232,11 @@ export class FirebaseAuthService extends MessagingAuthService {
     });
   }
 
-  logout() {
+  logout(): Promise<boolean> {
     this.logger.debug('[FIREBASEAuthSERVICE] logout');
     // cancello token firebase dal local storage e da firebase
     // dovrebbe scattare l'evento authchangeStat
-    this.signOut();
+    return this.signOut();
   }
 
 }

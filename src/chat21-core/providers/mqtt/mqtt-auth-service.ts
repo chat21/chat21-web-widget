@@ -68,20 +68,23 @@ export class MQTTAuthService extends MessagingAuthService {
   }
 
   // logout(callback) {
-  logout() {
+  logout(): Promise<boolean> {
     console.log("closing mqtt connection...");
-    this.chat21Service.chatClient.close(() => {
-      console.log("mqtt connection closed. OK");
-      // remove
-      // this.appStorage.removeItem('tiledeskToken');
-      // this.appStorage.removeItem('currentUser');
-      this.currentUser = null;
-      console.log("user removed.");
-      this.BSSignOut.next(true);
-      this.BSAuthStateChanged.next('offline');
-      // if (callback) {
-      //   callback();
-      // }
+    return new Promise((resolve, reject) => {
+      this.chat21Service.chatClient.close(() => {
+        console.log("mqtt connection closed. OK");
+        // remove
+        // this.appStorage.removeItem('tiledeskToken');
+        // this.appStorage.removeItem('currentUser');
+        this.currentUser = null;
+        console.log("user removed.");
+        this.BSSignOut.next(true);
+        this.BSAuthStateChanged.next('offline');
+        resolve(true)
+        // if (callback) {
+        //   callback();
+        // }
+      });
     });
   }
 
@@ -255,6 +258,7 @@ z
     const responseType = 'text';
     const postData = {};
     // const that = this;
+    console.log('tokeeeennnnn', tiledeskToken)
     this.http.post(this.URL_TILEDESK_CREATE_CUSTOM_TOKEN, postData, { headers, responseType})
     .subscribe(data =>  {
       console.log("**** data", data)

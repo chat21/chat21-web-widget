@@ -46,6 +46,6 @@ export abstract class MessagingAuthService {
   abstract initialize(): void;
   abstract getToken(): string;
   abstract createCustomToken(tiledeskToken): void;
-  abstract logout(): void;
+  abstract logout(): Promise<boolean>;
 
 }
