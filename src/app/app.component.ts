@@ -554,6 +554,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.logger.debug('[APP-COMP] token passato da url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
                         this.logger.debug('[APP-COMP]  ----------------  mi loggo con custom token passato nell url  ---------------- ');
                         //   this.g.autoStart = false;
+                        const storedTiledeskToken = this.appStorageService.getItem('tiledeskToken')
+                        storedTiledeskToken === this.g.jwt? null: 
                         this.appStorageService.setItem('tiledeskToken', this.g.jwt)
                         this.g.tiledeskToken = this.g.jwt;
                         // this.signInWithCustomToken(this.g.jwt) // moved to authenticate() in else(tiledeskToken)
@@ -1461,6 +1463,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
     private signInWithCustomToken(token: string):Promise<UserModel> {
         const that = this;
+        const storedTiledeskToken = this.appStorageService.getItem('tiledeskToken');
+        storedTiledeskToken === token? null: this.appStorageService.removeItem('recipientId')
         return this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
             this.messagingAuthService.createCustomToken(token)
             this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
