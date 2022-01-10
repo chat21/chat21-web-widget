@@ -83,7 +83,7 @@ export class MQTTArchivedConversationsHandler extends ArchivedConversationsHandl
             callback(conversation);
         } else {
             console.log('Not found locally, remote.getConversationDetail *****: ', conversation);
-            this.chat21Service.chatClient.conversationDetail(conversationWith, (conversation) => {
+            this.chat21Service.chatClient.conversationDetail(conversationWith, (err, conversation) => {
                 if (conversation) {
                     if (callback) {
                         callback(this.completeConversation(conversation));
