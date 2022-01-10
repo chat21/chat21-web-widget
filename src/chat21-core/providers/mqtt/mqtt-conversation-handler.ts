@@ -98,6 +98,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
      */
     connect() {
         this.logger.log('[MQTTConversationHandler] connecting conversation handler...');
+        console.log('[MQTTConversationHandler] connecting conversation handler...', this.conversationWith);
         if (this.conversationWith == null) {
             this.logger.error('[MQTTConversationHandler] cant connect invalid this.conversationWith', this.conversationWith);
             return;
@@ -181,6 +182,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
             channelType,
             // language,
             (err, message) => {
+                console.log('SENDDDDDDDD', err, message)
                 if (err) {
                     message.status = '-100';
                     this.logger.log('[MQTTConversationHandler] ERROR', err);

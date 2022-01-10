@@ -580,7 +580,7 @@ export class GlobalSettingsService {
             // globals.setParameter('userFullname', TEMP);
         }
         TEMP = tiledeskSettings['preChatForm'];
-        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatForm:: ', TEMP]);
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatForm:: ', TEMP);
         if (TEMP !== undefined) {
             globals.preChatForm = (TEMP === true) ? true : false;
             // globals.setParameter('preChatForm', (TEMP === false) ? false : true);

@@ -428,7 +428,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
             }
           })
         }
-      })
+      });
     // } else { //get conversation from 'conversations' firebase node
     //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
     //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
@@ -891,7 +891,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
       subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.pipe(takeUntil(this.unsubscribe$)).subscribe((conversation) => {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
-        if(conversation && conversation.uid === this.conversationWith && !this.isConversationArchived){
+        if(conversation && conversation.uid === this.conversationWith){
           this.starRatingWidgetService.setOsservable(true)
           this.isConversationArchived = true;
         }

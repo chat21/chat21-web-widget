@@ -21,6 +21,9 @@ export class AvatarComponent implements OnInit {
         this.url =  this.baseLocation +'/assets/images/light_avatar_placeholder.svg'
       }
       let url = this.imageRepoService.getImagePhotoUrl(this.senderID)
+      // this.imageRepoService.checkImageExists(url,  (existImage)=> {
+      //   existImage? this.url = url: null; 
+      // })
       this.checkImageExists(url, (existImage)=> {
         existImage? this.url = url: null; 
       })
