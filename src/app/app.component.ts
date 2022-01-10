@@ -1751,6 +1751,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    private setParameter(parameterObj: {key: string, value: string}){
+        this.g.setParameter(parameterObj.key, parameterObj.value)
+    }
     // ========= end:: COMPONENT TO WINDOW ============//
 
 
