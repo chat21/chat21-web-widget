@@ -1,5 +1,32 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.12
+- added: onBeforeInit tiledesk event
+- added: checkImageExists function in image-repo.service
+- changed: launch.js file -> replace onInit with onBeforeInit
+- bug-fixed: window.Tiledesk function wasn't created if widget don't have any event queued
+- bug-fixed: if tiledeskToken passed is different from stored one, remove item with key 'recipientId' in storage 
+
+### 5.0.19-rc.11
+- bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
+- bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
+- bug-fixed: check if conversation.attributes has property subtype: 'info' before manageTabNotification
+- bug-fixed: chatbot gif was grainly
+- bug-fixed: do not show home component after department is selected -> show conversation component and then destroy select-department component
+- bug-fixed: /file-alt-solid.png not found
+- bug-fixed: getConversationDetail logic updates because if conversation is archived and widget tab is already closed, when user open it again, widget don't know the right status of the conversation and think always that is an active conversation
+- bug-fixed: bubbleSentBackground and bubbleReceivedBackground errors while rgb color is passed as property value
+- added: if previus message has same senderId, not show avatar and agent/bot placeholder
+- added : subscription to on('value') firebase event in getConversationDetail method
+- added: buttonBackgroundColor, buttonTextColor, buttonHoverBackgroundColor, buttonHoverTextColor tiledesk settings property to customize attachment buttons
+- added: enabled splitting messages into different message objects
+- added: loader in iframe bubblemessage component (WID-53)
+- added: when user send/receive single emotion, it is showed without background and bigger than normal message text size
+- updated: chat21client.js and mqtt-conversation-handler.ts
+- changed: signInWithCustomToken and signInAnonymously function now return a Promise\<UserModel>
+- changed: button to scroll conversation-content component now have background and fill color same as themeColor and foregroundColor on :hover event
+- changed: show all-conversation option in home-conversation if exist at least one active or closed conversation
+
 ### 5.0.19-rc.10
 - bug-fixed: widget sounds also when info message arrived: managed conversationChanged BS
 - bug-fixed: if avatar image is not set, it delays in being shown the default placeholder image 
