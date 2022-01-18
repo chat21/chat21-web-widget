@@ -796,6 +796,7 @@ class Chat21Client {
             if (callback && xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText) {
                 try {
                     const json = JSON.parse(xmlhttp.responseText);
+                    console.log('getting conversation detail response', json, xmlhttp.responseText)
                     if (json && json.result && Array.isArray(json.result) && json.result.length ==1) {
                         callback(null, json.result[0]);
                     }

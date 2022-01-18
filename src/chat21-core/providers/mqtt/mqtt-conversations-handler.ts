@@ -86,6 +86,9 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
         } else {
             console.log('Not found locally, remote.getConversationDetail *****: ', conversation);
             this.chat21Service.chatClient.conversationDetail(conversationWith, (err, conversation) => {
+                console.log("--REMOTE CONV IS:" + JSON.stringify(conversation));
+                console.log("--REMOTE CONV IS OBJ:", conversation);
+                console.log("--REMOTE ERR IS:" + JSON.stringify(err));
                 if (conversation) {
                     if (callback) {
                         callback(this.completeConversation(conversation));
@@ -445,7 +448,7 @@ export class MQTTConversationsHandler extends ConversationsHandlerService {
     }
 
     private isGroup(conv: ConversationModel) {
-        if (conv.recipient && conv.recipient.startsWith('group-') || conv.recipient.startsWith('support-group')) {
+        if (conv.recipient && (conv.recipient.startsWith('group-') || conv.recipient.startsWith('support-group'))) {
             return true;
         };
         return false;
