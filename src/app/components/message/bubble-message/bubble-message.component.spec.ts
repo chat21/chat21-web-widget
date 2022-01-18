@@ -50,7 +50,7 @@ describe('BubbleMessageComponent', () => {
           isSender: false
     }
     component.message = messages
-    component.textColor = 'black'
+    // component.textColor = 'black'
     fixture.detectChanges()
     const textChild = fixture.debugElement.query(By.css('chat-text'))
     textChild.properties.text
@@ -76,7 +76,7 @@ describe('BubbleMessageComponent', () => {
           isSender: false
     }
     component.message = messages
-    component.textColor = 'black'
+    // component.textColor = 'black'
     fixture.detectChanges()
     const textChild = fixture.debugElement.query(By.css('chat-text'))
     expect(textChild.properties.text).toEqual(messages.text)
