@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.19-rc.13
+- bug-fixed: onBeforeInit was not called in launch function
+- bug-fixed: link test inside bubble message not set text color dynamically
+- added: setParmeter and setAttributeParameter methods added to external programmers
+-
+
 ### 5.0.19-rc.12
 - added: onBeforeInit tiledesk event
 - added: checkImageExists function in image-repo.service
