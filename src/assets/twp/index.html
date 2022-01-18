@@ -255,6 +255,17 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'tiledesk-jssdk'));
         
+        window.Tiledesk('onLoadParams', function(event_data) {
+            console.log("onLoadParams Tiledesk FN", event_data);
+            // window.Tiledesk('signInWithCustomToken', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDliOGVmYTg3MzJlYjAwMTQxNzYzZDlfNWU0ZWNiOThiNzhlZTQwMDE3NDA2MTEwIiwiZmlyc3RuYW1lIjoiS2VsbHkiLCJsYXN0bmFtZSI6IkdyYWNlIiwiZW1haWwiOiJncmFjZUBlbWFpbG5hLmNvIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNjA5YjhlZmE4NzMyZWIwMDE0MTc2M2Q5IiwiaWF0IjoxNjQxODAzODk0fQ.p0reTwd25p93CsDTyQa8tkihgFxThAI4DXloNc6vbXw')
+            //                 .then(response => console.log('signInWithCustomToken: user_logged -> ', response))
+            //                 .catch((error)=> console.error('signInWithCustomToken: error', error))
+        });
+        
+        window.Tiledesk('onBeforeInit', function(event_data) {
+        	console.log("onBeforeInit Tiledesk FN", event_data);
+        });
+        
         window.Tiledesk('onInit', function(event_data) {
             console.log("onInit Tiledesk FN", event_data); 
             setTimeout(() => {
@@ -262,14 +273,6 @@
             }, 1000);
         });
 
-        window.Tiledesk('onLoadParams', function(event_data) {
-            console.log("onLoadParams Tiledesk FN", event_data);
-            window.tiledesk.open();
-            // window.Tiledesk('signInWithCustomToken', 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDliOGVmYTg3MzJlYjAwMTQxNzYzZDlfNWU0ZWNiOThiNzhlZTQwMDE3NDA2MTEwIiwiZmlyc3RuYW1lIjoiS2VsbHkiLCJsYXN0bmFtZSI6IkdyYWNlIiwiZW1haWwiOiJncmFjZUBlbWFpbG5hLmNvIiwic3ViIjoidXNlcmV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly90aWxlZGVzay5jb20vcHJvamVjdHMvNjA5YjhlZmE4NzMyZWIwMDE0MTc2M2Q5IiwiaWF0IjoxNjQxODAzODk0fQ.p0reTwd25p93CsDTyQa8tkihgFxThAI4DXloNc6vbXw')
-            //                 .then(response => console.log('signInWithCustomToken: user_logged -> ', response))
-            //                 .catch((error)=> console.error('signInWithCustomToken: error', error))
-        });
-        
         window.Tiledesk('onAuthStateChanged', function(event_data) {
         	console.log("AUTHENTICATED!", event_data);
        		// if(event_data.detail.isLogged){

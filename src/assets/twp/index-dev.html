@@ -371,16 +371,6 @@
             js.id = id; js.async = true; js.src = "../../launch.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'tiledesk-jssdk'));
-        
-        window.Tiledesk('onInit', function(event_data) {
-            console.log("onInit Tiledesk FN", event_data); 
-            setTimeout(() => {
-                initLang();
-                document.getElementById("preloader").style.display = "none";
-                document.getElementById('events').value += 'onInit --> FIRED!' + '\n' 
-                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
-            }, 1000);
-        });
 
         window.Tiledesk('onLoadParams', function(event_data) {
             console.log("onLoadParams Tiledesk FN", event_data);
@@ -394,6 +384,25 @@
             document.getElementById("project_name").innerHTML = project_name;
         });
 
+        window.Tiledesk('onBeforeInit', function(event_data) {
+            console.log("onBeforeInit Tiledesk FN", event_data); 
+            if(document.getElementById('events')){
+                document.getElementById('events').value +=  'onBeforeInit --> FIRED!' + '\n' 
+                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            }
+        });
+        
+        window.Tiledesk('onInit', function(event_data) {
+            console.log("onInit Tiledesk FN", event_data); 
+            setTimeout(() => {
+                initLang();
+                initDefaultSettings();
+                document.getElementById("preloader").style.display = "none";
+                document.getElementById('events').value += 'onInit --> FIRED!' + '\n' 
+                document.getElementById('events').scrollTop = document.getElementById('events').scrollHeight
+            }, 1000);
+        });
+        
         window.Tiledesk('onAuthStateChanged', function(event_data) {
             console.log("onAuthStateChanged Tiledesk FN", event_data); 
             if(document.getElementById('events')){
@@ -517,7 +526,7 @@
             );
          }
 
-         function shareOnLinkedin() {
+        function shareOnLinkedin() {
             var LinkedinShareUrl = "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(currentUrl);
             window.open(
                 LinkedinShareUrl,
@@ -525,7 +534,7 @@
             );
          }
 
-         function shareOnTelegram() {                                    
+        function shareOnTelegram() {                                    
             var TelegramShareUrl = "tg://msg_url?url=" + encodeURIComponent(currentUrl) ;
             // console.log('TelegramShareUrl ', TelegramShareUrl ) 
             window.open(
@@ -534,7 +543,7 @@
             );
          }
 
-         function shareOnWhatsapp() {            
+        function shareOnWhatsapp() {            
             var WhatsappShareUrl = "whatsapp://send?text=" + currentUrl;
             window.open(
                 WhatsappShareUrl,
@@ -564,10 +573,37 @@
             }
         }
 
+        function onClickSignInAnonymous(){
+            console.log('onClickSignInAnonymous: event-->')
+            window.Tiledesk('signInAnonymous')
+        }
+
         function onClickCustomToken(){
             let jwt = document.getElementById('jwt').value
             console.log('onClickCustomToken: event-->',jwt)
             window.Tiledesk('signInWithCustomToken', jwt)
+        }
+
+        function onClickCustomPreChatForm(){
+            let preChatForm = document.getElementById('preChatForm').value
+            console.log('onClickCustomPreChatForm: event-->',preChatForm)
+            if(preChatForm !== '' && isJsonString(preChatForm)=== true){
+                document.getElementById('preChatForm').style.color= '#555'
+                window.tiledeskSettings['preChatForm'] = true
+                window.Tiledesk('setAttributeParameter',({key: 'userFullName', value: null}))
+                window.Tiledesk('setAttributeParameter',({key: 'userEmail', value: null}))
+                window.Tiledesk('setPreChatFormJson', JSON.parse(preChatForm))
+                // window.Tiledesk('restart')
+            }else{
+                document.getElementById('preChatForm').style.color = 'red'
+            }
+            
+        }
+
+        function onClickGetPreChatForm(){
+            let preChatFormTextArea = document.getElementById('preChatFormGet')
+            let preChatFormJSON = window.Tiledesk('getPreChatFormJson')
+            preChatFormTextArea.value = JSON.stringify(preChatFormJSON, null, 4)
         }
 
         // function onClickParameter(elementName){
@@ -593,6 +629,15 @@
                 case "false": case "no": case "0": case null: return false;
                 default: return string;
             }
+        }
+
+        isJsonString = function(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
         }
     
         function onClickStartFromHome(){
@@ -696,6 +741,13 @@
             window.Tiledesk('restart')
         }
 
+        function onClickHideSettings(){
+            let status = document.querySelector('input[name="hideSettings"]:checked').value
+            window.tiledeskSettings['hideSettings'] = stringToBoolean(status)
+            console.log('onClickHideSettings: status-->',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
         function onClickHideHeaderConversationOptionsMenu(){
             let status = document.querySelector('input[name="hideHeaderConversationOptionsMenu"]:checked').value
             window.tiledeskSettings['hideHeaderConversationOptionsMenu'] = stringToBoolean(status)
@@ -743,6 +795,40 @@
             document.getElementById('themeForegroundColorText').value = color
             window.tiledeskSettings['themeForegroundColor'] = color
             console.log('onClickThemeForegroundColor:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onChangeColor(parameter){
+            let color = document.getElementById(parameter).value
+            document.getElementById(parameter+'Text').value = color
+        }
+
+        function onChangeColorText(parameter){
+            let color = document.getElementById(parameter+'Text').value
+            document.getElementById(parameter).value = color
+        }
+
+        function onClickColor(parameter){
+            let color = document.getElementById(parameter).value
+            document.getElementById(parameter).value = color
+            window.tiledeskSettings[parameter] = color
+            console.log('onClickColor:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickFontSize(){
+            let text = document.getElementById('fontSize').value
+            text === ""? text= '1.4em': text
+            window.tiledeskSettings['fontSize'] = text
+            console.log('onClickFontSize:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickButtonFontSize(){
+            let text = document.getElementById('buttonFontSize').value
+            text === ""? text= '15px': text
+            window.tiledeskSettings['buttonFontSize'] = text
+            console.log('onClickButtonFontSize:',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
@@ -1236,6 +1322,13 @@
             });
         }
 
+
+        function initDefaultSettings(){
+            let defaultPreChatForm = [{name: "userFullname", type:"text", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ en:"Invalid email address", it:"Indirizzo email non valido"}}]
+            let preChatFormTextArea = document.getElementById('preChatForm')
+            preChatFormTextArea.value= JSON.stringify(defaultPreChatForm, null, 4)
+        }
+
     </script>
     
 </head>
@@ -1287,18 +1380,48 @@
                         <button class="btn btn-light" onclick="onClickTestButton('show')">Show</button>
                         <button class="btn btn-light" onclick="onClickTestButton('showCallout')">Show callout</button>
                         <button class="btn btn-light" onclick="onClickTestButton('reInit')">ReInit</button>
+                        <button class="btn btn-light" onclick="onClickTestButton('restart')">ReStart</button>
                         <button class="btn btn-light" onclick="onClickTestButton('logout')">LogOut</button>
                     </div>
                     <div class="row section">
-                            <div>Insert a custon <i><b>JWT Token</b></i> here </div>
-                            <div class="row" style="margin: 0">
-                                <textarea class="form-control" id="jwt" placeholder="JWT ..." rows="4" cols="60"></textarea>
-                            </div>
-                            <div class="row" style="text-align: right; margin:0">
-                                <button class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
-                            </div>
+                        <div><h3 style="line-height: 0.3;">MANAGE <i><b>Authentication</b></i></h3></div>
+
+                        <div>Insert a custon <i><b>JWT Token</b></i> here </div>
+                        <div class="row" style="margin: 0">
+                            <textarea class="form-control" id="jwt" placeholder="JWT ..." rows="4" cols="60"></textarea>
+                        </div>
+                        <div class="row" style="text-align: right; margin:0">
+                            <button class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        </div>
+
+                        <div>Sign in with <i><b>anonymous user </b></i> here </div>
+                        <div class="row" style="margin: 0">
+                            <button class="btn btn-light" onclick="onClickSignInAnonymous()">SingIn Anonymous <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        </div>
+                        
+                    </div>
+                    <div class="row section">
+                        <div><h3 style="line-height: 0.3;">MANAGE <i><b>Pre-Chat Form</b></i></h3></div>
+
+                        <div>Customize <i><b>Pre-Chat Form JSON</b></i> here </div>
+                        <div class="row" style="margin: 0">
+                            <textarea class="form-control" id="preChatForm" placeholder="Set preChatForm ..." rows="6" cols="60"></textarea>
+                        </div>
+                        <div class="row" style="text-align: right; margin:0">
+                            <button class="btn btn-light" onclick="onClickCustomPreChatForm()">Customize <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        </div>
+
+                        <div>Get <i><b>Pre-Chat Form JSON</b></i> value </div>
+                        <div class="row" style="margin: 0">
+                            <textarea class="form-control" id="preChatFormGet" placeholder="Get preChatForm JSON..." rows="6" cols="60"></textarea>
+                        </div>
+                        <div class="row" style="text-align: right; margin:0">
+                            <button class="btn btn-light" onclick="onClickGetPreChatForm()">Get Form <i class="fa fa-sticky-note-o" aria-hidden="true"></i></button>
+                        </div>
+
                     </div>
                     <div class="row section c21-parameters">
+                        <div><h3 style="line-height: 0.3;">MANAGE <i><b>widget settings</b></i></h3></div>
                         <div>Select an option for Tiledesk settings parameter</div>
                         <div class="row">
                             <div class="col-md-5 formElement"><span><i><b>startFromHome</b></i></span></div>
@@ -1424,6 +1547,16 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickHideHeaderCloseButton()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>hideSettings</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="hideSettings" value="true"><label>True</label>
+                                <input class="form-check-input" type="radio" name="hideSettings" value="false" checked><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickHideSettings()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1711,12 +1844,117 @@
                                 <button class="btn btn-light" onclick="onClickLogLevel()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
+                        <div class="row">
+                            <h4 class="col-md-10 formElement" >Manage BUBBLE MESSAGE STYLES</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>bubbleSentBackground</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="bubbleSentBackground" name="bubbleSentBackground" value="#2a6ac1" oninput="onChangeColor('bubbleSentBackground')">
+                                <input class="form-control" type="text" id="bubbleSentBackgroundText" name="bubbleSentBackground" value="#2a6ac1" oninput="onChangeColorText('bubbleSentBackground')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('bubbleSentBackground')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>bubbleSentTextColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="bubbleSentTextColor" name="bubbleSentTextColor" value="ffffff" oninput="onChangeColor('bubbleSentTextColor')">
+                                <input class="form-control" type="text" id="bubbleSentTextColorText" name="bubbleSentTextColor" value="ffffff" oninput="onChangeColorText('bubbleSentTextColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('bubbleSentTextColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>bubbleReceivedBackground</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="bubbleReceivedBackground" name="bubbleReceivedBackground" value="#f7f7f7" oninput="onChangeColor('bubbleReceivedBackground')">
+                                <input class="form-control" type="text" id="bubbleReceivedBackgroundText" name="bubbleReceivedBackground" value="#f7f7f7" oninput="onChangeText('bubbleReceivedBackground')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('bubbleReceivedBackgroundText')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>bubbleReceivedTextColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="bubbleReceivedTextColor" name="bubbleReceivedTextColor" value="#1a1a1a" oninput="onChangeColor('bubbleReceivedTextColor')">
+                                <input class="form-control" type="text" id="bubbleReceivedTextColorText" name="bubbleReceivedTextColor" value="#1a1a1a" oninput="onChangeColorText('bubbleReceivedTextColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('bubbleReceivedTextColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>fontSize</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control col-sm-2" type="text" id="fontSize" name="fontSize" placeholder="Ex. 22px, 1.4em">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickFontSize()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 class="col-md-10 formElement" >Manage BUTTON STYLES</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>buttonBackgroundColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="buttonBackgroundColor" name="buttonBackgroundColor" value="#ffffff" oninput="onChangeColor('buttonBackgroundColor')">
+                                <input class="form-control" type="text" id="buttonBackgroundColorText" name="buttonBackgroundColor" value="#ffffff" oninput="onChangeColorText('buttonBackgroundColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('buttonBackgroundColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>buttonTextColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="buttonTextColor" name="buttonTextColor" value="#2a6ac1" oninput="onChangeColor('buttonTextColor')">
+                                <input class="form-control" type="text" id="buttonTextColorText" name="buttonTextColor" value="#2a6ac1" oninput="onChangeColorText('buttonTextColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('buttonTextColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>buttonHoverBackgroundColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="buttonHoverBackgroundColor" name="buttonHoverBackgroundColor" value="#2a6ac1" oninput="onChangeColor('buttonHoverBackgroundColor')">
+                                <input class="form-control" type="text" id="buttonHoverBackgroundColorText" name="buttonHoverBackgroundColor" value="#2a6ac1" oninput="onChangeText('buttonHoverBackgroundColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('buttonHoverBackgroundColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>buttonHoverTextColor</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control" type="color" id="buttonHoverTextColor" name="buttonHoverTextColor" value="#ffffff" oninput="onChangeColor('buttonHoverTextColor')">
+                                <input class="form-control" type="text" id="buttonHoverTextColorText" name="buttonHoverTextColor" value="#ffffff" oninput="onChangeColorText('buttonHoverTextColor')">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickColor('buttonHoverTextColor')">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>buttonFontSize</b></i></span></div>
+                            <div class="col-md-4 formElement">
+                                <input class="form-control col-sm-2" type="text" id="buttonFontSize" name="buttonFontSize" placeholder="Ex. 15px, 1em">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickButtonFontSize()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        
                         <div class="row testAllBtn">
                                 <button class="btn btn-light" onclick="onClickTestAll()">TEST ALL</button>
                         </div>
                     </div>
                     <div class="row section">
-                        <div>Events history </div>
+                        <div><h3 style="line-height: 0.3;">WIDGET EVENTS <i><b>history</b></i></h3></div>
                         <div>
                             <textarea class="form-control" id="events" placeholder="Events history here" rows="4" cols="60"></textarea>
                         </div>
