@@ -216,7 +216,7 @@ function initAysncEvents() {
                 var functionCallback = f[1];
                 if(typeof functionCallback === "function"){
                   window.tiledesk.on(functionName, functionCallback); //potrei usare window.Tiledesk ?!?
-                  if (functionName==="onInit") {
+                  if (functionName==="onBeforeInit") {
                       functionCallback(event_data)
                   }
                 } else {

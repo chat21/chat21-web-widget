@@ -407,28 +407,28 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // if(!this.isConversationArchived){ 
     //get conversation from 'conversations' firebase node
     this.logger.debug('[CONV-COMP] getConversationDetail: isConversationArchived???', this.isConversationArchived, this.conversationWith)
-      this.conversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
-        this.logger.debug('[CONV-COMP] getConversationDetail: conversationsHandlerService ', this.conversationWith, conv, this.isConversationArchived)
-        if(conv){
-          this.conversation = conv;
-          this.isConversationArchived = false;
-          callback(this.isConversationArchived)
-        }
-        if(!conv){
-          //get conversation from 'archivedconversations' firebase node
-          this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list')
-          this.archivedConversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
-            this.logger.debug('[CONV-COMP] getConversationDetail: archivedConversationsHandlerService', this.conversationWith, conv, this.isConversationArchived)
-            if(conv){
-              this.conversation = conv;
-              this.isConversationArchived = true;
-              callback(this.isConversationArchived)
-            }else if(!conv) {
-              callback(null);
-            }
-          })
-        }
-      });
+    this.conversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+      this.logger.debug('[CONV-COMP] getConversationDetail: conversationsHandlerService ', this.conversationWith, conv, this.isConversationArchived)
+      if(conv){
+        this.conversation = conv;
+        this.isConversationArchived = false;
+        callback(this.isConversationArchived)
+      }
+      if(!conv){
+        //get conversation from 'archivedconversations' firebase node
+        this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list')
+        this.archivedConversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
+          this.logger.debug('[CONV-COMP] getConversationDetail: archivedConversationsHandlerService', this.conversationWith, conv, this.isConversationArchived)
+          if(conv){
+            this.conversation = conv;
+            this.isConversationArchived = true;
+            callback(this.isConversationArchived)
+          }else if(!conv) {
+            callback(null);
+          }
+        })
+      }
+    });
     // } else { //get conversation from 'conversations' firebase node
     //   this.archivedConversationsHandlerService.getConversationDetail(this.conversationId, (conv)=>{
     //     this.logger.debug('[CONV-COMP] archivedConversationsHandlerService getConversationDetail', this.conversationId, conv, this.isConversationArchived)
@@ -780,6 +780,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.conversationsHandlerService = this.chatManager.conversationsHandlerService
     this.archivedConversationsHandlerService = this.chatManager.archivedConversationsService
 
+    //this.conversationsHandlerService.conversations.splice(0, 0, this.conversation);
+    // if(!this.isConversationArchived){
+    //   this.conversationsHandlerService.conversations.unshift(this.conversation)
+    // }
+    // console.log('convssss', this.conversationsHandlerService.conversations)
   }
 
   /**
