@@ -92,6 +92,9 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
   // }
 
   // ========= begin:: ACTIONS ============//
+  /**
+   * @deprecated
+   */
   openNewConversation() {
     if (this.g.attributes) {
       const attributes = this.g.attributes;

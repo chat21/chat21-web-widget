@@ -251,14 +251,14 @@ export class Triggerhandler {
     }
 
     public triggerOnBeforeInit(detailObj: {}) {
-        this.logger.debug(' ---------------- triggerOnLoadParamsEvent ---------------- ', detailObj);
-        const onLoadParams = new CustomEvent('onBeforeInit', { detail: detailObj });
+        this.logger.debug(' ---------------- triggerOnBeforeInitEvent ---------------- ', detailObj);
+        const onBeforeInit = new CustomEvent('onBeforeInit', { detail: detailObj });
         const windowContext = this.windowContext;
         if (windowContext.tiledesk && windowContext.tiledesk.tiledeskroot) {
-            windowContext.tiledesk.tiledeskroot.dispatchEvent(onLoadParams);
+            windowContext.tiledesk.tiledeskroot.dispatchEvent(onBeforeInit);
             this.windowContext = windowContext;
         } else {
-            this.el.nativeElement.dispatchEvent(onLoadParams);
+            this.el.nativeElement.dispatchEvent(onBeforeInit);
         }
     }
 
