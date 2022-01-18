@@ -76,6 +76,7 @@ export class ConversationContentComponent implements OnInit {
   private logger: LoggerService = LoggerInstance.getInstance();
 
   constructor(private cdref: ChangeDetectorRef,
+              private elementRef: ElementRef,
               private uploadService: UploadService) { }
 
   ngOnInit() {
@@ -84,6 +85,12 @@ export class ConversationContentComponent implements OnInit {
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    //decomment if element should have same color of themeColor and fregroundColor
+    if(this.stylesMap && this.stylesMap.get('bubbleSentTextColor')) this.elementRef.nativeElement.querySelector('.c21-body').style.setProperty('--textColorSent', this.stylesMap.get('bubbleSentTextColor'));
+    if(this.stylesMap && this.stylesMap.get('bubbleReceivedTextColor')) this.elementRef.nativeElement.querySelector('.c21-body').style.setProperty('--textColorReceive', this.stylesMap.get('bubbleReceivedTextColor'));
   }
 
 

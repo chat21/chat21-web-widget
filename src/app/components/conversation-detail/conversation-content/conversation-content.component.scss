@@ -8,6 +8,19 @@
     scroll-behavior: unset;
 }
 
+:host {
+    --textColorSent: #{$col-msg-sent};
+    --textColorReceive: #{$black};
+}
+
+:host .base_receive .msg_receive ::ng-deep > div > div > div > chat-text a {
+    color: var(--textColorReceive) !important;
+}
+
+:host .base_sent .msg_sent ::ng-deep > div > div > div > chat-text a {
+    color: var(--textColorSent) !important;
+}
+
 // ============= CSS c21-body ================= //
 .c21-body {
     // -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
@@ -262,7 +275,10 @@
                         margin: 0 20px 4px 10px;
                         height: fit-content;
                         width: auto;
+
                     }
+                    
+
                     .message_innerhtml {
                         padding: 14px;
                     }
