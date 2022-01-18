@@ -1159,6 +1159,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     windowContext['tiledesk']['angularcomponent'].component.setPreChatForm(state);
                 });
             };
+
             windowContext['tiledesk'].setPrivacyPolicy = function () {
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component.setPrivacyPolicy();
@@ -1347,12 +1348,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             };
 
             /** set a value to a parameter in widget  */
-            windowContext['tiledesk'].setParameter = function (parameterObj: {key: string, value: string}) {
-                // let preChatForm = {}
+            windowContext['tiledesk'].setParameter = function (parameterObj: {key: string, value: any}) {
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component.setParameter(parameterObj);
                 });
-                // return preChatForm
+            };
+
+            /** set a value to an attribute parameter in widget  */
+            windowContext['tiledesk'].setAttributeParameter = function (parameterObj: {key: string, value: any}) {
+                ngZone.run(() => {
+                    windowContext['tiledesk']['angularcomponent'].component.setAttributeParameter(parameterObj);
+                });
             };
 
         }
@@ -1755,8 +1761,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    private setParameter(parameterObj: {key: string, value: string}){
+    private setParameter(parameterObj: {key: string, value: any}){
         this.g.setParameter(parameterObj.key, parameterObj.value)
+    }
+
+    private setAttributeParameter(parameterObj: {key: string, value: any}){
+        this.g.setAttributeParameter(parameterObj.key, parameterObj.value)
     }
     // ========= end:: COMPONENT TO WINDOW ============//
 
