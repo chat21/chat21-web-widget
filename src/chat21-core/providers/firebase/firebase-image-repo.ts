@@ -41,8 +41,12 @@ export class FirebaseImageRepoService extends ImageRepoService {
 
 
     checkImageExists(url: string, callback: (exist: boolean) => void): void {
-        this.http.get(url).subscribe( res => {
+        console.log('urllll', url)
+        this.http.get(url, { responseType: 'blob' }).subscribe( res => {
             callback(true)
-        },(error) => {callback(false)})
+        },(error) => {
+            console.log('ressssssss errorr', error);
+            callback(false)
+        })
     }
 }

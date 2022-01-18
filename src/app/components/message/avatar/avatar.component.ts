@@ -22,7 +22,8 @@ export class AvatarComponent implements OnInit {
       }
       let url = this.imageRepoService.getImagePhotoUrl(this.senderID)
       // this.imageRepoService.checkImageExists(url,  (existImage)=> {
-      //   existImage? this.url = url: null; 
+      //   existImage? this.url = url: null;
+      //   console.log('existttttt', existImage)
       // })
       this.checkImageExists(url, (existImage)=> {
         existImage? this.url = url: null; 
