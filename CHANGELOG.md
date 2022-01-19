@@ -1,7 +1,7 @@
 # chat21-web-widget ver 5.0
 
 ### 5.0.20-rc.1
-- bug-fixed: if widget is open on mobile browser, when user scroll on conversation messages, scroll also parent hoting page --> added style to body page
+- bug-fixed: if widget is open on mobile browser, when user scroll on conversation messages, scroll also parent hosting page --> added style to body page
 
 ### 5.0.19 IN PROD
 
