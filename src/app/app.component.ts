@@ -1054,6 +1054,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         
         // visualizzo l'iframe!!!
         this.triggerOnViewInit();
+        this.g.setParentBodyStyleMobile(this.g.isOpen, this.g.isMobile)
         // this.triggerOnAuthStateChanged(true)
         // mostro il widget
         // setTimeout(() => {
@@ -1959,6 +1960,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.triggerOnCloseEvent();
         }
+        this.g.setParentBodyStyleMobile(this.g.isOpen, this.g.isMobile)
 
     }
 

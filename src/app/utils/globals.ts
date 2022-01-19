@@ -529,6 +529,19 @@ export class Globals {
     this.bubbleSentBackground = 'linear-gradient( 135grad, ' + this.bubbleSentBackground + ', ' + convertColorToRGBA(this.bubbleSentBackground, 80) + ')';
   }
 
+
+  setParentBodyStyleMobile(isOpen: boolean, isMobile: boolean){
+    if(isOpen && isMobile){
+      //block body scroll
+      window.parent.document.body.style.height = '100vh';
+      window.parent.document.body.style.overflowY = 'hidden'
+    }else if(!isOpen && isMobile){
+      //reset body style
+      window.parent.document.body.style.removeProperty('height')
+      window.parent.document.body.style.removeProperty('overflow-y')
+    }
+  }
+
   /**
    *
    * @param val
@@ -536,6 +549,7 @@ export class Globals {
   public setIsOpen(val: boolean) {
     // console.log('setIsOpen', val);
     this.isOpen = val;
+    this.setParentBodyStyleMobile(val, this.isMobile)
     this.obsIsOpen.next(val);
   }
 
