@@ -241,7 +241,11 @@ export function getFromNow(windowContext, timestamp) {
 }
 
 export function detectIfIsMobile(windowContext) {
-  const isMobile = /Android|iPhone/i.test(windowContext.navigator.userAgent);
+  let isMobile = false;
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(windowContext.navigator.userAgent))
+    isMobile = true
+  else
+    isMobile = false
   return isMobile;
 }
 
