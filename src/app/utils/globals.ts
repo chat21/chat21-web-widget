@@ -533,12 +533,15 @@ export class Globals {
   setParentBodyStyleMobile(isOpen: boolean, isMobile: boolean){
     if(isOpen && isMobile){
       //block body scroll
-      window.parent.document.body.style.height = '100vh';
+      // window.parent.document.body.style.height = '100vh';
+      window.parent.document.body.style.height = '0';
       window.parent.document.body.style.overflowY = 'hidden'
+      window.parent.document.body.style.position = 'fixed';
     }else if(!isOpen && isMobile){
       //reset body style
       window.parent.document.body.style.removeProperty('height')
       window.parent.document.body.style.removeProperty('overflow-y')
+      window.parent.document.body.style.removeProperty('position')
     }
   }
 
