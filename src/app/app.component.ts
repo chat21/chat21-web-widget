@@ -1,3 +1,4 @@
+import { MessageModel } from './../chat21-core/models/message';
 import { EyeeyeCatcherCardComponent } from './components/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { LoggerInstance } from './../chat21-core/providers/logger/loggerInstance';
 import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
@@ -60,6 +61,20 @@ import { ImageRepoService } from '../chat21-core/providers/abstract/image-repo.s
 import { UploadService } from '../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../chat21-core/providers/abstract/logger.service';
 import { isInfo } from '../chat21-core/utils/utils-message';
+
+interface MessageObj {
+    tenant?: string;
+    senderId?: string;
+    senderFullname?: string;
+    message: string;
+    type: string;
+    metadata: any;
+    recipientId: string;
+    recipientFullname: string;
+    attributes: {};
+    projectid?: string;
+    channelType?: string;
+}
 
 @Component({
     selector: 'chat-root',
@@ -1168,20 +1183,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             };
 
             /** send first message */
-            windowContext['tiledesk'].sendMessage = function (
-                tenant,
-                senderId,
-                senderFullname,
-                message,
-                type,
-                metadata,
-                recipientId,
-                recipientFullname,
-                additional_attributes,
-                projectid,
-                channel_type
-            ) {
+            windowContext['tiledesk'].sendMessage = function (msgObj: MessageObj) {
                 const _globals = windowContext['tiledesk'].angularcomponent.component.g;
+
+                let tenant = (msgObj.tenant? msgObj.tenant: null)
+                let senderId = (msgObj.senderId? msgObj.senderId: null)
+                let senderFullname = (msgObj.senderFullname? msgObj.senderFullname: null)
+                let message = (msgObj.message? msgObj.message: null)
+                let type = (msgObj.type? msgObj.type: null)
+                let metadata = (msgObj.metadata? msgObj.metadata: null)
+                let recipientId = (msgObj.recipientId? msgObj.recipientId: null)
+                let recipientFullname = (msgObj.recipientFullname? msgObj.recipientFullname: null)
+                let additional_attributes = (msgObj.attributes? msgObj.attributes: null)
+                let projectid = (msgObj.projectid? msgObj.projectid: null)
+                let channelType = (msgObj.channelType? msgObj.channelType: null)
 
                 if (!tenant) {
                     tenant = _globals.tenant;
@@ -1210,8 +1225,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (!projectid) {
                     projectid = _globals.projectId;
                 }
-                if (!channel_type || channel_type === undefined) {
-                    channel_type = 'group';
+                if (!channelType || channelType === undefined) {
+                    channelType = 'group';
                 }
                 // set default attributes
                 const g_attributes = _globals.attributes;
@@ -1228,33 +1243,33 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component
-                        .sendMessage(
-                            tenant,
-                            senderId,
-                            senderFullname,
-                            message,
-                            type,
-                            metadata,
-                            recipientId,
-                            recipientFullname,
-                            attributes,
-                            projectid,
-                            channel_type
-                        );
+                        .sendMessage({   
+                            tenant : tenant,
+                            senderId :senderId,
+                            senderFullname: senderFullname,
+                            message : message,
+                            type: type,
+                            metadata: metadata,
+                            recipientId: recipientId,
+                            recipientFullname: recipientFullname,
+                            attributes: attributes,
+                            projectid: projectid,
+                            channel_type: channelType
+                        });
                 });
             };
 
 
             /** send custom message from html page */
-            windowContext['tiledesk'].sendSupportMessage = function (
-                message,
-                recipientId,
-                recipientFullname,
-                type,
-                metadata,
-                additional_attributes
-            ) {
+            windowContext['tiledesk'].sendSupportMessage = function (msgObj: MessageObj) {
                 const _globals = windowContext['tiledesk'].angularcomponent.component.g;
+                let message = (msgObj.message? msgObj.message: null)
+                let recipientId = (msgObj.recipientId? msgObj.recipientId: null)
+                let recipientFullname = (msgObj.recipientFullname? msgObj.recipientFullname: null)
+                let type = (msgObj.type? msgObj.type: null)
+                let metadata = (msgObj.metadata? msgObj.metadata: null)
+                let additional_attributes = (msgObj.attributes? msgObj.attributes: null)             
+                
                 if (!message) {
                     message = 'hello';
                 }
@@ -1281,19 +1296,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 ngZone.run(() => {
                     windowContext['tiledesk']['angularcomponent'].component
-                        .sendMessage(
-                            _globals.tenant,
-                            _globals.senderId,
-                            _globals.userFullname,
-                            message,
-                            type,
-                            metadata,
-                            recipientId,
-                            recipientFullname,
-                            attributes,
-                            _globals.projectid,
-                            _globals.channelType
-                        );
+                        .sendMessage({
+                            tenant: _globals.tenant,
+                            senderId: _globals.senderId,
+                            senderFullname: _globals.userFullname,
+                            message: message,
+                            type: type,
+                            metadata: metadata,
+                            recipientId: recipientId,
+                            recipientFullname: recipientFullname,
+                            attributes: attributes,
+                            projectid: _globals.projectid,
+                            channelType: _globals.channelType
+                        });
                 });
             };
 
@@ -1422,45 +1437,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
 
     /** */
-    private sendMessage(
-        tenant,
-        senderId,
-        senderFullname,
-        msg,
-        type,
-        metadata,
-        conversationWith,
-        recipientFullname,
-        attributes,
-        projectid,
-        channel_type) {
+    private sendMessage(msgObect: MessageObj) {
+
+        const tenant = msgObect.tenant 
+        const senderId = msgObect.senderId
+        const senderFullname = msgObect.senderFullname
+        const message = msgObect.message
+        const type = msgObect.type
+        const metadata = msgObect.metadata
+        const recipientId = msgObect.recipientId
+        const recipientFullname  = msgObect.recipientFullname
+        const attributes = msgObect.attributes
+        const projectid = msgObect.projectid
+        const channelType = msgObect.channelType
+
+
         this.logger.debug('[APP-COMP] sendMessage from window.tiledesk *********** ',tenant,senderId,senderFullname,
-                                msg,type,metadata,conversationWith,recipientFullname,
-                                attributes,projectid,channel_type);
-        const messageSent = this.initConversationHandler(conversationWith).sendMessage(
-            msg,
+                                message,type,metadata,recipientId,recipientFullname,
+                                attributes,projectid,channelType);
+        const messageSent = this.initConversationHandler(recipientId).sendMessage(
+            message,
             type,
             metadata,
-            conversationWith,
+            recipientId,
             recipientFullname,
             senderId,
             senderFullname,
-            channel_type,
+            channelType,
             attributes)
-        // const messageSent = this.messagingService
-        //     .sendMessageFull(
-        //         tenant,
-        //         senderId,
-        //         senderFullname,
-        //         msg,
-        //         type,
-        //         metadata,
-        //         conversationWith,
-        //         recipientFullname,
-        //         attributes,
-        //         projectid,
-        //         channel_type);
-        // sendMessage(senderFullname, msg, type, metadata, conversationWith, recipientFullname, attributes, projectid, channel_type)
     }
 
 
