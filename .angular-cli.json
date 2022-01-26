@@ -25,7 +25,8 @@
         "widget-config.json",
         "widget-config-firebase.json",
         "widget-config-mqtt.json",
-        "widget-config-docker.json"
+        "widget-config-docker.json",
+        "widget-config-native-mqtt.json"
       ],
       "index": "index.html",
       "main": "main.ts",

@@ -46,3 +46,4 @@ test_widget.php
 src/environments
 src/environments_dati_reali
 src/widget-config-docker.json
+src/widget-config-native-mqtt.json
