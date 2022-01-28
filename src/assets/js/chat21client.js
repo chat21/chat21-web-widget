@@ -1,7 +1,7 @@
 /*
     Chat21Client
 
-    v0.1.9
+    v0.1.10
 
     @Author Andrea Sponziello
     (c) Tiledesk 2020
@@ -785,18 +785,34 @@ class Chat21Client {
     }
 
     conversationDetail(conversWith, callback) {
+        this.crossConversationDetail(conversWith, false, callback);
+    }
+
+    archivedConversationDetail(conversWith, callback) {
+        this.crossConversationDetail(conversWith, true, callback);
+    }
+
+    crossConversationDetail(conversWith, archived, callback) {
+        let path = "conversations";
+        console.log('conversationdetail', conversWith, archived)
+        if (archived) {
+            path = "archived_conversations"
+            console.log('conversationdetail', conversWith, archived), path
+        }
         // ex.: http://localhost:8004/tilechat/04-ANDREASPONZIELLO/conversations/CONVERS_WITH
-        const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/conversations/${conversWith}`
+        //const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/conversations/${conversWith}`
+        const URL = `${this.APIendpoint}/${this.appid}/${this.user_id}/${path}/${conversWith}`
         console.log("getting conversation detail:", URL)
         console.log("conversWith:", conversWith)
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, true);
         xmlhttp.setRequestHeader("authorization", this.jwt);
         xmlhttp.onreadystatechange = function() {
+            console.log('responseeeee 111', xmlhttp)
             if (callback && xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText) {
                 try {
                     const json = JSON.parse(xmlhttp.responseText);
-                    console.log('getting conversation detail response', json, xmlhttp.responseText)
+                    console.log('responseeeee', json)
                     if (json && json.result && Array.isArray(json.result) && json.result.length ==1) {
                         callback(null, json.result[0]);
                     }
