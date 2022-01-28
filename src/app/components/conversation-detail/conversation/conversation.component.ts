@@ -416,7 +416,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if(!conv){
         //get conversation from 'archivedconversations' firebase node
-        this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list')
+        this.logger.debug('[CONV-COMP] getConversationDetail: conv not exist --> search in archived list', this.isConversationArchived, this.conversationWith)
         this.archivedConversationsHandlerService.getConversationDetail(this.conversationWith, (conv)=>{
           this.logger.debug('[CONV-COMP] getConversationDetail: archivedConversationsHandlerService', this.conversationWith, conv, this.isConversationArchived)
           if(conv){
