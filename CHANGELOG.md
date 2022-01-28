@@ -1,7 +1,13 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.20-rc.2
+- bug-fixed: (mqtt) new conversation was signed as archived conversation beacause archivedConversationHandlers get conversation detail from active conversation node
+- bug-fixed: buttonBackgrounColor and buttonHovertextColor was setted programatically based on themeColor
+- bug-fied: sendMessage and sendSupportMessage external method provide more than 1 input parameter: now pass a MessageObj
+- bug-fixed: space between lines was different if message contains emojii
+
 ### 5.0.20-rc.1
-- bug-fixed: if widget is open on mobile browser, when user scroll on conversation messages, scroll also parent hosting page --> added style to body page
+- bug-fixed: if widget is open on mobile browser, when user scroll on conversation messages, scrolls also parent hosting page --> added style to body page
 
 ### 5.0.19 IN PROD
 
