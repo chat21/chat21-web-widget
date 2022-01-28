@@ -467,9 +467,10 @@ export class GlobalSettingsService {
                         globals['themeColor'] = variables['themeColor'];
                         globals['bubbleSentBackground']=variables['themeColor'];
                         globals['bubbleSentTextColor']= invertColor(variables['themeColor'], true);
-                        globals['buttonBackgroundColor']= invertColor(variables['themeColor'], true);
+        
+                        // globals['buttonBackgroundColor']= invertColor(variables['themeColor'], true);
                         globals['buttonTextColor'] = variables['themeColor'];
-                        globals['buttonHoverTextColor'] = invertColor(variables['themeColor'], true);
+                        // globals['buttonHoverTextColor'] = invertColor(variables['themeColor'], true);
                         globals['buttonHoverBackgroundColor'] = variables['themeColor'];
                     }
                     if (variables.hasOwnProperty('themeForegroundColor')) {
@@ -686,11 +687,10 @@ export class GlobalSettingsService {
             globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
             globals.bubbleSentTextColor = invertColor(TEMP, true)
 
-            globals.buttonBackgroundColor = invertColor(TEMP, true);
+            // globals.buttonBackgroundColor = invertColor(TEMP, true);
             globals.buttonTextColor = convertColorToRGBA(TEMP, 100);
             globals.buttonHoverBackgroundColor = convertColorToRGBA(TEMP, 100);
-            globals.buttonHoverTextColor = invertColor(TEMP, true);
-            // globals.setParameter('themeColor', convertColorToRGBA(TEMP, 100));
+            // globals.buttonHoverTextColor = invertColor(TEMP, true);
         }
         TEMP = tiledeskSettings['themeForegroundColor'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > themeForegroundColor:: ', TEMP);
@@ -832,10 +832,10 @@ export class GlobalSettingsService {
             globals.bubbleSentBackground = convertColorToRGBA(TEMP, 100);
             globals.bubbleSentTextColor = invertColor(TEMP, true);
 
-            globals.buttonBackgroundColor= invertColor(TEMP, true);
+            // globals.buttonBackgroundColor= invertColor(TEMP, true);
             globals.buttonTextColor = convertColorToRGBA(TEMP, 100);
             globals.buttonHoverBackgroundColor = convertColorToRGBA(TEMP, 100);
-            globals.buttonHoverTextColor = invertColor(TEMP, true);
+            // globals.buttonHoverTextColor = invertColor(TEMP, true);
         }
         TEMP = tiledeskSettings['bubbleSentTextColor'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentTextColor:: ', TEMP]);
@@ -1251,10 +1251,10 @@ export class GlobalSettingsService {
             globals.themeColor = convertColorToRGBA(themecolor, 100);
             globals.bubbleSentBackground = convertColorToRGBA(themecolor, 100);
 
-            globals.buttonBackgroundColor = invertColor(themecolor, true);
+            // globals.buttonBackgroundColor = invertColor(themecolor, true);
             globals.buttonTextColor = convertColorToRGBA(themecolor, 100);
             globals.buttonHoverBackgroundColor = convertColorToRGBA(themecolor, 100);
-            globals.buttonHoverTextColor = invertColor(themecolor, true);
+            // globals.buttonHoverTextColor = invertColor(themecolor, true);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_themeForegroundColor');
@@ -1415,10 +1415,10 @@ export class GlobalSettingsService {
             globals.bubbleSentBackground = convertColorToRGBA(bubbleSentBackground, 100);
             globals.bubbleSentTextColor = invertColor(bubbleSentBackground, true)
 
-            globals.buttonBackgroundColor= invertColor(bubbleSentBackground, true);
+            // globals.buttonBackgroundColor= invertColor(bubbleSentBackground, true);
             globals.buttonTextColor = convertColorToRGBA(bubbleSentBackground, 100);
             globals.buttonHoverBackgroundColor = convertColorToRGBA(bubbleSentBackground, 100);
-            globals.buttonHoverTextColor = invertColor(bubbleSentBackground, true);
+            // globals.buttonHoverTextColor = invertColor(bubbleSentBackground, true);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_bubbleSentTextColor');
