@@ -127,8 +127,8 @@ export class StarRatingWidgetComponent implements OnInit {
 
   // ========= begin:: ACTIONS ============//
   returnClosePage() {
-    this.logger.debug('[STAR-RATING_COMP] closePage: ', this.mouseRate);
-    if(this.rate && this.rate !== 0){
+    this.logger.debug('[STAR-RATING_COMP] closePage: ', this.mouseRate, this.step, this.rate);
+    if(this.rate && this.rate !== 0 && this.step < 2){
       this.sendRate()
     }else{
       this.step = 0;
