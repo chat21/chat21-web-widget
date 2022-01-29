@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.20-rc.3
+- bug-fixed: undefined when sendRate in last step
+
 ### 5.0.20-rc.2
 - bug-fixed: (mqtt) new conversation was signed as archived conversation beacause archivedConversationHandlers get conversation detail from active conversation node
 - bug-fixed: buttonBackgrounColor and buttonHovertextColor was setted programatically based on themeColor
