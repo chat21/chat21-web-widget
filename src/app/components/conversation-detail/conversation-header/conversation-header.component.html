@@ -6,52 +6,52 @@
       <!-- CONTENT HEADER -->
       <div class="c21-header-content">
 
-          <!-- ICON CLOSE CHAT -->
-          <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-close c21-button-clean" [ngStyle]="{'display': (hideHeaderCloseButton)?'none':'flex'}" (click)="returnCloseWidget()">
-              <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
-                  width="24px" height="24px" viewBox="0 0 24 24">
-                  <path fill="none" d="M0 0h24v24H0V0z" />
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                  <title id="altIconTitle">{{ translationMap?.get('BUTTON_CLOSE_TO_ICON') }}</title>
-              </svg>
-          </button>
+        <!-- ICON CLOSE CHAT -->
+        <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-close c21-button-clean" [ngStyle]="{'display': (hideHeaderCloseButton)?'none':'flex'}" (click)="returnCloseWidget()">
+            <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
+                width="24px" height="24px" viewBox="0 0 24 24">
+                <path fill="none" d="M0 0h24v24H0V0z" />
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                <title id="altIconTitle">{{ translationMap?.get('BUTTON_CLOSE_TO_ICON') }}</title>
+            </svg>
+        </button>
 
-          <!-- ICON MENU OPTION -->
-          <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-button-clean" [ngStyle]="{'display': (hideHeaderConversationOptionsMenu)?'none':'flex'}" (click)="toggleMenu()" > <!--(blur)="onBlurMenuOption($event)"-->
-              <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
-                  width="24" height="24" viewBox="0 0 24 24">
-                  <path fill="none" d="M0 0h24v24H0V0z" />
-                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                  <title id="altIconTitle">{{ translationMap?.get('OPTIONS') }}</title>
-              </svg>
-          </button>
+        <!-- ICON MENU OPTION -->
+        <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="-1" class="c21-header-button c21-right c21-button-clean" [ngStyle]="{'display': (hideHeaderConversationOptionsMenu)?'none':'flex'}" (click)="toggleMenu()" > <!--(blur)="onBlurMenuOption($event)"-->
+            <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" viewBox="0 0 24 24">
+                <path fill="none" d="M0 0h24v24H0V0z" />
+                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                <title id="altIconTitle">{{ translationMap?.get('OPTIONS') }}</title>
+            </svg>
+        </button>
 
-          <!-- ICON BACK -->
-          <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="1530" aria-label=" indietro " class="c21-header-button c21-left c21-button-clean" (click)="returnHome()">
-              <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
-                  width="24px" height="24px" viewBox="0 0 24 24">
-                  <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
-                  <path fill="none" d="M0 0h24v24H0V0z" />
-                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
-                  <title id="altIconTitle">{{ translationMap?.get('PREV_CONVERSATIONS') }}</title>
-              </svg>
-          </button>
+        <!-- ICON BACK -->
+        <button [attr.disabled]="(isButtonsDisabled)?true:null" tabindex="1530" aria-label=" indietro " class="c21-header-button c21-left c21-button-clean" (click)="returnHome()">
+            <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor') }" xmlns="http://www.w3.org/2000/svg"
+                width="24px" height="24px" viewBox="0 0 24 24">
+                <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/> -->
+                <path fill="none" d="M0 0h24v24H0V0z" />
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
+                <title id="altIconTitle">{{ translationMap?.get('PREV_CONVERSATIONS') }}</title>
+            </svg>
+        </button>
 
-          <!-- TITLE HEADER -->
-          <div class="c21-title" [ngStyle]="{'color': stylesMap?.get('foregroundColor') }">
-              <!-- <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
-                  <div *ngIf="g.project.logoChat == 'tiledesklogo'" #avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
-                  <div *ngIf="g.project.logoChat !== 'tiledesklogo'" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
-              </div> -->
-              <div class="titleText">{{widgetTitle}}</div>
-          </div>
-          
-          <user-typing *ngIf="isTypings"
-            [foregroundColor]="stylesMap?.get('foregroundColor')"
-            [translationMap]="translationMap"
-            [nameUserTypingNow]="nameUserTypingNow">
-          </user-typing>
-          <!-- <p *ngIf="isTypings" class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p> -->
+        <!-- TITLE HEADER -->
+        <div class="c21-title" [ngStyle]="{'color': stylesMap?.get('foregroundColor') }">
+            <!-- <div *ngIf="g.project.logoChat !== 'nologo'" class='avatar-project' item-start>
+                <div *ngIf="g.project.logoChat == 'tiledesklogo'" #avatarPlaceholder class="avatar-placeholder" [style.background-color]="g.project.color" [innerHTML]="g.project.avatar"></div>
+                <div *ngIf="g.project.logoChat !== 'tiledesklogo'" #avatarImage class="avatar-image" [style.background-image]="'url(' + g.project.logoChat + ')'"></div>
+            </div> -->
+            <div class="titleText">{{widgetTitle}}</div>
+        </div>
+        
+        <user-typing *ngIf="isTypings"
+        [foregroundColor]="stylesMap?.get('foregroundColor')"
+        [translationMap]="translationMap"
+        [nameUserTypingNow]="nameUserTypingNow">
+        </user-typing>
+        <!-- <p *ngIf="isTypings" class="c21-header-writing" [ngStyle]="{'color': g.themeForegroundColor}">{{writingMessage}}</p> -->
       </div>
 
   </div>
@@ -59,35 +59,44 @@
 </div>
 
 <div *ngIf="isMenuShow" id="c21-options-menu" [ngStyle]="{ 'border-top': '2.4px solid', 'border-top-color': convertColorToRGBA(stylesMap?.get('themeColor'), 50), 'color': stylesMap?.get('themeColor') }">
-  <!-- ICON VOLUME -->
-  <div class="c21-header-button c21-right" (click)="toggleSound()">
-      <svg *ngIf="!soundEnabled" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
-          width="20" height="20" viewBox="0 0 24 24">
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M4.34 2.93L2.93 4.34 7.29 8.7 7 9H3v6h4l5 5v-6.59l4.18 4.18c-.65.49-1.38.88-2.18 1.11v2.06c1.34-.3 2.57-.92 3.61-1.75l2.05 2.05 1.41-1.41L4.34 2.93zM10 15.17L7.83 13H5v-2h2.83l.88-.88L10 11.41v3.76zM19 12c0 .82-.15 1.61-.41 2.34l1.53 1.53c.56-1.17.88-2.48.88-3.87 0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zm-7-8l-1.88 1.88L12 7.76zm4.5 8c0-1.77-1.02-3.29-2.5-4.03v1.79l2.48 2.48c.01-.08.02-.16.02-.24z" />
-          <title id="altIconTitle">{{ translationMap?.get('SOUND_OFF') }}</title>
-      </svg>
-      <svg *ngIf="soundEnabled" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
-          width="20" height="20" viewBox="0 0 24 24">
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
-          <title id="altIconTitle">{{ translationMap?.get('SOUND_ON') }}</title>
-      </svg>
-      <span *ngIf="!soundEnabled" class="label-menu-item"> {{ translationMap?.get('SOUND_OFF') }}</span>
-      <span *ngIf="soundEnabled" class="label-menu-item"> {{ translationMap?.get('SOUND_ON')}}</span>
-  </div>
+    <!-- ICON VOLUME -->
+    <div class="c21-header-button c21-right" (click)="toggleSound()">
+        <svg *ngIf="!soundEnabled" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
+            width="20" height="20" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M4.34 2.93L2.93 4.34 7.29 8.7 7 9H3v6h4l5 5v-6.59l4.18 4.18c-.65.49-1.38.88-2.18 1.11v2.06c1.34-.3 2.57-.92 3.61-1.75l2.05 2.05 1.41-1.41L4.34 2.93zM10 15.17L7.83 13H5v-2h2.83l.88-.88L10 11.41v3.76zM19 12c0 .82-.15 1.61-.41 2.34l1.53 1.53c.56-1.17.88-2.48.88-3.87 0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zm-7-8l-1.88 1.88L12 7.76zm4.5 8c0-1.77-1.02-3.29-2.5-4.03v1.79l2.48 2.48c.01-.08.02-.16.02-.24z" />
+            <title id="altIconTitle">{{ translationMap?.get('SOUND_OFF') }}</title>
+        </svg>
+        <svg *ngIf="soundEnabled" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
+            width="20" height="20" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
+            <title id="altIconTitle">{{ translationMap?.get('SOUND_ON') }}</title>
+        </svg>
+        <span *ngIf="!soundEnabled" class="label-menu-item"> {{ translationMap?.get('SOUND_OFF') }}</span>
+        <span *ngIf="soundEnabled" class="label-menu-item"> {{ translationMap?.get('SOUND_ON')}}</span>
+    </div>
 
-  <!-- ICON TRANSCRIPT -->
-  <div class="c21-header-button c21-right" *ngIf="isTrascriptDownloadEnabled" (click)="dowloadTranscript()">
-      <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
-          width="20px" height="20px" viewBox="0 0 24 24">
-          <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z" />
-          <title id="altIconTitle">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</title>
-      </svg>
-      <span class="label-menu-item">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</span>
-  </div>
+    <!-- ICON TRANSCRIPT -->
+    <div class="c21-header-button c21-right" *ngIf="isTrascriptDownloadEnabled" (click)="dowloadTranscript()">
+        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg"
+            width="20px" height="20px" viewBox="0 0 24 24">
+            <!-- <path fill="none" d="M0 0h24v24H0V0z"/><path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z"/> -->
+            <path fill="none" d="M0 0h24v24H0V0z" />
+            <path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z" />
+            <title id="altIconTitle">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</title>
+        </svg>
+        <span class="label-menu-item">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</span>
+    </div>
+
+    <!-- ICON MAXIMIZE/MINIMIZE -->
+    <!-- <div class="c21-header-button c21-right" (click)="dowloadTranscript()">
+        <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 288.824 288.824" style="enable-background:new 0 0 288.824 288.824;" xml:space="preserve"
+            width="20px" height="20px">
+            <path id="Arrow_Up_Right" d="M3.501,285.323c4.668,4.668,12.235,4.668,16.891,0L264.763,40.951v91.382   c0,6.641,5.39,12.03,12.03,12.03c6.641,0,12.03-5.39,12.03-12.03V12.03c0-3.188-1.239-6.268-3.501-8.529S279.981,0,276.793,0   H156.49c-6.641,0-12.03,5.39-12.03,12.03s5.39,12.03,12.03,12.03h91.382L3.501,268.432C-1.167,273.1-1.167,280.667,3.501,285.323z"/>
+        </svg>
+        <span class="label-menu-item">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</span>
+    </div> -->
 
   <!-- ICON EDIT PROFILE -->
   <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1">
