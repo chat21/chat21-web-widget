@@ -101,11 +101,17 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
             const msg: MessageModel = childSnapshot.val();        
             msg.uid = childSnapshot.key;
-            if(msg.attributes && !msg.attributes.commands){
-                that.addedNew(msg)
-            }else if(msg.attributes && msg.attributes.commands){
+            // if(msg.attributes && !msg.attributes.commands){
+            //     that.addedNew(msg)
+            // }else if(msg.attributes && msg.attributes.commands){
+            //     that.addCommandMessage(msg)
+            // }
+            if(msg.attributes && msg.attributes.commands){
                 that.addCommandMessage(msg)
+            }else{
+                that.addedNew(msg)
             }
+
         });
         this.ref.on('child_changed', (childSnapshot) => {
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_changed: ', childSnapshot.val())
