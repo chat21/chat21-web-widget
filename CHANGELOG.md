@@ -1,10 +1,30 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.20.2 IN PROD
+
+### 5.0.20-rc.4
+- bug-fixed: when message comes from mobile app, message wasn't rendered because msg.attributes not exist 
+
+### 5.0.20.1 IN PROD
+
+### 5.0.20-rc.3
+- bug-fixed: undefined when sendRate in last step
+
+### 5.0.20-rc.2
+- bug-fixed: (mqtt) new conversation was signed as archived conversation beacause archivedConversationHandlers get conversation detail from active conversation node
+- bug-fixed: buttonBackgrounColor and buttonHovertextColor was setted programatically based on themeColor
+- bug-fied: sendMessage and sendSupportMessage external method provide more than 1 input parameter: now pass a MessageObj
+- bug-fixed: space between lines was different if message contains emojii
+
+### 5.0.20-rc.1
+- bug-fixed: if widget is open on mobile browser, when user scroll on conversation messages, scrolls also parent hosting page --> added style to body page
+
+### 5.0.19 IN PROD
+
 ### 5.0.19-rc.13
 - bug-fixed: onBeforeInit was not called in launch function
 - bug-fixed: link test inside bubble message not set text color dynamically
 - added: setParmeter and setAttributeParameter methods added to external programmers
--
 
 ### 5.0.19-rc.12
 - added: onBeforeInit tiledesk event
