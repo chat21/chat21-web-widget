@@ -1,5 +1,12 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.20.2 IN PROD
+
+### 5.0.20-rc.4
+- bug-fixed: when message comes from mobile app, message wasn't rendered because msg.attributes not exist 
+
+### 5.0.20.1 IN PROD
+
 ### 5.0.20-rc.3
 - bug-fixed: undefined when sendRate in last step
 
