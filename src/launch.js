@@ -95,8 +95,10 @@ function loadIframe(tiledeskScriptBaseLocation) {
     /** */
     window.tiledesk.on('onConversationUpdated', function(event_data) {
         // console.log("tiledesk onChangedConversation", event_data);
+        const messagePreview = window.tiledesk.angularcomponent.component.g.isOpenNewMessage
+        const isOpen = window.tiledesk.angularcomponent.component.g.isOpen
         try {
-            if (!window.tiledesk.angularcomponent.component.g.isOpen) {
+            if (!isOpen && messagePreview) {
                 iDiv.classList.add("messagePreview");
                 iDiv.classList.remove("callout");
                 // ----------------------------//
@@ -130,7 +132,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
         }
     });
 
-    /** */
+    /** @deprecated event */
     window.tiledesk.on('onLoggedIn', function(event_data) {
         // console.log("test-custom-auth.html onLoggedIn",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
@@ -231,13 +233,10 @@ function initAysncEvents() {
               } else {
                 window.tiledesk[functionName](); 
               }
-              
             }
 
           }   
         });
-
-        
 
       }
 
