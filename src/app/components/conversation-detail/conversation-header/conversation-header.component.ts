@@ -29,6 +29,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Output() onBack = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
+  @Output() onWidgetHeightChange = new EventEmitter<string>();
   @Output() onMenuOptionShow = new EventEmitter();
   // ========= end:: Input/Output values
 
@@ -47,6 +48,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   subscriptions = [];
   
   membersConversation = ['SYSTEM'];
+  heightStatus: string = 'min'
 
   // text used within the html
   private API_URL: string;
@@ -178,6 +180,15 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   toggleMenu() {
     this.onMenuOptionShow.emit(!this.isMenuShow)
     // this.isMenuShow = !this.isMenuShow;   
+  }
+
+  /**
+   * 
+   * @param status : string 'max' || 'min'
+   */
+  maximizeMinimize(status){
+    this.heightStatus = status
+    this.onWidgetHeightChange.emit(status)
   }
 
 

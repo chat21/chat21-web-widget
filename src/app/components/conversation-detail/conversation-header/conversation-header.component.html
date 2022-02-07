@@ -89,14 +89,24 @@
         <span class="label-menu-item">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</span>
     </div>
 
-    <!-- ICON MAXIMIZE/MINIMIZE -->
-    <!-- <div class="c21-header-button c21-right" (click)="dowloadTranscript()">
-        <svg aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 288.824 288.824" style="enable-background:new 0 0 288.824 288.824;" xml:space="preserve"
-            width="20px" height="20px">
-            <path id="Arrow_Up_Right" d="M3.501,285.323c4.668,4.668,12.235,4.668,16.891,0L264.763,40.951v91.382   c0,6.641,5.39,12.03,12.03,12.03c6.641,0,12.03-5.39,12.03-12.03V12.03c0-3.188-1.239-6.268-3.501-8.529S279.981,0,276.793,0   H156.49c-6.641,0-12.03,5.39-12.03,12.03s5.39,12.03,12.03,12.03h91.382L3.501,268.432C-1.167,273.1-1.167,280.667,3.501,285.323z"/>
+    <!-- ICON MAXIMIZE -->
+    <div class="c21-header-button c21-right" *ngIf="heightStatus==='min'" (click)="maximizeMinimize('max')">
+        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" xmlns="http://www.w3.org/2000/svg" 
+            width="17" height="17" viewBox="0 0 62 62">
+            <path d="M61,2H33a1,1,0,0,0-1,1V9a1,1,0,0,0,1,1H48.344L2.293,56.051a1,1,0,0,0,0,1.414l4.243,4.242a1,1,0,0,0,1.414,0L54,15.656V31a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V3A1,1,0,0,0,61,2Z"></path>
+            <title id="altIconTitle">{{ translationMap?.get('MAXIMIZE') }}</title>
         </svg>
-        <span class="label-menu-item">{{ translationMap?.get('DOWNLOAD_TRANSCRIPT') }}</span>
-    </div> -->
+        <span class="label-menu-item">{{ translationMap?.get('MAXIMIZE') }}</span>
+    </div>
+    <!-- ICON MINIMIZE -->
+    <div class="c21-header-button c21-right" *ngIf="heightStatus==='max'" (click)="maximizeMinimize('min')">
+        <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" transform="rotate(180)" xmlns="http://www.w3.org/2000/svg" 
+            width="17" height="17" viewBox="0 0 62 62">
+            <path d="M61,2H33a1,1,0,0,0-1,1V9a1,1,0,0,0,1,1H48.344L2.293,56.051a1,1,0,0,0,0,1.414l4.243,4.242a1,1,0,0,0,1.414,0L54,15.656V31a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V3A1,1,0,0,0,61,2Z"></path>
+            <title id="altIconTitle">{{ translationMap?.get('MINIMIZE') }}</title>
+        </svg>
+        <span class="label-menu-item">{{ translationMap?.get('MINIMIZE') }}</span>
+    </div>
 
   <!-- ICON EDIT PROFILE -->
   <!-- <div class="c21-header-button c21-right" *ngIf="messages && messages.length > 1">

@@ -235,7 +235,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       'SOUND_ON',
       'DOWNLOAD_TRANSCRIPT',
       'BACK',
-      'CLOSE'
+      'CLOSE',
+      'MAXIMIZE',
+      'MINIMIZE'
     ];
 
     const keysFooter = [
@@ -1844,6 +1846,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   returnSoundChange(soundEnabled){
     this.onSoundChange.emit(soundEnabled)
+  }
+
+  returnOnWidgetHeightChange(mode){
+    var tiledeskDiv = this.g.windowContext.window.document.getElementById('tiledeskdiv') 
+    if(mode==='max'){
+      tiledeskDiv.style.maxHeight = 'unset'
+    }else if(mode==='min'){
+      tiledeskDiv.style.maxHeight = '620px'
+    }
+    this.isMenuShow = false;
   }
 
   returnOnBeforeMessangeSent(messageModel){
