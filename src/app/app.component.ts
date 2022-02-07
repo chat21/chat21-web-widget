@@ -236,34 +236,36 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
                     if(conversation.sender !== this.g.senderId && !isInfo(conversation)){
                         that.manageTabNotification();
                     }
+
+                    if (that.g.isOpen === true) {
+                        that.g.setParameter('displayEyeCatcherCard', 'none');
+    
+                        this.logger.debug('[APP-COMP] obsChangeConversation ::: ', conversation);
+                        if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                            return;
+                        }
+                        if (conversation.is_new && !this.isOpenConversation) {
+                            // this.soundMessage();
+                        }
+    
+                    } else {
+                        // if(conversation.is_new && isJustRecived(this.g.startedAt.getTime(), conversation.timestamp)){
+                        //widget closed
+                        that.lastConversation = conversation;
+                        that.g.isOpenNewMessage = true;
+                        that.logger.debug('[APP-COMP] lastconversationnn', that.lastConversation)
+    
+                        let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
+                        that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+                        // }
+                    }
+
                     that.triggerOnConversationUpdated(conversation);
                 } else {
                     this.logger.debug('[APP-COMP] oBSconversationChanged null: errorrr')
                     return;
                 }
-                if (that.g.isOpen === true) {
-                    that.g.setParameter('displayEyeCatcherCard', 'none');
-
-                    this.logger.debug('[APP-COMP] obsChangeConversation ::: ', conversation);
-                    if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
-                        return;
-                    }
-                    if (conversation.is_new && !this.isOpenConversation) {
-                        // this.soundMessage();
-                    }
-
-
-                } else {
-                    // if(conversation.is_new && isJustRecived(this.g.startedAt.getTime(), conversation.timestamp)){
-                    //widget closed
-                    that.lastConversation = conversation;
-                    that.g.isOpenNewMessage = true;
-                    that.logger.debug('[APP-COMP] lastconversationnn', that.lastConversation)
-
-                    let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
-                    that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
-                    // }
-                }
+                
                 // });
             });
             this.subscriptions.push(subChangedConversation);
@@ -1478,7 +1480,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         storedTiledeskToken === token? null: this.appStorageService.removeItem('recipientId')
         return this.tiledeskAuthService.signInWithCustomToken(token).then((user: UserModel) => {
             this.messagingAuthService.createCustomToken(token)
-            this.logger.debug('[APP-COMP] signInWithCustomToken user::', user)
+            this.logger.debug('[APP-COMP] signInWithCustomToken user::', user, this.g.userFullname)
             //check if tiledesk_userFullname exist (passed from URL or tiledeskSettings) before update userFullname parameter
             //if tiledesk_userFullname not exist--> update parameter with tiledesk user returned from auth
             if ((user.firstname || user.lastname) && !this.g.userFullname) {
