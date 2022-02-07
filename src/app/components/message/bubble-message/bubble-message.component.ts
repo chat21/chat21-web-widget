@@ -6,7 +6,7 @@ import { LoggerService } from '../../../../chat21-core/providers/abstract/logger
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { isFile, isFrame, isImage } from '../../../../chat21-core/utils/utils-message';
 import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
-import { Globals } from '../../../utils/globals';
+
 @Component({
   selector: 'chat-bubble-message',
   templateUrl: './bubble-message.component.html',
