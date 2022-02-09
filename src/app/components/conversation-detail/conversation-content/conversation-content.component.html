@@ -86,7 +86,6 @@
 
                           </div>
     
-    
                           <!-- message RECIPIENT:: -->
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message) && !isSameSender(message?.sender, i)" class="message_sender_fullname slide-in-left">{{message?.sender_fullname}}</div>
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">

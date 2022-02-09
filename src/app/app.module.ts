@@ -181,7 +181,6 @@ export class TranslateHttpLoaderCustom implements TranslateLoader {
 }
 
 
-
 // FACTORIES
 export function createTranslateLoader(http: HttpClient) {
   let localUrl = './assets/i18n/';
