@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.21 IN PROD
+- bug-fixed: first bubble message  flikers when new conversation starts
+
 ### 5.0.20 IN PROD
 
 ### 5.0.19.2 IN PROD
