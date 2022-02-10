@@ -76,8 +76,12 @@ body {
 }
 
 .slide-in-left {
-	-webkit-animation: slide-in-left 0.2s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s both;
-	        animation: slide-in-left 0.2s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s both;
+	-webkit-animation: slideIn 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s ;
+            animation: slideIn 0.5s cubic-bezier(0.895, 0.030, 0.685, 0.220) 0.0s ;
+    // -webkit-animation: slideIn 0.2s forwards;
+    //    -moz-animation: slideIn 0.2s forwards;
+    //     -ms-animation: slideIn 0.2s forwards;
+    //         animation: slideIn 0.2s forwards;
 }
 
 .scale-in-center {

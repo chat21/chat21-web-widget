@@ -270,6 +270,14 @@ export class ConversationContentComponent implements OnInit {
   }
 
 
+  isFirstMessage(senderId, index){
+    if(senderId && index == 0 && this.messages[index] && (this.messages[index] !== senderId)){
+      return true;
+    }
+    return false;
+  }
+
+
   hideMenuOption(){
     this.onMenuOptionShow.emit(false)
   }

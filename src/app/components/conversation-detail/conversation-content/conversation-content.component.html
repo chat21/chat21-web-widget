@@ -80,24 +80,26 @@
 
                               <!-- icon status message -->
                               <!-- class="slide-in-right" -->
-                            <chat-return-receipt 
+                            <chat-return-receipt
                               [status]="message?.status">
                             </chat-return-receipt>
 
                           </div>
     
                           <!-- message RECIPIENT:: -->
-                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message) && !isSameSender(message?.sender, i)" class="message_sender_fullname slide-in-left">{{message?.sender_fullname}}</div>
+                          <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message) && !isSameSender(message?.sender, i)" class="message_sender_fullname" [ngClass]="{'slide-in-left': !isFirstMessage(message?.sender, i)}" >{{message?.sender_fullname}}</div>
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_OTHERS, message)" class="msg_container base_receive">
                             
-                            <chat-avatar-image *ngIf="!isSameSender(message?.sender, i)" class="slide-in-left"    
+                            <chat-avatar-image *ngIf="!isSameSender(message?.sender, i)" 
+                              [ngClass]="{'slide-in-left': !isFirstMessage(message?.sender, i)}"    
                               [senderID]="message?.sender"
                               [senderFullname]="message?.sender_fullname"
                               [baseLocation]="baseLocation">
                             </chat-avatar-image>
 
                             <!--backgroundColor non viene ancora usato -->
-                            <chat-bubble-message class="messages msg_receive slide-in-left"
+                            <chat-bubble-message class="messages msg_receive"
+                              [ngClass]="{'slide-in-left': !isFirstMessage(message?.sender, i)}"  
                               [class.emoticon]="message?.emoticon"
                               [style.margin-left]="isSameSender(message?.sender, i)? '50px': null"
                               [ngStyle]="{'background': stylesMap.get('bubbleReceivedBackground'), 'color': stylesMap.get('bubbleReceivedTextColor')}"
@@ -171,7 +173,7 @@
     
     
                           <!-- message type:: button &&  -->
-                          <div *ngIf="message?.attributes && message?.attributes?.attachment " class="slide-in-left" > 
+                          <div *ngIf="message?.attributes && message?.attributes?.attachment " [ngClass]="{'slide-in-left': !isFirstMessage(message?.sender, i)}" > 
                               <chat-message-attachment 
                                   style="height: 100%; display: block;"
                                   [message]="message"
