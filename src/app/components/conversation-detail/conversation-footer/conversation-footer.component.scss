@@ -152,8 +152,6 @@ textarea:active{
 }
 
 
-
-
 #chat21-button-send {
     right: 8px;
     bottom: 10px;
@@ -166,4 +164,47 @@ textarea:active{
 #chat21-start-mic {
     left: 8px;
     top: 10px;
+}
+
+#floating-container{
+    width: 98%; //not 100% due to vertical scroll bar
+    margin: 2px auto;
+    // height: 46px;
+    // position: absolute;
+    // bottom: 0px;
+    border-top: 0px solid $light-gray;
+    display: inline-block;
+    align-items: center;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    vertical-align: top;
+    text-align: center;
+
+    .c21-label-button {
+        margin-left: 8px;
+        font-weight: 400;
+        font-size: 1.2em;
+    }
+
+    .c21-button-primary {
+        height: 30px;
+        margin: 5px 0px;
+    }
+
+    .c21-waiting-time {
+        font-size: 1.3em;
+        font-weight: 200;
+        padding: 0px 24px 5px 24px;
+    }
+
+    // .c21-button-primary {
+    //     position: fixed;
+    //     bottom: 10px;
+    // }
+
+}
+
+.fade-in-bottom {
+    -webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
+    animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
 }
