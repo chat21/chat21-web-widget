@@ -23,7 +23,7 @@ import {
   setHeaderDate,
   conversationMessagesRef
 } from '../../utils/utils';
-import { messageType } from '../../utils/utils-message';
+import { checkIfIsMemberJoinedGroup, messageType } from '../../utils/utils-message';
 
 
 // @Injectable({ providedIn: 'root' })
@@ -241,7 +241,9 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         const msg = this.messageGenerate(messageSnapshot);
         msg.uid = msg.message_id;
         if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
-            return;
+            if(!checkIfIsMemberJoinedGroup(msg)){
+                return;
+            } 
         }
         // imposto il giorno del messaggio per visualizzare o nascondere l'header data
         msg.headerDate = null;

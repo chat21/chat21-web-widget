@@ -27,7 +27,7 @@ import {
   isJustRecived
 } from '../../utils/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { isEmojii, messageType } from '../../utils/utils-message';
+import { isEmojii, messageType, checkIfIsMemberJoinedGroup } from '../../utils/utils-message';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -266,7 +266,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const msg = this.messageCommandGenerate(message);
         // msg.attributes && msg.attributes['subtype'] === 'info'
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
-            return;
+            if(!checkIfIsMemberJoinedGroup(msg)){
+                return;
+            }
         }
         // this.addRepalceMessageInArray(childSnapshot.key, msg);
         this.addRepalceMessageInArray(msg.uid, msg);
