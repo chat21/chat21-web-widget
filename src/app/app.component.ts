@@ -2176,17 +2176,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         
         this.isOpenConversation = false;
         this.g.singleConversation? this.isOpenHome = false: null;
-        const departments = this.g.departments;
-        if (departments && departments.length > 1 && this.g.departmentID == null) {
-            this.isOpenSelectionDepartment = true;
-        } else {
-            this.isOpenConversation = true;
-        }
+        this.openNewConversation();
+        // const departments = this.g.departments;
+        // if (departments && departments.length > 1 && this.g.departmentID == null) {
+        //     this.isOpenSelectionDepartment = true;
+        // } 
+        // // else {
+        // //     this.isOpenConversation = true;
+        // // }
 
-        this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
-        if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
-            this.startNewConversation();
-        }
+        // this.logger.debug('[APP-COMP] isOpenPrechatForm', this.g.isOpenPrechatForm, ' isOpenSelectionDepartment:', this.isOpenSelectionDepartment);
+        // if (this.g.isOpenPrechatForm === false && this.isOpenSelectionDepartment === false) {
+        //     // this.isOpenConversation = true
+        //     this.onNewConversation();
+        //     // this.startNewConversation();
+        // }
         // setTimeout(() => {
         //     this.onNewConversation();
         // }, 0); 

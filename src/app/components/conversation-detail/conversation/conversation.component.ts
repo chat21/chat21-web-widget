@@ -327,6 +327,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       //this.updateConversationBadge();
       // this.scrollToBottom();
     }
+    // CHECK if conversationId is changed and re-build component
+    if(changes && changes['conversationId'] && changes['conversationId'].previousValue !== undefined && (changes['conversationId'].previousValue !== changes['conversationId'].currentValue)){
+      this.logger.debug("[CONV-COMP] UID CHANGESSSS", changes['conversationId'])
+      this.ngOnInit();
+      this.ngAfterViewInit();
+    }
   }
 
   updateConversationBadge() {
