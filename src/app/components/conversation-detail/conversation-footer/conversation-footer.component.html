@@ -1,4 +1,18 @@
-<div class="visible-text-area" [class.disabled] = "( isConversationArchived || hideTextReply)? true : null">
+<div id="floating-container" *ngIf="isConversationArchived" class="fade-in-bottom" start-focus-chat21-conversation-component> 
+    <button tabindex="1040" aflistconv #aflistconv  class="c21-button-primary" (click)="openNewConversation()" [ngStyle]="{'background-color': stylesMap.get('themeColor'), 'border-color': stylesMap.get('themeColor'), 'color': stylesMap?.get('foregroundColor')}">
+        <span class="v-align-center">
+          <svg [ngStyle]="{'fill': 'yellow' }" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"  [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}"/>
+          </svg>
+        </span>
+        <span class="v-align-center c21-label-button">
+          {{translationMap?.get('LABEL_START_NW_CONV')}}
+        </span>  
+        <div class="clear"></div>
+    </button>
+</div>
+
+<div class="visible-text-area"  *ngIf="!isConversationArchived" [class.disabled] = "( isConversationArchived || hideTextReply)? true : null">
     <!-- isFilePendingToUpload || -->
   <textarea 
     [attr.disabled] = "(isConversationArchived || hideTextReply)? true : null"
@@ -25,7 +39,7 @@
   ></chat-message-text-area> -->
 </div>
 <!--   -->
-<div #div_attached>
+<div #div_attached  *ngIf="!isConversationArchived">
     <!-- ICON ATTACHMENT -->
     <label *ngIf="showAttachmentButton == true" tabindex="1502" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && !hideTextReply" id="chat21-start-upload-doc">
         <span class="v-align-center">
@@ -91,5 +105,5 @@
 <!-- <div [class.active]="isFileSelected" class="name-image" id="chat21-file-selected">
   <span>{{nameFile}}</span>
 </div> -->
-<span id="testFocus" tabindex="1599" onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()"></span>
-<span id="altTextArea" style="display: none">scrivi la tua domanda</span>
+<!-- <span id="testFocus" tabindex="1599" *ngIf="!isConversationArchived" onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()"></span> -->
+<!-- <span id="altTextArea" style="display: none">scrivi la tua domanda</span> -->

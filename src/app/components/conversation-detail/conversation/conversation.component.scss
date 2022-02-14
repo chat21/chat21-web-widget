@@ -420,8 +420,12 @@
     right: 0px;
     margin: 0px;
     padding: 0;
-    box-shadow: 0 -1px 0px 0px $trasp-light-gray;
+    // box-shadow: 0 -1px 0px 0px $trasp-light-gray;
     background: white;
+ 
+    &.border-top{
+        box-shadow: 0 -1px 0px 0px $trasp-light-gray;
+    }
 
     .visible-text-area {
         pointer-events: auto;

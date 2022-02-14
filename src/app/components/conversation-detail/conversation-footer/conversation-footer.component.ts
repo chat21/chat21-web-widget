@@ -41,6 +41,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Output() onAfterSendMessage = new EventEmitter();
   @Output() onChangeTextArea = new EventEmitter<any>();
   @Output() onAttachmentButtonClicked = new EventEmitter<any>();
+  @Output() onNewConversationButtonClicked = new EventEmitter();
 
   @ViewChild('chat21_file') public chat21_file: ElementRef;
 
@@ -74,6 +75,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined){
       this.restoreTextArea();
     }
+    console.log("AAAAAAAAA", this.isConversationArchived)
   }
   
   ngAfterViewInit() {
@@ -488,7 +490,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
 
-
+  openNewConversation(){
+    this.onNewConversationButtonClicked.emit();
+  }
 
 
   setFocusOnId(id) {
