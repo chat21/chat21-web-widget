@@ -241,7 +241,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
         const msg = this.messageGenerate(messageSnapshot);
         msg.uid = msg.message_id;
         if(this.skipInfoMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
-            if(!checkIfIsMemberJoinedGroup(msg)){
+            if(!checkIfIsMemberJoinedGroup(msg, this.loggedUser)){
                 return;
             } 
         }

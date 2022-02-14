@@ -266,7 +266,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         const msg = this.messageCommandGenerate(message);
         // msg.attributes && msg.attributes['subtype'] === 'info'
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
-            if(!checkIfIsMemberJoinedGroup(msg)){
+            if(!checkIfIsMemberJoinedGroup(msg, this.loggedUser)){
                 return;
             }
         }

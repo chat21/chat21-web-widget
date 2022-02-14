@@ -137,10 +137,10 @@ export function isEmojii(message: any){
 }
 
 
-export function checkIfIsMemberJoinedGroup(msg): boolean{
+export function checkIfIsMemberJoinedGroup(msg, loggedUser): boolean{
   if(msg && msg.attributes && msg.attributes.messagelabel
       && msg.attributes.messagelabel['key']=== "MEMBER_JOINED_GROUP" 
-      && msg.attributes.messagelabel.parameters['member_id'] !== this.loggedUser.uid
+      && msg.attributes.messagelabel.parameters['member_id'] !== loggedUser.uid
       && !msg.attributes.messagelabel.parameters['member_id'].includes('bot')){
           return true
   }

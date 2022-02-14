@@ -75,7 +75,6 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     if(changes['hideTextReply'] && changes['hideTextReply'].currentValue !== undefined){
       this.restoreTextArea();
     }
-    console.log("AAAAAAAAA", this.isConversationArchived)
   }
   
   ngAfterViewInit() {
