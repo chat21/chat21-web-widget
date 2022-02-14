@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.1
+- added: enabled info message for MEMBER_JOINED_GROUP (not for bot, only human)
+- added: new conversation button in conversation-footer if conversation is archived. user can start new conversation from this button directly
+
 ### 5.0.21 IN PROD
 - bug-fixed: first bubble message  flikers when new conversation starts
 
