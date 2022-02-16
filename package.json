@@ -33,6 +33,7 @@
     "@angular/platform-browser": "^5.0.2",
     "@angular/platform-browser-dynamic": "^5.0.2",
     "@angular/router": "^5.0.2",
+    "@joeattardi/emoji-button": "^4.6.2",
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",
     "@types/jasmine": "2.8.2",
