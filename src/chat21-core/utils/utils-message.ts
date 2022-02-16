@@ -141,7 +141,8 @@ export function checkIfIsMemberJoinedGroup(msg, loggedUser): boolean{
   if(msg && msg.attributes && msg.attributes.messagelabel
       && msg.attributes.messagelabel['key']=== "MEMBER_JOINED_GROUP" 
       && msg.attributes.messagelabel.parameters['member_id'] !== loggedUser.uid
-      && !msg.attributes.messagelabel.parameters['member_id'].includes('bot')){
+      && !msg.attributes.messagelabel.parameters['member_id'].includes('bot') 
+      && !msg.attributes.messagelabel.parameters['member_id'].includes('system')){
           return true
   }
   return false
