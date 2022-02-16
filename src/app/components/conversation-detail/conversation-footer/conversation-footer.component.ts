@@ -12,7 +12,7 @@ import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
-
+// import { EmojiButton } from '@joeattardi/emoji-button';
 @Component({
   selector: 'chat-conversation-footer',
   templateUrl: './conversation-footer.component.html',

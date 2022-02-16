@@ -7,6 +7,7 @@
     }
 }
 
+
 .chat21-textarea-button {
     pointer-events: auto;
 }
@@ -135,6 +136,8 @@ textarea:active{
     padding: 0px 40px;
     margin: 10px 0px 10px;
     border: none;
+
+    
 }
 
 .chat21-textarea-button {
@@ -158,6 +161,10 @@ textarea:active{
 }
 #chat21-file{
     left: 8px;
+    bottom: 10px;
+}
+#chat21-emoticon-picker{
+    left: 36px;
     bottom: 10px;
 }
 #chat21-start-upload-doc,
