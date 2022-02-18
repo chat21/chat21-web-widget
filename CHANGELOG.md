@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.3
+- bug-fixed: new conversation button do not deactivate itself and show conversation-footer text area when nativeRating is activate and only 1 department is active
+
 ### 5.0.22-rc.2
 - added: nativeRating management
 
