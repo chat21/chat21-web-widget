@@ -331,6 +331,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     // CHECK if conversationId is changed and re-build component
     if(changes && changes['conversationId'] && changes['conversationId'].previousValue !== undefined && (changes['conversationId'].previousValue !== changes['conversationId'].currentValue)){
       this.logger.debug("[CONV-COMP] UID CHANGESSSS", changes['conversationId'])
+      this.isConversationArchived = false;
+      this.conversationFooter.textInputTextArea=null;
       this.ngOnInit();
       this.ngAfterViewInit();
     }
