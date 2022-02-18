@@ -51,6 +51,7 @@
                 [stylesMap]="styleMapConversation"
                 (onBackHome)="onBackConversation()" 
                 (onCloseWidget)="onCloseWidget()"
+                (onConversationClosed)="onConversationClosed($event)"
                 (onSoundChange)="onSoundChange($event)"
                 (onNewConversationButtonClicked)="onNewConversationButtonClicked($event)"
                 (onBeforeMessageSent)="triggerHandler.triggerBeforeSendMessageEvent($event)"

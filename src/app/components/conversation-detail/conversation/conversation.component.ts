@@ -64,6 +64,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() isConversationArchived: boolean;
   @Output() onBackHome = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
+  @Output() onConversationClosed = new EventEmitter<string>()
   @Output() onSoundChange = new EventEmitter();
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
@@ -905,8 +906,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       subscribtion = this.chatManager.conversationsHandlerService.conversationRemoved.pipe(takeUntil(this.unsubscribe$)).subscribe((conversation) => {
         this.logger.debug('[CONV-COMP] ***** DATAIL conversationsRemoved *****', conversation, this.conversationWith, this.isConversationArchived);
         if(conversation && conversation.uid === this.conversationWith){
-          this.starRatingWidgetService.setOsservable(true)
           this.isConversationArchived = true;
+          this.g.nativeRating? this.starRatingWidgetService.setOsservable(true): null; //if nativeRating is true, open starRatingComponent, otherwize do nothing
+          this.g.nativeRating? null: this.onConversationClosed.emit(conversation.uid) //if nativeRating is false, when conversation in archived -> manually back to home
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
