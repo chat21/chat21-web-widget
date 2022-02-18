@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.2
+- added: nativeRating management
+
 ### 5.0.22-rc.1
 - added: enabled info message for MEMBER_JOINED_GROUP (not for bot, only human)
 - added: new conversation button in conversation-footer if conversation is archived. user can start new conversation from this button directly

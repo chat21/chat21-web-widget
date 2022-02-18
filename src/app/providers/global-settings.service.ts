@@ -1548,8 +1548,8 @@ export class GlobalSettingsService {
             this.setDepartment(departments[0]);
             // return false;
         } else if (departments.length > 1) {
-            // CI SONO + DI 2 DIPARTIMENTI
-            this.logger.debug('[GLOBAL-SET] initDepartments > CI SONO + DI 2 DIPARTIMENTI ::::', departments[0]);
+            // there are more then 1 department
+            this.logger.debug('[GLOBAL-SET] initDepartments > MORE THAN 1 DEPARTMENT ::::', departments[0]);
             let i = 0;
             departments.forEach(department => {
                 if (department['default'] === true) {
