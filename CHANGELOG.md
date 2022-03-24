@@ -1,5 +1,8 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.5
+- added: 'name' key property to static preChatFormjson
+
 ### 5.0.22-rc.4
 - bug-fixed: not show info message if it can't retrive translations
 - bug-fixed: reduced space for single emoticon when user send message 
