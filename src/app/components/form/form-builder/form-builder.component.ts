@@ -61,7 +61,7 @@ export class FormBuilderComponent implements OnInit {
       child.tabIndex= initIndex + index;
       this.lastTabIndex = initIndex + index + 1;
       // child.type = child.type.toLowerCase()
-      if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
+      //if(!child.name) return; // if 'name' property not exist, NOT RENDER CURRENT FIELD
       
       child.label? child.label : child.label= child.name; //if 'label' property not exist, set 'name' property as its value
       child.type? child.type = child.type.toLowerCase() :  child.type = 'text' // if 'type' property not exist, set 'text' as default value
@@ -79,8 +79,8 @@ export class FormBuilderComponent implements OnInit {
         child.mandatory? validatorsObject.push(Validators.required, Validators.requiredTrue) : null
         child.value? defaultValue = (child.value=== 'true' || child.value=== true) : null
         objectFormBuilder[child.name] = new FormControl(defaultValue, Validators.compose(validatorsObject))
-      } else if(child.type === 'label'){
-        // type: 'label' not need to render as FormControl object in formBuilder --> skip it
+      } else if(child.type === 'static'){
+        // type: 'static' not need to render as FormControl object in formBuilder --> skip it
         return;
       } else {
         this.logger.error('[FORM-BUILDER] ERROR while rendering field --> RESTORE DEFAULT')
