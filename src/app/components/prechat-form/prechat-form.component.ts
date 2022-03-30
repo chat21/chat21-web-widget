@@ -158,7 +158,7 @@ export class PrechatFormComponent implements OnInit, AfterViewInit {
 
   onErrorRenderForm(){
     this.logger.debug('[PRE-CHAT-FORM] onErrorRenderForm: RESTORE DEFAULT JSON')
-    const defaultPreChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:{ en:"User fullname", it:"Nome utente"}},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:{ en:"Email", it: "Indirizzo email"},"errorLabel":{ en:"Invalid email address", it:"Indirizzo email non valido"}}]
+    const defaultPreChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:"LABEL_PRECHAT_USER_FULLNAME"},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:"LABEL_PRECHAT_USER_EMAIL", errorLabel:"LABEL_PRECHAT_USER_EMAIL_ERROR"}]
     this.g.setParameter('preChatFormJson', defaultPreChatFormJson)
   }
   // ========= end:: ACTIONS ============//

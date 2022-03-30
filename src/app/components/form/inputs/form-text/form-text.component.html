@@ -15,7 +15,7 @@
       (focus)="onFocus()" (focusout)="onFocusOut()">
   </div>
   <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('required')" class="text-danger">
-    {{translationErrorLabelMap.get('LABEL_ERROR_FIELD_REQUIRED')}}
+    {{translationErrorLabelMap.get('PRECHAT_REQUIRED_ERROR')}}
   </div>
   <div *ngIf="hasSubmitted && form.controls[element.name].errors && form.controls[element.name].hasError('pattern') && element.errorLabel" class="text-danger">
     {{element.errorLabel}}
