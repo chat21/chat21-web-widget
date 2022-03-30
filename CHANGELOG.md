@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.6
+- bug-fixed: z-index increased
+- changed: label and errorLabel key value for preChatFormJson
+
 ### 5.0.22-rc.5
 - added: 'name' key property to static preChatFormjson
 
