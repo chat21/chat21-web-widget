@@ -118,7 +118,7 @@ export class FormBuilderComponent implements OnInit {
         // translation === ''?  translation= element.label[0] : null 
         // element.label = translation
       } else if (isString(element.label)){
-        return element.label = this.customTranslateService.translateLanguage([element.label]).get(element.label)
+        element.label = this.customTranslateService.translateLanguage([element.label]).get(element.label)
       }
 
       /** 'erroLabel' property */
@@ -136,7 +136,7 @@ export class FormBuilderComponent implements OnInit {
         // translation === ''?  translation= element.errorLabel[0] : null 
         // element.errorLabel = translation
       } else if (isString(element.errorLabel)){
-        return element.errorLabel = this.customTranslateService.translateLanguage([element.errorLabel]).get(element.errorLabel)
+        element.errorLabel = this.customTranslateService.translateLanguage([element.errorLabel]).get(element.errorLabel)
       }
 
     })

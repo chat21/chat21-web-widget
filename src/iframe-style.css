@@ -5,7 +5,7 @@
     width: auto;   
     height: auto;
     display: none;
-    z-index: 999999;
+    z-index: 2000000000; /*999999*/;
 }
 #tiledeskdiv {
     /* width: 100%;
