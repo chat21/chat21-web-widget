@@ -1,5 +1,13 @@
 # chat21-web-widget ver 5.0
 
+
+### 5.0.22-rc.7
+- changed: errorLabel and label translation key restored to old values
+
+### 5.0.21.1 IN PROD
+- bug-fixed: z-index increased
+- bug-fixed: errorLabel not translated if translate key is passed
+
 ### 5.0.22-rc.6
 - bug-fixed: z-index increased
 - changed: label and errorLabel key value for preChatFormJson
