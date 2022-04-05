@@ -36,7 +36,7 @@ export class FormBuilderComponent implements OnInit {
               private customTranslateService: CustomTranslateService,) { }
 
   ngOnInit() {
-    const key = [ 'PRECHAT_REQUIRED_ERROR' ]
+    const key = [ 'LABEL_ERROR_FIELD_REQUIRED', 'PRECHAT_REQUIRED_ERROR' ]
     const translationKey =[ 'LABEL_START_NW_CONV']
     this.translationErrorLabelMap = this.customTranslateService.translateLanguage(key)
     this.translationMap = this.customTranslateService.translateLanguage(translationKey)

@@ -9,7 +9,7 @@
             (keydown.enter)="onEnterPressed($event)">
     <label class="c21-form-message-field">{{element.label}}</label>
     <div *ngIf="hasSubmitted && form.get(element.name).errors" class="text-danger">
-      {{translationErrorLabelMap.get('PRECHAT_REQUIRED_ERROR')}}
+      {{translationErrorLabelMap.get('LABEL_ERROR_FIELD_REQUIRED')}}
     </div>
   </div>
 </form>

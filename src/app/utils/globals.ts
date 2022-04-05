@@ -347,7 +347,7 @@ export class Globals {
     /** show conversations with conversation.attributes.requester_id == user.uid */
     this.persistence = 'local';
     /** set the auth persistence */
-    this.preChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:"LABEL_PRECHAT_USER_FULLNAME"},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:"LABEL_PRECHAT_USER_EMAIL", errorLabel:"LABEL_PRECHAT_USER_EMAIL_ERROR"}]
+    this.preChatFormJson = [{name: "userFullname", type:"text", mandatory:true, label:"LABEL_FIELD_NAME"},{name:"userEmail", type:"text", mandatory:true, regex:"/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/", label:"LABEL_FIELD_EMAIL", errorLabel:"LABEL_ERROR_FIELD_EMAIL"}]
     /** set the preChatForm Json as default if preChatFormCustomFieldsEnabled is false or not exist */
     this.bubbleSentBackground = convertColorToRGBA('#2a6ac1', 100); //'#62a8ea'
     /** set the background of bubble sent message */
