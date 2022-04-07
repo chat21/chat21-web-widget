@@ -1,5 +1,7 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.22-rc.8
+- bug-fixed: preChatFormJson error when passed through tiledeskSettings 
 
 ### 5.0.22-rc.7
 - changed: errorLabel and label translation key restored to old values
