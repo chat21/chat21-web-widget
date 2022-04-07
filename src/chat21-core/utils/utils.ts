@@ -622,6 +622,17 @@ export function isJsonString(str) {
   return true;
 }
 
+export function isJsonArray(array){
+  var status= true
+  if (Array.isArray(array)) {
+    array.forEach(function(item){
+      if(typeof item !== 'object')
+        return status =false
+    })
+  }
+  return status
+}
+
 export function validateRegex(regex){
   let validRegex = regex
   if(regex.substring(0,1) !== '/')

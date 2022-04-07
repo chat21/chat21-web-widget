@@ -14,7 +14,7 @@ import { ProjectModel } from '../../models/project';
 import { AppStorageService } from '../../chat21-core/providers/abstract/app-storage.service';
 import { LoggerService } from '../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../chat21-core/providers/logger/loggerInstance';
-import { invertColor, isJsonString } from '../../chat21-core/utils/utils';
+import { invertColor, isJsonArray, isJsonString } from '../../chat21-core/utils/utils';
 
 
 @Injectable()
@@ -822,9 +822,10 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['preChatFormJson'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > preChatFormJson:: ', TEMP]);
         if (TEMP !== undefined) {
-            if(isJsonString(TEMP)){
+            if(isJsonArray(TEMP)){
                 globals.preChatFormJson = TEMP;
             }
+
         }
         TEMP = tiledeskSettings['bubbleSentBackground'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > bubbleSentBackground:: ', TEMP);
