@@ -30,6 +30,11 @@ With Chat21-web-widget you can:
 * Create a Firebase project. Create one free on `https://firebase.google.com`
 * "Chat21 Firebase cloud functions" installed. Instructions:`https://github.com/chat21/chat21-cloud-functions`
 
+# Run Tiledesk with Docker Compose
+
+Do you want to install all the Tiledesk components on your server with just one click?
+Use [Docker Compose Tiledesk installation guide](https://github.com/Tiledesk/tiledesk-deployment/blob/master/docker-compose/README.md)
+
 # Installation
 
 * Clone the repository from master (or use a tagged release) with command: ```git clone https://github.com/chat21/chat21-web-widget <YOUR_PATH>```
