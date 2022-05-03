@@ -903,6 +903,11 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.nativeRating = (TEMP === true) ? true : false;;
         }
+        TEMP = tiledeskSettings['hideBubbleInfoMessage'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > hideBubbleInfoMessage:: ', TEMP]);
+        if (TEMP !== undefined) {
+            globals.hideBubbleInfoMessage = (TEMP === true) ? true : false;;
+        }
         
 
     }
@@ -1118,6 +1123,10 @@ export class GlobalSettingsService {
         TEMP = el.nativeElement.getAttribute('nativeRating');
         if (TEMP !== null) {
             this.globals.nativeRating = (TEMP === true) ? true : false;
+        }
+        TEMP = el.nativeElement.getAttribute('hideBubbleInfoMessage');
+        if (TEMP !== null) {
+            this.globals.hideBubbleInfoMessage = (TEMP === true) ? true : false;
         }
         
     }
@@ -1342,7 +1351,7 @@ export class GlobalSettingsService {
 
         TEMP = getParameterByName(windowContext, 'tiledesk_customAttributes');
         if (TEMP) {
-            globals.customAttributes = stringToBoolean(TEMP);
+            globals.customAttributes = JSON.parse(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_showAttachmentButton');
@@ -1491,6 +1500,11 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_nativeRating');
         if (TEMP) {
             globals.nativeRating = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_hideBubbleInfoMessage');
+        if (TEMP) {
+            globals.hideBubbleInfoMessage = stringToBoolean(TEMP);
         }
         
     }
