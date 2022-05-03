@@ -200,19 +200,24 @@ svg.star:hover{
                         <div class="default-text">{{ g.YOUR_RATING_HAS_BEEN_RECEIVED }}</div>
                     </div>
 
-                    <button class="c21-button-link" (click)="returnClosePage()">
-                        <span>{{ g.CLOSE }}</span>
+                    <!-- ICON CLOSE -->
+                    <button tabindex="1415"  class="c21-button-primary" (click)="returnClosePage()" [ngStyle]="{'background-color': stylesMap?.get('themeColor'), 'border-color': stylesMap?.get('themeColor'), 'color': stylesMap?.get('foregroundColor') }">
+                        <span class="v-align-center">
+                            <svg role="img" aria-labelledby="altIconTitle" [ngStyle]="{'fill': stylesMap?.get('foregroundColor')}" xmlns="http://www.w3.org/2000/svg"
+                                width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="none" d="M0 0h24v24H0V0z" />
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                                <title id="altIconTitle">{{ g.CLOSE }}</title>    
+                            </svg>
+                        </span>
+                        <span class="v-align-center c21-label-button">
+                            {{ g.CLOSE }}
+                          <!-- {{translationMap?.get('LABEL_START_NW_CONV')}} -->
+                        </span>  
+                        <div class="clear"></div>
                     </button>
                 </div>
                 <!-- ***************  STEP 2 : END ***************** -->
-
-
-
-
-
-
-
-
 
 
             </div>
