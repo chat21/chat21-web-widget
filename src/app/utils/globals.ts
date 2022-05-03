@@ -219,6 +219,7 @@ export class Globals {
    buttonHoverTextColor: string // *******  new ********
    singleConversation: boolean; // *******  new ********
    nativeRating: boolean; // *******  new ********
+   hideBubbleInfoMessage: boolean; // *******  new ********
   constructor(
   ) {
     // console.log(' ---------------- 1: initDefafultParameters ---------------- ');
@@ -371,11 +372,12 @@ export class Globals {
     /** set the text size of attachment-buttons */
     this.buttonHoverTextColor = convertColorToRGBA('#ffffff', 100);
     /** set the text size of attachment-buttons */
-
     this.singleConversation = false;
     /** set the single conversation mode for the widget */
     this.nativeRating = true;
     /** set if native rating componet has to be shown */
+    this.hideBubbleInfoMessage = false;
+    /** disable or show bubble info message 'MEMBER_JOINED_CHAT' */
 
     this.showWaitTime = true;
 
