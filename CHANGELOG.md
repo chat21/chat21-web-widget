@@ -3,6 +3,7 @@
 ### 5.0.22-rc.9
 - bug-fixed: transform string value of customAttribute url parameter to keyValue object
 - changed: last step 'close' button UI star-rating component
+- changed: info-message font size reduced
 - added: hideBubbleInfoMessage tiledesk propery to manage bubble info message
 
 ### 5.0.22-rc.8
