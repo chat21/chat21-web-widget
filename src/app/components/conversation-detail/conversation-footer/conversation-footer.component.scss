@@ -133,7 +133,8 @@ textarea:active{
     max-height: 110px;
     min-height: auto;
     height: 20px;
-    padding: 0px 40px;
+    //padding: 0px 40px;
+    padding: 0px 40px 0px 70px; //NEW FOR EMOJII BUTTON
     margin: 10px 0px 10px;
     border: none;
 
@@ -165,7 +166,7 @@ textarea:active{
 }
 #chat21-emoticon-picker{
     left: 36px;
-    bottom: 10px;
+    top: 10px;
 }
 #chat21-start-upload-doc,
 #chat21-start-mic {

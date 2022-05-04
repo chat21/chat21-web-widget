@@ -64,10 +64,10 @@
             [ngStyle]="{'display': 'block', height:'1px', width:'1px', overflow: 'hidden' }"
             (change)="detectFiles($event)"/>
     </label>
-    <label tabindex="1504" aria-label="allegati" for="chat21-file" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && !hideTextReply" id="chat21-emoticon-picker">
+    <!-- ICON EMOJII -->
+    <label tabindex="1504" aria-label="emojii" for="chat21-emojii" class="chat21-textarea-button" [class.active]="!isFilePendingToUpload && !isConversationArchived && !hideTextReply" id="chat21-emoticon-picker" (click)="onEmojiiPickerClicked()">
         <span class="v-align-center">
             <svg xmlns="http://www.w3.org/2000/svg" [ngStyle]="{'fill': stylesMap?.get('themeColor') }" width="24" height="24" viewBox="0 0 28 28" >
-                <!-- <path [ngStyle]="{'fill': g.themeColor}" d="M0 0h24v24H0V0z"/> -->
                 <path d="M0 0h24v24H0V0z" fill="none"/>
                 <circle cx="15.5" cy="9.5" r="1.5"/>
                 <circle cx="8.5" cy="9.5" r="1.5"/>

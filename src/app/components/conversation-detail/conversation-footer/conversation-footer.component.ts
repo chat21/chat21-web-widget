@@ -12,7 +12,8 @@ import { FileDetector } from 'protractor';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
-// import { EmojiButton } from '@joeattardi/emoji-button';
+//import { EmojiButton } from '@joeattardi/emoji-button';
+
 @Component({
   selector: 'chat-conversation-footer',
   templateUrl: './conversation-footer.component.html',
@@ -82,6 +83,24 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   }
 
   // ========= begin:: functions send image ======= //
+
+  onEmojiiPickerClicked(){
+    // const picker = new EmojiButton({
+    //   position: 'bottom',
+    //   showPreview: false,
+    //   emojiSize: '1.4em',
+    //   emojisPerRow: 10,
+    //   recentsCount: 10
+    // });
+    // const trigger = document.querySelector('#chat21-emoticon-picker') as HTMLInputElement;
+    // const that = this
+    // picker.showPicker(trigger)
+    // picker.on('emoji', selection => {
+    //   console.log('selectionnn', that.textInputTextArea, that.textInputTextArea + selection.emoji)
+    //   that.textInputTextArea= that.textInputTextArea + selection.emoji
+    // });
+  }
+
   // START LOAD IMAGE //
   /**
    * carico in locale l'immagine selezionata e apro pop up anteprima
