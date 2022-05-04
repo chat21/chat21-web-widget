@@ -59,6 +59,7 @@
     "less": "^2.7.3",
     "marked": "^2.0.1",
     "material-design-icons": "^3.0.1",
+    "ng-emoji-picker": "^1.2.4",
     "ng2-tooltip-directive": "^2.9.20",
     "node-sass": "^4.13.0",
     "popper.js": "^1.16.1",

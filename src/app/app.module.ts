@@ -164,6 +164,7 @@ import { FormLabelComponent } from './components/form/inputs/form-label/form-lab
 import { FormCheckboxComponent } from './components/form/inputs/form-checkbox/form-checkbox.component';
 import { FormTextareaComponent } from './components/form/inputs/form-textarea/form-textarea.component';
 
+import { EmojiPickerModule } from 'ng-emoji-picker';
 
 export class TranslateHttpLoaderCustom implements TranslateLoader {
   constructor(private http: HttpClient, 
@@ -374,6 +375,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
       // }
     }), 
     TooltipModule,
+    EmojiPickerModule
     //RouterModule.forRoot([])
   ],
   providers: [

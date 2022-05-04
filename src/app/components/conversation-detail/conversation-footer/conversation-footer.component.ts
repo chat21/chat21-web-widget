@@ -58,6 +58,9 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   textInputTextArea: string;
   conversationHandlerService: ConversationHandlerService
 
+  text: string = '';
+  openPopup: Function;
+
   convertColorToRGBA = convertColorToRGBA;
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public g: Globals,
@@ -99,6 +102,14 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
     //   console.log('selectionnn', that.textInputTextArea, that.textInputTextArea + selection.emoji)
     //   that.textInputTextArea= that.textInputTextArea + selection.emoji
     // });
+  }
+  onOpenEmojiPicker(){
+    this.openPopup()
+  }
+
+  setPopupAction(fn: any) {
+    console.log('setPopupAction');
+    this.openPopup = fn;
   }
 
   // START LOAD IMAGE //
