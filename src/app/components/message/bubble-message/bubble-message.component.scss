@@ -47,3 +47,16 @@
     }
     
 }
+
+.floating_like{
+    position: fixed;
+    height: 30px;
+    width: 30px;
+    margin-top: 20px;
+    /* top: 18px; */
+    right: 10px;
+    background-color: red;
+    border-radius: 50%;
+    --padding-end: 7px;
+    --padding-start: 7px;
+}

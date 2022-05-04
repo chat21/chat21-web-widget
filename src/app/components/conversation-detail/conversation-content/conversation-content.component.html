@@ -57,8 +57,8 @@
               <div #scrollMe id="scroll-me" (scroll)="onScroll($event)">
     
                   <div id="{{idDivScroll}}" class="c21-contentScroll" > <!-- (resized)="onResized($event)" -->
-                      <div *ngFor="let message of messages; let last = last; let i = index" tabindex="1521" class="rowMsg">
-    
+                      <div *ngFor="let message of messages; let first = first;let last = last; let i = index" tabindex="1521" class="rowMsg">
+
                           <!-- message SENDER:: -->
                           <div role="messaggio" *ngIf="messageType(MESSAGE_TYPE_MINE, message)" class="msg_container base_sent">
                           
@@ -77,6 +77,7 @@
                               (onAfterMessageRender)="returnOnAfterMessageRender($event)"
                               (onImageRendered)="onImageRenderedFN($event)">
                             </chat-bubble-message>
+                            
 
                               <!-- icon status message -->
                               <!-- class="slide-in-right" -->
@@ -121,6 +122,7 @@
                                 [message]="message">
                             </chat-info-message>
                           </div>
+
                           
                           <!-- <div role="messaggio" *ngIf="message.sender != senderId;" class="msg_container base_receive slide-in-left">
                               
