@@ -716,18 +716,10 @@
             window.Tiledesk('restart')
         }
 
-        function onClickPoweredBy(){
-            let htmlText = document.getElementById('poweredBy').value
-            window.tiledeskSettings['poweredBy'] = htmlText
-            console.log('onClickPoweredBy: status-->',window.tiledeskSettings);
-            window.Tiledesk('restart')
-        }
-
         function onClickLang(){
             let lang = document.getElementById('lang').value
             // if lang is not pre-translated, use English
             const selectedLanguage = JSON.parse(lang)
-            console.log('langgg', selectedLanguage.type)
             selectedLanguage.type === '--- Needs own translation ---'? lang = 'en': lang= selectedLanguage.code
             window.tiledeskSettings['lang'] = lang
             console.log('onClickLang: status-->',window.tiledeskSettings);
@@ -821,6 +813,13 @@
             text === ""? text= '1.4em': text
             window.tiledeskSettings['fontSize'] = text
             console.log('onClickFontSize:',window.tiledeskSettings);
+            window.Tiledesk('restart')
+        }
+
+        function onClickHideBubbleInfoMessage(){
+            let status = document.querySelector('input[name="hideBubbleInfoMessage"]:checked').value
+            window.tiledeskSettings['hideBubbleInfoMessage'] = stringToBoolean(status)
+            console.log('onClickHideBubbleInfoMessage:', window.tiledeskSettings)
             window.Tiledesk('restart')
         }
 
@@ -1033,6 +1032,20 @@
             let status = document.getElementById('logLevel').value
             window.tiledeskSettings['logLevel'] = status
             console.log('onClickLogLevel:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickNativeRating(){
+            let status = document.querySelector('input[name="nativeRating"]:checked').value
+            window.tiledeskSettings['nativeRating'] = stringToBoolean(status)
+            console.log('onClickNativeRating:', window.tiledeskSettings)
+            window.Tiledesk('restart')
+        }
+
+        function onClickCustomAttributes(){
+            let text = document.getElementById('customAttributes').value
+            window.tiledeskSettings['customAttributes'] = JSON.parse(text)
+            console.log('onClickCustomAttributes:',window.tiledeskSettings);
             window.Tiledesk('restart')
         }
 
@@ -1390,12 +1403,12 @@
                         <div class="row" style="margin: 0">
                             <textarea class="form-control" id="jwt" placeholder="JWT ..." rows="4" cols="60"></textarea>
                         </div>
-                        <div class="row" style="text-align: right; margin:0">
-                            <button class="btn btn-light" onclick="onClickCustomToken()">Authenticate <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        <div class="row" style="text-align: right; margin:5px 0px">
+                            <button class="btn btn-light" onclick="onClickCustomToken()">Try authentication <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </div>
 
                         <div>Sign in with <i><b>anonymous user </b></i> here </div>
-                        <div class="row" style="margin: 0">
+                        <div class="row" style="margin:5px 0px">
                             <button class="btn btn-light" onclick="onClickSignInAnonymous()">SingIn Anonymous <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </div>
                         
@@ -1407,15 +1420,15 @@
                         <div class="row" style="margin: 0">
                             <textarea class="form-control" id="preChatForm" placeholder="Set preChatForm ..." rows="6" cols="60"></textarea>
                         </div>
-                        <div class="row" style="text-align: right; margin:0">
-                            <button class="btn btn-light" onclick="onClickCustomPreChatForm()">Customize <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        <div class="row" style="text-align: right; margin:5px 0px">
+                            <button class="btn btn-light" onclick="onClickCustomPreChatForm()">Test it! <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </div>
 
                         <div>Get <i><b>Pre-Chat Form JSON</b></i> value </div>
                         <div class="row" style="margin: 0">
                             <textarea class="form-control" id="preChatFormGet" placeholder="Get preChatForm JSON..." rows="6" cols="60"></textarea>
                         </div>
-                        <div class="row" style="text-align: right; margin:0">
+                        <div class="row" style="text-align: right; margin:5px 0px">
                             <button class="btn btn-light" onclick="onClickGetPreChatForm()">Get Form <i class="fa fa-sticky-note-o" aria-hidden="true"></i></button>
                         </div>
 
@@ -1519,15 +1532,6 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickLogoChat()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5 formElement"><span><i><b>poweredBy</b></i></span></div>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" id="poweredBy" name="poweredBy" placeholder="(HTML code)">
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-light" onclick="onClickPoweredBy()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1845,6 +1849,25 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>nativeRating</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="nativeRating" value="true" checked><label>True</label>
+                                <input class="form-check-input" type="radio" name="nativeRating" value="false"><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickNativeRating()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>customAttributes</b></i></span></div>
+                            <div class="col-md-4">
+                                <textarea class="form-control" id="customAttributes" placeholder="Set a key-value object.." rows="6" cols="30"></textarea>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickCustomAttributes()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
                             <h4 class="col-md-10 formElement" >Manage BUBBLE MESSAGE STYLES</h4>
                         </div>
                         <div class="row">
@@ -1894,6 +1917,16 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-light" onclick="onClickFontSize()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 formElement"><span><i><b>hideBubbleInfoMessage</b></i></span></div>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="radio" name="hideBubbleInfoMessage" value="true" ><label>True</label>
+                                <input class="form-check-input" type="radio" name="hideBubbleInfoMessage" value="false" checked><label>False</label>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light" onclick="onClickHideBubbleInfoMessage()">Test this setting <i class="fa fa-magic" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -1958,7 +1991,7 @@
                         <div>
                             <textarea class="form-control" id="events" placeholder="Events history here" rows="4" cols="60"></textarea>
                         </div>
-                        <div class="row" style="text-align: right; margin:0">
+                        <div class="row" style="text-align: right; margin:5px 0px">
                             <button class="btn btn-light" onclick="onClickClearHistory()">Clear <i class="fa fa-trash" aria-hidden="true"></i></button>
                         </div>
                     </div>
