@@ -890,7 +890,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (!subscribtion) {
       this.logger.debug('[CONV-COMP] ***** add messageAdded *****',  this.conversationHandlerService);
       subscribtion = this.conversationHandlerService.messageAdded.pipe(takeUntil(this.unsubscribe$)).subscribe((msg: MessageModel) => {
-        this.logger.debug('[CONV-COMP] ***** DATAIL messageAdded *****', msg);
+        this.logger.debug('[CONV-COMP] ***** DETAIL messageAdded *****', msg);
         if (msg) {
           that.newMessageAdded(msg);
           this.onNewMessageCreated.emit(msg)
@@ -1025,56 +1025,56 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   newMessageAdded(msg){
     const that = this;
     const senderId = that.senderId;
-      if (msg.sender === senderId) { //caso in cui sender manda msg
-        that.logger.debug('[CONV-COMP] *A1-------');
+    if (msg.sender === senderId) { //caso in cui sender manda msg
+      that.logger.debug('[CONV-COMP] *A1-------');
+      setTimeout(function () {
+        that.conversationContent.scrollToBottom();
+      }, 200);
+    } else if (msg.sender !== senderId) { //caso in cui operatore manda msg
+      const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
+      if (checkContentScrollPosition) {
+        that.logger.debug('[CONV-COMP] *A2-------');
+        // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
         setTimeout(function () {
           that.conversationContent.scrollToBottom();
-        }, 200);
-      } else if (msg.sender !== senderId) { //caso in cui operatore manda msg
-        const checkContentScrollPosition = that.conversationContent.checkContentScrollPosition();
-        if (checkContentScrollPosition) {
-          that.logger.debug('[CONV-COMP] *A2-------');
-          // https://developer.mozilla.org/it/docs/Web/API/Element/scrollHeight
-          setTimeout(function () {
-            that.conversationContent.scrollToBottom();
-          }, 0);
-        } else {
-          that.logger.debug('[CONV-COMP] *A3-------');
-          that.messagesBadgeCount++;
-          // that.soundMessage(msg.timestamp);
-        }
-
-        // check if sender can reply --> set footer active/disabled
-        if(msg.attributes && msg.attributes['disableInputMessage']){
-          this.hideFooterTextReply = msg.attributes['disableInputMessage']
-          
-        } else if (msg.attributes && !msg.attributes['disableInputMessage']) {
-          this.hideFooterTextReply = false
-        }
-
-        // check if footer text placebolder exist --> set new footer text placeholder
-        if(msg.attributes && msg.attributes['inputMessagePlaceholder']) {
-          this.footerMessagePlaceholder = msg.attributes['inputMessagePlaceholder']
-        }else {
-          this.footerMessagePlaceholder = '';
-        }
-
-        //check if user has changed userFullName and userEmail
-        if (msg.attributes && msg.attributes['updateUserFullname']) {
-          const userFullname = msg.attributes['updateUserFullname'];
-          that.logger.debug('[CONV-COMP] newMessageAdded --> updateUserFullname', userFullname)
-          that.g.setAttributeParameter('userFullname', userFullname);
-          that.g.setParameter('userFullname', userFullname);
-          that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
-        }
-        if (msg.attributes && msg.attributes['updateUserEmail']) {
-          const userEmail = msg.attributes['updateUserEmail'];
-          that.logger.debug('[CONV-COMP] newMessageAdded --> userEmail', userEmail)
-          that.g.setAttributeParameter('userEmail', userEmail);
-          that.g.setParameter('userEmail', userEmail);
-          that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
-        }
+        }, 0);
+      } else {
+        that.logger.debug('[CONV-COMP] *A3-------');
+        that.messagesBadgeCount++;
+        // that.soundMessage(msg.timestamp);
       }
+
+      // check if sender can reply --> set footer active/disabled
+      if(msg.attributes && msg.attributes['disableInputMessage']){
+        this.hideFooterTextReply = msg.attributes['disableInputMessage']
+        
+      } else if (msg.attributes && !msg.attributes['disableInputMessage']) {
+        this.hideFooterTextReply = false
+      }
+
+      // check if footer text placebolder exist --> set new footer text placeholder
+      if(msg.attributes && msg.attributes['inputMessagePlaceholder']) {
+        this.footerMessagePlaceholder = msg.attributes['inputMessagePlaceholder']
+      }else {
+        this.footerMessagePlaceholder = '';
+      }
+
+      //check if user has changed userFullName and userEmail
+      if (msg.attributes && msg.attributes['updateUserFullname']) {
+        const userFullname = msg.attributes['updateUserFullname'];
+        that.logger.debug('[CONV-COMP] newMessageAdded --> updateUserFullname', userFullname)
+        that.g.setAttributeParameter('userFullname', userFullname);
+        that.g.setParameter('userFullname', userFullname);
+        that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
+      }
+      if (msg.attributes && msg.attributes['updateUserEmail']) {
+        const userEmail = msg.attributes['updateUserEmail'];
+        that.logger.debug('[CONV-COMP] newMessageAdded --> userEmail', userEmail)
+        that.g.setAttributeParameter('userEmail', userEmail);
+        that.g.setParameter('userEmail', userEmail);
+        that.appStorageService.setItem('attributes', JSON.stringify(that.g.attributes));
+      }
+    }
 
   }
 
