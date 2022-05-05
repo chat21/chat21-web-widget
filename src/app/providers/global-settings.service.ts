@@ -362,17 +362,20 @@ export class GlobalSettingsService {
         if (!divTiledeskiframe) {
             return;
         }
+        let marginX;
         if (this.globals.align === 'left') {
             divTiledeskiframe.classList.add('align-left');
-            divTiledeskiframe.style.left =  this.globals.marginX;
+            this.globals.isMobile? marginX= this.globals.mobileMarginX : marginX = this.globals.marginX
+            divTiledeskiframe.style.left =  marginX;
         } else {
             divTiledeskiframe.classList.add('align-right');
-            divTiledeskiframe.style.right =  this.globals.marginX;
+            this.globals.isMobile? marginX= this.globals.mobileMarginX: marginX = this.globals.marginX
+            divTiledeskiframe.style.right =  marginX;
         }
-        if (this.globals.isMobile === false) {
-            divTiledeskiframe.style.bottom =  this.globals.marginY;
+        if (this.globals.isMobile) {
+            divTiledeskiframe.style.bottom =  this.globals.mobileMarginY
         } else {
-            divTiledeskiframe.style.bottom =  '0px';
+            divTiledeskiframe.style.bottom =  this.globals.marginY;
         }
         // console.log('this.globals.fullscreenMode' + this.globals.fullscreenMode);
         if (this.globals.fullscreenMode === true) {
@@ -625,6 +628,18 @@ export class GlobalSettingsService {
         if (TEMP !== undefined) {
             globals.marginY = TEMP;
             // globals.setParameter('marginY', TEMP);
+        }
+        TEMP = tiledeskSettings['mobileMarginX'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > mobileMarginX:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.mobileMarginX = TEMP;
+            // globals.setParameter('mobileMarginX', TEMP);
+        }
+        TEMP = tiledeskSettings['mobileMarginY'];
+        // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > mobileMarginY:: ', TEMP);
+        if (TEMP !== undefined) {
+            globals.mobileMarginY = TEMP;
+            // globals.setParameter('mobileMarginY', TEMP);
         }
         TEMP = tiledeskSettings['launcherWidth'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > launcherWidth:: ', TEMP);
@@ -980,6 +995,14 @@ export class GlobalSettingsService {
         if (TEMP !== null) {
             this.globals.marginY = TEMP;
         }
+        TEMP = el.nativeElement.getAttribute('mobileMarginX');
+        if (TEMP !== null) {
+            this.globals.mobileMarginX = TEMP;
+        }
+        TEMP = el.nativeElement.getAttribute('mobileMarginY');
+        if (TEMP !== null) {
+            this.globals.mobileMarginY = TEMP;
+        }
         TEMP = el.nativeElement.getAttribute('launcherWidth');
         if (TEMP !== null) {
             this.globals.launcherWidth = TEMP;
@@ -1213,6 +1236,16 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_marginY');
         if (TEMP) {
             globals.marginY = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_mobileMarginX');
+        if (TEMP) {
+            globals.mobileMarginX = stringToBoolean(TEMP);
+        }
+
+        TEMP = getParameterByName(windowContext, 'tiledesk_mobileMarginY');
+        if (TEMP) {
+            globals.mobileMarginY = stringToBoolean(TEMP);
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_launcherWidth');

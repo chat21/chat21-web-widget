@@ -176,6 +176,8 @@ export class Globals {
   //  userToken: string;
    marginX: string;
    marginY: string;
+   mobileMarginX: string;
+   mobileMarginY: string;
    launcherWidth: string;
    launcherHeight: string;
    baloonImage: string;
@@ -328,6 +330,10 @@ export class Globals {
     /** set margin left or rigth widget  */
     this.marginY = '20px';
     /** set margin bottom widget */
+    this.mobileMarginX = '20px';
+    /** set margin left or rigth widget for mobile */
+    this.mobileMarginY = '0px';
+    /** set margin bottom widget for mobile*/
     this.launcherWidth = '60px'
     /** set launcher width widget  */
     this.launcherHeight = '60px'
