@@ -132,17 +132,17 @@
             /* left: 0px!important;
             right: 0px!important; */
             top: auto;
-            bottom: 0px!important;
+            /* bottom: 0px!important;  THIS IS FOR DEFAULT BY mobileMarginY property*/
             max-width: 100%;
             max-height: 100%;
             min-width: 320px;
         }
-        #tiledeskdiv.align-right { 
+        /* #tiledeskdiv.align-right { 
             right: 0!important;
         }
         #tiledeskdiv.align-left { 
             left: 0!important;
-        }
+        } */
         #tiledesk-container.closed #tiledeskdiv.callout {
             min-width: auto;
             max-width: 100%;
