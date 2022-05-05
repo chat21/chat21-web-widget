@@ -610,12 +610,12 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['align'];
         if (TEMP !== undefined) {
             globals.align = TEMP;
-            const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
-            if (globals.align === 'left') {
-                divWidgetContainer.classList.add('align-left');
-            } else {
-                divWidgetContainer.classList.add('align-right');
-            }
+            // const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
+            // if (globals.align === 'left') {
+            //     divWidgetContainer.classList.add('align-left');
+            // } else {
+            //     divWidgetContainer.classList.add('align-right');
+            // }
         }
         TEMP = tiledeskSettings['marginX'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > marginX:: ', TEMP);
@@ -1220,12 +1220,12 @@ export class GlobalSettingsService {
         TEMP = getParameterByName(windowContext, 'tiledesk_align');
         if (TEMP) {
             globals.align = stringToBoolean(TEMP);
-            const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
-            if (globals.align === 'left') {
-                divWidgetContainer.classList.add('align-left');
-            } else {
-                divWidgetContainer.classList.add('align-right');
-            }
+            // const divWidgetContainer = windowContext.document.getElementById('tiledeskdiv');
+            // if (globals.align === 'left') {
+            //     divWidgetContainer.classList.add('align-left');
+            // } else {
+            //     divWidgetContainer.classList.add('align-right');
+            // }
         }
 
         TEMP = getParameterByName(windowContext, 'tiledesk_marginX');
