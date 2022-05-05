@@ -65,7 +65,7 @@
                             <!--backgroundColor non viene ancora usato -->
                             <!-- class="messages msg_sent slide-in-right" -->
                             <chat-bubble-message class="messages msg_sent"
-                              [class.emoticon]="message?.emoticon"
+                              [class.emoticon]="isEmojii(message.text)"
                               [ngStyle]="{'background': stylesMap.get('bubbleSentBackground'), 'color': stylesMap.get('bubbleSentTextColor')}"
                               [ngClass]="{'button-in-msg' : message?.metadata && message?.metadata?.button}"
                               [message]="message"
@@ -100,7 +100,7 @@
                             <!--backgroundColor non viene ancora usato -->
                             <chat-bubble-message class="messages msg_receive"
                               [ngClass]="{'slide-in-left': !isFirstMessage(message?.sender, i)}"  
-                              [class.emoticon]="message?.emoticon"
+                              [class.emoticon]="isEmojii(message.text)"
                               [style.margin-left]="isSameSender(message?.sender, i)? '50px': null"
                               [ngStyle]="{'background': stylesMap.get('bubbleReceivedBackground'), 'color': stylesMap.get('bubbleReceivedTextColor')}"
                               [message]="message"

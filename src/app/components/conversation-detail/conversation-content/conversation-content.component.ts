@@ -4,7 +4,7 @@ import { MessageModel } from '../../../../chat21-core/models/message';
 import { isPopupUrl, popupUrl, stripTags } from '../../../../chat21-core/utils/utils';
 import { MSG_STATUS_SENT, MSG_STATUS_RETURN_RECEIPT, MSG_STATUS_SENT_SERVER, MAX_WIDTH_IMAGES} from '../../../utils/constants';
 import { strip_tags } from '../../../utils/utils';
-import { isInfo, isMine, messageType } from '../../../../chat21-core/utils/utils-message';
+import { isInfo, isMine, messageType, isEmojii } from '../../../../chat21-core/utils/utils-message';
 import { MESSAGE_TYPE_INFO, MESSAGE_TYPE_MINE, MESSAGE_TYPE_OTHERS } from '../../../../chat21-core/utils/constants';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
@@ -54,6 +54,7 @@ export class ConversationContentComponent implements OnInit {
   isMine = isMine;
   isInfo = isInfo;
   messageType = messageType;
+  isEmojii = isEmojii;
 
   MESSAGE_TYPE_INFO = MESSAGE_TYPE_INFO;
   MESSAGE_TYPE_MINE = MESSAGE_TYPE_MINE;

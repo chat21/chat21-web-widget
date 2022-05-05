@@ -316,7 +316,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // verifico che il sender è il logged user
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
         //check if message contains only an emojii
-        msg.emoticon = isEmojii(msg.text)
+        // msg.emoticon = isEmojii(msg.text)
         // traduco messaggi se sono del server
         if (msg.attributes && msg.attributes.subtype) {
             if (msg.attributes.subtype === 'info' || msg.attributes.subtype === 'info/support') {
