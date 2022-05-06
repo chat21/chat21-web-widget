@@ -1,5 +1,15 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.23-rc.1
+- added: mobileMarginX and mobileMarginY tiledesk settings property to manage mobile launch button margin
+- added: typing component moved from con-header to conv-content
+- bug-fixed: align-right and align-left were both set if align equals to 'right'
+- bug-fixed: splitted message update unexisted firebase msg node
+- removed: align-right and align-left css class from iframe-stype.css -> now they are managed by mobileMarginX and mobileMarginY parameters
+- changed: moved emotion check in firebase-conversation service to converation-content component
+
+### 5.0.22 IN PROD
+
 ### 5.0.22-rc.9
 - bug-fixed: transform string value of customAttribute url parameter to keyValue object
 - changed: last step 'close' button UI star-rating component
