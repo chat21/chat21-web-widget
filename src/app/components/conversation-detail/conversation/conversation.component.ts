@@ -43,6 +43,7 @@ import { LoggerService } from '../../../../chat21-core/providers/abstract/logger
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { TypingService } from '../../../../chat21-core/providers/abstract/typing.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -169,6 +170,15 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   translationMapContent: Map<string, string>;
   translationMapPreview: Map<string, string>;
 
+  // ========== begin:: typying =======
+  public isTypings = false;
+  public isDirect = false;
+  public idUserTypingNow: string;
+  public nameUserTypingNow: string;
+  private setTimeoutWritingMessages;
+  membersConversation = ['SYSTEM'];
+  // ========== end:: typying =======
+
   @ViewChild(ConversationFooterComponent) conversationFooter: ConversationFooterComponent
   @ViewChild(ConversationContentComponent) conversationContent: ConversationContentComponent
   conversationHandlerService: ConversationHandlerService
@@ -191,6 +201,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     public appConfigService: AppConfigService,
     private customTranslateService: CustomTranslateService,
     private chatManager: ChatManager,
+    public typingService: TypingService,
     private changeDetectorRef: ChangeDetectorRef,
     private elementRef: ElementRef
   ) { }
@@ -397,6 +408,9 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.g.customAttributes && this.g.customAttributes.recipient_fullname) {
       this.g.recipientFullname = this.g.customAttributes.recipient_fullname;
     }
+
+    this.logger.debug('[CONV-COMP] ------ 7: initializeTyping()', this.conversationId)
+    this.initializeTyping();
 
     // try {
     //   JSON.parse(this.g.customAttributes, (key, value) => {
@@ -814,6 +828,44 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }, 1000);
   }
+
+
+  initializeTyping() {
+    this.logger.debug('[CONV-COMP] membersconversation', this.membersConversation)
+    //this.setSubscriptions();
+    this.typingService.isTyping(this.conversationId, this.senderId, this.isDirect);
+    
+  }
+
+  /** */
+  subscribeTypings(data: any) {
+    const that = this;
+    try {
+      const key = data.uidUserTypingNow; 
+      this.nameUserTypingNow = null;
+      if (data.nameUserTypingNow) {
+        this.nameUserTypingNow = data.nameUserTypingNow;
+      }
+      if (data.uidUserTypingNow){
+        this.idUserTypingNow = data.uidUserTypingNow
+      }
+      this.logger.debug('[CONV-COMP] subscribeTypings data:', data);
+      const userTyping = this.membersConversation.includes(key);
+      if ( !userTyping) {
+        this.isTypings = true;
+        setTimeout(function () {
+          that.conversationContent.scrollToBottom();
+        }, 0);
+        clearTimeout(this.setTimeoutWritingMessages);
+        this.setTimeoutWritingMessages = setTimeout(() => {
+            that.isTypings = false;
+        }, 2000);
+      }
+    } catch (error) {
+      this.logger.error('[CONV-COMP] error: ', error);
+    }
+
+  }
   /**
    * inizializzo variabili
    * effettuo il login anonimo su firebase
@@ -928,6 +980,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           if(checkContentScrollPosition && conversation.is_new){ //update conversation if scroolToBottom is to the end
             this.logger.debug('[CONV-COMP] updateConversationBadge...')
             that.updateConversationBadge();
+          }
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
+
+    subscribtionKey = 'conversationTyping';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if (!subscribtion) {
+
+      subscribtion =  this.typingService.BSIsTyping.subscribe((data: any) => {
+        this.logger.debug('[CONV-COMP] ***** BSIsTyping *****', data);
+        if (data) {
+          const isTypingUid = data.uid; //support-group-...
+          if (this.conversationId === isTypingUid) {
+            that.subscribeTypings(data);
           }
         }
       });

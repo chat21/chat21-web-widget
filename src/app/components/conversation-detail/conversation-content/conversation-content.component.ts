@@ -22,6 +22,9 @@ export class ConversationContentComponent implements OnInit {
   @Input() baseLocation: string;
   @Input() hideBubbleInfoMessage: boolean;
   @Input() isConversationArchived: boolean;
+  @Input() isTypings: boolean;
+  @Input() idUserTypingNow: string;
+  @Input() nameUserTypingNow: string;
   @Input() translationMap: Map< string, string>;
   @Input() stylesMap: Map<string, string>;
   @Output() onBeforeMessageRender = new EventEmitter();
