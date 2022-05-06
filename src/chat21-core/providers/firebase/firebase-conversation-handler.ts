@@ -27,7 +27,7 @@ import {
   isJustRecived
 } from '../../utils/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { isEmojii, messageType, checkIfIsMemberJoinedGroup } from '../../utils/utils-message';
+import { messageType, checkIfIsMemberJoinedGroup } from '../../utils/utils-message';
 
 // @Injectable({ providedIn: 'root' })
 @Injectable()
@@ -169,7 +169,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             typeMsg,
             attributes,
             channelType,
-            isEmojii(msg)
+            true
         );
         const messageRef = firebaseMessagesCustomUid.push({
                 language: lang,
@@ -346,7 +346,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         // verifico che il sender è il logged user
         msg.isSender = this.isSender(msg.sender, this.loggedUser.uid);
         //check if message contains only an emojii
-        msg.emoticon = isEmojii(msg.text)
+        // msg.emoticon = isEmojii(msg.text)
         // traduco messaggi se sono del server
         if (msg.attributes && msg.attributes.subtype) {
             if (msg.attributes.subtype === 'info' || msg.attributes.subtype === 'info/support') {
@@ -425,9 +425,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * @param conversationWith
      */
     private setStatusMessage(msg: MessageModel, conversationWith: string) {
-        if (msg.status < MSG_STATUS_RECEIVED) {
+        if (msg.status < MSG_STATUS_RECEIVED && !msg.attributes.commands) {
+            let uid = msg.uid
+            // msg.attributes.commands? uid = msg.attributes.parentUid: null
+            // console.log('updateeeeee uidd', msg.attributes.commands, uid)
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
-            const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + msg.uid;
+            const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + uid;
             this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
             firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
             }
@@ -481,7 +484,7 @@ private addCommandMessage(msg: MessageModel){
     let i=0;
     function execute(command){
         if(command.type === "message"){
-                        that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="message"', command, i)
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="message"', command, i)
             if (i >= 2) {
                 
                 //check if previus wait message type has time value, otherwize set to 1000ms
@@ -527,7 +530,6 @@ private addCommandMessage(msg: MessageModel){
 }
 
 private generateMessageObject(message, command_message, callback) {
-    command_message.uid = uuidv4();
     command_message.language = message.language;
     command_message.recipient = message.recipient;
     command_message.recipient_fullname = message.recipient_fullname;
@@ -536,6 +538,9 @@ private generateMessageObject(message, command_message, callback) {
     command_message.channel_type = message.channel_type;
     command_message.status = message.status;
     command_message.isSender = message.isSender;
+    command_message.attributes = message.attributes
+    command_message.attributes.parentUid= message.uid
+    command_message.uid = uuidv4();
     this.addedNew(command_message)
     callback();
   }
