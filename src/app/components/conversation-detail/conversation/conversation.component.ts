@@ -832,6 +832,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
   initializeTyping() {
     this.logger.debug('[CONV-COMP] membersconversation', this.membersConversation)
+    this.membersConversation.push(this.senderId)
     //this.setSubscriptions();
     this.typingService.isTyping(this.conversationId, this.senderId, this.isDirect);
     
@@ -843,6 +844,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     try {
       const key = data.uidUserTypingNow; 
       this.nameUserTypingNow = null;
+      this.idUserTypingNow = null;
+
       if (data.nameUserTypingNow) {
         this.nameUserTypingNow = data.nameUserTypingNow;
       }
