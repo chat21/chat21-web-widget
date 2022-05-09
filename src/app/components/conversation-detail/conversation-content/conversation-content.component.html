@@ -212,12 +212,12 @@
                       </div>
 
                       <div *ngIf="isTypings" class="msg_container base_receive">
-                        <chat-avatar-image *ngIf="!isSameSender(idUserTypingNow, i)" 
+                        <!-- <chat-avatar-image *ngIf="!isSameSender(idUserTypingNow, i)" 
                               [ngClass]="{'slide-in-left': !isFirstMessage(idUserTypingNow, i)}"    
                               [senderID]="idUserTypingNow"
                               [senderFullname]="nameUserTypingNow"
                               [baseLocation]="baseLocation">
-                        </chat-avatar-image>
+                        </chat-avatar-image> -->
 
                         <user-typing class="typing" 
                           [foregroundColor]="stylesMap?.get('foregroundColor')"
