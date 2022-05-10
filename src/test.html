@@ -120,6 +120,10 @@
           console.log('testpage event OnBeforeSendMessage', event_data)
         });
 
+        window.tiledesk.on('onNewConversationComponentInit', function (event_data) {
+          console.log('event onNewConversationComponentInit', event_data)
+        });
+
       };
       function approved() {
           window.tiledesk.setPrivacyPolicy();
