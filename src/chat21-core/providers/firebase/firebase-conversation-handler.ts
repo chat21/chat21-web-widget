@@ -284,6 +284,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
+        // if(msg.attributes && msg.attributes.commands){
+        //     return;
+        // }
         this.addRepalceMessageInArray(childSnapshot.key, msg);
         this.messageChanged.next(msg);
         
@@ -426,9 +429,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      */
     private setStatusMessage(msg: MessageModel, conversationWith: string) {
         if (msg.status < MSG_STATUS_RECEIVED && !msg.attributes.commands) {
-            let uid = msg.uid
+            // && !msg.attributes.commands
+             let uid = msg.uid
             // msg.attributes.commands? uid = msg.attributes.parentUid: null
-            // console.log('updateeeeee uidd', msg.attributes.commands, uid)
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
             const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + uid;
             this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
