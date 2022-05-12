@@ -79,9 +79,11 @@
 
 /* ******BOUNCE SPINNER START****** */
 .spinner {
-    margin: 15px 20px 15px 50px; //remove it if activate avatar image 
+    margin: 15px 10px; //remove it if activate avatar image 
     width: 70px;
-    //text-align: center;
+    // text-align: center;
+    min-height: 20px;
+    display: block;
 }
 
 .spinner > div {
@@ -98,17 +100,19 @@
 .spinner .bounce1 {
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
-    background-color: rgb(169, 169, 175)
+    background-color: var(--themeColor)
 }
 
 .spinner .bounce2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
-    background-color: rgb(237, 237, 238)
+    background-color: var(--themeColor);
+    opacity: 0.4
 }
 
 .spinner .bounce3 {
-    background-color: rgb(220, 220, 222)
+    background-color: var(--themeColor);
+    opacity: 0.6
 }
 
 

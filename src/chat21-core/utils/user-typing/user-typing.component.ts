@@ -11,7 +11,7 @@ export class UserTypingComponent implements OnInit, OnDestroy {
   // @Input() idCurrentUser: string;
   // @Input() isDirect: boolean;
   @Input() translationMap: Map<string, string>;
-  @Input() foregroundColor: string;
+  @Input() themeColor: string;
   @Input() idUserTypingNow: string;
   @Input() nameUserTypingNow: string;
   // @Input() membersConversation: [string];
@@ -20,7 +20,7 @@ export class UserTypingComponent implements OnInit, OnDestroy {
 
   /** */
   ngOnInit() {
-    this.elementRef.nativeElement.style.setProperty('--foregroundColor', this.foregroundColor);
+    this.elementRef.nativeElement.style.setProperty('--themeColor', this.themeColor);
   }
 
   /** */

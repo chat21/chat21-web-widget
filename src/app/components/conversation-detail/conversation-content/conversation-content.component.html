@@ -43,12 +43,18 @@
   
       <!-- CONTENT !isNewConversation && [class.active]="isShowSpinner"  -->
       <span *ngIf="messages && this.messages.length === 0">
-          <div class="chat21-spinner active" id="chat21-spinner">
-              <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-              <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-              <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-              <span [ngStyle]="{'color': stylesMap.get('themeColor')}">{{translationMap.get('LABEL_LOADING')}}</span>
-          </div>
+        <user-typing class="loading"
+          [themeColor]="stylesMap?.get('themeColor')"
+          [translationMap]="translationMap"
+          [idUserTypingNow]="idUserTypingNow"
+          [nameUserTypingNow]="nameUserTypingNow">
+        </user-typing>
+        <!-- <div class="chat21-spinner active" id="chat21-spinner">
+            <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+            <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+            <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+            <span [ngStyle]="{'color': stylesMap.get('themeColor')}">{{translationMap.get('LABEL_LOADING')}}</span>
+        </div> -->
       </span>
       
     
@@ -212,15 +218,17 @@
                       </div>
 
                       <div *ngIf="isTypings" class="msg_container base_receive">
-                        <!-- <chat-avatar-image *ngIf="!isSameSender(idUserTypingNow, i)" 
-                              [ngClass]="{'slide-in-left': !isFirstMessage(idUserTypingNow, i)}"    
-                              [senderID]="idUserTypingNow"
-                              [senderFullname]="nameUserTypingNow"
-                              [baseLocation]="baseLocation">
-                        </chat-avatar-image> -->
 
-                        <user-typing 
-                          [foregroundColor]="stylesMap?.get('foregroundColor')"
+                        <chat-avatar-image *ngIf="idUserTypingNow && !isSameSender(idUserTypingNow, i)" 
+                          [ngClass]="{'slide-in-left': !isFirstMessage(idUserTypingNow, i)}"    
+                          [senderID]="idUserTypingNow"
+                          [senderFullname]="nameUserTypingNow"
+                          [baseLocation]="baseLocation">
+                        </chat-avatar-image>
+
+                        <user-typing
+                          [ngClass]="{'userTypingNowExist': !idUserTypingNow}"
+                          [themeColor]="stylesMap?.get('themeColor')"
                           [translationMap]="translationMap"
                           [idUserTypingNow]="idUserTypingNow"
                           [nameUserTypingNow]="nameUserTypingNow">

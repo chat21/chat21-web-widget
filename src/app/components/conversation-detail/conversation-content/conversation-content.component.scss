@@ -21,6 +21,14 @@
     color: var(--textColorSent) !important;
 }
 
+:host .userTypingNowExist ::ng-deep > div.spinner{
+    margin: 15px 50px
+}
+
+:host .loading ::ng-deep > div.spinner{
+    margin: 25px 50px
+}
+
 // ============= CSS c21-body ================= //
 .c21-body {
     // -webkit-box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.4);
