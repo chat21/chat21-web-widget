@@ -286,9 +286,12 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
         if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
             return;
         }
-        // if(msg.attributes && msg.attributes.commands){
-        //     return;
-        // }
+        // if commands detected do not push element into messages array
+        // TODO: it's a patch that not updated split message. set parendId to message
+        // and update completed message on server-side
+        if(msg.attributes && msg.attributes.commands){
+            return;
+        }
         this.addRepalceMessageInArray(childSnapshot.key, msg);
         this.messageChanged.next(msg);
         
@@ -437,9 +440,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
              let uid = msg.uid
             // msg.attributes.commands? uid = msg.attributes.parentUid: null
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
-            const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + uid;
-            this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
-            firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
+                const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + uid;
+                this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
+                firebase.database().ref(urlNodeMessagesUpdate).update({ status: MSG_STATUS_RECEIVED });
             }
         }
     }
@@ -537,6 +540,7 @@ private addCommandMessage(msg: MessageModel){
 }
 
 private generateMessageObject(message, command_message, callback) {
+    let parentUid = message.uid
     command_message.uid = uuidv4();
     command_message.language = message.language;
     command_message.recipient = message.recipient;
@@ -547,6 +551,7 @@ private generateMessageObject(message, command_message, callback) {
     command_message.status = message.status;
     command_message.isSender = message.isSender;
     command_message.attributes = message.attributes
+    command_message.attributes.parentUid = parentUid
     this.addedNew(command_message)
     callback();
   }
