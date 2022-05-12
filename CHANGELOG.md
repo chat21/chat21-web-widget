@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.23-rc.2
+- removed: avatar on left side of typing 
+- bug-fixed: command uid for a split msg moved up
+- bug-fixed: typing was active also when sender type a message
+- bug-fixed: do not notify commands message on child_changed firebase event
+
 ### 5.0.23-rc.1
 - added: mobileMarginX and mobileMarginY tiledesk settings property to manage mobile launch button margin
 - added: typing component moved from con-header to conv-content
