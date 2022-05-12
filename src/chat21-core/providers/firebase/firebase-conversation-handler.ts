@@ -106,9 +106,11 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             // }else if(msg.attributes && msg.attributes.commands){
             //     that.addCommandMessage(msg)
             // }
-            if(msg.attributes && msg.attributes.commands){
+            if (msg.attributes && msg.attributes.commands) {
+                this.logger.debug('[FIREBASEConversationHandlerSERVICE] splitted message::::', msg)
                 that.addCommandMessage(msg)
-            }else{
+            } else {
+                this.logger.debug('[FIREBASEConversationHandlerSERVICE] NOT splitted message::::', msg)
                 that.addedNew(msg)
             }
             
@@ -428,7 +430,9 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      * @param conversationWith
      */
     private setStatusMessage(msg: MessageModel, conversationWith: string) {
+        this.logger.debug('[FIREBASEConversationHandlerSERVICE] update statusss', msg)
         if (msg.status < MSG_STATUS_RECEIVED && !msg.attributes.commands) {
+            this.logger.debug('[FIREBASEConversationHandlerSERVICE] update statusss IN ', msg)
             // && !msg.attributes.commands
              let uid = msg.uid
             // msg.attributes.commands? uid = msg.attributes.parentUid: null
@@ -533,6 +537,7 @@ private addCommandMessage(msg: MessageModel){
 }
 
 private generateMessageObject(message, command_message, callback) {
+    command_message.uid = uuidv4();
     command_message.language = message.language;
     command_message.recipient = message.recipient;
     command_message.recipient_fullname = message.recipient_fullname;
@@ -542,8 +547,6 @@ private generateMessageObject(message, command_message, callback) {
     command_message.status = message.status;
     command_message.isSender = message.isSender;
     command_message.attributes = message.attributes
-    command_message.attributes.parentUid= message.uid
-    command_message.uid = uuidv4();
     this.addedNew(command_message)
     callback();
   }
