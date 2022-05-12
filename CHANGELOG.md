@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.23-rc.3
+ - changed: loagind spinner when conversation start -> replaced with user-typing component
+ - changed: base bounce color for user-typing component
+ - added: user-typing component (only spinner) when bot type a message
+ - bug-fixed: emojii was not catched when message came from chat
+ 
 ### 5.0.23-rc.2
 - removed: avatar on left side of typing 
 - bug-fixed: command uid for a split msg moved up
