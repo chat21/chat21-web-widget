@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.23-rc.4
+- removed: double subscription from firebase typing events
+- bug-fixed: attachment buttons showed in each command_message
+
 ### 5.0.23-rc.3
  - changed: loagind spinner when conversation start -> replaced with user-typing component
  - changed: base bounce color for user-typing component
