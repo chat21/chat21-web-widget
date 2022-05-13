@@ -550,8 +550,8 @@ private generateMessageObject(message, command_message, callback) {
     command_message.channel_type = message.channel_type;
     command_message.status = message.status;
     command_message.isSender = message.isSender;
-    command_message.attributes = message.attributes
-    command_message.attributes.parentUid = parentUid
+    command_message.attributes? command_message.attributes.commands = true : command_message.attributes = {commands : true}
+    // command_message.attributes.parentUid = parentUid
     this.addedNew(command_message)
     callback();
   }
