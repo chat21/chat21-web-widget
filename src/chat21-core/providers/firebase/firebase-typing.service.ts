@@ -60,6 +60,7 @@ export class FirebaseTypingService extends TypingService {
     const ref = firebase.database().ref(urlTyping);
     ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
+      this.logger.debug('[FIREBASETypingSERVICE] urlTyping: ', precence);
       this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name});
     });
   }
@@ -67,6 +68,7 @@ export class FirebaseTypingService extends TypingService {
   /** */
   public setTyping(idConversation: string, message: string, recipientId: string, userFullname: string) {
     const that = this;
+    this.logger.debug('[FIREBASETypingSERVICE] setWritingMessages message:',message)
     clearTimeout(this.setTimeoutWritingMessages);
     this.setTimeoutWritingMessages = setTimeout(() => {
       const urlTyping = this.urlNodeTypings + idConversation + '/' + recipientId;// + '/user';
