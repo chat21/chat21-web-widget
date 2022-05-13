@@ -1827,18 +1827,18 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
      * richiamata alla sottoscrizione dell'aggiunta di un nw messaggio
      * in caso in cui il messaggio è un'immagine ed è stata inviata dall'utente
      */
-    updateMessage(message) {
-      this.logger.debug('[CONV-COMP] UPDATE MSG:', message.metadata.uid);
-      const index = searchIndexInArrayForUid(this.messages, message.metadata.uid);
-      if (index > -1) {
-          this.messages[index].uid = message.uid;
-          this.messages[index].status = message.status;
-          this.messages[index].timestamp = message.timestamp;
-          this.logger.debug('[CONV-COMP] UPDATE ok:', this.messages[index]);
-      } else {
-          this.messages.push(message);
-      }
-  }
+    // updateMessage(message) {
+    //   this.logger.debug('[CONV-COMP] UPDATE MSG:', message.metadata.uid);
+    //   const index = searchIndexInArrayForUid(this.messages, message.metadata.uid);
+    //   if (index > -1) {
+    //       this.messages[index].uid = message.uid;
+    //       this.messages[index].status = message.status;
+    //       this.messages[index].timestamp = message.timestamp;
+    //       this.logger.debug('[CONV-COMP] UPDATE ok:', this.messages[index]);
+    //   } else {
+    //       this.messages.push(message);
+    //   }
+    // }
 
 
 
