@@ -102,27 +102,27 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   initializeTyping() {
     this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
     //this.setSubscriptions();
-    this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
+    // this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
   }
 
   // /** */
   private setSubscriptions() {
-    const that = this;
-    const conversationSelected = this.subscriptions.find(item => item.key === this.idConversation);
-    if (!conversationSelected) {
-      const subscribeBSIsTyping =  this.typingService.BSIsTyping.subscribe((data: any) => {
-        this.logger.debug('[CONV-HEADER] ***** BSIsTyping *****', data);
-        if (data) {
-          const isTypingUid = data.uid; //support-group-...
-          if (this.idConversation === isTypingUid) {
-            that.subscribeTypings(data);
-          }
-        }
-      });
-      const subscribe = {key: this.idConversation, value: subscribeBSIsTyping };
-      this.subscriptions.push(subscribe);
-    }
+    // const that = this;
+    // const conversationSelected = this.subscriptions.find(item => item.key === this.idConversation);
+    // if (!conversationSelected) {
+    //   const subscribeBSIsTyping =  this.typingService.BSIsTyping.subscribe((data: any) => {
+    //     this.logger.debug('[CONV-HEADER] ***** BSIsTyping *****', data);
+    //     if (data) {
+    //       const isTypingUid = data.uid; //support-group-...
+    //       if (this.idConversation === isTypingUid) {
+    //         that.subscribeTypings(data);
+    //       }
+    //     }
+    //   });
+    //   const subscribe = {key: this.idConversation, value: subscribeBSIsTyping };
+    //   this.subscriptions.push(subscribe);
+    // }
   }
 
   /** */
