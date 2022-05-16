@@ -2,7 +2,9 @@
 
 ### 5.0.23-rc.5
 - added: user-typing while splitting a message
+- added: constants that specifies default user-typing time wait
 - bug-fixed: typing was showed also after message arrives
+
 ### 5.0.23-rc.4
 - removed: double subscription from firebase typing events
 - bug-fixed: attachment buttons showed in each command_message
