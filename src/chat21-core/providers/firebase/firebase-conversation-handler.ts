@@ -534,10 +534,8 @@ private addCommandMessage(msg: MessageModel){
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="wait"', command, i, commands.length)
             //publish waiting event to simulate user typing
             if(isJustRecived(that.startTime.getTime(), msg.timestamp)){
-                console.log('message just received::', command, i, commands)
+                // console.log('message just received::', command, i, commands)
                 that.messageWait.next({uid: that.conversationWith, uidUserTypingNow: msg.sender, nameUserTypingNow: msg.sender_fullname, waitTime: command.time, command: command})
-            }else {
-                console.log('message already received::', command, i, commands)
             }
             setTimeout(function() {
                 i += 1
@@ -572,23 +570,23 @@ private generateMessageObject(message, command_message, callback) {
 
 
     private isValidMessage(msgToCkeck:MessageModel): boolean{
-        console.log('message to check-->', msgToCkeck)
-        if(!this.isValidField(msgToCkeck.uid)){
-            return false;
-        }
-        if(!this.isValidField(msgToCkeck.sender)){
-            return false;
-        }
-        if(!this.isValidField(msgToCkeck.recipient)){
-            return false;
-        }
-        if(!this.isValidField(msgToCkeck.type)){
-            return false;
-        }else if (msgToCkeck.type === "text" && !this.isValidField(msgToCkeck.text)){
-            return false;
-        } else if ((msgToCkeck.type === "image" || msgToCkeck.type === "file") && !this.isValidField(msgToCkeck.metadata) && !this.isValidField(msgToCkeck.metadata.src)){
-            return false
-        }
+        // console.log('message to check-->', msgToCkeck)
+        // if(!this.isValidField(msgToCkeck.uid)){
+        //     return false;
+        // }
+        // if(!this.isValidField(msgToCkeck.sender)){
+        //     return false;
+        // }
+        // if(!this.isValidField(msgToCkeck.recipient)){
+        //     return false;
+        // }
+        // if(!this.isValidField(msgToCkeck.type)){
+        //     return false;
+        // }else if (msgToCkeck.type === "text" && !this.isValidField(msgToCkeck.text)){
+        //     return false;
+        // } else if ((msgToCkeck.type === "image" || msgToCkeck.type === "file") && !this.isValidField(msgToCkeck.metadata) && !this.isValidField(msgToCkeck.metadata.src)){
+        //     return false
+        // }
 
 
         return true
