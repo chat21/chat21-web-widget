@@ -46,6 +46,7 @@ export const TYPE_MSG_FILE = 'file';
 export const TYPE_MSG_BUTTON = 'button';
 
 export const MAX_WIDTH_IMAGES = 300;
+export const TIME_TYPING_MESSAGE = 2000;
 export const TYPE_DIRECT = 'direct';
 export const TYPE_GROUP = 'group';
 export const SYSTEM = 'system';
