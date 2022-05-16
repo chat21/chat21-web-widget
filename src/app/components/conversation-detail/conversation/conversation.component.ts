@@ -842,7 +842,8 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   subscribeTypings(data: any) {
     const that = this;
     try {
-      const key = data.uidUserTypingNow; 
+      const key = data.uidUserTypingNow;
+      const waitTime = data.waitTime
       this.nameUserTypingNow = null;
       this.idUserTypingNow = null;
 
@@ -859,15 +860,29 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
         setTimeout(function () {
           that.conversationContent.scrollToBottom();
         }, 0);
-        clearTimeout(this.setTimeoutWritingMessages);
+        // clearTimeout(this.setTimeoutWritingMessages);
         this.setTimeoutWritingMessages = setTimeout(() => {
             that.isTypings = false;
-        }, 2000);
+        }, waitTime);
+        // this.initiTimeout(waitTime)
       }
     } catch (error) {
       this.logger.error('[CONV-COMP] error: ', error);
     }
 
+  }
+
+  initiTimeout(waitTime){
+    const that = this;
+    this.setTimeoutWritingMessages = setTimeout(() => {
+      that.isTypings = false;
+    }, waitTime);
+  }
+
+  resetTimeout(){
+    this.isTypings = false
+    this.setTimeoutWritingMessages = null;
+    // clearTimeout(this.setTimeoutWritingMessages)
   }
   /**
    * inizializzo variabili
@@ -950,6 +965,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
           that.newMessageAdded(msg);
           this.onNewMessageCreated.emit(msg)
           this.checkMessagesLegntForTranscriptDownloadMenuOption();
+          this.resetTimeout();
         }
       });
       const subscribe = {key: subscribtionKey, value: subscribtion };
@@ -990,10 +1006,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(subscribe);
     }
 
+    
+
     subscribtionKey = 'conversationTyping';
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
     if (!subscribtion) {
-
       subscribtion =  this.typingService.BSIsTyping.subscribe((data: any) => {
         this.logger.debug('[CONV-COMP] ***** BSIsTyping *****', data);
         if (data) {

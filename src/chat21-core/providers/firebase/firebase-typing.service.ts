@@ -1,3 +1,4 @@
+import { TIME_TYPING_MESSAGE } from './../../utils/constants';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -36,6 +37,7 @@ export class FirebaseTypingService extends TypingService {
   private setTimeoutWritingMessages: any;
   private tenant: string;
   private logger: LoggerService = LoggerInstance.getInstance();
+  private ref: firebase.database.Query;
 
   constructor() {
     super();
@@ -57,11 +59,11 @@ export class FirebaseTypingService extends TypingService {
       urlTyping = this.urlNodeTypings + idCurrentUser + '/' + idConversation;
     }
     this.logger.debug('[FIREBASETypingSERVICE] urlTyping: ', urlTyping);
-    const ref = firebase.database().ref(urlTyping);
-    ref.on('child_changed', (childSnapshot) => {
+    this.ref = firebase.database().ref(urlTyping);
+    this.ref.on('child_changed', (childSnapshot) => {
       const precence: TypingModel = childSnapshot.val();
-      this.logger.debug('[FIREBASETypingSERVICE] urlTyping: ', precence);
-      this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name});
+      this.logger.debug('[FIREBASETypingSERVICE] child_changed: ', precence);
+      this.BSIsTyping.next({uid: idConversation, uidUserTypingNow: precence.uid, nameUserTypingNow: precence.name, waitTime: TIME_TYPING_MESSAGE});
     });
   }
 
