@@ -1006,7 +1006,22 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       this.subscriptions.push(subscribe);
     }
 
-    
+    subscribtionKey = 'messageWait';
+    subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);
+    if (!subscribtion) {
+      this.logger.debug('[CONV-COMP] ***** add messageWait *****',  this.conversationHandlerService);
+      subscribtion = this.conversationHandlerService.messageWait.pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+        this.logger.debug('[CONV-COMP] ***** DETAIL messageWait *****', data);
+        if (data && data.waitTime && data.waitTime !== 0) {
+          const isTypingUid = data.uid; //support-group-...
+          if (this.conversationId === isTypingUid) {
+            that.subscribeTypings(data);
+          }
+        }
+      });
+      const subscribe = {key: subscribtionKey, value: subscribtion };
+      this.subscriptions.push(subscribe);
+    }
 
     subscribtionKey = 'conversationTyping';
     subscribtion = this.subscriptions.find(item => item.key === subscribtionKey);

@@ -37,6 +37,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     messageAdded: BehaviorSubject<MessageModel>;
     messageChanged: BehaviorSubject<MessageModel>;
     messageRemoved: BehaviorSubject<string>;
+    messageWait: BehaviorSubject<any>;
     isTyping: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
     // public variables
@@ -101,11 +102,7 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             that.logger.debug('[FIREBASEConversationHandlerSERVICE] >>>>>>>>>>>>>> child_added: ', childSnapshot.val())
             const msg: MessageModel = childSnapshot.val();        
             msg.uid = childSnapshot.key;
-            // if(msg.attributes && !msg.attributes.commands){
-            //     that.addedNew(msg)
-            // }else if(msg.attributes && msg.attributes.commands){
-            //     that.addCommandMessage(msg)
-            // }
+
             if (msg.attributes && msg.attributes.commands) {
                 this.logger.debug('[FIREBASEConversationHandlerSERVICE] splitted message::::', msg)
                 that.addCommandMessage(msg)
@@ -266,34 +263,44 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
 
     private addedNew(message:MessageModel){
         const msg = this.messageCommandGenerate(message);
-        // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
-            if(!checkIfIsMemberJoinedGroup(msg, this.loggedUser)){
-                return;
+        if(this.isValidMessage(msg)){
+            // msg.attributes && msg.attributes['subtype'] === 'info'
+            if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg)){
+                if(!checkIfIsMemberJoinedGroup(msg, this.loggedUser)){
+                    return;
+                }
             }
+            // this.addRepalceMessageInArray(childSnapshot.key, msg);
+            this.addRepalceMessageInArray(msg.uid, msg);
+            this.messageAdded.next(msg);
+        } else {
+            this.logger.error('[FIREBASEConversationHandlerSERVICE] ADDED::message with uid: ', msg.uid, 'is not valid')
         }
-        // this.addRepalceMessageInArray(childSnapshot.key, msg);
-        this.addRepalceMessageInArray(msg.uid, msg);
-        this.messageAdded.next(msg);
         
     }
 
     /** */
     private changed(childSnapshot: any) {
         const msg = this.messageGenerate(childSnapshot);
-        // imposto il giorno del messaggio per visualizzare o nascondere l'header data
-        // msg.attributes && msg.attributes['subtype'] === 'info'
-        if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
-            return;
+        if(this.isValidMessage(msg)){
+            // imposto il giorno del messaggio per visualizzare o nascondere l'header data
+            // msg.attributes && msg.attributes['subtype'] === 'info'
+            if(this.skipMessage && messageType(MESSAGE_TYPE_INFO, msg) ){
+                return;
+            }
+            // if commands detected do not push element into messages array
+            // TODO: it's a patch that not updated split message. set parendId to message
+            // and update completed message on server-side
+            if(msg.attributes && msg.attributes.commands){
+                return;
+            }
+            this.addRepalceMessageInArray(childSnapshot.key, msg);
+            this.messageChanged.next(msg);
+        } else {
+            this.logger.error('[FIREBASEConversationHandlerSERVICE] CHANGED::message with uid: ', msg.uid, 'is not valid')
         }
-        // if commands detected do not push element into messages array
-        // TODO: it's a patch that not updated split message. set parendId to message
-        // and update completed message on server-side
-        if(msg.attributes && msg.attributes.commands){
-            return;
-        }
-        this.addRepalceMessageInArray(childSnapshot.key, msg);
-        this.messageChanged.next(msg);
+
+        
         
     }
 
@@ -524,7 +531,14 @@ private addCommandMessage(msg: MessageModel){
                 }
             })
         }else if(command.type === "wait"){
-            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="wait"', command)
+            that.logger.debug('[FIREBASEConversationHandlerSERVICE] addCommandMessage --> type="wait"', command, i, commands.length)
+            //publish waiting event to simulate user typing
+            if(isJustRecived(that.startTime.getTime(), msg.timestamp)){
+                console.log('message just received::', command, i, commands)
+                that.messageWait.next({uid: that.conversationWith, uidUserTypingNow: msg.sender, nameUserTypingNow: msg.sender_fullname, waitTime: command.time, command: command})
+            }else {
+                console.log('message already received::', command, i, commands)
+            }
             setTimeout(function() {
                 i += 1
                 if (i < commands.length) {
@@ -557,6 +571,36 @@ private generateMessageObject(message, command_message, callback) {
   }
 
 
+    private isValidMessage(msgToCkeck:MessageModel): boolean{
+        console.log('message to check-->', msgToCkeck)
+        if(!this.isValidField(msgToCkeck.uid)){
+            return false;
+        }
+        if(!this.isValidField(msgToCkeck.sender)){
+            return false;
+        }
+        if(!this.isValidField(msgToCkeck.recipient)){
+            return false;
+        }
+        if(!this.isValidField(msgToCkeck.type)){
+            return false;
+        }else if (msgToCkeck.type === "text" && !this.isValidField(msgToCkeck.text)){
+            return false;
+        } else if ((msgToCkeck.type === "image" || msgToCkeck.type === "file") && !this.isValidField(msgToCkeck.metadata) && !this.isValidField(msgToCkeck.metadata.src)){
+            return false
+        }
+
+
+        return true
+    }
+
+    /**
+     *
+     * @param field
+     */
+    private isValidField(field: any): boolean {
+        return (field === null || field === undefined) ? false : true;
+    }
 
   
 }

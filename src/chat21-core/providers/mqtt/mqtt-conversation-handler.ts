@@ -34,6 +34,7 @@ export class MQTTConversationHandler extends ConversationHandlerService {
     messageAdded: BehaviorSubject<MessageModel>;
     messageChanged: BehaviorSubject<MessageModel>;
     messageRemoved: BehaviorSubject<string>;
+    messageWait: BehaviorSubject<any>;
     isTypings: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
     // public variables
