@@ -2041,7 +2041,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
    /** CALLED BY: floating-button footer component */
    onNewConversationButtonClickedFN(event){
-    console.log('floating onNewConversationButtonClicked')
+    this.logger.debug('[CONV-COMP] floating onNewConversationButtonClicked')
     this.onNewConversationButtonClicked.emit()
   }
   // =========== END: event emitter function ====== //
