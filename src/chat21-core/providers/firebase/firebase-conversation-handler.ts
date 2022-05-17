@@ -441,11 +441,10 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
      */
     private setStatusMessage(msg: MessageModel, conversationWith: string) {
         this.logger.debug('[FIREBASEConversationHandlerSERVICE] update statusss', msg)
-        if (msg.status < MSG_STATUS_RECEIVED && !msg.attributes.commands) {
-            this.logger.debug('[FIREBASEConversationHandlerSERVICE] update statusss IN ', msg)
-            // && !msg.attributes.commands
-             let uid = msg.uid
-            // msg.attributes.commands? uid = msg.attributes.parentUid: null
+        if (msg.status < MSG_STATUS_RECEIVED ) { // && !msg.attributes.commands
+            //get message uid from attributes.parentUid if msg is a splitted one, from msg.uid otherwize
+            let uid = msg.uid
+            msg.attributes.commands? uid = msg.attributes.parentUid: null 
             if (msg.sender !== this.loggedUser.uid && msg.status < MSG_STATUS_RECEIVED) {
                 const urlNodeMessagesUpdate  = this.urlNodeFirebase + '/' + uid;
                 this.logger.debug('[FIREBASEConversationHandlerSERVICE] update message status', urlNodeMessagesUpdate);
@@ -563,7 +562,7 @@ private generateMessageObject(message, command_message, callback) {
     command_message.status = message.status;
     command_message.isSender = message.isSender;
     command_message.attributes? command_message.attributes.commands = true : command_message.attributes = {commands : true}
-    // command_message.attributes.parentUid = parentUid
+    command_message.attributes.parentUid = parentUid //added to manage message STATUS UPDATES
     this.addedNew(command_message)
     callback();
   }
