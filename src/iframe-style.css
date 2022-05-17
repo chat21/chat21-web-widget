@@ -137,6 +137,15 @@
             max-height: 100%;
             min-width: 320px;
         }
+
+        #tiledesk-container.open #tiledeskdiv {
+            /* restore widget to default fullscreen dimension when it is open*/
+            right: 0px !important;
+            left: 0px !important;
+            bottom: 0px !important;
+            top: 0px !important;
+
+        }
         /* #tiledeskdiv.align-right { 
             right: 0!important;
         }
