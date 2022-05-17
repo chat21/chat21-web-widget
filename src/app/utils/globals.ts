@@ -330,7 +330,7 @@ export class Globals {
     /** set margin left or rigth widget  */
     this.marginY = '20px';
     /** set margin bottom widget */
-    this.mobileMarginX = '20px';
+    this.mobileMarginX = '0px';
     /** set margin left or rigth widget for mobile */
     this.mobileMarginY = '0px';
     /** set margin bottom widget for mobile*/
