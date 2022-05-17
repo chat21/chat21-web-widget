@@ -2084,6 +2084,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.chatManager.conversationsHandlerService.conversationRemoved.next(null)
+    this.conversationHandlerService.messageWait.next(null)
 
     // TODO-GAB: da verificare se eliminarlo
     this.subscriptions.forEach(function (subscription) {
