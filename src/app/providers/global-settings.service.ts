@@ -5,7 +5,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 // services
 import { Globals } from '../utils/globals';
-import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName, stringToNumber } from '../utils/utils';
+import { getImageUrlThumb, stringToBoolean, convertColorToRGBA, getParameterByName, stringToNumber, detectIfIsMobile } from '../utils/utils';
 
 import { TemplateBindingParseResult } from '@angular/compiler';
 import { AppConfigService } from './app-config.service';
@@ -356,6 +356,7 @@ export class GlobalSettingsService {
      *
      */
     setCssIframe() {
+        this.globals.setParameter('isMobile', detectIfIsMobile(this.globals.windowContext));
         // tslint:disable-next-line:max-line-length
         // this.logger.debug('[GLOBAL-SET] ***** setCssIframe *****', this.globals.windowContext.document.getElementById('tiledeskdiv'));
         const divTiledeskiframe = this.globals.windowContext.document.getElementById('tiledeskdiv');
