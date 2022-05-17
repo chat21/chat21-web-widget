@@ -1,5 +1,11 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.24-rc.1
+- bug-fixed: typing was showed for ms when came back to old conversation (BS was fired with last old value)
+- bug-fixed: open widget do not fit fullscreen window on mobile
+- added: message status update for splitted message (update parent message firebase node for FIREBASE)
+- changed: right alignment for attachment-buttons same as right sent bubble messages
+
 ### 5.0.23 IN PROD
 
 ### 5.0.23-rc.5
