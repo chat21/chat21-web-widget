@@ -1,5 +1,7 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.23 IN PROD
+
 ### 5.0.23-rc.5
 - added: user-typing while splitting a message
 - added: constants that specifies default user-typing time wait
