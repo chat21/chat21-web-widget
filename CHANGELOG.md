@@ -1,5 +1,9 @@
 # chat21-web-widget ver 5.0
 
+### 5.0.24-rc.2
+- bug-fixed: parent width page was halved while widget is opened
+- bug-fixed: keyboard automatically open when new conversation starts
+
 ### 5.0.24-rc.1
 - bug-fixed: typing was showed for ms when came back to old conversation (BS was fired with last old value)
 - bug-fixed: open widget do not fit fullscreen window on mobile
