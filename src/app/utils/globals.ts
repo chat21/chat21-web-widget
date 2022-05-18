@@ -543,11 +543,13 @@ export class Globals {
       //block body scroll
       // window.parent.document.body.style.height = '100vh';
       window.parent.document.body.style.height = '0';
+      window.parent.document.body.style.width = '100%';
       window.parent.document.body.style.overflowY = 'hidden'
       window.parent.document.body.style.position = 'fixed';
     }else if(!isOpen && isMobile){
       //reset body style
       window.parent.document.body.style.removeProperty('height')
+      window.parent.document.body.style.removeProperty('width')
       window.parent.document.body.style.removeProperty('overflow-y')
       window.parent.document.body.style.removeProperty('position')
     }
