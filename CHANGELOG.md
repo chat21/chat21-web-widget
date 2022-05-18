@@ -1,5 +1,6 @@
 # chat21-web-widget ver 5.0
 
+
 ### 5.0.24-rc.2
 - bug-fixed: parent width page was halved while widget is opened
 - bug-fixed: keyboard automatically open when new conversation starts
