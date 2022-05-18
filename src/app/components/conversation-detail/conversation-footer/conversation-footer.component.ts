@@ -33,6 +33,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   // @Input() showWidgetNameInConversation: boolean
   @Input() isConversationArchived: boolean;
   @Input() hideTextReply: boolean;
+  @Input() isMobile: boolean;
   @Input() footerMessagePlaceholder: string;
   @Input() fileUploadAccept: string;
   @Input() stylesMap: Map<string, string>
@@ -495,14 +496,18 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
 
 
   setFocusOnId(id) {
-    setTimeout(function () {
+    console.log('IS MOBILEEE?', this.isMobile)
+    if(!this.isMobile){
+      setTimeout(function () {
         const textarea = document.getElementById(id);
         if (textarea) {
             //   that.logger.debug('[CONV-FOOTER] 1--------> FOCUSSSSSS : ', textarea);
             textarea.setAttribute('value', ' ');
             textarea.focus();
         }
-    }, 500);
+      }, 500);
+    }
+    
   }
 
   removeFocusOnId(id){

@@ -1,10 +1,10 @@
 
 <!-- tabindex="1500"-->
+<!-- onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()" -->
 <div id="chat21-conversation-component" 
     #afConversationComponent
     tabindex="1500" 
-    aria-modal="true"
-    onFocus="document.querySelector('[start-focus-chat21-conversation-component]').focus()">
+    aria-modal="true">
 
     <!-- HEADER -->
     <chat-conversation-header
@@ -87,6 +87,7 @@
             [showAttachmentButton]="g?.showAttachmentButton"
             [isConversationArchived]="isConversationArchived"
             [hideTextReply]="hideFooterTextReply"
+            [isMobile]="g?.isMobile"
             [footerMessagePlaceholder]="footerMessagePlaceholder"
             [fileUploadAccept]="appConfigService?.getConfig().fileUploadAccept"
             [stylesMap]="stylesMap"
