@@ -209,7 +209,7 @@ export function supports_html5_storage() {
   try {
       return 'localStorage' in window && window['localStorage'] !== null;
   } catch (e) {
-    this.g.wdLog(['> Error :' + e]);
+    console.log('supports_html5_storage > Error :' + e);
     return false;
   }
 }
@@ -218,7 +218,7 @@ export function supports_html5_session() {
   try {
       return 'sessionStorage' in window && window['sessionStorage'] !== null;
   } catch (e) {
-    this.g.wdLog(['> Error :' + e]);
+    console.log('supports_html5_session > Error :' + e);
     return false;
   }
 }
